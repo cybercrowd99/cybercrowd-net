@@ -4,9 +4,84 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CYBERCROWD</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;width:100vw;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:'Courier New',monospace;}
+canvas{position:absolute;inset:0;width:100%;height:100%;}
+.content{position:relative;z-index:10;text-align:center;}
+.domain{font-size:10px;letter-spacing:5px;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:22px;}
+.brand{font-size:clamp(28px,7vw,58px);font-weight:900;letter-spacing:10px;text-transform:uppercase;color:#fff;white-space:nowrap;text-shadow:0 0 60px #000,0 0 30px #000;}
+.tagline{margin-top:18px;font-size:clamp(10px,2vw,14px);letter-spacing:8px;color:#c8a84b;text-transform:uppercase;}
+.uc{position:fixed;bottom:0;left:0;width:100%;text-align:center;padding:13px;font-size:13px;font-weight:900;letter-spacing:8px;color:#cc0000;text-transform:uppercase;z-index:20;}
+</style>
 </head>
 <body>
-<h1>CYBERCROWD</h1>
-<p>Coming.</p>
+<canvas id="c"></canvas>
+<div class="content">
+<div class="domain">cybercrowd.net</div>
+<div class="brand">CYBERCROWD</div>
+<div class="tagline">WHERE WE BELONG</div>
+</div>
+<div class="uc">UNDER CONSTRUCTION</div>
+<script>
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H,pieces=[];
+const COLS=8,ROWS=10;
+let phase='assemble',timer=0;
+
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();
+window.addEventListener('resize',resize);
+
+function initPieces(){
+pieces=[];
+const pw=W/COLS,ph=H/ROWS;
+for(let r=0;r<ROWS;r++){
+for(let c=0;c<COLS;c++){
+const tx=c*pw,ty=r*ph;
+const a=Math.random()*Math.PI*2;
+const d=0.4+Math.random()*0.8;
+pieces.push({tx,ty,pw,ph,cx:W/2+Math.cos(a)*W*d,cy:H/2+Math.sin(a)*H*d,sx:W/2+Math.cos(a)*W*d,sy:H/2+Math.sin(a)*H*d,c:r/ROWS,r:c/COLS});
+}}}
+
+function ease(t){return t<.5?2*t*t:-1+(4-2*t)*t;}
+
+function animate(){
+requestAnimationFrame(animate);
+ctx.clearRect(0,0,W,H);
+ctx.fillStyle='#000';
+ctx.fillRect(0,0,W,H);
+timer++;
+let prog=0;
+if(phase==='assemble'){
+prog=ease(Math.min(timer/180,1));
+if(timer>=180){phase='hold';timer=0;}
+}else if(phase==='hold'){
+prog=1;
+if(timer>=90){
+phase='scatter';timer=0;
+pieces.forEach(p=>{const a=Math.random()*Math.PI*2;const d=0.4+Math.random()*0.8;p.sx=p.cx;p.sy=p.cy;p.ex=W/2+Math.cos(a)*W*d;p.ey=H/2+Math.sin(a)*H*d;});
+}
+}else{
+prog=ease(Math.min(timer/150,1));
+if(timer>=150){phase='assemble';timer=0;pieces.forEach(p=>{p.sx=p.ex||p.cx;p.sy=p.ey||p.cy;});}
+}
+pieces.forEach(p=>{
+let x,y,alpha;
+if(phase==='assemble'){x=p.sx+(p.tx-p.sx)*prog;y=p.sy+(p.ty-p.sy)*prog;alpha=0.1+0.9*prog;}
+else if(phase==='hold'){x=p.tx;y=p.ty;alpha=1;}
+else{x=p.sx+(p.ex-p.sx)*prog;y=p.sy+(p.ey-p.sy)*prog;alpha=1-0.9*prog;}
+ctx.save();
+ctx.globalAlpha=alpha;
+ctx.fillStyle=`hsl(${p.c*30},0%,${20+p.r*60}%)`;
+ctx.fillRect(x,y,p.pw-1,p.ph-1);
+ctx.restore();
+});
+}
+
+initPieces();
+animate();
+</script>
 </body>
 </html>
