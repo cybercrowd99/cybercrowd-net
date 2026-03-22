@@ -184,8 +184,18 @@ window.addEventListener("resize", () => {
     c.height = window.innerHeight;
   });
 });
+  // AUDIO START FIX
+const bgAudio = document.getElementById("bg-audio");
+function startAudio() {
+if (bgAudio) bgAudio.play().catch(() => {});
+  document.removeEventListener("click", startAudio);
+  document.removeEventListener("touchstart", startAudio);
+}
+
+document.addEventListener("click", startAudio);
+document.addEventListener("touchstart", startAudio);
 </script>
-<audio id="bg-audio" autoplay loop>
+<audio id="bg-audio" loop>
   <source src="audio/cybercrowd.mp3" type="audio/mpeg">
 </audio>
 </body>
