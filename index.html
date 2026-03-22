@@ -78,9 +78,48 @@
       z-index:20;
       text-shadow:0 0 15px rgba(200,0,0,0.5);
     }
+    #welcome-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  z-index: 999;
+}
+
+#welcome-btn {
+  background: transparent;
+  color: #c8a84b;
+  border: 2px solid #c8a84b;
+  padding: 20px 38px;
+  font-size: 34px;
+  letter-spacing: 8px;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+}
+
+#patreon-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  z-index: 998;
+}
   </style>
 </head>
 <body>
+  <div id="welcome-overlay">
+  <button id="welcome-btn">WELCOME</button>
+</div>
+
+<div id="patreon-overlay">
+  <a href="https://patreon.com/cybercrowd" target="_blank" id="patreon-link">
+    SUPPORT CYBERCROWD
+  </a>
+</div>
 
   <canvas id="matrix"></canvas>
   <canvas id="shatter"></canvas>
@@ -207,6 +246,14 @@
 
     document.addEventListener("click", startAudio);
     document.addEventListener("touchstart", startAudio);
+    const welcomeBtn = document.getElementById("welcome-btn");
+const welcomeOverlay = document.getElementById("welcome-overlay");
+const patreonOverlay = document.getElementById("patreon-overlay");
+
+welcomeBtn.addEventListener("click", () => {
+  welcomeOverlay.style.display = "none";
+  patreonOverlay.style.display = "flex";
+});
   </script>
 
   <audio id="bg-audio" loop preload="auto">
