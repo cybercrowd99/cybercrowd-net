@@ -35,14 +35,21 @@
       text-align:center;
       pointer-events:none;
     }
-
+    
     .domain {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: clamp(26px, 6vw, 42px);
   letter-spacing: 6px;
   color: rgba(255,255,255,0.95);
   text-transform: uppercase;
-  margin-bottom: 18px;
   font-weight: 900;
+  text-shadow: 0 0 30px #000, 0 0 12px #000;
+  z-index: 30;
+  white-space: nowrap;
+  margin: 0;
 }
     
     .brand {
@@ -113,10 +120,7 @@
 </head>
 <body>
   <div id="welcome-overlay">
-  <button id="welcome-btn">ENTER</button>
-</div>
-
-<div id="patreon-overlay">
+  
   <a href="https://patreon.com/cybercrowd" target="_blank" id="patreon-link">
     SUPPORT CYBERCROWD
   </a>
@@ -126,12 +130,10 @@
   <canvas id="shatter"></canvas>
   <canvas id="particles"></canvas>
 
-  <div class="content">
-    <div class="domain">CYBERCROWD</div>
-    <div class="brand">CYBERCROWD</div>
-    <div class="tagline">WHERE WE BELONG</div>
-  </div>
-
+<div class="content">
+  <div class="domain">CYBERCROWD</div>
+  <div class="tagline">WHERE WE BELONG</div>
+</div>
   <div class="uc">UNDER CONSTRUCTION</div>
 
   <script>
