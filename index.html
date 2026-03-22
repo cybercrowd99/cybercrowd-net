@@ -5,97 +5,117 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CYBERCROWD</title>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #000;
-  font-family: "Courier New", monospace;
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  font-family:"Courier New", monospace;
 }
 
-body {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+body{
+  position:relative;
 }
 
-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
+canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
 }
 
-#matrix { z-index: 1; }
-#shatter { z-index: 2; pointer-events: none; }
-#particles { z-index: 3; pointer-events: none; }
-
-.content {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  pointer-events: none;
-  padding: 0 24px;
+#matrix{
+  z-index:1;
 }
 
-.domain {
-  font-size: 10px;
-  letter-spacing: 5px;
-  color: rgba(255,255,255,0.28);
-  text-transform: uppercase;
-  margin-bottom: 20px;
+#spray{
+  z-index:2;
+  pointer-events:none;
 }
 
-.brand {
-  font-size: clamp(30px, 6vw, 64px);
-  font-weight: 900;
-  letter-spacing: clamp(6px, 1vw, 12px);
-  text-transform: uppercase;
-  color: #ffffff;
-  white-space: nowrap;
-  text-shadow: 0 0 60px #000, 0 0 30px #000, 0 2px 8px #000;
+#shatter{
+  z-index:3;
+  pointer-events:none;
 }
 
-.tagline {
-  margin-top: 16px;
-  font-size: clamp(10px, 1.2vw, 14px);
-  letter-spacing: clamp(4px, 0.6vw, 8px);
-  color: #c8a84b;
-  text-transform: uppercase;
-  text-shadow: 0 0 20px #000;
+#particles{
+  z-index:4;
+  pointer-events:none;
 }
 
-.uc {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  padding: 14px 16px;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 8px;
-  color: #cc0000;
-  text-transform: uppercase;
-  z-index: 20;
-  text-shadow: 0 0 15px rgba(200,0,0,0.5);
-  pointer-events: none;
+.content{
+  position:absolute;
+  inset:0;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  pointer-events:none;
+  padding:24px;
 }
 
-#gateway {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  background: transparent;
-  cursor: pointer;
+.domain{
+  font-size:10px;
+  letter-spacing:5px;
+  color:rgba(255,255,255,0.28);
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+
+.brand{
+  font-size:clamp(30px,6vw,64px);
+  font-weight:900;
+  letter-spacing:clamp(6px,1vw,12px);
+  color:#fff;
+  text-transform:uppercase;
+  white-space:nowrap;
+  text-shadow:
+    0 0 60px #000,
+    0 0 30px #000,
+    0 2px 8px #000;
+}
+
+.tagline{
+  margin-top:16px;
+  font-size:clamp(10px,1.2vw,14px);
+  letter-spacing:clamp(4px,.6vw,8px);
+  color:#b89b45;
+  text-transform:uppercase;
+  text-shadow:0 0 20px #000;
+}
+
+.uc{
+  position:fixed;
+  left:0;
+  bottom:0;
+  width:100%;
+  z-index:20;
+  text-align:center;
+  padding:14px 16px;
+  color:#b30000;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:8px;
+  text-transform:uppercase;
+  text-shadow:0 0 15px rgba(200,0,0,.45);
+  pointer-events:none;
+}
+
+#gateway{
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:transparent;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -104,6 +124,7 @@ canvas {
 <div id="gateway" aria-label="Enter"></div>
 
 <canvas id="matrix"></canvas>
+<canvas id="spray"></canvas>
 <canvas id="shatter"></canvas>
 <canvas id="particles"></canvas>
 
@@ -120,6 +141,9 @@ window.addEventListener("DOMContentLoaded", function () {
   const matrixCanvas = document.getElementById("matrix");
   const matrixCtx = matrixCanvas.getContext("2d");
 
+  const sprayCanvas = document.getElementById("spray");
+  const sprayCtx = sprayCanvas.getContext("2d");
+
   const shatterCanvas = document.getElementById("shatter");
   const shatterCtx = shatterCanvas.getContext("2d");
 
@@ -131,6 +155,8 @@ window.addEventListener("DOMContentLoaded", function () {
   const matrixChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let matrixDrops = [];
   let transitioning = false;
+  let sprayDrips = [];
+  let particles = [];
 
   function sizeCanvases() {
     const w = window.innerWidth;
@@ -138,25 +164,30 @@ window.addEventListener("DOMContentLoaded", function () {
 
     matrixCanvas.width = w;
     matrixCanvas.height = h;
+
+    sprayCanvas.width = w;
+    sprayCanvas.height = h;
+
     shatterCanvas.width = w;
     shatterCanvas.height = h;
+
     particleCanvas.width = w;
     particleCanvas.height = h;
-  }
-
-  function resetMatrix() {
-    matrixDrops = Array(Math.floor(matrixCanvas.width / 20)).fill(1);
   }
 
   function randomBetween(min, max) {
     return min + Math.random() * (max - min);
   }
 
+  function resetMatrix() {
+    matrixDrops = Array(Math.floor(matrixCanvas.width / 20)).fill(1);
+  }
+
   function drawMatrix() {
-    matrixCtx.fillStyle = "rgba(0,0,0,0.08)";
+    matrixCtx.fillStyle = "rgba(0,0,0,0.07)";
     matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
 
-    matrixCtx.fillStyle = "#4f4";
+    matrixCtx.fillStyle = "rgba(120,255,120,0.62)";
     matrixCtx.font = "14px monospace";
 
     for (let i = 0; i < matrixDrops.length; i++) {
@@ -171,22 +202,67 @@ window.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function buildSpray() {
+    sprayDrips = [];
+
+    const bandY = matrixCanvas.height * 0.34;
+    const centerX = matrixCanvas.width * 0.5;
+    const spread = Math.min(420, matrixCanvas.width * 0.38);
+
+    for (let i = 0; i < 220; i++) {
+      const angle = randomBetween(-Math.PI, 0);
+      const radius = randomBetween(20, spread);
+      const x = centerX + Math.cos(angle) * radius + randomBetween(-30, 30);
+      const y = bandY + Math.sin(angle) * radius * 0.35 + randomBetween(-14, 14);
+
+      sprayDrips.push({
+        x: x,
+        y: y,
+        r: randomBetween(0.8, 4.0),
+        alpha: randomBetween(0.05, 0.28),
+        drip: Math.random() > 0.72 ? randomBetween(8, 70) : 0
+      });
+    }
+  }
+
+  function drawSpray() {
+    sprayCtx.clearRect(0, 0, sprayCanvas.width, sprayCanvas.height);
+
+    for (let i = 0; i < sprayDrips.length; i++) {
+      const d = sprayDrips[i];
+
+      sprayCtx.beginPath();
+      sprayCtx.fillStyle = "rgba(150,255,150," + d.alpha + ")";
+      sprayCtx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      sprayCtx.fill();
+
+      if (d.drip > 0) {
+        sprayCtx.beginPath();
+        sprayCtx.strokeStyle = "rgba(150,255,150," + (d.alpha * 0.75) + ")";
+        sprayCtx.lineWidth = Math.max(1, d.r * 0.28);
+        sprayCtx.moveTo(d.x, d.y + d.r);
+        sprayCtx.lineTo(d.x + randomBetween(-1.6, 1.6), d.y + d.drip);
+        sprayCtx.stroke();
+      }
+    }
+  }
+
   function drawShards() {
     shatterCtx.clearRect(0, 0, shatterCanvas.width, shatterCanvas.height);
 
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 16; i++) {
       const cx = randomBetween(0, shatterCanvas.width);
       const cy = randomBetween(0, shatterCanvas.height);
       const w = randomBetween(40, 220);
       const h = randomBetween(20, 120);
       const angle = randomBetween(-0.6, 0.6);
-      const alpha = randomBetween(0.03, 0.12);
+      const alpha = randomBetween(0.02, 0.10);
 
       shatterCtx.save();
       shatterCtx.translate(cx, cy);
       shatterCtx.rotate(angle);
 
-      shatterCtx.strokeStyle = "rgba(200,168,75," + alpha + ")";
+      shatterCtx.strokeStyle = "rgba(185,150,70," + alpha + ")";
       shatterCtx.lineWidth = 1;
       shatterCtx.strokeRect(-w / 2, -h / 2, w, h);
 
@@ -199,21 +275,23 @@ window.addEventListener("DOMContentLoaded", function () {
         w / 2 - randomBetween(0, w * 0.4),
         randomBetween(-h / 2, h / 2)
       );
-      shatterCtx.strokeStyle = "rgba(255,255,255," + (alpha + 0.5) + ")";
+      shatterCtx.strokeStyle = "rgba(255,255,255," + (alpha + 0.26) + ")";
       shatterCtx.stroke();
 
       shatterCtx.restore();
     }
   }
 
-  const particles = Array.from({ length: 120 }, function () {
-    return {
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      vx: Math.random() - 0.5,
-      vy: Math.random() - 0.5
-    };
-  });
+  function buildParticles() {
+    particles = Array.from({ length: 110 }, function () {
+      return {
+        x: Math.random() * particleCanvas.width,
+        y: Math.random() * particleCanvas.height,
+        vx: Math.random() - 0.5,
+        vy: Math.random() - 0.5
+      };
+    });
+  }
 
   function animateParticles() {
     particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
@@ -227,11 +305,20 @@ window.addEventListener("DOMContentLoaded", function () {
       if (p.x < 0 || p.x > particleCanvas.width) p.vx *= -1;
       if (p.y < 0 || p.y > particleCanvas.height) p.vy *= -1;
 
-      particleCtx.fillStyle = "rgba(255,255,255,0.2)";
+      particleCtx.fillStyle = "rgba(255,255,255,0.18)";
       particleCtx.fillRect(p.x, p.y, 2, 2);
     }
 
     requestAnimationFrame(animateParticles);
+  }
+
+  function burstTransition() {
+    const burst = setInterval(drawShards, 70);
+
+    setTimeout(function () {
+      clearInterval(burst);
+      window.location.href = "page2.html";
+    }, 1200);
   }
 
   function enterScene(event) {
@@ -241,28 +328,29 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     if (transitioning) return;
+
     transitioning = true;
     gateway.style.pointerEvents = "none";
-
-    const burst = setInterval(drawShards, 80);
-
-    setTimeout(function () {
-      clearInterval(burst);
-      window.location.href = "page2.html";
-    }, 1200);
+    burstTransition();
   }
 
-  sizeCanvases();
-  resetMatrix();
-  drawShards();
+  function rebuildAll() {
+    sizeCanvases();
+    resetMatrix();
+    buildSpray();
+    drawSpray();
+    drawShards();
+    buildParticles();
+  }
+
+  rebuildAll();
   animateParticles();
 
   setInterval(drawMatrix, 60);
-  setInterval(drawShards, 3000);
+  setInterval(drawShards, 3200);
 
   window.addEventListener("resize", function () {
-    sizeCanvases();
-    resetMatrix();
+    rebuildAll();
   });
 
   gateway.addEventListener("pointerdown", enterScene, { passive: false });
