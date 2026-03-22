@@ -191,12 +191,11 @@ if (bgAudio) bgAudio.play().catch(() => {});
   document.removeEventListener("click", startAudio);
   document.removeEventListener("touchstart", startAudio);
 }
-
 document.addEventListener("click", startAudio);
 document.addEventListener("touchstart", startAudio);
 </script>
-<audio id="bg-audio" loop>
-  <source src="audio/cybercrowd.mp3" type="audio/mpeg">
+<audio id="bg-audio" loop muted autoplay preload="auto">
+<source src="https://pub-177f7e99181349cbb8fef11b0137ea29.r2.dev/cybercrowd.mp3" type="audio/mpeg">
 </audio>
 </body>
 </html>
