@@ -37,22 +37,23 @@
     }
 
     .domain {
-      font-size:10px;
-      letter-spacing:5px;
-      color:rgba(255,255,255,0.3);
-      text-transform:uppercase;
-      margin-bottom:20px;
-    }
-
+  font-size: clamp(26px, 6vw, 42px);
+  letter-spacing: 6px;
+  color: rgba(255,255,255,0.95);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  font-weight: 900;
+}
+    
     .brand {
-      font-size:clamp(26px,6.5vw,54px);
-      font-weight:900;
-      letter-spacing:10px;
-      text-transform:uppercase;
-      color:#fff;
-      white-space:nowrap;
-      text-shadow:0 0 60px #000, 0 0 30px #000, 0 2px 8px #000;
-    }
+  font-size:clamp(14px,3.2vw,20px);
+  font-weight:700;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:#fff;
+  white-space:nowrap;
+  text-shadow:0 0 40px #000, 0 0 20px #000, 0 2px 8px #000;
+}
 
     .tagline {
       margin-top:16px;
@@ -87,16 +88,16 @@
   background: rgba(0,0,0,0.55);
   z-index: 999;
 }
-
+    
 #welcome-btn {
   background: transparent;
   color: #c8a84b;
-  border: 2px solid #c8a84b;
-  padding: 20px 38px;
-  font-size: 34px;
-  letter-spacing: 8px;
-  font-family: 'Courier New', monospace;
+  border: 1px solid #c8a84b;
+  padding: 6px 12px;
+  font-size: 12px;
+  letter-spacing: 1px;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 #patreon-overlay {
@@ -112,7 +113,7 @@
 </head>
 <body>
   <div id="welcome-overlay">
-  <button id="welcome-btn">WELCOME</button>
+  <button id="welcome-btn">ENTER</button>
 </div>
 
 <div id="patreon-overlay">
@@ -126,7 +127,7 @@
   <canvas id="particles"></canvas>
 
   <div class="content">
-    <div class="domain">cybercrowd.net</div>
+    <div class="domain">CYBERCROWD</div>
     <div class="brand">CYBERCROWD</div>
     <div class="tagline">WHERE WE BELONG</div>
   </div>
