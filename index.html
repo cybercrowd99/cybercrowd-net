@@ -37,19 +37,21 @@
     }
 
     .domain {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: clamp(26px, 6vw, 42px);
-      letter-spacing: 6px;
-      color: rgba(255,255,255,0.95);
-      text-transform: uppercase;
-      font-weight: 900;
-      text-shadow: 0 0 30px #000, 0 0 12px #000;
-      z-index: 30;
-      white-space: nowrap;
-      margin: 0;
+      font-size:10px;
+      letter-spacing:5px;
+      color:rgba(255,255,255,0.3);
+      text-transform:uppercase;
+      margin-bottom:20px;
+    }
+
+    .brand {
+      font-size:clamp(26px,6.5vw,54px);
+      font-weight:900;
+      letter-spacing:10px;
+      text-transform:uppercase;
+      color:#fff;
+      white-space:nowrap;
+      text-shadow:0 0 60px #000, 0 0 30px #000, 0 2px 8px #000;
     }
 
     .tagline {
@@ -76,85 +78,17 @@
       z-index:20;
       text-shadow:0 0 15px rgba(200,0,0,0.5);
     }
-
-    /* PAGE 1 */
-    #welcome-overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      z-index: 999;
-    }
-
-    #welcome-btn {
-      background: rgba(0,0,0,0.25);
-      color: #c8a84b;
-      border: 1px solid #c8a84b;
-      padding: 10px 28px;
-      font-size: 16px;
-      letter-spacing: 2px;
-      cursor: pointer;
-      text-transform: uppercase;
-      font-family:'Courier New', monospace;
-    }
-
-    /* PAGE 2 */
-    #access-overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      z-index: 998;
-    }
-
-    .access-wrap {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .access-link {
-      text-decoration: none;
-      color: #c8a84b;
-      border: 1px solid #c8a84b;
-      padding: 10px 18px;
-      font-size: 16px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      background: rgba(0,0,0,0.25);
-      font-family:'Courier New', monospace;
-      min-width: 120px;
-      text-align: center;
-    }
   </style>
 </head>
 <body>
-
-  <!-- PAGE 1 -->
-  <div id="welcome-overlay">
-    <button id="welcome-btn">ENTER</button>
-  </div>
-
-  <!-- PAGE 2 -->
-  <div id="access-overlay">
-    <div class="access-wrap">
-      <a href="https://patreon.com/cybercrowd" target="_blank" class="access-link">PATREON</a>
-      <a href="#" class="access-link" id="crwd-link">CRWD</a>
-    </div>
-  </div>
 
   <canvas id="matrix"></canvas>
   <canvas id="shatter"></canvas>
   <canvas id="particles"></canvas>
 
   <div class="content">
-    <div class="domain">CYBERCROWD</div>
+    <div class="domain">cybercrowd.net</div>
+    <div class="brand">CYBERCROWD</div>
     <div class="tagline">WHERE WE BELONG</div>
   </div>
 
@@ -264,10 +198,6 @@
     });
 
     const bgAudio = document.getElementById("bg-audio");
-    const welcomeBtn = document.getElementById("welcome-btn");
-    const welcomeOverlay = document.getElementById("welcome-overlay");
-    const accessOverlay = document.getElementById("access-overlay");
-    const crwdLink = document.getElementById("crwd-link");
 
     function startAudio() {
       if (bgAudio) bgAudio.play().catch(() => {});
@@ -277,16 +207,6 @@
 
     document.addEventListener("click", startAudio);
     document.addEventListener("touchstart", startAudio);
-
-    welcomeBtn.addEventListener("click", () => {
-      welcomeOverlay.style.display = "none";
-      accessOverlay.style.display = "flex";
-    });
-
-    crwdLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      alert("CRWD destination not connected yet.");
-    });
   </script>
 
   <audio id="bg-audio" loop preload="auto">
