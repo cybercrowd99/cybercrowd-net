@@ -1,216 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CYBERCROWD</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBERCROWD</title>
 
-    body {
-      background:#000;
-      width:100vw;
-      height:100vh;
-      overflow:hidden;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family:'Courier New', monospace;
-    }
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
 
-    canvas {
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-    }
+body {
+  background:#000;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Courier New', monospace;
+}
 
-    #matrix { z-index:1; }
-    #shatter { z-index:2; pointer-events:none; }
-    #particles { z-index:3; pointer-events:none; }
+canvas {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
 
-    .content {
-      position:relative;
-      z-index:10;
-      text-align:center;
-      pointer-events:none;
-    }
+#matrix { z-index:1; }
+#shatter { z-index:2; pointer-events:none; }
+#particles { z-index:3; pointer-events:none; }
 
-    .domain {
-      font-size:10px;
-      letter-spacing:5px;
-      color:rgba(255,255,255,0.3);
-      text-transform:uppercase;
-      margin-bottom:20px;
-    }
+.content {
+  position:relative;
+  z-index:10;
+  text-align:center;
+  pointer-events:none;
+}
 
-    .brand {
-      font-size:clamp(26px,6.5vw,54px);
-      font-weight:900;
-      letter-spacing:10px;
-      text-transform:uppercase;
-      color:#fff;
-      white-space:nowrap;
-      text-shadow:0 0 60px #000, 0 0 30px #000, 0 2px 8px #000;
-    }
+.domain {
+  font-size:10px;
+  letter-spacing:5px;
+  color:rgba(255,255,255,0.3);
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
 
-    .tagline {
-      margin-top:16px;
-      font-size:clamp(9px,2vw,13px);
-      letter-spacing:8px;
-      color:#c8a84b;
-      text-transform:uppercase;
-      text-shadow:0 0 20px #000;
-    }
+.brand {
+  font-size:clamp(26px,6.5vw,54px);
+  font-weight:900;
+  letter-spacing:10px;
+  text-transform:uppercase;
+  color:#fff;
+  white-space:nowrap;
+  text-shadow:0 0 60px #000, 0 0 30px #000, 0 2px 8px #000;
+}
 
-    .uc {
-      position:fixed;
-      bottom:0;
-      left:0;
-      width:100%;
-      text-align:center;
-      padding:13px;
-      font-size:13px;
-      font-weight:900;
-      letter-spacing:8px;
-      color:#cc0000;
-      text-transform:uppercase;
-      z-index:20;
-      text-shadow:0 0 15px rgba(200,0,0,0.5);
-    }
-  </style>
+.tagline {
+  margin-top:16px;
+  font-size:clamp(9px,2vw,13px);
+  letter-spacing:8px;
+  color:#c8a84b;
+  text-transform:uppercase;
+  text-shadow:0 0 20px #000;
+}
+
+.uc {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  text-align:center;
+  padding:13px;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:8px;
+  color:#cc0000;
+  text-transform:uppercase;
+  z-index:20;
+  text-shadow:0 0 15px rgba(200,0,0,0.5);
+}
+
+/* Invisible full-page gateway */
+#gateway {
+  position:fixed;
+  inset:0;
+  z-index:999;
+  cursor:pointer;
+}
+</style>
 </head>
+
 <body>
 
-  <canvas id="matrix"></canvas>
-  <canvas id="shatter"></canvas>
-  <canvas id="particles"></canvas>
+<div id="gateway"></div>
 
-  <div class="content">
-    <div class="domain">cybercrowd.net</div>
-    <div class="brand">CYBERCROWD</div>
-    <div class="tagline">WHERE WE BELONG</div>
-  </div>
+<canvas id="matrix"></canvas>
+<canvas id="shatter"></canvas>
+<canvas id="particles"></canvas>
 
-  <div class="uc">UNDER CONSTRUCTION</div>
+<div class="content">
+  <div class="domain">cybercrowd.net</div>
+  <div class="brand">CYBERCROWD</div>
+  <div class="tagline">WHERE WE BELONG</div>
+</div>
 
-  <script>
-    const mc = document.getElementById("matrix");
-    const mx = mc.getContext("2d");
-    mc.width = window.innerWidth;
-    mc.height = window.innerHeight;
+<div class="uc">UNDER CONSTRUCTION</div>
 
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const drops = Array(Math.floor(mc.width / 20)).fill(1);
+<script>
+const mc = document.getElementById("matrix");
+const mx = mc.getContext("2d");
+mc.width = window.innerWidth;
+mc.height = window.innerHeight;
 
-    function drawMatrix() {
-      mx.fillStyle = "rgba(0,0,0,0.08)";
-      mx.fillRect(0, 0, mc.width, mc.height);
-      mx.fillStyle = "#6f5";
-      mx.font = "16px monospace";
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const drops = Array(Math.floor(mc.width / 20)).fill(1);
 
-      for (let i = 0; i < drops.length; i++) {
-        const ch = chars[Math.floor(Math.random() * chars.length)];
-        mx.fillText(ch, i * 20, drops[i] * 20);
-        if (drops[i] * 20 > mc.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      }
-    }
+function drawMatrix() {
+  mx.fillStyle = "rgba(0,0,0,0.08)";
+  mx.fillRect(0, 0, mc.width, mc.height);
+  mx.fillStyle = "#4f4"; // darker green (not neon)
+  mx.font = "14px monospace";
 
-    setInterval(drawMatrix, 60);
+  for (let i = 0; i < drops.length; i++) {
+    const ch = chars[Math.floor(Math.random() * chars.length)];
+    mx.fillText(ch, i * 20, drops[i] * 20);
+    if (drops[i] * 20 > mc.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+}
+setInterval(drawMatrix, 60);
 
-    const sc = document.getElementById("shatter");
-    const sx = sc.getContext("2d");
-    sc.width = window.innerWidth;
-    sc.height = window.innerHeight;
+const sc = document.getElementById("shatter");
+const sx = sc.getContext("2d");
+sc.width = window.innerWidth;
+sc.height = window.innerHeight;
 
-    function randBetween(a, b) {
-      return a + Math.random() * (b - a);
-    }
+function randBetween(a, b) {
+  return a + Math.random() * (b - a);
+}
 
-    function drawShards() {
-      sx.clearRect(0, 0, sc.width, sc.height);
-      const count = 18;
+function drawShards() {
+  sx.clearRect(0, 0, sc.width, sc.height);
+  const count = 18;
 
-      for (let i = 0; i < count; i++) {
-        const cx = randBetween(0, sc.width);
-        const cy = randBetween(0, sc.height);
-        const w = randBetween(40, 220);
-        const h = randBetween(20, 120);
-        const angle = randBetween(-0.6, 0.6);
-        const alpha = randBetween(0.03, 0.12);
+  for (let i = 0; i < count; i++) {
+    const cx = randBetween(0, sc.width);
+    const cy = randBetween(0, sc.height);
+    const w = randBetween(40, 220);
+    const h = randBetween(20, 120);
+    const angle = randBetween(-0.6, 0.6);
+    const alpha = randBetween(0.03, 0.12);
 
-        sx.save();
-        sx.translate(cx, cy);
-        sx.rotate(angle);
-        sx.strokeStyle = `rgba(200,168,75,${alpha})`;
-        sx.lineWidth = 1;
-        sx.strokeRect(-w / 2, -h / 2, w, h);
+    sx.save();
+    sx.translate(cx, cy);
+    sx.rotate(angle);
+    sx.strokeStyle = `rgba(200,168,75,${alpha})`;
+    sx.lineWidth = 1;
+    sx.strokeRect(-w / 2, -h / 2, w, h);
 
-        sx.beginPath();
-        sx.moveTo(-w / 2 + randBetween(0, w * 0.4), randBetween(-h / 2, h / 2));
-        sx.lineTo(w / 2 - randBetween(0, w * 0.4), randBetween(-h / 2, h / 2));
-        sx.strokeStyle = `rgba(255,255,255,${alpha + 0.5})`;
-        sx.stroke();
-        sx.restore();
-      }
-    }
+    sx.beginPath();
+    sx.moveTo(-w / 2 + randBetween(0, w * 0.4), randBetween(-h / 2, h / 2));
+    sx.lineTo(w / 2 - randBetween(0, w * 0.4), randBetween(-h / 2, h / 2));
+    sx.strokeStyle = `rgba(255,255,255,${alpha + 0.5})`;
+    sx.stroke();
+    sx.restore();
+  }
+}
+drawShards();
+setInterval(drawShards, 3000);
 
-    drawShards();
-    setInterval(drawShards, 3000);
+const pc = document.getElementById("particles");
+const px = pc.getContext("2d");
+pc.width = window.innerWidth;
+pc.height = window.innerHeight;
 
-    const pc = document.getElementById("particles");
-    const px = pc.getContext("2d");
-    pc.width = window.innerWidth;
-    pc.height = window.innerHeight;
+const particles = Array.from({ length: 120 }, () => ({
+  x: Math.random() * pc.width,
+  y: Math.random() * pc.height,
+  vx: (Math.random() - 0.5),
+  vy: (Math.random() - 0.5)
+}));
 
-    const particles = Array.from({ length: 120 }, () => ({
-      x: Math.random() * pc.width,
-      y: Math.random() * pc.height,
-      vx: (Math.random() - 0.5),
-      vy: (Math.random() - 0.5)
-    }));
+function animateParticles() {
+  px.clearRect(0, 0, pc.width, pc.height);
 
-    function animateParticles() {
-      px.clearRect(0, 0, pc.width, pc.height);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
 
-      particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
+    if (p.x < 0 || p.x > pc.width) p.vx *= -1;
+    if (p.y < 0 || p.y > pc.height) p.vy *= -1;
 
-        if (p.x < 0 || p.x > pc.width) p.vx *= -1;
-        if (p.y < 0 || p.y > pc.height) p.vy *= -1;
+    px.fillStyle = "rgba(255,255,255,0.2)";
+    px.fillRect(p.x, p.y, 2, 2);
+  });
 
-        px.fillStyle = "rgba(255,255,255,0.2)";
-        px.fillRect(p.x, p.y, 2, 2);
-      });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
 
-      requestAnimationFrame(animateParticles);
-    }
+window.addEventListener("resize", () => {
+  [mc, sc, pc].forEach(c => {
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+  });
+});
 
-    animateParticles();
+/* Audio from R2 */
+const audio = document.getElementById("cc-audio");
 
-    window.addEventListener("resize", () => {
-      [mc, sc, pc].forEach(c => {
-        c.width = window.innerWidth;
-        c.height = window.innerHeight;
-      });
-    });
+function startAudio() {
+  if (!audio) return;
+  audio.play().catch(() => {});
+  document.removeEventListener("click", startAudio);
+  document.removeEventListener("touchstart", startAudio);
+}
 
-    const bgAudio = document.getElementById("bg-audio");
+document.addEventListener("click", startAudio);
+document.addEventListener("touchstart", startAudio);
 
-    function startAudio() {
-      if (bgAudio) bgAudio.play().catch(() => {});
-      document.removeEventListener("click", startAudio);
-      document.removeEventListener("touchstart", startAudio);
-    }
+/* Full page gateway */
+let transitioning = false;
 
-    document.addEventListener("click", startAudio);
-    document.addEventListener("touchstart", startAudio);
-  </script>
+function enterCybercrowd() {
+  if (transitioning) return;
+  transitioning = true;
 
-  <audio id="bg-audio" loop preload="auto">
-    <source src="https://pub-177f7e99181349cbb8fef11b0137ea29.r2.dev/cybercrowd.mp3" type="audio/mpeg">
-  </audio>
+  // burst effect
+  let burst = setInterval(drawShards, 80);
+
+  setTimeout(() => {
+    clearInterval(burst);
+    window.location.href = "page2.html";
+  }, 1200);
+}
+
+document.getElementById("gateway").addEventListener("click", enterCybercrowd);
+document.getElementById("gateway").addEventListener("touchstart", enterCybercrowd);
+</script>
+
+<audio id="cc-audio" loop preload="auto" playsinline>
+  <source src="https://pub-177f7e99181349cbb8fef11b0137ea29.r2.dev/cybercrowd.mp3" type="audio/mpeg">
+</audio>
+
 </body>
 </html>
