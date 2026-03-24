@@ -115,6 +115,9 @@
   </style>
 </head>
 <body>
+  <audio id="bg-audio" preload="auto">
+  <source src="https://pub-177f7e99181349cbb8fef11b0137ea29.r2.dev/Cybercrowd_60s.mp3" type="audio/mpeg">
+</audio>
   <canvas id="bgrain"></canvas>
   <h1>CYBERCROWD</h1>
   <a href="#" class="enter-btn">ENTER</a>
@@ -170,6 +173,40 @@
         grid.appendChild(tile);
       }
     }
+    const enterBtn = document.querySelector(".enter-btn");
+const bgAudio = document.getElementById("bg-audio");
+
+let introArmed = false;
+let navigating = false;
+
+async function startIntroAudio() {
+  if (introArmed) return;
+
+  try {
+    bgAudio.currentTime = 0;
+    await bgAudio.play();
+    introArmed = true;
+    document.body.classList.add("audio-started");
+  } catch (err) {
+    console.error("Audio start blocked:", err);
+  }
+}
+
+document.addEventListener("pointerdown", startIntroAudio, { once: true });
+
+enterBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+});
+
+enterBtn.addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+
+  if (!introArmed) return;
+  if (navigating) return;
+
+  navigating = true;
+  window.location.href = "page2.html";
+});
   </script>
 </body>
 </html>
