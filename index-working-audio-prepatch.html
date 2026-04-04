@@ -170,6 +170,26 @@
         grid.appendChild(tile);
       }
     }
-  </script><audio id="cc-audio" autoplay loop src="https://pub-177f7e99181349cbb8fef11b0137ea29.r2.dev/Cybercrowd_60s.teaser.mp3">
+  <audio id="cc-audio" preload="auto" loop>
+  <source src="https://pub-177f7e99181349cbb8fef11b0137ea29.r2.dev/Cybercrowd_60s.teaser.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const audio = document.getElementById("cc-audio");
+
+  function unlockAudio() {
+    audio.muted = false;
+    audio.play().catch(()=>{});
+  }
+
+  document.querySelector(".enter-btn").addEventListener("click", e => {
+    e.preventDefault();
+    unlockAudio();
+    window.location.href = "page2.html";
+  });
+
+  window.addEventListener("click", unlockAudio, { once: true });
+</script>
+
 </body>
 </html>
