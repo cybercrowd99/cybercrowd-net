@@ -1,1 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cybercrowd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    canvas#bgrain {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+    h1 {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 900;
+      color: #FFFFFF;
+      font-size: clamp(40px, 12vw, 90px);
+      margin-bottom: 0px;
+      margin-left: 20px;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 10;
+    }
+    .enter-graphic {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 0.9rem;
+      letter-spacing: 5px;
+      color: #7CFF7C;
+      border: 2px solid #7CFF7C;
+      padding: 6px 24px;
+      margin-bottom: 8px;
+      margin-top: -12px;
+      position: relative;
+      z-index: 10;
+      display: inline-block;
+      pointer-events: none;
+      transition: color 0.2s, border-color 0.2s, text-shadow 0.2s, box-shadow 0.2s;
+    }
+    .enter-graphic.lit {
+      color: #fff;
+      border-color: #7CFF7C;
+      text-shadow: 0 0 18px #7CFF7C, 0 0 40px #7CFF7C;
+      box-shadow: 0 0 24px rgba(124,255,124,0.7);
+    }
+    .scene {
+      position: relative;
+      display: inline-block;
+      z-index: 2;
+    }
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(10, 28px);
+      grid-template-rows: repeat(10, 28px);
+      position: relative;
+      z-index: 1;
+    }
+    .tile {
+      width: 28px;
+      height: 28px;
+      background-image: url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/image-4.png");
+      background-size: 280px 280px;
+      animation: tron var(--dur) var(--delay) ease-in-out infinite;
+    }
+    @keyframes tron {
+      0%   { transform: translate(0,0)                    rotate(0deg);   opacity: 1; }
+      35%  { transform: translate(var(--ex), var(--ey))   rotate(360deg); opacity: 0.9; }
+      55%  { transform: translate(var(--bx), var(--by))   rotate(450deg); opacity: 0.9; }
+      80%  { transform: translate(0,0)                    rotate(720deg); opacity: 1; }
+      82%  { transform: translate(0,0)                    rotate(0deg);   opacity: 1; }
+      100% { transform: translate(0,0)                    rotate(0deg);   opacity: 1; }
+    }
+    .banner {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 100%);
+      padding: 5px 10px;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #FFD700;
+      text-transform: uppercase;
+      border-top: 1px solid rgba(255,215,0,0.3);
+      text-shadow: 0 0 10px rgba(255,215,0,0.6);
+      z-index: 10;
+    }
+    .footer {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      text-align: center;
+      padding: 8px;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 5px;
+      color: #FF0000;
+      background: rgba(0,0,0,0.75);
+      border-top: 1px solid rgba(255,0,0,0.25);
+      text-shadow: 0 0 10px rgba(255,0,0,0.5);
+      z-index: 99;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bg-audio" preload="auto" loop>
+    <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Cybercrowd_60s.teaser.mp3" type="audio/mpeg">
+  </audio>
+  <canvas id="bgrain"></canvas>
+  <h1>CYBERCROWD</h1>
+  <div class="enter-graphic" id="enter-graphic">ENTER</div>
+  <div class="scene">
+    <div id="grid"></div>
+    <div class="banner">WHERE WE BELONG</div>
+  </div>
+  <div class="footer">⚠ UNDER CONSTRUCTION ⚠</div>
 
+  <script>
+    const chars = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ01";
+
+    const bgrain = document.getElementById("bgrain");
+    const bgctx = bgrain.getContext("2d");
+    bgrain.width = window.innerWidth;
+    bgrain.height = window.innerHeight;
+    const bgdrops = Array(Math.floor(bgrain.width/14)).fill(0).map(()=>Math.random()*-80);
+    function drawBgRain() {
+      bgctx.fillStyle = "rgba(0,0,0,0.05)";
+      bgctx.fillRect(0,0,bgrain.width,bgrain.height);
+      bgctx.fillStyle = "#7CFF7C";
+      bgctx.font = "14px monospace";
+      bgdrops.forEach((d,i)=>{
+        bgctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*14,d*14);
+        if(d*14>bgrain.height && Math.random()>0.975) bgdrops[i]=0;
+        else bgdrops[i]++;
+      });
+    }
+    setInterval(drawBgRain, 40);
+    window.addEventListener("resize",()=>{ bgrain.width=window.innerWidth; bgrain.height=window.innerHeight; });
+
+    const grid = document.getElementById("grid");
+    const cols=10, rows=10, tileSize=28;
+    const cx=(cols-1)/2, cy=(rows-1)/2;
+    const maxDist=Math.sqrt(cx*cx+cy*cy);
+    for (let r=0; r<rows; r++) {
+      for (let c=0; c<cols; c++) {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+        tile.style.backgroundPosition = (-c*tileSize)+"px "+(-r*tileSize)+"px";
+        const dx=c-cx, dy=r-cy;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        const angle=Math.atan2(dy,dx);
+        const travel=(dist/maxDist)*48;
+        tile.style.setProperty("--ex", (Math.cos(angle)*travel).toFixed(1)+"px");
+        tile.style.setProperty("--ey", (Math.sin(angle)*travel).toFixed(1)+"px");
+        tile.style.setProperty("--bx", (Math.cos(angle)*travel*-0.3).toFixed(1)+"px");
+        tile.style.setProperty("--by", (Math.sin(angle)*travel*-0.3).toFixed(1)+"px");
+        tile.style.setProperty("--delay", (((maxDist-dist)/maxDist)*0.3).toFixed(2)+"s");
+        tile.style.setProperty("--dur", "5s");
+        grid.appendChild(tile);
+      }
+    }
+
+    const bgAudio = document.getElementById("bg-audio");
+    const enterGraphic = document.getElementById("enter-graphic");
+    let introArmed = false;
+
+    document.addEventListener("pointerdown", async () => {
+      if (!introArmed) {
+        enterGraphic.classList.add("lit");
+        try {
+          bgAudio.currentTime = 0;
+          await bgAudio.play();
+        } catch (err) {
+          console.error("Audio blocked:", err);
+        }
+        introArmed = true;
+      } else {
+        window.location.href = "page2.html";
+      }
+    });
+  </script>
+</body>
+</html>
