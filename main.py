@@ -7,4 +7,4 @@ def on_fetch(request):
             html_content = f.read()
         return Response.new(html_content, headers={"content-type": "text/html"})
     except Exception as e:
-        return Response.new(f"Error loading index: {str(e)}", status=500)
+        return Response.new(f"Error [CC-2001]: {str(e)}", status=500)
