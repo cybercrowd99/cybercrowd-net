@@ -22,6 +22,6 @@ The platform is deployed using modern web technologies, ensuring a responsive an
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact Information
-For more information, please contact us at support@cybercrowd.net.
+For more information, please contact us at cybercrowd@live.com.
 
 ---
