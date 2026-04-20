@@ -1,4 +1,19 @@
+
 name = "cybercrowd-net"
-main = "main.py"
-compatibility_date = "2026-04-18"
-compatibility_flags = ["python_workers"]
+pages_build_output_dir = "."
+
+[[r2_buckets]]
+binding = "ALBUM"
+bucket_name = "cybercrowd-album"
+
+[[r2_buckets]]
+binding = "GRAPHICS"
+bucket_name = "cybercrowd-graphics"
+
+[[r2_buckets]]
+binding = "TEASERS"
+bucket_name = "cybercrowd-teasers"
+
+[[services]]
+binding = "MAIN_WORKER"
+service = "cybercrowd-net"
