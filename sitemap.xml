@@ -1,27 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-<loc>https://cybercrowd.net/</loc>
-<priority>1.00</priority>
-<changefreq>weekly</changefreq>
-</url>
-<url>
-<loc>https://cybercrowd.net/</loc>
-<priority>0.90</priority>
-<changefreq>weekly</changefreq>
-</url>
-<url>
-<loc>https://cybercrowd.net/PATH-TO-PAGE-2</loc>
-<priority>0.80</priority>
-<changefreq>monthly</changefreq>
-</url>
-<url>
-<loc>https://cybercrowd.net/PATH-TO-PAGE-3</loc>
-<priority>0.80</priority>
-<changefreq>monthly</changefreq>
-</url>
-<url>
-<loc>https://cybercrowd.net/PATH-TO-PAGE-4</loc>
-<priority>0.70</priority>
-<changefreq>monthly</changefreq>
-</url>
+  <url>
+    <loc>https://cybercrowd.net/</loc>
+    <priority>1.00</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://cybercrowd.net/PATH-TO-PAGE-1</loc>
+    <priority>0.90</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://cybercrowd.net/PATH-TO-PAGE-2</loc>
+    <priority>0.80</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://cybercrowd.net/PATH-TO-PAGE-3</loc>
+    <priority>0.80</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://cybercrowd.net/PATH-TO-PAGE-4</loc>
+    <priority>0.70</priority>
+    <changefreq>monthly</changefreq>
+  </url>
 </urlset>
