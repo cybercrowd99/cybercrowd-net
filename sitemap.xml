@@ -6,8 +6,23 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://cybercrowd.net/page2.html</loc>
+    <loc>https://cybercrowd.net/PATH-TO-PAGE-1</loc>
+    <priority>0.90</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://cybercrowd.net/PATH-TO-PAGE-2</loc>
     <priority>0.80</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://cybercrowd.net/PATH-TO-PAGE-3</loc>
+    <priority>0.80</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://cybercrowd.net/PATH-TO-PAGE-4</loc>
+    <priority>0.70</priority>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>
