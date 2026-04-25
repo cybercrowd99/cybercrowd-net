@@ -1,6 +1,8 @@
 
 name = "cybercrowd-net"
-pages_build_output_dir = "."
+compatibility_date = "2026-04-25"
+[assets] 
+directory = "."
 
 [[r2_buckets]]
 binding = "ALBUM"
@@ -13,7 +15,3 @@ bucket_name = "cybercrowd-graphics"
 [[r2_buckets]]
 binding = "TEASERS"
 bucket_name = "cybercrowd-teasers"
-
-[[services]]
-binding = "MAIN_WORKER"
-service = "cybercrowd-net"
