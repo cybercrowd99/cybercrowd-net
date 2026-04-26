@@ -2,7 +2,7 @@
 name = "cybercrowd-net"
 compatibility_date = "2026-04-25"
 [assets] 
-directory = "."
+directory = "./dist"
 pages_build_output_dir = "."
 [[r2_buckets]]
 binding = "ALBUM"
