@@ -1,10 +1,11 @@
-import js
 from js import Response
 
-def on_fetch(request):
+async def on_fetch(request, env):
     try:
-        with open("index.html", "r") as f:
-            html_content = f.read()
-        return Response.new(html_content, headers={"content-type": "text/html"})
+        return await env.ASSETS.fetch(request)
     except Exception as e:
-        return Response.new(f"Error [CC-2001]: {str(e)}", status=500)
+        return Response.new(
+            f"Error [CC-2001]: {str(e)}",
+            status=500,
+            headers={"content-type": "text/plain; charset=utf-8"}
+        )
