@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>CyberCrowd.net — Official Digital Media Platform</title>
-  <meta name="description" content="CyberCrowd.net is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing." />
+  <meta name="description" content="CyberCrowd.net is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Kricket network development, Reten Records music production, CyberCare support systems, WDIG device pairing, and community-driven publishing." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://cybercrowd.net/page2.html" />
 
   <meta property="og:title" content="CyberCrowd.net — Official Digital Media Platform" />
-  <meta property="og:description" content="CyberCrowd.net is the official home of CyberCrowd: live events, creator tools, audience participation, accessibility, Atomic Cricket, CyberCare, and WDIG." />
+  <meta property="og:description" content="CyberCrowd.net is the official home of CyberCrowd: live events, creator tools, audience participation, accessibility, Atomic Kricket network development, Reten Records music production, CyberCare, and WDIG." />
   <meta property="og:url" content="https://cybercrowd.net/page2.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="CyberCrowd" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="CyberCrowd.net — Official Digital Media Platform" />
-  <meta name="twitter:description" content="CyberCrowd.net is the official home of CyberCrowd: live events, creator tools, audience participation, accessibility, Atomic Cricket, CyberCare, and WDIG." />
+  <meta name="twitter:description" content="CyberCrowd.net is the official home of CyberCrowd: live events, creator tools, audience participation, accessibility, Atomic Kricket network development, Reten Records music production, CyberCare, and WDIG." />
 
   <script type="application/ld+json">
   {
@@ -26,7 +26,7 @@
     "name": "CyberCrowd.net",
     "alternateName": "CyberCrowd",
     "url": "https://cybercrowd.net/",
-    "description": "CyberCrowd.net is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing."
+    "description": "CyberCrowd.net is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Kricket network development, Reten Records music production, CyberCare support systems, WDIG device pairing, and community-driven publishing."
   }
   </script>
 
@@ -37,15 +37,17 @@
     "name": "CyberCrowd",
     "alternateName": "CyberCrowd.net",
     "url": "https://cybercrowd.net/",
-    "description": "CyberCrowd is a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing.",
+    "description": "CyberCrowd is a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Kricket network development, Reten Records music production, CyberCare support systems, WDIG device pairing, and community-driven publishing.",
     "knowsAbout": [
       "CyberCrowd.net",
       "live event discovery",
       "creator participation",
       "audience participation",
       "multi-angle viewing",
+      "observer interaction",
       "accessibility tools",
-      "Atomic Cricket",
+      "Atomic Kricket network development",
+      "Reten Records music production",
       "CyberCare",
       "WDIG device pairing",
       "community-driven publishing"
@@ -80,6 +82,8 @@
 
     .page-wrap {
       width: min(980px, 100%);
+      position: relative;
+      z-index: 2;
     }
 
     h1 {
@@ -125,30 +129,6 @@
     .identity-copy strong {
       color: #7CFF7C;
       font-weight: 700;
-    }
-
-    .atomic-audio-button {
-      position: fixed;
-      top: 14px;
-      right: 14px;
-      z-index: 120;
-      display: none;
-      color: #7CFF7C;
-      background: rgba(0,0,0,0.72);
-      border: 1px solid rgba(124,255,124,0.8);
-      padding: 8px 12px;
-      font-family: "Playfair Display", serif;
-      font-style: italic;
-      font-weight: 900;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-shadow: 0 0 8px rgba(124,255,124,0.55);
-      cursor: pointer;
-    }
-
-    .atomic-audio-button.show {
-      display: block;
     }
 
     .tool-menu {
@@ -201,10 +181,6 @@
     <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Atomic%20Kricket_60s.teaser.mp3" type="audio/mpeg">
   </audio>
 
-  <button id="atomic-audio-button" class="atomic-audio-button" type="button">
-    PLAY ATOMIC KRICKET
-  </button>
-
   <main>
     <div class="page-wrap">
       <h1>CYBERCROWD</h1>
@@ -213,7 +189,7 @@
 
       <section class="identity-copy" aria-label="CyberCrowd.net official platform identity">
         <p>
-          <strong>CyberCrowd.net</strong> is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, observer interaction, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing.
+          <strong>CyberCrowd.net</strong> is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, observer interaction, accessibility tools, Atomic Kricket network development, Reten Records music production, CyberCare support systems, WDIG device pairing, and community-driven publishing.
         </p>
 
         <p>
@@ -237,7 +213,6 @@
 
   <script>
     const atomicAudio = document.getElementById("atomic-kricket-audio");
-    const atomicAudioButton = document.getElementById("atomic-audio-button");
 
     async function startAtomicKricket() {
       if (!atomicAudio) return;
@@ -253,33 +228,22 @@
         }
 
         await atomicAudio.play();
-
-        if (atomicAudioButton) {
-          atomicAudioButton.classList.remove("show");
-        }
-
         console.log("Atomic Kricket audio started on Page 2.");
       } catch (err) {
-        console.warn("Atomic Kricket autoplay blocked. Waiting for user tap.", err);
-
-        if (atomicAudioButton) {
-          atomicAudioButton.classList.add("show");
-        }
+        console.warn("Atomic Kricket audio blocked or source not ready yet.", err);
       }
     }
 
-    window.addEventListener("DOMContentLoaded", startAtomicKricket);
+    window.addEventListener("DOMContentLoaded", () => {
+      startAtomicKricket();
+      setTimeout(startAtomicKricket, 350);
+      setTimeout(startAtomicKricket, 1200);
+    });
 
-    document.addEventListener("pointerdown", () => {
-      if (atomicAudio && atomicAudio.paused) {
-        startAtomicKricket();
-      }
-    }, { once: true });
-
-    if (atomicAudioButton) {
-      atomicAudioButton.addEventListener("click", startAtomicKricket);
-      atomicAudioButton.addEventListener("pointerup", startAtomicKricket);
-    }
+    document.addEventListener("pointerdown", startAtomicKricket, { once: true });
+    document.addEventListener("click", startAtomicKricket, { once: true });
+    document.addEventListener("keydown", startAtomicKricket, { once: true });
+    document.addEventListener("touchstart", startAtomicKricket, { once: true });
   </script>
 </body>
 </html>
