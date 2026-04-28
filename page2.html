@@ -4,44 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>CyberCrowd.net Official Platform — Live Events, Creator Tools, Audience Participation</title>
-
-  <meta name="description" content="CyberCrowd.net is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, observer interaction, multi-angle audience participation, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing." />
-
+  <title>CyberCrowd.net — Official Digital Media Platform</title>
+  <meta name="description" content="CyberCrowd.net is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://cybercrowd.net/page2.html" />
 
-  <meta property="og:title" content="CyberCrowd.net Official Platform" />
-  <meta property="og:description" content="Live event discovery, creator tools, audience participation, accessibility, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing." />
+  <meta property="og:title" content="CyberCrowd.net — Official Digital Media Platform" />
+  <meta property="og:description" content="CyberCrowd.net is the official home of CyberCrowd: live events, creator tools, audience participation, accessibility, Atomic Cricket, CyberCare, and WDIG." />
   <meta property="og:url" content="https://cybercrowd.net/page2.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="CyberCrowd" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="CyberCrowd.net Official Platform" />
+  <meta name="twitter:title" content="CyberCrowd.net — Official Digital Media Platform" />
   <meta name="twitter:description" content="CyberCrowd.net is the official home of CyberCrowd: live events, creator tools, audience participation, accessibility, Atomic Cricket, CyberCare, and WDIG." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CyberCrowd.net",
+    "alternateName": "CyberCrowd",
+    "url": "https://cybercrowd.net/",
+    "description": "CyberCrowd.net is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing."
+  }
+  </script>
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "CyberCrowd",
+    "alternateName": "CyberCrowd.net",
     "url": "https://cybercrowd.net/",
-    "description": "CyberCrowd is a developing digital media platform for live event discovery, creator participation, observer interaction, multi-angle audience participation, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing.",
-    "brand": {
-      "@type": "Brand",
-      "name": "CyberCrowd"
-    },
-    "sameAs": [
-      "https://cybercrowd.net/"
-    ],
+    "description": "CyberCrowd is a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing.",
     "knowsAbout": [
       "CyberCrowd.net",
       "live event discovery",
-      "creator tools",
+      "creator participation",
       "audience participation",
-      "multi-angle media",
-      "observer interaction",
+      "multi-angle viewing",
       "accessibility tools",
       "Atomic Cricket",
       "CyberCare",
@@ -51,23 +53,25 @@
   }
   </script>
 
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      margin: 0;
       min-height: 100vh;
       background: black;
-      color: #00ff66;
-      font-family: Arial, sans-serif;
+      color: #ffffff;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 900;
       text-align: center;
-      padding-bottom: 92px;
+      overflow: hidden;
+      padding-bottom: 78px;
     }
 
     main {
-      min-height: calc(100vh - 92px);
+      min-height: calc(100vh - 78px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -79,107 +83,90 @@
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: clamp(34px, 8vw, 76px);
-      letter-spacing: 3px;
-      color: #00ff66;
-      text-shadow: 0 0 18px rgba(0,255,102,0.55);
-    }
-
-    h2 {
-      margin: 0 0 18px;
-      color: #ffd700;
-      font-size: clamp(18px, 4vw, 34px);
-      letter-spacing: 1px;
-    }
-
-    p {
-      margin: 0 auto 14px;
-      max-width: 820px;
-      color: rgba(255,255,255,0.86);
-      font-size: 16px;
-      line-height: 1.55;
-    }
-
-    .identity-box {
-      width: min(860px, 100%);
-      margin: 24px auto 0;
-      padding: 18px;
-      border: 1px solid rgba(0,255,102,0.55);
-      background: rgba(0,255,102,0.05);
-    }
-
-    .identity-box strong {
-      color: #00ff66;
-    }
-
-    .lighthouse-cue {
-      width: min(760px, 100%);
-      min-height: 150px;
-      margin: 22px auto 0;
-      border: 1px solid rgba(255,215,0,0.45);
-      background: rgba(255,215,0,0.04);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      color: rgba(255,255,255,0.78);
-    }
-
-    .lighthouse-cue strong {
-      display: block;
-      color: #ffd700;
-      margin-bottom: 8px;
+      color: #ffffff;
+      font-size: clamp(40px, 12vw, 90px);
       letter-spacing: 2px;
+      margin-bottom: 4px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.22);
+    }
+
+    .domain-line {
+      color: #7CFF7C;
+      font-size: clamp(18px, 5vw, 38px);
+      letter-spacing: 3px;
+      margin-bottom: 14px;
+      text-shadow: 0 0 18px rgba(124,255,124,0.65);
+    }
+
+    .motto {
+      color: #FFD700;
+      font-size: 13px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      text-shadow: 0 0 10px rgba(255,215,0,0.6);
+    }
+
+    .identity-copy {
+      max-width: 840px;
+      margin: 0 auto;
+      color: rgba(255,255,255,0.78);
+      font-family: Arial, sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .identity-copy p {
+      margin-bottom: 11px;
+    }
+
+    .identity-copy strong {
+      color: #7CFF7C;
+      font-weight: 700;
     }
 
     .tool-menu {
       position: fixed;
-      left: 0;
       bottom: 0;
+      left: 0;
       width: 100%;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
       gap: 8px;
       padding: 10px;
-      background: rgba(0,0,0,0.94);
-      border-top: 1px solid rgba(0,255,102,0.45);
-      z-index: 100;
+      background: rgba(0,0,0,0.82);
+      border-top: 1px solid rgba(255,0,0,0.25);
+      z-index: 99;
     }
 
     .tool-menu a {
-      color: #00ff66;
+      color: #7CFF7C;
       text-decoration: none;
-      border: 1px solid rgba(0,255,102,0.75);
-      padding: 9px 11px;
-      font-size: 12px;
-      letter-spacing: 1px;
+      border: 1px solid rgba(124,255,124,0.75);
+      padding: 7px 11px;
+      font-size: 11px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      background: rgba(0,255,102,0.06);
+      text-shadow: 0 0 8px rgba(124,255,124,0.55);
+      background: rgba(0,0,0,0.45);
     }
 
     .tool-menu a:hover,
     .tool-menu a:focus {
-      color: black;
-      background: #00ff66;
+      color: #FFFFFF;
+      border-color: #7CFF7C;
+      box-shadow: 0 0 18px rgba(124,255,124,0.65);
       outline: none;
-      box-shadow: 0 0 16px rgba(0,255,102,0.7);
     }
 
     @media (max-width: 600px) {
-      body {
-        padding-bottom: 132px;
-      }
-
-      main {
-        min-height: calc(100vh - 132px);
-      }
-
-      .tool-menu a {
-        font-size: 11px;
-        padding: 8px 9px;
-      }
+      body { padding-bottom: 124px; }
+      main { min-height: calc(100vh - 124px); }
+      .identity-copy { font-size: 12px; }
+      .tool-menu a { font-size: 10px; padding: 7px 8px; }
     }
   </style>
 </head>
@@ -188,35 +175,21 @@
   <main>
     <div class="page-wrap">
       <h1>CYBERCROWD</h1>
-      <h2>Where We Belong</h2>
+      <div class="domain-line">CYBERCROWD.NET</div>
+      <div class="motto">WHERE WE BELONG</div>
 
-      <div class="identity-box">
+      <section class="identity-copy" aria-label="CyberCrowd.net official platform identity">
         <p>
-          <strong>CyberCrowd.net</strong> is the official home of CyberCrowd, a developing
-          digital media platform for live event discovery, creator participation,
-          observer interaction, multi-angle audience participation, accessibility tools,
-          Atomic Cricket records, CyberCare support systems, WDIG device pairing, and
-          community-driven publishing.
+          <strong>CyberCrowd.net</strong> is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, observer interaction, accessibility tools, Atomic Cricket records, CyberCare support systems, WDIG device pairing, and community-driven publishing.
         </p>
 
         <p>
-          CyberCrowd is being built as an expandable multi-page, multi-client platform
-          for digital media, live culture, creator tools, audience-selected viewing angles,
-          accessibility-first participation, verified records, and future platform services.
+          CyberCrowd is being built for live culture, creators, viewers, observers, accessibility-first participation, searchable media experiences, verified records, care pathways, and future platform services.
         </p>
 
         <p>
-          CyberCrowd is not a static page. CyberCrowd is a platform system: live events,
-          creators, observers, viewers, archives, accessibility, care pathways, device
-          pairing, and community-built media tools.
+          CyberCrowd.net is not the UK cybersecurity company, not CyberCrowd.co.uk, and not a static placeholder. CyberCrowd.net is the official CyberCrowd platform project: a digital media and audience participation system under development.
         </p>
-      </div>
-
-      <section class="lighthouse-cue" aria-label="Lighthouse cue paste zone">
-        <div>
-          <strong>LIGHTHOUSE CUE ZONE</strong>
-          Paste lighthouse cue content here.
-        </div>
       </section>
     </div>
   </main>
