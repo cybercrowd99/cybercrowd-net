@@ -127,6 +127,30 @@
       font-weight: 700;
     }
 
+    .atomic-audio-button {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 120;
+      display: none;
+      color: #7CFF7C;
+      background: rgba(0,0,0,0.72);
+      border: 1px solid rgba(124,255,124,0.8);
+      padding: 8px 12px;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(124,255,124,0.55);
+      cursor: pointer;
+    }
+
+    .atomic-audio-button.show {
+      display: block;
+    }
+
     .tool-menu {
       position: fixed;
       bottom: 0;
@@ -172,6 +196,15 @@
 </head>
 
 <body>
+  <audio id="atomic-kricket-audio" preload="auto" loop playsinline>
+    <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Atomic%20Kricket_60s.teaser" type="audio/mpeg">
+    <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Atomic%20Kricket_60s.teaser.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="atomic-audio-button" class="atomic-audio-button" type="button">
+    PLAY ATOMIC KRICKET
+  </button>
+
   <main>
     <div class="page-wrap">
       <h1>CYBERCROWD</h1>
@@ -201,5 +234,52 @@
     <a href="#monetary-benefits-cost">Monetary Benefits &amp; Cost</a>
     <a href="wdig-trial.html">WDIG Trial</a>
   </nav>
+
+  <script>
+    const atomicAudio = document.getElementById("atomic-kricket-audio");
+    const atomicAudioButton = document.getElementById("atomic-audio-button");
+
+    async function startAtomicKricket() {
+      if (!atomicAudio) return;
+
+      try {
+        atomicAudio.muted = false;
+        atomicAudio.volume = 1;
+        atomicAudio.setAttribute("playsinline", "");
+        atomicAudio.setAttribute("webkit-playsinline", "");
+
+        if (atomicAudio.readyState === 0) {
+          atomicAudio.load();
+        }
+
+        await atomicAudio.play();
+
+        if (atomicAudioButton) {
+          atomicAudioButton.classList.remove("show");
+        }
+
+        console.log("Atomic Kricket audio started on Page 2.");
+      } catch (err) {
+        console.warn("Atomic Kricket autoplay blocked. Waiting for user tap.", err);
+
+        if (atomicAudioButton) {
+          atomicAudioButton.classList.add("show");
+        }
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", startAtomicKricket);
+
+    document.addEventListener("pointerdown", () => {
+      if (atomicAudio && atomicAudio.paused) {
+        startAtomicKricket();
+      }
+    }, { once: true });
+
+    if (atomicAudioButton) {
+      atomicAudioButton.addEventListener("click", startAtomicKricket);
+      atomicAudioButton.addEventListener("pointerup", startAtomicKricket);
+    }
+  </script>
 </body>
 </html>
