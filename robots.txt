@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://cybercrowd.net/sitemap.xml
+
+Content-Signal: ai-train=no, search=yes, ai-input=no
