@@ -1,0 +1,12 @@
+{
+  "name": "cybercrowd-net",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@x402/hono": "latest",
+    "@x402/evm": "latest",
+    "@x402/core": "latest",
+    "hono": "latest"
+  }
+}
