@@ -132,4 +132,123 @@
     }
 
     .banner {
-      position: absolute
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 100%);
+      padding: 5px 10px;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #FFD700;
+      text-transform: uppercase;
+      border-top: 1px solid rgba(255,215,0,0.3);
+      text-shadow: 0 0 10px rgba(255,215,0,0.6);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      padding: 8px;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: 5px;
+      color: #FF0000;
+      background: rgba(0,0,0,0.75);
+      border-top: 1px solid rgba(255,0,0,0.25);
+      text-shadow: 0 0 10px rgba(255,0,0,0.5);
+      z-index: 99;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .seo-identity {
+      position: fixed;
+      top: 6px;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      color: #7CFF7C;
+      background: transparent;
+      border: none;
+      padding: 0;
+      max-width: none;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1;
+      text-align: center;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .seo-identity h2 {
+      font-size: 12px;
+      font-weight: 400;
+      margin: 0;
+      color: #7CFF7C;
+    }
+
+    .seo-identity p {
+      display: none;
+    }
+
+    @media (max-height: 520px) {
+      :root {
+        --tile-size: 20px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .enter-graphic {
+        font-size: 0.75rem;
+        padding: 4px 18px;
+        margin-top: -8px;
+      }
+
+      .footer {
+        padding: 5px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="bg-audio" preload="auto" loop playsinline>
+    <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Cybercrowd_60s.teaser.mp3" type="audio/mpeg">
+  </audio>
+
+  <canvas id="bgrain"></canvas>
+
+  <h1>CYBERCROWD</h1>
+
+  <div class="enter-graphic" id="enter-graphic">ENTER</div>
+
+  <div class="scene">
+    <div id="grid"></div>
+    <div class="banner">WHERE WE BELONG</div>
+  </div>
+
+  <div class="footer">UNDER CONSTRUCTION</div>
+
+  <section id="cybercrowd-official" class="seo-identity">
+    <h2>Official Site</h2>
+  </section>
+
+  <script>
+    const chars = "\u30a2\u30a4\u30a6\u30a8\u30aa\u30ab\u30ad\u30af\u30b1\u30b3\u30b5\u30b7\u30b9\u30bb\u30bd\u30bf\u30c1\u30c4\u30c6\u30c8\u30na\u30cb\u30cc\u30ネ\u30ノ\u30ハ\u30ヒ\u30フ\u30ヘ\u30ホ01";
+  </script>
+</body>
+</html>
