@@ -150,7 +150,7 @@
       z-index: 10;
       pointer-events: none;
     }
-
+    
     .footer {
       position: fixed;
       bottom: 0;
@@ -248,7 +248,208 @@
   </section>
 
   <script>
-    const chars = "\u30a2\u30a4\u30a6\u30a8\u30aa\u30ab\u30ad\u30af\u30b1\u30b3\u30b5\u30b7\u30b9\u30bb\u30bd\u30bf\u30c1\u30c4\u30c6\u30c8\u30na\u30cb\u30cc\u30ネ\u30ノ\u30ハ\u30ヒ\u30フ\u30ヘ\u30ホ01";
+    const chars = Array.from({ length: 86 }, (_, i) => String.fromCharCode(0x30A0 + i)).join("") + "01";
+
+    const bgrain = document.getElementById("bgrain");
+    const bgctx = bgrain.getContext("2d");
+
+    function sizeRainCanvas() {
+      bgrain.width = window.innerWidth;
+      bgrain.height = window.innerHeight;
+    }
+
+    sizeRainCanvas();
+
+    let bgdrops = Array(Math.floor(bgrain.width / 14)).fill(0).map(() => Math.random() * -80);
+
+    function resetRainDrops() {
+      bgdrops = Array(Math.floor(bgrain.width / 14)).fill(0).map(() => Math.random() * -80);
+    }
+
+    function drawBgRain() {
+      bgctx.fillStyle = "rgba(0,0,0,0.05)";
+      bgctx.fillRect(0, 0, bgrain.width, bgrain.height);
+
+      bgctx.fillStyle = "#7CFF7C";
+      bgctx.font = "14px monospace";
+
+      bgdrops.forEach((d, i) => {
+        bgctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 14, d * 14);
+
+        if (d * 14 > bgrain.height && Math.random() > 0.975) {
+          bgdrops[i] = 0;
+        } else {
+          bgdrops[i]++;
+        }
+      });
+    }
+
+    setInterval(drawBgRain, 40);
+    
+    window.addEventListener("resize", () => {
+      sizeRainCanvas();
+      resetRainDrops();
+      positionTiles();
+    });
+
+    const grid = document.getElementById("grid");
+    const cols = 10;
+    const rows = 10;
+    const tileSize = 28;
+    const cx = (cols - 1) / 2;
+    const cy = (rows - 1) / 2;
+    const maxDist = Math.sqrt(cx * cx + cy * cy);
+    const tiles = [];
+
+    function positionTiles() {
+      if (!grid) return;
+      const currentTileSize = grid.getBoundingClientRect().width / cols;
+      const backgroundSize = (currentTileSize * cols) + "px " + (currentTileSize * rows) + "px";
+
+      tiles.forEach(({ tile, r, c }) => {
+        tile.style.backgroundSize = backgroundSize;
+        tile.style.backgroundPosition = (-c * currentTileSize) + "px " + (-r * currentTileSize) + "px";
+      });
+    }
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+
+        const dx = c - cx;
+        const dy = r - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx);
+        const travel = (dist / maxDist) * 48;
+
+        tile.style.setProperty("--ex", (Math.cos(angle) * travel).toFixed(1) + "px");
+        tile.style.setProperty("--ey", (Math.sin(angle) * travel).toFixed(1) + "px");
+        tile.style.setProperty("--bx", (Math.cos(angle) * travel * -0.3).toFixed(1) + "px");
+        tile.style.setProperty("--by", (Math.sin(angle) * travel * -0.3).toFixed(1) + "px");
+        tile.style.setProperty("--delay", (((maxDist - dist) / maxDist) * 0.3).toFixed(2) + "s");
+        tile.style.setProperty("--dur", "5s");
+
+        grid.appendChild(tile);
+        tiles.push({ tile, r, c });
+      }
+    }
+
+    positionTiles();
+
+    const bgAudio = document.getElementById("bg-audio");
+    const enterGraphic = document.getElementById("enter-graphic");
+
+    const NEXT_PAGE_URL = "page2.html";
+
+    let gateState = "WAITING_FOR_AUDIO";
+    let navigating = false;
+    let audioStartedAt = 0;
+    let lastAudioAttemptAt = 0;
+
+    function setEnterText(text) {
+      if (!enterGraphic) return;
+      enterGraphic.textContent = text;
+    }
+
+    function lightEnter() {
+      if (!enterGraphic) return;
+      enterGraphic.classList.add("lit");
+    }
+
+    function dimEnter() {
+      if (!enterGraphic) return;
+      enterGraphic.classList.remove("lit");
+    }
+
+    async function startCybercrowdTeaser() {
+      if (!bgAudio) {
+        console.error("CyberCrowd audio error: #bg-audio was not found.");
+        setEnterText("NO AUDIO");
+        gateState = "WAITING_FOR_AUDIO";
+        return false;
+      }
+
+      try {
+        bgAudio.muted = false;
+        bgAudio.volume = 1;
+        bgAudio.setAttribute("playsinline", "");
+        bgAudio.setAttribute("webkit-playsinline", "");
+
+        if (bgAudio.readyState === 0) {
+          bgAudio.load();
+        }
+
+        try {
+          bgAudio.currentTime = 0;
+        } catch (seekErr) {
+          console.warn("CyberCrowd teaser seek warning:", seekErr);
+        }
+
+        await bgAudio.play();
+
+        gateState = "AUDIO_PLAYING";
+        audioStartedAt = Date.now();
+
+        lightEnter();
+        setEnterText("ENTER");
+
+        console.log("CyberCrowd teaser audio started. Staying on Window 1.");
+        return true;
+      } catch (err) {
+        gateState = "WAITING_FOR_AUDIO";
+        dimEnter();
+        setEnterText("TAP AGAIN");
+
+        console.error("CyberCrowd teaser audio failed to start:", err);
+        return false;
+      }
+    }
+    
+    async function cybercrowdGateTouch(e) {
+      if (e && typeof e.preventDefault === "function") {
+        e.preventDefault();
+      }
+
+      if (navigating) return;
+
+      const now = Date.now();
+
+      if (gateState === "WAITING_FOR_AUDIO") {
+        if (now - lastAudioAttemptAt < 250) return;
+
+        lastAudioAttemptAt = now;
+        setEnterText("ARMING");
+
+        await startCybercrowdTeaser();
+        return;
+      }
+
+      if (gateState === "AUDIO_PLAYING" && now - audioStartedAt < 900) {
+        return;
+      }
+
+      if (gateState === "AUDIO_PLAYING") {
+        navigating = true;
+        setEnterText("ENTERING");
+        window.location.href = NEXT_PAGE_URL;
+      }
+    }
+
+    document.addEventListener("click", cybercrowdGateTouch, false);
+
+    document.addEventListener("pointerup", cybercrowdGateTouch, false);
+
+    document.addEventListener("touchend", cybercrowdGateTouch, { passive: false });
+
+    document.addEventListener("keydown", async (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        await cybercrowdGateTouch(e);
+      }
+    });
   </script>
 </body>
 </html>
+
+
+
