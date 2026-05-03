@@ -19,7 +19,16 @@ The platform is deployed using modern web technologies, ensuring a responsive an
 - Archives
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+This repository is protected under the CyberCrowd Proprietary License.
+
+CyberCrowd Net, WDIG, Surface OS, Magic Cursor, adWorm, Blind Slate, Deaf Companion, camera-access systems, pairing systems, licensing systems, interface designs, documentation, media, branding, workflows, and related platform materials are proprietary CyberCrowd intellectual property.
+
+No part of this repository may be copied, modified, distributed, sublicensed, sold, published, reused, reverse engineered, or used to create derivative works without prior written permission from CyberCrowd.
+
+Customer purchases, including the WDIG Access Pass, are governed by separate CyberCrowd product terms, checkout terms, access policies, and license policies.
+
+See [LICENSE.md](LICENSE.md) for the full CyberCrowd Proprietary License.
 
 ## Contact Information
 For more information, please contact us at cybercrowd@live.com.
