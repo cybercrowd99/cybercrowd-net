@@ -1,36 +1,24 @@
-# Cybercrowd Net
+# CyberCrowd Net
 
 ## Overview
-Cybercrowd Net is a discovery-first media platform designed to enhance live culture, provide comprehensive archives, enable monetization opportunities, ensure accessibility, and create coordinated digital experiences for users.
+
+CyberCrowd Net is a discovery-first live media and camera-access platform built for live culture, creator/client broadcasts, MultiCam experiences, archives, accessibility expansion, and coordinated digital interaction.
+
+CyberCrowd is not a basic static website or simple storefront. It is being developed as a platform ecosystem where viewers, subscribers, creators, clients, and device-based tools can connect through live media access, WDIG control, CyberShop products, and future Reten Records media integration.
 
 ## Purpose
-The platform aims to connect audiences with engaging content and facilitate interactions around various cultural and entertainment events. With a focus on discoverability, Cybercrowd Net empowers users to explore and participate in live experiences.
+
+The platform aims to connect audiences with engaging content and facilitate interactions around live cultural, entertainment, creator, and client-driven events.
+
+With a focus on discoverability, CyberCrowd Net empowers users to explore, participate in, and access live experiences through camera-access tools, WDIG systems, MultiCam trials, CyberShop products, and future accessibility features.
 
 ## Deployment Details
-The platform is deployed using modern web technologies, ensuring a responsive and user-friendly interface that accommodates various devices and screen sizes.
 
-## Tags for SEO
-- Cybercrowd
-- Media Platform
-- Live Culture
-- Digital Experiences
-- Monetization
-- Accessibility
-- Archives
+The platform is deployed using modern web technologies with a responsive interface designed for multiple devices and screen sizes.
 
-## License
+Current public pages include:
 
-This repository is protected under the CyberCrowd Proprietary License.
-
-CyberCrowd Net, WDIG, Surface OS, Magic Cursor, adWorm, Blind Slate, Deaf Companion, camera-access systems, pairing systems, licensing systems, interface designs, documentation, media, branding, workflows, and related platform materials are proprietary CyberCrowd intellectual property.
-
-No part of this repository may be copied, modified, distributed, sublicensed, sold, published, reused, reverse engineered, or used to create derivative works without prior written permission from CyberCrowd.
-
-Customer purchases, including the WDIG Access Pass, are governed by separate CyberCrowd product terms, checkout terms, access policies, and license policies.
-
-See [LICENSE.md](LICENSE.md) for the full CyberCrowd Proprietary License.
-
-## Contact Information
-For more information, please contact us at cybercrowd@live.com.
-
----
+```txt
+https://cybercrowd.net/
+https://cybercrowd.net/page2.html
+https://cybercrowd.net/shop.html
