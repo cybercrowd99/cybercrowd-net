@@ -1,4 +1,6 @@
-# CyberCrowd Net
+# CyberCrowd / RetenRecords Web Foundation
+
+This repository supports development for CyberCrowd.net and RetenRecords. The official public platform home is CyberCrowd.net.
 
 ## Overview
 
