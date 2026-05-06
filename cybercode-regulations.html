@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCode of Regulations | Moral Rulebook, Precedent & Platform Memory</title>
+  <meta name="description" content="CyberCode of Regulations is CyberCrowd's living moral and operational rulebook for CyberCourt lessons, Docket Forum issues, public signal, precedent, restraint, repair, Water Decrees, and escape-clause correction." />
+  <link rel="canonical" href="https://cybercrowd.net/cybercode-regulations.html" />
+
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: #101522;
+      --panel-2: #151c2d;
+      --text: #f4f7fb;
+      --muted: #aab4c5;
+      --line: rgba(255,255,255,0.14);
+      --accent: #48e0ff;
+      --gold: #facc15;
+      --red: #fb7185;
+      --green: #22c55e;
+      --purple: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(72,224,255,0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(250,204,21,0.14), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(168,85,247,0.10), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 28px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5,7,13,0.82);
+    }
+
+    nav {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .links a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+    }
+
+    .links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    .hero {
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(16,21,34,0.96), rgba(21,28,45,0.90));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 5vw, 4.2rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      max-width: 930px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 160px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.96rem;
+    }
+
+    .section {
+      margin-top: 34px;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(16,21,34,0.74);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.7rem;
+    }
+
+    .section p {
+      color: var(--muted);
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: var(--panel-2);
+    }
+
+    .item strong {
+      color: var(--accent);
+    }
+
+    .notice {
+      border-left: 4px solid var(--gold);
+      padding: 16px 18px;
+      background: rgba(250,204,21,0.08);
+      border-radius: 14px;
+      margin-top: 20px;
+      color: var(--text);
+    }
+
+    .warning {
+      border-left-color: var(--red);
+      background: rgba(251,113,133,0.08);
+    }
+
+    .safe {
+      border-left-color: var(--green);
+      background: rgba(34,197,94,0.08);
+    }
+
+    .deep {
+      border-left-color: var(--purple);
+      background: rgba(168,85,247,0.08);
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 50px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      margin-right: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .grid,
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero {
+        padding: 24px;
+      }
+
+      nav {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav aria-label="CyberCode of Regulations navigation">
+      <div class="brand">CyberCode</div>
+      <div class="links">
+        <a href="/">Landing</a>
+        <a href="/page2.html">Platform</a>
+        <a href="/cybercourt.html">CyberCourt</a>
+        <a href="/docket-forum.html">Docket Forum</a>
+        <a href="/monetary-system.html">Monetary System</a>
+        <a href="/access.html">Access</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">CyberCode of Regulations / Moral Rulebook / Platform Memory</div>
+      <h1>CyberCode is the deep rulebook underneath CyberCrowd.</h1>
+      <p>
+        CyberCode of Regulations is the living moral and operational rulebook of CyberCrowd.
+        It records what CyberCourt learns, what the Docket Forum reveals, what the public
+        signals, what the board must remember, what money must not touch, what safety must
+        protect, what can be forgiven, what must be restrained, and what must never be repeated.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <h2>Memory</h2>
+          <p>CyberCode remembers the lesson so CyberCrowd does not repeat the same blindness twice.</p>
+        </article>
+
+        <article class="card">
+          <h2>Morality</h2>
+          <p>CyberCode does not claim moral perfection. It demands moral accounting.</p>
+        </article>
+
+        <article class="card">
+          <h2>Restraint</h2>
+          <p>CyberCode keeps the sword sheathed until action is necessary.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Moral foundation</h2>
+      <p>
+        CyberCode is not written so CyberCrowd can punish faster. CyberCode is written so
+        CyberCrowd knows when not to punish, when to warn, when to repair, when to restrict,
+        when to forgive, when to remember, and when action becomes necessary.
+      </p>
+      <p>
+        CyberCrowd may make mistakes. Users may make mistakes. Creators may make mistakes.
+        Reviewers may lean. Board members may fail disclosure. Public sentiment may be wrong.
+        Automated systems may overreach. CyberCode exists so those failures do not disappear.
+      </p>
+
+      <div class="notice deep">
+        CyberCode turns failure into rule memory.
+      </div>
+
+      <div class="grid-two">
+        <div class="item"><strong>A mistake may be repairable.</strong> CyberCode should allow correction when harm can be fixed and trust can be restored.</div>
+        <div class="item"><strong>A pattern becomes policy.</strong> Repeated harm, loopholes, abuse, or confusion must become clearer rules.</div>
+        <div class="item"><strong>A person may be forgiven.</strong> CyberCrowd should not confuse repairable human failure with permanent threat.</div>
+        <div class="item"><strong>A breach of trust must be remembered.</strong> Forgiveness does not require CyberCrowd to erase the lesson.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>The CyberCrowd rule path</h2>
+      <div class="list">
+        <div class="item"><strong>CyberCourt hears the issue:</strong> public discourse, survey review, Debate Recourse, Sequester Requests, and service-call review surface what needs attention.</div>
+        <div class="item"><strong>Docket Forum frames the issue:</strong> the issue is narrowed, tested, labeled, and routed without turning the profile into the case.</div>
+        <div class="item"><strong>CyberCode remembers the lesson:</strong> rules, exceptions, corrections, precedent, and Water Decrees are recorded for future clarity.</div>
+        <div class="item"><strong>CyberCrowd keeps the keys:</strong> the public has a valuable voice, but CyberCrowd has operational responsibility.</div>
+      </div>
+
+      <div class="notice safe">
+        CyberCourt hears. Docket Forum frames. CyberCode remembers. CyberCrowd keeps the keys.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>The Five-Part Foundation</h2>
+      <p>
+        CyberCode begins with shelter, food, clothing, water, and reward. These are not decorative
+        metaphors. They describe how CyberCrowd protects, learns, identifies, corrects, and sustains.
+      </p>
+
+      <div class="list">
+        <div class="item">
+          <strong>Shelter:</strong>
+          rules are the walls. They protect child safety, no-doxx boundaries, access integrity,
+          identity rules, money boundaries, public trust, board disclosure, and platform safety.
+        </div>
+
+        <div class="item">
+          <strong>Food:</strong>
+          gaps feed the rulebook. Loopholes, dislikes, mistakes, Sequester Requests, venue failures,
+          public confusion, and repeated issues become nourishment for better rules.
+        </div>
+
+        <div class="item">
+          <strong>Clothing:</strong>
+          doctrine clothes the platform before power arrives. CyberCrowd establishes its language,
+          ethics, identity, and first principles before future boards, investors, sponsors, or challengers
+          attempt to redefine what the platform meant.
+        </div>
+
+        <div class="item">
+          <strong>Water:</strong>
+          correction washes through the system. Water carries decrees, clarifications, reinstatements,
+          redactions, venue corrections, and policy updates without erasing the lesson.
+        </div>
+
+        <div class="item">
+          <strong>Reward:</strong>
+          contributors may receive value when they improve the code. A good challenge may become a
+          better rule, and a better rule may earn a thank-you, credit, comp, or recognition without
+          buying control.
+        </div>
+      </div>
+
+      <div class="notice">
+        Rules protect. Gaps teach. Doctrine identifies. Water corrects and carries the decree. Reward sustains.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>The Socratic Net Rule</h2>
+      <p>
+        CyberCourt does not chase every ball. The Socratic Net decides what crosses into review.
+        Every public challenge, decree, docket issue, Sequester Request, and debate input must clear
+        a definition-first question boundary before it becomes policy signal.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Is this about the issue, not the profile?</strong></div>
+        <div class="item"><strong>Is this clear enough to answer?</strong></div>
+        <div class="item"><strong>Is this a real concern or a side slap?</strong></div>
+        <div class="item"><strong>Is this a public signal or a weapon?</strong></div>
+        <div class="item"><strong>Is this debate or competitive narrative?</strong></div>
+        <div class="item"><strong>Is this asking for clarity or control?</strong></div>
+        <div class="item"><strong>Is this repairable, punishable, forgivable, or pattern-based?</strong></div>
+        <div class="item"><strong>Is this safe to publish without doxxing?</strong></div>
+      </div>
+
+      <div class="notice">
+        A bad argument hits the net. A clear issue enters the docket.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>The Herodotean Inquiry Rule</h2>
+      <p>
+        CyberCode should not begin with one story and call it truth. Different people may enter
+        CyberCourt with different stories, customs, fears, loyalties, explanations, and interests.
+        CyberCode must study the issue before judging the person.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Who is telling the story?</strong> Identify the source without turning the profile into the issue.</div>
+        <div class="item"><strong>What other account exists?</strong> Look for competing accounts before treating one version as complete.</div>
+        <div class="item"><strong>What shaped the story?</strong> Consider fear, custom, loyalty, incentive, conflict, sponsor pressure, or hidden influence.</div>
+        <div class="item"><strong>What did the action cause?</strong> Study consequence, harm, confusion, repair, and platform maintenance needs.</div>
+      </div>
+
+      <div class="notice deep">
+        CyberCode gathers accounts, tests the issue, studies motive, protects the person, and records the lesson.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>The Dynamic Foundation Rule</h2>
+      <p>
+        CyberCrowd is not a frozen platform foundation. It is a dynamic, evolutionary, revolutionary
+        business model. CyberCode must be able to record stable rules while still allowing new evidence,
+        public sentiment, market change, technology advancement, moral correction, and better questions
+        to reshape the rulebook.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Accepted model:</strong> what CyberCrowd currently believes works.</div>
+        <div class="item"><strong>Challenger model:</strong> what a user, reviewer, client, guardian, or board member argues should be different.</div>
+        <div class="item"><strong>Hybrid model:</strong> what emerges when two explanations are incomplete by themselves.</div>
+        <div class="item"><strong>Evolving model:</strong> what CyberCode records after the issue teaches CyberCrowd something better.</div>
+      </div>
+
+      <div class="notice safe">
+        A foundation can be stable without being static.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>The Sheathed Sword Principle</h2>
+      <p>
+        A rule is a sword. It must have a hilt, a hand, and a sheath. Without the hilt,
+        power cannot be held safely. Without the sheath, power is always threatening someone.
+        Without restraint, enforcement becomes performance.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Two cutting edges:</strong> enforcement and mercy.</div>
+        <div class="item"><strong>The point:</strong> final decision.</div>
+        <div class="item"><strong>The hilt:</strong> controlled authority.</div>
+        <div class="item"><strong>The sheath:</strong> restraint before action.</div>
+      </div>
+
+      <div class="notice">
+        CyberCode keeps the sword sheathed until action is necessary.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>KAREN Rule / Anti Side-Slap Rule</h2>
+      <p>
+        The weakest use of CyberCode is the side slap: using policy for noise, shame,
+        ego, pressure, popularity, profile punishment, or public theater instead of necessary
+        protection, repair, or enforcement.
+      </p>
+      <p>
+        The KAREN Rule blocks side-slap behavior. Frivolous, false, weaponized, performative,
+        or bad-faith complaints may not force CyberCrowd to draw enforcement against a person,
+        profile, creator, client, reviewer, board member, or platform lane.
+      </p>
+
+      <div class="notice warning">
+        CyberCrowd will not swing the sword just because someone screams for it.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>The Competitive Narrative Ban</h2>
+      <p>
+        CyberCrowd must not develop, deploy, reward, or algorithmically format competitive narratives
+        that turn users, creators, reviewers, guardians, clients, advertisers, board members, communities,
+        religions, identities, regions, or profiles into opposing sides for engagement, punishment,
+        monetization, or control.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Debate seeks clarity.</strong> Debate may test disagreement, policy, evidence, repair, and public sentiment.</div>
+        <div class="item"><strong>Competitive narrative seeks domination.</strong> It turns people into enemies for attention, money, pressure, or platform control.</div>
+        <div class="item"><strong>Algorithm boundary:</strong> ranking, recommendation, notification, survey, debate, docket, or ad systems should not amplify hostility because hostility performs.</div>
+      </div>
+
+      <div class="notice warning">
+        CyberCourt may test disagreement. CyberCrowd must not manufacture enemies.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Valuable Voice Boundary</h2>
+      <p>
+        CyberCourt exists because the public voice matters. Public debate can reveal confusion,
+        pain, unfairness, dislike, loopholes, market needs, policy failure, and repair opportunities.
+      </p>
+      <p>
+        Public voice is not the same as operational control. CyberCrowd must listen without surrendering
+        its duty to safety, child protection, identity rules, payment integrity, platform stability,
+        legal compliance, and final enforcement.
+      </p>
+
+      <div class="notice safe">
+        The public has a valuable voice. CyberCrowd has operational responsibility.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Controlled Answer Rule</h2>
+      <p>
+        CyberCode answers the issue, not the appetite. CyberCourt and CyberCode may answer public
+        issues without exposing private handles, personal identity, unnecessary details, or language
+        that can be weaponized.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Clarify without exposing:</strong> answer the issue without doxxing the person.</div>
+        <div class="item"><strong>Respond without feeding attack:</strong> do not hand a hostile participant a weapon.</div>
+        <div class="item"><strong>Preserve the record:</strong> record the lesson without unnecessary identity exposure.</div>
+      </div>
+
+      <div class="notice">
+        A public answer should create clarity, not ammunition.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Water Decree Rule</h2>
+      <p>
+        Water is the public decree layer of CyberCode. It carries simple notices when CyberCrowd
+        updates a rule, corrects a lane, reinstates access, clarifies a policy, or announces that
+        an issue may now be discussed on a specific avenue.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>New Decree:</strong> a topic is now allowed on this avenue under issue-not-profile rules.</div>
+        <div class="item"><strong>New Decree:</strong> a content lane was corrected after review.</div>
+        <div class="item"><strong>New Decree:</strong> access was reinstated after review under the current CyberCode standard.</div>
+        <div class="item"><strong>New Decree:</strong> a policy gap was closed after public signal and CyberCrowd review.</div>
+        <div class="item"><strong>New Decree:</strong> a Magic Cursor-related policy challenge was reviewed, and corrective action was supported under the current standard.</div>
+      </div>
+
+      <div class="notice safe">
+        Water Decrees announce the issue outcome, not the person. Specific issue. Protected person.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Reward and contributor credit</h2>
+      <p>
+        CyberCrowd may reward rule improvement, not rule manipulation. If a person successfully
+        reveals a gap, improves a rule, exposes an escape clause, helps clarify policy, or contributes
+        to a CyberCode update, CyberCrowd may offer a thank-you, credit, comp, membership time,
+        service-call credit, CyberShop credit, Docket Forum credit, or future recognition.
+      </p>
+
+      <div class="notice">
+        A good challenge may become a better rule. A better rule may earn a thank-you. A thank-you may be a credit, not control.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Rule hierarchy</h2>
+      <p>
+        CyberCode needs order. Public sentiment cannot outrank child safety. A sponsor cannot outrank
+        no-money-on-the-scales. A popular argument cannot outrank doxxing protection.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>1. Child safety and vulnerable-user protection</strong></div>
+        <div class="item"><strong>2. Legal compliance, fraud, crime, and platform security</strong></div>
+        <div class="item"><strong>3. Identity, access, and payment integrity</strong></div>
+        <div class="item"><strong>4. No-doxx and issue-not-profile protection</strong></div>
+        <div class="item"><strong>5. No money on the scales and ad-free courtroom integrity</strong></div>
+        <div class="item"><strong>6. Board disclosure and hidden influence prevention</strong></div>
+        <div class="item"><strong>7. Public sentiment precedent</strong></div>
+        <div class="item"><strong>8. Debate, dislike, suggestion, and market signals</strong></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Rule source labels and states</h2>
+      <p>
+        CyberCode should remember where a rule came from and whether it is active, challenged,
+        emergency-only, or replaced.
+      </p>
+
+      <div class="grid-two">
+        <div class="item">
+          <strong>Rule source labels:</strong>
+          Founder Rule, Board Rule, CyberCourt Precedent, Docket Forum Signal, Legal/Compliance Rule,
+          Safety Rule, Guardian Rule, Monetary Rule, Emergency Rule.
+        </div>
+
+        <div class="item">
+          <strong>Rule states:</strong>
+          Draft, Active, Under Review, Suspended, Overturned, Emergency Active, Retired, Replaced.
+        </div>
+      </div>
+
+      <div class="notice">
+        CyberCode is not a pile of old rules. It is a living rulebook with source, status, and memory.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Exception handling</h2>
+      <p>
+        Exceptions must not become secret loopholes. An exception must be recorded, justified,
+        limited, and reviewable.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>No secret exceptions.</strong></div>
+        <div class="item"><strong>No friend exceptions.</strong></div>
+        <div class="item"><strong>No sponsor exceptions.</strong></div>
+        <div class="item"><strong>No board-favor exceptions.</strong></div>
+        <div class="item"><strong>No exception that erases the duty to protect children, safety, identity, money integrity, or public trust.</strong></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Emergency brake</h2>
+      <p>
+        CyberCrowd may act before public review when child safety, violence, fraud, doxxing,
+        platform security, hidden influence, payment abuse, or serious public-trust harm requires
+        immediate action. CyberCourt may review after, but CyberCrowd does not need to wait while
+        active harm spreads.
+      </p>
+
+      <div class="notice warning">
+        Public review is valuable. Active harm may require immediate operational action.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Appeal, challenge, and overturning</h2>
+      <p>
+        CyberCode is alive. A rule may be challenged by new facts, repeated public signal,
+        board review, legal duty, safety failure, market change, technology advancement, or evidence
+        that the rule caused harm.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Precedent signal:</strong> repeated public sentiment may guide future handling of similar issues.</div>
+        <div class="item"><strong>Overturning:</strong> new facts, better policy, changed market conditions, stronger safety concerns, or later public sentiment may overturn a prior precedent signal.</div>
+        <div class="item"><strong>Operational boundary:</strong> precedent guides CyberCrowd; it does not replace CyberCrowd’s duty to safety, legal compliance, child protection, identity, payment rules, and platform stability.</div>
+      </div>
+
+      <div class="notice">
+        Precedent is memory, not prison.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>CyberCourt to CyberCode loop</h2>
+      <div class="list">
+        <div class="item"><strong>1. Issue appears:</strong> a violation, block, dispute, complaint, venue problem, Sequester Request, Water Decree need, or public signal enters CyberCourt.</div>
+        <div class="item"><strong>2. Docket Forum tests it:</strong> public signal, survey narrowing, Debate Recourse, service-call review, or evidence review identifies the problem.</div>
+        <div class="item"><strong>3. Gap appears:</strong> CyberCourt may reveal vague language, missing policy, hidden influence, profile attack, lane confusion, competitive narrative, or rule-bypass behavior.</div>
+        <div class="item"><strong>4. CyberCrowd reviews:</strong> CyberCrowd assigns the lane, checks records, protects safety, and decides operational action.</div>
+        <div class="item"><strong>5. CyberCode records the fix:</strong> the regulation, clarification, exception, precedent, Water Decree, or updated rule is recorded for future cases.</div>
+      </div>
+
+      <div class="notice safe">
+        CyberCourt finds the ambiguity. CyberCode closes the escape clause. CyberCrowd keeps the keys.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>CyberCode regulation books</h2>
+      <p>
+        In future 3D or interactive CyberCourt experiences, the Jester may pull a book from a shelf.
+        That book is not merely an archive. It is a CyberCode regulation volume.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Access Code:</strong> viewer access, creator access, guardian access, paid-member privileges, service-call access, and verified-member participation.</div>
+        <div class="item"><strong>Guardian Code:</strong> child-safe access, guardian controls, restricted discovery, and no-profile/no-targeting protections.</div>
+        <div class="item"><strong>Creator Code:</strong> creator identity step-up, content authorization, camera access, payout eligibility, and room control rules.</div>
+        <div class="item"><strong>Venue Code:</strong> content placement, wrong-lane correction, adult/family/education/client routing, and venue-change notices.</div>
+        <div class="item"><strong>CyberCourt Code:</strong> docket status labels, Debate Recourse Center rules, survey narrowing standards, Sequester Requests, evidence standards, and public sentiment precedent.</div>
+        <div class="item"><strong>Sequester Code:</strong> live forum challenge rules, relevance questions, benefit disclosure, conflict disclosure, and board-facing escalation.</div>
+        <div class="item"><strong>Disclosure Code:</strong> hidden influence triggers, board contact records, vote integrity checks, recusal review, and ethics review states.</div>
+        <div class="item"><strong>Reviewer Code:</strong> paid reviewer standards, debate-worker rules, survey-auditor rules, quality checks, and conflict boundaries.</div>
+        <div class="item"><strong>Reimbursement Code:</strong> participation reimbursement, service-fee refunds, access credits, membership credits, and no-outcome-buying boundaries.</div>
+        <div class="item"><strong>Monetary Code:</strong> Me/Them/They value circulation, service-call fees, sponsor lanes, and money clarity before complex money rails.</div>
+        <div class="item"><strong>No-Doxx Code:</strong> expose the issue, not the person.</div>
+        <div class="item"><strong>KAREN Rule Code:</strong> frivolous complaint, bad-faith escalation, profile attack, side-slap behavior, and weaponized complaint boundaries.</div>
+        <div class="item"><strong>Competitive Narrative Code:</strong> debate without manufacturing enemies for engagement.</div>
+        <div class="item"><strong>AI Shadow-Block Code:</strong> automated restriction review, grace periods, public silence signals, reinstatement logic, and escalation paths.</div>
+        <div class="item"><strong>Water Decree Code:</strong> public rule updates, policy clarifications, lane corrections, and non-identifying issue notices.</div>
+      </div>
+
+      <div class="notice">
+        The Jester does not pull a case from an archive. The Jester opens the CyberCode.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Ad-free regulation integrity</h2>
+      <p>
+        CyberCode must protect the same ad-free integrity as CyberCourt. Regulations, precedent,
+        rulings, reviewer standards, survey rules, reimbursement rules, Water Decrees, and policy updates
+        must not be shaped by adWorm, sponsor pressure, paid-outcome behavior, or hidden money influence.
+      </p>
+
+      <div class="notice warning">
+        No ads in the courtroom. No money on the scales. adWorm funds the building, not the ruling.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Record integrity</h2>
+      <p>
+        Every meaningful CyberCode change should leave a trail. CyberCrowd should know what changed,
+        why it changed, who approved it, what issue triggered it, what prior rule it replaced, and what
+        future review is needed.
+      </p>
+
+      <div class="notice">
+        CyberCode is not written to hide CyberCrowd behind fine print. It is written to preserve memory, explain judgment, guide restraint, and prevent repeat blindness.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>What is active now</h2>
+      <p>
+        This page is a public foundation page only. It defines the CyberCode of Regulations direction,
+        moral foundation, Socratic Net, Herodotean Inquiry, Dynamic Foundation, Sheathed Sword,
+        KAREN Rule, Competitive Narrative Ban, Valuable Voice Boundary, Five-Part Foundation,
+        Water Decree Rule, reward concept, rule hierarchy, exception handling, emergency brake,
+        appeal path, regulation books, and ad-free integrity.
+      </p>
+
+      <div class="notice warning">
+        No live regulation database, live voting engine, login system, case filing system, payment wiring,
+        legal-code engine, enforcement engine, or personal data collection is active on this page.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      CyberCode of Regulations foundation. Moral rulebook, platform memory, restraint, Water Decrees,
+      public signal, escape-clause repair, precedent, and board-ready doctrine.
+    </p>
+    <p>
+      <a href="/cybercourt.html">Return to CyberCourt</a>
+      <a href="/docket-forum.html">Return to Docket Forum</a>
+    </p>
+  </footer>
+</body>
+</html>
