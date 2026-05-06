@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd Broadcast | Live Rooms, Camera Angles & Discovery</title>
+  <meta name="description" content="CyberCrowd broadcast foundation for live rooms, camera angles, creator packages, viewer switching, event discovery, and future media access." />
+
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: #101522;
+      --panel-2: #151c2d;
+      --text: #f4f7fb;
+      --muted: #aab4c5;
+      --line: rgba(255,255,255,0.14);
+      --accent: #48e0ff;
+      --accent-2: #a855f7;
+      --hot: #fb7185;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(72,224,255,0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(168,85,247,0.16), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 28px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5,7,13,0.82);
+    }
+
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .links a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+    }
+
+    .links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    .hero {
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(16,21,34,0.95), rgba(21,28,45,0.88));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 5vw, 4.2rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      max-width: 850px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 175px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.96rem;
+    }
+
+    .section {
+      margin-top: 34px;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(16,21,34,0.74);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.7rem;
+    }
+
+    .flow {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .flow-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: var(--panel-2);
+    }
+
+    .flow-item strong {
+      color: var(--accent);
+    }
+
+    .notice {
+      border-left: 4px solid var(--hot);
+      padding: 16px 18px;
+      background: rgba(251,113,133,0.08);
+      border-radius: 14px;
+      margin-top: 20px;
+    }
+
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 50px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero {
+        padding: 24px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav aria-label="CyberCrowd broadcast navigation">
+      <div class="brand">CyberCrowd</div>
+      <div class="links">
+        <a href="/">Landing</a>
+        <a href="/page2.html">Platform</a>
+        <a href="/shop.html">CyberShop</a>
+        <a href="/system-map.html">System Map</a>
+        <a href="/device-trust.html">Device Trust</a>
+        <a href="/intake.html">Intake</a>
+        <a href="/access.html">Access</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Broadcast / Camera Angles / Discovery</div>
+      <h1>CyberCrowd is built for live rooms, camera choices, and controlled viewing paths.</h1>
+      <p>
+        This broadcast foundation defines the future live experience before connecting streams,
+        subscriptions, room controls, creator dashboards, camera hardware, or paid viewing packages.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <h2>Live Rooms</h2>
+          <p>Future spaces where creators, clients, events, or venues can host controlled live experiences.</p>
+        </article>
+
+        <article class="card">
+          <h2>Camera Angles</h2>
+          <p>Viewer paths may support switching between available camera views, room perspectives, or event feeds.</p>
+        </article>
+
+        <article class="card">
+          <h2>Discovery</h2>
+          <p>Public previews and platform-safe listings may help viewers discover rooms, shows, creators, and media.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Broadcast flow foundation</h2>
+
+      <div class="flow">
+        <div class="flow-item">
+          <strong>1. Room exists:</strong>
+          a creator, client, venue, event, or platform package has a controlled broadcast space.
+        </div>
+
+        <div class="flow-item">
+          <strong>2. Cameras are assigned:</strong>
+          camera positions, device trust, room permissions, and available angles are defined.
+        </div>
+
+        <div class="flow-item">
+          <strong>3. Viewers enter:</strong>
+          public, trial, paid, subscriber, or protected access decides what the viewer can see.
+        </div>
+
+        <div class="flow-item">
+          <strong>4. Switching is controlled:</strong>
+          camera-angle changes, room movement, upgrades, and future package rules are handled by access logic.
+        </div>
+
+        <div class="flow-item">
+          <strong>5. Media is preserved:</strong>
+          teasers, highlights, VOD, Reten Records media, or event archives may route into future media paths.
+        </div>
+      </div>
+
+      <div class="notice">
+        This page does not stream video, collect viewer data, process payments, or connect hardware.
+        It defines the broadcast map before live systems are wired.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Simple rule</h2>
+      <p>
+        A CyberCrowd broadcast should know the room, the camera, the viewer access level,
+        the device trust state, and the media destination before it becomes a live product.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      CyberCrowd broadcast foundation. Built for live rooms, camera switching,
+      controlled viewing, discovery, and future media routing.
+    </p>
+    <p>
+      <a href="/">Return to landing</a>
+    </p>
+  </footer>
+</body>
+</html>
