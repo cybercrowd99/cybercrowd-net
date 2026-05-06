@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCourt | Public Discourse, Recourse & Platform Clarity</title>
+  <meta name="description" content="CyberCourt is CyberCrowd's public discourse, Debate Recourse Center, survey precedent, service-call, Sequester Request, and platform clarity foundation. CyberCourt is not a court of law." />
+  <link rel="canonical" href="https://cybercrowd.net/cybercourt.html" />
+
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: #101522;
+      --panel-2: #151c2d;
+      --text: #f4f7fb;
+      --muted: #aab4c5;
+      --line: rgba(255,255,255,0.14);
+      --accent: #48e0ff;
+      --gold: #facc15;
+      --red: #fb7185;
+      --green: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(72,224,255,0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(250,204,21,0.14), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 28px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5,7,13,0.82);
+    }
+
+    nav {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .links a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+    }
+
+    .links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    .hero {
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(16,21,34,0.95), rgba(21,28,45,0.88));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 5vw, 4.2rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 150px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.96rem;
+    }
+
+    .section {
+      margin-top: 34px;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(16,21,34,0.74);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.7rem;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: var(--panel-2);
+    }
+
+    .item strong {
+      color: var(--accent);
+    }
+
+    .notice {
+      border-left: 4px solid var(--gold);
+      padding: 16px 18px;
+      background: rgba(250,204,21,0.08);
+      border-radius: 14px;
+      margin-top: 20px;
+    }
+
+    .warning {
+      border-left-color: var(--red);
+      background: rgba(251,113,133,0.08);
+    }
+
+    .safe {
+      border-left-color: var(--green);
+      background: rgba(34,197,94,0.08);
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 50px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 800px) {
+      .principles {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero {
+        padding: 24px;
+      }
+
+      nav {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav aria-label="CyberCourt navigation">
+      <div class="brand">CyberCourt</div>
+      <div class="links">
+        <a href="/">Landing</a>
+        <a href="/page2.html">Platform</a>
+        <a href="/monetary-system.html">Monetary System</a>
+        <a href="/media-routing.html">Media Routing</a>
+        <a href="/access.html">Access</a>
+        <a href="/broadcast.html">Broadcast</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Public Discourse / Debate Recourse / Platform Clarity</div>
+      <h1>CyberCourt is not a court of law. It is a court of platform clarity.</h1>
+      <p>
+        CyberCourt is CyberCrowd’s public discourse, Debate Recourse Center, survey precedent,
+        service-call, Sequester Request, reviewer occupation, policy-review, market-signal,
+        and board-intelligence foundation. It helps CyberCrowd understand needs before controls
+        become permanent.
+      </p>
+
+      <div class="principles">
+        <article class="card">
+          <h2>CyberCourt gets the questions.</h2>
+          <p>The public realm can ask, survey, debate, challenge relevance, narrow issues, and create visible sentiment signals.</p>
+        </article>
+
+        <article class="card">
+          <h2>CyberCrowd keeps the keys.</h2>
+          <p>CyberCrowd remains responsible for safety, enforcement, identity, child protection, payments, security, and final operations.</p>
+        </article>
+
+        <article class="card">
+          <h2>The issue is the issue.</h2>
+          <p>CyberCourt debates the issue, not the profile. It exposes the issue, not the person.</p>
+        </article>
+
+        <article class="card">
+          <h2>The wheel must be heard.</h2>
+          <p>If CyberCrowd cannot hear the wheel, CyberCrowd cannot maintain the system. A loud squeak gets inspected; it does not automatically get control.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="jester">
+      <h2>The Jester Link</h2>
+      <p>
+        In CyberCourt, the word <a href="/cybercourt.html#jester">Jester</a> points to the reminder
+        that CyberCourt is not a court of law. The Jester marks the public clarity role:
+        question confusion, expose absurdity, surface signal, and keep silence from being mistaken
+        for system health.
+      </p>
+      <p>
+        The Jester does not hold the operating keys. The Jester helps the crowd see the issue,
+        test the question, and reveal whether CyberCrowd needs repair, education, venue correction,
+        policy adjustment, review, reimbursement, or reinstatement.
+      </p>
+
+      <div class="notice">
+        Jester means public clarity, not legal authority.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Debate Recourse Center</h2>
+      <p>
+        The Debate Recourse Center is a CyberCourt lane where paid, verified, trusted,
+        or approved participants may request structured debate, service-call review,
+        survey narrowing, public reasoning, or policy recourse for platform issues.
+      </p>
+
+      <div class="list">
+        <div class="item">
+          <strong>Recourse:</strong>
+          a user, creator, client, guardian, sponsor, reviewer, or public participant may need a structured path when they were blocked, mislabeled, ignored, venue-routed incorrectly, or denied clarity.
+        </div>
+
+        <div class="item">
+          <strong>Service-call review:</strong>
+          a fee may open the docket, reduce spam, and help fund structured review. It does not buy the outcome.
+        </div>
+
+        <div class="item">
+          <strong>Debate:</strong>
+          debate may clarify the issue, test policy, educate participants, and create public reasoning records.
+        </div>
+
+        <div class="item">
+          <strong>Boundary:</strong>
+          CyberCourt does not sell arguments. CyberCourt sells access to structured recourse.
+        </div>
+      </div>
+
+      <div class="notice safe">
+        The Debate Recourse Center gives users a paid path to be heard, not a paid path to win.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Public sentiment and survey precedent</h2>
+      <p>
+        CyberCourt may later use structured surveys as the public voting mechanism inside
+        the CyberCourt realm. A survey may begin with several questions and narrow toward
+        a final yes-or-no clarity question.
+      </p>
+      <p>
+        As cases stack, repeated survey outcomes may become public sentiment precedent.
+        If repeated paid-member, verified-member, or trusted-member surveys show that
+        a strong majority would rule a certain way, CyberCrowd may treat that as a precedent
+        signal until new facts, better policy, or later public sentiment overturns it.
+      </p>
+
+      <div class="notice safe">
+        Public sentiment can create precedent signals. It does not seize operational control.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Suggestion Box</h2>
+      <p>
+        CyberCourt may include a low-friction Suggestion Box for quick public signals.
+        Participants may click Like, Dislike, Short Comment, or Other to identify what works,
+        what fails, what confuses them, what feels unsafe, or what needs repair.
+      </p>
+
+      <div class="list">
+        <div class="item">
+          <strong>Like:</strong>
+          marks what appears useful, clear, fair, valuable, or worth expanding.
+        </div>
+
+        <div class="item">
+          <strong>Dislike:</strong>
+          marks what feels unfair, unsafe, boring, manipulative, misplaced, age-inappropriate, trust-breaking, or confusing.
+        </div>
+
+        <div class="item">
+          <strong>Short Comment:</strong>
+          gives CyberCourt a small explanation without forcing a full debate.
+        </div>
+
+        <div class="item">
+          <strong>Other:</strong>
+          signals that the issue may need a new category, survey question, service-call review, or board alert.
+        </div>
+      </div>
+
+      <div class="notice">
+        The Suggestion Box hears the whisper before CyberCourt hears the scream.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>No-Doxx / No-Profile Trial Rule</h2>
+      <p>
+        CyberCourt reviews issues, not identities. The issue is the issue, not the profile.
+        Public review should focus on conduct, claim, content lane, policy question,
+        harm signal, venue mismatch, and repair need.
+      </p>
+      <p>
+        CyberCourt does not use doxxing, identity exposure, profile shaming, or targeted
+        harassment as transparency. Personal information should be minimized, redacted,
+        anonymized, aggregated, or withheld when it is not necessary for public understanding.
+      </p>
+
+      <div class="notice warning">
+        Debate the issue. Do not hunt the person. Expose the issue, not the person.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Frivolous Complaint and Bad-Faith Escalation Rule</h2>
+      <p>
+        CyberCourt should protect honest reports of harm, abuse, fraud, exploitation,
+        child-safety risk, identity misuse, payment fraud, security threats, or platform failures.
+      </p>
+      <p>
+        CyberCourt may also help identify frivolous complaints, false reports, harassment complaints,
+        weaponized accusations, repeated bad-faith escalations, profile attacks, and rule-bypass demands.
+      </p>
+
+      <div class="notice">
+        CyberCrowd protects honest reporting and blocks weaponized complaining.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>AI shadow-block review and grace periods</h2>
+      <p>
+        CyberCourt may later help review AI shadow blocks, automated restrictions,
+        venue mismatches, public silence signals, and reinstatement paths.
+      </p>
+
+      <div class="list">
+        <div class="item">
+          <strong>First event:</strong>
+          a short grace or review period may allow public signal, survey response, correction, or automatic reinstatement.
+        </div>
+
+        <div class="item">
+          <strong>Second event:</strong>
+          a longer review period may apply if the same pattern repeats.
+        </div>
+
+        <div class="item">
+          <strong>Serious or repeated events:</strong>
+          internal review, appeal paths, venue correction, restriction, or cancellation may follow the evidence.
+        </div>
+
+        <div class="item">
+          <strong>Public silence:</strong>
+          if nobody comments, surveys, or signals concern, that silence may become a maintenance signal for reinstatement or reduced escalation.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Venue correction and content lanes</h2>
+      <p>
+        CyberCourt is not only about punishment. It helps CyberCrowd understand needs,
+        content placement, audience safety, and lane mismatch.
+      </p>
+
+      <div class="list">
+        <div class="item">
+          <strong>Wrong venue:</strong>
+          content may belong in a different age lane, adult-oriented lane, client lane, creator lane, educational lane, or restricted lane.
+        </div>
+
+        <div class="item">
+          <strong>Client notice:</strong>
+          CyberCrowd may notify a client when evidence shows their content needs venue correction, safer routing, or policy adjustment.
+        </div>
+
+        <div class="item">
+          <strong>Maintenance signal:</strong>
+          repeated venue problems may tell CyberCrowd what tool, rule, warning, or category needs to be built next.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Sequester Request / Live Forum Challenge</h2>
+      <p>
+        CyberCourt may later support Sequester Requests during live forums, policy discussions,
+        public dockets, or board-facing sessions. A Sequester Request lets a verified, paid,
+        or trusted participant challenge relevance, ask for clarity, or submit one structured
+        question after passing relevance checks.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Question 1:</strong> What exactly are you challenging?</div>
+        <div class="item"><strong>Question 2:</strong> What decision are you trying to affect?</div>
+        <div class="item"><strong>Question 3:</strong> Who benefits if your challenge succeeds?</div>
+        <div class="item"><strong>Question 4:</strong> Are you asking CyberCrowd to change a rule, delay a vote, remove a person, override policy, alter access, or redirect money?</div>
+        <div class="item"><strong>Question 5:</strong> Is this about the issue, or about the profile?</div>
+        <div class="item"><strong>Question 6:</strong> Do you have a relationship, conflict, sponsor, client, campaign, or private interest connected to this challenge?</div>
+      </div>
+
+      <div class="notice">
+        A Sequester Request gives the public a microphone, not a crowbar. Sequester narrows chaos into evidence.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Disclosure cross-check and hidden influence</h2>
+      <p>
+        If a Sequester Request, public challenge, service-call review, or CyberCourt docket
+        reveals prior contact, private influence, undisclosed coordination, sponsor pressure,
+        client involvement, campaign interest, or board-member communication connected to a vote
+        or operational action, CyberCrowd may compare that information against board disclosures,
+        meeting records, vote records, and ethics protocols.
+      </p>
+      <p>
+        The purpose is not to accuse without review. The purpose is to determine whether
+        a decision was made with complete disclosure, whether a member should have recused,
+        whether a vote should be flagged, or whether a hidden-influence review is required.
+      </p>
+
+      <div class="notice">
+        CyberCourt can reveal the missing disclosure. A vote is only clean if the influence trail was clean.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Review lanes</h2>
+      <p>
+        CyberCourt can trigger different review lanes without becoming the entire courthouse.
+        A public signal is not automatically a finding. A Sequester Request is not automatically
+        proof. A disclosure mismatch is not automatically guilt. Each trigger creates a review lane.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Public Discourse Lane:</strong> questions, debate, surveys, and sentiment.</div>
+        <div class="item"><strong>Survey / Sentiment Lane:</strong> structured public review and precedent signals.</div>
+        <div class="item"><strong>Service-Call Lane:</strong> paid request for structured review.</div>
+        <div class="item"><strong>Debate Recourse Center:</strong> structured debate and policy recourse.</div>
+        <div class="item"><strong>Reviewer Occupation Lane:</strong> paid public reasoning work.</div>
+        <div class="item"><strong>Governance Lane:</strong> board disclosure cross-checks and hidden influence review triggers.</div>
+        <div class="item"><strong>HR / Quality Lane:</strong> reviewer conduct, bias drift, conflict checks, and rubric failures.</div>
+        <div class="item"><strong>Investigation Trigger Lane:</strong> suspicious patterns or anomalies that need CyberCrowd review.</div>
+        <div class="item"><strong>Market Intelligence Lane:</strong> geography, demographics, policy needs, technology priorities, and monetary design.</div>
+      </div>
+
+      <div class="notice">
+        CyberCourt opens the question. CyberCrowd assigns the lane.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Reviewer occupation lane</h2>
+      <p>
+        CyberCourt may later support third-party reviewer, debate-worker, survey-auditor,
+        service-call reviewer, policy-signal reviewer, market-signal reviewer, and educational
+        mock-case participant roles.
+      </p>
+      <p>
+        CyberCourt reviewers may contribute structured reasoning from home. They do not act as
+        legal judges, do not own CyberCrowd operations, and do not sell outcomes.
+      </p>
+
+      <div class="notice safe">
+        CyberCourt turns public reasoning into an occupation. Reviewers contribute structured reasoning; they do not sell outcomes.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Needs discovery and market intelligence</h2>
+      <p>
+        CyberCourt may help CyberCrowd understand routine issues through geography,
+        general geolocation, demographics, market regions, content categories, access lanes,
+        and global-to-local patterns.
+      </p>
+
+      <div class="list">
+        <div class="item">
+          <strong>Policy design:</strong>
+          repeated issues can show where rules are unclear, too harsh, too weak, or missing.
+        </div>
+
+        <div class="item">
+          <strong>Market analysis:</strong>
+          regional patterns can help CyberCrowd understand what markets, creators, viewers, guardians, sponsors, or clients need.
+        </div>
+
+        <div class="item">
+          <strong>Technology advancement:</strong>
+          repeated CyberCourt signals can tell the board what should be built next.
+        </div>
+
+        <div class="item">
+          <strong>Privacy boundary:</strong>
+          CyberCourt gathers signals, not weapons. Data should be aggregated, minimized, and protected.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Reimbursement and remedy boundary</h2>
+      <p>
+        CyberCourt may later support service-fee refunds, access credits, membership credits,
+        participation reimbursement, reviewer compensation, or platform remedies where appropriate.
+        Reimbursement is not guaranteed.
+      </p>
+      <p>
+        Reimbursement depends on docket rules, public sentiment, CyberCrowd review, good-faith
+        participation, policy outcome, and whether the original restriction or complaint was valid,
+        abusive, criminal, fraudulent, or a public-trust violation.
+      </p>
+
+      <div class="notice">
+        CyberCourt reimburses participation, not conclusions. A service fee may open the docket. It does not buy the outcome.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Ad-free courtroom integrity</h2>
+      <p>
+        CyberCourt is an ad-free review environment. adWorm may support CyberCrowd infrastructure,
+        public awareness, hallway-style sponsorship, or external platform sustainability, but adWorm
+        may not appear inside CyberCourt proceedings or influence questions, survey design, reviewer
+        selection, review compensation, docket priority, case visibility, rulings, precedent signals,
+        reinstatements, bans, findings, or operational decisions.
+      </p>
+
+      <div class="notice warning">
+        No ads in the courtroom. No money on the scales. adWorm funds the building, not the ruling.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Educational debate layer</h2>
+      <p>
+        CyberCourt may later support mock-case review, courtroom-style debate lessons,
+        platform policy education, civic reasoning, media literacy, AI moderation transparency,
+        creator education, guardian education, and public reasoning exercises.
+      </p>
+
+      <div class="notice">
+        CyberCourt can pay for civic reasoning, not purchased outcomes.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Evidence and archive standards</h2>
+      <div class="list">
+        <div class="item"><strong>Allegation is not proof:</strong> a claim starts review; it does not complete review.</div>
+        <div class="item"><strong>Signal is not finding:</strong> public signal may guide inquiry but does not automatically decide operations.</div>
+        <div class="item"><strong>Challenge is not guilt:</strong> a Sequester Request may trigger review without proving wrongdoing.</div>
+        <div class="item"><strong>Silence is signal, not proof:</strong> lack of public concern may support reduced escalation but does not erase records.</div>
+        <div class="item"><strong>Archive boundary:</strong> CyberCourt records may be summarized or redacted for public history without exposing private identity.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>What is active now</h2>
+      <p>
+        This page is a public foundation page only. It defines the CyberCourt direction,
+        Jester link, Debate Recourse Center, survey-precedent concept, service-call model,
+        Sequester Request, disclosure cross-check, reviewer occupation lane, reimbursement boundary,
+        ad-free courtroom integrity, and public discourse boundary.
+      </p>
+
+      <div class="notice warning">
+        No live case database, live login system, live survey engine, payment wiring,
+        compensation engine, or personal data collection is active on this page.
+        CyberCourt is not a court of law.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      CyberCourt foundation. Public discourse, Debate Recourse Center, survey precedent,
+      service-call review, Jester-linked platform clarity, Sequester Requests, disclosure
+      cross-checks, reviewer occupation lanes, reimbursement boundaries, and policy-maintenance signals.
+    </p>
+    <p>
+      <a href="/cybercourt.html#jester">Jester</a> links to CyberCourt clarity.
+      <a href="/">Return to landing</a>
+    </p>
+  </footer>
+</body>
+</html>
