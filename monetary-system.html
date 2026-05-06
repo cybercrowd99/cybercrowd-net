@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd Monetary System | Access, Value & Participation</title>
+  <meta name="description" content="CyberCrowd monetary system foundation for access products, creator income, viewer participation, sponsor funding, adWorm campaigns, CyberCourt review pools, Reten Records media, and future CRWD platform value." />
+
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: #101522;
+      --panel-2: #151c2d;
+      --text: #f4f7fb;
+      --muted: #aab4c5;
+      --line: rgba(255,255,255,0.14);
+      --accent: #48e0ff;
+      --accent-2: #a855f7;
+      --gold: #facc15;
+      --green: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(72,224,255,0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(168,85,247,0.16), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 28px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5,7,13,0.82);
+    }
+
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .links a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+    }
+
+    .links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    .hero {
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(16,21,34,0.95), rgba(21,28,45,0.88));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 5vw, 4.2rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      max-width: 850px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 180px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.96rem;
+    }
+
+    .section {
+      margin-top: 34px;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(16,21,34,0.74);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.7rem;
+    }
+
+    .money-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .money-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: var(--panel-2);
+    }
+
+    .money-item strong {
+      color: var(--accent);
+    }
+
+    .notice {
+      border-left: 4px solid var(--gold);
+      padding: 16px 18px;
+      background: rgba(250,204,21,0.08);
+      border-radius: 14px;
+      margin-top: 20px;
+    }
+
+    .safe {
+      border-left-color: var(--green);
+      background: rgba(34,197,94,0.08);
+    }
+
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 50px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .value-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero {
+        padding: 24px;
+      }
+
+      nav {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav aria-label="CyberCrowd monetary system navigation">
+      <div class="brand">CyberCrowd</div>
+      <div class="links">
+        <a href="/">Landing</a>
+        <a href="/page2.html">Platform</a>
+        <a href="/shop.html">CyberShop</a>
+        <a href="/intake.html">Intake</a>
+        <a href="/access.html">Access</a>
+        <a href="/broadcast.html">Broadcast</a>
+        <a href="/media-routing.html">Media Routing</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Monetary System / Access / Value Circulation</div>
+      <h1>CyberCrowd money must be clear, staged, auditable, and tied to real value.</h1>
+      <p>
+        This monetary foundation explains how CyberCrowd may connect access products,
+        creator income, viewer participation, sponsor funding, adWorm campaigns,
+        CyberCourt review pools, Reten Records media, and future CRWD platform value
+        without pretending complex money rails are already active.
+      </p>
+
+      <div class="value-grid">
+        <article class="card">
+          <h2>Me</h2>
+          <p>CyberCrowd must survive, grow, pay infrastructure, protect the platform, and remain independent.</p>
+        </article>
+
+        <article class="card">
+          <h2>Them</h2>
+          <p>Creators, reviewers, viewers, guardians, advertisers, sponsors, clients, and partners should receive real value or compensation.</p>
+        </article>
+
+        <article class="card">
+          <h2>They</h2>
+          <p>The public realm, platform ecosystem, and broader community should gain transparency, access, safety, opportunity, and participation value.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Monetary paths CyberCrowd may support</h2>
+
+      <div class="money-list">
+        <div class="money-item">
+          <strong>CyberShop products:</strong>
+          WDIG Access Pass, platform access products, future MultiCam trials, and controlled access purchases.
+        </div>
+
+        <div class="money-item">
+          <strong>Creator income:</strong>
+          creator packages, broadcast participation, room access, camera packages, subscriptions, tips, and future payout paths.
+        </div>
+
+        <div class="money-item">
+          <strong>Viewer participation:</strong>
+          viewer upgrades, trial access, paid rooms, discovery rewards, and future participation value.
+        </div>
+
+        <div class="money-item">
+          <strong>adWorm campaigns:</strong>
+          perimeter ads, sponsor placements, Reten Records promotion, CyberShop exposure, event visibility, and approved campaign lanes.
+        </div>
+
+        <div class="money-item">
+          <strong>CyberCourt review pools:</strong>
+          future sponsored public review, surveys, follow-up questions, clarity signals, and repair participation.
+        </div>
+
+        <div class="money-item">
+          <strong>Reten Records media:</strong>
+          music releases, teasers, covers, catalog media, full-length content, and future media sales paths.
+        </div>
+
+        <div class="money-item">
+          <strong>Future CRWD value systems:</strong>
+          possible internal credits, participation rewards, access credits, platform balances, or ecosystem transactions.
+        </div>
+      </div>
+
+      <div class="notice">
+        This page does not collect payment information, create wallets, issue tokens,
+        process payouts, or provide financial services. It defines the money map
+        before complex systems are wired.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Early money rails vs future money rails</h2>
+
+      <div class="money-list">
+        <div class="money-item">
+          <strong>Early tools:</strong>
+          Stripe checkout, Stripe product pages, controlled access products, sponsor invoices,
+          manual campaign approval, and simple purchase flows.
+        </div>
+
+        <div class="money-item">
+          <strong>Future tools:</strong>
+          Stripe Connect creator payouts, reviewer compensation pools, guardian-approved purchases,
+          wallet-style balances, CRWD internal credits, and sponsor-funded engagement lanes.
+        </div>
+
+        <div class="money-item">
+          <strong>Hard boundary:</strong>
+          early Stripe payments should not be confused with a completed internal currency,
+          banking, investment, token, or wallet system.
+        </div>
+      </div>
+
+      <div class="notice safe">
+        First rule: sell clear access products safely before building complex money rails.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>CyberCourt and adWorm compensation boundary</h2>
+      <p>
+        CyberCourt may later allow public participants to review docket items, answer surveys,
+        ask follow-up questions, identify confusion, and participate in repair discourse.
+        adWorm or approved sponsors may fund participation pools.
+      </p>
+      <p>
+        Compensation may reward useful participation, but it must not buy verdicts, bans,
+        reinstatements, harassment, public pressure campaigns, or operational control.
+      </p>
+
+      <div class="notice">
+        adWorm funds the room, not the verdict.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Simple rule</h2>
+      <p>
+        CyberCrowd money should be tied to real access, real participation, real sponsorship,
+        real media, real creator value, real public review, or real platform utility.
+      </p>
+      <p>
+        No fake participation. No pay-to-control. No hidden money rails. No complex financial
+        promises before the platform has the proper backend, compliance, privacy, payout,
+        tax, fraud, and account systems in place.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      CyberCrowd monetary system foundation. Built for access products, creator income,
+      viewer participation, sponsor funding, adWorm campaigns, CyberCourt review pools,
+      Reten Records media, and future CRWD value systems.
+    </p>
+    <p>
+      <a href="/">Return to landing</a>
+    </p>
+  </footer>
+</body>
+</html>
