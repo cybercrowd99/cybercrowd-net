@@ -4,149 +4,494 @@
   <meta charset="utf-8">
   <title>CyberCrowd Ethics & Conduct | Board Behavior, Communication, Platform Integrity</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberCrowd Ethics and Conduct defines board behavior, communication standards, anti-weaponization, procedural integrity, platform duty, and accountability expectations.">
+  <meta name="description" content="CyberCrowd Ethics and Conduct defines board behavior, communication standards, anti-weaponization, procedural integrity, platform duty, correction, recourse, and accountability expectations.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://cybercrowd.net/ethics-conduct.html">
+
+  <style>
+    :root {
+      --bg: #020804;
+      --panel: #07130b;
+      --panel-2: #0b1d11;
+      --text: #ecfff1;
+      --muted: #a8c7af;
+      --line: rgba(124, 255, 158, 0.22);
+      --green: #39ff88;
+      --green-soft: rgba(57, 255, 136, 0.12);
+      --gold: #facc15;
+      --gold-soft: rgba(250, 204, 21, 0.12);
+      --red: #fb7185;
+      --red-soft: rgba(251, 113, 133, 0.10);
+      --blue: #48e0ff;
+      --blue-soft: rgba(72, 224, 255, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(57,255,136,0.18), transparent 34%),
+        radial-gradient(circle at top right, rgba(72,224,255,0.11), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(250,204,21,0.10), transparent 34%),
+        linear-gradient(180deg, #020804 0%, #030b06 48%, #010402 100%);
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: rgba(2, 8, 4, 0.86);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+
+    nav {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .brand {
+      color: var(--green);
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .links a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .links a:hover {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 54px 20px 80px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      padding: 36px;
+      background:
+        linear-gradient(135deg, rgba(7,19,11,0.96), rgba(11,29,17,0.88)),
+        var(--panel);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.46);
+    }
+
+    .eyebrow {
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 980px;
+      font-size: clamp(2.05rem, 5vw, 4.05rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 920px;
+      font-size: 1.08rem;
+      margin: 20px 0 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card, .item {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.045);
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .card h2, .item strong {
+      color: var(--green);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .card p, .item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .section {
+      margin-top: 30px;
+      padding: 28px;
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      background: rgba(7,19,11,0.76);
+      box-shadow: 0 16px 45px rgba(0,0,0,0.26);
+    }
+
+    .section h2 {
+      margin: 0 0 12px;
+      color: var(--text);
+      font-size: 1.62rem;
+    }
+
+    .section p {
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border-left: 4px solid var(--green);
+      background: var(--green-soft);
+      color: var(--text);
+    }
+
+    .notice.gold {
+      border-left-color: var(--gold);
+      background: var(--gold-soft);
+    }
+
+    .notice.red {
+      border-left-color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .notice.blue {
+      border-left-color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    a { color: var(--green); }
+
+    footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 30px 20px 54px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    footer a {
+      color: var(--green);
+      text-decoration: none;
+      margin-right: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .grid, .grid-two { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      main { padding-top: 34px; }
+      .hero, .section { padding: 22px; }
+      nav { align-items: flex-start; }
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <nav aria-label="CyberCrowd Ethics and Conduct navigation">
+      <div class="brand">CyberCrowd Ethics</div>
+      <div class="links">
+        <a href="/">Landing</a>
+        <a href="/page2.html">Platform</a>
+        <a href="/cybercourt.html">CyberCourt</a>
+        <a href="/docket-forum.html">Docket Forum</a>
+        <a href="/cybercode-regulations.html">CyberCode</a>
+        <a href="/access.html">Access</a>
+      </div>
+    </nav>
+  </header>
+
   <main>
-    <h1>CyberCrowd Ethics &amp; Conduct</h1>
+    <section class="hero">
+      <div class="eyebrow">Ethics &amp; Conduct / Board Behavior / Platform Integrity</div>
+      <h1>CyberCrowd Ethics keeps power separated, visible, correctable, and accountable.</h1>
+      <p>
+        CyberCrowd Ethics &amp; Conduct defines the behavior, communication, and procedural integrity
+        standards expected around the CyberCrowd platform. It exists to protect the glass castle from
+        hidden pressure, confusion, bad-faith silence, manipulation, profile attacks, and careless authority.
+      </p>
 
-    <p>
-      CyberCrowd Ethics &amp; Conduct defines the behavior, communication, and
-      procedural integrity standards expected around the CyberCrowd platform.
-      It exists to protect the glass castle from hidden pressure, confusion,
-      bad-faith silence, manipulation, and careless authority.
-    </p>
+      <div class="grid">
+        <article class="card">
+          <h2>Conduct</h2>
+          <p>Conduct controls behavior, disclosure, recusal, duty, and public-trust expectations.</p>
+        </article>
+        <article class="card">
+          <h2>Correction</h2>
+          <p>Correction keeps mistakes from becoming hidden patterns or public humiliation.</p>
+        </article>
+        <article class="card">
+          <h2>Separation</h2>
+          <p>No person, process, complaint, sponsor, or algorithm gets to hold every role at once.</p>
+        </article>
+      </div>
+    </section>
 
-    <h2>Conduct Purpose</h2>
-    <p>
-      CyberCrowd is not only a technical system. It is a platform with political,
-      financial, moral, operational, and user-safety obligations. Ethical conduct
-      helps protect the platform, users, clients, creators, viewers, operators,
-      and future governance processes.
-    </p>
+    <section class="section">
+      <h2>Conduct Purpose</h2>
+      <p>
+        CyberCrowd is not only a technical system. It is a platform with political, financial, moral,
+        operational, and user-safety obligations. Ethical conduct helps protect the platform, users,
+        clients, creators, viewers, operators, and future governance processes.
+      </p>
+      <div class="notice">
+        Ethics protects the glass castle before pressure cracks the mortar.
+      </div>
+    </section>
 
-    <h2>Definition-First Communication</h2>
-    <p>
-      CyberCrowd communication should define terms, events, risks, and decisions
-      before they are used to pressure action. Ambiguity should be clarified,
-      not weaponized.
-    </p>
+    <section class="section">
+      <h2>Definition-First Communication</h2>
+      <p>
+        CyberCrowd communication should define terms, events, risks, and decisions before they are used
+        to pressure action. Ambiguity should be clarified, not weaponized.
+      </p>
+      <div class="notice gold">
+        Silence cannot stall. Ambiguity cannot obscure. Public sentiment clarifies but never governs.
+      </div>
+    </section>
 
-    <h2>Truth-First Standard</h2>
-    <p>
-      CyberCrowd should favor truthful, clear, and auditable communication over
-      persuasive confusion. A person should not use partial facts, hidden motives,
-      or silence to control outcomes.
-    </p>
+    <section class="section">
+      <h2>Truth-First Standard</h2>
+      <p>
+        CyberCrowd should favor truthful, clear, and auditable communication over persuasive confusion.
+        A person should not use partial facts, hidden motives, selective silence, or private pressure to
+        control outcomes.
+      </p>
+      <div class="notice">
+        Truth-first communication protects the platform from drift.
+      </div>
+    </section>
 
-    <h2>Anti-Weaponization</h2>
-    <p>
-      Ethics and procedure should not be used as weapons to stall, confuse,
-      embarrass, silence, or manipulate participants. CyberCrowd must protect
-      governance tools from being twisted into political traps.
-    </p>
+    <section class="section">
+      <h2>Anti-Weaponization</h2>
+      <p>
+        Ethics and procedure should not be used as weapons to stall, confuse, embarrass, silence, or
+        manipulate participants. CyberCrowd must protect governance tools from being twisted into traps.
+      </p>
+      <p>
+        A rule should protect the platform, clarify conduct, support correction, or guide review. A rule
+        should not become a costume for retaliation, profile punishment, or hidden control.
+      </p>
+      <div class="notice red">
+        The issue is the case. The profile is not the case.
+      </div>
+    </section>
 
-    <h2>Separation of Roles and Process</h2>
-    <p>
-      CyberCrowd separates conduct, regulation, review, correction, escalation,
-      appeal, and enforcement so no person, board member, reviewer, sponsor,
-      complaint, public wave, or automated system can become the entire process
-      at once. Conduct controls behavior. Regulation controls the rule. Review
-      controls the question. Correction controls the learning path. Escalation
-      controls serious risk. Appeal controls recourse. Enforcement controls
-      necessary restriction or removal after the proper lane has been followed.
-    </p>
+    <section class="section">
+      <h2>Separation of Roles and Process</h2>
+      <p>
+        CyberCrowd separates conduct, regulation, question, docket entry, correction, escalation, appeal,
+        and enforcement. This separation keeps one person, one board member, one reviewer, one sponsor,
+        one public wave, one complaint, or one algorithm from becoming judge, rulebook, prosecutor, defense,
+        and executioner at the same time.
+      </p>
+      <div class="grid-two">
+        <div class="item"><strong>Conduct controls behavior.</strong> Duty, disclosure, recusal, conflicts, communication, and platform loyalty stay in the conduct lane.</div>
+        <div class="item"><strong>Regulation controls the rule.</strong> CyberCode governs rule hierarchy, exceptions, grace, default, appeal, payment review, and remedies.</div>
+        <div class="item"><strong>CyberCourt controls the question.</strong> The issue is narrowed before action is taken.</div>
+        <div class="item"><strong>Docket Forum controls entry.</strong> The issue enters, gets framed, and may be routed for public review without turning the person into the case.</div>
+        <div class="item"><strong>CyberHR / CLER controls learning correction.</strong> Training, environment, instruction, role clarity, and human-machine flow are reviewed before judging the worker.</div>
+        <div class="item"><strong>CyberCrowd Legal / Governance controls escalation.</strong> Serious conflicts, rights, risks, whistleblower issues, and remedies are escalated through the proper lane.</div>
+      </div>
+      <div class="notice blue">
+        We are not building a war machine. We are building a clean recipe so nobody dumps salt in the ice cream and then claims it was always supposed to taste that way.
+      </div>
+    </section>
 
-    <h2>Issue, Not Profile Rule</h2>
-    <p>
-      CyberCrowd Ethics must keep the issue separate from the person's profile.
-      Accent, origin, disability, class, education, appearance, religion, region,
-      learning style, or communication style should not become the case. The
-      issue is the case. The profile is not the case.
-    </p>
+    <section class="section">
+      <h2>Issue, Not Profile Rule</h2>
+      <p>
+        CyberCrowd may review conduct, decisions, conflicts, evidence, risks, access, payments, safety,
+        platform integrity, or public harm. CyberCrowd should not turn accent, origin, disability, class,
+        education, appearance, religion, region, language rhythm, or learning style into the case.
+      </p>
+      <p>
+        A profile attack is not issue review. A statement such as “you do not sound like” or “people like you”
+        is not a substitute for evidence, conduct, policy, or platform harm.
+      </p>
+      <div class="notice red">
+        The issue is the case. The person’s profile is not the case.
+      </div>
+    </section>
 
-    <h2>Lean and Drift Rule</h2>
-    <p>
-      People may have opinions, and opinions naturally lean. Ethics does not
-      treat ordinary human perspective as misconduct. The risk begins when a
-      lean becomes drift, bias, hidden influence, unfair pressure, retaliation,
-      or loss of neutrality. Opinion may lean. Ethics watches for drift.
-    </p>
+    <section class="section">
+      <h2>Lean and Drift Rule</h2>
+      <p>
+        Board participants, reviewers, operators, advisors, and trusted decision participants may have opinions,
+        and opinions naturally lean. Ethics does not pretend humans are neutral machines. The risk begins when
+        a lean becomes drift, bias, hidden influence, retaliation, favoritism, or loss of neutrality.
+      </p>
+      <div class="notice">
+        Opinion may lean. Ethics watches for drift.
+      </div>
+    </section>
 
-    <h2>Correction Before Escalation</h2>
-    <p>
-      CyberCrowd should not rush every mistake into punishment language. When
-      harm can be repaired, a person can be instructed, a rule can be clarified,
-      or a process can be corrected, Ethics should support warning, training,
-      recusal, disclosure, get-back instruction, or review before stronger
-      remedies are used. Serious harm, hidden influence, safety risk, fraud,
-      retaliation, or repeated breach may still require escalation.
-    </p>
+    <section class="section">
+      <h2>Board Behavior</h2>
+      <p>
+        Board participants, advisors, operators, and trusted decision participants should act with transparency,
+        disclosure, platform loyalty, and respect for procedure. Hidden influence, concealed conflicts, and
+        undisclosed pressure may trigger review.
+      </p>
+      <p>
+        Honest disclosure protects the member and protects the vote. Hidden influence endangers the decision,
+        the record, and the trust CyberCrowd needs to operate.
+      </p>
+      <div class="notice gold">
+        Honest disclosure protects the member. Hidden influence endangers the vote.
+      </div>
+    </section>
 
-    <h2>Board Behavior</h2>
-    <p>
-      Board participants, advisors, operators, and trusted decision participants
-      should act with transparency, disclosure, platform loyalty, and respect for
-      procedure. Honest disclosure protects the member and protects the vote.
-      Hidden influence, concealed conflicts, undisclosed pressure, false
-      disclosure, or refusal to clear a material conflict may trigger review,
-      recusal, temporary seating limits, vote-integrity review, access limits,
-      or other remedies under the proper CyberCrowd lane.
-    </p>
+    <section class="section">
+      <h2>Duty to Platform</h2>
+      <p>
+        CyberCrowd’s duty is not to protect ego, convenience, or hidden advantage. Its duty is to platform
+        stability, user safety, mission integrity, ethical communication, accountable decision-making,
+        access integrity, and correction memory.
+      </p>
+      <div class="notice">
+        CyberCrowd keeps the keys because CyberCrowd carries the duty.
+      </div>
+    </section>
 
-    <h2>Duty to Platform</h2>
-    <p>
-      CyberCrowd’s duty is not to protect ego, convenience, or hidden advantage.
-      Its duty is to platform stability, user safety, mission integrity, ethical
-      communication, and accountable decision-making.
-    </p>
+    <section class="section">
+      <h2>Silence and Procedure</h2>
+      <p>
+        Silence cannot stall. If silence blocks clarity, that silence may become a procedural signal.
+        CyberCrowd must be able to continue defining, reviewing, and protecting the platform without letting
+        silence become control.
+      </p>
+      <div class="notice gold">
+        Silence is not a veto. Silence may become signal.
+      </div>
+    </section>
 
-    <h2>Silence and Procedure</h2>
-    <p>
-      Silence cannot stall. If silence blocks clarity, that silence may become
-      a procedural signal. CyberCrowd must be able to continue defining, reviewing,
-      and protecting the platform without letting silence become control.
-    </p>
+    <section class="section">
+      <h2>Correction Before Escalation</h2>
+      <p>
+        CyberCrowd should separate mistakes, training gaps, unclear instructions, poor process, hidden pressure,
+        and harmful conduct before choosing a remedy. Correction should come before escalation when correction
+        is safe, honest, timely, and likely to restore trust.
+      </p>
+      <p>
+        Serious harm, repeated breach, safety risk, fraud, doxxing, retaliation, hidden influence, or refusal to
+        correct may require stronger action through the proper lane.
+      </p>
+      <div class="notice">
+        Correct what can be corrected. Escalate what must be escalated. Record the lesson either way.
+      </div>
+    </section>
 
-    <h2>Observation and Correction</h2>
-    <p>
-      Failure should not be hidden. Failure should be observed, defined, corrected,
-      and archived when it affects platform integrity. Correction is part of the
-      mortar that keeps the glass castle standing.
-    </p>
+    <section class="section">
+      <h2>Observation and Correction</h2>
+      <p>
+        Failure should not be hidden. Failure should be observed, defined, corrected, and archived when it
+        affects platform integrity. Correction is part of the mortar that keeps the glass castle standing.
+      </p>
+      <div class="notice blue">
+        Observation keeps the cat alive. Definition keeps the platform honest.
+      </div>
+    </section>
 
-    <h2>Public Friction and Competitor Signal</h2>
-    <p>
-      CyberCrowd does not manufacture enemies for attention. CyberCrowd does not
-      turn competitors, critics, users, creators, clients, reviewers, board
-      members, communities, or profiles into villains for engagement. However,
-      public friction may contain useful signal. A public attack is not always a
-      wound. Sometimes it is market proof.
-    </p>
-    <p>
-      Criticism, competitor complaints, confusion, negative commentary, or public
-      pressure may reveal visibility, market fear, unmet need, product
-      misunderstanding, policy weakness, education gaps, pricing confusion,
-      access problems, or competitive pressure. CyberCrowd may study public
-      friction to improve the platform, explain the product, correct weak
-      language, strengthen policy, educate users, or prove value through better
-      operation. CyberCrowd may not use public friction to harass, retaliate,
-      shame, target, impersonate, bait, or manufacture a competitive narrative.
-    </p>
+    <section class="section">
+      <h2>Public Friction and Competitor Signal</h2>
+      <p>
+        CyberCrowd does not manufacture enemies for attention. CyberCrowd does not turn competitors, critics,
+        users, creators, clients, reviewers, board members, communities, or public waves into villains for engagement.
+      </p>
+      <p>
+        However, public friction may contain useful signal. Criticism, competitor complaints, confusion, negative
+        commentary, or public pressure may reveal visibility, fear, unmet need, product misunderstanding, policy
+        weakness, education gaps, pricing confusion, access problems, or competitive pressure.
+      </p>
+      <p>
+        CyberCrowd may study public friction to improve the platform, explain the product, correct weak language,
+        strengthen policy, educate users, or prove value through better operation. CyberCrowd may not use public
+        friction to harass, retaliate, shame, target, impersonate, bait, or manufacture a competitive narrative.
+      </p>
+      <div class="notice gold">
+        A public attack is not always a wound. Sometimes it is market proof.
+      </div>
+    </section>
 
-    <h2>Connection to the CyberCrowd System</h2>
-    <p>
-      Ethics &amp; Conduct may connect to Governance, Platform Archive, Public
-      Discourse, Client Investigation, Access Passes, Creator Control, Live
-      Control Room, WDIG Routing, Magic Cursor, Secure Surface Hardware, Cam
-      Packages, Viewer Upgrades, Atomic Kricket, and Reten Records references.
-    </p>
+    <section class="section">
+      <h2>Connection to the CyberCrowd System</h2>
+      <p>
+        Ethics &amp; Conduct may connect to Governance, Platform Archive, Public Discourse, Client Investigation,
+        Access Passes, Creator Control, Live Control Room, WDIG Routing, Magic Cursor, Secure Surface Hardware,
+        Cam Packages, Viewer Upgrades, Atomic Kricket, and Reten Records references.
+      </p>
+      <div class="notice">
+        Ethics is not separate from the platform. Ethics is the conduct layer that keeps the platform usable.
+      </div>
+    </section>
+  </main>
 
+  <footer>
+    <p>
+      CyberCrowd Ethics &amp; Conduct foundation. Board behavior, communication standards, anti-weaponization,
+      duty to platform, issue-not-profile review, lean/drift logic, correction before escalation, public friction
+      signal, and platform integrity.
+    </p>
     <p>
       <a href="/">Return to CyberCrowd</a>
+      <a href="/cybercode-regulations.html">Return to CyberCode</a>
+      <a href="/cybercourt.html">Return to CyberCourt</a>
+      <a href="/docket-forum.html">Return to Docket Forum</a>
     </p>
-  </main>
+  </footer>
 </body>
 </html>
