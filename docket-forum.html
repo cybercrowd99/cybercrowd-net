@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCourt Docket Forum | Issue Review, Recourse & Public Signal</title>
+  <meta name="description" content="CyberCourt Docket Forum foundation for issue review, service-call recourse, debate input, survey narrowing, Sequester Requests, suggestion signals, and CyberCode regulation updates." />
+  <link rel="canonical" href="https://cybercrowd.net/docket-forum.html" />
+
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: #101522;
+      --panel-2: #151c2d;
+      --text: #f4f7fb;
+      --muted: #aab4c5;
+      --line: rgba(255,255,255,0.14);
+      --accent: #48e0ff;
+      --gold: #facc15;
+      --red: #fb7185;
+      --green: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(72,224,255,0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(250,204,21,0.14), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 28px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5,7,13,0.82);
+    }
+
+    nav {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .links a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+    }
+
+    .links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    .hero {
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(16,21,34,0.95), rgba(21,28,45,0.88));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 5vw, 4.2rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 160px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.96rem;
+    }
+
+    .section {
+      margin-top: 34px;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(16,21,34,0.74);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.7rem;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: var(--panel-2);
+    }
+
+    .item strong {
+      color: var(--accent);
+    }
+
+    .notice {
+      border-left: 4px solid var(--gold);
+      padding: 16px 18px;
+      background: rgba(250,204,21,0.08);
+      border-radius: 14px;
+      margin-top: 20px;
+    }
+
+    .warning {
+      border-left-color: var(--red);
+      background: rgba(251,113,133,0.08);
+    }
+
+    .safe {
+      border-left-color: var(--green);
+      background: rgba(34,197,94,0.08);
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    footer {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 50px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero {
+        padding: 24px;
+      }
+
+      nav {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav aria-label="CyberCourt Docket Forum navigation">
+      <div class="brand">Docket Forum</div>
+      <div class="links">
+        <a href="/">Landing</a>
+        <a href="/page2.html">Platform</a>
+        <a href="/cybercourt.html">CyberCourt</a>
+        <a href="/monetary-system.html">Monetary System</a>
+        <a href="/access.html">Access</a>
+        <a href="/media-routing.html">Media Routing</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">CyberCourt / Docket Forum / Public Issue Entry</div>
+      <h1>The Docket Forum is where an issue enters CyberCourt.</h1>
+      <p>
+        The Docket Forum is the CyberCourt lane for issue review, service-call recourse,
+        survey narrowing, Sequester Requests, suggestion signals, debate input, public reasoning,
+        and future CyberCode regulation updates.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <h2>Issue enters.</h2>
+          <p>A block, dispute, venue problem, complaint, policy question, service call, or public challenge becomes a docket issue.</p>
+        </article>
+
+        <article class="card">
+          <h2>Public signal forms.</h2>
+          <p>CyberCourt can collect structured questions, suggestions, survey answers, dislikes, debate input, and relevance challenges.</p>
+        </article>
+
+        <article class="card">
+          <h2>CyberCode learns.</h2>
+          <p>If the issue reveals an ambiguity or escape clause, CyberCode of Regulations can later record the rule correction.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>What the Docket Forum asks</h2>
+      <p>
+        The Docket Forum does not begin by attacking a profile. It begins by narrowing the issue.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>What happened?</strong> Identify the event, restriction, dispute, content placement, complaint, or policy question.</div>
+        <div class="item"><strong>What rule is involved?</strong> Identify whether this belongs to access, venue, safety, money, identity, guardian access, advertising, board procedure, or public trust.</div>
+        <div class="item"><strong>What lane did this belong in?</strong> Determine whether the matter belongs in public discourse, service-call review, Debate Recourse Center, governance review, HR/reviewer quality, investigation trigger, or market intelligence.</div>
+        <div class="item"><strong>Was this issue or profile?</strong> CyberCourt reviews the issue, not the person’s identity, appearance, religion, ethnicity, clothing, background, or profile.</div>
+        <div class="item"><strong>Was there a repair path?</strong> Determine whether warning, venue correction, reinstatement, refund, access credit, service-call review, or CyberCode update may be appropriate.</div>
+        <div class="item"><strong>Was there an escape clause?</strong> Determine whether someone exploited vague language, missing policy, poor routing, hidden influence, or a weak rule boundary.</div>
+      </div>
+
+      <div class="notice">
+        The public may reveal the loophole. CyberCourt may test the issue. CyberCode may record the fix. CyberCrowd keeps the keys.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Docket Forum intake lanes</h2>
+
+      <div class="list">
+        <div class="item">
+          <strong>Suggestion Signal:</strong>
+          quick Like, Dislike, Short Comment, or Other signals that show friction before it becomes failure.
+        </div>
+
+        <div class="item">
+          <strong>Service-Call Review:</strong>
+          a structured review request for urgent or unresolved platform issues. A fee may open the docket; it does not buy the outcome.
+        </div>
+
+        <div class="item">
+          <strong>Debate Recourse Center:</strong>
+          a paid, verified, trusted, or approved participant path for structured debate, public reasoning, and policy recourse.
+        </div>
+
+        <div class="item">
+          <strong>Sequester Request:</strong>
+          a live forum challenge or board-facing relevance request that must pass narrowing questions before receiving attention.
+        </div>
+
+        <div class="item">
+          <strong>Survey Narrowing:</strong>
+          structured questions may narrow from many issues into one final yes-or-no clarity question.
+        </div>
+
+        <div class="item">
+          <strong>CyberCode Referral:</strong>
+          if the docket reveals an ambiguity, loophole, or escape clause, the issue may be referred toward future CyberCode of Regulations updates.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Sequester Request narrowing questions</h2>
+      <p>
+        A Sequester Request gives the public a microphone, not a crowbar. It narrows chaos into evidence.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Question 1:</strong> What exactly are you challenging?</div>
+        <div class="item"><strong>Question 2:</strong> What decision are you trying to affect?</div>
+        <div class="item"><strong>Question 3:</strong> Who benefits if your challenge succeeds?</div>
+        <div class="item"><strong>Question 4:</strong> Are you asking CyberCrowd to change a rule, delay a vote, remove a person, override policy, alter access, or redirect money?</div>
+        <div class="item"><strong>Question 5:</strong> Is this about the issue, or about the profile?</div>
+        <div class="item"><strong>Question 6:</strong> Do you have a relationship, conflict, sponsor, client, campaign, or private interest connected to this challenge?</div>
+      </div>
+
+      <div class="notice">
+        CyberCourt records the challenge. CyberCrowd verifies the context.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Debate input lenses</h2>
+      <p>
+        The Docket Forum may support debate input lenses that help reviewers and participants understand power,
+        incentives, manipulation, fear, leverage, hidden influence, and control attempts.
+      </p>
+
+      <div class="list">
+        <div class="item">
+          <strong>Issue Lens:</strong>
+          What is the actual issue, and what is being distracted away from?
+        </div>
+
+        <div class="item">
+          <strong>Profile Lens:</strong>
+          Is someone trying to make identity, appearance, religion, ethnicity, clothing, background, or profile the issue?
+        </div>
+
+        <div class="item">
+          <strong>Conflict Lens:</strong>
+          Who benefits, who has a relationship, and who may have an undisclosed interest?
+        </div>
+
+        <div class="item">
+          <strong>Power-Game Lens:</strong>
+          Are there signs of hidden influence, manufactured urgency, divide-and-control behavior, public sentiment gaming, or board capture attempts?
+        </div>
+
+        <div class="item">
+          <strong>Machiavellian Principles Lens:</strong>
+          used as an internal debate-analysis lens for detecting power games, not as a public slogan or accusation.
+        </div>
+      </div>
+
+      <div class="notice">
+        Use power analysis to detect manipulation. Use plain language to explain the finding.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Issue, not profile</h2>
+      <p>
+        The Docket Forum does not put a profile on trial. It reviews the issue, evidence,
+        policy question, venue problem, public safety signal, and repair path.
+      </p>
+
+      <div class="notice warning">
+        Debate the issue. Do not hunt the person. Expose the issue, not the person.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>No-doxx privacy boundary</h2>
+      <p>
+        CyberCourt transparency must not become personal exposure. Docket issues should be handled with
+        minimized, redacted, anonymized, aggregated, or withheld personal information where appropriate.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Show:</strong> issue type, content lane, general market, survey result, repair path, precedent signal, and policy question.</div>
+        <div class="item"><strong>Protect:</strong> home address, exact location, phone number, private email, child identity, raw ID, payment details, medical details, private family details, and unnecessary personal names.</div>
+      </div>
+
+      <div class="notice">
+        CyberCourt gathers signals, not weapons.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Docket status labels</h2>
+      <p>
+        A future Docket Forum may use clear status labels so users know where an issue stands.
+      </p>
+
+      <div class="list">
+        <div class="item"><strong>Submitted:</strong> issue entered the Docket Forum.</div>
+        <div class="item"><strong>Accepted:</strong> issue passed basic relevance checks.</div>
+        <div class="item"><strong>Rejected:</strong> issue failed relevance, safety, spam, or abuse checks.</div>
+        <div class="item"><strong>Docketed:</strong> issue entered structured review.</div>
+        <div class="item"><strong>Answered:</strong> issue received a response or disposition.</div>
+        <div class="item"><strong>Deferred:</strong> issue was delayed for more information, timing, or lane assignment.</div>
+        <div class="item"><strong>Escalated:</strong> issue moved to governance, HR/quality, investigation, operations, or board-facing review.</div>
+        <div class="item"><strong>Closed:</strong> issue ended with a recorded disposition.</div>
+        <div class="item"><strong>Reinstated:</strong> restriction, block, or limitation was reversed or reduced.</div>
+        <div class="item"><strong>Restricted:</strong> access remained limited due to evidence, public trust, safety, fraud, crime, abuse, or policy violation.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Evidence standard</h2>
+      <div class="list">
+        <div class="item"><strong>Allegation is not proof:</strong> a claim starts review; it does not complete review.</div>
+        <div class="item"><strong>Signal is not finding:</strong> public signal may guide inquiry but does not automatically decide operations.</div>
+        <div class="item"><strong>Challenge is not guilt:</strong> a Sequester Request may trigger review without proving wrongdoing.</div>
+        <div class="item"><strong>Silence is signal, not proof:</strong> lack of public concern may support reduced escalation but does not erase records.</div>
+        <div class="item"><strong>Precedent is not prison:</strong> public sentiment precedent may guide future handling until new facts, better policy, or later public sentiment overturns it.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Escape clause discovery</h2>
+      <p>
+        The Docket Forum helps CyberCourt find where a rule failed, where a loophole existed,
+        where wording was too vague, or where a participant found a path around the intent of the policy.
+      </p>
+
+      <div class="notice safe">
+        CyberCourt finds the ambiguity. CyberCode closes the escape clause.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Ad-free docket integrity</h2>
+      <p>
+        Docket review must remain clean. adWorm may fund the building, public hallway, infrastructure,
+        or platform sustainability, but it may not enter the docket or touch the ruling.
+      </p>
+
+      <div class="notice warning">
+        No ads in the courtroom. No money on the scales. adWorm funds the building, not the ruling.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>What is active now</h2>
+      <p>
+        This page is a public foundation page only. It defines the Docket Forum direction,
+        intake lanes, Sequester narrowing, debate input lenses, no-doxx boundary, issue-not-profile rule,
+        evidence standard, status labels, and CyberCode referral concept.
+      </p>
+
+      <div class="notice warning">
+        No live docket database, login system, survey engine, payment wiring, compensation engine,
+        case filing form, or personal data collection is active on this page.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      CyberCourt Docket Forum foundation. Public issue entry, Debate Recourse Center support,
+      Sequester Requests, suggestion signals, survey narrowing, escape-clause discovery,
+      and future CyberCode regulation referral.
+    </p>
+    <p>
+      <a href="/cybercourt.html">Return to CyberCourt</a>
+    </p>
+  </footer>
+</body>
+</html>
