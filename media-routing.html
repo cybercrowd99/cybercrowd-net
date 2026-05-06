@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd Media Routing | Reten Records, Teasers & Archives</title>
+  <meta name="description" content="CyberCrowd media routing foundation for Reten Records audio, teasers, covers, video, event archives, broadcast media, and future controlled content paths." />
+
+  <style>
+    :root {
+      --bg: #05070d;
+      --panel: #101522;
+      --panel-2: #151c2d;
+      --text: #f4f7fb;
+      --muted: #aab4c5;
+      --line: rgba(255,255,255,0.14);
+      --accent: #48e0ff;
+      --accent-2: #a855f7;
+      --gold: #facc15;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(72,224,255,0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(168,85,247,0.16), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 28px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5,7,13,0.82);
+    }
+
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .links a {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+    }
+
+    .links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+    }
+
+    .hero {
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(16,21,34,0.95), rgba(21,28,45,0.88));
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 5vw, 4.2rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      max-width: 850px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 170px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.96rem;
+    }
+
+    .section {
+      margin-top: 34px;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(16,21,34,0.74);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      font-size: 1.7rem;
+    }
+
+    .route-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .route-item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: var(--panel-2);
+    }
+
+    .route-item strong {
+      color: var(--accent);
+    }
+
+    .notice {
+      border-left: 4px solid var(--gold);
+      padding: 16px 18px;
+      background: rgba(250,204,21,0.08);
+      border-radius: 14px;
+      margin-top: 20px;
+    }
+
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 50px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 1000px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero {
+        padding: 24px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav aria-label="CyberCrowd media routing navigation">
+      <div class="brand">CyberCrowd</div>
+      <div class="links">
+        <a href="/">Landing</a>
+        <a href="/page2.html">Platform</a>
+        <a href="/shop.html">CyberShop</a>
+        <a href="/intake.html">Intake</a>
+        <a href="/access.html">Access</a>
+        <a href="/broadcast.html">Broadcast</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Media Routing / Reten Records / Archives</div>
+      <h1>CyberCrowd needs clear media paths before content becomes a product.</h1>
+      <p>
+        This page defines how CyberCrowd can think about audio, teasers, video, covers,
+        broadcast archives, event media, Reten Records content, and future controlled media
+        areas without hard-wiring production dependencies too early.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <h2>Audio</h2>
+          <p>Previews, teasers, full-length tracks, show audio, sound beds, and future Reten Records releases.</p>
+        </article>
+
+        <article class="card">
+          <h2>Video</h2>
+          <p>Broadcast clips, teasers, room previews, event footage, future VOD, and controlled viewing assets.</p>
+        </article>
+
+        <article class="card">
+          <h2>Graphics</h2>
+          <p>Covers, posters, creator visuals, product art, room cards, show branding, and promotional material.</p>
+        </article>
+
+        <article class="card">
+          <h2>Metadata</h2>
+          <p>Titles, credits, pricing notes, access flags, release status, ownership notes, and routing records.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Media routing foundation</h2>
+
+      <div class="route-list">
+        <div class="route-item">
+          <strong>Public Preview:</strong>
+          crawler-safe teasers, public clips, landing-page media, and discovery-safe content.
+        </div>
+
+        <div class="route-item">
+          <strong>Reten Records:</strong>
+          music, full-length audio, cover art, release material, catalog content, and future media sales paths.
+        </div>
+
+        <div class="route-item">
+          <strong>CyberCrowd Broadcast:</strong>
+          live-room assets, camera previews, event teasers, viewer paths, and future archive routing.
+        </div>
+
+        <div class="route-item">
+          <strong>CyberShop:</strong>
+          product visuals, offer copy, paid access assets, license-related media, and future package presentation.
+        </div>
+
+        <div class="route-item">
+          <strong>Protected / RED-card:</strong>
+          unreleased files, private records, credentials, internal evidence, legal material, board documents, and anything not safe for public deployment.
+        </div>
+      </div>
+
+      <div class="notice">
+        This page does not upload, store, sell, stream, or expose media files.
+        It is a foundation map for where media should belong later.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Simple rule</h2>
+      <p>
+        CyberCrowd should know whether a media file is a teaser, public preview, paid item,
+        Reten Records catalog asset, broadcast archive, product graphic, metadata record,
+        or protected file before it is connected to the public web.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      CyberCrowd media routing foundation. Built for Reten Records, teasers, covers,
+      video, broadcast archives, product media, and future controlled access paths.
+    </p>
+    <p>
+      <a href="/">Return to landing</a>
+    </p>
+  </footer>
+</body>
+</html>
