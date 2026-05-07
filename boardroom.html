@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CyberCrowd Boardroom | Governance, Definitions, Disclosure, Platform Duty</title>
+  <title>CyberCrowd Boardroom | Decisions, Disclosure, Authority Boundaries</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberCrowd Boardroom defines the governance room for board decisions, definitions, disclosure, public sentiment boundaries, hidden influence review, silence events, and platform duty.">
+  <meta name="description" content="CyberCrowd Boardroom defines the decision room for definitions, disclosure, public signal boundaries, hidden influence review, silence events, authority separation, and platform duty.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://cybercrowd.net/boardroom.html">
 
@@ -16,12 +16,15 @@
       --muted: #b9c4d8;
       --gold: #ffd166;
       --green: #66e3a5;
-      --blue: #7cc7ff;
       --red: #ff7474;
       --line: rgba(255,255,255,.14);
       --shadow: 0 18px 48px rgba(0,0,0,.34);
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       color: var(--text);
@@ -32,8 +35,18 @@
         radial-gradient(circle at top right, rgba(255,209,102,.13), transparent 32rem),
         linear-gradient(180deg, #070910 0%, #0b1020 100%);
     }
-    a { color: var(--gold); font-weight: 700; }
-    main { max-width: 1120px; margin: 0 auto; padding: 28px 18px 64px; }
+
+    a {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 18px 64px;
+    }
+
     .hero {
       border: 1px solid var(--line);
       border-radius: 28px;
@@ -41,6 +54,7 @@
       background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(23,32,51,.88));
       box-shadow: var(--shadow);
     }
+
     .eyebrow {
       display: inline-block;
       padding: 7px 12px;
@@ -52,10 +66,29 @@
       letter-spacing: .04em;
       text-transform: uppercase;
     }
-    h1 { margin: 18px 0 10px; font-size: clamp(2rem, 5vw, 4rem); line-height: 1.04; }
-    h2 { margin: 0 0 10px; color: var(--gold); font-size: 1.35rem; }
-    p { margin: 0 0 12px; }
-    .lead { max-width: 900px; color: var(--muted); font-size: 1.18rem; }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.04;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 1.35rem;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    .lead {
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.18rem;
+    }
+
     .rule-strip {
       margin-top: 18px;
       padding: 16px 18px;
@@ -64,7 +97,14 @@
       background: rgba(255,209,102,.10);
       font-weight: 800;
     }
-    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; margin-top: 18px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
     .card {
       grid-column: span 6;
       border: 1px solid var(--line);
@@ -73,7 +113,11 @@
       background: rgba(17,24,39,.88);
       box-shadow: 0 10px 30px rgba(0,0,0,.22);
     }
-    .card.full { grid-column: 1 / -1; }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
     .plain-rule {
       margin-top: 14px;
       padding: 15px 17px;
@@ -82,6 +126,7 @@
       background: rgba(102,227,165,.10);
       font-weight: 800;
     }
+
     .warning {
       margin-top: 14px;
       padding: 15px 17px;
@@ -90,12 +135,31 @@
       background: rgba(255,116,116,.10);
       font-weight: 800;
     }
-    ul { margin: 8px 0 0; padding-left: 1.25rem; color: var(--muted); }
-    li { margin: 7px 0; }
-    .nav-back { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 1.25rem;
+      color: var(--muted);
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .nav-back {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
     @media (max-width: 820px) {
-      .hero { padding: 24px; }
-      .card { grid-column: 1 / -1; }
+      .hero {
+        padding: 24px;
+      }
+
+      .card {
+        grid-column: 1 / -1;
+      }
     }
   </style>
 </head>
@@ -103,82 +167,189 @@
 <body>
   <main>
     <section class="hero" aria-labelledby="page-title">
-      <span class="eyebrow">Boardroom Layer</span>
+      <span class="eyebrow">CyberCrowd Boardroom</span>
       <h1 id="page-title">CyberCrowd Boardroom</h1>
+
       <p class="lead">
-        The Boardroom is the governance room for platform decisions, definition-first review, disclosure, public signals, silence events, hidden influence, and platform duty. It connects the ecosystem while keeping authority separated and corrections visible.
+        The CyberCrowd Boardroom is the decision room for platform duty,
+        disclosure, authority boundaries, silence events, hidden influence review,
+        public signal limits, and major decisions that affect trust.
       </p>
+
       <div class="rule-strip">
-        Rule on the table. Disclosure first. Hidden influence blocked. Public signal clarifies; it does not govern.
+        Define the issue. Disclose the pressure. Separate authority. Public signal may clarify, but it does not govern CyberCrowd.
       </div>
     </section>
 
-    <section class="grid" aria-label="Boardroom governance rules">
+    <section class="grid" aria-label="CyberCrowd Boardroom rules">
       <article class="card full">
         <h2>Boardroom Purpose</h2>
         <p>
-          The Boardroom exists because CyberCrowd is the glass castle. Major decisions require clear definitions, honest disclosure, evidence, procedure, and moral discipline.
+          The Boardroom exists because CyberCrowd is the glass castle. Major decisions
+          require clear definitions, honest disclosure, evidence, procedure, platform loyalty,
+          and moral discipline.
+        </p>
+        <p>
+          The Boardroom is not a costume, not a performance room, and not a place for hidden control.
+          It is where CyberCrowd keeps serious decisions visible enough to review and disciplined enough to trust.
         </p>
       </article>
 
       <article class="card">
-        <h2>Definition-First Governance</h2>
+        <h2>Definition Before Decision</h2>
         <p>
-          Decisions begin by defining the issue, event, signal, conflict, risk, or opportunity before action is taken. Definition prevents ambiguity from controlling the room.
+          CyberCrowd decisions should begin by defining the issue, event, signal,
+          conflict, risk, or opportunity before action is taken.
+        </p>
+        <p>
+          Definition prevents ambiguity from controlling the room. A definition gives the rule a container.
+          It does not freeze the recipe.
         </p>
       </article>
 
       <article class="card">
-        <h2>Pre-Vote Disclosure</h2>
+        <h2>Disclosure Before Decision</h2>
         <p>
-          Before major decisions, participants must disclose relevant conflicts, contacts, schedules, pressures, or conversations that could affect the decision. Honest disclosure protects the process.
+          Before major decisions, CyberCrowd may require participants to disclose relevant conflicts,
+          contacts, schedules, pressures, or conversations that could affect the decision.
+        </p>
+        <p>
+          Honest disclosure protects the participant, the decision, and CyberCrowd.
+          Deceit, evasion, incomplete disclosure, or hidden pressure may trigger review.
         </p>
       </article>
 
       <article class="card">
         <h2>Hidden Influence Review</h2>
         <p>
-          Hidden influence, undisclosed pressure, concealed conflicts, or incomplete disclosure may trigger review. The Boardroom must protect platform decisions from covert control.
+          Hidden influence, undisclosed pressure, concealed conflict, or incomplete disclosure may trigger review.
+          The Boardroom must protect CyberCrowd decisions from covert control.
+        </p>
+        <p>
+          Hidden influence review does not begin as an accusation. It begins as a serious signal that requires
+          definition, evidence, disclosure, and a visible process.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Authority Boundaries</h2>
+        <p>
+          No board member, reviewer, sponsor, public wave, complaint, payment signal, or automated system
+          should control the question, the rule, the evidence, the correction, and the final decision at the same time.
+        </p>
+        <p>
+          CyberCrowd separates authority so one pressure point cannot quietly become the whole decision.
         </p>
       </article>
 
       <article class="card full">
         <h2>Silence Events</h2>
         <p>
-          Silence cannot stall the Boardroom. Silence blocking required clarity may become a procedural signal and be handled through the Silence Events process.
+          Silence cannot stall the Boardroom. If silence blocks required clarity,
+          it may become a procedural signal and be handled through the Silence Events process.
+        </p>
+        <p>
+          Silence does not automatically prove guilt, approval, consent, or authority.
+          It means CyberCrowd must decide whether the next visible step is notice,
+          clarification, disclosure, recusal, open-seat handling, or escalation.
         </p>
       </article>
 
       <article class="card">
-        <h2>Public Sentiment Boundary</h2>
+        <h2>Public Signal Boundary</h2>
         <p>
-          Public sentiment may clarify, but it does not govern. Public reaction may help the Boardroom understand confusion, concern, urgency, or support, but it does not replace board duty, evidence, authority, or platform obligation.
+          Public sentiment may clarify, but it does not govern. Public reaction may help the Boardroom
+          understand confusion, concern, urgency, pressure, or support.
+        </p>
+        <p>
+          Public signal does not replace board duty, evidence, authority, disclosure, or platform obligation.
         </p>
       </article>
 
       <article class="card">
         <h2>Transparency Mode</h2>
         <p>
-          Transparency Mode may be used when silence, ambiguity, hidden pressure, public confusion, or platform risk requires clearer observation and public explanation.
+          Transparency Mode may be used when silence, ambiguity, hidden pressure, public confusion,
+          or platform risk requires clearer observation and public explanation.
         </p>
+        <p>
+          Transparency does not mean chaos. It means CyberCrowd can define what is known,
+          what is unknown, what is being reviewed, and what action is allowed next.
+        </p>
+      </article>
+
+      <article class="card full">
+        <h2>Public Challenge and Correction</h2>
+        <p>
+          A rule that cannot survive public challenge was not ready to govern,
+          but the public can show us where the rules are weak.
+        </p>
+        <p>
+          Public challenge does not mean the public governs CyberCrowd. It may reveal where a rule is
+          confusing, unfair, too broad, too narrow, too hidden, too harsh, or missing a correction path.
+        </p>
+        <p>
+          CyberCrowd should not simply become harder when challenged. It should become clearer and more workable.
+          A definition is a boundary, not a blanket, and not a lock-and-key safe.
+        </p>
+        <div class="plain-rule">
+          Public challenge tests clarity. The Boardroom remains responsible for the decision.
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Recusal and Open-Seat Handling</h2>
+        <p>
+          If a participant cannot cleanly take part in a decision because of conflict, exposure,
+          undisclosed pressure, or hidden influence concerns, CyberCrowd may require recusal or
+          temporary open-seat handling.
+        </p>
+        <p>
+          Open-seat handling protects the decision. It is not a secret punishment or public shame label.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>No Invisible Punishment</h2>
+        <p>
+          Boardroom process must not become hidden punishment. Vote handling, recusal,
+          access review, seat review, or escalation must connect to a visible rule and a visible path.
+        </p>
+        <div class="warning">
+          Hidden influence cannot be fixed with another hidden process.
+        </div>
       </article>
 
       <article class="card full">
         <h2>Archive and Proof</h2>
         <p>
-          Boardroom decisions, disclosures, review triggers, silence events, vote concerns, and governance lessons may be preserved through the Platform Archive when they affect platform trust.
+          Boardroom decisions, disclosures, review triggers, silence events, vote concerns,
+          public-signal questions, and governance lessons may be preserved through the Platform Archive
+          when they affect platform trust.
+        </p>
+        <p>
+          The record should help CyberCrowd explain what happened, what was known,
+          what was unclear, what was corrected, and what rule or process changed.
         </p>
       </article>
 
       <article class="card full">
-        <h2>Connection to the CyberCrowd System</h2>
+        <h2>Connection to CyberCrowd</h2>
         <p>
-          Boardroom connects to Governance, Ethics & Conduct, Hidden Influence, Silence Events, Transparency Mode, Public Discourse, Platform Archive, Client Investigation, Access Passes, WDIG Routing, Magic Cursor, Live Control Room, CyberCode, and the Rules Manual.
+          Boardroom may connect to Governance, Ethics &amp; Conduct, Hidden Influence,
+          Silence Events, Transparency Mode, Public Discourse, Platform Archive,
+          Client Investigation, Access Passes, WDIG Routing, Magic Cursor, Live Control Room,
+          CyberCode, and the CyberCrowd Rules Manual.
         </p>
+        <div class="plain-rule">
+          The Boardroom protects CyberCrowd by keeping major decisions defined, disclosed, reviewable, and accountable.
+        </div>
       </article>
     </section>
 
-    <p class="nav-back"><a href="/">Return to CyberCrowd</a></p>
+    <p class="nav-back">
+      <a href="/">Return to CyberCrowd</a>
+    </p>
   </main>
 </body>
 </html>
