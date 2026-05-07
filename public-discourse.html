@@ -2,76 +2,324 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CyberCrowd Public Discourse | Debate, Sentiment, Transparency, Rotating Platform</title>
+  <title>CyberCrowd Public Discourse | Public Signal, Debate, Transparency</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberCrowd Public Discourse defines the public conversation layer for debate, sentiment, transparency, audience signal, boardroom awareness, and rotating platform interaction.">
+  <meta name="description" content="CyberCrowd Public Discourse defines the public conversation layer for debate, public signal, transparency, audience response, boardroom awareness, and platform review boundaries.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://cybercrowd.net/public-discourse.html">
+
+  <style>
+    :root {
+      --bg: #070910;
+      --panel: #111827;
+      --text: #f5f7fb;
+      --muted: #b9c4d8;
+      --gold: #ffd166;
+      --green: #66e3a5;
+      --red: #ff7474;
+      --line: rgba(255,255,255,.14);
+      --shadow: 0 18px 48px rgba(0,0,0,.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(124,199,255,.18), transparent 34rem),
+        radial-gradient(circle at top right, rgba(255,209,102,.13), transparent 32rem),
+        linear-gradient(180deg, #070910 0%, #0b1020 100%);
+    }
+
+    a {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 18px 64px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 34px;
+      background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(23,32,51,.88));
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #08111d;
+      background: var(--gold);
+      font-weight: 900;
+      font-size: .78rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.04;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 1.35rem;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    .lead {
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.18rem;
+    }
+
+    .rule-strip {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-left: 5px solid var(--gold);
+      border-radius: 16px;
+      background: rgba(255,209,102,.10);
+      font-weight: 800;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .card {
+      grid-column: span 6;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px;
+      background: rgba(17,24,39,.88);
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+    }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
+    .plain-rule {
+      margin-top: 14px;
+      padding: 15px 17px;
+      border-left: 5px solid var(--green);
+      border-radius: 16px;
+      background: rgba(102,227,165,.10);
+      font-weight: 800;
+    }
+
+    .warning {
+      margin-top: 14px;
+      padding: 15px 17px;
+      border-left: 5px solid var(--red);
+      border-radius: 16px;
+      background: rgba(255,116,116,.10);
+      font-weight: 800;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 1.25rem;
+      color: var(--muted);
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .nav-back {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        padding: 24px;
+      }
+
+      .card {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <main>
-    <h1>CyberCrowd Public Discourse</h1>
+    <section class="hero" aria-labelledby="page-title">
+      <span class="eyebrow">CyberCrowd Public Discourse</span>
+      <h1 id="page-title">CyberCrowd Public Discourse</h1>
 
-    <p>
-      CyberCrowd Public Discourse is the public conversation and signal layer
-      for the platform. It is where audience attention, debate, sentiment,
-      transparency, public questions, and rotating platform interaction can be
-      observed without letting the public directly govern the system.
-    </p>
+      <p class="lead">
+        CyberCrowd Public Discourse is the public conversation and signal layer for CyberCrowd.
+        It is where audience attention, debate, sentiment, public questions, transparency prompts,
+        and platform response can be observed without letting public pressure secretly control the system.
+      </p>
 
-    <h2>Public Discourse Purpose</h2>
-    <p>
-      CyberCrowd is not a linear feed. Public Discourse gives the platform a way
-      to observe public reaction, confusion, support, disagreement, questions,
-      and pressure without turning every signal into command authority.
-    </p>
+      <div class="rule-strip">
+        Public signal may clarify. Public challenge may expose weak rules. Public pressure does not govern CyberCrowd.
+      </div>
+    </section>
 
-    <h2>Possible Discourse Signals</h2>
-    <ul>
-      <li>Public questions</li>
-      <li>Viewer reactions</li>
-      <li>Creator and client feedback</li>
-      <li>Confusion clusters</li>
-      <li>Sentiment heatmaps</li>
-      <li>Transparency prompts</li>
-      <li>Boardroom awareness signals</li>
-      <li>Event-specific discourse</li>
-      <li>Live session reactions</li>
-      <li>Atomic Kricket culture reactions</li>
-      <li>Reten Records media reactions</li>
-    </ul>
+    <section class="grid" aria-label="CyberCrowd public discourse rules">
+      <article class="card full">
+        <h2>Public Discourse Purpose</h2>
+        <p>
+          CyberCrowd is not a linear feed. Public Discourse gives CyberCrowd a way to observe public reaction,
+          confusion, support, disagreement, questions, friction, and pressure without turning every signal into
+          command authority.
+        </p>
+        <p>
+          The purpose is to listen without surrendering the decision. CyberCrowd can hear the public,
+          name the issue, route the concern, and keep the next action visible.
+        </p>
+      </article>
 
-    <h2>Public Sentiment Boundary</h2>
-    <p>
-      Public sentiment may clarify, but it does not govern. CyberCrowd may use
-      public discourse to identify confusion, friction, urgency, support, or
-      concern, but the platform must preserve proper decision authority,
-      governance rules, safety boundaries, and definition-first review.
-    </p>
+      <article class="card">
+        <h2>Possible Public Signals</h2>
+        <ul>
+          <li>Public questions</li>
+          <li>Viewer reactions</li>
+          <li>Creator and client feedback</li>
+          <li>Confusion clusters</li>
+          <li>Sentiment heatmaps</li>
+          <li>Transparency prompts</li>
+          <li>Boardroom awareness signals</li>
+          <li>Event-specific discourse</li>
+          <li>Live session reactions</li>
+          <li>Atomic Kricket culture reactions</li>
+          <li>Reten Records media reactions</li>
+        </ul>
+      </article>
 
-    <h2>Transparency Mode</h2>
-    <p>
-      Public Discourse may connect to Transparency Mode when silence, ambiguity,
-      confusion, or public pressure needs to be observed and defined. Transparency
-      does not mean chaos. It means the platform can show what is known, what is
-      unknown, and what is being reviewed.
-    </p>
+      <article class="card">
+        <h2>Public Sentiment Boundary</h2>
+        <p>
+          Public sentiment may clarify, but it does not govern. CyberCrowd may use public discourse to identify
+          confusion, friction, urgency, support, or concern, but the platform must preserve proper decision authority,
+          governance rules, safety boundaries, and definition-first review.
+        </p>
+        <div class="plain-rule">
+          Public signal can identify pressure. It does not become hidden authority.
+        </div>
+      </article>
 
-    <h2>Rotating Platform Logic</h2>
-    <p>
-      Public Discourse can rotate attention between events, creators, viewers,
-      archive proof, live rooms, boardroom topics, media assets, access issues,
-      Atomic Kricket stories, and Reten Records media events.
-    </p>
+      <article class="card full">
+        <h2>Public Challenge and Correction</h2>
+        <p>
+          A rule that cannot survive public challenge was not ready to govern, but the public can show us where
+          the rules are weak.
+        </p>
+        <p>
+          Public challenge may reveal that a rule is confusing, unfair, too broad, too narrow, too hidden,
+          too harsh, or missing a correction path. That challenge does not give the crowd decision authority.
+        </p>
+        <p>
+          CyberCrowd should not simply become harder when challenged. It should become clearer and more workable.
+          A definition is a boundary, not a blanket, and not a lock-and-key safe.
+        </p>
+      </article>
 
-    <h2>Connection to the CyberCrowd System</h2>
-    <p>
-      Public Discourse may connect to the CyberCrowd Archive, Live Control Room,
-      Creator Control, Viewer Upgrades, WDIG Routing, Magic Cursor, Atomic Kricket,
-      Reten Records, public sentiment tools, and governance review.
-    </p>
+      <article class="card">
+        <h2>Transparency Mode</h2>
+        <p>
+          Public Discourse may connect to Transparency Mode when silence, ambiguity, confusion, hidden pressure,
+          or public concern needs to be observed and defined.
+        </p>
+        <p>
+          Transparency does not mean chaos. It means CyberCrowd can explain what is known, what is unknown,
+          what is being reviewed, and what action is allowed next.
+        </p>
+      </article>
 
-    <p>
+      <article class="card">
+        <h2>Rotating Platform Attention</h2>
+        <p>
+          Public Discourse can rotate attention between events, creators, viewers, archive proof, live rooms,
+          boardroom topics, media assets, access issues, Atomic Kricket stories, Reten Records media events,
+          and CyberCrowd updates.
+        </p>
+        <p>
+          Rotation should help people find the issue and follow the response. It should not turn attention
+          into a substitute for evidence or authority.
+        </p>
+      </article>
+
+      <article class="card full">
+        <h2>Public Friction</h2>
+        <p>
+          A public attack is not always a wound. Sometimes it is market proof. CyberCrowd does not manufacture
+          enemies for engagement, but it may route public friction through issue, answer, correction, education,
+          or proof.
+        </p>
+        <p>
+          Public friction may reveal visibility, market pressure, confusion, unmet need, policy weakness,
+          product misunderstanding, or competitive pressure.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Signal Routing</h2>
+        <p>
+          Public Discourse should not leave signals floating loose. A signal may need to be routed to Governance,
+          Boardroom, Hidden Influence, Societal Sentiment, Client Investigation, CyberCode, Docket Forum,
+          or the Rules Manual.
+        </p>
+        <ul>
+          <li>Confusion may route to clarification.</li>
+          <li>Friction may route to answer, correction, education, or proof.</li>
+          <li>Hidden pressure may route to Hidden Influence review.</li>
+          <li>Client risk may route to Client Investigation.</li>
+          <li>Repeated misunderstanding may route to CyberCode memory.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>No Public Shortcut</h2>
+        <p>
+          Public Discourse must not become a shortcut around rules, board duty, evidence, disclosure,
+          correction, or safety boundaries. The loudest signal is not automatically the correct signal.
+        </p>
+        <div class="warning">
+          Public attention can show smoke. CyberCrowd still has to find the source.
+        </div>
+      </article>
+
+      <article class="card full">
+        <h2>Connection to CyberCrowd</h2>
+        <p>
+          Public Discourse may connect to the CyberCrowd Archive, Live Control Room, Creator Control,
+          Viewer Upgrades, WDIG Routing, Magic Cursor, Atomic Kricket, Reten Records, public sentiment tools,
+          Governance, Boardroom, Hidden Influence, Societal Sentiment, Client Investigation, CyberCode,
+          and the CyberCrowd Rules Manual.
+        </p>
+        <div class="plain-rule">
+          Public Discourse helps CyberCrowd hear the signal, name the issue, and keep the response visible.
+        </div>
+      </article>
+    </section>
+
+    <p class="nav-back">
       <a href="/">Return to CyberCrowd</a>
     </p>
   </main>
