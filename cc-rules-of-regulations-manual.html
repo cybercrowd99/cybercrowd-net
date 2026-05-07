@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberCrowd Rules Manual | Rules of the Game</title>
+  <meta name="description" content="CyberCrowd Rules Manual: a clear rules-of-the-game guide for users, creators, clients, reviewers, and business sandbox operators." />
+  <style>
+    :root {
+      --bg: #06080d;
+      --panel: #101827;
+      --panel-soft: #162235;
+      --ink: #f8fafc;
+      --muted: #cbd5e1;
+      --gold: #f8c14a;
+      --green: #44d17a;
+      --blue: #67b7ff;
+      --red: #ff6b6b;
+      --line: rgba(255,255,255,0.14);
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(103, 183, 255, 0.20), transparent 32rem),
+        radial-gradient(circle at top right, rgba(248, 193, 74, 0.18), transparent 30rem),
+        linear-gradient(180deg, #06080d 0%, #0b111d 52%, #06080d 100%);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    header.hero {
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(16, 24, 39, 0.88);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+
+    h1, h2, h3 { line-height: 1.15; margin: 0 0 14px; }
+    h1 { font-size: clamp(2.3rem, 5vw, 4.6rem); }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.35rem); color: var(--gold); }
+    h3 { font-size: 1.22rem; color: var(--blue); }
+
+    p { margin: 0 0 14px; color: var(--muted); }
+
+    .lead {
+      font-size: 1.18rem;
+      max-width: 880px;
+      color: #e2e8f0;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      color: #e5e7eb;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    nav.manual-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin: 0 0 24px;
+    }
+
+    nav.manual-nav a {
+      display: block;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    section.card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(16, 24, 39, 0.86);
+      padding: 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .mini-card {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.055);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .rule-box {
+      border-left: 5px solid var(--gold);
+      background: rgba(248, 193, 74, 0.08);
+      border-radius: 14px;
+      padding: 18px;
+      margin: 18px 0;
+    }
+
+    .rule-box strong { color: var(--gold); }
+
+    ul, ol { color: var(--muted); padding-left: 22px; margin-top: 8px; }
+    li { margin: 8px 0; }
+
+    .scoreboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .score {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255,255,255,0.055);
+    }
+
+    .score.good h3 { color: var(--green); }
+    .score.watch h3 { color: var(--gold); }
+    .score.stop h3 { color: var(--red); }
+
+    .manual-footer {
+      margin-top: 28px;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .print-note {
+      color: #e2e8f0;
+      font-weight: 800;
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .wrap { width: 100%; padding: 0; }
+      header.hero, section.card, .manual-footer, .mini-card, .score, .rule-box {
+        background: #fff;
+        color: #111;
+        box-shadow: none;
+        border-color: #999;
+      }
+      p, ul, ol, li { color: #222; }
+      nav.manual-nav { display: none; }
+      h2, h3, .eyebrow { color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div class="eyebrow">CyberCrowd Rules Manual</div>
+      <h1>Rules of the Game</h1>
+      <p class="lead">
+        CyberCrowd works best when everybody can see the board, understand the pieces, and know what happens next.
+        This manual explains the system in plain language: no hidden fine print, no mystery switches, and no rule that only appears after someone loses a turn.
+      </p>
+      <div class="tag-row" aria-label="Core manual promises">
+        <span class="tag">Rule on the table</span>
+        <span class="tag">Issue, not profile</span>
+        <span class="tag">Correct before escalation</span>
+        <span class="tag">Public value without public control</span>
+        <span class="tag">Trust is the scoreboard</span>
+      </div>
+    </header>
+
+    <nav class="manual-nav" aria-label="Rules manual sections">
+      <a href="#object">Object</a>
+      <a href="#players">Players</a>
+      <a href="#board">Game Board</a>
+      <a href="#pieces">Pieces</a>
+      <a href="#setup">Setup</a>
+      <a href="#turn-order">Turn Order</a>
+      <a href="#chopping-block">Chopping Block</a>
+      <a href="#sequester">Sequester Event</a>
+      <a href="#signals">Scoring &amp; Signals</a>
+      <a href="#penalties">Penalties</a>
+      <a href="#special-cards">Special Cards</a>
+      <a href="#winning">Winning Condition</a>
+    </nav>
+
+    <section id="object" class="card">
+      <h2>1. Object of the Game</h2>
+      <p>
+        The object of CyberCrowd is to help creators, clients, users, and businesses move through access, content, review,
+        correction, and trust without turning confusion into punishment.
+      </p>
+      <div class="rule-box">
+        <p><strong>Plain rule:</strong> CyberCrowd does not hide the ball. If a rule matters, the rule belongs on the table before the play begins.</p>
+      </div>
+      <p>
+        CyberCode holds the deeper memory. This Rules Manual explains the game so regular people can understand what the system is doing and why.
+      </p>
+    </section>
+
+    <section id="players" class="card">
+      <h2>2. Players</h2>
+      <div class="grid">
+        <div class="mini-card">
+          <h3>Users</h3>
+          <p>People watching, joining, subscribing, testing, voting, asking, learning, or using CyberCrowd tools.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Creators</h3>
+          <p>People or teams offering content, broadcasts, camera packages, products, services, or creative work.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Clients</h3>
+          <p>Businesses, partners, venues, brands, or operators using CyberCrowd systems for access, discovery, or trust workflows.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Reviewers</h3>
+          <p>People helping sort issues, check facts, identify drift, and keep review tied to the issue instead of the profile.</p>
+        </div>
+        <div class="mini-card">
+          <h3>CyberHR / CLER</h3>
+          <p>The learning and correction role. CLER maps the work before judging the worker.</p>
+        </div>
+        <div class="mini-card">
+          <h3>CyberCrowd Governance</h3>
+          <p>The role that protects rules, access, escalation, remedies, records, and platform stability.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="board" class="card">
+      <h2>3. Game Board</h2>
+      <p>The CyberCrowd board is not one square. It is a connected system of spaces where different kinds of play happen.</p>
+      <div class="grid">
+        <div class="mini-card">
+          <h3>CyberCourt</h3>
+          <p>The place where the question is framed clearly. CyberCourt controls the question, not the person.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Docket Forum</h3>
+          <p>The entry table where issues can be placed, tracked, clarified, and routed.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Chopping Block</h3>
+          <p>A public review table for visibility, pressure testing, and learning. It does not become the judge.</p>
+        </div>
+        <div class="mini-card">
+          <h3>CyberCode</h3>
+          <p>The deep rulebook and memory layer that records rules, corrections, lessons, and system history.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Business Sandbox</h3>
+          <p>A practice and testing space where businesses, creators, and operators can learn before scaling mistakes.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Water Decrees</h3>
+          <p>Plain statements that define flow, access, obligations, correction, and boundaries.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="pieces" class="card">
+      <h2>4. Game Pieces</h2>
+      <p>Game pieces are the things that move through the board.</p>
+      <ul>
+        <li><strong>Issue:</strong> the question or problem being reviewed.</li>
+        <li><strong>Complaint:</strong> a claim that something went wrong or needs review.</li>
+        <li><strong>Docket Entry:</strong> the record that places the issue on the table.</li>
+        <li><strong>Notice:</strong> a clear message that tells a player what is happening and why.</li>
+        <li><strong>Grace Period:</strong> time to fix, answer, pay, clarify, or correct before stronger action.</li>
+        <li><strong>Default:</strong> a temporary status when a duty is missed. Default is not forever.</li>
+        <li><strong>Appeal or Recourse:</strong> a path to ask for review, correction, or explanation.</li>
+        <li><strong>Recusal:</strong> stepping away from a decision when neutrality is at risk.</li>
+        <li><strong>Open Seat:</strong> a temporary status when a decision-maker cannot safely participate in a vote.</li>
+      </ul>
+    </section>
+
+    <section id="setup" class="card">
+      <h2>5. Setup</h2>
+      <p>Before play begins, CyberCrowd needs the board set cleanly.</p>
+      <ol>
+        <li>Name the issue clearly.</li>
+        <li>Identify which players are involved.</li>
+        <li>Separate the issue from the person’s profile.</li>
+        <li>Check the rule that applies.</li>
+        <li>Give notice when notice is required.</li>
+        <li>Offer correction before escalation when correction is possible.</li>
+        <li>Record the outcome so the same confusion does not become a hidden pattern.</li>
+      </ol>
+      <div class="rule-box">
+        <p><strong>Issue, not profile:</strong> Accent, origin, disability, class, education, appearance, religion, region, or learning style must not become the case.</p>
+      </div>
+    </section>
+
+    <section id="turn-order" class="card">
+      <h2>6. Turn Order</h2>
+      <p>CyberCrowd should move in order instead of jumping straight to punishment.</p>
+      <ol>
+        <li><strong>Ask:</strong> What is the issue?</li>
+        <li><strong>Define:</strong> What rule, duty, or expectation applies?</li>
+        <li><strong>Notice:</strong> Has the player been told what is wrong?</li>
+        <li><strong>Answer:</strong> Has the player had a chance to respond?</li>
+        <li><strong>Correct:</strong> Can training, payment, access repair, role clarity, or better instruction fix it?</li>
+        <li><strong>Review:</strong> Is there drift, bias, hidden influence, or missing context?</li>
+        <li><strong>Escalate:</strong> If correction fails or risk is serious, stronger action may be used.</li>
+        <li><strong>Record:</strong> CyberCode remembers the lesson.</li>
+      </ol>
+    </section>
+
+    <section id="chopping-block" class="card">
+      <h2>7. Chopping Block / Public Review Table</h2>
+      <p>
+        The Chopping Block is not a mob button. It is a public review table. It can reveal confusion, pressure, visibility,
+        market fear, policy weakness, product misunderstanding, or unmet need.
+      </p>
+      <div class="rule-box">
+        <p><strong>Plain rule:</strong> Public sentiment can clarify the heat around an issue, but it cannot replace the rulebook.</p>
+      </div>
+      <p>
+        CyberCrowd may learn from public friction without manufacturing enemies for engagement. A public attack is not always a wound.
+        Sometimes it is market proof.
+      </p>
+    </section>
+
+    <section id="sequester" class="card">
+      <h2>8. Sequester Event</h2>
+      <p>
+        A Sequester Event is a protected review moment. It lets a player separate identity, pressure, noise, or public heat from the issue being reviewed.
+      </p>
+      <ul>
+        <li>A player may be invited into Sequester when the issue needs cleaner review.</li>
+        <li>The player may be offered an identity choice when public exposure is not required.</li>
+        <li>Sequester does not erase accountability. It helps keep the review fair.</li>
+        <li>The goal is to protect the issue from becoming a profile attack.</li>
+      </ul>
+    </section>
+
+    <section id="signals" class="card">
+      <h2>9. Scoring &amp; Signals</h2>
+      <p>CyberCrowd scoring is not just money. Trust, clarity, correction, safety, and public understanding all matter.</p>
+      <div class="scoreboard">
+        <div class="score good">
+          <h3>Green Signals</h3>
+          <p>Clear rule, fair notice, correction accepted, access repaired, payment resolved, trust improved.</p>
+        </div>
+        <div class="score watch">
+          <h3>Yellow Signals</h3>
+          <p>Confusion, drift risk, unclear instruction, payment delay, public friction, missing context, review needed.</p>
+        </div>
+        <div class="score stop">
+          <h3>Red Signals</h3>
+          <p>Hidden influence, deception, unsafe access, repeated default, retaliation, profile attack, concealed conflict.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="penalties" class="card">
+      <h2>10. Penalties and Remedies</h2>
+      <p>Penalties should match the issue. CyberCrowd should not use invisible punishment.</p>
+      <ul>
+        <li><strong>Correction:</strong> training, clarification, repair, role change, or better instruction.</li>
+        <li><strong>Restriction:</strong> temporary access limits when risk requires it.</li>
+        <li><strong>Default:</strong> temporary status for missed payment, missed duty, or missed answer.</li>
+        <li><strong>Open Seat:</strong> temporary decision pause when hidden influence or conflict threatens a vote.</li>
+        <li><strong>Removal:</strong> stronger remedy when correction fails or serious harm requires it.</li>
+        <li><strong>Record:</strong> CyberCode records the reason so action does not become hidden fine print.</li>
+      </ul>
+      <div class="rule-box">
+        <p><strong>No invisible punishment:</strong> If CyberCrowd restricts, defaults, removes, or limits a player, the reason must be tied to a visible rule or record.</p>
+      </div>
+    </section>
+
+    <section id="special-cards" class="card">
+      <h2>11. Special Cards</h2>
+      <p>Special cards are tools that can change the next move when fairness, learning, or safety requires it.</p>
+      <div class="grid">
+        <div class="mini-card">
+          <h3>Grace Card</h3>
+          <p>Allows time to fix a missed duty before stronger action.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Recusal Card</h3>
+          <p>Removes a conflicted player from a decision before the decision is damaged.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Correction Card</h3>
+          <p>Sends an issue to learning, role clarity, instruction, or system repair.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Sequester Card</h3>
+          <p>Protects review from noise, identity pressure, or public pile-on.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Public Signal Card</h3>
+          <p>Uses public friction as information without letting the crowd become the rulebook.</p>
+        </div>
+        <div class="mini-card">
+          <h3>Open Seat Card</h3>
+          <p>Temporarily pauses a decision-maker when hidden influence or disclosure failure threatens the board.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="winning" class="card">
+      <h2>12. Winning Condition</h2>
+      <p>
+        CyberCrowd wins when people can use the system, understand the rules, fix mistakes, trust the process,
+        and see that correction is stronger than confusion.
+      </p>
+      <p>
+        Winning does not mean nobody ever makes a mistake. Winning means mistakes do not become secret patterns,
+        hidden penalties, rigged outcomes, or profile attacks.
+      </p>
+      <div class="rule-box">
+        <p><strong>Winning rule:</strong> Trust compounds when the rule is visible, the issue is clear, correction is possible, and the record remembers the lesson.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Physical Manual / Creator Kit Note</h2>
+      <p>
+        This Rules Manual is designed so it can later become a printable handbook, mini constitution book, Creator Welcome Kit insert,
+        Business Sandbox Kit guide, QR card, or small starter package. The physical version should feel like a coachable rulebook:
+        clear, friendly, firm, and useful before the first play begins.
+      </p>
+      <p class="print-note">No hidden fine print. No mystery switches. Rule on the table.</p>
+    </section>
+
+    <footer class="manual-footer">
+      <p><strong>CyberCrowd Rules Manual</strong></p>
+      <p>Rules of the game for access, correction, review, public value, and trust.</p>
+    </footer>
+  </main>
+</body>
+</html>
