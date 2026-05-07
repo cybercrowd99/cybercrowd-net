@@ -11,11 +11,18 @@ const wss = new WebSocket.Server({ server });
 const PORT = 7070;
 
 function getLocalIP() {
+
     const nets = os.networkInterfaces();
 
     for (const name of Object.keys(nets)) {
+
         for (const net of nets[name]) {
-            if (net.family === "IPv4" && !net.internal) {
+
+            if (
+                net.family === "IPv4" &&
+                !net.internal
+            ) {
+
                 return net.address;
             }
         }
@@ -26,7 +33,7 @@ function getLocalIP() {
 
 app.get("/", (req, res) => {
 
-    res.send(`
+res.send(`
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +45,9 @@ app.get("/", (req, res) => {
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>CYBERCROWD SANDBOX CURSOR</title>
+<title>
+CYBERCROWD SANDBOX CURSOR
+</title>
 
 <style>
 
@@ -56,6 +65,9 @@ body {
     background: #050505;
 
     font-family: Arial, sans-serif;
+
+    transition:
+    background 0.2s ease;
 }
 
 #surface {
@@ -66,11 +78,14 @@ body {
     height: 100vh;
 
     background:
-    radial-gradient(circle at center,
+    radial-gradient(
+    circle at center,
+
     rgba(0,255,255,0.12),
+
     transparent 40%),
 
-    #050505;
+    transparent;
 }
 
 #cursor {
@@ -82,7 +97,8 @@ body {
 
     border-radius: 50%;
 
-    border: 2px solid #00ffff;
+    border:
+    2px solid #00ffff;
 
     box-shadow:
     0 0 10px #00ffff,
@@ -90,10 +106,15 @@ body {
 
     pointer-events: none;
 
-    transform: translate(-50%, -50%);
+    transform:
+    translate(-50%, -50%);
 
     left: 50%;
     top: 50%;
+
+    transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
 #title {
@@ -119,7 +140,7 @@ body {
 <div id="surface">
 
 <div id="title">
-CYBERCROWD SANDBOX CURSOR V0
+CYBERCROWD SANDBOX CURSOR V1
 </div>
 
 <div id="cursor"></div>
@@ -128,7 +149,10 @@ CYBERCROWD SANDBOX CURSOR V0
 
 <script>
 
-const cursor = document.getElementById("cursor");
+const cursor =
+document.getElementById(
+"cursor"
+);
 
 const ws =
 new WebSocket(
@@ -138,7 +162,9 @@ new WebSocket(
 let role = "server";
 
 if (
-location.search.includes("client")
+location.search.includes(
+"client"
+)
 ) {
     role = "client";
 }
@@ -147,7 +173,9 @@ ws.onopen = () => {
 
     ws.send(
         JSON.stringify({
+
             type: "role",
+
             role: role
         })
     );
@@ -155,81 +183,114 @@ ws.onopen = () => {
 
 if (role === "server") {
 
-    document.body.addEventListener(
-    "mousemove",
+document.body.addEventListener(
+"mousemove",
 
-    (e) => {
+(e) => {
 
-        ws.send(
-            JSON.stringify({
+    ws.send(
 
-                type: "cursor",
+        JSON.stringify({
 
-                x:
-                e.clientX /
-                window.innerWidth,
+            type: "cursor",
 
-                y:
-                e.clientY /
-                window.innerHeight
-            })
-        );
-    });
+            x:
+            e.clientX /
+            window.innerWidth,
 
-    document.body.addEventListener(
-    "click",
+            y:
+            e.clientY /
+            window.innerHeight,
 
-    (e) => {
+            edge:
+            e.clientX >=
+            window.innerWidth - 8
+        })
+    );
+});
 
-        ws.send(
-            JSON.stringify({
+document.body.addEventListener(
+"click",
 
-                type: "click",
+(e) => {
 
-                x:
-                e.clientX /
-                window.innerWidth,
+    ws.send(
 
-                y:
-                e.clientY /
-                window.innerHeight
-            })
-        );
-    });
+        JSON.stringify({
+
+            type: "click",
+
+            x:
+            e.clientX /
+            window.innerWidth,
+
+            y:
+            e.clientY /
+            window.innerHeight
+        })
+    );
+});
+
 }
 
 ws.onmessage = (event) => {
 
-    const data =
-    JSON.parse(event.data);
+const data =
+JSON.parse(
+event.data
+);
 
-    if (data.type === "cursor") {
+if (
+data.type === "cursor"
+) {
 
-        cursor.style.left =
-        (
-            data.x *
-            window.innerWidth
-        ) + "px";
+    if (
+        data.edge === true
+    ) {
 
-        cursor.style.top =
-        (
-            data.y *
-            window.innerHeight
-        ) + "px";
+        document.body.style.background =
+        "#001a1a";
+
+        cursor.style.boxShadow =
+        "0 0 18px #00ffff, 0 0 40px #00ffff";
+
+    } else {
+
+        document.body.style.background =
+        "#050505";
+
+        cursor.style.boxShadow =
+        "0 0 10px #00ffff, 0 0 20px #00ffff";
     }
 
-    if (data.type === "click") {
+    cursor.style.left =
+    (
+        data.x *
+        window.innerWidth
+    ) + "px";
+
+    cursor.style.top =
+    (
+        data.y *
+        window.innerHeight
+    ) + "px";
+}
+
+if (
+data.type === "click"
+) {
+
+    cursor.style.transform =
+    "translate(-50%, -50%) scale(1.7)";
+
+    setTimeout(() => {
 
         cursor.style.transform =
-        "translate(-50%, -50%) scale(1.7)";
+        "translate(-50%, -50%) scale(1)";
 
-        setTimeout(() => {
+    }, 120);
+}
 
-            cursor.style.transform =
-            "translate(-50%, -50%) scale(1)";
-
-        }, 120);
-    }
 };
 
 </script>
@@ -243,67 +304,86 @@ ws.onmessage = (event) => {
 
 let clients = [];
 
-wss.on("connection", (ws) => {
+wss.on(
+"connection",
 
-    clients.push(ws);
+(ws) => {
 
-    ws.on("message", (msg) => {
+clients.push(ws);
 
-        for (const client of clients) {
+ws.on(
+"message",
 
-            if (
-                client !== ws &&
-                client.readyState === WebSocket.OPEN
-            ) {
+(msg) => {
 
-                client.send(
-                    msg.toString()
-                );
-            }
-        }
-    });
+for (
+const client of clients
+) {
 
-    ws.on("close", () => {
+if (
+client !== ws &&
+client.readyState ===
+WebSocket.OPEN
+) {
 
-        clients =
-        clients.filter(
-            c => c !== ws
-        );
-    });
+client.send(
+msg.toString()
+);
+}
+}
 });
 
-const ip = getLocalIP();
+ws.on(
+"close",
 
-server.listen(PORT, () => {
+() => {
 
-    console.log("");
-    console.log("CYBERCROWD SANDBOX CURSOR ONLINE");
-    console.log("");
+clients =
+clients.filter(
+c => c !== ws
+);
+});
+});
 
-    console.log(
-        "LAPTOP:"
-    );
+const ip =
+getLocalIP();
 
-    console.log(
-        "http://" +
-        ip +
-        ":" +
-        PORT
-    );
+server.listen(
+PORT,
 
-    console.log("");
+() => {
 
-    console.log(
-        "PHONE:"
-    );
+console.log("");
+console.log(
+"CYBERCROWD SANDBOX CURSOR ONLINE"
+);
 
-    console.log(
-        "http://" +
-        ip +
-        ":" +
-        PORT +
-        "/?client"
-    );
+console.log("");
 
-    console.log("");
+console.log(
+"LAPTOP:"
+);
+
+console.log(
+"http://" +
+ip +
+":" +
+PORT
+);
+
+console.log("");
+
+console.log(
+"PHONE:"
+);
+
+console.log(
+"http://" +
+ip +
+":" +
+PORT +
+"/?client"
+);
+
+console.log("");
 });
