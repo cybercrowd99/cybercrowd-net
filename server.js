@@ -22,7 +22,6 @@ function getLocalIP() {
                 net.family === "IPv4" &&
                 !net.internal
             ) {
-
                 return net.address;
             }
         }
@@ -46,7 +45,7 @@ res.send(`
 content="width=device-width, initial-scale=1.0">
 
 <title>
-CYBERCROWD SANDBOX CURSOR
+CYBERCROWD SANDBOX CURSOR V2
 </title>
 
 <style>
@@ -86,6 +85,8 @@ body {
     transparent 40%),
 
     transparent;
+
+    touch-action: none;
 }
 
 #cursor {
@@ -131,6 +132,20 @@ body {
     letter-spacing: 2px;
 }
 
+#mode {
+
+    position: fixed;
+
+    bottom: 15px;
+    left: 15px;
+
+    color: #00ffaa;
+
+    font-size: 12px;
+
+    opacity: 0.8;
+}
+
 </style>
 
 </head>
@@ -140,7 +155,11 @@ body {
 <div id="surface">
 
 <div id="title">
-CYBERCROWD SANDBOX CURSOR V1
+CYBERCROWD SANDBOX CURSOR V2
+</div>
+
+<div id="mode">
+LIVE SURFACE LINK
 </div>
 
 <div id="cursor"></div>
@@ -152,6 +171,11 @@ CYBERCROWD SANDBOX CURSOR V1
 const cursor =
 document.getElementById(
 "cursor"
+);
+
+const surface =
+document.getElementById(
+"surface"
 );
 
 const ws =
@@ -181,12 +205,7 @@ ws.onopen = () => {
     );
 };
 
-if (role === "server") {
-
-document.body.addEventListener(
-"mousemove",
-
-(e) => {
+function sendCursor(x, y) {
 
     ws.send(
 
@@ -195,42 +214,92 @@ document.body.addEventListener(
             type: "cursor",
 
             x:
-            e.clientX /
-            window.innerWidth,
+            x / window.innerWidth,
 
             y:
-            e.clientY /
-            window.innerHeight,
+            y / window.innerHeight,
 
             edge:
-            e.clientX >=
-            window.innerWidth - 8
+            x >=
+            window.innerWidth - 8,
+
+            source:
+            role
         })
     );
-});
+}
 
-document.body.addEventListener(
-"click",
+if (role === "server") {
 
-(e) => {
+    document.body.addEventListener(
+    "mousemove",
 
-    ws.send(
+    (e) => {
 
-        JSON.stringify({
+        sendCursor(
+            e.clientX,
+            e.clientY
+        );
+    });
 
-            type: "click",
+    document.body.addEventListener(
+    "click",
 
-            x:
-            e.clientX /
-            window.innerWidth,
+    (e) => {
 
-            y:
-            e.clientY /
-            window.innerHeight
-        })
-    );
-});
+        ws.send(
 
+            JSON.stringify({
+
+                type: "click",
+
+                source: role
+            })
+        );
+    });
+}
+
+if (role === "client") {
+
+    surface.addEventListener(
+    "touchmove",
+
+    (e) => {
+
+        e.preventDefault();
+
+        const t =
+        e.touches[0];
+
+        sendCursor(
+            t.clientX,
+            t.clientY
+        );
+    });
+
+    surface.addEventListener(
+    "touchstart",
+
+    (e) => {
+
+        const t =
+        e.touches[0];
+
+        sendCursor(
+            t.clientX,
+            t.clientY
+        );
+
+        ws.send(
+
+            JSON.stringify({
+
+                type: "click",
+
+                source: role
+            })
+        );
+    });
 }
 
 ws.onmessage = (event) => {
@@ -355,7 +424,7 @@ PORT,
 
 console.log("");
 console.log(
-"CYBERCROWD SANDBOX CURSOR ONLINE"
+"CYBERCROWD SANDBOX CURSOR V2 ONLINE"
 );
 
 console.log("");
@@ -386,4 +455,17 @@ PORT +
 );
 
 console.log("");
+
+qrcode.generate(
+"http://" +
+ip +
+":" +
+PORT +
+"/?client",
+
+{
+small: true
+}
+);
+
 });
