@@ -4,93 +4,348 @@
   <meta charset="utf-8">
   <title>CyberCrowd Societal Sentiment | Public Signal, Heatmaps, Clarity Boundaries</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberCrowd Societal Sentiment defines public signal handling, sentiment heatmaps, confusion clusters, clarity gradients, public discourse boundaries, and platform review signals.">
+  <meta name="description" content="CyberCrowd Societal Sentiment defines public signal handling, sentiment heatmaps, confusion clusters, clarity gradients, public challenge boundaries, public discourse routing, and platform review signals.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://cybercrowd.net/societal-sentiment.html">
+
+  <style>
+    :root {
+      --bg: #070910;
+      --panel: #111827;
+      --text: #f5f7fb;
+      --muted: #b9c4d8;
+      --gold: #ffd166;
+      --green: #66e3a5;
+      --blue: #7cc7ff;
+      --red: #ff7474;
+      --line: rgba(255,255,255,.14);
+      --shadow: 0 18px 48px rgba(0,0,0,.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(124,199,255,.18), transparent 34rem),
+        radial-gradient(circle at top right, rgba(255,209,102,.13), transparent 32rem),
+        linear-gradient(180deg, #070910 0%, #0b1020 100%);
+    }
+
+    a {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 18px 64px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 34px;
+      background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(23,32,51,.88));
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #08111d;
+      background: var(--gold);
+      font-weight: 900;
+      font-size: .78rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.04;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 1.35rem;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    .lead {
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 1.18rem;
+    }
+
+    .rule-strip {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-left: 5px solid var(--gold);
+      border-radius: 16px;
+      background: rgba(255,209,102,.10);
+      font-weight: 800;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .card {
+      grid-column: span 6;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px;
+      background: rgba(17,24,39,.88);
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+    }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
+    .plain-rule {
+      margin-top: 14px;
+      padding: 15px 17px;
+      border-left: 5px solid var(--green);
+      border-radius: 16px;
+      background: rgba(102,227,165,.10);
+      font-weight: 800;
+    }
+
+    .warning {
+      margin-top: 14px;
+      padding: 15px 17px;
+      border-left: 5px solid var(--red);
+      border-radius: 16px;
+      background: rgba(255,116,116,.10);
+      font-weight: 800;
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 1.25rem;
+      color: var(--muted);
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .nav-back {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        padding: 24px;
+      }
+
+      .card {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <main>
-    <h1>CyberCrowd Societal Sentiment</h1>
+    <section class="hero" aria-labelledby="page-title">
+      <span class="eyebrow">Public Signal Layer</span>
+      <h1 id="page-title">CyberCrowd Societal Sentiment</h1>
 
-    <p>
-      CyberCrowd Societal Sentiment is the public signal layer for observing
-      public reaction, confusion, concern, support, disagreement, urgency, and
-      cultural pressure around the platform.
-    </p>
+      <p class="lead">
+        CyberCrowd Societal Sentiment is the public signal layer for observing public reaction,
+        confusion, concern, support, disagreement, urgency, cultural pressure, and trust pressure
+        around the platform.
+      </p>
 
-    <h2>Sentiment Purpose</h2>
-    <p>
-      Societal sentiment helps CyberCrowd understand where clarity is needed.
-      It can show heat, confusion, friction, concern, momentum, or support without
-      allowing public pressure to replace proper authority.
-    </p>
+      <div class="rule-strip">
+        Sentiment may clarify. Sentiment does not govern. Public signal can show where the rule needs a clearer boundary.
+      </div>
+    </section>
 
-    <h2>Possible Sentiment Signals</h2>
-    <ul>
-      <li>Confusion clusters</li>
-      <li>Sentiment heatmaps</li>
-      <li>Clarity gradients</li>
-      <li>Public concern signals</li>
-      <li>Viewer reactions</li>
-      <li>Creator and client feedback</li>
-      <li>Live event reactions</li>
-      <li>Boardroom awareness signals</li>
-      <li>Atomic Kricket culture signals</li>
-      <li>Reten Records media reactions</li>
-      <li>Platform trust pressure</li>
-    </ul>
+    <section class="grid" aria-label="CyberCrowd societal sentiment rules">
+      <article class="card full">
+        <h2>Sentiment Purpose</h2>
+        <p>
+          Societal sentiment helps CyberCrowd understand where clarity is needed. It can show heat,
+          confusion, friction, concern, momentum, or support without allowing public pressure to replace
+          proper authority.
+        </p>
+        <p>
+          The point is not to obey every wave. The point is to observe the signal, name the issue,
+          route the pressure, and decide whether a rule, explanation, correction path, or public answer
+          needs to become clearer.
+        </p>
+      </article>
 
-    <h2>Clarify, Do Not Govern</h2>
-    <p>
-      Public sentiment may clarify, but it does not govern. CyberCrowd may use
-      sentiment to understand where communication, review, transparency, or
-      definition is needed, but public reaction does not override board duty,
-      evidence, safety, governance rules, or platform obligations.
-    </p>
+      <article class="card">
+        <h2>Possible Sentiment Signals</h2>
+        <ul>
+          <li>Confusion clusters</li>
+          <li>Sentiment heatmaps</li>
+          <li>Clarity gradients</li>
+          <li>Public concern signals</li>
+          <li>Viewer reactions</li>
+          <li>Creator and client feedback</li>
+          <li>Live event reactions</li>
+          <li>Boardroom awareness signals</li>
+          <li>Atomic Kricket culture signals</li>
+          <li>Reten Records media reactions</li>
+          <li>Platform trust pressure</li>
+        </ul>
+      </article>
 
-    <h2>Confusion Clusters</h2>
-    <p>
-      A confusion cluster may appear when many people misunderstand the same
-      event, rule, page, access issue, governance signal, or platform decision.
-      CyberCrowd can treat that cluster as a clarity signal.
-    </p>
+      <article class="card">
+        <h2>Clarify, Do Not Govern</h2>
+        <p>
+          Public sentiment may clarify, but it does not govern. CyberCrowd may use sentiment to understand
+          where communication, review, transparency, or definition is needed, but public reaction does not
+          override board duty, evidence, safety, governance rules, or platform obligations.
+        </p>
+        <div class="plain-rule">
+          The public may reveal the crack. The public does not become the hammer.
+        </div>
+      </article>
 
-    <h2>Heatmaps and Clarity Gradients</h2>
-    <p>
-      Sentiment heatmaps and clarity gradients can help CyberCrowd identify where
-      public attention is concentrated, where explanation is weak, and where
-      review may be needed.
-    </p>
+      <article class="card full">
+        <h2>Public Challenge Rule</h2>
+        <p>
+          A rule that cannot survive public challenge was not ready to govern, but the public can show us
+          where the rules are weak.
+        </p>
+        <p>
+          Public challenge may reveal that a rule is confusing, unfair, too broad, too narrow, too hidden,
+          too harsh, or missing a correction path. That challenge does not give the crowd decision authority.
+        </p>
+        <p>
+          CyberCrowd should not simply become harder when challenged. It should become clearer and more workable.
+          A definition is a boundary, not a blanket, and not a lock-and-key safe.
+        </p>
+      </article>
 
-    <h2>Connection to Public Discourse</h2>
-    <p>
-      Societal Sentiment connects to Public Discourse by turning scattered public
-      reaction into observable signal. It does not turn the crowd into the board.
-    </p>
+      <article class="card">
+        <h2>Confusion Clusters</h2>
+        <p>
+          A confusion cluster may appear when many people misunderstand the same event, rule, page, access issue,
+          governance signal, public statement, or platform decision.
+        </p>
+        <p>
+          CyberCrowd can treat that cluster as a clarity signal. The response may be explanation, correction,
+          rewrite, public answer, routing to CyberCode, or review by Governance.
+        </p>
+      </article>
 
-    <h2>Connection to Transparency Mode</h2>
-    <p>
-      When sentiment reveals widespread confusion or concern, Transparency Mode
-      may help CyberCrowd explain what is known, what is unknown, and what is
-      under review.
-    </p>
+      <article class="card">
+        <h2>Heatmaps and Clarity Gradients</h2>
+        <p>
+          Sentiment heatmaps and clarity gradients can help CyberCrowd identify where public attention is concentrated,
+          where explanation is weak, where pressure is rising, and where review may be needed.
+        </p>
+        <p>
+          A heatmap is not a verdict. A clarity gradient is not a command. They are tools for seeing where the public
+          is pointing.
+        </p>
+      </article>
 
-    <h2>Archive and Proof</h2>
-    <p>
-      Significant sentiment events, confusion clusters, or public review triggers
-      may be preserved in the Platform Archive when they affect governance,
-      trust, access, client investigation, or platform stability.
-    </p>
+      <article class="card full">
+        <h2>Signal Routing</h2>
+        <p>
+          Societal Sentiment should not leave pressure floating loose. A signal may need a clear destination.
+        </p>
+        <ul>
+          <li>Confusion may route to Public Discourse or CyberCode for explanation.</li>
+          <li>Governance pressure may route to Boardroom or Governance review.</li>
+          <li>Hidden pressure may route to Hidden Influence review.</li>
+          <li>Client risk may route to Client Investigation.</li>
+          <li>Repeated misunderstanding may route to the Rules Manual.</li>
+          <li>Trust pressure may route to Transparency Mode.</li>
+        </ul>
+      </article>
 
-    <h2>Connection to the CyberCrowd System</h2>
-    <p>
-      Societal Sentiment may connect to Public Discourse, Transparency Mode,
-      Boardroom, Governance, Ethics &amp; Conduct, Client Investigation,
-      Platform Archive, Atomic Kricket, Reten Records, Live Control Room,
-      and WDIG Routing.
-    </p>
+      <article class="card">
+        <h2>Connection to Public Discourse</h2>
+        <p>
+          Societal Sentiment connects to Public Discourse by turning scattered public reaction into observable signal.
+          It does not turn the crowd into the board.
+        </p>
+      </article>
 
-    <p>
+      <article class="card">
+        <h2>Connection to Transparency Mode</h2>
+        <p>
+          When sentiment reveals widespread confusion or concern, Transparency Mode may help CyberCrowd explain
+          what is known, what is unknown, what is being reviewed, and what move is allowed next.
+        </p>
+      </article>
+
+      <article class="card full">
+        <h2>Public Friction and Competitor Signal</h2>
+        <p>
+          A public attack is not always a wound. Sometimes it is market proof. CyberCrowd does not manufacture
+          enemies for engagement, but it may use public friction as a signal.
+        </p>
+        <p>
+          Public friction may reveal visibility, market fear, confusion, unmet need, policy weakness, product
+          misunderstanding, or competitive pressure.
+        </p>
+        <div class="plain-rule">
+          No better ad exists than a competitor explaining why they are afraid of your product.
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>No Public Shortcut</h2>
+        <p>
+          Societal Sentiment must not become a shortcut around rules, evidence, disclosure, board duty,
+          safety boundaries, or correction paths.
+        </p>
+        <div class="warning">
+          Public attention can show smoke. It does not get to burn the house down.
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Archive and Proof</h2>
+        <p>
+          Significant sentiment events, confusion clusters, public review triggers, and trust-pressure signals
+          may be preserved in the Platform Archive when they affect governance, access, client investigation,
+          public discourse, or platform stability.
+        </p>
+      </article>
+
+      <article class="card full">
+        <h2>Connection to the CyberCrowd System</h2>
+        <p>
+          Societal Sentiment may connect to Public Discourse, Transparency Mode, Boardroom, Governance,
+          Ethics &amp; Conduct, Hidden Influence, Client Investigation, Platform Archive, Atomic Kricket,
+          Reten Records, Live Control Room, WDIG Routing, CyberCode, and the CyberCrowd Rules Manual.
+        </p>
+        <div class="plain-rule">
+          Societal Sentiment observes the pressure, names the signal, and helps CyberCrowd decide where clarity is needed.
+        </div>
+      </article>
+    </section>
+
+    <p class="nav-back">
       <a href="/">Return to CyberCrowd</a>
     </p>
   </main>
