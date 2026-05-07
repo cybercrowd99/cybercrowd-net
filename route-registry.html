@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Route Registry</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.72;
+    margin-top: 8px;
+    margin-bottom: 28px;
+}
+
+#registry {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 14px;
+}
+
+.routeRow {
+    border: 1px solid rgba(0,255,255,0.32);
+    background: rgba(10,10,10,0.9);
+    border-radius: 18px;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+.routeName {
+    color: #00ffff;
+    font-size: 18px;
+}
+
+.routePath {
+    color: #00ffaa;
+    font-size: 13px;
+    word-break: break-word;
+}
+
+.routeState {
+    opacity: 0.82;
+    font-size: 13px;
+}
+
+button {
+    width: 100%;
+    margin-top:
