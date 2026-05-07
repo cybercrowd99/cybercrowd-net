@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD NAV</title>
+
+<style>
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    background: #050505;
+
+    font-family: Arial, sans-serif;
+
+    color: white;
+}
+
+/*
+=====================================
+BACKGROUND
+=====================================
+*/
+
+#background {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.08),
+        transparent 42%
+    );
+
+    z-index: 0;
+}
+
+/*
+=====================================
+MAIN ENVIRONMENT
+=====================================
+*/
+
+#environment {
+
+    position: relative;
+
+    z-index: 1;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    overflow-y: auto;
+}
+
+/*
+=====================================
+HEADER
+=====================================
+*/
+
+#header {
+
+    width: 100%;
+
+    text-align: center;
+
+    padding-top: 30px;
+}
+
+#title {
+
+    color: #00ffff;
+
+    font-size: 34px;
+
+    letter-spacing: 5px;
+}
+
+#subtitle {
+
+    margin-top: 10px;
+
+    opacity: 0.7;
+
+    font-size: 14px;
+
+    letter-spacing: 2px;
+}
+
+/*
+=====================================
+ROUTE GRID
+=====================================
+*/
+
+#routeGrid {
+
+    width: 92%;
+
+    max-width: 1100px;
+
+    margin-top: 40px;
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(240px, 1fr));
+
+    gap: 22px;
+
+    padding-bottom: 60px;
+}
+
+/*
+=====================================
+ROUTE CARD
+=====================================
+*/
+
+.routeCard {
+
+    position: relative;
+
+    min-height: 170px;
+
+    border-radius: 22px;
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(0,255,255,0.08),
+        rgba(255,255,255,0.02)
+    );
+
+    border:
+    1px solid rgba(0,255,255,0.25);
+
+    backdrop-filter: blur(6px);
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    transition:
+    transform 0.25s ease,
+    border 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.routeCard:hover {
+
+    transform:
+    scale(1.03);
+
+    border:
+    1px solid rgba(0,255,255,0.7);
+
+    box-shadow:
+    0 0 20px rgba(0,255,255,0.22);
+}
+
+.routeGlow {
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    background:
+    rgba(0,255,255,0.12);
+
+    filter: blur(40px);
+
+    top: -40px;
+    right: -40px;
+}
+
+.routeContent {
+
+    position: relative;
+
+    z-index: 2;
+
+    padding: 22px;
+}
+
+.routeTitle {
+
+    color: #00ffff;
+
+    font-size: 22px;
+
+    margin-bottom: 12px;
+}
+
+.routeText {
+
+    line-height: 1.5;
+
+    opacity: 0.82;
+
+    font-size: 14px;
+}
+
+.locked {
+
+    border:
+    1px solid rgba(255,170,0,0.35);
+}
+
+.locked .routeTitle {
+
+    color: #ffaa00;
+}
+
+/*
+=====================================
+STATUS BAR
+=====================================
+*/
+
+#statusBar {
+
+    width: 100%;
+
+    text-align: center;
+
+    padding-bottom: 20px;
+
+    opacity: 0.5;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="background"></div>
+
+<div id="environment">
+
+<div id="header">
+
+<div id="title">
+CYBERCROWD NAV
+</div>
+
+<div id="subtitle">
+OPERATING ENVIRONMENT ROUTING SURFACE
+</div>
+
+</div>
+
+<div id="routeGrid">
+
+<!-- SANDBOX -->
+
+<div class="routeCard"
+onclick="window.location.href='server.html'">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+Sandbox Cursor
+</div>
+
+<div class="routeText">
+Surface-to-surface interaction transport.
+Shared sandbox authority transfer.
+</div>
+
+</div>
+</div>
+
+<!-- ATOMIC CRICKET -->
+
+<div class="routeCard locked"
+onclick="lockedFeature('Atomic Cricket')">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+Atomic Cricket
+</div>
+
+<div class="routeText">
+Media archive systems, publications,
+event memory, and layered discovery.
+</div>
+
+</div>
+</div>
+
+<!-- OBSERVER -->
+
+<div class="routeCard locked"
+onclick="lockedFeature('Observer Broadcast')">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+Observer Broadcast
+</div>
+
+<div class="routeText">
+Live environment broadcasting,
+multi-surface observation,
+and creator visibility.
+</div>
+
+</div>
+</div>
+
+<!-- CREATOR -->
+
+<div class="routeCard locked"
+onclick="lockedFeature('Creator Route')">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+Creator Route
+</div>
+
+<div class="routeText">
+Build channels, creator systems,
+and live participation tools.
+</div>
+
+</div>
+</div>
+
+<!-- CUEBERCARE -->
+
+<div class="routeCard locked"
+onclick="lockedFeature('CueberCare')">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+CueberCare
+</div>
+
+<div class="routeText">
+Accessibility, support routing,
+community assistance,
+and care ecosystems.
+</div>
+
+</div>
+</div>
+
+<!-- MULTICAM -->
+
+<div class="routeCard locked"
+onclick="lockedFeature('Multi-Cam')">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+Multi-Cam
+</div>
+
+<div class="routeText">
+Layered viewing surfaces,
+dynamic perspectives,
+and environmental visibility.
+</div>
+
+</div>
+</div>
+
+<!-- LIVE EVENTS -->
+
+<div class="routeCard locked"
+onclick="lockedFeature('Live Events')">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+Live Events
+</div>
+
+<div class="routeText">
+Regional activity routing,
+live showcases,
+and connected participation.
+</div>
+
+</div>
+</div>
+
+<!-- AUDIO -->
+
+<div class="routeCard locked"
+onclick="lockedFeature('Cybercrowd Audio')">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+Cybercrowd Audio
+</div>
+
+<div class="routeText">
+Interactive audio systems,
+environment sound routing,
+and layered voice surfaces.
+</div>
+
+</div>
+</div>
+
+<!-- ABOUT -->
+
+<div class="routeCard"
+onclick="window.location.href='signup.html'">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+About Cybercrowd
+</div>
+
+<div class="routeText">
+Enter the Cybercrowd sign-up area
+and explore the expanding operating environment.
+</div>
+
+</div>
+</div>
+
+</div>
+
+<div id="statusBar">
+
+RUNTIME EXPLORATION ACTIVE
+
+</div>
+
+</div>
+
+<script>
+
+let lockedTouches = 0;
+
+function lockedFeature(featureName) {
+
+    lockedTouches++;
+
+    if (lockedTouches >= 4) {
+
+        alert(
+        "You’ve discovered subscriber-level features.\n\n" +
+        "Your 7-day Cybercrowd trial is now available."
+        );
+
+        lockedTouches = 0;
+
+    } else {
+
+        alert(
+        featureName +
+        " is currently operating in subscriber-level access mode."
+        );
+    }
+}
+
+</script>
+
+</body>
+</html>
