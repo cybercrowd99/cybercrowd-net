@@ -11,17 +11,11 @@ const wss = new WebSocket.Server({ server });
 const PORT = 7070;
 
 function getLocalIP() {
-
     const nets = os.networkInterfaces();
 
     for (const name of Object.keys(nets)) {
-
         for (const net of nets[name]) {
-
-            if (
-                net.family === "IPv4" &&
-                !net.internal
-            ) {
+            if (net.family === "IPv4" && !net.internal) {
                 return net.address;
             }
         }
@@ -44,106 +38,84 @@ res.send(`
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>
-CYBERCROWD SANDBOX CURSOR V2
-</title>
+<title>CYBERCROWD MAGIC CURSOR V3</title>
 
 <style>
 
 html,
 body {
-
     margin: 0;
     padding: 0;
-
     width: 100%;
     height: 100%;
-
     overflow: hidden;
-
     background: #050505;
-
     font-family: Arial, sans-serif;
-
-    transition:
-    background 0.2s ease;
-}
-
-#surface {
-
-    position: relative;
-
-    width: 100vw;
-    height: 100vh;
-
-    background:
-    radial-gradient(
-    circle at center,
-
-    rgba(0,255,255,0.12),
-
-    transparent 40%),
-
-    transparent;
-
     touch-action: none;
 }
 
+#surface {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.12), transparent 42%),
+    transparent;
+}
+
 #cursor {
-
     position: absolute;
-
-    width: 26px;
-    height: 26px;
-
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-
-    border:
-    2px solid #00ffff;
-
+    border: 2px solid #00ffff;
     box-shadow:
-    0 0 10px #00ffff,
-    0 0 20px #00ffff;
-
+    0 0 12px #00ffff,
+    0 0 26px #00ffff;
     pointer-events: none;
-
-    transform:
-    translate(-50%, -50%);
-
+    transform: translate(-50%, -50%);
     left: 50%;
     top: 50%;
-
     transition:
     box-shadow 0.15s ease,
+    opacity 0.15s ease,
     transform 0.15s ease;
 }
 
 #title {
-
     position: fixed;
-
     top: 15px;
     left: 15px;
-
     color: #00ffff;
-
     font-size: 14px;
-
     letter-spacing: 2px;
 }
 
-#mode {
-
+#status {
     position: fixed;
-
     bottom: 15px;
     left: 15px;
-
     color: #00ffaa;
+    font-size: 13px;
+    opacity: 0.9;
+}
 
+#hint {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    color: #ffffff;
     font-size: 12px;
+    opacity: 0.65;
+    text-align: right;
+}
 
-    opacity: 0.8;
+.active {
+    background: #001f1f !important;
+}
+
+.inactive #cursor {
+    opacity: 0.25;
 }
 
 </style>
@@ -155,11 +127,16 @@ body {
 <div id="surface">
 
 <div id="title">
-CYBERCROWD SANDBOX CURSOR V2
+CYBERCROWD MAGIC CURSOR V3
 </div>
 
-<div id="mode">
-LIVE SURFACE LINK
+<div id="status">
+CONNECTING...
+</div>
+
+<div id="hint">
+RIGHT EDGE = SEND TO PHONE<br>
+PHONE LEFT EDGE = RETURN
 </div>
 
 <div id="cursor"></div>
@@ -169,90 +146,141 @@ LIVE SURFACE LINK
 <script>
 
 const cursor =
-document.getElementById(
-"cursor"
-);
+document.getElementById("cursor");
+
+const statusBox =
+document.getElementById("status");
 
 const surface =
-document.getElementById(
-"surface"
-);
+document.getElementById("surface");
 
 const ws =
-new WebSocket(
-"ws://" + location.host
-);
+new WebSocket("ws://" + location.host);
 
 let role = "server";
 
-if (
-location.search.includes(
-"client"
-)
-) {
+if (location.search.includes("client")) {
     role = "client";
+}
+
+let hasAuthority =
+role === "server";
+
+let lastX =
+window.innerWidth / 2;
+
+let lastY =
+window.innerHeight / 2;
+
+function setAuthority(value) {
+
+    hasAuthority = value;
+
+    if (hasAuthority) {
+        document.body.classList.add("active");
+        document.body.classList.remove("inactive");
+
+        statusBox.textContent =
+        role.toUpperCase() + " HAS CURSOR AUTHORITY";
+
+    } else {
+        document.body.classList.remove("active");
+        document.body.classList.add("inactive");
+
+        statusBox.textContent =
+        role.toUpperCase() + " WATCHING";
+    }
+}
+
+function moveCursorByRatio(xRatio, yRatio) {
+
+    lastX =
+    xRatio * window.innerWidth;
+
+    lastY =
+    yRatio * window.innerHeight;
+
+    cursor.style.left =
+    lastX + "px";
+
+    cursor.style.top =
+    lastY + "px";
+}
+
+function sendCursor(x, y) {
+
+    ws.send(
+        JSON.stringify({
+            type: "cursor",
+            x: x / window.innerWidth,
+            y: y / window.innerHeight,
+            source: role
+        })
+    );
+}
+
+function sendAuthority(target) {
+
+    ws.send(
+        JSON.stringify({
+            type: "authority",
+            target: target
+        })
+    );
+}
+
+function pulse() {
+
+    cursor.style.transform =
+    "translate(-50%, -50%) scale(1.7)";
+
+    setTimeout(() => {
+        cursor.style.transform =
+        "translate(-50%, -50%) scale(1)";
+    }, 120);
 }
 
 ws.onopen = () => {
 
     ws.send(
         JSON.stringify({
-
             type: "role",
-
             role: role
         })
     );
+
+    setAuthority(hasAuthority);
 };
-
-function sendCursor(x, y) {
-
-    ws.send(
-
-        JSON.stringify({
-
-            type: "cursor",
-
-            x:
-            x / window.innerWidth,
-
-            y:
-            y / window.innerHeight,
-
-            edge:
-            x >=
-            window.innerWidth - 8,
-
-            source:
-            role
-        })
-    );
-}
 
 if (role === "server") {
 
-    document.body.addEventListener(
-    "mousemove",
+    document.body.addEventListener("mousemove", (e) => {
 
-    (e) => {
+        if (!hasAuthority) {
+            return;
+        }
 
-        sendCursor(
-            e.clientX,
-            e.clientY
-        );
+        lastX = e.clientX;
+        lastY = e.clientY;
+
+        sendCursor(lastX, lastY);
+
+        if (e.clientX >= window.innerWidth - 8) {
+            sendAuthority("client");
+            setAuthority(false);
+            pulse();
+        }
     });
 
-    document.body.addEventListener(
-    "click",
+    document.body.addEventListener("click", () => {
 
-    (e) => {
+        if (!hasAuthority) {
+            return;
+        }
 
         ws.send(
-
             JSON.stringify({
-
                 type: "click",
-
                 source: role
             })
         );
@@ -261,105 +289,82 @@ if (role === "server") {
 
 if (role === "client") {
 
-    surface.addEventListener(
-    "touchmove",
-
-    (e) => {
+    surface.addEventListener("touchmove", (e) => {
 
         e.preventDefault();
 
+        if (!hasAuthority) {
+            return;
+        }
+
         const t =
         e.touches[0];
 
-        sendCursor(
-            t.clientX,
-            t.clientY
-        );
+        lastX = t.clientX;
+        lastY = t.clientY;
+
+        sendCursor(lastX, lastY);
+
+        if (t.clientX <= 8) {
+            sendAuthority("server");
+            setAuthority(false);
+            pulse();
+        }
     });
 
-    surface.addEventListener(
-    "touchstart",
+    surface.addEventListener("touchstart", (e) => {
 
-    (e) => {
+        e.preventDefault();
+
+        if (!hasAuthority) {
+            return;
+        }
 
         const t =
         e.touches[0];
 
-        sendCursor(
-            t.clientX,
-            t.clientY
-        );
+        lastX = t.clientX;
+        lastY = t.clientY;
+
+        sendCursor(lastX, lastY);
 
         ws.send(
-
             JSON.stringify({
-
                 type: "click",
-
                 source: role
             })
         );
+
+        if (t.clientX <= 8) {
+            sendAuthority("server");
+            setAuthority(false);
+            pulse();
+        }
     });
 }
 
 ws.onmessage = (event) => {
 
-const data =
-JSON.parse(
-event.data
-);
+    const data =
+    JSON.parse(event.data);
 
-if (
-data.type === "cursor"
-) {
-
-    if (
-        data.edge === true
-    ) {
-
-        document.body.style.background =
-        "#001a1a";
-
-        cursor.style.boxShadow =
-        "0 0 18px #00ffff, 0 0 40px #00ffff";
-
-    } else {
-
-        document.body.style.background =
-        "#050505";
-
-        cursor.style.boxShadow =
-        "0 0 10px #00ffff, 0 0 20px #00ffff";
+    if (data.type === "cursor") {
+        moveCursorByRatio(data.x, data.y);
     }
 
-    cursor.style.left =
-    (
-        data.x *
-        window.innerWidth
-    ) + "px";
+    if (data.type === "click") {
+        pulse();
+    }
 
-    cursor.style.top =
-    (
-        data.y *
-        window.innerHeight
-    ) + "px";
-}
+    if (data.type === "authority") {
 
-if (
-data.type === "click"
-) {
-
-    cursor.style.transform =
-    "translate(-50%, -50%) scale(1.7)";
-
-    setTimeout(() => {
-
-        cursor.style.transform =
-        "translate(-50%, -50%) scale(1)";
-
-    }, 120);
-}
-
+        if (data.target === role) {
+            setAuthority(true);
+            pulse();
+        } else {
+            setAuthority(false);
+        }
+    }
 };
 
 </script>
@@ -373,99 +378,49 @@ data.type === "click"
 
 let clients = [];
 
-wss.on(
-"connection",
+wss.on("connection", (ws) => {
 
-(ws) => {
+    clients.push(ws);
 
-clients.push(ws);
+    ws.on("message", (msg) => {
 
-ws.on(
-"message",
+        for (const client of clients) {
+            if (
+                client !== ws &&
+                client.readyState === WebSocket.OPEN
+            ) {
+                client.send(msg.toString());
+            }
+        }
+    });
 
-(msg) => {
-
-for (
-const client of clients
-) {
-
-if (
-client !== ws &&
-client.readyState ===
-WebSocket.OPEN
-) {
-
-client.send(
-msg.toString()
-);
-}
-}
-});
-
-ws.on(
-"close",
-
-() => {
-
-clients =
-clients.filter(
-c => c !== ws
-);
-});
+    ws.on("close", () => {
+        clients =
+        clients.filter(c => c !== ws);
+    });
 });
 
 const ip =
 getLocalIP();
 
-server.listen(
-PORT,
+server.listen(PORT, () => {
 
-() => {
+    console.log("");
+    console.log("CYBERCROWD MAGIC CURSOR V3 ONLINE");
+    console.log("");
 
-console.log("");
-console.log(
-"CYBERCROWD SANDBOX CURSOR V2 ONLINE"
-);
+    console.log("LAPTOP:");
+    console.log("http://" + ip + ":" + PORT);
 
-console.log("");
+    console.log("");
 
-console.log(
-"LAPTOP:"
-);
+    console.log("PHONE:");
+    console.log("http://" + ip + ":" + PORT + "/?client");
 
-console.log(
-"http://" +
-ip +
-":" +
-PORT
-);
+    console.log("");
 
-console.log("");
-
-console.log(
-"PHONE:"
-);
-
-console.log(
-"http://" +
-ip +
-":" +
-PORT +
-"/?client"
-);
-
-console.log("");
-
-qrcode.generate(
-"http://" +
-ip +
-":" +
-PORT +
-"/?client",
-
-{
-small: true
-}
-);
-
+    qrcode.generate(
+        "http://" + ip + ":" + PORT + "/?client",
+        { small: true }
+    );
 });
