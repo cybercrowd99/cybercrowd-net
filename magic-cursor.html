@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CyberCrowd Magic Cursor | File Scoop Prototype</title>
+  <title>CyberCrowd Magic Cursor | Paired Surface Tray</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberCrowd Magic Cursor file scoop prototype for QR pairing, phone-to-laptop file movement, laptop-to-phone file movement, and trusted surface transfer.">
+  <meta name="description" content="CyberCrowd Magic Cursor paired surface tray for QR pairing, phone surface staging, laptop-side selection, grab, and drop transfer.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://cybercrowd.net/magic-cursor.html">
 
@@ -43,7 +43,7 @@
     }
 
     main {
-      max-width: 1160px;
+      max-width: 1180px;
       margin: 0 auto;
       padding: 28px 18px 64px;
     }
@@ -51,19 +51,19 @@
     .hero,
     .card {
       border: 1px solid var(--line);
-      border-radius: 28px;
       background: rgba(17,24,39,.9);
-      box-shadow: var(--shadow);
     }
 
     .hero {
+      border-radius: 28px;
       padding: 34px;
       background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(23,32,51,.88));
+      box-shadow: var(--shadow);
     }
 
     .card {
-      padding: 24px;
       border-radius: 22px;
+      padding: 24px;
       box-shadow: 0 10px 30px rgba(0,0,0,.22);
     }
 
@@ -96,7 +96,7 @@
     }
 
     .lead {
-      max-width: 950px;
+      max-width: 960px;
       color: var(--muted);
       font-size: 1.18rem;
     }
@@ -187,47 +187,67 @@
       border: 1px solid var(--line);
     }
 
-    .dropzone {
-      min-height: 220px;
-      border: 2px dashed rgba(255,255,255,.34);
-      border-radius: 22px;
+    button.danger {
+      color: #fff;
+      background: var(--red);
+    }
+
+    .phone-standby {
+      min-height: 62vh;
+      border: 2px solid rgba(102,227,165,.42);
+      border-radius: 24px;
       padding: 24px;
       display: grid;
       place-items: center;
       text-align: center;
-      background: rgba(255,255,255,.045);
-      color: var(--muted);
-      cursor: pointer;
-      touch-action: manipulation;
+      background:
+        radial-gradient(circle at center, rgba(102,227,165,.12), transparent 20rem),
+        rgba(255,255,255,.045);
     }
 
-    .dropzone strong {
+    .phone-standby strong {
       display: block;
       color: var(--text);
-      font-size: 1.3rem;
-      margin-bottom: 8px;
+      font-size: clamp(1.6rem, 5vw, 3rem);
+      line-height: 1.08;
+      margin-bottom: 12px;
     }
 
-    input[type="file"] {
-      display: none;
+    .surface-tray {
+      min-height: 420px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px;
+      background:
+        radial-gradient(circle at center, rgba(255,209,102,.08), transparent 18rem),
+        rgba(0,0,0,.20);
     }
 
-    .files {
+    .surface-row {
       display: grid;
+      grid-template-columns: 1fr auto;
       gap: 12px;
-      margin-top: 14px;
-    }
-
-    .file-card {
+      align-items: center;
       border: 1px solid var(--line);
       border-radius: 18px;
       padding: 14px;
+      margin-bottom: 12px;
       background: rgba(255,255,255,.045);
+      cursor: grab;
+    }
+
+    .surface-row:active {
+      cursor: grabbing;
+    }
+
+    .surface-row.selected {
+      border-color: var(--gold);
+      background: rgba(255,209,102,.10);
+      box-shadow: 0 0 22px rgba(255,209,102,.18);
     }
 
     .file-name {
       font-weight: 900;
-      color: var(--text);
       word-break: break-word;
     }
 
@@ -235,6 +255,36 @@
       color: var(--muted);
       font-size: .9rem;
       margin-top: 4px;
+    }
+
+    .drop-target {
+      margin-top: 18px;
+      min-height: 160px;
+      border: 2px dashed rgba(255,209,102,.55);
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 20px;
+      background: rgba(255,209,102,.06);
+      color: var(--muted);
+    }
+
+    .drop-target.ready {
+      border-color: var(--green);
+      background: rgba(102,227,165,.09);
+      color: var(--text);
+    }
+
+    .drop-target strong {
+      display: block;
+      color: var(--text);
+      font-size: 1.35rem;
+      margin-bottom: 6px;
+    }
+
+    input[type="file"] {
+      display: none;
     }
 
     .nav-back {
@@ -265,16 +315,15 @@
   <main>
     <section class="hero" aria-labelledby="page-title">
       <span class="eyebrow">CyberCrowd Magic Cursor</span>
-      <h1 id="page-title">Magic Cursor File Scoop</h1>
+      <h1 id="page-title">Magic Cursor Paired Surface Tray</h1>
 
       <p class="lead">
-        This is not mirroring and not casting. This is the first working Magic Cursor scoop:
-        pair the phone to the laptop with a QR code, choose a file on one surface, and send that file
-        across the paired CyberCrowd room.
+        Phone opens link once. Phone becomes a CyberCrowd surface. Laptop sees the phone tray.
+        Laptop cursor selects from the phone tray, grabs the item, and drops it to the laptop receive path.
       </p>
 
       <div class="rule-strip">
-        The phone is one box of ice cream. The laptop is another box. Magic Cursor is the scoop.
+        The cursor becomes the finger, clicker, grabber, and scooper. The phone stays mostly hands-off after pairing.
       </div>
     </section>
 
@@ -296,6 +345,9 @@
 
     let peer = null;
     let conn = null;
+    let selectedRemoteId = null;
+    let phoneTray = [];
+    const localPhoneFiles = new Map();
 
     function createRoomId() {
       const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -306,8 +358,25 @@
       return output;
     }
 
+    function basePath() {
+      return window.location.origin + window.location.pathname;
+    }
+
+    function makeHostLink() {
+      return basePath() + "?role=host&room=" + encodeURIComponent(room);
+    }
+
+    function makeControllerLink(peerId) {
+      return basePath() + "?role=controller&room=" + encodeURIComponent(room) + "&peer=" + encodeURIComponent(peerId);
+    }
+
     function qrImageUrl(text) {
       return "https://api.qrserver.com/v1/create-qr-code/?size=236x236&data=" + encodeURIComponent(text);
+    }
+
+    function setStatus(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
     }
 
     function formatBytes(bytes) {
@@ -320,120 +389,6 @@
         index++;
       }
       return size.toFixed(index === 0 ? 0 : 1) + " " + sizes[index];
-    }
-
-    function safeClipboard(text, statusElement) {
-      if (!navigator.clipboard) {
-        statusElement.textContent = "Clipboard unavailable. Copy the link manually.";
-        return;
-      }
-
-      navigator.clipboard.writeText(text).then(() => {
-        statusElement.textContent = "Copied link.";
-      }).catch(() => {
-        statusElement.textContent = "Copy failed. Copy the link manually.";
-      });
-    }
-
-    function makeControllerLink(peerId) {
-      const clean = window.location.origin + window.location.pathname;
-      return clean + "?role=controller&room=" + encodeURIComponent(room) + "&peer=" + encodeURIComponent(peerId);
-    }
-
-    function makeHostLink() {
-      const clean = window.location.origin + window.location.pathname;
-      return clean + "?role=host&room=" + encodeURIComponent(room);
-    }
-
-    function setStatus(id, text) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = text;
-    }
-
-    function installDropzone(dropzoneId, inputId, statusId) {
-      const dropzone = document.getElementById(dropzoneId);
-      const input = document.getElementById(inputId);
-
-      dropzone.addEventListener("click", () => input.click());
-
-      input.addEventListener("change", () => {
-        if (input.files && input.files.length) {
-          sendFiles(Array.from(input.files), statusId);
-          input.value = "";
-        }
-      });
-
-      dropzone.addEventListener("dragover", event => {
-        event.preventDefault();
-        dropzone.style.borderColor = "var(--gold)";
-      });
-
-      dropzone.addEventListener("dragleave", () => {
-        dropzone.style.borderColor = "rgba(255,255,255,.34)";
-      });
-
-      dropzone.addEventListener("drop", event => {
-        event.preventDefault();
-        dropzone.style.borderColor = "rgba(255,255,255,.34)";
-
-        const files = Array.from(event.dataTransfer.files || []);
-        if (files.length) {
-          sendFiles(files, statusId);
-        }
-      });
-    }
-
-    function sendFiles(files, statusId) {
-      if (!conn || !conn.open) {
-        setStatus(statusId, "No paired surface connected yet.");
-        return;
-      }
-
-      files.forEach(file => {
-        conn.send({
-          type: "file",
-          name: file.name,
-          size: file.size,
-          mime: file.type || "application/octet-stream",
-          file
-        });
-
-        addSentFile(file);
-      });
-
-      setStatus(statusId, "Scooped " + files.length + " file(s) to the paired surface.");
-    }
-
-    function addSentFile(file) {
-      const list = document.getElementById("sentFiles");
-      if (!list) return;
-
-      const card = document.createElement("div");
-      card.className = "file-card";
-      card.innerHTML = `
-        <div class="file-name">Sent: ${escapeHtml(file.name)}</div>
-        <div class="file-meta">${formatBytes(file.size)} · ${escapeHtml(file.type || "file")}</div>
-      `;
-      list.prepend(card);
-    }
-
-    function addReceivedFile(data) {
-      const list = document.getElementById("receivedFiles");
-      if (!list) return;
-
-      const blob = data.file;
-      const url = URL.createObjectURL(blob);
-
-      const card = document.createElement("div");
-      card.className = "file-card";
-
-      card.innerHTML = `
-        <div class="file-name">Received: ${escapeHtml(data.name || "file")}</div>
-        <div class="file-meta">${formatBytes(data.size)} · ${escapeHtml(data.mime || "file")}</div>
-        <a class="download-link" href="${url}" download="${escapeAttribute(data.name || "cybercrowd-file")}">Download / Save</a>
-      `;
-
-      list.prepend(card);
     }
 
     function escapeHtml(value) {
@@ -450,41 +405,33 @@
       return String(value).replace(/"/g, "&quot;");
     }
 
-    function wireConnection(connection, statusId) {
-      conn = connection;
+    function safeClipboard(text, statusElement) {
+      if (!navigator.clipboard) {
+        statusElement.textContent = "Clipboard unavailable. Copy the link manually.";
+        return;
+      }
 
-      conn.on("open", () => {
-        setStatus(statusId, "Paired. Magic Cursor scoop is ready.");
+      navigator.clipboard.writeText(text).then(() => {
+        statusElement.textContent = "Copied link.";
+      }).catch(() => {
+        statusElement.textContent = "Copy failed. Copy the link manually.";
       });
+    }
 
-      conn.on("data", data => {
-        if (data && data.type === "file") {
-          addReceivedFile(data);
-          setStatus(statusId, "Received " + (data.name || "file") + ".");
-        }
-
-        if (data && data.type === "hello") {
-          setStatus(statusId, "Paired with " + (data.label || "surface") + ".");
-        }
-      });
-
-      conn.on("close", () => {
-        setStatus(statusId, "Connection closed.");
-      });
-
-      conn.on("error", error => {
-        setStatus(statusId, "Connection error: " + error.message);
-      });
+    function sendToPeer(data) {
+      if (!conn || !conn.open) return false;
+      conn.send(data);
+      return true;
     }
 
     function renderHost() {
       app.innerHTML = `
         <div class="grid">
           <article class="card">
-            <h2>Laptop Host Surface</h2>
+            <h2>Laptop Host</h2>
             <p>
-              Keep this page open on the laptop. Scan the QR code with the phone.
-              The phone opens the controller surface for this Magic Cursor room.
+              Keep this page open on the laptop. Scan the QR with the phone one time.
+              After pairing, the laptop cursor works the phone tray from this screen.
             </p>
 
             <div id="qrBox">
@@ -499,124 +446,331 @@
             <div class="status" id="hostStatus">Starting host...</div>
 
             <div class="warning">
-              First prototype uses PeerJS for pairing and transfer. Production can replace this with a CyberCrowd relay.
+              Browser security still requires the phone to grant file access once. After that, laptop controls the tray.
             </div>
           </article>
 
           <article class="card">
-            <h2>Laptop Drop / Receive Surface</h2>
-            <div class="dropzone" id="dropzone">
+            <h2>Phone Surface Tray Seen From Laptop</h2>
+            <p>
+              This is the phone surface exposed to the laptop. Click an item to grab it,
+              then drop it into the laptop receive lane.
+            </p>
+
+            <div class="surface-tray" id="remoteTray">
+              <p class="file-meta">Waiting for phone tray...</p>
+            </div>
+
+            <div class="drop-target" id="dropTarget">
               <div>
-                <strong>Drop laptop files here</strong>
-                or click to choose files and scoop them to the phone.
+                <strong>Laptop Receive Lane</strong>
+                Select a phone item above, then click here to pull it to the laptop.
               </div>
             </div>
-            <input id="fileInput" type="file" multiple>
 
-            <div class="status" id="transferStatus">Waiting for phone pairing.</div>
+            <div class="status" id="transferStatus">No phone tray connected yet.</div>
+          </article>
 
-            <h2 style="margin-top:22px;">Received Files</h2>
-            <div class="files" id="receivedFiles"></div>
-
-            <h2 style="margin-top:22px;">Sent Files</h2>
-            <div class="files" id="sentFiles"></div>
+          <article class="card full">
+            <h2>Received on Laptop</h2>
+            <div id="receivedFiles"></div>
           </article>
         </div>
       `;
 
-      const status = document.getElementById("hostStatus");
+      const hostStatus = document.getElementById("hostStatus");
       const qrBox = document.getElementById("qrBox");
       const pairLink = document.getElementById("pairLink");
 
-      peer = new Peer(undefined, {
-        debug: 1
-      });
+      peer = new Peer(undefined, { debug: 1 });
 
       peer.on("open", id => {
         const link = makeControllerLink(id);
         pairLink.textContent = link;
         qrBox.innerHTML = `<img src="${qrImageUrl(link)}" alt="Magic Cursor phone pairing QR code">`;
-        status.textContent = "Host room ready. Scan QR with phone.";
+        hostStatus.textContent = "Host ready. Scan QR with phone.";
         window.history.replaceState({}, "", makeHostLink());
       });
 
       peer.on("connection", connection => {
-        wireConnection(connection, "transferStatus");
-        connection.on("open", () => {
-          connection.send({ type: "hello", label: "Laptop host" });
-        });
+        conn = connection;
+        wireHostConnection();
       });
 
       peer.on("error", error => {
-        status.textContent = "Peer error: " + error.message;
+        hostStatus.textContent = "Peer error: " + error.message;
       });
 
       document.getElementById("copyLink").addEventListener("click", () => {
-        safeClipboard(pairLink.textContent, status);
+        safeClipboard(pairLink.textContent, hostStatus);
       });
 
       document.getElementById("newRoom").addEventListener("click", () => {
-        window.location.href = window.location.origin + window.location.pathname + "?role=host&room=" + createRoomId();
+        window.location.href = basePath() + "?role=host&room=" + createRoomId();
       });
 
-      installDropzone("dropzone", "fileInput", "transferStatus");
+      document.getElementById("dropTarget").addEventListener("click", () => {
+        if (!selectedRemoteId) {
+          setStatus("transferStatus", "Select a phone tray item first.");
+          return;
+        }
+
+        const item = phoneTray.find(entry => entry.id === selectedRemoteId);
+        if (!item) {
+          setStatus("transferStatus", "Selected item is no longer available.");
+          return;
+        }
+
+        const ok = sendToPeer({
+          type: "request-file",
+          id: selectedRemoteId
+        });
+
+        if (ok) {
+          document.getElementById("dropTarget").classList.add("ready");
+          setStatus("transferStatus", "Pulling " + item.name + " from phone surface...");
+        } else {
+          setStatus("transferStatus", "Phone surface is not connected.");
+        }
+      });
+    }
+
+    function wireHostConnection() {
+      conn.on("open", () => {
+        setStatus("transferStatus", "Phone paired. Waiting for tray.");
+        conn.send({ type: "host-ready", room });
+      });
+
+      conn.on("data", data => {
+        if (!data || !data.type) return;
+
+        if (data.type === "tray-manifest") {
+          phoneTray = data.files || [];
+          renderRemoteTray();
+          setStatus("transferStatus", "Phone tray loaded. Use laptop cursor to select and pull.");
+        }
+
+        if (data.type === "file-response") {
+          receiveFileOnHost(data);
+          setStatus("transferStatus", "Received " + (data.name || "file") + ".");
+          document.getElementById("dropTarget").classList.remove("ready");
+        }
+
+        if (data.type === "phone-status") {
+          setStatus("transferStatus", data.message || "Phone status updated.");
+        }
+      });
+
+      conn.on("close", () => {
+        setStatus("transferStatus", "Phone surface disconnected.");
+      });
+
+      conn.on("error", error => {
+        setStatus("transferStatus", "Connection error: " + error.message);
+      });
+    }
+
+    function renderRemoteTray() {
+      const tray = document.getElementById("remoteTray");
+      if (!tray) return;
+
+      if (!phoneTray.length) {
+        tray.innerHTML = `<p class="file-meta">Phone surface is paired, but the tray is empty.</p>`;
+        return;
+      }
+
+      tray.innerHTML = phoneTray.map(file => `
+        <div class="surface-row ${file.id === selectedRemoteId ? "selected" : ""}" data-id="${escapeAttribute(file.id)}">
+          <div>
+            <div class="file-name">${escapeHtml(file.name)}</div>
+            <div class="file-meta">${formatBytes(file.size)} · ${escapeHtml(file.type || "file")}</div>
+          </div>
+          <button type="button">Grab</button>
+        </div>
+      `).join("");
+
+      tray.querySelectorAll(".surface-row").forEach(row => {
+        row.addEventListener("click", () => {
+          selectedRemoteId = row.getAttribute("data-id");
+          renderRemoteTray();
+
+          const item = phoneTray.find(entry => entry.id === selectedRemoteId);
+          if (item) {
+            setStatus("transferStatus", "Grabbed " + item.name + ". Click Laptop Receive Lane to drop.");
+          }
+        });
+      });
+    }
+
+    function receiveFileOnHost(data) {
+      const list = document.getElementById("receivedFiles");
+      const blob = data.file;
+      const url = URL.createObjectURL(blob);
+
+      const card = document.createElement("div");
+      card.className = "surface-row";
+      card.innerHTML = `
+        <div>
+          <div class="file-name">Received: ${escapeHtml(data.name || "file")}</div>
+          <div class="file-meta">${formatBytes(data.size)} · ${escapeHtml(data.mime || "file")}</div>
+        </div>
+        <a class="download-link" href="${url}" download="${escapeAttribute(data.name || "cybercrowd-file")}">Save</a>
+      `;
+
+      list.prepend(card);
     }
 
     function renderController() {
       app.innerHTML = `
         <div class="grid">
           <article class="card full">
-            <h2>Phone Scoop Surface</h2>
+            <h2>Phone Surface</h2>
             <p>
-              This phone is now a Magic Cursor scoop surface. Choose files from the phone
-              and send them to the laptop. Files received from the laptop will appear below.
+              This phone is paired as a CyberCrowd surface. Load the tray once,
+              then leave the phone alone. The laptop cursor will select, grab,
+              and pull items from the phone tray.
             </p>
 
-            <div class="dropzone" id="dropzone">
+            <div class="phone-standby">
               <div>
-                <strong>Tap to choose phone files</strong>
-                then scoop them to the laptop.
+                <strong>Phone Surface Ready</strong>
+                Room ${escapeHtml(room)}<br><br>
+                <button id="loadTray">Load Phone Tray Once</button>
+                <input id="fileInput" type="file" multiple>
+                <div class="status" id="controllerStatus">Connecting to laptop...</div>
+                <div class="warning">
+                  Browser security requires one file permission step. After files are staged, laptop controls the tray.
+                </div>
               </div>
             </div>
-            <input id="fileInput" type="file" multiple>
 
-            <div class="status" id="controllerStatus">Connecting to laptop...</div>
-
-            <h2 style="margin-top:22px;">Received Files</h2>
-            <div class="files" id="receivedFiles"></div>
-
-            <h2 style="margin-top:22px;">Sent Files</h2>
-            <div class="files" id="sentFiles"></div>
+            <div class="card" style="margin-top:18px;">
+              <h2>Tray Contents</h2>
+              <div id="localTrayList"><p class="file-meta">No files staged yet.</p></div>
+            </div>
           </article>
         </div>
       `;
 
       if (!hostPeerId) {
-        setStatus("controllerStatus", "Missing host peer ID. Scan the QR code from the laptop host.");
+        setStatus("controllerStatus", "Missing host peer ID. Scan the QR from the laptop.");
         return;
       }
 
-      peer = new Peer(undefined, {
-        debug: 1
-      });
+      peer = new Peer(undefined, { debug: 1 });
 
       peer.on("open", () => {
-        const connection = peer.connect(hostPeerId, {
-          reliable: true
-        });
-
-        wireConnection(connection, "controllerStatus");
-
-        connection.on("open", () => {
-          connection.send({ type: "hello", label: "Phone controller" });
-        });
+        conn = peer.connect(hostPeerId, { reliable: true });
+        wireControllerConnection();
       });
 
       peer.on("error", error => {
         setStatus("controllerStatus", "Peer error: " + error.message);
       });
 
-      installDropzone("dropzone", "fileInput", "controllerStatus");
+      const loadTray = document.getElementById("loadTray");
+      const fileInput = document.getElementById("fileInput");
+
+      loadTray.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", () => {
+        const files = Array.from(fileInput.files || []);
+        stagePhoneFiles(files);
+        fileInput.value = "";
+      });
+    }
+
+    function wireControllerConnection() {
+      conn.on("open", () => {
+        setStatus("controllerStatus", "Paired. Load the tray once, then laptop can control it.");
+        conn.send({ type: "phone-status", message: "Phone surface paired. Waiting for tray." });
+      });
+
+      conn.on("data", data => {
+        if (!data || !data.type) return;
+
+        if (data.type === "host-ready") {
+          setStatus("controllerStatus", "Laptop host answered. Load tray when ready.");
+        }
+
+        if (data.type === "request-file") {
+          const file = localPhoneFiles.get(data.id);
+          if (!file) {
+            conn.send({ type: "phone-status", message: "Requested item is not available on phone tray." });
+            return;
+          }
+
+          conn.send({
+            type: "file-response",
+            id: data.id,
+            name: file.name,
+            size: file.size,
+            mime: file.type || "application/octet-stream",
+            file
+          });
+
+          setStatus("controllerStatus", "Laptop pulled " + file.name + ".");
+        }
+      });
+
+      conn.on("close", () => {
+        setStatus("controllerStatus", "Laptop disconnected.");
+      });
+
+      conn.on("error", error => {
+        setStatus("controllerStatus", "Connection error: " + error.message);
+      });
+    }
+
+    function stagePhoneFiles(files) {
+      if (!files.length) return;
+
+      files.forEach(file => {
+        const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random();
+        localPhoneFiles.set(id, file);
+      });
+
+      renderLocalTray();
+
+      if (conn && conn.open) {
+        conn.send({
+          type: "tray-manifest",
+          files: Array.from(localPhoneFiles.entries()).map(([id, file]) => ({
+            id,
+            name: file.name,
+            size: file.size,
+            type: file.type || "file"
+          }))
+        });
+
+        setStatus("controllerStatus", "Tray staged. You can leave the phone alone.");
+      } else {
+        setStatus("controllerStatus", "Tray staged, but laptop is not connected.");
+      }
+    }
+
+    function renderLocalTray() {
+      const list = document.getElementById("localTrayList");
+      if (!list) return;
+
+      const files = Array.from(localPhoneFiles.entries());
+
+      if (!files.length) {
+        list.innerHTML = `<p class="file-meta">No files staged yet.</p>`;
+        return;
+      }
+
+      list.innerHTML = files.map(([id, file]) => `
+        <div class="surface-row">
+          <div>
+            <div class="file-name">${escapeHtml(file.name)}</div>
+            <div class="file-meta">${formatBytes(file.size)} · ${escapeHtml(file.type || "file")}</div>
+          </div>
+          <span class="file-meta">In tray</span>
+        </div>
+      `).join("");
     }
 
     if (role === "controller") {
