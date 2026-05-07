@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Profile Room</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#header {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+}
+
+#subtitle {
+    opacity: 0.72;
+    margin-top: 8px;
+}
+
+#room {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 22px;
+}
+
+.panel {
+    background: rgba(12,12,12,0.92);
+    border: 1px solid rgba(0,255,255,0.35);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 0 24px rgba(0,255,255,0.14);
+}
+
+h2 {
+    color: #00ffff;
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    color: #00ffaa;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+input, textarea, select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #171717;
+    color: white;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+button {
+    margin-top: 14px;
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    background: #00ffff;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#previewRoom {
+    min-height: 520px;
+    border-radius: 24px;
+    padding: 24px;
+    box-sizing: border-box;
+    background: linear-gradient(145deg, #071313, #050505);
+    border: 1px solid rgba(0,255,255,0.35);
+}
+
+#roomName {
+    font-size: 30px;
+    color: #00ffff;
+    letter-spacing: 2px;
+}
+
+#roomBio {
+    margin-top: 12px;
+    line-height: 1.55;
+    opacity: 0.86;
+}
+
+#videoTag {
+    margin-top: 20px;
+    min-height: 120px;
+    border: 1px dashed rgba(0,255,255,0.45);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #00ffaa;
+    padding: 16px;
+}
+
+#cards {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+}
+
+.card {
+    min-height: 90px;
+    border-radius: 18px;
+    background: rgba(0,255,255,0.08);
+    border: 1px solid rgba(0,255,255,0.30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 18px rgba(0,255,255,0.22);
+}
+
+#message {
+    margin-top: 14px;
+    display: none;
+    padding: 12px;
+    border-radius: 12px;
+    background: #111;
+    border: 1px solid rgba(0,255,170,0.45);
+}
+
+.theme-warm {
+    background: linear-gradient(145deg, #211207, #050505) !important;
+}
+
+.theme-church {
+    background: linear-gradient(145deg, #111018, #050505) !important;
+}
+
+.theme-comedy {
+    background: linear-gradient(145deg, #191007, #050505) !important;
+}
+
+.theme-travel {
+    background: linear-gradient(145deg, #071521, #050505) !important;
+}
+
+@media (max-width: 820px) {
+    #room {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="header">
+    <div id="title">PROFILE ROOM</div>
+    <div id="subtitle">Your free Cybercrowd dressing room. Build your atmosphere.</div>
+</div>
+
+<div id="room">
+
+<div class="panel">
+
+<h2>Room Controls</h2>
+
+<label>ROOM NAME</label>
+<input id="nameInput" value="My Cybercrowd Room">
+
+<label>WELCOME DESCRIPTION</label>
+<textarea id="bioInput">Welcome to my room. This is where my cards, routes, and creative identity start stacking.</textarea>
+
+<label>15 SECOND VIDEO TAG IDEA</label>
+<input id="videoInput" value="Welcome to my Cybercrowd room. Come see what I build next.">
+
+<label>ROOM THEME</label>
+<select id="themeInput">
