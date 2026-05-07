@@ -1,0 +1,16 @@
+CYBERCROWD MAGIC CURSOR
+Cursor Authority Transfer System
+
+Developed under the Cybercrowd project.
+
+This project includes experimental multi-surface interaction systems,
+including cursor authority transfer, live surface routing,
+cross-device interaction transport, and distributed interface concepts.
+
+All Cybercrowd branding, implementation logic, design structure,
+documentation, visual presentation, interaction flow,
+and associated source code are protected intellectual property
+where applicable by law.
+
+Copyright © Cybercrowd
+All rights reserved.
