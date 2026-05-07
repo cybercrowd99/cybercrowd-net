@@ -2,78 +2,628 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CyberCrowd Magic Cursor | Multi-Surface Control, WDIG, Live Coordination</title>
+  <title>CyberCrowd Magic Cursor | File Scoop Prototype</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberCrowd Magic Cursor defines the multi-surface control concept for phones, monitors, camera packages, WDIG routing, live control rooms, audience interaction, and trusted surfaces.">
+  <meta name="description" content="CyberCrowd Magic Cursor file scoop prototype for QR pairing, phone-to-laptop file movement, laptop-to-phone file movement, and trusted surface transfer.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://cybercrowd.net/magic-cursor.html">
+
+  <style>
+    :root {
+      --bg: #070910;
+      --panel: #111827;
+      --text: #f5f7fb;
+      --muted: #b9c4d8;
+      --gold: #ffd166;
+      --green: #66e3a5;
+      --red: #ff7474;
+      --line: rgba(255,255,255,.14);
+      --shadow: 0 18px 48px rgba(0,0,0,.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at top left, rgba(124,199,255,.18), transparent 34rem),
+        radial-gradient(circle at top right, rgba(255,209,102,.13), transparent 32rem),
+        linear-gradient(180deg, #070910 0%, #0b1020 100%);
+    }
+
+    a {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 28px 18px 64px;
+    }
+
+    .hero,
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(17,24,39,.9);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 34px;
+      background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(23,32,51,.88));
+    }
+
+    .card {
+      padding: 24px;
+      border-radius: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #08111d;
+      background: var(--gold);
+      font-weight: 900;
+      font-size: .78rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.04;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 1.35rem;
+    }
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    .lead {
+      max-width: 950px;
+      color: var(--muted);
+      font-size: 1.18rem;
+    }
+
+    .rule-strip {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-left: 5px solid var(--gold);
+      border-radius: 16px;
+      background: rgba(255,209,102,.10);
+      font-weight: 800;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-left: 5px solid var(--green);
+      border-radius: 16px;
+      background: rgba(102,227,165,.10);
+      font-weight: 800;
+    }
+
+    .warning {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-left: 5px solid var(--red);
+      border-radius: 16px;
+      background: rgba(255,116,116,.10);
+      font-weight: 800;
+    }
+
+    .linkbox {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(0,0,0,.24);
+      color: var(--green);
+      word-break: break-all;
+      font-size: .9rem;
+    }
+
+    #qrBox {
+      width: 260px;
+      height: 260px;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 18px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+    }
+
+    #qrBox img {
+      width: 236px;
+      height: 236px;
+      display: block;
+    }
+
+    button,
+    .download-link {
+      display: inline-block;
+      border: 0;
+      border-radius: 999px;
+      padding: 11px 14px;
+      color: #08111d;
+      background: var(--gold);
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      margin: 6px 6px 0 0;
+    }
+
+    button.secondary {
+      color: var(--text);
+      background: rgba(255,255,255,.12);
+      border: 1px solid var(--line);
+    }
+
+    .dropzone {
+      min-height: 220px;
+      border: 2px dashed rgba(255,255,255,.34);
+      border-radius: 22px;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background: rgba(255,255,255,.045);
+      color: var(--muted);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .dropzone strong {
+      display: block;
+      color: var(--text);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .files {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .file-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .file-name {
+      font-weight: 900;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .file-meta {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-top: 4px;
+    }
+
+    .nav-back {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      #qrBox {
+        width: 230px;
+        height: 230px;
+      }
+
+      #qrBox img {
+        width: 206px;
+        height: 206px;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <main>
-    <h1>CyberCrowd Magic Cursor</h1>
+    <section class="hero" aria-labelledby="page-title">
+      <span class="eyebrow">CyberCrowd Magic Cursor</span>
+      <h1 id="page-title">Magic Cursor File Scoop</h1>
 
-    <p>
-      CyberCrowd Magic Cursor is the control concept for moving across surfaces
-      in a multi-surface live system. It helps coordinate phones, monitors,
-      cameras, live rooms, show surfaces, media vessels, access states, and
-      archive paths without flattening everything into one screen.
-    </p>
+      <p class="lead">
+        This is not mirroring and not casting. This is the first working Magic Cursor scoop:
+        pair the phone to the laptop with a QR code, choose a file on one surface, and send that file
+        across the paired CyberCrowd room.
+      </p>
 
-    <h2>Magic Cursor Purpose</h2>
-    <p>
-      Magic Cursor is not just a pointer. It is a control layer for selecting,
-      guiding, routing, and coordinating activity across CyberCrowd surfaces.
-      It helps operators and trusted users move through live inputs, camera
-      angles, audience moments, media references, and control panels.
-    </p>
+      <div class="rule-strip">
+        The phone is one box of ice cream. The laptop is another box. Magic Cursor is the scoop.
+      </div>
+    </section>
 
-    <h2>What Magic Cursor May Control</h2>
-    <ul>
-      <li>Phone input surfaces</li>
-      <li>Camera angle selection</li>
-      <li>Monitor-to-monitor coordination</li>
-      <li>Atomic Kricket show surfaces</li>
-      <li>Reten Records media surfaces</li>
-      <li>CyberCrowd public discourse surfaces</li>
-      <li>Live Control Room panels</li>
-      <li>Viewer upgrade states</li>
-      <li>Creator and client controls</li>
-      <li>Archive capture paths</li>
-      <li>WDIG placement decisions</li>
-    </ul>
+    <section id="app"></section>
 
-    <h2>Connection to WDIG</h2>
-    <p>
-      WDIG asks where something belongs. Magic Cursor helps move through those
-      placements and control the surfaces where those things appear. WDIG defines
-      placement. Magic Cursor supports coordination.
-    </p>
-
-    <h2>Connection to the Live Control Room</h2>
-    <p>
-      The Live Control Room is where the multi-surface system comes together.
-      Magic Cursor can support that control room by moving attention and control
-      between phones, cameras, monitors, show surfaces, media surfaces, viewer
-      access states, and archive paths.
-    </p>
-
-    <h2>Trust and Surface Discipline</h2>
-    <p>
-      Magic Cursor should operate only within trusted and intentionally defined
-      surfaces. CyberCrowd must avoid uncontrolled movement, unclear custody,
-      accidental exposure, or confusing control paths.
-    </p>
-
-    <h2>Connection to the CyberCrowd System</h2>
-    <p>
-      Magic Cursor may connect to WDIG Routing, Cam Packages, Viewer Upgrades,
-      Live Control Room, Secure Surface Hardware, Atomic Kricket, Reten Records,
-      public discourse, access passes, and platform archive proof.
-    </p>
-
-    <p>
+    <p class="nav-back">
       <a href="/">Return to CyberCrowd</a>
     </p>
   </main>
+
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+  <script>
+    const app = document.getElementById("app");
+    const params = new URLSearchParams(window.location.search);
+    const role = params.get("role") || "host";
+    const hostPeerId = params.get("peer") || "";
+    const room = params.get("room") || createRoomId();
+
+    let peer = null;
+    let conn = null;
+
+    function createRoomId() {
+      const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let output = "";
+      for (let i = 0; i < 8; i++) {
+        output += letters[Math.floor(Math.random() * letters.length)];
+      }
+      return output;
+    }
+
+    function qrImageUrl(text) {
+      return "https://api.qrserver.com/v1/create-qr-code/?size=236x236&data=" + encodeURIComponent(text);
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes && bytes !== 0) return "unknown size";
+      const sizes = ["B", "KB", "MB", "GB"];
+      let size = bytes;
+      let index = 0;
+      while (size >= 1024 && index < sizes.length - 1) {
+        size = size / 1024;
+        index++;
+      }
+      return size.toFixed(index === 0 ? 0 : 1) + " " + sizes[index];
+    }
+
+    function safeClipboard(text, statusElement) {
+      if (!navigator.clipboard) {
+        statusElement.textContent = "Clipboard unavailable. Copy the link manually.";
+        return;
+      }
+
+      navigator.clipboard.writeText(text).then(() => {
+        statusElement.textContent = "Copied link.";
+      }).catch(() => {
+        statusElement.textContent = "Copy failed. Copy the link manually.";
+      });
+    }
+
+    function makeControllerLink(peerId) {
+      const clean = window.location.origin + window.location.pathname;
+      return clean + "?role=controller&room=" + encodeURIComponent(room) + "&peer=" + encodeURIComponent(peerId);
+    }
+
+    function makeHostLink() {
+      const clean = window.location.origin + window.location.pathname;
+      return clean + "?role=host&room=" + encodeURIComponent(room);
+    }
+
+    function setStatus(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    function installDropzone(dropzoneId, inputId, statusId) {
+      const dropzone = document.getElementById(dropzoneId);
+      const input = document.getElementById(inputId);
+
+      dropzone.addEventListener("click", () => input.click());
+
+      input.addEventListener("change", () => {
+        if (input.files && input.files.length) {
+          sendFiles(Array.from(input.files), statusId);
+          input.value = "";
+        }
+      });
+
+      dropzone.addEventListener("dragover", event => {
+        event.preventDefault();
+        dropzone.style.borderColor = "var(--gold)";
+      });
+
+      dropzone.addEventListener("dragleave", () => {
+        dropzone.style.borderColor = "rgba(255,255,255,.34)";
+      });
+
+      dropzone.addEventListener("drop", event => {
+        event.preventDefault();
+        dropzone.style.borderColor = "rgba(255,255,255,.34)";
+
+        const files = Array.from(event.dataTransfer.files || []);
+        if (files.length) {
+          sendFiles(files, statusId);
+        }
+      });
+    }
+
+    function sendFiles(files, statusId) {
+      if (!conn || !conn.open) {
+        setStatus(statusId, "No paired surface connected yet.");
+        return;
+      }
+
+      files.forEach(file => {
+        conn.send({
+          type: "file",
+          name: file.name,
+          size: file.size,
+          mime: file.type || "application/octet-stream",
+          file
+        });
+
+        addSentFile(file);
+      });
+
+      setStatus(statusId, "Scooped " + files.length + " file(s) to the paired surface.");
+    }
+
+    function addSentFile(file) {
+      const list = document.getElementById("sentFiles");
+      if (!list) return;
+
+      const card = document.createElement("div");
+      card.className = "file-card";
+      card.innerHTML = `
+        <div class="file-name">Sent: ${escapeHtml(file.name)}</div>
+        <div class="file-meta">${formatBytes(file.size)} · ${escapeHtml(file.type || "file")}</div>
+      `;
+      list.prepend(card);
+    }
+
+    function addReceivedFile(data) {
+      const list = document.getElementById("receivedFiles");
+      if (!list) return;
+
+      const blob = data.file;
+      const url = URL.createObjectURL(blob);
+
+      const card = document.createElement("div");
+      card.className = "file-card";
+
+      card.innerHTML = `
+        <div class="file-name">Received: ${escapeHtml(data.name || "file")}</div>
+        <div class="file-meta">${formatBytes(data.size)} · ${escapeHtml(data.mime || "file")}</div>
+        <a class="download-link" href="${url}" download="${escapeAttribute(data.name || "cybercrowd-file")}">Download / Save</a>
+      `;
+
+      list.prepend(card);
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function escapeAttribute(value) {
+      return String(value).replace(/"/g, "&quot;");
+    }
+
+    function wireConnection(connection, statusId) {
+      conn = connection;
+
+      conn.on("open", () => {
+        setStatus(statusId, "Paired. Magic Cursor scoop is ready.");
+      });
+
+      conn.on("data", data => {
+        if (data && data.type === "file") {
+          addReceivedFile(data);
+          setStatus(statusId, "Received " + (data.name || "file") + ".");
+        }
+
+        if (data && data.type === "hello") {
+          setStatus(statusId, "Paired with " + (data.label || "surface") + ".");
+        }
+      });
+
+      conn.on("close", () => {
+        setStatus(statusId, "Connection closed.");
+      });
+
+      conn.on("error", error => {
+        setStatus(statusId, "Connection error: " + error.message);
+      });
+    }
+
+    function renderHost() {
+      app.innerHTML = `
+        <div class="grid">
+          <article class="card">
+            <h2>Laptop Host Surface</h2>
+            <p>
+              Keep this page open on the laptop. Scan the QR code with the phone.
+              The phone opens the controller surface for this Magic Cursor room.
+            </p>
+
+            <div id="qrBox">
+              <span style="color:#08111d;font-weight:900;">Creating QR...</span>
+            </div>
+
+            <div class="linkbox" id="pairLink">Creating pairing link...</div>
+
+            <button id="copyLink">Copy phone link</button>
+            <button id="newRoom" class="secondary">New room</button>
+
+            <div class="status" id="hostStatus">Starting host...</div>
+
+            <div class="warning">
+              First prototype uses PeerJS for pairing and transfer. Production can replace this with a CyberCrowd relay.
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Laptop Drop / Receive Surface</h2>
+            <div class="dropzone" id="dropzone">
+              <div>
+                <strong>Drop laptop files here</strong>
+                or click to choose files and scoop them to the phone.
+              </div>
+            </div>
+            <input id="fileInput" type="file" multiple>
+
+            <div class="status" id="transferStatus">Waiting for phone pairing.</div>
+
+            <h2 style="margin-top:22px;">Received Files</h2>
+            <div class="files" id="receivedFiles"></div>
+
+            <h2 style="margin-top:22px;">Sent Files</h2>
+            <div class="files" id="sentFiles"></div>
+          </article>
+        </div>
+      `;
+
+      const status = document.getElementById("hostStatus");
+      const qrBox = document.getElementById("qrBox");
+      const pairLink = document.getElementById("pairLink");
+
+      peer = new Peer(undefined, {
+        debug: 1
+      });
+
+      peer.on("open", id => {
+        const link = makeControllerLink(id);
+        pairLink.textContent = link;
+        qrBox.innerHTML = `<img src="${qrImageUrl(link)}" alt="Magic Cursor phone pairing QR code">`;
+        status.textContent = "Host room ready. Scan QR with phone.";
+        window.history.replaceState({}, "", makeHostLink());
+      });
+
+      peer.on("connection", connection => {
+        wireConnection(connection, "transferStatus");
+        connection.on("open", () => {
+          connection.send({ type: "hello", label: "Laptop host" });
+        });
+      });
+
+      peer.on("error", error => {
+        status.textContent = "Peer error: " + error.message;
+      });
+
+      document.getElementById("copyLink").addEventListener("click", () => {
+        safeClipboard(pairLink.textContent, status);
+      });
+
+      document.getElementById("newRoom").addEventListener("click", () => {
+        window.location.href = window.location.origin + window.location.pathname + "?role=host&room=" + createRoomId();
+      });
+
+      installDropzone("dropzone", "fileInput", "transferStatus");
+    }
+
+    function renderController() {
+      app.innerHTML = `
+        <div class="grid">
+          <article class="card full">
+            <h2>Phone Scoop Surface</h2>
+            <p>
+              This phone is now a Magic Cursor scoop surface. Choose files from the phone
+              and send them to the laptop. Files received from the laptop will appear below.
+            </p>
+
+            <div class="dropzone" id="dropzone">
+              <div>
+                <strong>Tap to choose phone files</strong>
+                then scoop them to the laptop.
+              </div>
+            </div>
+            <input id="fileInput" type="file" multiple>
+
+            <div class="status" id="controllerStatus">Connecting to laptop...</div>
+
+            <h2 style="margin-top:22px;">Received Files</h2>
+            <div class="files" id="receivedFiles"></div>
+
+            <h2 style="margin-top:22px;">Sent Files</h2>
+            <div class="files" id="sentFiles"></div>
+          </article>
+        </div>
+      `;
+
+      if (!hostPeerId) {
+        setStatus("controllerStatus", "Missing host peer ID. Scan the QR code from the laptop host.");
+        return;
+      }
+
+      peer = new Peer(undefined, {
+        debug: 1
+      });
+
+      peer.on("open", () => {
+        const connection = peer.connect(hostPeerId, {
+          reliable: true
+        });
+
+        wireConnection(connection, "controllerStatus");
+
+        connection.on("open", () => {
+          connection.send({ type: "hello", label: "Phone controller" });
+        });
+      });
+
+      peer.on("error", error => {
+        setStatus("controllerStatus", "Peer error: " + error.message);
+      });
+
+      installDropzone("dropzone", "fileInput", "controllerStatus");
+    }
+
+    if (role === "controller") {
+      renderController();
+    } else {
+      renderHost();
+    }
+  </script>
 </body>
 </html>
