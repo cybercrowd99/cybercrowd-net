@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CyberCrowd Magic Cursor | Paired Surface Tray</title>
+  <title>CyberCrowd Magic Cursor | Surface Control, WDIG, Trusted Pairing</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberCrowd Magic Cursor paired surface tray for QR pairing, phone surface staging, laptop-side selection, grab, and drop transfer.">
+  <meta name="description" content="CyberCrowd Magic Cursor defines trusted surface control for phones, laptops, cameras, media rooms, WDIG placement, Surface OS pairing, live control, and session-based movement across CyberCrowd.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://cybercrowd.net/magic-cursor.html">
 
@@ -27,7 +27,6 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
       color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
       line-height: 1.6;
@@ -43,28 +42,17 @@
     }
 
     main {
-      max-width: 1180px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 28px 18px 64px;
     }
 
-    .hero,
-    .card {
-      border: 1px solid var(--line);
-      background: rgba(17,24,39,.9);
-    }
-
     .hero {
+      border: 1px solid var(--line);
       border-radius: 28px;
       padding: 34px;
       background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(23,32,51,.88));
       box-shadow: var(--shadow);
-    }
-
-    .card {
-      border-radius: 22px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.22);
     }
 
     .eyebrow {
@@ -96,7 +84,7 @@
     }
 
     .lead {
-      max-width: 960px;
+      max-width: 940px;
       color: var(--muted);
       font-size: 1.18rem;
     }
@@ -112,18 +100,27 @@
 
     .grid {
       display: grid;
-      grid-template-columns: 360px 1fr;
+      grid-template-columns: repeat(12, 1fr);
       gap: 18px;
       margin-top: 18px;
     }
 
-    .full {
+    .card {
+      grid-column: span 6;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px;
+      background: rgba(17,24,39,.88);
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+    }
+
+    .card.full {
       grid-column: 1 / -1;
     }
 
-    .status {
+    .plain-rule {
       margin-top: 14px;
-      padding: 14px 16px;
+      padding: 15px 17px;
       border-left: 5px solid var(--green);
       border-radius: 16px;
       background: rgba(102,227,165,.10);
@@ -132,159 +129,21 @@
 
     .warning {
       margin-top: 14px;
-      padding: 14px 16px;
+      padding: 15px 17px;
       border-left: 5px solid var(--red);
       border-radius: 16px;
       background: rgba(255,116,116,.10);
       font-weight: 800;
     }
 
-    .linkbox {
-      margin-top: 12px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(0,0,0,.24);
-      color: var(--green);
-      word-break: break-all;
-      font-size: .9rem;
-    }
-
-    #qrBox {
-      width: 260px;
-      height: 260px;
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 18px;
-      background: #fff;
-      display: grid;
-      place-items: center;
-    }
-
-    #qrBox img {
-      width: 236px;
-      height: 236px;
-      display: block;
-    }
-
-    button,
-    .download-link {
-      display: inline-block;
-      border: 0;
-      border-radius: 999px;
-      padding: 11px 14px;
-      color: #08111d;
-      background: var(--gold);
-      font-weight: 900;
-      cursor: pointer;
-      text-decoration: none;
-      margin: 6px 6px 0 0;
-    }
-
-    button.secondary {
-      color: var(--text);
-      background: rgba(255,255,255,.12);
-      border: 1px solid var(--line);
-    }
-
-    button.danger {
-      color: #fff;
-      background: var(--red);
-    }
-
-    .phone-standby {
-      min-height: 62vh;
-      border: 2px solid rgba(102,227,165,.42);
-      border-radius: 24px;
-      padding: 24px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      background:
-        radial-gradient(circle at center, rgba(102,227,165,.12), transparent 20rem),
-        rgba(255,255,255,.045);
-    }
-
-    .phone-standby strong {
-      display: block;
-      color: var(--text);
-      font-size: clamp(1.6rem, 5vw, 3rem);
-      line-height: 1.08;
-      margin-bottom: 12px;
-    }
-
-    .surface-tray {
-      min-height: 420px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 18px;
-      background:
-        radial-gradient(circle at center, rgba(255,209,102,.08), transparent 18rem),
-        rgba(0,0,0,.20);
-    }
-
-    .surface-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: center;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 12px;
-      background: rgba(255,255,255,.045);
-      cursor: grab;
-    }
-
-    .surface-row:active {
-      cursor: grabbing;
-    }
-
-    .surface-row.selected {
-      border-color: var(--gold);
-      background: rgba(255,209,102,.10);
-      box-shadow: 0 0 22px rgba(255,209,102,.18);
-    }
-
-    .file-name {
-      font-weight: 900;
-      word-break: break-word;
-    }
-
-    .file-meta {
-      color: var(--muted);
-      font-size: .9rem;
-      margin-top: 4px;
-    }
-
-    .drop-target {
-      margin-top: 18px;
-      min-height: 160px;
-      border: 2px dashed rgba(255,209,102,.55);
-      border-radius: 24px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 20px;
-      background: rgba(255,209,102,.06);
+    ul {
+      margin: 8px 0 0;
+      padding-left: 1.25rem;
       color: var(--muted);
     }
 
-    .drop-target.ready {
-      border-color: var(--green);
-      background: rgba(102,227,165,.09);
-      color: var(--text);
-    }
-
-    .drop-target strong {
-      display: block;
-      color: var(--text);
-      font-size: 1.35rem;
-      margin-bottom: 6px;
-    }
-
-    input[type="file"] {
-      display: none;
+    li {
+      margin: 7px 0;
     }
 
     .nav-back {
@@ -293,19 +152,13 @@
       border-top: 1px solid var(--line);
     }
 
-    @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: 1fr;
+    @media (max-width: 820px) {
+      .hero {
+        padding: 24px;
       }
 
-      #qrBox {
-        width: 230px;
-        height: 230px;
-      }
-
-      #qrBox img {
-        width: 206px;
-        height: 206px;
+      .card {
+        grid-column: 1 / -1;
       }
     }
   </style>
@@ -315,469 +168,192 @@
   <main>
     <section class="hero" aria-labelledby="page-title">
       <span class="eyebrow">CyberCrowd Magic Cursor</span>
-      <h1 id="page-title">Magic Cursor Paired Surface Tray</h1>
+      <h1 id="page-title">Magic Cursor Surface Control</h1>
 
       <p class="lead">
-        Phone opens link once. Phone becomes a CyberCrowd surface. Laptop sees the phone tray.
-        Laptop cursor selects from the phone tray, grabs the item, and drops it to the laptop receive path.
+        Magic Cursor is the CyberCrowd control layer for moving across trusted surfaces.
+        It is not mirroring, not casting, not a file upload box, and not a phone left open as a toy controller.
+        It is the session-based hand that helps select, grab, place, route, and control approved CyberCrowd surfaces.
       </p>
 
       <div class="rule-strip">
-        The cursor becomes the finger, clicker, grabber, and scooper. The phone stays mostly hands-off after pairing.
+        Phone opens the link. Phone verifies the session. Phone becomes a temporary trusted surface. Laptop becomes the hand.
       </div>
     </section>
 
-    <section id="app"></section>
+    <section class="grid" aria-label="CyberCrowd Magic Cursor surface control">
+      <article class="card full">
+        <h2>Magic Cursor Purpose</h2>
+        <p>
+          Magic Cursor exists because CyberCrowd is built across phones, laptops, cameras, monitors,
+          live rooms, media rooms, records, channels, access states, and local control surfaces.
+          A normal mouse stops at the edge of one screen. Magic Cursor is designed to work across
+          approved CyberCrowd surfaces without flattening everything into one screen.
+        </p>
+        <p>
+          The phone is the fastest surface because it already has the camera, files, photos, mic,
+          touch, browser, share sheet, network, QR scan, permissions, and live capture. Magic Cursor
+          uses what is already there instead of rebuilding the phone from scratch.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>What Magic Cursor Is Not</h2>
+        <ul>
+          <li>Not screen mirroring</li>
+          <li>Not casting</li>
+          <li>Not a permanent remote-control app</li>
+          <li>Not a manual upload box</li>
+          <li>Not a tray that adds extra steps</li>
+          <li>Not a fake support-code takeover</li>
+        </ul>
+        <div class="warning">
+          Nobody pays to add a step. Magic Cursor must remove friction.
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>What Magic Cursor Does</h2>
+        <ul>
+          <li>Pairs a phone, laptop, board, kiosk, camera, or monitor as a CyberCrowd surface</li>
+          <li>Uses QR and visual confirmation to open a temporary trusted session</li>
+          <li>Lets the laptop-side cursor act as the finger, clicker, grabber, and placement hand</li>
+          <li>Routes selected media, files, camera angles, access states, or control actions through WDIG</li>
+          <li>Ends the session when the surface closes, locks, drops, expires, or disconnects</li>
+        </ul>
+      </article>
+
+      <article class="card full">
+        <h2>Pairing Protocol</h2>
+        <p>
+          Magic Cursor begins with a link, not a cord. The host surface creates a temporary session.
+          The phone scans a QR code or opens a pairing link. Both devices show a visible confirmation code.
+          The user approves the match. Only then does the phone become a trusted CyberCrowd surface for that session.
+        </p>
+        <ul>
+          <li>QR opens the doorway.</li>
+          <li>Confirm code proves both devices are looking at the same session.</li>
+          <li>Phone approval grants the temporary surface.</li>
+          <li>Surface OS / WDIG carries the local control path.</li>
+          <li>Magic Cursor acts only inside the approved CyberCrowd session.</li>
+        </ul>
+        <div class="plain-rule">
+          Magic Cursor does not own the phone. It borrows an approved surface for one live session.
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Connection to Surface OS</h2>
+        <p>
+          Surface OS is the local CyberCrowd control layer. It can expose pairing, status,
+          peer discovery, camera control, file movement, input hooks, and device capability signals.
+          Magic Cursor should ride on that layer instead of pretending a single HTML page can control a phone alone.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Connection to WDIG</h2>
+        <p>
+          WDIG asks where the selected thing belongs. Magic Cursor handles the hand movement:
+          select, grab, place, route, approve, or cancel. WDIG decides the destination lane:
+          file, camera, media, archive, viewer upgrade, live room, creator control, client control,
+          or public surface.
+        </p>
+      </article>
+
+      <article class="card full">
+        <h2>Magic Cursor Flow</h2>
+        <ul>
+          <li>Laptop opens CyberCrowd Magic Cursor host.</li>
+          <li>Host creates a short-lived session and QR link.</li>
+          <li>Phone scans the QR link.</li>
+          <li>Phone and laptop show the same confirm code.</li>
+          <li>User approves the temporary CyberCrowd surface.</li>
+          <li>Laptop cursor becomes the active hand for the approved surface.</li>
+          <li>WDIG routes the selected file, media, camera, access state, or action.</li>
+          <li>Session ends when the phone closes, locks, receives interruption, expires, or disconnects.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>Supported CyberCrowd Surfaces</h2>
+        <ul>
+          <li>Phone source surfaces</li>
+          <li>Laptop host surfaces</li>
+          <li>Live Control Room panels</li>
+          <li>Camera package controls</li>
+          <li>Viewer upgrade states</li>
+          <li>Creator and client controls</li>
+          <li>Reten Records media surfaces</li>
+          <li>Atomic Kricket channel surfaces</li>
+          <li>Archive capture paths</li>
+          <li>Secure Surface Hardware / GPIO surfaces</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>Session Discipline</h2>
+        <p>
+          Magic Cursor sessions must be temporary. If the phone page closes, the phone locks,
+          a call interrupts the session, the browser drops, the laptop host closes, the user disconnects,
+          or the timer expires, the link dies and the user pairs again.
+        </p>
+        <div class="warning">
+          No always-on control. No hidden background takeover. No permanent open door.
+        </div>
+      </article>
+
+      <article class="card full">
+        <h2>Live Control Room Use</h2>
+        <p>
+          In the Live Control Room, Magic Cursor can help move attention and control between phones,
+          cameras, monitors, show surfaces, media assets, viewer access states, archive paths, and
+          client or creator rooms. The cursor becomes the operator’s hand across CyberCrowd surfaces,
+          while WDIG keeps the destination decision clear.
+        </p>
+        <p>
+          This is the same foundation as cord-free live streaming: signal first, verify both devices,
+          open a temporary trusted session, move control or media through that session, and close the
+          session when the surface closes.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Security Rule</h2>
+        <p>
+          Magic Cursor should never ask a user to read a code to a stranger. The code is not a support key.
+          The code is a same-room confirmation shown on both of the user’s devices.
+        </p>
+        <div class="plain-rule">
+          QR opens the door. The matching code proves the door belongs to this session.
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Build Direction</h2>
+        <p>
+          The public page explains the control foundation. The working implementation belongs in
+          Surface OS / WDIG: pairing endpoints, trusted surface registry, command lane, peer discovery,
+          file/media movement, and session shutdown behavior.
+        </p>
+      </article>
+
+      <article class="card full">
+        <h2>Connection to CyberCrowd</h2>
+        <p>
+          Magic Cursor may connect to Surface OS, WDIG Routing, Cam Packages, Viewer Upgrades,
+          Live Control Room, Secure Surface Hardware, the Atomic Kricket channel, Reten Records,
+          Public Discourse, Access Passes, Platform Archive, CyberCode, and the CyberCrowd Rules Manual.
+        </p>
+        <div class="plain-rule">
+          Magic Cursor is the CyberCrowd hand across trusted surfaces.
+        </div>
+      </article>
+    </section>
 
     <p class="nav-back">
       <a href="/">Return to CyberCrowd</a>
     </p>
   </main>
-
-  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-
-  <script>
-    const app = document.getElementById("app");
-    const params = new URLSearchParams(window.location.search);
-    const role = params.get("role") || "host";
-    const hostPeerId = params.get("peer") || "";
-    const room = params.get("room") || createRoomId();
-
-    let peer = null;
-    let conn = null;
-    let selectedRemoteId = null;
-    let phoneTray = [];
-    const localPhoneFiles = new Map();
-
-    function createRoomId() {
-      const letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-      let output = "";
-      for (let i = 0; i < 8; i++) {
-        output += letters[Math.floor(Math.random() * letters.length)];
-      }
-      return output;
-    }
-
-    function basePath() {
-      return window.location.origin + window.location.pathname;
-    }
-
-    function makeHostLink() {
-      return basePath() + "?role=host&room=" + encodeURIComponent(room);
-    }
-
-    function makeControllerLink(peerId) {
-      return basePath() + "?role=controller&room=" + encodeURIComponent(room) + "&peer=" + encodeURIComponent(peerId);
-    }
-
-    function qrImageUrl(text) {
-      return "https://api.qrserver.com/v1/create-qr-code/?size=236x236&data=" + encodeURIComponent(text);
-    }
-
-    function setStatus(id, text) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = text;
-    }
-
-    function formatBytes(bytes) {
-      if (!bytes && bytes !== 0) return "unknown size";
-      const sizes = ["B", "KB", "MB", "GB"];
-      let size = bytes;
-      let index = 0;
-      while (size >= 1024 && index < sizes.length - 1) {
-        size = size / 1024;
-        index++;
-      }
-      return size.toFixed(index === 0 ? 0 : 1) + " " + sizes[index];
-    }
-
-    function escapeHtml(value) {
-      return String(value).replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-      }[char]));
-    }
-
-    function escapeAttribute(value) {
-      return String(value).replace(/"/g, "&quot;");
-    }
-
-    function safeClipboard(text, statusElement) {
-      if (!navigator.clipboard) {
-        statusElement.textContent = "Clipboard unavailable. Copy the link manually.";
-        return;
-      }
-
-      navigator.clipboard.writeText(text).then(() => {
-        statusElement.textContent = "Copied link.";
-      }).catch(() => {
-        statusElement.textContent = "Copy failed. Copy the link manually.";
-      });
-    }
-
-    function sendToPeer(data) {
-      if (!conn || !conn.open) return false;
-      conn.send(data);
-      return true;
-    }
-
-    function renderHost() {
-      app.innerHTML = `
-        <div class="grid">
-          <article class="card">
-            <h2>Laptop Host</h2>
-            <p>
-              Keep this page open on the laptop. Scan the QR with the phone one time.
-              After pairing, the laptop cursor works the phone tray from this screen.
-            </p>
-
-            <div id="qrBox">
-              <span style="color:#08111d;font-weight:900;">Creating QR...</span>
-            </div>
-
-            <div class="linkbox" id="pairLink">Creating pairing link...</div>
-
-            <button id="copyLink">Copy phone link</button>
-            <button id="newRoom" class="secondary">New room</button>
-
-            <div class="status" id="hostStatus">Starting host...</div>
-
-            <div class="warning">
-              Browser security still requires the phone to grant file access once. After that, laptop controls the tray.
-            </div>
-          </article>
-
-          <article class="card">
-            <h2>Phone Surface Tray Seen From Laptop</h2>
-            <p>
-              This is the phone surface exposed to the laptop. Click an item to grab it,
-              then drop it into the laptop receive lane.
-            </p>
-
-            <div class="surface-tray" id="remoteTray">
-              <p class="file-meta">Waiting for phone tray...</p>
-            </div>
-
-            <div class="drop-target" id="dropTarget">
-              <div>
-                <strong>Laptop Receive Lane</strong>
-                Select a phone item above, then click here to pull it to the laptop.
-              </div>
-            </div>
-
-            <div class="status" id="transferStatus">No phone tray connected yet.</div>
-          </article>
-
-          <article class="card full">
-            <h2>Received on Laptop</h2>
-            <div id="receivedFiles"></div>
-          </article>
-        </div>
-      `;
-
-      const hostStatus = document.getElementById("hostStatus");
-      const qrBox = document.getElementById("qrBox");
-      const pairLink = document.getElementById("pairLink");
-
-      peer = new Peer(undefined, { debug: 1 });
-
-      peer.on("open", id => {
-        const link = makeControllerLink(id);
-        pairLink.textContent = link;
-        qrBox.innerHTML = `<img src="${qrImageUrl(link)}" alt="Magic Cursor phone pairing QR code">`;
-        hostStatus.textContent = "Host ready. Scan QR with phone.";
-        window.history.replaceState({}, "", makeHostLink());
-      });
-
-      peer.on("connection", connection => {
-        conn = connection;
-        wireHostConnection();
-      });
-
-      peer.on("error", error => {
-        hostStatus.textContent = "Peer error: " + error.message;
-      });
-
-      document.getElementById("copyLink").addEventListener("click", () => {
-        safeClipboard(pairLink.textContent, hostStatus);
-      });
-
-      document.getElementById("newRoom").addEventListener("click", () => {
-        window.location.href = basePath() + "?role=host&room=" + createRoomId();
-      });
-
-      document.getElementById("dropTarget").addEventListener("click", () => {
-        if (!selectedRemoteId) {
-          setStatus("transferStatus", "Select a phone tray item first.");
-          return;
-        }
-
-        const item = phoneTray.find(entry => entry.id === selectedRemoteId);
-        if (!item) {
-          setStatus("transferStatus", "Selected item is no longer available.");
-          return;
-        }
-
-        const ok = sendToPeer({
-          type: "request-file",
-          id: selectedRemoteId
-        });
-
-        if (ok) {
-          document.getElementById("dropTarget").classList.add("ready");
-          setStatus("transferStatus", "Pulling " + item.name + " from phone surface...");
-        } else {
-          setStatus("transferStatus", "Phone surface is not connected.");
-        }
-      });
-    }
-
-    function wireHostConnection() {
-      conn.on("open", () => {
-        setStatus("transferStatus", "Phone paired. Waiting for tray.");
-        conn.send({ type: "host-ready", room });
-      });
-
-      conn.on("data", data => {
-        if (!data || !data.type) return;
-
-        if (data.type === "tray-manifest") {
-          phoneTray = data.files || [];
-          renderRemoteTray();
-          setStatus("transferStatus", "Phone tray loaded. Use laptop cursor to select and pull.");
-        }
-
-        if (data.type === "file-response") {
-          receiveFileOnHost(data);
-          setStatus("transferStatus", "Received " + (data.name || "file") + ".");
-          document.getElementById("dropTarget").classList.remove("ready");
-        }
-
-        if (data.type === "phone-status") {
-          setStatus("transferStatus", data.message || "Phone status updated.");
-        }
-      });
-
-      conn.on("close", () => {
-        setStatus("transferStatus", "Phone surface disconnected.");
-      });
-
-      conn.on("error", error => {
-        setStatus("transferStatus", "Connection error: " + error.message);
-      });
-    }
-
-    function renderRemoteTray() {
-      const tray = document.getElementById("remoteTray");
-      if (!tray) return;
-
-      if (!phoneTray.length) {
-        tray.innerHTML = `<p class="file-meta">Phone surface is paired, but the tray is empty.</p>`;
-        return;
-      }
-
-      tray.innerHTML = phoneTray.map(file => `
-        <div class="surface-row ${file.id === selectedRemoteId ? "selected" : ""}" data-id="${escapeAttribute(file.id)}">
-          <div>
-            <div class="file-name">${escapeHtml(file.name)}</div>
-            <div class="file-meta">${formatBytes(file.size)} · ${escapeHtml(file.type || "file")}</div>
-          </div>
-          <button type="button">Grab</button>
-        </div>
-      `).join("");
-
-      tray.querySelectorAll(".surface-row").forEach(row => {
-        row.addEventListener("click", () => {
-          selectedRemoteId = row.getAttribute("data-id");
-          renderRemoteTray();
-
-          const item = phoneTray.find(entry => entry.id === selectedRemoteId);
-          if (item) {
-            setStatus("transferStatus", "Grabbed " + item.name + ". Click Laptop Receive Lane to drop.");
-          }
-        });
-      });
-    }
-
-    function receiveFileOnHost(data) {
-      const list = document.getElementById("receivedFiles");
-      const blob = data.file;
-      const url = URL.createObjectURL(blob);
-
-      const card = document.createElement("div");
-      card.className = "surface-row";
-      card.innerHTML = `
-        <div>
-          <div class="file-name">Received: ${escapeHtml(data.name || "file")}</div>
-          <div class="file-meta">${formatBytes(data.size)} · ${escapeHtml(data.mime || "file")}</div>
-        </div>
-        <a class="download-link" href="${url}" download="${escapeAttribute(data.name || "cybercrowd-file")}">Save</a>
-      `;
-
-      list.prepend(card);
-    }
-
-    function renderController() {
-      app.innerHTML = `
-        <div class="grid">
-          <article class="card full">
-            <h2>Phone Surface</h2>
-            <p>
-              This phone is paired as a CyberCrowd surface. Load the tray once,
-              then leave the phone alone. The laptop cursor will select, grab,
-              and pull items from the phone tray.
-            </p>
-
-            <div class="phone-standby">
-              <div>
-                <strong>Phone Surface Ready</strong>
-                Room ${escapeHtml(room)}<br><br>
-                <button id="loadTray">Load Phone Tray Once</button>
-                <input id="fileInput" type="file" multiple>
-                <div class="status" id="controllerStatus">Connecting to laptop...</div>
-                <div class="warning">
-                  Browser security requires one file permission step. After files are staged, laptop controls the tray.
-                </div>
-              </div>
-            </div>
-
-            <div class="card" style="margin-top:18px;">
-              <h2>Tray Contents</h2>
-              <div id="localTrayList"><p class="file-meta">No files staged yet.</p></div>
-            </div>
-          </article>
-        </div>
-      `;
-
-      if (!hostPeerId) {
-        setStatus("controllerStatus", "Missing host peer ID. Scan the QR from the laptop.");
-        return;
-      }
-
-      peer = new Peer(undefined, { debug: 1 });
-
-      peer.on("open", () => {
-        conn = peer.connect(hostPeerId, { reliable: true });
-        wireControllerConnection();
-      });
-
-      peer.on("error", error => {
-        setStatus("controllerStatus", "Peer error: " + error.message);
-      });
-
-      const loadTray = document.getElementById("loadTray");
-      const fileInput = document.getElementById("fileInput");
-
-      loadTray.addEventListener("click", () => {
-        fileInput.click();
-      });
-
-      fileInput.addEventListener("change", () => {
-        const files = Array.from(fileInput.files || []);
-        stagePhoneFiles(files);
-        fileInput.value = "";
-      });
-    }
-
-    function wireControllerConnection() {
-      conn.on("open", () => {
-        setStatus("controllerStatus", "Paired. Load the tray once, then laptop can control it.");
-        conn.send({ type: "phone-status", message: "Phone surface paired. Waiting for tray." });
-      });
-
-      conn.on("data", data => {
-        if (!data || !data.type) return;
-
-        if (data.type === "host-ready") {
-          setStatus("controllerStatus", "Laptop host answered. Load tray when ready.");
-        }
-
-        if (data.type === "request-file") {
-          const file = localPhoneFiles.get(data.id);
-          if (!file) {
-            conn.send({ type: "phone-status", message: "Requested item is not available on phone tray." });
-            return;
-          }
-
-          conn.send({
-            type: "file-response",
-            id: data.id,
-            name: file.name,
-            size: file.size,
-            mime: file.type || "application/octet-stream",
-            file
-          });
-
-          setStatus("controllerStatus", "Laptop pulled " + file.name + ".");
-        }
-      });
-
-      conn.on("close", () => {
-        setStatus("controllerStatus", "Laptop disconnected.");
-      });
-
-      conn.on("error", error => {
-        setStatus("controllerStatus", "Connection error: " + error.message);
-      });
-    }
-
-    function stagePhoneFiles(files) {
-      if (!files.length) return;
-
-      files.forEach(file => {
-        const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random();
-        localPhoneFiles.set(id, file);
-      });
-
-      renderLocalTray();
-
-      if (conn && conn.open) {
-        conn.send({
-          type: "tray-manifest",
-          files: Array.from(localPhoneFiles.entries()).map(([id, file]) => ({
-            id,
-            name: file.name,
-            size: file.size,
-            type: file.type || "file"
-          }))
-        });
-
-        setStatus("controllerStatus", "Tray staged. You can leave the phone alone.");
-      } else {
-        setStatus("controllerStatus", "Tray staged, but laptop is not connected.");
-      }
-    }
-
-    function renderLocalTray() {
-      const list = document.getElementById("localTrayList");
-      if (!list) return;
-
-      const files = Array.from(localPhoneFiles.entries());
-
-      if (!files.length) {
-        list.innerHTML = `<p class="file-meta">No files staged yet.</p>`;
-        return;
-      }
-
-      list.innerHTML = files.map(([id, file]) => `
-        <div class="surface-row">
-          <div>
-            <div class="file-name">${escapeHtml(file.name)}</div>
-            <div class="file-meta">${formatBytes(file.size)} · ${escapeHtml(file.type || "file")}</div>
-          </div>
-          <span class="file-meta">In tray</span>
-        </div>
-      `).join("");
-    }
-
-    if (role === "controller") {
-      renderController();
-    } else {
-      renderHost();
-    }
-  </script>
 </body>
 </html>
