@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Sign-Up Area</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#gate {
+    width: 90%;
+    max-width: 440px;
+    background: #101010;
+    border: 1px solid #00ffff;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 0 28px rgba(0,255,255,0.25);
+}
+
+h1 {
+    color: #00ffff;
+    margin-top: 0;
+    font-size: 26px;
+    letter-spacing: 2px;
+}
+
+p {
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.button-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+button {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#continueBtn {
+    background: #00ffff;
+    color: black;
+}
+
+#cancelBtn {
+    background: #333;
+    color: white;
+}
+
+#formArea {
+    display: none;
+    margin-top: 22px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: white;
+    box-sizing: border-box;
+}
+
+#submitBtn {
+    width: 100%;
+    background: #00ffaa;
+    color: black;
+}
+
+#responseBox {
+    display: none;
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 10px;
+    background: #171717;
+    border: 1px solid #00ffaa;
+    line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+
+<div id="gate">
+
+<h1>Cybercrowd</h1>
+
+<p>
+Welcome to Cybercrowd, you are entering a sign-up area. Please create a free profile.
+</p>
+
+<div class="button-row">
+    <button id="continueBtn">CONTINUE</button>
+    <button id="cancelBtn">CANCEL</button>
+</div>
+
+<div id="formArea">
+
+<input id="username" placeholder="Username">
+
+<input id="email" placeholder="Email">
+
+<input id="password" type="password" placeholder="Password">
+
+<button id="submitBtn">CREATE FREE PROFILE</button>
+
+<div id="responseBox"></div>
+
+</div>
+
+</div>
+
+<script>
+const REGISTRATION_OPEN = false;
+
+const continueBtn = document.getElementById("continueBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+const formArea = document.getElementById("formArea");
+const submitBtn = document.getElementById("submitBtn");
+const responseBox = document.getElementById("responseBox");
+
+continueBtn.onclick = () => {
+    formArea.style.display = "block";
+};
+
+cancelBtn.onclick = () => {
+    window.location.href = "nav.html";
+};
+
+submitBtn.onclick = () => {
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!username || !email || !password) {
+        responseBox.style.display = "block";
+        responseBox.innerHTML = "Please complete all fields.";
+        return;
+    }
+
+    responseBox.style.display = "block";
+
+    if (REGISTRATION_OPEN === true) {
+        responseBox.innerHTML =
+        "Your free Cybercrowd profile has been created.<br><br>" +
+        "Please check your email and verify your account to continue.";
+    } else {
+        responseBox.innerHTML =
+        "Cybercrowd registration is currently operating in controlled access mode.<br><br>" +
+        "Your registration request has been received.<br><br>" +
+        "Please wait for account authorization.";
+    }
+};
+</script>
+
+</
