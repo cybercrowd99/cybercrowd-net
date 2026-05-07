@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd FlowRail</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 28px;
+    padding-bottom: 120px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 32px;
+    letter-spacing: 4px;
+}
+
+#subtitle {
+    margin-top: 10px;
+    opacity: 0.7;
+    max-width: 720px;
+    line-height: 1.5;
+}
+
+#panel {
+    margin-top: 32px;
+    max-width: 760px;
+    min-height: 180px;
+    border: 1px solid rgba(0,255,255,0.35);
+    border-radius: 20px;
+    padding: 24px;
+    background: rgba(10,10,10,0.82);
+    box-shadow: 0 0 24px rgba(0,255,255,0.14);
+}
+
+#panelTitle {
+    color: #00ffff;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+#panelText {
+    opacity: 0.85;
+    line-height: 1.6;
+}
+
+#rail {
+    position: fixed;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    width: 94%;
+    max-width: 980px;
+    min-height: 78px;
+    background: rgba(8,8,8,0.92);
+    border: 1px solid rgba(0,255,255,0.35);
+    border-radius: 24px;
+    box-shadow: 0 0 26px rgba(0,255,255,0.18);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+    z-index: 50;
+}
+
+.railButton {
+    border: 1px solid rgba(0,255,255,0.25);
+    border-radius: 16px;
+    background: rgba(0,255,255,0.06);
+    color: white;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    min-height: 56px;
+    transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    border 0.2s ease;
+}
+
+.railButton:hover,
+.railButton.active {
+    transform: translateY(-4px);
+    background: rgba(0,255,255,0.16);
+    border: 1px solid rgba(0,255,255,0.75);
+    box-shadow: 0 0 18px rgba(0,255,255,0.24);
+}
+
+.badge {
+    display: block;
+    color: #00ffaa;
+    font-size: 10px;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+#ticker {
+    position: fixed;
+    left: 50%;
+    bottom: 104px;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 940px;
+    color: #00ffaa;
+    font-size: 12px;
+    letter-spacing: 1px;
+    opacity: 0.78;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    #rail {
+        grid-template-columns: repeat(4, 1fr);
+        min-height: 142px;
+    }
+
+    #stage {
+        padding-bottom: 190px;
+    }
+
+    #ticker {
+        bottom: 170px;
+    }
+}
+</style>
