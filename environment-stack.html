@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cybercrowd Operating Environment Stack</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+#stack {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+}
+
+.stackCard {
+    min-height: 150px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(10,10,10,0.9);
+    padding: 22px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease, border .2s ease;
+}
+
+.stackCard:hover {
+    transform: scale(1.03);
+    border: 1px solid rgba(0,255,255,0.8);
+    box-shadow: 0 0 22px rgba(0,255,255,0.22);
+}
+
+.cardTitle {
+    color: #00ffff;
+    font-size: 21px;
+    margin-bottom: 10px;
+}
+
+.cardText {
+    opacity: 0.82;
+    line-height: 1.45;
+    font-size: 14px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 32px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">CYBERCROWD STACK</div>
+<div id="subtitle">Operating environment launcher. No squash. Every system stands.</div>
+
+<div id="stack">
+
+<div class="stackCard" onclick="go('nav.html')">
+    <div class="cardTitle">NAV Environment</div>
+    <div class="cardText">Exploration hub and route surface.</div>
+</div>
+
+<div class="stackCard" onclick="go('signup.html')">
+    <div class="cardTitle">Signup Gate</div>
+    <div class="cardText">Controlled registration and free profile entry.</div>
+</div>
+
+<div class="stackCard" onclick="go('security
