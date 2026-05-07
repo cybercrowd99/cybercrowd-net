@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Security Gate</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#gate {
+    width: 92%;
+    max-width: 520px;
+    background: rgba(12,12,12,0.92);
+    border: 1px solid rgba(0,255,255,0.42);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: 0 0 28px rgba(0,255,255,0.18);
+}
+
+h1 {
+    color: #00ffff;
+    margin-top: 0;
+    letter-spacing: 3px;
+}
+
+p {
+    opacity: 0.86;
+    line-height: 1.55;
+}
+
+.statusBox {
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 14px;
+    background: #151515;
+    border: 1px solid rgba(0,255,170,0.45);
+}
+
+.label {
+    color: #00ffaa;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+}
+
+.value {
+    font-size: 18px;
+}
+
+button {
+    width: 100%;
+    margin-top: 14px;
