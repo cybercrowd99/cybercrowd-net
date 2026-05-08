@@ -7,8 +7,7 @@
 <title>Cybercrowd Tabletop Status</title>
 
 <style>
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
     background: #050505;
@@ -20,13 +19,8 @@ body {
     min-height: 100vh;
     padding: 24px;
     box-sizing: border-box;
-
     background:
-    radial-gradient(
-        circle at center,
-        rgba(0,255,255,0.10),
-        transparent 42%
-    ),
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
     #050505;
 }
 
@@ -44,24 +38,13 @@ body {
     margin-bottom: 30px;
 }
 
-#statusPanel {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
 .section {
-    margin-bottom: 24px;
-
+    max-width: 1100px;
+    margin: 0 auto 24px auto;
     border-radius: 22px;
-
-    border:
-    1px solid rgba(0,255,255,0.30);
-
-    background:
-    rgba(10,10,10,0.90);
-
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.90);
     padding: 22px;
-
     box-sizing: border-box;
 }
 
@@ -78,22 +61,14 @@ body {
 
 .surfaceGrid {
     display: grid;
-
-    grid-template-columns:
-    repeat(auto-fit, minmax(260px, 1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 18px;
 }
 
 .surfaceCard {
     border-radius: 18px;
-
-    border:
-    1px solid rgba(0,255,255,0.25);
-
-    background:
-    rgba(0,0,0,0.45);
-
+    border: 1px solid rgba(0,255,255,0.25);
+    background: rgba(0,0,0,0.45);
     padding: 18px;
 }
 
@@ -117,6 +92,10 @@ body {
     color: #ff3355;
 }
 
+.unknown {
+    color: #ffaa00;
+}
+
 .owner {
     color: #ffff00;
 }
@@ -135,15 +114,11 @@ body {
 
 <div id="stage">
 
-<div id="title">
-TABLETOP STATUS
-</div>
+<div id="title">TABLETOP STATUS</div>
 
 <div id="subtitle">
-Operational behavior testing and live infrastructure awareness.
+Live surface heartbeat and operational behavior testing.
 </div>
-
-<div id="statusPanel">
 
 <div class="section">
 
@@ -153,23 +128,22 @@ Tabletop Trial Status
 
 <div class="statusRow">
 Trial Mode:
-<span id="trialMode">
-Loading...
-</span>
+<span id="trialMode">Loading...</span>
 </div>
 
 <div class="statusRow">
 Current Owner:
-<span class="owner" id="currentOwner">
-Loading...
-</span>
+<span class="owner" id="currentOwner">Loading...</span>
 </div>
 
 <div class="statusRow">
 Registry Version:
-<span id="registryVersion">
-Loading...
-</span>
+<span id="registryVersion">Loading...</span>
+</div>
+
+<div class="statusRow">
+Last Refresh:
+<span id="lastRefresh">Loading...</span>
 </div>
 
 </div>
@@ -177,165 +151,123 @@ Loading...
 <div class="section">
 
 <div class="sectionTitle">
-Registered Surfaces
+Registered Surfaces + Live Heartbeat
 </div>
 
-<div class="surfaceGrid" id="surfaceGrid">
-</div>
-
-</div>
+<div class="surfaceGrid" id="surfaceGrid"></div>
 
 </div>
 
 <div id="footer">
-CYBERCROWD TABLETOP OPERATIONAL STATUS V1
+CYBERCROWD TABLETOP HEARTBEAT STATUS V2
 </div>
 
 </div>
 
 <script>
+const surfaceGrid = document.getElementById("surfaceGrid");
+const trialMode = document.getElementById("trialMode");
+const currentOwner = document.getElementById("currentOwner");
+const registryVersion = document.getElementById("registryVersion");
+const lastRefresh = document.getElementById("lastRefresh");
 
-const surfaceGrid =
-document.getElementById(
-    "surfaceGrid"
-);
+function statusClass(status) {
+    if (status === "online") {
+        return "online";
+    }
 
-const trialMode =
-document.getElementById(
-    "trialMode"
-);
+    if (status === "offline") {
+        return "offline";
+    }
 
-const currentOwner =
-document.getElementById(
-    "currentOwner"
-);
+    return "unknown";
+}
 
-const registryVersion =
-document.getElementById(
-    "registryVersion"
-);
+function formatLastSeen(heartbeat) {
+    if (!heartbeat || !heartbeat.last_seen) {
+        return "not seen yet";
+    }
+
+    const date = new Date(heartbeat.last_seen);
+    return date.toLocaleString();
+}
 
 async function loadTabletopStatus() {
-
     try {
+        const statusResponse = await fetch("/api/tabletop-status");
+        const statusData = await statusResponse.json();
 
-        const response =
-        await fetch(
-            "/api/tabletop-status"
-        );
+        const registryResponse = await fetch("/api/surface-registry");
+        const registryData = await registryResponse.json();
 
-        const data =
-        await response.json();
-
-        trialMode.innerHTML =
-            data.tabletop_enabled
+        trialMode.innerHTML = statusData.tabletop_enabled
             ? "<span class='online'>ENABLED</span>"
             : "<span class='offline'>DISABLED</span>";
 
-        currentOwner.innerHTML =
-            data.current_owner;
+        currentOwner.innerHTML = statusData.current_owner;
+        registryVersion.innerHTML = registryData.registry.version;
+        lastRefresh.innerHTML = new Date().toLocaleString();
 
-        loadSurfaceCards(
-            data.surfaces
+        renderSurfaceCards(
+            statusData.surfaces,
+            statusData.heartbeat || {}
         );
 
     } catch (err) {
-
-        trialMode.innerHTML =
-        "<span class='offline'>FAILED</span>";
+        trialMode.innerHTML = "<span class='offline'>FAILED</span>";
+        lastRefresh.innerHTML = new Date().toLocaleString();
     }
 }
 
-async function loadRegistryVersion() {
-
-    try {
-
-        const response =
-        await fetch(
-            "/api/surface-registry"
-        );
-
-        const data =
-        await response.json();
-
-        registryVersion.innerHTML =
-            data.registry.version;
-
-    } catch (err) {
-
-        registryVersion.innerHTML =
-        "UNKNOWN";
-    }
-}
-
-function loadSurfaceCards(surfaces) {
-
+function renderSurfaceCards(surfaces, heartbeat) {
     surfaceGrid.innerHTML = "";
 
-    Object.values(surfaces)
-    .forEach((surface) => {
+    Object.values(surfaces).forEach((surface) => {
+        const live = heartbeat[surface.id] || {
+            status: "unknown",
+            last_seen: null
+        };
 
-        const card =
-        document.createElement("div");
+        const card = document.createElement("div");
+        card.className = "surfaceCard";
 
-        card.className =
-        "surfaceCard";
+        card.innerHTML =
+            "<div class='surfaceTitle'>" +
+            surface.label +
+            "</div>" +
 
-        card.innerHTML = `
+            "<div class='surfaceData'>" +
 
-        <div class="surfaceTitle">
-        ${surface.label}
-        </div>
+            "ID: " + surface.id + "<br><br>" +
+            "Type: " + surface.type + "<br><br>" +
+            "Route: " + surface.route + "<br><br>" +
+            "Trusted: " + surface.trusted + "<br><br>" +
+            "Can Own Control: " + surface.can_own_control + "<br><br>" +
+            "Can Watch: " + surface.can_watch + "<br><br>" +
+            "Can Move Pointer: " + surface.can_move_pointer + "<br><br>" +
 
-        <div class="surfaceData">
+            "Registry Status: " +
+            "<span class='" + statusClass(surface.status) + "'>" +
+            (surface.status || "unknown") +
+            "</span><br><br>" +
 
-        ID:
-        ${surface.id}
-        <br><br>
+            "Live Heartbeat: " +
+            "<span class='" + statusClass(live.status) + "'>" +
+            live.status +
+            "</span><br><br>" +
 
-        Type:
-        ${surface.type}
-        <br><br>
+            "Last Seen: " +
+            formatLastSeen(live) +
 
-        Route:
-        ${surface.route}
-        <br><br>
-
-        Trusted:
-        ${surface.trusted}
-        <br><br>
-
-        Can Own Control:
-        ${surface.can_own_control}
-        <br><br>
-
-        Can Watch:
-        ${surface.can_watch}
-        <br><br>
-
-        Can Move Pointer:
-        ${surface.can_move_pointer}
-        <br><br>
-
-        Status:
-        <span class="${
-            surface.status === "online"
-            ? "online"
-            : "offline"
-        }">
-        ${surface.status}
-        </span>
-
-        </div>
-        `;
+            "</div>";
 
         surfaceGrid.appendChild(card);
     });
 }
 
 loadTabletopStatus();
-loadRegistryVersion();
 
+setInterval(loadTabletopStatus, 5000);
 </script>
 
 </body>
