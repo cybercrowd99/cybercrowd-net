@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Ledger Event Simulator</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.card {
+    margin-top: 18px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+p {
+    line-height: 1.65;
+    opacity: 0.88;
+}
+
+.buttonGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+button {
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: #00ffff;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.warning {
+    background: #ffaa00;
+}
+
+button.critical {
+    background: #ff3355;
+    color: white;
+}
+
+.eventItem {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.05);
+    border: 1px solid rgba(0,255,255,0.16);
+    line-height: 1.55;
+}
+
+.eventType {
+    color: #00ffff;
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.eventStatus {
+    margin-top: 6px;
+    color: #00ffaa;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.eventMeta {
+    margin-top: 6px;
+    opacity: 0.72;
+    font-size: 13px;
+}
+
+.code {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.58);
+    border: 1px solid rgba(0,255,255,0.18);
+    font-family: Consolas, monospace;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    line-height: 1.55;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+<div id="wrap">
+
+<h1>LEDGER EVENT SIMULATOR</h1>
+
+<div id="subtitle">
+Simulated operational lineage events before Magic Cursor physical injection.
+</div>
+
+<div class="card">
+<h2>Purpose</h2>
+<p>
+This simulator creates local ledger event objects that follow CyberCrowd event physics:
+arrival, propagation, lineage, replay, governance, canon, and surface visibility.
+</p>
+
+<div class="code">Magic Cursor later connects here.
+For now: buttons simulate ledger events safely.</div>
+</div>
+
+<div class="card">
+
+<h2>Simulate Ledger Events</h2>
+
+<div class="buttonGrid">
+
+<button onclick="simulateEvent('subscription_started')">
+Subscription Start
+</button>
+
+<button onclick="simulateEvent('subscription_stopped')">
+Subscription Stop
+</button>
+
+<button onclick="simulateEvent('creator_view_recorded')">
+Creator View
+</button>
+
+<button onclick="simulateEvent('creator_payout_accrued')">
+Creator Payout Accrued
+</button>
+
+<button onclick="simulateEvent('creator_payout_executed')">
+Creator Payout Executed
+</button>
+
+<button onclick="simulateEvent('crwd_transfer_recorded')">
+CRWD Transfer
+</button>
+
+<button onclick="simulateEvent('adworm_interaction_recorded')">
+AdWorm Interaction
+</button>
+
+<button onclick="simulateEvent('node_heartbeat_recorded')">
+Node Heartbeat
+</button>
+
+<button onclick="simulateEvent('archive_upload_recorded')">
+Archive Upload
+</button>
+
+<button class="warning" onclick="simulateEvent('governance_override_created')">
+Governance Override
+</button>
+
+<button class="warning" onclick="simulateEvent('replay_event_executed')">
+Replay Event
+</button>
+
+<button class="critical" onclick="simulateEvent('deadletter_event_created')">
+Deadletter Event
+</button>
+
+<button class="critical" onclick="clearEvents()">
+Clear Events
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+<h2>Ledger Event Trail</h2>
+<div id="eventList">
+No ledger events yet.
+</div>
+</div>
+
+<div id="footer">
+CYBERCROWD LEDGER EVENT SIMULATOR V1
+</div>
+
+</div>
+</div>
+
+<script>
+const eventList =
+document.getElementById("eventList");
+
+const ledgerEvents = [];
+
+const eventTemplates = {
+
+    subscription_started: {
+        rail: "subscription",
+        lane_source: "Lane A - Intake",
+        compartment_source: "Intake Compartment",
+        native_amount: 10.00,
+        native_unit: "USD",
+        usd_mirror_rate: 1.00,
+        notes: "Tier 1 subscription started."
+    },
+
+    subscription_stopped: {
+        rail: "subscription",
+        lane_source: "Lane A - Intake",
+        compartment_source: "Intake Compartment",
+        native_amount: 0.00,
+        native_unit: "USD",
+        usd_mirror_rate: 1.00,
+        notes: "Subscription stopped."
+    },
+
+    creator_view_recorded: {
+        rail: "creator_payout",
+        lane_source: "Lane B - Processing",
+        compartment_source: "Processing Compartment",
+        native_amount: 1.00,
+        native_unit: "ACCESS",
+        usd_mirror_rate: 0.01,
+        notes: "Creator content view recorded."
+    },
+
+    creator_payout_accrued: {
+        rail: "creator_payout",
+        lane_source: "Lane B - Processing",
+        compartment_source: "Creative Sovereignty Compartment",
+        native_amount: 7.00,
+        native_unit: "USD",
+        usd_mirror_rate: 1.00,
+        notes: "Creator payout accrued from split rule."
+    },
+
+    creator_payout_executed: {
+        rail: "creator_payout",
+        lane_source: "Lane B - Processing",
+        compartment_source: "Creative Sovereignty Compartment",
+        native_amount: 7.00,
+        native_unit: "USD",
+        usd_mirror_rate: 1.00,
+        notes: "Creator payout execution recorded."
+    },
+
+    crwd_transfer_recorded: {
+        rail: "CRWD",
+        lane_source: "Lane B - Processing",
+        compartment_source: "Processing Compartment",
+        native_amount: 250000.00,
+        native_unit: "CRWD",
+        usd_mirror_rate: 0.00001,
+        notes: "CRWD settlement recognition recorded."
+    },
+
+    adworm_interaction_recorded: {
+        rail: "adworm",
+        lane_source: "Lane B - Processing",
+        compartment_source: "Processing Compartment",
+        native_amount: 1.00,
+        native_unit: "CREDIT",
+        usd_mirror_rate: 0.005,
+        notes: "AdWorm interaction event recorded."
+    },
+
+    node_heartbeat_recorded: {
+        rail: "node_operator",
+        lane_source: "Lane A - Intake",
+        compartment_source: "Infrastructure Compartment",
+        native_amount: 1.00,
+        native_unit: "NODE",
+        usd_mirror_rate: 0.00,
+        notes: "Node heartbeat verified."
+    },
+
+    archive_upload_recorded: {
+        rail: "archive_lineage",
+        lane_source: "Lane A - Intake",
+        compartment_source: "Canon Compartment",
+        native_amount: 1.00,
+        native_unit: "STORAGE",
+        usd_mirror_rate: 0.02,
+        notes: "Archive upload recorded."
+    },
+
+    governance_override_created: {
+        rail: "governance_override",
+        lane_source: "Override Lane",
+        compartment_source: "Governance Compartment",
+        native_amount: 0.00,
+        native_unit: "RULE",
+        usd_mirror_rate: 0.00,
+        notes: "Governance override created."
+    },
+
+    replay_event_executed: {
+        rail: "replay",
+        lane_source: "Replay Lane",
+        compartment_source: "Continuity Compartment",
+        native_amount: 0.00,
+        native_unit: "REPLAY",
+        usd_mirror_rate: 0.00,
+        notes: "Replay event executed."
+    },
+
+    deadletter_event_created: {
+        rail: "deadletter",
+        lane_source: "Deadletter Lane",
+        compartment_source: "Resilience Compartment",
+        native_amount: 0.00,
+        native_unit: "FAILED_EVENT",
+        usd_mirror_rate: 0.00,
+        notes: "Failed event routed to deadletter."
+    }
+};
+
+function simulateEvent(eventType) {
+
+    const template =
+    eventTemplates[eventType];
+
+    if (!template) {
+        return;
+    }
+
+    const now =
+    new Date().toISOString();
+
+    const id =
+    Date.now() +
+    "_" +
+    Math.floor(Math.random() * 10000);
+
+    const event = {
+        event_id:
+        "evt_" + id,
+
+        event_type:
+        eventType,
+
+        event_status:
+        "COMMITTED",
+
+        timestamp:
+        now,
+
+        rail:
+        template.rail,
+
+        lane_source:
+        template.lane_source,
+
+        compartment_source:
+        template.compartment_source,
+
+        native_amount:
+        template.native_amount,
+
+        native_unit:
+        template.native_unit,
+
+        usd_mirror_amount:
+        template.native_amount * template.usd_mirror_rate,
+
+        usd_mirror_rate:
+        template.usd_mirror_rate,
+
+        member_id:
+        "member_demo",
+
+        creator_id:
+        eventType.includes("creator")
+            ? "creator_demo"
+            : null,
+
+        asset_id:
+        "asset_demo",
+
+        origin_id:
+        "origin_" + id,
+
+        propagation_id:
+        "prop_" + id,
+
+        replay_id:
+        "replay_" + id,
+
+        governance_id:
+        eventType.includes("governance")
+            ? "gov_" + id
+            : null,
+
+        previous_event_id:
+        null,
+
+        canonical_record_id:
+        "canon_" + id,
+
+        notes:
+        template.notes
+    };
+
+    ledgerEvents.unshift(event);
+
+    renderEvents();
+}
+
+function clearEvents() {
+
+    ledgerEvents.length = 0;
+
+    renderEvents();
+}
+
+function renderEvents() {
+
+    if (ledgerEvents.length === 0) {
+
+        eventList.innerHTML =
+        "No ledger events yet.";
+
+        return;
+    }
+
+    eventList.innerHTML = "";
+
+    ledgerEvents.forEach((event) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "eventItem";
+
+        item.innerHTML =
+            "<div class='eventType'>" +
+            event.event_type +
+            "</div>" +
+
+            "<div class='eventStatus'>" +
+            event.event_status +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "Rail: " +
+            event.rail +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "Lane: " +
+            event.lane_source +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "Compartment: " +
+            event.compartment_source +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "Native: " +
+            event.native_amount +
+            " " +
+            event.native_unit +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "USD Mirror: " +
+            event.usd_mirror_amount +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "Replay ID: " +
+            event.replay_id +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "Canon ID: " +
+            event.canonical_record_id +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            event.timestamp +
+            "</div>";
+
+        eventList.appendChild(item);
+    });
+}
+</script>
+
+</body>
+</html>
