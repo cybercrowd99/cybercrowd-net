@@ -1,52 +1,102 @@
-{
-  "policy_name": "Cybercrowd Retention Policy",
-  "version": "V1",
+const fs = require("fs");
+const path = require("path");
 
-  "objective": {
-    "purpose": "Operational accountability and continuity awareness",
-    "non_objective": "Hostile surveillance or invasive behavioral harvesting"
-  },
+const RETENTION_POLICY_PATH =
+path.join(
+    __dirname,
+    "retention-policy.json"
+);
 
-  "allowed_retention": {
-    "heartbeat_events": true,
-    "surface_connect_disconnect": true,
-    "ownership_transfer_events": true,
-    "emergency_stop_events": true,
-    "system_fault_events": true,
-    "deployment_events": true,
-    "runtime_status_events": true
-  },
+let cachedPolicy = null;
 
-  "forbidden_retention": {
-    "keystroke_logging": true,
-    "private_message_capture": true,
-    "screen_recording_without_notice": true,
-    "hidden_microphone_capture": true,
-    "behavioral_profiling_without_disclosure": true,
-    "silent_surveillance": true
-  },
+function loadRetentionPolicy() {
 
-  "retention_behavior": {
-    "disclosure_required": true,
-    "user_visibility_required": true,
-    "auditability_required": true,
-    "tamper_evidence_preferred": true,
-    "retention_should_remain_serviceable": true
-  },
+    try {
 
-  "future_layers": {
-    "retention_loader": false,
-    "retention_dashboard": false,
-    "event_archives": false,
-    "lawful_audit_exports": false,
-    "tabletop_replay": false
-  },
+        const raw =
+        fs.readFileSync(
+            RETENTION_POLICY_PATH,
+            "utf8"
+        );
 
-  "doctrine": [
-    "interaction accountability without hostile intrusion",
-    "systems should remain serviceable",
-    "retention must remain visible",
-    "operational continuity matters",
-    "trust must not become covert surveillance"
-  ]
+        cachedPolicy =
+        JSON.parse(raw);
+
+        console.log(
+            "RETENTION POLICY LOADED"
+        );
+
+        return cachedPolicy;
+
+    } catch (err) {
+
+        console.log(
+            "RETENTION POLICY LOAD FAILED"
+        );
+
+        console.log(err);
+
+        return null;
+    }
 }
+
+function getRetentionPolicy() {
+
+    if (!cachedPolicy) {
+
+        return loadRetentionPolicy();
+    }
+
+    return cachedPolicy;
+}
+
+function reloadRetentionPolicy() {
+
+    cachedPolicy = null;
+
+    return loadRetentionPolicy();
+}
+
+function isRetentionAllowed(eventType) {
+
+    const policy =
+    getRetentionPolicy();
+
+    if (
+        !policy ||
+        !policy.allowed_retention
+    ) {
+
+        return false;
+    }
+
+    return !!(
+        policy.allowed_retention[eventType]
+    );
+}
+
+function isRetentionForbidden(eventType) {
+
+    const policy =
+    getRetentionPolicy();
+
+    if (
+        !policy ||
+        !policy.forbidden_retention
+    ) {
+
+        return false;
+    }
+
+    return !!(
+        policy.forbidden_retention[eventType]
+    );
+}
+
+module.exports = {
+    loadRetentionPolicy,
+    getRetentionPolicy,
+    reloadRetentionPolicy,
+    isRetentionAllowed,
+    isRetentionForbidden
+};
