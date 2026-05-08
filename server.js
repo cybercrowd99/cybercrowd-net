@@ -52,6 +52,20 @@ const {
     clearSimulatedEvents
 } = require("./retention-event-simulator");
 
+const {
+    loadContinuityRegistry
+} = require("./continuity-loader");
+
+const {
+    loadContinuityEventRegistry
+} = require("./continuity-event-loader");
+
+const {
+    createContinuityEvent,
+    getContinuityEvents,
+    clearContinuityEvents
+} = require("./continuity-simulator");
+
 /* ------------------------------------------------ */
 /* LOAD CONFIG                                      */
 /* ------------------------------------------------ */
@@ -86,6 +100,14 @@ getSurfaceRegistry();
 loadRetentionPolicy();
 
 loadRetentionEventRegistry();
+
+/* ------------------------------------------------ */
+/* LOAD CONTINUITY SYSTEMS                          */
+/* ------------------------------------------------ */
+
+loadContinuityRegistry();
+
+loadContinuityEventRegistry();
 
 /* ------------------------------------------------ */
 /* APPLY CONFIG TO OS AUTHORITY                     */
@@ -341,6 +363,50 @@ app.get(
 );
 
 /* ------------------------------------------------ */
+/* CONTINUITY EVENT APIs                            */
+/* ------------------------------------------------ */
+
+app.get(
+    "/api/continuity-events",
+    (req, res) => {
+
+        res.json({
+            success: true,
+            events:
+                getContinuityEvents()
+        });
+    }
+);
+
+app.get(
+    "/api/continuity-events/simulate/:eventType",
+    (req, res) => {
+
+        const result =
+        createContinuityEvent(
+            req.params.eventType,
+            {
+                source:
+                "continuity-simulation"
+            }
+        );
+
+        res.json(result);
+    }
+);
+
+app.get(
+    "/api/continuity-events/clear",
+    (req, res) => {
+
+        const result =
+        clearContinuityEvents();
+
+        res.json(result);
+    }
+);
+
+/* ------------------------------------------------ */
 /* START                                            */
 /* ------------------------------------------------ */
 
@@ -436,6 +502,20 @@ server.listen(PORT, () => {
         ":" +
         PORT +
         "/api/retention-events"
+    );
+
+    console.log("");
+
+    console.log(
+        "CONTINUITY EVENT API:"
+    );
+
+    console.log(
+        "http://" +
+        ip +
+        ":" +
+        PORT +
+        "/api/continuity-events"
     );
 
     console.log("");
