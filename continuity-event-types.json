@@ -1,0 +1,92 @@
+{
+  "event_registry_name": "Cybercrowd Continuity Event Types",
+  "version": "V1",
+
+  "continuity_event_types": {
+
+    "continuity_mode_enabled": {
+      "category": "continuity",
+      "severity": "info",
+      "retainable": true,
+      "description": "A continuity mode became active."
+    },
+
+    "continuity_mode_disabled": {
+      "category": "continuity",
+      "severity": "warning",
+      "retainable": true,
+      "description": "A continuity mode was disabled."
+    },
+
+    "fallback_surface_activated": {
+      "category": "fallback",
+      "severity": "warning",
+      "retainable": true,
+      "description": "Fallback operational surface activated."
+    },
+
+    "fallback_surface_deactivated": {
+      "category": "fallback",
+      "severity": "info",
+      "retainable": true,
+      "description": "Fallback operational surface deactivated."
+    },
+
+    "status_only_mode_enabled": {
+      "category": "status",
+      "severity": "info",
+      "retainable": true,
+      "description": "Status-only continuity visibility mode enabled."
+    },
+
+    "continuity_broadcast_sent": {
+      "category": "broadcast",
+      "severity": "info",
+      "retainable": true,
+      "description": "Continuity status broadcast issued."
+    },
+
+    "continuity_recovery_started": {
+      "category": "recovery",
+      "severity": "warning",
+      "retainable": true,
+      "description": "Continuity recovery process started."
+    },
+
+    "continuity_recovery_completed": {
+      "category": "recovery",
+      "severity": "info",
+      "retainable": true,
+      "description": "Continuity recovery process completed."
+    },
+
+    "cross_domain_sync_attempt": {
+      "category": "sync",
+      "severity": "info",
+      "retainable": true,
+      "description": "Cross-domain continuity synchronization attempted."
+    },
+
+    "continuity_fault_detected": {
+      "category": "fault",
+      "severity": "critical",
+      "retainable": true,
+      "description": "Continuity infrastructure fault detected."
+    },
+
+    "unauthorized_failover_attempt": {
+      "category": "security",
+      "severity": "critical",
+      "retainable": false,
+      "description": "Unauthorized continuity failover attempt detected."
+    }
+  },
+
+  "doctrine": [
+    "continuity systems should remain visible",
+    "fallback systems should remain structured",
+    "recovery should remain observable",
+    "continuity language should remain standardized",
+    "operational resilience should remain serviceable"
+  ]
+}
