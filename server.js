@@ -38,6 +38,20 @@ const {
     startHeartbeatMonitor
 } = require("./surface-heartbeat");
 
+const {
+    loadRetentionPolicy
+} = require("./retention-policy-loader");
+
+const {
+    loadRetentionEventRegistry
+} = require("./retention-event-loader");
+
+const {
+    createSimulatedEvent,
+    getSimulatedEvents,
+    clearSimulatedEvents
+} = require("./retention-event-simulator");
+
 /* ------------------------------------------------ */
 /* LOAD CONFIG                                      */
 /* ------------------------------------------------ */
@@ -64,6 +78,14 @@ loadSurfaceRegistry();
 
 const surfaceRegistry =
 getSurfaceRegistry();
+
+/* ------------------------------------------------ */
+/* LOAD RETENTION SYSTEMS                           */
+/* ------------------------------------------------ */
+
+loadRetentionPolicy();
+
+loadRetentionEventRegistry();
 
 /* ------------------------------------------------ */
 /* APPLY CONFIG TO OS AUTHORITY                     */
@@ -188,4 +210,244 @@ if (
         (req, res) => {
 
             registerHeartbeat(
-                "
+                "laptop"
+            );
+
+            res.sendFile(
+                path.join(
+                    __dirname,
+                    laptopSurface.file
+                )
+            );
+        }
+    );
+}
+
+/* ------------------------------------------------ */
+/* PHONE SURFACE                                    */
+/* ------------------------------------------------ */
+
+if (
+    phoneSurface.enabled
+) {
+
+    app.get(
+        phoneSurface.route,
+        (req, res) => {
+
+            registerHeartbeat(
+                "phone"
+            );
+
+            res.sendFile(
+                path.join(
+                    __dirname,
+                    phoneSurface.file
+                )
+            );
+        }
+    );
+}
+
+/* ------------------------------------------------ */
+/* CURSOR PROFILE API                               */
+/* ------------------------------------------------ */
+
+app.get("/api/cursor-profile", (req, res) => {
+
+    res.json({
+        success: true,
+        profile: defaultCursor
+    });
+});
+
+/* ------------------------------------------------ */
+/* SURFACE REGISTRY API                             */
+/* ------------------------------------------------ */
+
+app.get("/api/surface-registry", (req, res) => {
+
+    res.json({
+        success: true,
+        registry: surfaceRegistry
+    });
+});
+
+/* ------------------------------------------------ */
+/* TABLETOP STATUS API                              */
+/* ------------------------------------------------ */
+
+app.get("/api/tabletop-status", (req, res) => {
+
+    res.json({
+        success: true,
+
+        tabletop_enabled:
+            isTabletopTrialEnabled(),
+
+        current_owner:
+            getCurrentOwner(),
+
+        surfaces:
+            surfaceRegistry.surfaces,
+
+        heartbeat:
+            getSurfaceState()
+    });
+});
+
+/* ------------------------------------------------ */
+/* RETENTION EVENT APIs                             */
+/* ------------------------------------------------ */
+
+app.get(
+    "/api/retention-events",
+    (req, res) => {
+
+        res.json({
+            success: true,
+            events:
+                getSimulatedEvents()
+        });
+    }
+);
+
+app.get(
+    "/api/retention-events/simulate/:eventType",
+    (req, res) => {
+
+        const result =
+        createSimulatedEvent(
+            req.params.eventType,
+            {
+                source:
+                "tabletop-simulation"
+            }
+        );
+
+        res.json(result);
+    }
+);
+
+app.get(
+    "/api/retention-events/clear",
+    (req, res) => {
+
+        const result =
+        clearSimulatedEvents();
+
+        res.json(result);
+    }
+);
+
+/* ------------------------------------------------ */
+/* START                                            */
+/* ------------------------------------------------ */
+
+const ip =
+getLocalIP();
+
+server.listen(PORT, () => {
+
+    console.log("");
+
+    console.log(
+        config.bridge.name
+    );
+
+    console.log("");
+
+    console.log(
+        "VERSION:"
+    );
+
+    console.log(
+        config.bridge.version
+    );
+
+    console.log("");
+
+    console.log(
+        "TABLETOP TRIAL:"
+    );
+
+    console.log(
+        isTabletopTrialEnabled()
+            ? "ENABLED"
+            : "DISABLED"
+    );
+
+    console.log("");
+
+    console.log(
+        "CURRENT OWNER:"
+    );
+
+    console.log(
+        getCurrentOwner()
+    );
+
+    console.log("");
+
+    console.log(
+        "DEFAULT CURSOR:"
+    );
+
+    console.log(
+        defaultCursor.name
+    );
+
+    console.log("");
+
+    console.log(
+        "LAPTOP:"
+    );
+
+    console.log(
+        "http://" +
+        ip +
+        ":" +
+        PORT
+    );
+
+    console.log("");
+
+    console.log(
+        "PHONE:"
+    );
+
+    console.log(
+        "http://" +
+        ip +
+        ":" +
+        PORT +
+        phoneSurface.route
+    );
+
+    console.log("");
+
+    console.log(
+        "RETENTION EVENT API:"
+    );
+
+    console.log(
+        "http://" +
+        ip +
+        ":" +
+        PORT +
+        "/api/retention-events"
+    );
+
+    console.log("");
+
+    qrcode.generate(
+        "http://" +
+        ip +
+        ":" +
+        PORT +
+        phoneSurface.route,
+        {
+            small: true
+        }
+    );
+});
