@@ -7,7 +7,6 @@
 <title>Cybercrowd Operating Environment Stack</title>
 
 <style>
-
 html,
 body {
     margin: 0;
@@ -21,13 +20,8 @@ body {
     min-height: 100vh;
     padding: 24px;
     box-sizing: border-box;
-
     background:
-    radial-gradient(
-        circle at center,
-        rgba(0,255,255,0.10),
-        transparent 42%
-    ),
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
     #050505;
 }
 
@@ -46,85 +40,49 @@ body {
 }
 
 #stack {
-
     max-width: 1200px;
-
     margin: 0 auto;
-
     display: grid;
-
-    grid-template-columns:
-    repeat(auto-fit, minmax(240px, 1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 18px;
 }
 
 .stackCard {
-
     min-height: 160px;
-
     border-radius: 22px;
-
-    border:
-    1px solid rgba(0,255,255,0.35);
-
-    background:
-    rgba(10,10,10,0.9);
-
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(10,10,10,0.9);
     padding: 22px;
-
     box-sizing: border-box;
-
     cursor: pointer;
-
-    transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    border .2s ease;
+    transition: transform .2s ease, box-shadow .2s ease, border .2s ease;
 }
 
 .stackCard:hover {
-
     transform: scale(1.03);
-
-    border:
-    1px solid rgba(0,255,255,0.8);
-
-    box-shadow:
-    0 0 22px rgba(0,255,255,0.22);
+    border: 1px solid rgba(0,255,255,0.8);
+    box-shadow: 0 0 22px rgba(0,255,255,0.22);
 }
 
 .cardTitle {
-
     color: #00ffff;
-
     font-size: 21px;
-
     margin-bottom: 10px;
 }
 
 .cardText {
-
     opacity: 0.82;
-
     line-height: 1.5;
-
     font-size: 14px;
 }
 
 #footer {
-
     text-align: center;
-
     margin-top: 34px;
-
     opacity: 0.55;
-
     font-size: 12px;
-
     letter-spacing: 2px;
 }
-
 </style>
 </head>
 
@@ -132,9 +90,7 @@ body {
 
 <div id="stage">
 
-<div id="title">
-CYBERCROWD STACK
-</div>
+<div id="title">CYBERCROWD STACK</div>
 
 <div id="subtitle">
 Operating environment launcher. No squash. Every system stands.
@@ -142,33 +98,70 @@ Operating environment launcher. No squash. Every system stands.
 
 <div id="stack">
 
-<div class="stackCard"
-onclick="go('nav.html')">
-
-    <div class="cardTitle">
-    Temporary Route Menu
-    </div>
-
-    <div class="cardText">
-    Test route launcher and transition menu environment.
-    </div>
-
+<div class="stackCard" onclick="go('nav.html')">
+    <div class="cardTitle">Temporary Route Menu</div>
+    <div class="cardText">Test route launcher and transition menu environment.</div>
 </div>
 
-<div class="stackCard"
-onclick="go('signup.html')">
-
-    <div class="cardTitle">
-    Signup Gate
-    </div>
-
-    <div class="cardText">
-    Controlled registration and profile-room entry.
-    </div>
-
+<div class="stackCard" onclick="go('signup.html')">
+    <div class="cardTitle">Signup Gate</div>
+    <div class="cardText">Controlled registration and profile-room entry.</div>
 </div>
 
-<div class="stackCard"
-onclick="go('security-gate.html')">
+<div class="stackCard" onclick="go('security-gate.html')">
+    <div class="cardTitle">Security Gate</div>
+    <div class="cardText">Trust progression, permissions hierarchy, and interaction protection systems.</div>
+</div>
 
-    <div class="cardTitle">
+<div class="stackCard" onclick="go('memory-core.html')">
+    <div class="cardTitle">Memory Core</div>
+    <div class="cardText">Continuity layer against doom-scroll resets.</div>
+</div>
+
+<div class="stackCard" onclick="go('flowrail.html')">
+    <div class="cardTitle">FlowRail</div>
+    <div class="cardText">Environmental awareness rail and attention flow.</div>
+</div>
+
+<div class="stackCard" onclick="go('route-registry.html')">
+    <div class="cardTitle">Route Registry</div>
+    <div class="cardText">Environmental route map and operating references.</div>
+</div>
+
+<div class="stackCard" onclick="go('route-engine.html')">
+    <div class="cardTitle">Route Engine</div>
+    <div class="cardText">Curiosity → exploration → progression behavior layer.</div>
+</div>
+
+<div class="stackCard" onclick="go('permissions-map.html')">
+    <div class="cardTitle">Permissions Map</div>
+    <div class="cardText">Environmental trust layers and interaction ownership permissions.</div>
+</div>
+
+<div class="stackCard" onclick="go('audit-trail.html')">
+    <div class="cardTitle">Audit Trail</div>
+    <div class="cardText">Interaction accountability and lawful event logging systems.</div>
+</div>
+
+<div class="stackCard" onclick="go('tabletop-status.html')">
+    <div class="cardTitle">Tabletop Status</div>
+    <div class="cardText">Operational behavior testing dashboard and surface awareness status.</div>
+</div>
+
+<div class="stackCard" onclick="go('magic-cursor-launch.html')">
+    <div class="cardTitle">Magic Cursor V5</div>
+    <div class="cardText">Persistent shared sandbox and transferable interaction ownership.</div>
+</div>
+
+<div class="stackCard" onclick="go('lock-mech.html')">
+    <div class="cardTitle">Lock Mechanism</div>
+    <div class="cardText">QR pairing, email access, and trusted surface verification.</div>
+</div>
+
+<div class="stackCard" onclick="go('atomic-cricket.html')">
+    <div class="cardTitle">Atomic Cricket</div>
+    <div class="cardText">Creator showcase and future virtual stage environment.</div>
+</div>
+
+<div class="stackCard" onclick="go('cuebercare.html')">
+    <div class="cardTitle">Cue
