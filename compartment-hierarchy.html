@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Compartment Hierarchy</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow-x: auto;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 30px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    min-width: 1300px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 38px;
+    letter-spacing: 4px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-bottom: 35px;
+}
+
+.lockLine {
+    margin: 0 auto 34px auto;
+    max-width: 950px;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    border:
+    1px solid rgba(0,255,255,0.35);
+
+    background:
+    rgba(0,255,255,0.06);
+
+    color: #00ffaa;
+
+    text-align: center;
+
+    font-size: 21px;
+
+    line-height: 1.5;
+}
+
+.diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.layer {
+    display: flex;
+    justify-content: center;
+    gap: 26px;
+    margin-bottom: 40px;
+    flex-wrap: nowrap;
+}
+
+.node {
+    min-width: 260px;
+    max-width: 260px;
+
+    padding: 20px;
+
+    border-radius: 22px;
+
+    text-align: center;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+
+    box-sizing: border-box;
+
+    position: relative;
+}
+
+.node h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #00ffff;
+    font-size: 20px;
+}
+
+.node p {
+    line-height: 1.55;
+    opacity: 0.88;
+    font-size: 14px;
+}
+
+.doctrine {
+    border-color: rgba(0,255,255,0.55);
+    background: rgba(0,255,255,0.08);
+}
+
+.bucket {
+    border-color: rgba(0,255,120,0.50);
+}
+
+.surface {
+    border-color: rgba(255,255,255,0.35);
+}
+
+.arrow {
+    font-size: 32px;
+    color: #00ffaa;
+    margin-bottom: 26px;
+}
+
+.bridge {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 34px;
+}
+
+.bridgeLine {
+    width: 140px;
+    height: 2px;
+    background: rgba(0,255,255,0.30);
+}
+
+.footerCard {
+    margin-top: 50px;
+
+    padding: 24px;
+
+    border-radius: 22px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footerCard h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+.footerCard p,
+.footerCard li {
+    line-height: 1.65;
+    opacity: 0.9;
+}
+
+.footerCard ul {
+    padding-left: 22px;
+}
+
+.code {
+    margin-top: 14px;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    background:
+    rgba(0,0,0,0.55);
+
+    border:
+    1px solid rgba(0,255,255,0.18);
+
+    font-family: monospace;
+
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 38px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="wrap">
+
+<h1>CYBERCROWD COMPARTMENT HIERARCHY</h1>
+
+<div id="subtitle">
+Doctrine layer above operational compartments, lanes, buckets, and public surface.
+</div>
+
+<div class="lockLine">
+CyberCrowd survives because no single compartment is the system.
+</div>
+
+<div class="diagram">
+
+<div class="layer">
+
+<div class="node doctrine">
+<h2>DOCTRINE LAYER</h2>
+<p>
+Identity, continuity, survivability, operational rules, lane sovereignty, and lineage governance.
+</p>
+</div>
+
+</div>
+
+<div class="arrow">↓</div>
+
+<div class="layer">
+
+<div class="node">
+<h2>Continuity Compartment</h2>
+<p>
+Identity, survivability, replayability, and persistence beyond implementation.
+</p>
+</div>
+
+<div class="node">
+<h2>Governance Compartment</h2>
+<p>
+Board, Pocket Chair, overrides, escalation paths, and bounded authority.
+</p>
+</div>
+
+<div class="node">
+<h2>Resilience Compartment</h2>
+<p>
+Atomic Kricket truth, pressure-state lineage, collapse memory, and survival logic.
+</p>
+</div>
+
+</div>
+
+<div class="bridge">
+<div class="bridgeLine"></div>
+<div class="bridgeLine"></div>
+</div>
+
+<div class="layer">
+
+<div class="node">
+<h2>Truth Compartment</h2>
+<p>
+Raw, unfiltered arrival truth before interpretation or transformation.
+</p>
+</div>
+
+<div class="node">
+<h2>Creative Sovereignty</h2>
+<p>
+RETEN Records, creator ownership, metadata lineage, and sovereign releases.
+</p>
+</div>
+
+</div>
+
+<div class="arrow">↓</div>
+
+<div class="layer">
+
+<div class="node">
+<h2>Lane A — Intake</h2>
+<p>
+Arrival protocol, lineage assignment, validation, logging, and deterministic intake.
+</p>
+</div>
+
+<div class="node bucket">
+<h2>Bucket 1 — Sequester</h2>
+<p>
+Elastic holding universe for raw arrivals, quarantine, and immutable preservation.
+</p>
+</div>
+
+<div class="node">
+<h2>Lane B — Processing</h2>
+<p>
+Transformation, adjudication, enrichment, replayability, and dead-letter routing.
+</p>
+</div>
+
+</div>
+
+<div class="arrow">↓</div>
+
+<div class="layer">
+
+<div class="node bucket">
+<h2>Bucket 2 — Archive</h2>
+<p>
+Canonical truth layer. Immutable, versioned, lineage-bound artifacts.
+</p>
+</div>
+
+<div class="node">
+<h2>Canon Compartment</h2>
+<p>
+Approved truth, structured record continuity, and canonical public state.
+</p>
+</div>
+
+</div>
+
+<div class="arrow">↓</div>
+
+<div class="layer">
+
+<div class="node surface">
+<h2>Lane C — Surface</h2>
+<p>
+Pages Surface Lane, APIs, dashboards, and public or role-gated operational visibility.
+</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="footerCard">
+
+<h2>Hierarchy Interpretation</h2>
+
+<p>
+Doctrine compartments exist above runtime implementation.
+Lanes move operational state horizontally.
+Buckets absorb timing, pressure, retries, and survivability load.
+Surface lanes expose approved canonical reality.
+</p>
+
+<ul>
+<li>Doctrine governs lanes.</li>
+<li>Compartments define responsibility.</li>
+<li>Buckets preserve continuity.</li>
+<li>Surface reads canon.</li>
+<li>No lane silently mutates another lane.</li>
+</ul>
+
+<div class="code">Doctrine
+→ Compartments
+→ Lanes
+→ Buckets
+→ Canon
+→ Surface</div>
+
+</div>
+
+<div class="footerCard">
+
+<h2>Macramé Principle</h2>
+
+<p>
+CyberCrowd is woven from tensioned operational strands.
+Every knot distributes pressure without requiring total collapse.
+Failure becomes localized instead of systemic.
+</p>
+
+<div class="code">small target fails
+whole environment survives</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD COMPARTMENT HIERARCHY V1
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
