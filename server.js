@@ -15,10 +15,42 @@ const {
     createNodeBridge
 } = require("./node-bridge");
 
-const app = express();
-const server = http.createServer(app);
+const {
+    loadConfig,
+    getConfig
+} = require("./config-loader");
 
-const PORT = 7070;
+/* ------------------------------------------------ */
+/* LOAD CONFIG                                      */
+/* ------------------------------------------------ */
+
+loadConfig();
+
+const config =
+getConfig();
+
+/* ------------------------------------------------ */
+/* APP                                              */
+/* ------------------------------------------------ */
+
+const app =
+express();
+
+const server =
+http.createServer(app);
+
+/* ------------------------------------------------ */
+/* CONFIG VALUES                                    */
+/* ------------------------------------------------ */
+
+const PORT =
+config.bridge.port;
+
+const laptopSurface =
+config.surfaces.laptop;
+
+const phoneSurface =
+config.surfaces.phone;
 
 /* ------------------------------------------------ */
 /* NETWORK                                          */
@@ -77,28 +109,48 @@ transport.onMessage((data) => {
 });
 
 /* ------------------------------------------------ */
-/* STATIC SURFACES                                  */
+/* LAPTOP SURFACE                                   */
 /* ------------------------------------------------ */
 
-app.get("/", (req, res) => {
+if (
+    laptopSurface.enabled
+) {
 
-    res.sendFile(
-        path.join(
-            __dirname,
-            "laptop-surface.html"
-        )
+    app.get(
+        laptopSurface.route,
+        (req, res) => {
+
+            res.sendFile(
+                path.join(
+                    __dirname,
+                    laptopSurface.file
+                )
+            );
+        }
     );
-});
+}
 
-app.get("/client", (req, res) => {
+/* ------------------------------------------------ */
+/* PHONE SURFACE                                    */
+/* ------------------------------------------------ */
 
-    res.sendFile(
-        path.join(
-            __dirname,
-            "phone-surface.html"
-        )
+if (
+    phoneSurface.enabled
+) {
+
+    app.get(
+        phoneSurface.route,
+        (req, res) => {
+
+            res.sendFile(
+                path.join(
+                    __dirname,
+                    phoneSurface.file
+                )
+            );
+        }
     );
-});
+}
 
 /* ------------------------------------------------ */
 /* START                                            */
@@ -112,7 +164,17 @@ server.listen(PORT, () => {
     console.log("");
 
     console.log(
-        "CYBERCROWD MODULAR BRIDGE ONLINE"
+        config.bridge.name
+    );
+
+    console.log("");
+
+    console.log(
+        "VERSION:"
+    );
+
+    console.log(
+        config.bridge.version
     );
 
     console.log("");
@@ -139,7 +201,7 @@ server.listen(PORT, () => {
         ip +
         ":" +
         PORT +
-        "/client"
+        phoneSurface.route
     );
 
     console.log("");
@@ -149,7 +211,7 @@ server.listen(PORT, () => {
         ip +
         ":" +
         PORT +
-        "/client",
+        phoneSurface.route,
         {
             small: true
         }
