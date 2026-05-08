@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Ledger Formula Sheet</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.card {
+    margin-top: 18px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+p, li {
+    line-height: 1.65;
+    opacity: 0.88;
+}
+
+ul {
+    padding-left: 22px;
+}
+
+.formula {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.58);
+    border: 1px solid rgba(0,255,255,0.18);
+    font-family: Consolas, monospace;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    color: #e8ffff;
+}
+
+.lockLine {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(0,255,255,0.06);
+    color: #00ffaa;
+    font-size: 21px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.mini {
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.05);
+    border: 1px solid rgba(0,255,255,0.16);
+}
+
+.miniTitle {
+    color: #00ffff;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+<div id="wrap">
+
+<h1>CYBERCROWD LEDGER FORMULA SHEET</h1>
+
+<div id="subtitle">
+Operational lineage memory, CRWD propagation, dynamic payout rails, and governance override math.
+</div>
+
+<div class="lockLine">
+The Ledger is Operational Lineage Memory.
+</div>
+
+<div class="card">
+<h2>1. Ledger Purpose</h2>
+<p>
+The CyberCrowd Ledger does not function as a bank, exchange, or market maker.
+It functions as a canonical operational memory layer that tracks cause, effect, propagation, settlement recognition, creator solvency, CRWD pressure, and platform survivability.
+</p>
+
+<div class="formula">Ledger Role:
+- record native unit
+- record USD mirror at event time
+- preserve lineage
+- prevent hidden debt
+- support replay
+- support governance audit
+- prevent silent overrides</div>
+</div>
+
+<div class="card">
+<h2>2. Ledger Rails</h2>
+
+<div class="grid">
+
+<div class="mini">
+<div class="miniTitle">USD Rail</div>
+<p>Tracks fiat-equivalent inflows, external payment gateway values, and audit mirrors.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">CRWD Rail</div>
+<p>Tracks native CRWD circulation, settlement recognition, and token pressure.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">Subscription Rail</div>
+<p>Tracks tier access, active service time, renewals, stops, and CRWD stream options.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">Creator Payout Rail</div>
+<p>Tracks accrued creator earnings and payout execution.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">Node / Operator Rail</div>
+<p>Tracks uptime verification, heartbeat rewards, compute credits, and operational incentives.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">Governance Override Rail</div>
+<p>Tracks administrative rule changes, overrides, treasury interventions, and audit receipts.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">Archive Lineage Rail</div>
+<p>Tracks data persistence, canon linkage, storage integrity, and long-term record cost.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">AdWorm / Referral Rail</div>
+<p>Tracks interaction credits, ad revenue events, and referral incentive balances.</p>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>3. Base Unit Rule</h2>
+<p>
+Every transaction is recorded in its native unit and mirrored into USD-equivalent value at the time of the event.
+CRWD remains floating by market behavior. The USD mirror is an audit and reporting layer, not a guaranteed redemption promise.
+</p>
+
+<div class="formula">Native Record:
+amount_native
+unit_native = CRWD | USD | CREDIT | ACCESS | NODE
+
+Mirror Record:
+amount_usd_mirror = amount_native × market_rate_at_event_time
+
+Rule:
+native event survives even if mirror rate changes later</div>
+</div>
+
+<div class="card">
+<h2>4. Event Entry Requirements</h2>
+
+<ul>
+<li>Amount</li>
+<li>Rail</li>
+<li>Timestamp</li>
+<li>User or member ID</li>
+<li>Creator ID if applicable</li>
+<li>Asset ID if applicable</li>
+<li>Lane source</li>
+<li>Bucket or wallet source</li>
+<li>Status</li>
+<li>Replay ID</li>
+<li>Governance ID if overridden</li>
+<li>USD mirror rate at event time</li>
+</ul>
+
+<div class="formula">Required Event Status:
+PENDING
+COMMITTED
+REVERSED
+ARCHIVED
+FAILED
+UNDER_REVIEW</div>
+</div>
+
+<div class="card">
+<h2>5. Dynamic Split Variables</h2>
+<p>
+Payout percentages are not hard-coded forever.
+They are dynamic governance variables that may be changed by authorized governance action.
+</p>
+
+<div class="formula">χ = creator percentage
+ν = node/operator percentage
+α = archive/continuity percentage
+γ = governance/treasury percentage
+π = platform margin
+
+Golden Rule:
+χ + ν + α + γ + π = 1.00</div>
+
+<p>
+If the sum does not equal 1.00, the ledger rejects the rule set.
+</p>
+</div>
+
+<div class="card">
+<h2>6. Initial Split Logic</h2>
+
+<div class="formula">Initial Values:
+χ = 0.70   Creator Share
+π = 0.15   CyberCrowd Platform Share
+ν = 0.05   Node / Operator Share
+α = 0.05   Archive / Continuity Reserve
+γ = 0.05   Governance / Treasury
+
+Validation:
+0.70 + 0.15 + 0.05 + 0.05 + 0.05 = 1.00</div>
+</div>
+
+<div class="card">
+<h2>7. Payout Formulas</h2>
+
+<div class="formula">S_net = net subscription or settlement amount after external processing cost
+
+P_creator  = χ × S_net
+P_platform = π × S_net
+P_node     = ν × S_net
+P_archive  = α × S_net
+P_gov      = γ × S_net
+
+Total Distribution:
+P_creator + P_platform + P_node + P_archive + P_gov = S_net</div>
+</div>
+
+<div class="card">
+<h2>8. Platform Equity Formula</h2>
+<p>
+Platform equity is the net increase in platform-controlled assets after all rail liabilities and operating costs are settled.
+</p>
+
+<div class="formula">E_platform =
+Σ(S + R_a + CRWD_gain_usd_mirror)
+-
+Σ(P_creator + P_node + P_archive + P_gov + C_op + C_gas + C_slippage + C_chargeback)
+
+Where:
+S = subscription inflow
+R_a = AdWorm revenue
+C_op = operational cost
+C_gas = payout gas fee
+C_slippage = CRWD conversion slippage
+C_chargeback = failed payment / reversal cost</div>
+</div>
+
+<div class="card">
+<h2>9. CRWD Velocity Formula</h2>
+<p>
+CRWD velocity tracks pressure on the CRWD rail by comparing total CRWD transaction volume to circulating supply.
+</p>
+
+<div class="formula">V_c =
+Total Transaction Volume in CRWD
+÷
+Circulating Supply of CRWD
+
+Interpretation:
+Higher V_c = higher movement pressure
+Lower V_c = lower movement pressure
+
+V_c is observational.
+It is not a price guarantee.</div>
+</div>
+
+<div class="card">
+<h2>10. Subscription Model</h2>
+
+<div class="formula">Tier 1:
+$10.00 / month fixed USD mirror
+
+Tier 2:
+$25.00 / month fixed USD mirror
+
+Pro Stream:
+real-time CRWD burn or stream based on consumption rate
+
+Subscription Ledger Entry:
+subscription_event =
+member_id + tier + start_time + stop_time + native_unit + usd_mirror + status + replay_id</div>
+</div>
+
+<div class="card">
+<h2>11. Governance Override Rule</h2>
+<p>
+Governance can change variables only through logged override events.
+Changes apply to future transactions only.
+Past canonical payouts are not silently rewritten.
+</p>
+
+<div class="formula">Governance Override Event:
+override_id
+admin_id
+old_rule_set
+new_rule_set
+timestamp
+reason
+effective_start_time
+signature_or_authority_reference
+
+Rule:
+override_event must be archived before rule activation</div>
+</div>
+
+<div class="card">
+<h2>12. Profit Definition</h2>
+
+<p>
+Profit is defined as the net increase in platform-controlled assets after all rail liabilities are settled.
+</p>
+
+<ul>
+<li>Cash received</li>
+<li>CRWD accumulated</li>
+<li>Subscription retention</li>
+<li>AdWorm revenue</li>
+<li>Operational surplus after creator, node, archive, and governance obligations</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>13. Cost / Loss Definition</h2>
+
+<ul>
+<li>Cloudflare usage</li>
+<li>R2 storage</li>
+<li>Worker usage</li>
+<li>Pages and deployment overhead</li>
+<li>Payout gas fees</li>
+<li>CRWD slippage</li>
+<li>Chargebacks</li>
+<li>Failed transaction overhead</li>
+<li>Node incentive inflation</li>
+<li>Storage bloat</li>
+<li>Dead-letter recovery costs</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>14. Must Never Happen</h2>
+
+<ul>
+<li>No hidden debt.</li>
+<li>No guaranteed redemption promise.</li>
+<li>No surface mutates canon.</li>
+<li>No silent override.</li>
+<li>No one bucket owns all records.</li>
+<li>No one rail owns the whole environment.</li>
+<li>No backdated payout rewrite.</li>
+<li>No destructive canon mutation.</li>
+<li>No market guarantee language.</li>
+</ul>
+
+<div class="formula">Ledger Safety Equation:
+Total Assets ≥ Total Liabilities
+
+If liabilities exceed assets:
+status = UNDER_REVIEW
+governance_event_required = true</div>
+</div>
+
+<div class="card">
+<h2>15. Final Ledger Lock</h2>
+
+<p>
+CRWD is an existing token rail inside CyberCrowd.
+CyberCrowd is not the exchange, not the bank, and not the market maker.
+CyberCrowd records operational lineage, recognizes settlement, and preserves propagation memory.
+</p>
+
+<div class="formula">CRWD = existing token rail
+Ledger = operational lineage memory
+USD mirror = audit/reference layer
+Governance = logged override rail
+Canon = append-only archive truth
+
+small target fails
+whole environment survives</div>
+</div>
+
+<div id="footer">
+CYBERCROWD LEDGER FORMULA SHEET V1
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
