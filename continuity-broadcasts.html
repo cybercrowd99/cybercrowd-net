@@ -186,25 +186,25 @@ CONTINUITY BROADCASTS
 </div>
 
 <div id="subtitle">
-Operational visibility and continuity communications surface.
+Live operational continuity messaging and resilience visibility.
 </div>
 
 <div class="panel">
 
 <div class="panelTitle">
-Issue Broadcast Simulation
+Issue Broadcast
 </div>
 
 <div class="broadcastGrid">
 
-<button onclick="broadcast(
+<button onclick="sendBroadcast(
 'INFO',
 'Primary environment operating normally.'
 )">
 Normal Operations
 </button>
 
-<button onclick="broadcast(
+<button onclick="sendBroadcast(
 'INFO',
 'Continuity systems synchronized successfully.'
 )">
@@ -212,7 +212,7 @@ Sync Completed
 </button>
 
 <button class="warning"
-onclick="broadcast(
+onclick="sendBroadcast(
 'WARNING',
 'Fallback surface preparing for activation.'
 )">
@@ -220,21 +220,21 @@ Fallback Preparation
 </button>
 
 <button class="warning"
-onclick="broadcast(
+onclick="sendBroadcast(
 'WARNING',
 'Continuity recovery process initiated.'
 )">
 Recovery Started
 </button>
 
-<button onclick="broadcast(
+<button onclick="sendBroadcast(
 'INFO',
 'Recovery completed successfully.'
 )">
 Recovery Completed
 </button>
 
-<button onclick="broadcast(
+<button onclick="sendBroadcast(
 'INFO',
 'Status-only mode enabled for public visibility.'
 )">
@@ -242,7 +242,7 @@ Status-Only Mode
 </button>
 
 <button class="critical"
-onclick="broadcast(
+onclick="sendBroadcast(
 'CRITICAL',
 'Continuity infrastructure fault detected.'
 )">
@@ -250,11 +250,16 @@ Continuity Fault
 </button>
 
 <button class="critical"
-onclick="broadcast(
+onclick="sendBroadcast(
 'CRITICAL',
 'Primary environment disruption detected.'
 )">
 Environment Disruption
+</button>
+
+<button class="critical"
+onclick="clearBroadcasts()">
+Clear Broadcasts
 </button>
 
 </div>
@@ -264,17 +269,17 @@ Environment Disruption
 <div class="panel">
 
 <div class="panelTitle">
-Broadcast Feed
+Live Broadcast Feed
 </div>
 
 <div id="broadcastFeed">
-No broadcasts issued.
+Loading...
 </div>
 
 </div>
 
 <div id="footer">
-CYBERCROWD CONTINUITY BROADCASTS V1
+CYBERCROWD CONTINUITY BROADCASTS API V2
 </div>
 
 </div>
@@ -286,31 +291,74 @@ document.getElementById(
     "broadcastFeed"
 );
 
-const broadcasts = [];
-
-function broadcast(
+async function sendBroadcast(
     severity,
     message
 ) {
 
-    broadcasts.unshift({
+    try {
 
-        id:
-        "broadcast_" +
-        Date.now(),
+        await fetch(
+            "/api/continuity-broadcasts/send/" +
+            severity +
+            "/" +
+            encodeURIComponent(message)
+        );
 
-        severity,
+        loadBroadcasts();
 
-        message,
+    } catch (err) {
 
-        timestamp:
-        new Date().toISOString()
-    });
-
-    renderBroadcasts();
+        alert(
+            "Broadcast request failed."
+        );
+    }
 }
 
-function renderBroadcasts() {
+async function clearBroadcasts() {
+
+    try {
+
+        await fetch(
+            "/api/continuity-broadcasts/clear"
+        );
+
+        loadBroadcasts();
+
+    } catch (err) {
+
+        alert(
+            "Failed to clear broadcasts."
+        );
+    }
+}
+
+async function loadBroadcasts() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/continuity-broadcasts"
+        );
+
+        const data =
+        await response.json();
+
+        renderBroadcasts(
+            data.broadcasts || []
+        );
+
+    } catch (err) {
+
+        broadcastFeed.innerHTML =
+        "Broadcast API unavailable.";
+    }
+}
+
+function renderBroadcasts(
+    broadcasts
+) {
 
     if (
         broadcasts.length === 0
@@ -355,12 +403,24 @@ function renderBroadcasts() {
         "</div>" +
 
         "<div class='broadcastMeta'>" +
+        "Source: " +
+        item.source +
+        "</div>" +
+
+        "<div class='broadcastMeta'>" +
         item.timestamp +
         "</div>";
 
         broadcastFeed.appendChild(row);
     });
 }
+
+loadBroadcasts();
+
+setInterval(
+    loadBroadcasts,
+    5000
+);
 
 </script>
 
