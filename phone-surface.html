@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Phone Surface</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+    touch-action: none;
+}
+
+#pad {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.14), transparent 44%),
+    #050505;
+}
+
+#title {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    color: #00ffff;
+    font-size: 14px;
+    letter-spacing: 2px;
+}
+
+#status {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    right: 18px;
+    color: #00ffaa;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+#touchDot {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid #00ffaa;
+    box-shadow: 0 0 18px #00ffaa, 0 0 34px #00ffaa;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="pad">
+
+<div id="title">
+PHONE SURFACE MODULE
+</div>
+
+<div id="touchDot"></div>
+
+<div id="status">
+Move finger to move laptop cursor.<br>
+Tap to click.
+</div>
+
+</div>
+
+<script>
+const ws = new WebSocket("ws://" + location.host);
+
+const pad = document.getElementById("pad");
+const dot = document.getElementById("touchDot");
+const statusBox = document.getElementById("status");
+
+function sendMove(touch) {
+    const x = touch.clientX / window.innerWidth;
+    const
