@@ -47,6 +47,16 @@ html, body {
     line-height: 1.6;
 }
 
+#cursorProfile {
+    position: fixed;
+    top: 48px;
+    left: 18px;
+    right: 18px;
+    opacity: 0.72;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
 #touchDot {
     position: absolute;
     width: 34px;
@@ -70,6 +80,10 @@ html, body {
 PHONE SURFACE MODULE
 </div>
 
+<div id="cursorProfile">
+Cursor profile loading...
+</div>
+
 <div id="touchDot"></div>
 
 <div id="status">
@@ -85,7 +99,107 @@ const ws = new WebSocket("ws://" + location.host);
 const pad = document.getElementById("pad");
 const dot = document.getElementById("touchDot");
 const statusBox = document.getElementById("status");
+const cursorProfileBox = document.getElementById("cursorProfile");
 
 function sendMove(touch) {
     const x = touch.clientX / window.innerWidth;
-    const
+    const y = touch.clientY / window.innerHeight;
+
+    dot.style.left = touch.clientX + "px";
+    dot.style.top = touch.clientY + "px";
+
+    ws.send(JSON.stringify({
+        type: "move",
+        x,
+        y
+    }));
+}
+
+function applyCursorProfile(profileData) {
+    if (!profileData || !profileData.profile) {
+        cursorProfileBox.innerHTML = "Cursor profile unavailable.";
+        return;
+    }
+
+    const profile = profileData.profile;
+
+    cursorProfileBox.innerHTML =
+        "Active Cursor: <strong>" + profile.label + "</strong><br>" +
+        profile.description;
+
+    dot.style.clipPath = "none";
+    dot.style.borderRadius = "50%";
+    dot.style.width = profile.size + "px";
+    dot.style.height = profile.size + "px";
+    dot.style.border = "2px solid " + profile.border;
+    dot.style.background = profile.color;
+
+    if (profile.glow) {
+        dot.style.boxShadow =
+            "0 0 16px " + profile.color + ", 0 0 34px " + profile.color;
+    } else {
+        dot.style.boxShadow = "none";
+    }
+
+    if (profile.shape === "triangle") {
+        dot.style.width = "0";
+        dot.style.height = "0";
+        dot.style.borderLeft = (profile.size / 2) + "px solid transparent";
+        dot.style.borderRight = (profile.size / 2) + "px solid transparent";
+        dot.style.borderBottom = profile.size + "px solid " + profile.color;
+        dot.style.borderTop = "none";
+        dot.style.background = "transparent";
+        dot.style.borderRadius = "0";
+        dot.style.boxShadow = profile.glow
+            ? "0 0 18px " + profile.color
+            : "none";
+    }
+
+    if (profile.shape === "arrow") {
+        dot.style.borderRadius = "0";
+        dot.style.width = profile.size + "px";
+        dot.style.height = profile.size + "px";
+        dot.style.background = profile.color;
+        dot.style.clipPath =
+            "polygon(0 0, 100% 45%, 58% 58%, 45% 100%, 30% 92%, 43% 55%, 0 70%)";
+    }
+}
+
+fetch("/api/cursor-profile")
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            applyCursorProfile(data.profile);
+        }
+    })
+    .catch(() => {
+        cursorProfileBox.innerHTML = "Cursor profile failed to load.";
+    });
+
+pad.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    sendMove(e.touches[0]);
+}, { passive: false });
+
+pad.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+    sendMove(e.touches[0]);
+}, { passive: false });
+
+pad.addEventListener("touchend", () => {
+    ws.send(JSON.stringify({
+        type: "click"
+    }));
+});
+
+ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.type === "bridge-status") {
+        statusBox.innerHTML = data.message;
+    }
+};
+</script>
+
+</body>
+</html>
