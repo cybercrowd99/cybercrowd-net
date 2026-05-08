@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Deployment Lane Map</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.grid {
+    max-width: 1250px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+.card {
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+    padding: 22px;
+    box-sizing: border-box;
+}
+
+.cardTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.statusLive {
+    color: #00ffaa;
+    font-weight: bold;
+}
+
+.statusParked {
+    color: #ffaa00;
+    font-weight: bold;
+}
+
+.statusFuture {
+    color: #ffcc66;
+    font-weight: bold;
+}
+
+p, li {
+    line-height: 1.6;
+    opacity: 0.88;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+.doctrine {
+    max-width: 1250px;
+    margin: 22px auto 0 auto;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(0,255,255,0.06);
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.bigLine {
+    color: #00ffaa;
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.effect {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.40);
+    border: 1px solid rgba(0,255,255,0.18);
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+DEPLOYMENT LANE MAP
+</div>
+
+<div id="subtitle">
+Failure containment, lane separation, and operational survival pattern.
+</div>
+
+<div class="doctrine">
+
+<div class="bigLine">
+Small target fails. Whole environment survives.
+</div>
+
+<div class="effect">
+One deployment lane must never collapse every subsystem simultaneously.
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+<div class="cardTitle">
+Pages Lane
+</div>
+
+<p class="statusLive">
+LIVE
+</p>
+
+<p>
+Current public Cybercrowd site deployment lane.
+</p>
+
+<ul>
+<li>GitHub source</li>
+<li>Cloudflare Pages deployment</li>
+<li>Static public HTML surfaces</li>
+<li>Live operational visibility</li>
+</ul>
+
+<p>
+Effect pattern: if Pages is healthy, the public site remains visible.
+</p>
+</div>
+
+<div class="card">
+<div class="cardTitle">
+Worker Lane
+</div>
+
+<p class="statusParked">
+PARKED
+</p>
+
+<p>
+Future runtime and API execution lane.
+</p>
+
+<ul>
+<li>Wrangler deploys</li>
+<li>Worker runtime logic</li>
+<li>Future API routing</li>
+<li>Future edge execution</li>
+</ul>
+
+<p>
+Effect pattern: Worker failure must not stop the Pages site.
+</p>
+</div>
+
+<div class="card">
+<div class="cardTitle">
+R2 Lane
+</div>
+
+<p class="statusParked">
+PARKED
+</p>
+
+<p>
+Future media, storage, sales, graphics, and teaser bucket lane.
+</p>
+
+<ul>
+<li>ALBUM bucket parked</li>
+<li>GRAPHICS bucket preserved</li>
+<li>TEASERS bucket preserved</li>
+<li>Future media architecture retained</li>
+</ul>
+
+<p>
+Effect pattern: one bucket validation failure must not collapse deployment.
+</p>
+</div>
+
+<div class="card">
+<div class="cardTitle">
+Functions Lane
+</div>
+
+<p class="statusParked">
+PARKED
+</p>
+
+<p>
+Future server-side Pages Functions lane.
+</p>
+
+<ul>
+<li>Server logic</li>
+<li>Form handlers</li>
+<li>Auth helpers</li>
+<li>Future integrations</li>
+</ul>
+
+<p>
+Effect pattern: Functions return only when intentionally activated.
+</p>
+</div>
+
+<div class="card">
+<div class="cardTitle">
+Operations Lane
+</div>
+
+<p class="statusLive">
+LIVE
+</p>
+
+<p>
+Operational visibility and coordination surfaces.
+</p>
+
+<ul>
+<li>Operations Dashboard</li>
+<li>Operations Map</li>
+<li>Continuity Dashboard</li>
+<li>Retention and broadcast panels</li>
+</ul>
+
+<p>
+Effect pattern: operations visibility continues while other lanes are isolated.
+</p>
+</div>
+
+<div class="card">
+<div class="cardTitle">
+Future Media Lane
+</div>
+
+<p class="statusFuture">
+FUTURE
+</p>
+
+<p>
+Separated media commerce and creator asset architecture.
+</p>
+
+<ul>
+<li>Album sales media</li>
+<li>Graphics delivery</li>
+<li>Teaser publishing</li>
+<li>Creator asset routing</li>
+</ul>
+
+<p>
+Effect pattern: media returns as its own lane, not as a hidden dependency.
+</p>
+</div>
+
+</div>
+
+<div class="doctrine">
+
+<div class="bigLine">
+Deployment topology matters as much as code topology.
+</div>
+
+<div class="effect">
+Pages, Workers, R2, Functions, Operations, and future media systems must remain separated enough that one failure cannot burn the whole house.
+</div>
+
+<div class="effect">
+Current lock: GitHub → Cloudflare Pages → live site.
+</div>
+
+<div class="effect">
+Parked lock: Workers, Wrangler, R2 bindings, and Functions return only through intentional lane activation.
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD DEPLOYMENT LANE MAP V1
+</div>
+
+</div>
+
+</body>
+</html>
