@@ -1,17 +1,15 @@
-
 name = "cybercrowd-net"
-compatibility_date = "2026-04-25"
-[assets] 
+compatibility_date = "2026-05-08"
+
+main = "worker.js"
+
+[assets]
 directory = "."
-pages_build_output_dir = "."
-[[r2_buckets]]
-binding = "ALBUM"
-bucket_name = "cybercrowd-album"
-
-[[r2_buckets]]
-binding = "GRAPHICS"
-bucket_name = "cybercrowd-graphics"
-
-[[r2_buckets]]
-binding = "TEASERS"
-bucket_name = "cybercrowd-teasers"
+not_found_handling = "single-page-application"
+exclude = [
+  ".git/**",
+  ".wrangler/**",
+  "node_modules/**",
+  ".github/**",
+  "*.log"
+]
