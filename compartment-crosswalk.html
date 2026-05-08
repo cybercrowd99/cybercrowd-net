@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Compartment Crosswalk</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.lockLine {
+    margin-top: 20px;
+    margin-bottom: 24px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(0,255,255,0.06);
+    color: #00ffaa;
+    text-align: center;
+    font-size: 22px;
+    line-height: 1.5;
+}
+
+.tableWrap {
+    overflow-x: auto;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+th {
+    color: #00ffff;
+    text-align: left;
+    padding: 16px;
+    border-bottom: 1px solid rgba(0,255,255,0.30);
+    background: rgba(0,255,255,0.06);
+}
+
+td {
+    padding: 16px;
+    border-bottom: 1px solid rgba(0,255,255,0.14);
+    vertical-align: top;
+    line-height: 1.55;
+    opacity: 0.9;
+}
+
+.compartment {
+    color: #00ffaa;
+    font-weight: bold;
+}
+
+.lane {
+    color: #00ffff;
+    font-weight: bold;
+}
+
+.card {
+    margin-top: 22px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+p, li {
+    line-height: 1.65;
+    opacity: 0.88;
+}
+
+ul {
+    padding-left: 22px;
+}
+
+.code {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(0,255,255,0.18);
+    font-family: monospace;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+<div id="wrap">
+
+<h1>CYBERCROWD COMPARTMENT CROSSWALK</h1>
+
+<div id="subtitle">
+Authoritative translation layer between original compartments, survivable lanes, buckets, and runtime behavior.
+</div>
+
+<div class="lockLine">
+Original compartment → operational lane → survivable bucket → public surface.
+</div>
+
+<div class="tableWrap">
+
+<table>
+<thead>
+<tr>
+<th>Original Compartment</th>
+<th>Lane / Bucket Mapping</th>
+<th>Runtime Behavior</th>
+<th>Survivability Function</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td class="compartment">Truth Compartment</td>
+<td class="lane">Lane A — Intake + Bucket 1 — Sequester</td>
+<td>Raw truth enters unfiltered, gets logged, tagged, and preserved before interpretation.</td>
+<td>Truth survives before judgment. Raw arrival is not lost when processing fails.</td>
+</tr>
+
+<tr>
+<td class="compartment">Governance Compartment</td>
+<td class="lane">Override Lane — Pocket Chair / Board</td>
+<td>Human intervention freezes, annotates, approves, or redirects without deleting lineage.</td>
+<td>Authority becomes visible, bounded, and logged instead of silent or destructive.</td>
+</tr>
+
+<tr>
+<td class="compartment">Continuity Compartment</td>
+<td class="lane">Doctrine Layer — Governs All Lanes</td>
+<td>Identity and operating rules stay above implementation details.</td>
+<td>Doctrine survives even if a lane, Worker, bucket, or surface fails.</td>
+</tr>
+
+<tr>
+<td class="compartment">Creative Sovereignty — RETEN</td>
+<td class="lane">Lane B — Processing + Bucket 2 — Archive</td>
+<td>Creative artifacts, metadata, releases, and rights move through structured processing into canon.</td>
+<td>Artists retain sovereignty while releases remain traceable, versioned, and protected.</td>
+</tr>
+
+<tr>
+<td class="compartment">Resilience — Atomic Kricket</td>
+<td class="lane">Lane B — Processing + Archive Lineage</td>
+<td>Pressure-tested truth, lived experience, and failure signals become preserved artifacts.</td>
+<td>Collapse, recovery, and survival become records instead of erased events.</td>
+</tr>
+
+<tr>
+<td class="compartment">Public Surface Compartment</td>
+<td class="lane">Lane C — Surface / Pages / Surface API</td>
+<td>Public or role-gated surfaces read from approved canon and do not mutate truth.</td>
+<td>The surface stays stable while internal lanes repair, replay, or recover.</td>
+</tr>
+
+<tr>
+<td class="compartment">Intake Compartment</td>
+<td class="lane">Lane A — Arrival Protocol</td>
+<td>Incoming objects are accepted, rejected, queued, logged, and assigned lineage.</td>
+<td>Nothing enters without traceability. Intake remains dumb, durable, and loss-resistant.</td>
+</tr>
+
+<tr>
+<td class="compartment">Processing Compartment</td>
+<td class="lane">Lane B — Adjudication / Transformation</td>
+<td>Objects are transformed, enriched, classified, or failed into dead-letter paths.</td>
+<td>Processing is replayable, replaceable, and idempotent so truth is not corrupted.</td>
+</tr>
+
+<tr>
+<td class="compartment">Canon Compartment</td>
+<td class="lane">Bucket 2 — Archive / Canonical Truth</td>
+<td>Approved artifacts are stored as versioned, traceable, non-destructive records.</td>
+<td>Canon is immutable, lineage-bound, and available to surface lanes without becoming editable.</td>
+</tr>
+
+</tbody>
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Doctrine Lock</h2>
+
+<p>
+This crosswalk is the permanent translation layer between CyberCrowd’s original mental compartments and the operational lane architecture.
+</p>
+
+<div class="code">Truth → Intake + Sequester
+Governance → Override Lane
+Continuity → Doctrine Layer
+RETEN → Processing + Archive
+Atomic Kricket → Resilience Lineage
+Public Surface → Lane C
+Intake → Lane A
+Processing → Lane B
+Canon → Archive</div>
+
+</div>
+
+<div class="card">
+
+<h2>Operating Rule</h2>
+
+<p>
+No compartment may assume the duty of another compartment. No lane may silently rewrite another lane. No bucket may become a universal storage blob. No surface may mutate canon.
+</p>
+
+<p>
+CyberCrowd survives because each compartment has a boundary, a role, and a failure radius.
+</p>
+
+<div class="code">small target fails
+whole environment survives</div>
+
+</div>
+
+<div class="card">
+
+<h2>Macramé Principle</h2>
+
+<p>
+CyberCrowd is woven from tensioned compartments, not poured into one container.
+Each knot carries pressure without forcing the whole structure to collapse.
+</p>
+
+<p>
+The crosswalk keeps the weave readable, repairable, and expandable.
+</p>
+
+</div>
+
+<div id="footer">
+CYBERCROWD COMPARTMENT CROSSWALK V1
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
