@@ -1,6 +1,6 @@
 {
   "registry_name": "Cybercrowd Surface Registry",
-  "version": "V1",
+  "version": "V2",
 
   "surfaces": {
     "laptop": {
@@ -11,7 +11,8 @@
       "trusted": true,
       "can_own_control": true,
       "can_watch": true,
-      "can_move_pointer": false
+      "can_move_pointer": false,
+      "status": "online"
     },
 
     "phone": {
@@ -22,13 +23,22 @@
       "trusted": true,
       "can_own_control": true,
       "can_watch": true,
-      "can_move_pointer": true
+      "can_move_pointer": true,
+      "status": "online"
     }
   },
 
   "ownership": {
     "current_owner": "phone",
-    "fallback_owner": "laptop"
+    "fallback_owner": "laptop",
+    "ownership_transfer_enabled": true
+  },
+
+  "tabletop_trial": {
+    "enabled": true,
+    "mode": "behavior-testing",
+    "allow_multi_surface_testing": true,
+    "allow_live_transfer": true
   },
 
   "doctrine": [
@@ -36,6 +46,7 @@
     "trusted surfaces only",
     "interaction ownership must be visible",
     "watching is not the same as controlling",
-    "serviceable surface registry"
+    "serviceable surface registry",
+    "tabletop operational behavior testing"
   ]
 }
