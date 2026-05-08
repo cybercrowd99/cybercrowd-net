@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Ledger Event Schema</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.card {
+    margin-top: 18px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+p, li {
+    line-height: 1.65;
+    opacity: 0.88;
+}
+
+ul {
+    padding-left: 22px;
+}
+
+.code {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.58);
+    border: 1px solid rgba(0,255,255,0.18);
+    font-family: Consolas, monospace;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    color: #e8ffff;
+    overflow-x: auto;
+}
+
+.lockLine {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(0,255,255,0.06);
+    color: #00ffaa;
+    font-size: 21px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.mini {
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.05);
+    border: 1px solid rgba(0,255,255,0.16);
+}
+
+.miniTitle {
+    color: #00ffff;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+<div id="wrap">
+
+<h1>CYBERCROWD LEDGER EVENT SCHEMA</h1>
+
+<div id="subtitle">
+Canonical event structure for lineage, replayability, governance, propagation, and survivability.
+</div>
+
+<div class="lockLine">
+Every ledger event must be traceable, replayable, and canon-safe.
+</div>
+
+<div class="card">
+<h2>1. Schema Purpose</h2>
+
+<p>
+The CyberCrowd Ledger Event Schema defines the exact structure every ledger entry must follow.
+It prevents hidden debt, silent overrides, duplicate counting, broken lineage, and uncontrolled mutation.
+</p>
+
+<p>
+The ledger event is the smallest survivable unit of operational memory.
+</p>
+
+<div class="code">Ledger Event =
+what happened
+where it happened
+who caused it
+what rail it affected
+what value moved
+what lineage it belongs to
+whether it can replay
+whether governance touched it</div>
+</div>
+
+<div class="card">
+<h2>2. Required Event Fields</h2>
+
+<ul>
+<li>event_id</li>
+<li>event_type</li>
+<li>event_status</li>
+<li>timestamp</li>
+<li>rail</li>
+<li>lane_source</li>
+<li>compartment_source</li>
+<li>native_amount</li>
+<li>native_unit</li>
+<li>usd_mirror_amount</li>
+<li>usd_mirror_rate</li>
+<li>member_id</li>
+<li>creator_id</li>
+<li>asset_id</li>
+<li>origin_id</li>
+<li>propagation_id</li>
+<li>replay_id</li>
+<li>governance_id</li>
+<li>previous_event_id</li>
+<li>canonical_record_id</li>
+<li>notes</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>3. Canonical Event Object</h2>
+
+<div class="code">{
+  "event_id": "evt_0000000001",
+  "event_type": "subscription_started",
+  "event_status": "COMMITTED",
+
+  "timestamp": "2026-05-08T00:00:00.000Z",
+
+  "rail": "subscription",
+  "lane_source": "Lane A - Intake",
+  "compartment_source": "Intake Compartment",
+
+  "native_amount": 10.00,
+  "native_unit": "USD",
+
+  "usd_mirror_amount": 10.00,
+  "usd_mirror_rate": 1.00,
+
+  "member_id": "member_0001",
+  "creator_id": null,
+  "asset_id": "tier_1_access",
+
+  "origin_id": "origin_signup_0001",
+  "propagation_id": "prop_0001",
+  "replay_id": "replay_0001",
+
+  "governance_id": null,
+  "previous_event_id": null,
+  "canonical_record_id": "canon_subscription_0001",
+
+  "notes": "Tier 1 subscription started."
+}</div>
+</div>
+
+<div class="card">
+<h2>4. Event Status Values</h2>
+
+<div class="grid">
+
+<div class="mini">
+<div class="miniTitle">PENDING</div>
+<p>Event received but not fully committed.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">COMMITTED</div>
+<p>Event accepted into canonical operational memory.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">REVERSED</div>
+<p>Event counteracted by a later reversal event, not deleted.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">ARCHIVED</div>
+<p>Event finalized into canonical archive lineage.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">FAILED</div>
+<p>Event failed and must route to dead-letter or review.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">UNDER_REVIEW</div>
+<p>Event frozen by governance or anomaly detection.</p>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>5. Event Types</h2>
+
+<ul>
+<li>subscription_started</li>
+<li>subscription_stopped</li>
+<li>subscription_renewed</li>
+<li>creator_view_recorded</li>
+<li>creator_payout_accrued</li>
+<li>creator_payout_executed</li>
+<li>adworm_interaction_recorded</li>
+<li>node_heartbeat_recorded</li>
+<li>node_reward_accrued</li>
+<li>archive_upload_recorded</li>
+<li>archive_storage_cost_recorded</li>
+<li>crwd_transfer_recorded</li>
+<li>crwd_pressure_sampled</li>
+<li>governance_override_created</li>
+<li>governance_override_applied</li>
+<li>payout_slippage_adjusted</li>
+<li>chargeback_recorded</li>
+<li>deadletter_event_created</li>
+<li>replay_event_executed</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>6. Rail Values</h2>
+
+<div class="code">Allowed Rails:
+USD
+CRWD
+subscription
+creator_payout
+node_operator
+governance_override
+archive_lineage
+adworm
+referral
+infrastructure
+deadletter
+replay</div>
+</div>
+
+<div class="card">
+<h2>7. Replay Rule</h2>
+
+<p>
+Every event must include a replay ID.
+The replay ID prevents duplicate counting and allows deterministic reconstruction.
+</p>
+
+<div class="code">Replay Rule:
+same replay_id + same event_type + same origin_id
+=
+same event
+
+If replay is attempted:
+- do not duplicate value
+- compare payload hash
+- return existing canonical event
+- log replay attempt if mismatch</div>
+</div>
+
+<div class="card">
+<h2>8. Governance Override Rule</h2>
+
+<p>
+Governance may annotate, freeze, reverse, or update future rule sets.
+Governance may not silently delete or rewrite past canon.
+</p>
+
+<div class="code">Governance Event Requirements:
+governance_id
+admin_id
+authority_role
+old_value
+new_value
+reason
+effective_start_time
+timestamp
+signature_reference
+
+Rule:
+governance event must be committed before its effect applies</div>
+</div>
+
+<div class="card">
+<h2>9. Native Unit and USD Mirror Rule</h2>
+
+<p>
+Every event keeps the native unit and a USD mirror at event time.
+The USD mirror is for audit/reference only.
+It is not a redemption promise.
+</p>
+
+<div class="code">native_amount = value in original rail
+native_unit = CRWD | USD | ACCESS | CREDIT | NODE | STORAGE
+
+usd_mirror_amount =
+native_amount × usd_mirror_rate_at_event_time
+
+Mirror Rule:
+future price changes do not mutate past events</div>
+</div>
+
+<div class="card">
+<h2>10. Canon Safety Rules</h2>
+
+<ul>
+<li>No event is deleted after commit.</li>
+<li>Corrections are new events.</li>
+<li>Reversals are new events.</li>
+<li>Overrides are new governance events.</li>
+<li>Past payout math is not silently rewritten.</li>
+<li>Surface lanes cannot mutate canon.</li>
+<li>Market movement cannot rewrite historical mirrors.</li>
+</ul>
+
+<div class="code">Append-only rule:
+state = reduce(all_events_in_order)
+
+Canon is derived.
+Canon is not hand-edited.</div>
+</div>
+
+<div class="card">
+<h2>11. Ledger Event Validation</h2>
+
+<div class="code">An event is valid only if:
+
+event_id exists
+event_type is allowed
+event_status is allowed
+timestamp exists
+rail exists
+lane_source exists
+compartment_source exists
+replay_id exists
+native_unit exists
+usd_mirror_rate exists
+canonical_record_id exists
+
+If event affects payout:
+split_rule_id required
+
+If event affects governance:
+governance_id required
+
+If event reverses another event:
+previous_event_id required</div>
+</div>
+
+<div class="card">
+<h2>12. Example CRWD Event</h2>
+
+<div class="code">{
+  "event_id": "evt_crwd_0001",
+  "event_type": "crwd_transfer_recorded",
+  "event_status": "COMMITTED",
+
+  "timestamp": "2026-05-08T00:00:00.000Z",
+
+  "rail": "CRWD",
+  "lane_source": "Lane B - Processing",
+  "compartment_source": "Processing Compartment",
+
+  "native_amount": 250000.00,
+  "native_unit": "CRWD",
+
+  "usd_mirror_amount": 2.50,
+  "usd_mirror_rate": 0.00001,
+
+  "member_id": "member_0001",
+  "creator_id": "creator_0001",
+  "asset_id": "asset_0001",
+
+  "origin_id": "origin_stream_0001",
+  "propagation_id": "prop_crwd_0001",
+  "replay_id": "replay_crwd_0001",
+
+  "governance_id": null,
+  "previous_event_id": null,
+  "canonical_record_id": "canon_crwd_0001",
+
+  "notes": "CRWD settlement recognition recorded."
+}</div>
+</div>
+
+<div class="card">
+<h2>13. Final Schema Lock</h2>
+
+<p>
+The ledger event is the smallest unit of CyberCrowd operational lineage memory.
+If every event is traceable, replayable, and canon-safe, the environment can survive pressure without hidden collapse.
+</p>
+
+<div class="code">Ledger Event =
+operational memory atom
+
+small target fails
+whole environment survives</div>
+</div>
+
+<div id="footer">
+CYBERCROWD LEDGER EVENT SCHEMA V1
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
