@@ -138,7 +138,7 @@ CONTINUITY EVENTS
 </div>
 
 <div id="subtitle">
-Simulated operational continuity and resilience behavior testing.
+Live API continuity and resilience behavior testing.
 </div>
 
 <div class="section">
@@ -157,8 +157,7 @@ Enable Continuity Mode
 Disable Continuity Mode
 </button>
 
-<button class="warning"
-onclick="simulateEvent('fallback_surface_activated')">
+<button class="warning" onclick="simulateEvent('fallback_surface_activated')">
 Activate Fallback Surface
 </button>
 
@@ -174,8 +173,7 @@ Enable Status-Only Mode
 Send Continuity Broadcast
 </button>
 
-<button class="warning"
-onclick="simulateEvent('continuity_recovery_started')">
+<button class="warning" onclick="simulateEvent('continuity_recovery_started')">
 Start Recovery
 </button>
 
@@ -187,14 +185,16 @@ Complete Recovery
 Cross-Domain Sync
 </button>
 
-<button class="critical"
-onclick="simulateEvent('continuity_fault_detected')">
+<button class="critical" onclick="simulateEvent('continuity_fault_detected')">
 Continuity Fault
 </button>
 
-<button class="critical"
-onclick="simulateEvent('unauthorized_failover_attempt')">
+<button class="critical" onclick="simulateEvent('unauthorized_failover_attempt')">
 Unauthorized Failover
+</button>
+
+<button class="critical" onclick="clearEvents()">
+Clear Continuity Events
 </button>
 
 </div>
@@ -204,185 +204,138 @@ Unauthorized Failover
 <div class="section">
 
 <div class="sectionTitle">
-Continuity Event Trail
+Live Continuity Event Trail
 </div>
 
 <div id="eventList">
-No continuity events yet.
+Loading...
 </div>
 
 </div>
 
 <div id="footer">
-CYBERCROWD CONTINUITY EVENTS PANEL V1
+CYBERCROWD CONTINUITY EVENTS API PANEL V2
 </div>
 
 </div>
 
 <script>
+const eventList = document.getElementById("eventList");
 
-const eventList =
-document.getElementById(
-    "eventList"
-);
+async function simulateEvent(eventType) {
+    try {
+        const response =
+        await fetch(
+            "/api/continuity-events/simulate/" +
+            eventType
+        );
 
-const continuityEvents = [];
+        const result =
+        await response.json();
 
-const eventDefinitions = {
+        if (!result.success) {
+            alert("Blocked: " + result.error);
+        }
 
-    continuity_mode_enabled: {
-        severity: "info",
-        description:
-        "Continuity mode became active."
-    },
+        loadEvents();
 
-    continuity_mode_disabled: {
-        severity: "warning",
-        description:
-        "Continuity mode disabled."
-    },
-
-    fallback_surface_activated: {
-        severity: "warning",
-        description:
-        "Fallback operational surface activated."
-    },
-
-    fallback_surface_deactivated: {
-        severity: "info",
-        description:
-        "Fallback operational surface deactivated."
-    },
-
-    status_only_mode_enabled: {
-        severity: "info",
-        description:
-        "Status-only continuity mode enabled."
-    },
-
-    continuity_broadcast_sent: {
-        severity: "info",
-        description:
-        "Continuity broadcast issued."
-    },
-
-    continuity_recovery_started: {
-        severity: "warning",
-        description:
-        "Continuity recovery started."
-    },
-
-    continuity_recovery_completed: {
-        severity: "info",
-        description:
-        "Continuity recovery completed."
-    },
-
-    cross_domain_sync_attempt: {
-        severity: "info",
-        description:
-        "Cross-domain sync attempted."
-    },
-
-    continuity_fault_detected: {
-        severity: "critical",
-        description:
-        "Continuity infrastructure fault detected."
-    },
-
-    unauthorized_failover_attempt: {
-        severity: "critical",
-        description:
-        "Unauthorized failover attempt blocked."
+    } catch (err) {
+        alert("Continuity event simulation failed.");
     }
-};
-
-function simulateEvent(eventType) {
-
-    const definition =
-    eventDefinitions[eventType];
-
-    if (!definition) {
-        return;
-    }
-
-    continuityEvents.unshift({
-
-        id:
-        "cont_" +
-        Date.now(),
-
-        type:
-        eventType,
-
-        severity:
-        definition.severity,
-
-        description:
-        definition.description,
-
-        timestamp:
-        new Date().toISOString()
-    });
-
-    renderEvents();
 }
 
-function renderEvents() {
+async function clearEvents() {
+    try {
+        await fetch(
+            "/api/continuity-events/clear"
+        );
 
-    if (
-        continuityEvents.length === 0
-    ) {
+        loadEvents();
 
+    } catch (err) {
+        alert("Clear request failed.");
+    }
+}
+
+async function loadEvents() {
+    try {
+        const response =
+        await fetch(
+            "/api/continuity-events"
+        );
+
+        const data =
+        await response.json();
+
+        if (
+            !data.events ||
+            data.events.length === 0
+        ) {
+            eventList.innerHTML =
+            "No continuity events recorded.";
+
+            return;
+        }
+
+        eventList.innerHTML = "";
+
+        data.events
+        .slice()
+        .reverse()
+        .forEach((event) => {
+
+            const item =
+            document.createElement("div");
+
+            item.className =
+            "eventItem";
+
+            item.innerHTML =
+                "<div class='eventType'>" +
+                event.type +
+                "</div>" +
+
+                "<div>" +
+                event.description +
+                "</div>" +
+
+                "<div class='eventSeverity severity-" +
+                event.severity +
+                "'>" +
+                "SEVERITY: " +
+                event.severity.toUpperCase() +
+                "</div>" +
+
+                "<div class='eventMeta'>" +
+                "Category: " +
+                event.category +
+                "</div>" +
+
+                "<div class='eventMeta'>" +
+                "Time: " +
+                event.timestamp +
+                "</div>" +
+
+                "<div class='eventMeta'>" +
+                "ID: " +
+                event.id +
+                "</div>";
+
+            eventList.appendChild(item);
+        });
+
+    } catch (err) {
         eventList.innerHTML =
-        "No continuity events yet.";
-
-        return;
+        "Continuity event API unavailable.";
     }
-
-    eventList.innerHTML = "";
-
-    continuityEvents.forEach((event) => {
-
-        const item =
-        document.createElement("div");
-
-        item.className =
-        "eventItem";
-
-        item.innerHTML =
-
-            "<div class='eventType'>" +
-            event.type +
-            "</div>" +
-
-            "<div>" +
-            event.description +
-            "</div>" +
-
-            "<div class='eventSeverity severity-" +
-            event.severity +
-            "'>" +
-
-            "SEVERITY: " +
-            event.severity.toUpperCase() +
-
-            "</div>" +
-
-            "<div class='eventMeta'>" +
-            "Timestamp: " +
-            event.timestamp +
-            "</div>" +
-
-            "<div class='eventMeta'>" +
-            "Event ID: " +
-            event.id +
-            "</div>";
-
-        eventList.appendChild(item);
-    });
 }
 
+loadEvents();
+
+setInterval(
+    loadEvents,
+    5000
+);
 </script>
 
 </body>
