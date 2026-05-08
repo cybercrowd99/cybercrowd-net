@@ -7,71 +7,125 @@
 <title>Cybercrowd Route Registry</title>
 
 <style>
-html, body {
+
+html,
+body {
+
     margin: 0;
     padding: 0;
+
     background: #050505;
+
     color: white;
+
     font-family: Arial, sans-serif;
 }
 
 #stage {
+
     min-height: 100vh;
+
     padding: 24px;
+
     box-sizing: border-box;
+
     background:
-    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
     #050505;
 }
 
 #title {
-    color: #00ffff;
-    font-size: 34px;
-    letter-spacing: 4px;
+
     text-align: center;
+
+    color: #00ffff;
+
+    font-size: 34px;
+
+    letter-spacing: 4px;
 }
 
 #subtitle {
+
     text-align: center;
-    opacity: 0.72;
+
+    opacity: 0.74;
+
     margin-top: 8px;
-    margin-bottom: 28px;
+
+    margin-bottom: 30px;
 }
 
 #registry {
-    max-width: 1100px;
+
+    max-width: 1200px;
+
     margin: 0 auto;
+
     display: grid;
-    gap: 14px;
+
+    gap: 16px;
 }
 
 .routeRow {
-    border: 1px solid rgba(0,255,255,0.32);
-    background: rgba(10,10,10,0.9);
-    border-radius: 18px;
-    padding: 16px;
+
+    border-radius: 20px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+
+    padding: 18px;
+
     display: grid;
-    grid-template-columns: 1.2fr 1fr 1fr;
-    gap: 12px;
+
+    grid-template-columns:
+    1.2fr
+    1fr
+    1fr
+    1fr;
+
+    gap: 16px;
+
     align-items: center;
 }
 
 .routeName {
+
     color: #00ffff;
+
     font-size: 18px;
 }
 
-.routePath {
-    color: #00ffaa;
-    font-size: 13px;
-    word-break: break-word;
+.routeType {
+
+    display: inline-block;
+
+    padding:
+    8px 12px;
+
+    border-radius: 12px;
+
+    font-size: 12px;
+
+    text-align: center;
+
+    letter-spacing: 1px;
+
+    background:
+    rgba(0,255,255,0.12);
+
+    color: #00ffff;
 }
 
-.routeState {
+.routeDescription {
+
     opacity: 0.82;
-    font-size: 13px;
-}
 
-button {
-    width: 100%;
-    margin-top:
+    line-height: 1 
