@@ -1,0 +1,87 @@
+{
+  "event_registry_name": "Cybercrowd Retention Event Types",
+  "version": "V1",
+
+  "event_types": {
+
+    "heartbeat_online": {
+      "category": "heartbeat",
+      "retainable": true,
+      "description": "Surface heartbeat detected online."
+    },
+
+    "heartbeat_offline": {
+      "category": "heartbeat",
+      "retainable": true,
+      "description": "Surface heartbeat timeout or disconnect detected."
+    },
+
+    "surface_connected": {
+      "category": "surface",
+      "retainable": true,
+      "description": "A registered surface connected to the environment."
+    },
+
+    "surface_disconnected": {
+      "category": "surface",
+      "retainable": true,
+      "description": "A registered surface disconnected from the environment."
+    },
+
+    "ownership_transfer": {
+      "category": "ownership",
+      "retainable": true,
+      "description": "Interaction ownership changed between trusted surfaces."
+    },
+
+    "emergency_stop": {
+      "category": "safety",
+      "retainable": true,
+      "description": "Emergency stop triggered to disarm interaction control."
+    },
+
+    "tabletop_trial_started": {
+      "category": "tabletop",
+      "retainable": true,
+      "description": "A tabletop operational behavior test session began."
+    },
+
+    "tabletop_trial_completed": {
+      "category": "tabletop",
+      "retainable": true,
+      "description": "A tabletop operational behavior test session completed."
+    },
+
+    "deployment_update": {
+      "category": "deployment",
+      "retainable": true,
+      "description": "Infrastructure deployment or update event."
+    },
+
+    "runtime_fault": {
+      "category": "runtime",
+      "retainable": true,
+      "description": "Runtime fault or infrastructure error detected."
+    },
+
+    "keystroke_capture_attempt": {
+      "category": "forbidden",
+      "retainable": false,
+      "description": "Forbidden keystroke capture behavior."
+    },
+
+    "hidden_surveillance_attempt": {
+      "category": "forbidden",
+      "retainable": false,
+      "description": "Forbidden covert surveillance behavior."
+    }
+  },
+
+  "doctrine": [
+    "event categories should remain standardized",
+    "retention systems should remain serviceable",
+    "accountability must remain visible",
+    "forbidden retention must remain blocked",
+    "operational history should not become invasive surveillance"
+  ]
+}
