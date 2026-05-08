@@ -51,7 +51,7 @@ body {
 
     width: 100%;
     max-width: 1400px;
-    min-height: 1100px;
+    min-height: 1200px;
 
     margin: 0 auto;
 
@@ -89,7 +89,8 @@ body {
     transition:
     transform .2s ease,
     border .2s ease,
-    box-shadow .2s ease;
+    box-shadow .2s ease,
+    background .2s ease;
 }
 
 .node:hover {
@@ -103,256 +104,22 @@ body {
     0 0 18px rgba(0,255,255,0.22);
 }
 
-.nodeTitle {
-    color: #00ffff;
-    margin-bottom: 8px;
-    font-size: 18px;
+.node.online {
+    border-color: rgba(0,255,170,0.75);
+
+    box-shadow:
+    0 0 20px rgba(0,255,170,0.16);
 }
 
-.nodeText {
-    opacity: 0.82;
-    font-size: 14px;
-    line-height: 1.5;
+.node.warning {
+    border-color: rgba(255,170,0,0.75);
+
+    box-shadow:
+    0 0 20px rgba(255,170,0,0.16);
 }
 
-svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-line {
-    stroke: rgba(0,255,255,0.28);
-    stroke-width: 2;
-}
-
-#footer {
-    text-align: center;
-    margin-top: 34px;
-    opacity: 0.55;
-    font-size: 12px;
-    letter-spacing: 2px;
-}
-</style>
-</head>
-
-<body>
-
-<div id="stage">
-
-<div id="title">
-OPERATIONS MAP
-</div>
-
-<div id="subtitle">
-Visual operational topology and continuity relationship surface.
-</div>
-
-<div id="map">
-
-<svg viewBox="0 0 1400 1100" preserveAspectRatio="none">
-
-<!-- OPERATIONS CORE -->
-<line x1="700" y1="120" x2="350" y2="320"/>
-<line x1="700" y1="120" x2="700" y2="320"/>
-<line x1="700" y1="120" x2="1050" y2="320"/>
-
-<!-- RETENTION -->
-<line x1="350" y1="320" x2="220" y2="560"/>
-<line x1="350" y1="320" x2="480" y2="560"/>
-
-<!-- CONTINUITY -->
-<line x1="700" y1="320" x2="700" y2="560"/>
-<line x1="700" y1="320" x2="920" y2="560"/>
-
-<!-- TABLETOP -->
-<line x1="1050" y1="320" x2="1120" y2="560"/>
-<line x1="1050" y1="320" x2="1320" y2="560"/>
-
-<!-- STACK -->
-<line x1="700" y1="560" x2="700" y2="850"/>
-
-</svg>
-
-<!-- ROOT -->
-
-<div class="node"
-style="top:40px; left:590px;"
-onclick="go('operations-dashboard.html')">
-
-<div class="nodeTitle">
-Operations Dashboard
-</div>
-
-<div class="nodeText">
-Primary operational coordination and visibility surface.
-</div>
-
-</div>
-
-<!-- RETENTION -->
-
-<div class="node"
-style="top:250px; left:240px;"
-onclick="go('retention-status.html')">
-
-<div class="nodeTitle">
-Retention Status
-</div>
-
-<div class="nodeText">
-Retention doctrine and accountability visibility.
-</div>
-
-</div>
-
-<div class="node"
-style="top:500px; left:120px;"
-onclick="go('retention-events.html')">
-
-<div class="nodeTitle">
-Retention Events
-</div>
-
-<div class="nodeText">
-Retention simulation and event activity stream.
-</div>
-
-</div>
-
-<div class="node"
-style="top:500px; left:390px;"
-onclick="go('audit-trail.html')">
-
-<div class="nodeTitle">
-Audit Trail
-</div>
-
-<div class="nodeText">
-Interaction accountability and lawful event logging.
-</div>
-
-</div>
-
-<!-- CONTINUITY -->
-
-<div class="node"
-style="top:250px; left:590px;"
-onclick="go('continuity-dashboard.html')">
-
-<div class="nodeTitle">
-Continuity Dashboard
-</div>
-
-<div class="nodeText">
-Resilience operations and continuity coordination.
-</div>
-
-</div>
-
-<div class="node"
-style="top:500px; left:590px;"
-onclick="go('continuity-events.html')">
-
-<div class="nodeTitle">
-Continuity Events
-</div>
-
-<div class="nodeText">
-Continuity event simulation and resilience visibility.
-</div>
-
-</div>
-
-<div class="node"
-style="top:500px; left:860px;"
-onclick="go('continuity-broadcasts.html')">
-
-<div class="nodeTitle">
-Continuity Broadcasts
-</div>
-
-<div class="nodeText">
-Operational continuity messaging and alerts.
-</div>
-
-</div>
-
-<!-- TABLETOP -->
-
-<div class="node"
-style="top:250px; left:940px;"
-onclick="go('tabletop-status.html')">
-
-<div class="nodeTitle">
-Tabletop Status
-</div>
-
-<div class="nodeText">
-Surface heartbeat and tabletop awareness systems.
-</div>
-
-</div>
-
-<div class="node"
-style="top:500px; left:1040px;"
-onclick="go('tabletop-checklist.html')">
-
-<div class="nodeTitle">
-Tabletop Checklist
-</div>
-
-<div class="nodeText">
-Operational scenario and simulation workflow surface.
-</div>
-
-</div>
-
-<div class="node"
-style="top:500px; left:1260px;"
-onclick="go('magic-cursor-launch.html')">
-
-<div class="nodeTitle">
-Magic Cursor
-</div>
-
-<div class="nodeText">
-Cross-surface interaction and transferable control layer.
-</div>
-
-</div>
-
-<!-- ROOT STACK -->
-
-<div class="node"
-style="top:820px; left:590px;"
-onclick="go('environment-stack.html')">
-
-<div class="nodeTitle">
-Environment Stack
-</div>
-
-<div class="nodeText">
-Full modular infrastructure launcher and system index.
-</div>
-
-</div>
-
-</div>
-
-<div id="footer">
-CYBERCROWD OPERATIONS MAP V1
-</div>
-
-</div>
-
-<script>
-function go(path) {
-    window.location.href = path;
-}
-</script>
-
-</body>
-</html>
+.node.critical {
+    border-color: rgba(255,50,85,0.85);
+
+    box-shadow:
+    0 0 22
