@@ -66,106 +66,55 @@ const {
     clearContinuityEvents
 } = require("./continuity-simulator");
 
+const {
+    createBroadcast,
+    getBroadcasts,
+    clearBroadcasts
+} = require("./continuity-broadcast-api");
+
 /* ------------------------------------------------ */
-/* LOAD CONFIG                                      */
+/* LOAD SYSTEMS                                     */
 /* ------------------------------------------------ */
 
 loadConfig();
-
-const config =
-getConfig();
-
-/* ------------------------------------------------ */
-/* LOAD CURSOR PREFERENCES                          */
-/* ------------------------------------------------ */
+const config = getConfig();
 
 loadCursorPreferences();
-
-const defaultCursor =
-getDefaultCursorProfile();
-
-/* ------------------------------------------------ */
-/* LOAD SURFACE REGISTRY                            */
-/* ------------------------------------------------ */
+const defaultCursor = getDefaultCursorProfile();
 
 loadSurfaceRegistry();
-
-const surfaceRegistry =
-getSurfaceRegistry();
-
-/* ------------------------------------------------ */
-/* LOAD RETENTION SYSTEMS                           */
-/* ------------------------------------------------ */
+const surfaceRegistry = getSurfaceRegistry();
 
 loadRetentionPolicy();
-
 loadRetentionEventRegistry();
 
-/* ------------------------------------------------ */
-/* LOAD CONTINUITY SYSTEMS                          */
-/* ------------------------------------------------ */
-
 loadContinuityRegistry();
-
 loadContinuityEventRegistry();
 
-/* ------------------------------------------------ */
-/* APPLY CONFIG TO OS AUTHORITY                     */
-/* ------------------------------------------------ */
-
 osAuthority.applyConfig(config);
-
-/* ------------------------------------------------ */
-/* START HEARTBEAT MONITOR                          */
-/* ------------------------------------------------ */
-
 startHeartbeatMonitor();
 
 /* ------------------------------------------------ */
 /* APP                                              */
 /* ------------------------------------------------ */
 
-const app =
-express();
+const app = express();
+const server = http.createServer(app);
 
-const server =
-http.createServer(app);
-
-/* ------------------------------------------------ */
-/* CONFIG VALUES                                    */
-/* ------------------------------------------------ */
-
-const PORT =
-config.bridge.port;
-
-const laptopSurface =
-config.surfaces.laptop;
-
-const phoneSurface =
-config.surfaces.phone;
+const PORT = config.bridge.port;
+const laptopSurface = config.surfaces.laptop;
+const phoneSurface = config.surfaces.phone;
 
 /* ------------------------------------------------ */
 /* NETWORK                                          */
 /* ------------------------------------------------ */
 
 function getLocalIP() {
+    const nets = os.networkInterfaces();
 
-    const nets =
-    os.networkInterfaces();
-
-    for (
-        const name of Object.keys(nets)
-    ) {
-
-        for (
-            const net of nets[name]
-        ) {
-
-            if (
-                net.family === "IPv4" &&
-                !net.internal
-            ) {
-
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]) {
+            if (net.family === "IPv4" && !net.internal) {
                 return net.address;
             }
         }
@@ -178,35 +127,17 @@ function getLocalIP() {
 /* TRANSPORT                                        */
 /* ------------------------------------------------ */
 
-const transport =
-createTransport(server);
+const transport = createTransport(server);
 
-/* ------------------------------------------------ */
-/* NODE BRIDGE                                      */
-/* ------------------------------------------------ */
-
-const nodeBridge =
-createNodeBridge({
+const nodeBridge = createNodeBridge({
     transport,
     osAuthority,
     config
 });
 
-/* ------------------------------------------------ */
-/* TRANSPORT EVENTS                                 */
-/* ------------------------------------------------ */
-
 transport.onMessage((data) => {
-
-    if (
-        data.type === "heartbeat" &&
-        data.surfaceId
-    ) {
-
-        registerHeartbeat(
-            data.surfaceId
-        );
-
+    if (data.type === "heartbeat" && data.surfaceId) {
+        registerHeartbeat(data.surfaceId);
         return;
     }
 
@@ -220,101 +151,54 @@ transport.onMessage((data) => {
 app.use(express.static(__dirname));
 
 /* ------------------------------------------------ */
-/* LAPTOP SURFACE                                   */
+/* SURFACES                                         */
 /* ------------------------------------------------ */
 
-if (
-    laptopSurface.enabled
-) {
+if (laptopSurface.enabled) {
+    app.get(laptopSurface.route, (req, res) => {
+        registerHeartbeat("laptop");
 
-    app.get(
-        laptopSurface.route,
-        (req, res) => {
+        res.sendFile(
+            path.join(__dirname, laptopSurface.file)
+        );
+    });
+}
 
-            registerHeartbeat(
-                "laptop"
-            );
+if (phoneSurface.enabled) {
+    app.get(phoneSurface.route, (req, res) => {
+        registerHeartbeat("phone");
 
-            res.sendFile(
-                path.join(
-                    __dirname,
-                    laptopSurface.file
-                )
-            );
-        }
-    );
+        res.sendFile(
+            path.join(__dirname, phoneSurface.file)
+        );
+    });
 }
 
 /* ------------------------------------------------ */
-/* PHONE SURFACE                                    */
-/* ------------------------------------------------ */
-
-if (
-    phoneSurface.enabled
-) {
-
-    app.get(
-        phoneSurface.route,
-        (req, res) => {
-
-            registerHeartbeat(
-                "phone"
-            );
-
-            res.sendFile(
-                path.join(
-                    __dirname,
-                    phoneSurface.file
-                )
-            );
-        }
-    );
-}
-
-/* ------------------------------------------------ */
-/* CURSOR PROFILE API                               */
+/* CORE APIs                                        */
 /* ------------------------------------------------ */
 
 app.get("/api/cursor-profile", (req, res) => {
-
     res.json({
         success: true,
         profile: defaultCursor
     });
 });
 
-/* ------------------------------------------------ */
-/* SURFACE REGISTRY API                             */
-/* ------------------------------------------------ */
-
 app.get("/api/surface-registry", (req, res) => {
-
     res.json({
         success: true,
         registry: surfaceRegistry
     });
 });
 
-/* ------------------------------------------------ */
-/* TABLETOP STATUS API                              */
-/* ------------------------------------------------ */
-
 app.get("/api/tabletop-status", (req, res) => {
-
     res.json({
         success: true,
-
-        tabletop_enabled:
-            isTabletopTrialEnabled(),
-
-        current_owner:
-            getCurrentOwner(),
-
-        surfaces:
-            surfaceRegistry.surfaces,
-
-        heartbeat:
-            getSurfaceState()
+        tabletop_enabled: isTabletopTrialEnabled(),
+        current_owner: getCurrentOwner(),
+        surfaces: surfaceRegistry.surfaces,
+        heartbeat: getSurfaceState()
     });
 });
 
@@ -322,210 +206,128 @@ app.get("/api/tabletop-status", (req, res) => {
 /* RETENTION EVENT APIs                             */
 /* ------------------------------------------------ */
 
-app.get(
-    "/api/retention-events",
-    (req, res) => {
+app.get("/api/retention-events", (req, res) => {
+    res.json({
+        success: true,
+        events: getSimulatedEvents()
+    });
+});
 
-        res.json({
-            success: true,
-            events:
-                getSimulatedEvents()
-        });
-    }
-);
+app.get("/api/retention-events/simulate/:eventType", (req, res) => {
+    const result = createSimulatedEvent(
+        req.params.eventType,
+        {
+            source: "tabletop-simulation"
+        }
+    );
 
-app.get(
-    "/api/retention-events/simulate/:eventType",
-    (req, res) => {
+    res.json(result);
+});
 
-        const result =
-        createSimulatedEvent(
-            req.params.eventType,
-            {
-                source:
-                "tabletop-simulation"
-            }
-        );
-
-        res.json(result);
-    }
-);
-
-app.get(
-    "/api/retention-events/clear",
-    (req, res) => {
-
-        const result =
-        clearSimulatedEvents();
-
-        res.json(result);
-    }
-);
+app.get("/api/retention-events/clear", (req, res) => {
+    res.json(clearSimulatedEvents());
+});
 
 /* ------------------------------------------------ */
 /* CONTINUITY EVENT APIs                            */
 /* ------------------------------------------------ */
 
-app.get(
-    "/api/continuity-events",
-    (req, res) => {
+app.get("/api/continuity-events", (req, res) => {
+    res.json({
+        success: true,
+        events: getContinuityEvents()
+    });
+});
 
-        res.json({
-            success: true,
-            events:
-                getContinuityEvents()
-        });
-    }
-);
+app.get("/api/continuity-events/simulate/:eventType", (req, res) => {
+    const result = createContinuityEvent(
+        req.params.eventType,
+        {
+            source: "continuity-simulation"
+        }
+    );
 
-app.get(
-    "/api/continuity-events/simulate/:eventType",
-    (req, res) => {
+    res.json(result);
+});
 
-        const result =
-        createContinuityEvent(
-            req.params.eventType,
-            {
-                source:
-                "continuity-simulation"
-            }
-        );
+app.get("/api/continuity-events/clear", (req, res) => {
+    res.json(clearContinuityEvents());
+});
 
-        res.json(result);
-    }
-);
+/* ------------------------------------------------ */
+/* CONTINUITY BROADCAST APIs                        */
+/* ------------------------------------------------ */
 
-app.get(
-    "/api/continuity-events/clear",
-    (req, res) => {
+app.get("/api/continuity-broadcasts", (req, res) => {
+    res.json({
+        success: true,
+        broadcasts: getBroadcasts()
+    });
+});
 
-        const result =
-        clearContinuityEvents();
+app.get("/api/continuity-broadcasts/send/:severity/:message", (req, res) => {
+    const result = createBroadcast({
+        severity: req.params.severity,
+        message: decodeURIComponent(req.params.message),
+        source: "continuity-broadcast-api"
+    });
 
-        res.json(result);
-    }
-);
+    res.json(result);
+});
+
+app.get("/api/continuity-broadcasts/clear", (req, res) => {
+    res.json(clearBroadcasts());
+});
 
 /* ------------------------------------------------ */
 /* START                                            */
 /* ------------------------------------------------ */
 
-const ip =
-getLocalIP();
+const ip = getLocalIP();
 
 server.listen(PORT, () => {
-
+    console.log("");
+    console.log(config.bridge.name);
     console.log("");
 
-    console.log(
-        config.bridge.name
-    );
-
+    console.log("VERSION:");
+    console.log(config.bridge.version);
     console.log("");
 
-    console.log(
-        "VERSION:"
-    );
-
-    console.log(
-        config.bridge.version
-    );
-
+    console.log("TABLETOP TRIAL:");
+    console.log(isTabletopTrialEnabled() ? "ENABLED" : "DISABLED");
     console.log("");
 
-    console.log(
-        "TABLETOP TRIAL:"
-    );
-
-    console.log(
-        isTabletopTrialEnabled()
-            ? "ENABLED"
-            : "DISABLED"
-    );
-
+    console.log("CURRENT OWNER:");
+    console.log(getCurrentOwner());
     console.log("");
 
-    console.log(
-        "CURRENT OWNER:"
-    );
-
-    console.log(
-        getCurrentOwner()
-    );
-
+    console.log("DEFAULT CURSOR:");
+    console.log(defaultCursor.name);
     console.log("");
 
-    console.log(
-        "DEFAULT CURSOR:"
-    );
-
-    console.log(
-        defaultCursor.name
-    );
-
+    console.log("LAPTOP:");
+    console.log("http://" + ip + ":" + PORT);
     console.log("");
 
-    console.log(
-        "LAPTOP:"
-    );
-
-    console.log(
-        "http://" +
-        ip +
-        ":" +
-        PORT
-    );
-
+    console.log("PHONE:");
+    console.log("http://" + ip + ":" + PORT + phoneSurface.route);
     console.log("");
 
-    console.log(
-        "PHONE:"
-    );
-
-    console.log(
-        "http://" +
-        ip +
-        ":" +
-        PORT +
-        phoneSurface.route
-    );
-
+    console.log("RETENTION EVENT API:");
+    console.log("http://" + ip + ":" + PORT + "/api/retention-events");
     console.log("");
 
-    console.log(
-        "RETENTION EVENT API:"
-    );
-
-    console.log(
-        "http://" +
-        ip +
-        ":" +
-        PORT +
-        "/api/retention-events"
-    );
-
+    console.log("CONTINUITY EVENT API:");
+    console.log("http://" + ip + ":" + PORT + "/api/continuity-events");
     console.log("");
 
-    console.log(
-        "CONTINUITY EVENT API:"
-    );
-
-    console.log(
-        "http://" +
-        ip +
-        ":" +
-        PORT +
-        "/api/continuity-events"
-    );
-
+    console.log("CONTINUITY BROADCAST API:");
+    console.log("http://" + ip + ":" + PORT + "/api/continuity-broadcasts");
     console.log("");
 
     qrcode.generate(
-        "http://" +
-        ip +
-        ":" +
-        PORT +
-        phoneSurface.route,
+        "http://" + ip + ":" + PORT + phoneSurface.route,
         {
             small: true
         }
