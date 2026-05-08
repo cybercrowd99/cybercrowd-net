@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Tabletop Status</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+#statusPanel {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.section {
+    margin-bottom: 24px;
+
+    border-radius: 22px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.90);
+
+    padding: 22px;
+
+    box-sizing: border-box;
+}
+
+.sectionTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+.statusRow {
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.surfaceGrid {
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(260px, 1fr));
+
+    gap: 18px;
+}
+
+.surfaceCard {
+    border-radius: 18px;
+
+    border:
+    1px solid rgba(0,255,255,0.25);
+
+    background:
+    rgba(0,0,0,0.45);
+
+    padding: 18px;
+}
+
+.surfaceTitle {
+    color: #00ffaa;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.surfaceData {
+    opacity: 0.85;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.online {
+    color: #00ffaa;
+}
+
+.offline {
+    color: #ff3355;
+}
+
+.owner {
+    color: #ffff00;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+TABLETOP STATUS
+</div>
+
+<div id="subtitle">
+Operational behavior testing and live infrastructure awareness.
+</div>
+
+<div id="statusPanel">
+
+<div class="section">
+
+<div class="sectionTitle">
+Tabletop Trial Status
+</div>
+
+<div class="statusRow">
+Trial Mode:
+<span id="trialMode">
+Loading...
+</span>
+</div>
+
+<div class="statusRow">
+Current Owner:
+<span class="owner" id="currentOwner">
+Loading...
+</span>
+</div>
+
+<div class="statusRow">
+Registry Version:
+<span id="registryVersion">
+Loading...
+</span>
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="sectionTitle">
+Registered Surfaces
+</div>
+
+<div class="surfaceGrid" id="surfaceGrid">
+</div>
+
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD TABLETOP OPERATIONAL STATUS V1
+</div>
+
+</div>
+
+<script>
+
+const surfaceGrid =
+document.getElementById(
+    "surfaceGrid"
+);
+
+const trialMode =
+document.getElementById(
+    "trialMode"
+);
+
+const currentOwner =
+document.getElementById(
+    "currentOwner"
+);
+
+const registryVersion =
+document.getElementById(
+    "registryVersion"
+);
+
+async function loadTabletopStatus() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/tabletop-status"
+        );
+
+        const data =
+        await response.json();
+
+        trialMode.innerHTML =
+            data.tabletop_enabled
+            ? "<span class='online'>ENABLED</span>"
+            : "<span class='offline'>DISABLED</span>";
+
+        currentOwner.innerHTML =
+            data.current_owner;
+
+        loadSurfaceCards(
+            data.surfaces
+        );
+
+    } catch (err) {
+
+        trialMode.innerHTML =
+        "<span class='offline'>FAILED</span>";
+    }
+}
+
+async function loadRegistryVersion() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/surface-registry"
+        );
+
+        const data =
+        await response.json();
+
+        registryVersion.innerHTML =
+            data.registry.version;
+
+    } catch (err) {
+
+        registryVersion.innerHTML =
+        "UNKNOWN";
+    }
+}
+
+function loadSurfaceCards(surfaces) {
+
+    surfaceGrid.innerHTML = "";
+
+    Object.values(surfaces)
+    .forEach((surface) => {
+
+        const card =
+        document.createElement("div");
+
+        card.className =
+        "surfaceCard";
+
+        card.innerHTML = `
+
+        <div class="surfaceTitle">
+        ${surface.label}
+        </div>
+
+        <div class="surfaceData">
+
+        ID:
+        ${surface.id}
+        <br><br>
+
+        Type:
+        ${surface.type}
+        <br><br>
+
+        Route:
+        ${surface.route}
+        <br><br>
+
+        Trusted:
+        ${surface.trusted}
+        <br><br>
+
+        Can Own Control:
+        ${surface.can_own_control}
+        <br><br>
+
+        Can Watch:
+        ${surface.can_watch}
+        <br><br>
+
+        Can Move Pointer:
+        ${surface.can_move_pointer}
+        <br><br>
+
+        Status:
+        <span class="${
+            surface.status === "online"
+            ? "online"
+            : "offline"
+        }">
+        ${surface.status}
+        </span>
+
+        </div>
+        `;
+
+        surfaceGrid.appendChild(card);
+    });
+}
+
+loadTabletopStatus();
+loadRegistryVersion();
+
+</script>
+
+</body>
+</html>
