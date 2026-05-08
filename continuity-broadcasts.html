@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Continuity Broadcasts</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.panel {
+    max-width: 1200px;
+    margin: 0 auto 24px auto;
+
+    border-radius: 22px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+
+    padding: 22px;
+
+    box-sizing: border-box;
+}
+
+.panelTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.broadcastGrid {
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 14px;
+}
+
+button {
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #00ffff;
+
+    color: black;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+    transform .2s ease,
+    opacity .2s ease;
+}
+
+button:hover {
+    transform: scale(1.03);
+}
+
+button.warning {
+    background: #ffaa00;
+}
+
+button.critical {
+    background: #ff3355;
+    color: white;
+}
+
+.broadcastItem {
+
+    margin-top: 12px;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    background:
+    rgba(0,255,255,0.05);
+
+    border:
+    1px solid rgba(0,255,255,0.16);
+
+    line-height: 1.6;
+}
+
+.broadcastHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+.broadcastType {
+    color: #00ffff;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.broadcastSeverity {
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.severity-info {
+    color: #00ffaa;
+}
+
+.severity-warning {
+    color: #ffaa00;
+}
+
+.severity-critical {
+    color: #ff3355;
+}
+
+.broadcastMessage {
+    opacity: 0.90;
+}
+
+.broadcastMeta {
+    margin-top: 8px;
+    opacity: 0.65;
+    font-size: 12px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+CONTINUITY BROADCASTS
+</div>
+
+<div id="subtitle">
+Operational visibility and continuity communications surface.
+</div>
+
+<div class="panel">
+
+<div class="panelTitle">
+Issue Broadcast Simulation
+</div>
+
+<div class="broadcastGrid">
+
+<button onclick="broadcast(
+'INFO',
+'Primary environment operating normally.'
+)">
+Normal Operations
+</button>
+
+<button onclick="broadcast(
+'INFO',
+'Continuity systems synchronized successfully.'
+)">
+Sync Completed
+</button>
+
+<button class="warning"
+onclick="broadcast(
+'WARNING',
+'Fallback surface preparing for activation.'
+)">
+Fallback Preparation
+</button>
+
+<button class="warning"
+onclick="broadcast(
+'WARNING',
+'Continuity recovery process initiated.'
+)">
+Recovery Started
+</button>
+
+<button onclick="broadcast(
+'INFO',
+'Recovery completed successfully.'
+)">
+Recovery Completed
+</button>
+
+<button onclick="broadcast(
+'INFO',
+'Status-only mode enabled for public visibility.'
+)">
+Status-Only Mode
+</button>
+
+<button class="critical"
+onclick="broadcast(
+'CRITICAL',
+'Continuity infrastructure fault detected.'
+)">
+Continuity Fault
+</button>
+
+<button class="critical"
+onclick="broadcast(
+'CRITICAL',
+'Primary environment disruption detected.'
+)">
+Environment Disruption
+</button>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelTitle">
+Broadcast Feed
+</div>
+
+<div id="broadcastFeed">
+No broadcasts issued.
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD CONTINUITY BROADCASTS V1
+</div>
+
+</div>
+
+<script>
+
+const broadcastFeed =
+document.getElementById(
+    "broadcastFeed"
+);
+
+const broadcasts = [];
+
+function broadcast(
+    severity,
+    message
+) {
+
+    broadcasts.unshift({
+
+        id:
+        "broadcast_" +
+        Date.now(),
+
+        severity,
+
+        message,
+
+        timestamp:
+        new Date().toISOString()
+    });
+
+    renderBroadcasts();
+}
+
+function renderBroadcasts() {
+
+    if (
+        broadcasts.length === 0
+    ) {
+
+        broadcastFeed.innerHTML =
+        "No broadcasts issued.";
+
+        return;
+    }
+
+    broadcastFeed.innerHTML = "";
+
+    broadcasts.forEach((item) => {
+
+        const row =
+        document.createElement("div");
+
+        row.className =
+        "broadcastItem";
+
+        row.innerHTML =
+
+        "<div class='broadcastHeader'>" +
+
+        "<div class='broadcastType'>" +
+        "CONTINUITY BROADCAST" +
+        "</div>" +
+
+        "<div class='broadcastSeverity severity-" +
+        item.severity.toLowerCase() +
+        "'>" +
+
+        item.severity +
+
+        "</div>" +
+
+        "</div>" +
+
+        "<div class='broadcastMessage'>" +
+        item.message +
+        "</div>" +
+
+        "<div class='broadcastMeta'>" +
+        item.timestamp +
+        "</div>";
+
+        broadcastFeed.appendChild(row);
+    });
+}
+
+</script>
+
+</body>
+</html>
