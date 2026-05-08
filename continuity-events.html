@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Continuity Events</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.section {
+    max-width: 1100px;
+    margin: 0 auto 22px auto;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+    padding: 22px;
+    box-sizing: border-box;
+}
+
+.sectionTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.buttonGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+button {
+    padding: 13px;
+    border: none;
+    border-radius: 14px;
+    background: #00ffff;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.warning {
+    background: #ffaa00;
+    color: black;
+}
+
+button.critical {
+    background: #ff3355;
+    color: white;
+}
+
+.eventItem {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.06);
+    border: 1px solid rgba(0,255,255,0.18);
+    line-height: 1.5;
+}
+
+.eventType {
+    color: #00ffaa;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.eventSeverity {
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.severity-info {
+    color: #00ffaa;
+}
+
+.severity-warning {
+    color: #ffaa00;
+}
+
+.severity-critical {
+    color: #ff3355;
+}
+
+.eventMeta {
+    opacity: 0.78;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+CONTINUITY EVENTS
+</div>
+
+<div id="subtitle">
+Simulated operational continuity and resilience behavior testing.
+</div>
+
+<div class="section">
+
+<div class="sectionTitle">
+Simulate Continuity Events
+</div>
+
+<div class="buttonGrid">
+
+<button onclick="simulateEvent('continuity_mode_enabled')">
+Enable Continuity Mode
+</button>
+
+<button onclick="simulateEvent('continuity_mode_disabled')">
+Disable Continuity Mode
+</button>
+
+<button class="warning"
+onclick="simulateEvent('fallback_surface_activated')">
+Activate Fallback Surface
+</button>
+
+<button onclick="simulateEvent('fallback_surface_deactivated')">
+Deactivate Fallback Surface
+</button>
+
+<button onclick="simulateEvent('status_only_mode_enabled')">
+Enable Status-Only Mode
+</button>
+
+<button onclick="simulateEvent('continuity_broadcast_sent')">
+Send Continuity Broadcast
+</button>
+
+<button class="warning"
+onclick="simulateEvent('continuity_recovery_started')">
+Start Recovery
+</button>
+
+<button onclick="simulateEvent('continuity_recovery_completed')">
+Complete Recovery
+</button>
+
+<button onclick="simulateEvent('cross_domain_sync_attempt')">
+Cross-Domain Sync
+</button>
+
+<button class="critical"
+onclick="simulateEvent('continuity_fault_detected')">
+Continuity Fault
+</button>
+
+<button class="critical"
+onclick="simulateEvent('unauthorized_failover_attempt')">
+Unauthorized Failover
+</button>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="sectionTitle">
+Continuity Event Trail
+</div>
+
+<div id="eventList">
+No continuity events yet.
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD CONTINUITY EVENTS PANEL V1
+</div>
+
+</div>
+
+<script>
+
+const eventList =
+document.getElementById(
+    "eventList"
+);
+
+const continuityEvents = [];
+
+const eventDefinitions = {
+
+    continuity_mode_enabled: {
+        severity: "info",
+        description:
+        "Continuity mode became active."
+    },
+
+    continuity_mode_disabled: {
+        severity: "warning",
+        description:
+        "Continuity mode disabled."
+    },
+
+    fallback_surface_activated: {
+        severity: "warning",
+        description:
+        "Fallback operational surface activated."
+    },
+
+    fallback_surface_deactivated: {
+        severity: "info",
+        description:
+        "Fallback operational surface deactivated."
+    },
+
+    status_only_mode_enabled: {
+        severity: "info",
+        description:
+        "Status-only continuity mode enabled."
+    },
+
+    continuity_broadcast_sent: {
+        severity: "info",
+        description:
+        "Continuity broadcast issued."
+    },
+
+    continuity_recovery_started: {
+        severity: "warning",
+        description:
+        "Continuity recovery started."
+    },
+
+    continuity_recovery_completed: {
+        severity: "info",
+        description:
+        "Continuity recovery completed."
+    },
+
+    cross_domain_sync_attempt: {
+        severity: "info",
+        description:
+        "Cross-domain sync attempted."
+    },
+
+    continuity_fault_detected: {
+        severity: "critical",
+        description:
+        "Continuity infrastructure fault detected."
+    },
+
+    unauthorized_failover_attempt: {
+        severity: "critical",
+        description:
+        "Unauthorized failover attempt blocked."
+    }
+};
+
+function simulateEvent(eventType) {
+
+    const definition =
+    eventDefinitions[eventType];
+
+    if (!definition) {
+        return;
+    }
+
+    continuityEvents.unshift({
+
+        id:
+        "cont_" +
+        Date.now(),
+
+        type:
+        eventType,
+
+        severity:
+        definition.severity,
+
+        description:
+        definition.description,
+
+        timestamp:
+        new Date().toISOString()
+    });
+
+    renderEvents();
+}
+
+function renderEvents() {
+
+    if (
+        continuityEvents.length === 0
+    ) {
+
+        eventList.innerHTML =
+        "No continuity events yet.";
+
+        return;
+    }
+
+    eventList.innerHTML = "";
+
+    continuityEvents.forEach((event) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "eventItem";
+
+        item.innerHTML =
+
+            "<div class='eventType'>" +
+            event.type +
+            "</div>" +
+
+            "<div>" +
+            event.description +
+            "</div>" +
+
+            "<div class='eventSeverity severity-" +
+            event.severity +
+            "'>" +
+
+            "SEVERITY: " +
+            event.severity.toUpperCase() +
+
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "Timestamp: " +
+            event.timestamp +
+            "</div>" +
+
+            "<div class='eventMeta'>" +
+            "Event ID: " +
+            event.id +
+            "</div>";
+
+        eventList.appendChild(item);
+    });
+}
+
+</script>
+
+</body>
+</html>
