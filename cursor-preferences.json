@@ -1,0 +1,52 @@
+{
+  "default_profile": "bright_yellow",
+
+  "profiles": {
+    "bright_yellow": {
+      "label": "Bright Yellow",
+      "description": "High-visibility pointer for users who need strong contrast.",
+      "color": "#ffff00",
+      "border": "#111111",
+      "shape": "circle",
+      "size": 34,
+      "glow": true
+    },
+
+    "clear_smooth_arrow": {
+      "label": "Clear Smooth Arrow",
+      "description": "Clean lighter pointer for users who prefer less visual noise.",
+      "color": "rgba(255,255,255,0.72)",
+      "border": "#00ffff",
+      "shape": "arrow",
+      "size": 30,
+      "glow": false
+    },
+
+    "yield_sign": {
+      "label": "Yield Sign",
+      "description": "Triangle pointer for fast visual recognition.",
+      "color": "#ffaa00",
+      "border": "#ffffff",
+      "shape": "triangle",
+      "size": 36,
+      "glow": true
+    },
+
+    "black_pointer": {
+      "label": "Black Pointer",
+      "description": "Dark pointer for users who prefer low-brightness control.",
+      "color": "#000000",
+      "border": "#ffffff",
+      "shape": "circle",
+      "size": 32,
+      "glow": false
+    }
+  },
+
+  "doctrine": [
+    "accessibility is adjustable",
+    "surface feel is personal",
+    "function must serve different eyes",
+    "one pointer style should not control every user"
+  ]
+}
