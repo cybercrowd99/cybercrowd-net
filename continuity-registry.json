@@ -1,0 +1,68 @@
+{
+  "registry_name": "Cybercrowd Continuity Registry",
+  "version": "V1",
+
+  "continuity_modes": {
+
+    "primary_environment": {
+      "enabled": true,
+      "priority": 1,
+      "description": "Primary operational environment."
+    },
+
+    "tabletop_environment": {
+      "enabled": true,
+      "priority": 2,
+      "description": "Operational tabletop behavior testing environment."
+    },
+
+    "read_only_status_mode": {
+      "enabled": true,
+      "priority": 3,
+      "description": "Status-only environment for continuity visibility during disruption."
+    },
+
+    "fallback_surface_mode": {
+      "enabled": false,
+      "priority": 4,
+      "description": "Alternate deployment surface for continuity recovery."
+    }
+  },
+
+  "continuity_surfaces": {
+
+    "primary_domain": {
+      "role": "primary",
+      "active": true,
+      "visibility": "public"
+    },
+
+    "tabletop_status_surface": {
+      "role": "status",
+      "active": true,
+      "visibility": "public"
+    },
+
+    "retention_visibility_surface": {
+      "role": "accountability",
+      "active": true,
+      "visibility": "public"
+    }
+  },
+
+  "future_layers": {
+    "alternate_domains": false,
+    "live_failover": false,
+    "cross_domain_sync": false,
+    "continuity_broadcasts": false,
+    "status_mirroring": false
+  },
+
+  "doctrine": [
+    "continuity should remain observable",
+    "fallback systems should remain structured",
+    "status visibility matters during disruption",
+    "continuity should not require panic rewrites",
+    "operational environments should remain serviceable under stress"
+  ]
+}
