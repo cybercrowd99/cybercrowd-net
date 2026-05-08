@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Retention Status</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#title {
+    text-align: center;
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.section {
+    max-width: 1100px;
+    margin: 0 auto 22px auto;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+    padding: 22px;
+    box-sizing: border-box;
+}
+
+.sectionTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.item {
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.06);
+    border: 1px solid rgba(0,255,255,0.18);
+}
+
+.allowed {
+    color: #00ffaa;
+}
+
+.forbidden {
+    color: #ff3355;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">RETENTION STATUS</div>
+
+<div id="subtitle">
+Interaction accountability without hostile intrusion.
+</div>
+
+<div class="section">
+    <div class="sectionTitle">Objective</div>
+    <div id="objective">Loading...</div>
+</div>
+
+<div class="section">
+    <div class="sectionTitle">Allowed Retention</div>
+    <div id="allowedList">Loading...</div>
+</div>
+
+<div class="section">
+    <div class="sectionTitle">Forbidden Retention</div>
+    <div id="forbiddenList">Loading...</div>
+</div>
+
+<div class="section">
+    <div class="sectionTitle">Doctrine</div>
+    <div id="doctrineList">Loading...</div>
+</div>
+
+<div id="footer">
+CYBERCROWD RETENTION STATUS V1
+</div>
+
+</div>
+
+<script>
+async function loadRetentionPolicy() {
+    try {
+        const response = await fetch("retention-policy.json");
+        const policy = await response.json();
+
+        document.getElementById("objective").innerHTML =
+            "<strong>Purpose:</strong> " + policy.objective.purpose +
+            "<br><br><strong>Non-objective:</strong> " + policy.objective.non_objective;
+
+        renderMap("allowedList", policy.allowed_retention, "allowed");
+        renderMap("forbiddenList", policy.forbidden_retention, "forbidden");
+        renderArray("doctrineList", policy.doctrine);
+
+    } catch (err) {
+        document.getElementById("objective").innerHTML =
+            "Retention policy failed to load.";
+    }
+}
+
+function renderMap(targetId, map, className) {
+    const target = document.getElementById(targetId);
+    target.innerHTML = "";
+
+    Object.keys(map).forEach((key) => {
+        const item = document.createElement("div");
+        item.className = "item " + className;
+        item.textContent = key + ": " + map[key];
+        target.appendChild(item);
+    });
+}
+
+function renderArray(targetId, items) {
+    const target = document.getElementById(targetId);
+    target.innerHTML = "";
+
+    items.forEach((text) => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.textContent = text;
+        target.appendChild(item);
+    });
+}
+
+loadRetentionPolicy();
+</script>
+
+</body>
+</html>
