@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Continuity Dashboard</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.dashboardGrid {
+    max-width: 1300px;
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(320px, 1fr));
+
+    gap: 18px;
+}
+
+.panel {
+
+    border-radius: 22px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+
+    padding: 22px;
+
+    box-sizing: border-box;
+
+    min-height: 240px;
+}
+
+.panelTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.item {
+    margin-top: 10px;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    background:
+    rgba(0,255,255,0.05);
+
+    border:
+    1px solid rgba(0,255,255,0.15);
+
+    line-height: 1.5;
+}
+
+.good {
+    color: #00ffaa;
+}
+
+.warning {
+    color: #ffaa00;
+}
+
+.critical {
+    color: #ff3355;
+}
+
+.meta {
+    opacity: 0.76;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 36px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+CONTINUITY DASHBOARD
+</div>
+
+<div id="subtitle">
+Operational resilience, continuity visibility, and tabletop awareness.
+</div>
+
+<div class="dashboardGrid">
+
+<div class="panel">
+
+<div class="panelTitle">
+Continuity Modes
+</div>
+
+<div id="modePanel">
+Loading...
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelTitle">
+Continuity Event Stream
+</div>
+
+<div id="eventPanel">
+Loading...
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelTitle">
+Surface Heartbeat
+</div>
+
+<div id="heartbeatPanel">
+Loading...
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelTitle">
+Operational Doctrine
+</div>
+
+<div id="doctrinePanel">
+Loading...
+</div>
+
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD CONTINUITY DASHBOARD V1
+</div>
+
+</div>
+
+<script>
+
+const modePanel =
+document.getElementById(
+    "modePanel"
+);
+
+const eventPanel =
+document.getElementById(
+    "eventPanel"
+);
+
+const heartbeatPanel =
+document.getElementById(
+    "heartbeatPanel"
+);
+
+const doctrinePanel =
+document.getElementById(
+    "doctrinePanel"
+);
+
+async function loadDashboard() {
+
+    loadContinuityRegistry();
+
+    loadContinuityEvents();
+
+    loadTabletopStatus();
+}
+
+async function loadContinuityRegistry() {
+
+    try {
+
+        const response =
+        await fetch(
+            "continuity-registry.json"
+        );
+
+        const data =
+        await response.json();
+
+        renderModes(
+            data.continuity_modes
+        );
+
+        renderDoctrine(
+            data.doctrine
+        );
+
+    } catch (err) {
+
+        modePanel.innerHTML =
+        "Continuity registry unavailable.";
+    }
+}
+
+async function loadContinuityEvents() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/continuity-events"
+        );
+
+        const data =
+        await response.json();
+
+        renderEvents(
+            data.events || []
+        );
+
+    } catch (err) {
+
+        eventPanel.innerHTML =
+        "Continuity event API unavailable.";
+    }
+}
+
+async function loadTabletopStatus() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/tabletop-status"
+        );
+
+        const data =
+        await response.json();
+
+        renderHeartbeat(
+            data.heartbeat || {}
+        );
+
+    } catch (err) {
+
+        heartbeatPanel.innerHTML =
+        "Heartbeat status unavailable.";
+    }
+}
+
+function renderModes(modes) {
+
+    modePanel.innerHTML = "";
+
+    Object.entries(modes)
+    .forEach(([name, mode]) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "item";
+
+        item.innerHTML =
+
+            "<strong>" +
+            name +
+            "</strong><br>" +
+
+            "<span class='" +
+            (mode.enabled
+                ? "good"
+                : "warning") +
+            "'>" +
+
+            (mode.enabled
+                ? "ENABLED"
+                : "DISABLED") +
+
+            "</span>" +
+
+            "<div class='meta'>" +
+            mode.description +
+            "</div>";
+
+        modePanel.appendChild(item);
+    });
+}
+
+function renderEvents(events) {
+
+    if (!events.length) {
+
+        eventPanel.innerHTML =
+        "No continuity events recorded.";
+
+        return;
+    }
+
+    eventPanel.innerHTML = "";
+
+    events
+    .slice()
+    .reverse()
+    .slice(0, 10)
+    .forEach((event) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "item";
+
+        item.innerHTML =
+
+            "<strong>" +
+            event.type +
+            "</strong><br>" +
+
+            "<span class='" +
+
+            (event.severity === "critical"
+                ? "critical"
+                : event.severity === "warning"
+                ? "warning"
+                : "good") +
+
+            "'>" +
+
+            event.severity.toUpperCase() +
+
+            "</span>" +
+
+            "<div class='meta'>" +
+            event.description +
+            "</div>" +
+
+            "<div class='meta'>" +
+            event.timestamp +
+            "</div>";
+
+        eventPanel.appendChild(item);
+    });
+}
+
+function renderHeartbeat(heartbeat) {
+
+    heartbeatPanel.innerHTML = "";
+
+    Object.entries(heartbeat)
+    .forEach(([surface, state]) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "item";
+
+        item.innerHTML =
+
+            "<strong>" +
+            surface +
+            "</strong><br>" +
+
+            "<span class='" +
+
+            (state.status === "online"
+                ? "good"
+                : "warning") +
+
+            "'>" +
+
+            state.status.toUpperCase() +
+
+            "</span>" +
+
+            "<div class='meta'>" +
+            "Last Seen: " +
+
+            (state.last_seen || "never") +
+
+            "</div>";
+
+        heartbeatPanel.appendChild(item);
+    });
+}
+
+function renderDoctrine(doctrine) {
+
+    doctrinePanel.innerHTML = "";
+
+    doctrine.forEach((text) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "item";
+
+        item.textContent =
+        text;
+
+        doctrinePanel.appendChild(item);
+    });
+}
+
+loadDashboard();
+
+setInterval(
+    loadDashboard,
+    5000
+);
+
+</script>
+
+</body>
+</html>
