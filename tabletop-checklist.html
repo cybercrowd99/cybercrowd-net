@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Tabletop Checklist</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+#checklist {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.checkCard {
+    margin-bottom: 18px;
+
+    border-radius: 22px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+
+    padding: 22px;
+
+    box-sizing: border-box;
+}
+
+.checkTitle {
+    color: #00ffff;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.checkText {
+    opacity: 0.84;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+.checkButton {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    background: #00ffff;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.checkButton:hover {
+    opacity: 0.88;
+}
+
+.complete {
+    color: #00ffaa;
+    margin-left: 14px;
+}
+
+.pending {
+    color: #ffaa00;
+    margin-left: 14px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+TABLETOP CHECKLIST
+</div>
+
+<div id="subtitle">
+Operational behavior testing sequence and live tabletop verification.
+</div>
+
+<div id="checklist">
+
+<div class="checkCard">
+
+<div class="checkTitle">
+1. Laptop Surface Loads
+</div>
+
+<div class="checkText">
+Verify the laptop surface opens successfully and heartbeat status appears online.
+</div>
+
+<button class="checkButton"
+onclick="toggleCheck('check1')">
+Toggle Complete
+</button>
+
+<span class="pending" id="check1">
+PENDING
+</span>
+
+</div>
+
+<div class="checkCard">
+
+<div class="checkTitle">
+2. Phone Surface Connects
+</div>
+
+<div class="checkText">
+Verify phone surface opens externally and heartbeat status appears online.
+</div>
+
+<button class="checkButton"
+onclick="toggleCheck('check2')">
+Toggle Complete
+</button>
+
+<span class="pending" id="check2">
+PENDING
+</span>
+
+</div>
+
+<div class="checkCard">
+
+<div class="checkTitle">
+3. Cursor Movement
+</div>
+
+<div class="checkText">
+Move finger on phone surface and confirm laptop cursor follows movement.
+</div>
+
+<button class="checkButton"
+onclick="toggleCheck('check3')">
+Toggle Complete
+</button>
+
+<span class="pending" id="check3">
+PENDING
+</span>
+
+</div>
+
+<div class="checkCard">
+
+<div class="checkTitle">
+4. Click Events
+</div>
+
+<div class="checkText">
+Tap phone surface and confirm click events occur on laptop environment.
+</div>
+
+<button class="checkButton"
+onclick="toggleCheck('check4')">
+Toggle Complete
+</button>
+
+<span class="pending" id="check4">
+PENDING
+</span>
+
+</div>
+
+<div class="checkCard">
+
+<div class="checkTitle">
+5. Heartbeat Monitoring
+</div>
+
+<div class="checkText">
+Verify tabletop dashboard reflects live online/offline surface status.
+</div>
+
+<button class="checkButton"
+onclick="toggleCheck('check5')">
+Toggle Complete
+</button>
+
+<span class="pending" id="check5">
+PENDING
+</span>
+
+</div>
+
+<div class="checkCard">
+
+<div class="checkTitle">
+6. Ownership Awareness
+</div>
+
+<div class="checkText">
+Verify tabletop status correctly shows current interaction owner.
+</div>
+
+<button class="checkButton"
+onclick="toggleCheck('check6')">
+Toggle Complete
+</button>
+
+<span class="pending" id="check6">
+PENDING
+</span>
+
+</div>
+
+<div class="checkCard">
+
+<div class="checkTitle">
+7. Emergency Stop
+</div>
+
+<div class="checkText">
+Disarm control and verify movement/click commands stop safely.
+</div>
+
+<button class="checkButton"
+onclick="toggleCheck('check7')">
+Toggle Complete
+</button>
+
+<span class="pending" id="check7">
+PENDING
+</span>
+
+</div>
+
+<div class="checkCard">
+
+<div class="checkTitle">
+8. Operational Continuity
+</div>
+
+<div class="checkText">
+Reload surfaces independently and verify the modular infrastructure remains stable.
+</div>
+
+<button class="checkButton"
+onclick="toggleCheck('check8')">
+Toggle Complete
+</button>
+
+<span class="pending" id="check8">
+PENDING
+</span>
+
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD TABLETOP TRIAL CHECKLIST V1
+</div>
+
+</div>
+
+<script>
+
+function toggleCheck(id) {
+
+    const item =
+    document.getElementById(id);
+
+    if (
+        item.innerHTML ===
+        "PENDING"
+    ) {
+
+        item.innerHTML =
+        "COMPLETE";
+
+        item.className =
+        "complete";
+
+    } else {
+
+        item.innerHTML =
+        "PENDING";
+
+        item.className =
+        "pending";
+    }
+}
+
+</script>
+
+</body>
+</html>
