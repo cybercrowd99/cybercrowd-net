@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Continuity Status</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.section {
+    max-width: 1100px;
+    margin: 0 auto 22px auto;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+    padding: 22px;
+    box-sizing: border-box;
+}
+
+.sectionTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.item {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.06);
+    border: 1px solid rgba(0,255,255,0.18);
+    line-height: 1.5;
+}
+
+.enabled {
+    color: #00ffaa;
+}
+
+.disabled {
+    color: #ff3355;
+}
+
+.meta {
+    opacity: 0.8;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">CONTINUITY STATUS</div>
+
+<div id="subtitle">
+Operational continuity visibility and resilience awareness.
+</div>
+
+<div class="section">
+    <div class="sectionTitle">
+    Continuity Modes
+    </div>
+
+    <div id="modeList">
+    Loading...
+    </div>
+</div>
+
+<div class="section">
+    <div class="sectionTitle">
+    Continuity Surfaces
+    </div>
+
+    <div id="surfaceList">
+    Loading...
+    </div>
+</div>
+
+<div class="section">
+    <div class="sectionTitle">
+    Continuity Doctrine
+    </div>
+
+    <div id="doctrineList">
+    Loading...
+    </div>
+</div>
+
+<div id="footer">
+CYBERCROWD CONTINUITY STATUS V1
+</div>
+
+</div>
+
+<script>
+const modeList =
+document.getElementById("modeList");
+
+const surfaceList =
+document.getElementById("surfaceList");
+
+const doctrineList =
+document.getElementById("doctrineList");
+
+async function loadContinuityStatus() {
+
+    try {
+
+        const response =
+        await fetch(
+            "continuity-registry.json"
+        );
+
+        const data =
+        await response.json();
+
+        renderModes(
+            data.continuity_modes
+        );
+
+        renderSurfaces(
+            data.continuity_surfaces
+        );
+
+        renderDoctrine(
+            data.doctrine
+        );
+
+    } catch (err) {
+
+        modeList.innerHTML =
+        "Continuity registry unavailable.";
+    }
+}
+
+function renderModes(modes) {
+
+    modeList.innerHTML = "";
+
+    Object.entries(modes)
+    .forEach(([name, mode]) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "item";
+
+        item.innerHTML =
+            "<strong>" +
+            name +
+            "</strong><br>" +
+
+            "<span class='" +
+            (mode.enabled
+                ? "enabled"
+                : "disabled") +
+            "'>" +
+
+            (mode.enabled
+                ? "ENABLED"
+                : "DISABLED") +
+
+            "</span>" +
+
+            "<div class='meta'>" +
+            "Priority: " +
+            mode.priority +
+            "</div>" +
+
+            "<div class='meta'>" +
+            mode.description +
+            "</div>";
+
+        modeList.appendChild(item);
+    });
+}
+
+function renderSurfaces(surfaces) {
+
+    surfaceList.innerHTML = "";
+
+    Object.entries(surfaces)
+    .forEach(([name, surface]) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "item";
+
+        item.innerHTML =
+            "<strong>" +
+            name +
+            "</strong><br>" +
+
+            "<div class='meta'>" +
+            "Role: " +
+            surface.role +
+            "</div>" +
+
+            "<div class='meta'>" +
+            "Visibility: " +
+            surface.visibility +
+            "</div>" +
+
+            "<div class='meta'>" +
+            "Active: " +
+            surface.active +
+            "</div>";
+
+        surfaceList.appendChild(item);
+    });
+}
+
+function renderDoctrine(items) {
+
+    doctrineList.innerHTML = "";
+
+    items.forEach((text) => {
+
+        const item =
+        document.createElement("div");
+
+        item.className =
+        "item";
+
+        item.textContent =
+        text;
+
+        doctrineList.appendChild(item);
+    });
+}
+
+loadContinuityStatus();
+</script>
+
+</body>
+</html>
