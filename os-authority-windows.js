@@ -2,38 +2,131 @@ const { execFile } = require("child_process");
 
 let screenWidth = 1920;
 let screenHeight = 1080;
+
+let throttleMs = 25;
+let smoothFactor = 0.18;
+let edgePadding = 2;
+
 let lastMoveTime = 0;
 
+let currentX = 0.5;
+let currentY = 0.5;
+
+function applyConfig(config) {
+
+    if (
+        config &&
+        config.movement
+    ) {
+
+        throttleMs =
+            config.movement.throttle_ms ??
+            throttleMs;
+
+        smoothFactor =
+            config.movement.smooth_factor ??
+            smoothFactor;
+
+        edgePadding =
+            config.movement.edge_padding ??
+            edgePadding;
+    }
+}
+
 function setScreenSize(width, height) {
-    screenWidth = width || screenWidth;
-    screenHeight = height || screenHeight;
+
+    screenWidth =
+    width || screenWidth;
+
+    screenHeight =
+    height || screenHeight;
+}
+
+function smoothValue(current, target, factor) {
+
+    return (
+        current +
+        (target - current) * factor
+    );
 }
 
 function moveMouseByRatio(xRatio, yRatio) {
-    const now = Date.now();
 
-    if (now - lastMoveTime < 25) {
+    const now =
+    Date.now();
+
+    if (
+        now - lastMoveTime <
+        throttleMs
+    ) {
+
         return;
     }
 
     lastMoveTime = now;
 
-    const x = Math.max(0, Math.min(screenWidth - 1, Math.round(xRatio * screenWidth)));
-    const y = Math.max(0, Math.min(screenHeight - 1, Math.round(yRatio * screenHeight)));
+    currentX =
+    smoothValue(
+        currentX,
+        xRatio,
+        smoothFactor
+    );
+
+    currentY =
+    smoothValue(
+        currentY,
+        yRatio,
+        smoothFactor
+    );
+
+    const x =
+    Math.max(
+        edgePadding,
+        Math.min(
+            screenWidth - edgePadding,
+            Math.round(
+                currentX *
+                screenWidth
+            )
+        )
+    );
+
+    const y =
+    Math.max(
+        edgePadding,
+        Math.min(
+            screenHeight - edgePadding,
+            Math.round(
+                currentY *
+                screenHeight
+            )
+        )
+    );
 
     const script =
         "Add-Type -AssemblyName System.Windows.Forms;" +
-        "[System.Windows.Forms.Cursor]::Position = New-Object System.Drawing.Point(" +
-        x + "," + y + ");";
+        "[System.Windows.Forms.Cursor]::Position = " +
+        "New-Object System.Drawing.Point(" +
+        x +
+        "," +
+        y +
+        ");";
 
     execFile(
         "powershell.exe",
-        ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", script],
+        [
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-Command",
+            script
+        ],
         () => {}
     );
 }
 
 function clickMouse() {
+
     const script =
         "Add-Type -TypeDefinition @'" +
         "using System;" +
@@ -49,12 +142,19 @@ function clickMouse() {
 
     execFile(
         "powershell.exe",
-        ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", script],
+        [
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-Command",
+            script
+        ],
         () => {}
     );
 }
 
 module.exports = {
+    applyConfig,
     setScreenSize,
     moveMouseByRatio,
     clickMouse
