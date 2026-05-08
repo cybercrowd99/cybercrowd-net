@@ -25,43 +25,35 @@ const {
     getDefaultCursorProfile
 } = require("./cursor-style-loader");
 
-/* ------------------------------------------------ */
-/* LOAD CONFIG                                      */
-/* ------------------------------------------------ */
+const {
+    loadSurfaceRegistry,
+    getSurfaceRegistry,
+    getCurrentOwner,
+    isTabletopTrialEnabled
+} = require("./surface-registry-loader");
 
 loadConfig();
 
 const config =
 getConfig();
 
-/* ------------------------------------------------ */
-/* LOAD CURSOR PREFERENCES                          */
-/* ------------------------------------------------ */
-
 loadCursorPreferences();
 
 const defaultCursor =
 getDefaultCursorProfile();
 
-/* ------------------------------------------------ */
-/* APPLY CONFIG TO OS AUTHORITY                     */
-/* ------------------------------------------------ */
+loadSurfaceRegistry();
+
+const surfaceRegistry =
+getSurfaceRegistry();
 
 osAuthority.applyConfig(config);
-
-/* ------------------------------------------------ */
-/* APP                                              */
-/* ------------------------------------------------ */
 
 const app =
 express();
 
 const server =
 http.createServer(app);
-
-/* ------------------------------------------------ */
-/* CONFIG VALUES                                    */
-/* ------------------------------------------------ */
 
 const PORT =
 config.bridge.port;
@@ -72,28 +64,13 @@ config.surfaces.laptop;
 const phoneSurface =
 config.surfaces.phone;
 
-/* ------------------------------------------------ */
-/* NETWORK                                          */
-/* ------------------------------------------------ */
-
 function getLocalIP() {
-
     const nets =
     os.networkInterfaces();
 
-    for (
-        const name of Object.keys(nets)
-    ) {
-
-        for (
-            const net of nets[name]
-        ) {
-
-            if (
-                net.family === "IPv4" &&
-                !net.internal
-            ) {
-
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]) {
+            if (net.family === "IPv4" && !net.internal) {
                 return net.address;
             }
         }
@@ -102,16 +79,8 @@ function getLocalIP() {
     return "localhost";
 }
 
-/* ------------------------------------------------ */
-/* TRANSPORT                                        */
-/* ------------------------------------------------ */
-
 const transport =
 createTransport(server);
-
-/* ------------------------------------------------ */
-/* NODE BRIDGE                                      */
-/* ------------------------------------------------ */
 
 const nodeBridge =
 createNodeBridge({
@@ -120,131 +89,84 @@ createNodeBridge({
     config
 });
 
-/* ------------------------------------------------ */
-/* TRANSPORT EVENTS                                 */
-/* ------------------------------------------------ */
-
 transport.onMessage((data) => {
-
     nodeBridge.handleMessage(data);
 });
 
-/* ------------------------------------------------ */
-/* STATIC FILES                                     */
-/* ------------------------------------------------ */
-
 app.use(express.static(__dirname));
 
-/* ------------------------------------------------ */
-/* LAPTOP SURFACE                                   */
-/* ------------------------------------------------ */
-
-if (
-    laptopSurface.enabled
-) {
-
-    app.get(
-        laptopSurface.route,
-        (req, res) => {
-
-            res.sendFile(
-                path.join(
-                    __dirname,
-                    laptopSurface.file
-                )
-            );
-        }
-    );
+if (laptopSurface.enabled) {
+    app.get(laptopSurface.route, (req, res) => {
+        res.sendFile(
+            path.join(__dirname, laptopSurface.file)
+        );
+    });
 }
 
-/* ------------------------------------------------ */
-/* PHONE SURFACE                                    */
-/* ------------------------------------------------ */
-
-if (
-    phoneSurface.enabled
-) {
-
-    app.get(
-        phoneSurface.route,
-        (req, res) => {
-
-            res.sendFile(
-                path.join(
-                    __dirname,
-                    phoneSurface.file
-                )
-            );
-        }
-    );
+if (phoneSurface.enabled) {
+    app.get(phoneSurface.route, (req, res) => {
+        res.sendFile(
+            path.join(__dirname, phoneSurface.file)
+        );
+    });
 }
-
-/* ------------------------------------------------ */
-/* CURSOR PROFILE API                               */
-/* ------------------------------------------------ */
 
 app.get("/api/cursor-profile", (req, res) => {
-
     res.json({
         success: true,
         profile: defaultCursor
     });
 });
 
-/* ------------------------------------------------ */
-/* START                                            */
-/* ------------------------------------------------ */
+app.get("/api/surface-registry", (req, res) => {
+    res.json({
+        success: true,
+        registry: surfaceRegistry
+    });
+});
+
+app.get("/api/tabletop-status", (req, res) => {
+    res.json({
+        success: true,
+        tabletop_enabled: isTabletopTrialEnabled(),
+        current_owner: getCurrentOwner(),
+        surfaces: surfaceRegistry.surfaces
+    });
+});
 
 const ip =
 getLocalIP();
 
 server.listen(PORT, () => {
-
+    console.log("");
+    console.log(config.bridge.name);
     console.log("");
 
-    console.log(
-        config.bridge.name
-    );
-
+    console.log("VERSION:");
+    console.log(config.bridge.version);
     console.log("");
 
+    console.log("TABLETOP TRIAL:");
     console.log(
-        "VERSION:"
+        isTabletopTrialEnabled()
+            ? "ENABLED"
+            : "DISABLED"
     );
-
-    console.log(
-        config.bridge.version
-    );
-
     console.log("");
 
-    console.log(
-        "DEFAULT CURSOR:"
-    );
-
-    console.log(
-        defaultCursor.name
-    );
-
+    console.log("CURRENT OWNER:");
+    console.log(getCurrentOwner());
     console.log("");
 
-    console.log(
-        "LAPTOP:"
-    );
-
-    console.log(
-        "http://" +
-        ip +
-        ":" +
-        PORT
-    );
-
+    console.log("DEFAULT CURSOR:");
+    console.log(defaultCursor.name);
     console.log("");
 
-    console.log(
-        "PHONE:"
-    );
+    console.log("LAPTOP:");
+    console.log("http://" + ip + ":" + PORT);
+    console.log("");
 
+    console.log("PHONE:");
     console.log(
         "http://" +
         ip +
@@ -252,19 +174,6 @@ server.listen(PORT, () => {
         PORT +
         phoneSurface.route
     );
-
-    console.log("");
-
-    console.log(
-        "CONTROL DEFAULT:"
-    );
-
-    console.log(
-        config.bridge.control_armed_default
-            ? "ARMED"
-            : "DISARMED"
-    );
-
     console.log("");
 
     qrcode.generate(
@@ -273,8 +182,6 @@ server.listen(PORT, () => {
         ":" +
         PORT +
         phoneSurface.route,
-        {
-            small: true
-        }
+        { small: true }
     );
 });
