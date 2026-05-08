@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd R2 Routing Doctrine</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.card {
+    margin-top: 18px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+p, li {
+    line-height: 1.65;
+    opacity: 0.88;
+}
+
+ul {
+    padding-left: 22px;
+}
+
+.code {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.58);
+    border: 1px solid rgba(0,255,255,0.18);
+    font-family: Consolas, monospace;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    color: #e8ffff;
+    overflow-x: auto;
+}
+
+.lockLine {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(0,255,255,0.06);
+    color: #00ffaa;
+    font-size: 21px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.mini {
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.05);
+    border: 1px solid rgba(0,255,255,0.16);
+}
+
+.miniTitle {
+    color: #00ffff;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.warning {
+    color: #ffaa00;
+    font-weight: bold;
+}
+
+.good {
+    color: #00ffaa;
+    font-weight: bold;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+<div id="wrap">
+
+<h1>CYBERCROWD R2 ROUTING DOCTRINE</h1>
+
+<div id="subtitle">
+Bucket routing, pressure separation, media propagation, and survivable storage lanes.
+</div>
+
+<div class="lockLine">
+R2 buckets are not folders. They are operational routing chambers.
+</div>
+
+<div class="card">
+<h2>1. Doctrine Purpose</h2>
+
+<p>
+The CyberCrowd R2 Routing Doctrine defines how objects move into, through, and out of storage compartments.
+The purpose is not to create one giant storage blob.
+The purpose is to preserve lane sovereignty, replayability, lineage, and operational survivability.
+</p>
+
+<div class="code">Event arrives
+→ router reads type
+→ object routes to correct bucket
+→ fallback catches failure
+→ canon remains protected</div>
+</div>
+
+<div class="card">
+<h2>2. Current Physical Buckets</h2>
+
+<div class="grid">
+
+<div class="mini">
+<div class="miniTitle">cybercrowd-graphics</div>
+<p>
+Public or semi-public graphics and surface visual assets.
+</p>
+<p class="good">
+Status: existing bucket
+</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">cybercrowd-teasers</div>
+<p>
+Teaser media, promotional clips, previews, and propagation-facing assets.
+</p>
+<p class="good">
+Status: existing bucket
+</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">cybercrowd-album</div>
+<p>
+Album, sales media, release-related assets, and creator commerce-linked media.
+</p>
+<p class="warning">
+Status: existing bucket / routing policy required before live commerce
+</p>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>3. Future Routing Buckets</h2>
+
+<ul>
+<li>cybercrowd-sequester — raw intake holding bucket.</li>
+<li>cybercrowd-archive — approved canonical truth bucket.</li>
+<li>cybercrowd-deadletter — failed event and failed object routing bucket.</li>
+<li>cybercrowd-replay — replay staging and deterministic reconstruction bucket.</li>
+<li>cybercrowd-ledger-events — ledger event object storage bucket.</li>
+<li>cybercrowd-lineage — provenance, ownership, and genealogy linkage bucket.</li>
+<li>cybercrowd-governance — override receipts and governance authority records.</li>
+<li>cybercrowd-surface-cache — public surface acceleration and last-known-good cache.</li>
+<li>cybercrowd-node-heartbeats — node uptime, infrastructure pings, and operator proof bucket.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>4. Primary Routing Map</h2>
+
+<div class="code">graphics
+→ cybercrowd-graphics
+
+teaser
+→ cybercrowd-teasers
+
+album_media
+→ cybercrowd-album
+
+raw_intake
+→ cybercrowd-sequester
+
+approved_canon
+→ cybercrowd-archive
+
+failed_event
+→ cybercrowd-deadletter
+
+replay_event
+→ cybercrowd-replay
+
+ledger_event
+→ cybercrowd-ledger-events
+
+lineage_record
+→ cybercrowd-lineage
+
+governance_override
+→ cybercrowd-governance
+
+surface_cached_object
+→ cybercrowd-surface-cache
+
+node_heartbeat
+→ cybercrowd-node-heartbeats</div>
+</div>
+
+<div class="card">
+<h2>5. Router Rule</h2>
+
+<p>
+The router is responsible for assigning storage destination.
+The object itself does not choose the bucket.
+The public surface does not choose the bucket.
+The market rail does not choose the bucket.
+</p>
+
+<div class="code">Router Input:
+event_type
+asset_type
+rail
+lane_source
+compartment_source
+canon_status
+visibility
+replay_state
+
+Router Output:
+target_bucket
+target_key
+fallback_bucket
+routing_receipt</div>
+</div>
+
+<div class="card">
+<h2>6. Key Format Doctrine</h2>
+
+<p>
+Every stored object must carry a predictable key pattern so objects can be traced without guessing.
+</p>
+
+<div class="code">Standard Key Pattern:
+
+/lane/{lane}
+/rail/{rail}
+/event/{event_type}
+/date/{yyyy-mm-dd}
+/origin/{origin_id}
+/object/{object_id}
+/version/{version_id}
+
+Example:
+
+/lane/lane-b-processing/rail/crwd/event/crwd-transfer/date/2026-05-08/origin/origin-001/object/object-001/version/v1.json</div>
+</div>
+
+<div class="card">
+<h2>7. Fallback Routing</h2>
+
+<p>
+If a primary bucket is unavailable or policy rejects the object, the router must not drop the event.
+It must route the failure into a survivable fallback path.
+</p>
+
+<div class="code">Primary route fails
+→ write routing_failure event
+→ send object reference to deadletter
+→ preserve origin metadata
+→ preserve replay_id
+→ mark status = UNDER_REVIEW</div>
+</div>
+
+<div class="card">
+<h2>8. Bucket Classifications</h2>
+
+<div class="grid">
+
+<div class="mini">
+<div class="miniTitle">Hot Bucket</div>
+<p>High access, high traffic, surface-facing, cache-aware.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">Warm Bucket</div>
+<p>Operational records, replay staging, governance review, active processing.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">Cold Bucket</div>
+<p>Archive, canon, lineage, long-term preservation, low mutation.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">Quarantine Bucket</div>
+<p>Raw, untrusted, failed, or under-review objects.</p>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>9. Existing Bucket Assignments</h2>
+
+<div class="code">cybercrowd-graphics
+class = hot / surface asset
+lane = Lane C - Surface
+risk = traffic surge
+policy = cache-safe, no canon mutation
+
+cybercrowd-teasers
+class = hot / propagation asset
+lane = Lane C - Surface + Marketing Rail
+risk = burst traffic
+policy = replaceable media, preserve campaign lineage
+
+cybercrowd-album
+class = warm-to-cold / creator commerce asset
+lane = Creative Sovereignty + Archive Rail
+risk = settlement coupling
+policy = do not bind live commerce until lineage + ledger routing exist</div>
+</div>
+
+<div class="card">
+<h2>10. Routing Receipt</h2>
+
+<p>
+Every route must create a receipt so the system knows what moved, where it moved, and why.
+</p>
+
+<div class="code">{
+  "routing_receipt_id": "route_0001",
+  "event_id": "evt_0001",
+  "origin_id": "origin_0001",
+  "replay_id": "replay_0001",
+  "source_lane": "Lane A - Intake",
+  "source_compartment": "Truth Compartment",
+  "target_bucket": "cybercrowd-sequester",
+  "target_key": "/lane/lane-a-intake/rail/archive/event/raw-intake/date/2026-05-08/origin/origin-0001/object/object-0001/version/v1.json",
+  "fallback_bucket": "cybercrowd-deadletter",
+  "status": "ROUTED",
+  "timestamp": "2026-05-08T00:00:00.000Z"
+}</div>
+</div>
+
+<div class="card">
+<h2>11. Must Never Happen</h2>
+
+<ul>
+<li>No bucket becomes a universal storage blob.</li>
+<li>No public surface writes directly to canon.</li>
+<li>No album commerce object goes live without lineage.</li>
+<li>No failed object disappears without deadletter record.</li>
+<li>No governance override bypasses routing receipt.</li>
+<li>No CRWD settlement record is stored without event lineage.</li>
+<li>No bucket policy silently changes without governance event.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>12. Final R2 Routing Lock</h2>
+
+<p>
+R2 routing exists to preserve operational survivability.
+A bucket is not merely where a file lives.
+A bucket is where pressure is contained, classified, traced, replayed, or canonized.
+</p>
+
+<div class="code">R2 Bucket =
+operational pressure chamber
+
+Router =
+traffic controller for event physics
+
+small target fails
+whole environment survives</div>
+</div>
+
+<div id="footer">
+CYBERCROWD R2 ROUTING DOCTRINE V1
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
