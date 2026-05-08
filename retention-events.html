@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Retention Events</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.section {
+    max-width: 1100px;
+    margin: 0 auto 22px auto;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+    padding: 22px;
+    box-sizing: border-box;
+}
+
+.sectionTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.buttonGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+button {
+    padding: 13px;
+    border: none;
+    border-radius: 14px;
+    background: #00ffff;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.danger {
+    background: #ff3355;
+    color: white;
+}
+
+.eventItem {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.06);
+    border: 1px solid rgba(0,255,255,0.18);
+    line-height: 1.5;
+}
+
+.eventType {
+    color: #00ffaa;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.eventMeta {
+    opacity: 0.78;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">RETENTION EVENTS</div>
+
+<div id="subtitle">
+Simulated operational events for accountability testing only.
+</div>
+
+<div class="section">
+    <div class="sectionTitle">Simulate Retainable Events</div>
+
+    <div class="buttonGrid">
+        <button onclick="simulateEvent('heartbeat_online')">Heartbeat Online</button>
+        <button onclick="simulateEvent('heartbeat_offline')">Heartbeat Offline</button>
+        <button onclick="simulateEvent('surface_connected')">Surface Connected</button>
+        <button onclick="simulateEvent('surface_disconnected')">Surface Disconnected</button>
+        <button onclick="simulateEvent('ownership_transfer')">Ownership Transfer</button>
+        <button onclick="simulateEvent('emergency_stop')">Emergency Stop</button>
+        <button onclick="simulateEvent('tabletop_trial_started')">Trial Started</button>
+        <button onclick="simulateEvent('tabletop_trial_completed')">Trial Completed</button>
+        <button onclick="simulateEvent('deployment_update')">Deployment Update</button>
+        <button onclick="simulateEvent('runtime_fault')">Runtime Fault</button>
+    </div>
+</div>
+
+<div class="section">
+    <div class="sectionTitle">Forbidden Event Test</div>
+
+    <div class="buttonGrid">
+        <button class="danger" onclick="simulateEvent('keystroke_capture_attempt')">
+            Test Keystroke Capture Block
+        </button>
+
+        <button class="danger" onclick="simulateEvent('hidden_surveillance_attempt')">
+            Test Hidden Surveillance Block
+        </button>
+
+        <button class="danger" onclick="clearEvents()">
+            Clear Simulated Events
+        </button>
+    </div>
+</div>
+
+<div class="section">
+    <div class="sectionTitle">Visible Simulated Event Trail</div>
+    <div id="eventList">Loading...</div>
+</div>
+
+<div id="footer">
+CYBERCROWD RETENTION EVENTS PANEL V1
+</div>
+
+</div>
+
+<script>
+const eventList = document.getElementById("eventList");
+
+async function simulateEvent(eventType) {
+    try {
+        const response = await fetch("/api/retention-events/simulate/" + eventType);
+        const result = await response.json();
+
+        if (!result.success) {
+            alert("Blocked: " + result.error);
+        }
+
+        loadEvents();
+    } catch (err) {
+        alert("Simulation request failed.");
+    }
+}
+
+async function clearEvents() {
+    try {
+        await fetch("/api/retention-events/clear");
+        loadEvents();
+    } catch (err) {
+        alert("Clear request failed.");
+    }
+}
+
+async function loadEvents() {
+    try {
+        const response = await fetch("/api/retention-events");
+        const data = await response.json();
+
+        if (!data.events || data.events.length === 0) {
+            eventList.innerHTML = "No simulated events recorded.";
+            return;
+        }
+
+        eventList.innerHTML = "";
+
+        data.events.slice().reverse().forEach((event) => {
+            const item = document.createElement("div");
+            item.className = "eventItem";
+
+            item.innerHTML =
+                "<div class='eventType'>" + event.type + "</div>" +
+                "<div>" + event.description + "</div>" +
+                "<div class='eventMeta'>Category: " + event.category + "</div>" +
+                "<div class='eventMeta'>Time: " + event.timestamp + "</div>" +
+                "<div class='eventMeta'>ID: " + event.id + "</div>";
+
+            eventList.appendChild(item);
+        });
+
+    } catch (err) {
+        eventList.innerHTML = "Retention event API unavailable.";
+    }
+}
+
+loadEvents();
+
+setInterval(loadEvents, 5000);
+</script>
+
+</body>
+</html>
