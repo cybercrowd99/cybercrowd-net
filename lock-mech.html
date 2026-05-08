@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Lock Mechanism</title>
+
+<style>
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    background: #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+
+    min-height: 100vh;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+
+    text-align: center;
+
+    color: #00ffff;
+
+    font-size: 34px;
+
+    letter-spacing: 4px;
+}
+
+#subtitle {
+
+    text-align: center;
+
+    opacity: 0.74;
+
+    margin-top: 8px;
+
+    margin-bottom: 30px;
+}
+
+#grid {
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap: 22px;
+}
+
+.panel {
+
+    background:
+    rgba(10,10,10,0.92);
+
+    border:
+    1px solid rgba(0,255,255,0.35);
+
+    border-radius: 22px;
+
+    padding: 22px;
+
+    box-shadow:
+    0 0 24px rgba(0,255,255,0.14);
+}
+
+h2 {
+
+    color: #00ffff;
+
+    margin-top: 0;
+}
+
+.step {
+
+    margin-top: 16px;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    background:
+    rgba(0,255,255,0.06);
+
+    border:
+    1px solid rgba(0,255,255,0.20);
+
+    line-height: 1.55;
+}
+
+input {
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background: #111;
+
+    color: white;
+
+    box-sizing: border-box;
+}
+
+button {
+
+    width: 100%;
+
+    margin-top: 12px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #00ffff;
+
+    color: black;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+button.secondary {
+
+    background: #333;
+
+    color: white;
+}
+
+#qrBox {
+
+    margin-top: 18px;
+
+    height: 220px;
+
+    border-radius: 18px;
+
+    border:
+    1px dashed rgba(0,255,255,0.40);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    opacity: 0.72;
+
+    line-height: 1.6;
+}
+
+#status {
+
+    margin-top: 18px;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    background:
+    rgba(0,255,170,0.08);
+
+    border:
+    1px solid rgba(0,255,170,0.28);
+
+    line-height: 1.5;
+}
+
+#doctrine {
+
+    margin-top: 18px;
+
+    padding: 16px;
+
+    border-radius: 16px;
+
+    background: #101010;
+
+    border:
+    1px solid rgba(255,170,0,0.35);
+
+    line-height: 1.6;
+}
+
+@media (max-width: 820px) {
+
+    #grid {
+
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+LOCK MECHANISM
+</div>
+
+<div id="subtitle">
+QR pairing, email access, and trusted surface verification.
+</div>
+
+<div id="grid">
+
+<div class="panel">
+
+<h2>Trusted Pairing</h2>
+
+<div class="step">
+STEP 1<br><br>
+
+Open the sandbox on your trusted laptop surface.
+</div>
+
+<div class="step">
+STEP 2<br><br>
+
+Scan the pairing QR code with your trusted mobile surface.
+</div>
+
+<div class="step">
+STEP 3<br><br>
+
+Complete secondary trust confirmation.
+</div>
+
+<div id="qrBox">
+QR PAIRING PLACEHOLDER
+<br><br>
+Future:
+<br>
+live session token
+<br>
+surface verification
+<br>
+ownership handshake
+</div>
+
+<div id="status">
+PAIRING STATUS:
+<br><br>
+Awaiting trusted device verification.
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>Access Verification</h2>
+
+<input
+type="email"
+placeholder="Trusted Email Surface">
+
+<input
+type="password"
+placeholder="Verification Passcode">
+
+<input
+type="text"
+placeholder="2-Step Authenticator Code">
+
+<button onclick="verifySurface()">
+VERIFY TRUSTED SURFACE
+</button>
+
+<button class="secondary"
+onclick="resetSession()">
+RESET TRUST SESSION
+</button>
+
+<div id="doctrine">
+
+<strong>LOCK DOCTRINE</strong>
+
+<br><br>
+
+The lock mechanism exists to:
+<br>
+• preserve trusted ownership
+<br>
+• prevent hostile surface injection
+<br>
+• protect interaction continuity
+<br>
+• support lawful accountability
+<br>
+• preserve environmental dignity
+
+<br><br>
+
+Trust should feel protective,
+not oppressive.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function verifySurface() {
+
+    const status =
+    document.getElementById("status");
+
+    status.innerHTML =
+    "PAIRING STATUS:" +
+    "<br><br>" +
+    "Trusted surface verified." +
+    "<br>" +
+    "Interaction ownership available.";
+}
+
+function resetSession() {
+
+    const status =
+    document.getElementById("status");
+
+    status.innerHTML =
+    "PAIRING STATUS:" +
+    "<br><br>" +
+    "Trust session reset." +
+    "<br>" +
+    "Awaiting trusted device verification.";
+}
+
+</script>
+
+</body>
+</html>
