@@ -1,78 +1,174 @@
-{
-  "environment": {
-    "name": "Cybercrowd Persistent Sandbox",
-    "version": "V1",
-    "continuity": true,
-    "ownership_transfer": true,
-    "serviceable_architecture": true
-  },
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  "ownership": {
-    "current_owner": "server",
-    "active_surface": "server"
-  },
+<title>Cybercrowd Operating Environment Stack</title>
 
-  "cursor": {
-    "surface": "server",
-    "x": 0.50,
-    "y": 0.50,
-    "motion_continuity": true
-  },
+<style>
 
-  "surfaces": [
-    {
-      "id": "server",
-      "label": "Laptop Surface",
-      "type": "primary"
-    },
-    {
-      "id": "client",
-      "label": "Phone Surface",
-      "type": "secondary"
-    }
-  ],
-
-  "objects": [
-    {
-      "id": "node-a",
-      "surface": "server",
-      "x": 0.22,
-      "y": 0.32,
-      "label": "FLOW NODE",
-      "color": "#00ffff",
-      "persistent": true,
-      "movable": true
-    },
-
-    {
-      "id": "node-b",
-      "surface": "server",
-      "x": 0.54,
-      "y": 0.52,
-      "label": "SHARED TOOL",
-      "color": "#00ffaa",
-      "persistent": true,
-      "movable": true
-    }
-  ],
-
-  "permissions": {
-    "server": {
-      "can_transfer": true,
-      "can_move_objects": true
-    },
-
-    "client": {
-      "can_transfer": true,
-      "can_move_objects": true
-    }
-  },
-
-  "doctrine": [
-    "persistent shared sandbox",
-    "transferable interaction ownership",
-    "preserve environmental continuity",
-    "systems should remain serviceable",
-    "modular replaceable environments"
-  ]
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
 }
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+#stack {
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(240px, 1fr));
+
+    gap: 18px;
+}
+
+.stackCard {
+
+    min-height: 160px;
+
+    border-radius: 22px;
+
+    border:
+    1px solid rgba(0,255,255,0.35);
+
+    background:
+    rgba(10,10,10,0.9);
+
+    padding: 22px;
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border .2s ease;
+}
+
+.stackCard:hover {
+
+    transform: scale(1.03);
+
+    border:
+    1px solid rgba(0,255,255,0.8);
+
+    box-shadow:
+    0 0 22px rgba(0,255,255,0.22);
+}
+
+.cardTitle {
+
+    color: #00ffff;
+
+    font-size: 21px;
+
+    margin-bottom: 10px;
+}
+
+.cardText {
+
+    opacity: 0.82;
+
+    line-height: 1.5;
+
+    font-size: 14px;
+}
+
+#footer {
+
+    text-align: center;
+
+    margin-top: 34px;
+
+    opacity: 0.55;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+CYBERCROWD STACK
+</div>
+
+<div id="subtitle">
+Operating environment launcher. No squash. Every system stands.
+</div>
+
+<div id="stack">
+
+<div class="stackCard"
+onclick="go('nav.html')">
+
+    <div class="cardTitle">
+    Temporary Route Menu
+    </div>
+
+    <div class="cardText">
+    Test route launcher and transition menu environment.
+    </div>
+
+</div>
+
+<div class="stackCard"
+onclick="go('signup.html')">
+
+    <div class="cardTitle">
+    Signup Gate
+    </div>
+
+    <div class="cardText">
+    Controlled registration and profile-room entry.
+    </div>
+
+</div>
+
+<div class="stackCard"
+onclick="go('security-gate.html')">
+
+    <div class="cardTitle">
