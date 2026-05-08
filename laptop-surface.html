@@ -58,6 +58,13 @@ h1 {
     line-height: 1.5;
 }
 
+#heartbeatStatus {
+    margin-top: 16px;
+    color: #ffff00;
+    font-size: 13px;
+    opacity: 0.8;
+}
+
 #cursorDot {
     position: fixed;
     width: 28px;
@@ -109,6 +116,10 @@ Phone surface may now control the laptop cursor.
 Cursor profile loading...
 </div>
 
+<div id="heartbeatStatus">
+Heartbeat: starting...
+</div>
+
 <button onclick="armControl()">
 ARM CONTROL
 </button>
@@ -129,6 +140,7 @@ const ws = new WebSocket("ws://" + location.host);
 const dot = document.getElementById("cursorDot");
 const statusBox = document.getElementById("status");
 const cursorProfileBox = document.getElementById("cursorProfile");
+const heartbeatBox = document.getElementById("heartbeatStatus");
 
 function armControl() {
     ws.send(JSON.stringify({
@@ -142,83 +154,182 @@ function disarmControl() {
     }));
 }
 
+function sendHeartbeat() {
+    if (ws.readyState === WebSocket.OPEN) {
+
+        ws.send(JSON.stringify({
+            type: "heartbeat",
+            surfaceId: "laptop"
+        }));
+
+        heartbeatBox.innerHTML =
+            "Heartbeat: online";
+    }
+}
+
+setInterval(sendHeartbeat, 4000);
+
 function applyCursorProfile(profileData) {
+
     if (!profileData || !profileData.profile) {
-        cursorProfileBox.innerHTML = "Cursor profile unavailable.";
+
+        cursorProfileBox.innerHTML =
+        "Cursor profile unavailable.";
+
         return;
     }
 
-    const name = profileData.name;
-    const profile = profileData.profile;
+    const profile =
+    profileData.profile;
 
     cursorProfileBox.innerHTML =
-        "Active Cursor: <strong>" + profile.label + "</strong><br>" +
+        "Active Cursor: <strong>" +
+        profile.label +
+        "</strong><br>" +
         profile.description;
 
-    dot.style.width = profile.size + "px";
-    dot.style.height = profile.size + "px";
-    dot.style.border = "2px solid " + profile.border;
-    dot.style.background = profile.color;
+    dot.style.clipPath =
+    "none";
+
+    dot.style.borderRadius =
+    "50%";
+
+    dot.style.width =
+    profile.size + "px";
+
+    dot.style.height =
+    profile.size + "px";
+
+    dot.style.border =
+    "2px solid " +
+    profile.border;
+
+    dot.style.background =
+    profile.color;
 
     if (profile.glow) {
+
         dot.style.boxShadow =
-            "0 0 16px " + profile.color + ", 0 0 34px " + profile.color;
+            "0 0 16px " +
+            profile.color +
+            ", 0 0 34px " +
+            profile.color;
+
     } else {
-        dot.style.boxShadow = "none";
+
+        dot.style.boxShadow =
+        "none";
     }
 
     if (profile.shape === "triangle") {
+
         dot.style.width = "0";
         dot.style.height = "0";
-        dot.style.borderLeft = (profile.size / 2) + "px solid transparent";
-        dot.style.borderRight = (profile.size / 2) + "px solid transparent";
-        dot.style.borderBottom = profile.size + "px solid " + profile.color;
-        dot.style.background = "transparent";
-        dot.style.borderRadius = "0";
-        dot.style.boxShadow = profile.glow
-            ? "0 0 18px " + profile.color
-            : "none";
+
+        dot.style.borderLeft =
+            (profile.size / 2) +
+            "px solid transparent";
+
+        dot.style.borderRight =
+            (profile.size / 2) +
+            "px solid transparent";
+
+        dot.style.borderBottom =
+            profile.size +
+            "px solid " +
+            profile.color;
+
+        dot.style.background =
+        "transparent";
+
+        dot.style.borderRadius =
+        "0";
     }
 
     if (profile.shape === "arrow") {
-        dot.style.borderRadius = "0";
-        dot.style.width = profile.size + "px";
-        dot.style.height = profile.size + "px";
-        dot.style.background = profile.color;
-        dot.style.clipPath = "polygon(0 0, 100% 45%, 58% 58%, 45% 100%, 30% 92%, 43% 55%, 0 70%)";
+
+        dot.style.borderRadius =
+        "0";
+
+        dot.style.width =
+        profile.size + "px";
+
+        dot.style.height =
+        profile.size + "px";
+
+        dot.style.background =
+        profile.color;
+
+        dot.style.clipPath =
+        "polygon(0 0, 100% 45%, 58% 58%, 45% 100%, 30% 92%, 43% 55%, 0 70%)";
     }
 }
 
 fetch("/api/cursor-profile")
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            applyCursorProfile(data.profile);
-        }
-    })
-    .catch(() => {
-        cursorProfileBox.innerHTML = "Cursor profile failed to load.";
-    });
+.then(response => response.json())
+.then(data => {
+
+    if (data.success) {
+
+        applyCursorProfile(
+            data.profile
+        );
+    }
+})
+.catch(() => {
+
+    cursorProfileBox.innerHTML =
+    "Cursor profile failed to load.";
+});
 
 ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
+
+    const data =
+    JSON.parse(event.data);
 
     if (data.type === "move") {
-        dot.style.left = (data.x * window.innerWidth) + "px";
-        dot.style.top = (data.y * window.innerHeight) + "px";
+
+        dot.style.left =
+            (data.x * window.innerWidth) +
+            "px";
+
+        dot.style.top =
+            (data.y * window.innerHeight) +
+            "px";
     }
 
     if (data.type === "click") {
-        dot.style.transform = "translate(-50%, -50%) scale(1.8)";
+
+        dot.style.transform =
+        "translate(-50%, -50%) scale(1.8)";
 
         setTimeout(() => {
-            dot.style.transform = "translate(-50%, -50%) scale(1)";
+
+            dot.style.transform =
+            "translate(-50%, -50%) scale(1)";
+
         }, 120);
     }
 
     if (data.type === "bridge-status") {
-        statusBox.innerHTML = data.message;
+
+        statusBox.innerHTML =
+        data.message;
     }
+};
+
+ws.onopen = () => {
+
+    heartbeatBox.innerHTML =
+    "Heartbeat: connected";
+
+    sendHeartbeat();
+};
+
+ws.onclose = () => {
+
+    heartbeatBox.innerHTML =
+    "Heartbeat: disconnected";
 };
 </script>
 
