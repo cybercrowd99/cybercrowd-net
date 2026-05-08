@@ -1,8 +1,11 @@
 function createNodeBridge(options) {
     const transport = options.transport;
     const osAuthority = options.osAuthority;
+    const config = options.config || {};
 
-    let controlArmed = true;
+    let controlArmed =
+        config.bridge &&
+        config.bridge.control_armed_default === true;
 
     function armControl() {
         controlArmed = true;
@@ -37,25 +40,30 @@ function createNodeBridge(options) {
 
         if (data.type === "move") {
             if (!controlArmed) {
+                transport.broadcast({
+                    type: "bridge-status",
+                    armed: false,
+                    message: "CONTROL DISARMED — MOVE IGNORED"
+                });
                 return;
             }
 
-            osAuthority.moveMouseByRatio(
-                data.x,
-                data.y
-            );
-
+            osAuthority.moveMouseByRatio(data.x, data.y);
             transport.broadcast(data);
             return;
         }
 
         if (data.type === "click") {
             if (!controlArmed) {
+                transport.broadcast({
+                    type: "bridge-status",
+                    armed: false,
+                    message: "CONTROL DISARMED — CLICK IGNORED"
+                });
                 return;
             }
 
             osAuthority.clickMouse();
-
             transport.broadcast(data);
             return;
         }
@@ -66,6 +74,12 @@ function createNodeBridge(options) {
             message: "UNKNOWN EVENT IGNORED"
         });
     }
+
+    transport.broadcast({
+        type: "bridge-status",
+        armed: controlArmed,
+        message: controlArmed ? "CONTROL ARMED" : "CONTROL DISARMED"
+    });
 
     return {
         handleMessage,
