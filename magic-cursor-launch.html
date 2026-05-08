@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Magic Cursor Launch</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+    text-align: center;
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+}
+
+#subtitle {
+    text-align: center;
+    margin-top: 8px;
+    opacity: 0.72;
+    margin-bottom: 28px;
+}
+
+#grid {
+    max-width: 1100px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.panel {
+    background: rgba(12,12,12,0.92);
+
+    border:
+    1px solid rgba(0,255,255,0.35);
+
+    border-radius: 22px;
+
+    padding: 22px;
+
+    box-shadow:
+    0 0 24px rgba(0,255,255,0.14);
+}
+
+h2 {
+    color: #00ffff;
+    margin-top: 0;
+}
+
+.step {
+    margin-top: 16px;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    background:
+    rgba(0,255,255,0.06);
+
+    border:
+    1px solid rgba(0,255,255,0.22);
+
+    line-height: 1.55;
+}
+
+.code {
+    margin-top: 10px;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    background: #111;
+
+    color: #00ffaa;
+
+    word-break: break-word;
+
+    font-family: monospace;
+    font-size: 13px;
+}
+
+button {
+    width: 100%;
+
+    margin-top: 14px;
+
+    padding: 14px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: #00ffff;
+
+    color: black;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+button.secondary {
+    background: #333;
+    color: white;
+}
+
+#concept {
+    margin-top: 18px;
+
+    padding: 16px;
+
+    border-radius: 16px;
+
+    background: #111;
+
+    border:
+    1px solid rgba(0,255,170,0.45);
+
+    line-height: 1.6;
+}
+
+#footer {
+    margin-top: 34px;
+
+    text-align: center;
+
+    opacity: 0.5;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+}
+
+@media (max-width: 820px) {
+
+    #grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+MAGIC CURSOR V5
+</div>
+
+<div id="subtitle">
+Persistent Shared Sandbox + Transferable Interaction Ownership
+</div>
+
+<div id="grid">
+
+<div class="panel">
+
+<h2>Launch Instructions</h2>
+
+<div class="step">
+STEP 1<br><br>
+
+Open terminal or command line in your Cybercrowd project folder.
+</div>
+
+<div class="step">
+STEP 2<br><br>
+
+Start the sandbox server:
+<div class="code">
+node server.js
+</div>
+</div>
+
+<div class="step">
+STEP 3<br><br>
+
+Laptop launch path:
+<div class="code">
+http://localhost:7070
+</div>
+</div>
+
+<div class="step">
+STEP 4<br><br>
+
+Phone launch path:
+<div class="code">
+http://YOUR-LAPTOP-IP:7070/?client
+</div>
+</div>
+
+<div class="step">
+STEP 5<br><br>
+
+Push cursor to right edge of laptop screen to transfer interaction ownership to phone.
+</div>
+
+<div class="step">
+STEP 6<br><br>
+
+Touch left edge on phone to return interaction ownership to laptop.
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>Sandbox Logic</h2>
+
+<div id="concept">
+
+Traditional systems:
+<br><br>
+
+open app → close app → lose state
+<br><br>
+
+Cybercrowd V5:
+<br><br>
+
+persistent shared sandbox
++
+transferable interaction ownership
+<br><br>
+
+The environment survives.
+Only interaction ownership changes.
+<br><br>
+
+Objects remain persistent between surfaces.
+Laptop and phone become collaborative environment layers.
+</div>
+
+<button onclick="window.location.href='environment-stack.html'">
+RETURN TO ENVIRONMENT STACK
+</button>
+
+<button class="secondary"
+onclick="window.location.href='route-registry.html'">
+OPEN ROUTE REGISTRY
+</button>
+
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD MAGIC CURSOR LAUNCH DOOR V1
+</div>
+
+</div>
+
+</body>
+</html>
