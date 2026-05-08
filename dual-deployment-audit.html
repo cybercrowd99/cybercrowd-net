@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Dual Deployment Audit</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    max-width: 1150px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.card {
+    margin-top: 18px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+p, li {
+    line-height: 1.65;
+    opacity: 0.88;
+}
+
+ul {
+    padding-left: 22px;
+}
+
+.lockLine {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(0,255,255,0.06);
+    color: #00ffaa;
+    font-size: 21px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.good {
+    color: #00ffaa;
+    font-weight: bold;
+}
+
+.warning {
+    color: #ffaa00;
+    font-weight: bold;
+}
+
+.code {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(0,255,255,0.18);
+    font-family: monospace;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+<div id="wrap">
+
+<h1>CYBERCROWD DUAL DEPLOYMENT AUDIT</h1>
+
+<div id="subtitle">
+Read-only deployment truth record and lane protection page.
+</div>
+
+<div class="lockLine">
+Do not panic-patch. Do not flatten. Do not condense. Document the real topology first.
+</div>
+
+<div class="card">
+<h2>1. Audit Finding</h2>
+<p>
+CyberCrowd is currently operating through a dual deployment model.
+The live surface is delivered through the Pages pipeline, while runtime capability remains connected through an independently deployed Worker service binding.
+</p>
+
+<div class="code">Pages Surface Lane
++
+MAIN_WORKER Runtime Lane</div>
+
+<p>
+This is not a total failure condition. It is an active topology that must be understood before any cleanup or migration occurs.
+</p>
+</div>
+
+<div class="card">
+<h2>2. Pages Surface Lane</h2>
+<p>
+The Pages pipeline is succeeding and remains the public visible layer.
+</p>
+
+<ul>
+<li>Build command is effectively no-op.</li>
+<li>Pages deploys the visible surface.</li>
+<li>Live site is not blocked by the red Workers Build indicator.</li>
+<li>Pages should not be flattened into a single-page coffin.</li>
+</ul>
+
+<div class="code">Pages Surface Lane = public visible layer</div>
+</div>
+
+<div class="card">
+<h2>3. Worker Runtime Lane</h2>
+<p>
+The project has a service binding connected to an independently deployed Worker.
+</p>
+
+<div class="code">MAIN_WORKER → cybercrowd-net</div>
+
+<p>
+This means the runtime lane exists and should not be deleted blindly.
+It must be separated, mapped, or intentionally migrated only when the architecture is ready.
+</p>
+</div>
+
+<div class="card">
+<h2>4. Red Workers Build Check</h2>
+<p>
+The red Workers Build indicator is currently understood as a detection artifact caused by Worker configuration being visible in the repository.
+</p>
+
+<ul>
+<li>Worker Builds are not confirmed as blocking the live Pages deployment.</li>
+<li>The red check does not mean the whole environment failed.</li>
+<li>The live Pages deployment continues to operate.</li>
+<li>The indicator should be treated as topology noise until the lane is intentionally cleaned.</li>
+</ul>
+
+<div class="code">Red Workers Build check = detection artifact
+not live-site collapse</div>
+</div>
+
+<div class="card">
+<h2>5. R2 Binding Status</h2>
+<p>
+The ALBUM binding was intentionally parked after Cloudflare R2 validation returned a timeout during deploy.
+</p>
+
+<ul>
+<li><span class="warning">ALBUM</span> is unbound / parked.</li>
+<li><span class="good">GRAPHICS</span> remains preserved.</li>
+<li><span class="good">TEASERS</span> remains preserved.</li>
+<li>The bucket itself was not deleted.</li>
+</ul>
+
+<div class="code">ALBUM → parked
+GRAPHICS → preserved
+TEASERS → preserved</div>
+</div>
+
+<div class="card">
+<h2>6. Current Doctrine Lock</h2>
+<ul>
+<li>No condensing.</li>
+<li>No rollback.</li>
+<li>No flattening.</li>
+<li>No single-page coffin.</li>
+<li>No killing Workers or R2 future lanes.</li>
+</ul>
+
+<div class="code">Pages Surface Lane = public visible layer
+Worker Lane = separated runtime
+R2 Lane = separated storage and media</div>
+</div>
+
+<div class="card">
+<h2>7. Correct Next Action</h2>
+<p>
+Do not clean or migrate blindly.
+The correct next step is documentation and lane mapping.
+</p>
+
+<p>
+Any future cleanup must preserve the operational principle:
+</p>
+
+<div class="code">small target fails
+whole environment survives</div>
+
+<p>
+CyberCrowd should remain an operational environment with survivable lanes.
+</p>
+</div>
+
+<div class="card">
+<h2>8. Final Audit Statement</h2>
+<p>
+CyberCrowd is not broken because one deployment indicator is red.
+The visible site, Worker lane, R2 future lane, operations surfaces, continuity doctrine, and survivable lane model must be treated as separate operational compartments.
+</p>
+
+<p>
+A red indicator must not cause destructive simplification.
+</p>
+</div>
+
+<div id="footer">
+CYBERCROWD DUAL DEPLOYMENT AUDIT V1
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
