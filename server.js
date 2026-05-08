@@ -3,6 +3,8 @@ const http = require("http");
 const WebSocket = require("ws");
 const qrcode = require("qrcode-terminal");
 const os = require("os");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -10,11 +12,47 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = 7070;
 
-function getLocalIP() {
-    const nets = os.networkInterfaces();
+/* ------------------------------------------------ */
+/* LOAD ENVIRONMENT STATE                           */
+/* ------------------------------------------------ */
 
-    for (const name of Object.keys(nets)) {
-        for (const net of nets[name]) {
+const STATE_PATH =
+path.join(
+    __dirname,
+    "environment-state.json"
+);
+
+let sandboxState =
+JSON.parse(
+    fs.readFileSync(
+        STATE_PATH,
+        "utf8"
+    )
+);
+
+console.log("");
+console.log(
+    "ENVIRONMENT STATE LOADED"
+);
+console.log("");
+
+/* ------------------------------------------------ */
+/* LOCAL IP                                         */
+/* ------------------------------------------------ */
+
+function getLocalIP() {
+
+    const nets =
+    os.networkInterfaces();
+
+    for (
+        const name of Object.keys(nets)
+    ) {
+
+        for (
+            const net of nets[name]
+        ) {
+
             if (
                 net.family === "IPv4" &&
                 !net.internal
@@ -27,32 +65,29 @@ function getLocalIP() {
     return "localhost";
 }
 
-const sandboxState = {
-    owner: "server",
-    cursor: {
-        surface: "server",
-        x: 0.50,
-        y: 0.50
-    },
-    objects: [
-        {
-            id: "node-a",
-            surface: "server",
-            x: 0.22,
-            y: 0.32,
-            label: "FLOW NODE",
-            color: "#00ffff"
-        },
-        {
-            id: "node-b",
-            surface: "server",
-            x: 0.54,
-            y: 0.52,
-            label: "SHARED TOOL",
-            color: "#00ffaa"
-        }
-    ]
-};
+/* ------------------------------------------------ */
+/* SAVE STATE                                       */
+/* ------------------------------------------------ */
+
+function saveEnvironmentState() {
+
+    fs.writeFileSync(
+        STATE_PATH,
+        JSON.stringify(
+            sandboxState,
+            null,
+            2
+        )
+    );
+
+    console.log(
+        "ENVIRONMENT STATE SAVED"
+    );
+}
+
+/* ------------------------------------------------ */
+/* MAIN PAGE                                        */
+/* ------------------------------------------------ */
 
 app.get("/", (req, res) => {
 
@@ -68,7 +103,7 @@ res.send(`
 content="width=device-width, initial-scale=1.0">
 
 <title>
-Cybercrowd Magic Cursor V6
+Cybercrowd Magic Cursor V7
 </title>
 
 <style>
@@ -143,7 +178,7 @@ body {
 
     color: white;
 
-    opacity: 0.86;
+    opacity: 0.85;
 
     font-size: 12px;
 
@@ -158,7 +193,7 @@ body {
     bottom: 16px;
     right: 16px;
 
-    opacity: 0.70;
+    opacity: 0.68;
 
     font-size: 12px;
 
@@ -169,6 +204,7 @@ body {
 
 #serverSurface,
 #clientSurface {
+
     position: absolute;
 
     top: 72px;
@@ -177,7 +213,7 @@ body {
     border-radius: 24px;
 
     border:
-    2px solid rgba(0,255,255,0.25);
+    2px solid rgba(0,255,255,0.24);
 
     background:
     linear-gradient(
@@ -186,32 +222,55 @@ body {
         rgba(255,255,255,0.02)
     );
 
-    box-shadow:
-    0 0 20px rgba(0,255,255,0.10);
-
     overflow: hidden;
+
+    transition:
+    border 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 #serverSurface {
+
     left: 28px;
-    width: calc(100vw - 56px);
+
+    width:
+    calc(100vw - 56px);
 }
 
 #clientSurface {
+
     right: -280px;
+
     width: 220px;
 
     transition:
     right 0.35s ease,
-    border 0.2s ease,
-    box-shadow 0.2s ease;
+    border 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 #clientSurface.pulled {
+
     right: 34px;
 
     border:
     2px solid rgba(0,255,170,0.85);
 
     box-shadow:
-    0 0 22px rgba(0,255,255,0.25
+    0 0 24px rgba(0,255,255,0.22),
+    0 0 44px rgba(0,255,170,0.18);
+}
+
+.surfaceLabel {
+
+    position: absolute;
+
+    top: 14px;
+
+    width: 100%;
+
+    text-align: center;
+
+    color: #00ffaa;
+
+    font-size: 12px;
