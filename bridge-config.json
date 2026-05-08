@@ -1,0 +1,54 @@
+{
+  "bridge": {
+    "name": "Cybercrowd Modular Mouse Bridge",
+    "version": "V1",
+    "port": 7070,
+    "transport": "websocket",
+    "authority_layer": "windows",
+    "control_armed_default": true
+  },
+
+  "movement": {
+    "throttle_ms": 25,
+    "smooth_factor": 0.18,
+    "edge_padding": 2
+  },
+
+  "surfaces": {
+    "laptop": {
+      "enabled": true,
+      "route": "/",
+      "file": "laptop-surface.html"
+    },
+
+    "phone": {
+      "enabled": true,
+      "route": "/client",
+      "file": "phone-surface.html"
+    }
+  },
+
+  "security": {
+    "lock_mechanism_enabled": true,
+    "require_pairing": false,
+    "allow_remote_click": true,
+    "emergency_stop_enabled": true
+  },
+
+  "future_modules": {
+    "qr_pairing": false,
+    "two_step_auth": false,
+    "persistent_sessions": false,
+    "multi_surface": false,
+    "rack_deployment": false,
+    "pcb_authority_layer": false
+  },
+
+  "doctrine": [
+    "systems should remain serviceable",
+    "replaceable infrastructure",
+    "interaction accountability without hostile intrusion",
+    "preserve environmental continuity",
+    "persistent shared sandbox"
+  ]
+}
