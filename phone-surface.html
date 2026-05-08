@@ -37,16 +37,6 @@ html, body {
     letter-spacing: 2px;
 }
 
-#status {
-    position: fixed;
-    bottom: 18px;
-    left: 18px;
-    right: 18px;
-    color: #00ffaa;
-    font-size: 13px;
-    line-height: 1.6;
-}
-
 #cursorProfile {
     position: fixed;
     top: 48px;
@@ -55,6 +45,26 @@ html, body {
     opacity: 0.72;
     font-size: 12px;
     line-height: 1.4;
+}
+
+#heartbeatStatus {
+    position: fixed;
+    top: 98px;
+    left: 18px;
+    right: 18px;
+    color: #ffff00;
+    font-size: 12px;
+    opacity: 0.82;
+}
+
+#status {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    right: 18px;
+    color: #00ffaa;
+    font-size: 13px;
+    line-height: 1.6;
 }
 
 #touchDot {
@@ -84,6 +94,10 @@ PHONE SURFACE MODULE
 Cursor profile loading...
 </div>
 
+<div id="heartbeatStatus">
+Heartbeat: starting...
+</div>
+
 <div id="touchDot"></div>
 
 <div id="status">
@@ -100,6 +114,20 @@ const pad = document.getElementById("pad");
 const dot = document.getElementById("touchDot");
 const statusBox = document.getElementById("status");
 const cursorProfileBox = document.getElementById("cursorProfile");
+const heartbeatBox = document.getElementById("heartbeatStatus");
+
+function sendHeartbeat() {
+    if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+            type: "heartbeat",
+            surfaceId: "phone"
+        }));
+
+        heartbeatBox.innerHTML = "Heartbeat: online";
+    }
+}
+
+setInterval(sendHeartbeat, 4000);
 
 function sendMove(touch) {
     const x = touch.clientX / window.innerWidth;
@@ -198,6 +226,15 @@ ws.onmessage = (event) => {
     if (data.type === "bridge-status") {
         statusBox.innerHTML = data.message;
     }
+};
+
+ws.onopen = () => {
+    heartbeatBox.innerHTML = "Heartbeat: connected";
+    sendHeartbeat();
+};
+
+ws.onclose = () => {
+    heartbeatBox.innerHTML = "Heartbeat: disconnected";
 };
 </script>
 
