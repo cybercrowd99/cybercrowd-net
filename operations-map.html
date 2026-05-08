@@ -50,7 +50,7 @@ body {
     position: relative;
 
     width: 100%;
-    max-width: 1400px;
+    max-width: 1450px;
     min-height: 1200px;
 
     margin: 0 auto;
@@ -70,7 +70,7 @@ body {
 
     position: absolute;
 
-    width: 220px;
+    width: 230px;
 
     border-radius: 18px;
 
@@ -105,21 +105,647 @@ body {
 }
 
 .node.online {
-    border-color: rgba(0,255,170,0.75);
+    border:
+    1px solid rgba(0,255,120,0.70);
 
     box-shadow:
-    0 0 20px rgba(0,255,170,0.16);
+    0 0 16px rgba(0,255,120,0.18);
 }
 
 .node.warning {
-    border-color: rgba(255,170,0,0.75);
+    border:
+    1px solid rgba(255,170,0,0.80);
 
     box-shadow:
-    0 0 20px rgba(255,170,0,0.16);
+    0 0 16px rgba(255,170,0,0.18);
 }
 
 .node.critical {
-    border-color: rgba(255,50,85,0.85);
+    border:
+    1px solid rgba(255,60,90,0.85);
 
     box-shadow:
-    0 0 22
+    0 0 18px rgba(255,60,90,0.22);
+}
+
+.nodeTitle {
+    color: #00ffff;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.nodeStatus {
+    margin-bottom: 10px;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.status-good {
+    color: #00ffaa;
+}
+
+.status-warning {
+    color: #ffaa00;
+}
+
+.status-critical {
+    color: #ff3355;
+}
+
+.nodeText {
+    opacity: 0.82;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.nodeMeta {
+    margin-top: 10px;
+    opacity: 0.65;
+    font-size: 12px;
+}
+
+svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+line {
+    stroke: rgba(0,255,255,0.28);
+    stroke-width: 2;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+OPERATIONS MAP
+</div>
+
+<div id="subtitle">
+Live operational topology and system relationship surface.
+</div>
+
+<div id="map">
+
+<svg viewBox="0 0 1450 1200" preserveAspectRatio="none">
+
+<!-- ROOT -->
+<line x1="725" y1="120" x2="350" y2="340"/>
+<line x1="725" y1="120" x2="725" y2="340"/>
+<line x1="725" y1="120" x2="1100" y2="340"/>
+
+<!-- RETENTION -->
+<line x1="350" y1="340" x2="200" y2="620"/>
+<line x1="350" y1="340" x2="470" y2="620"/>
+
+<!-- CONTINUITY -->
+<line x1="725" y1="340" x2="725" y2="620"/>
+<line x1="725" y1="340" x2="970" y2="620"/>
+
+<!-- TABLETOP -->
+<line x1="1100" y1="340" x2="1120" y2="620"/>
+<line x1="1100" y1="340" x2="1320" y2="620"/>
+
+<!-- STACK -->
+<line x1="725" y1="620" x2="725" y2="930"/>
+
+</svg>
+
+<!-- OPERATIONS ROOT -->
+
+<div
+id="node-operations"
+class="node online"
+style="top:40px; left:610px;"
+onclick="go('operations-dashboard.html')">
+
+<div class="nodeTitle">
+Operations Dashboard
+</div>
+
+<div class="nodeStatus status-good">
+LIVE OPERATIONS
+</div>
+
+<div class="nodeText">
+Primary operational coordination and visibility surface.
+</div>
+
+<div class="nodeMeta"
+id="operations-meta">
+Awaiting runtime data...
+</div>
+
+</div>
+
+<!-- RETENTION -->
+
+<div
+id="node-retention-status"
+class="node online"
+style="top:260px; left:240px;"
+onclick="go('retention-status.html')">
+
+<div class="nodeTitle">
+Retention Status
+</div>
+
+<div class="nodeStatus status-good">
+ACCOUNTABILITY ACTIVE
+</div>
+
+<div class="nodeText">
+Retention doctrine and visibility layer.
+</div>
+
+<div class="nodeMeta">
+Retention systems online.
+</div>
+
+</div>
+
+<div
+id="node-retention-events"
+class="node online"
+style="top:560px; left:110px;"
+onclick="go('retention-events.html')">
+
+<div class="nodeTitle">
+Retention Events
+</div>
+
+<div class="nodeStatus status-good">
+SIMULATION ACTIVE
+</div>
+
+<div class="nodeText">
+Retention event and operational simulation systems.
+</div>
+
+<div class="nodeMeta"
+id="retention-meta">
+Loading retention activity...
+</div>
+
+</div>
+
+<div
+id="node-audit"
+class="node online"
+style="top:560px; left:390px;"
+onclick="go('audit-trail.html')">
+
+<div class="nodeTitle">
+Audit Trail
+</div>
+
+<div class="nodeStatus status-good">
+LOGGING ACTIVE
+</div>
+
+<div class="nodeText">
+Interaction accountability and lawful event tracking.
+</div>
+
+<div class="nodeMeta">
+Audit systems operational.
+</div>
+
+</div>
+
+<!-- CONTINUITY -->
+
+<div
+id="node-continuity-dashboard"
+class="node online"
+style="top:260px; left:610px;"
+onclick="go('continuity-dashboard.html')">
+
+<div class="nodeTitle">
+Continuity Dashboard
+</div>
+
+<div class="nodeStatus status-good">
+RESILIENCE ACTIVE
+</div>
+
+<div class="nodeText">
+Continuity coordination and resilience monitoring.
+</div>
+
+<div class="nodeMeta"
+id="continuity-meta">
+Loading continuity state...
+</div>
+
+</div>
+
+<div
+id="node-continuity-events"
+class="node online"
+style="top:560px; left:610px;"
+onclick="go('continuity-events.html')">
+
+<div class="nodeTitle">
+Continuity Events
+</div>
+
+<div class="nodeStatus status-good">
+EVENT STREAM ACTIVE
+</div>
+
+<div class="nodeText">
+Continuity simulations and resilience events.
+</div>
+
+<div class="nodeMeta"
+id="continuity-events-meta">
+Loading event stream...
+</div>
+
+</div>
+
+<div
+id="node-broadcasts"
+class="node online"
+style="top:560px; left:900px;"
+onclick="go('continuity-broadcasts.html')">
+
+<div class="nodeTitle">
+Continuity Broadcasts
+</div>
+
+<div class="nodeStatus status-good">
+BROADCAST NETWORK ACTIVE
+</div>
+
+<div class="nodeText">
+Operational continuity messaging and awareness.
+</div>
+
+<div class="nodeMeta"
+id="broadcast-meta">
+Loading broadcast state...
+</div>
+
+</div>
+
+<!-- TABLETOP -->
+
+<div
+id="node-tabletop"
+class="node online"
+style="top:260px; left:980px;"
+onclick="go('tabletop-status.html')">
+
+<div class="nodeTitle">
+Tabletop Status
+</div>
+
+<div class="nodeStatus status-good">
+TABLETOP ACTIVE
+</div>
+
+<div class="nodeText">
+Surface heartbeat and operational awareness systems.
+</div>
+
+<div class="nodeMeta"
+id="tabletop-meta">
+Loading heartbeat...
+</div>
+
+</div>
+
+<div
+id="node-checklist"
+class="node online"
+style="top:560px; left:1080px;"
+onclick="go('tabletop-checklist.html')">
+
+<div class="nodeTitle">
+Tabletop Checklist
+</div>
+
+<div class="nodeStatus status-good">
+WORKFLOW ACTIVE
+</div>
+
+<div class="nodeText">
+Operational workflow and tabletop execution surface.
+</div>
+
+<div class="nodeMeta">
+Checklist systems operational.
+</div>
+
+</div>
+
+<div
+id="node-cursor"
+class="node online"
+style="top:560px; left:1310px;"
+onclick="go('magic-cursor-launch.html')">
+
+<div class="nodeTitle">
+Magic Cursor
+</div>
+
+<div class="nodeStatus status-good">
+SURFACE LINK ACTIVE
+</div>
+
+<div class="nodeText">
+Cross-surface control and transferable interaction layer.
+</div>
+
+<div class="nodeMeta">
+Cursor bridge online.
+</div>
+
+</div>
+
+<!-- STACK -->
+
+<div
+id="node-stack"
+class="node online"
+style="top:920px; left:610px;"
+onclick="go('environment-stack.html')">
+
+<div class="nodeTitle">
+Environment Stack
+</div>
+
+<div class="nodeStatus status-good">
+INFRASTRUCTURE ACTIVE
+</div>
+
+<div class="nodeText">
+Full modular infrastructure launcher and environment index.
+</div>
+
+<div class="nodeMeta">
+Stack operational.
+</div>
+
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD OPERATIONS MAP LIVE V2
+</div>
+
+</div>
+
+<script>
+
+async function loadOperationsMap() {
+
+    await Promise.all([
+        loadTabletopStatus(),
+        loadRetentionEvents(),
+        loadContinuityEvents(),
+        loadBroadcasts()
+    ]);
+}
+
+async function loadTabletopStatus() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/tabletop-status"
+        );
+
+        const data =
+        await response.json();
+
+        const heartbeat =
+        data.heartbeat || {};
+
+        const onlineCount =
+        Object.values(heartbeat)
+        .filter(
+            s => s.status === "online"
+        ).length;
+
+        document.getElementById(
+            "tabletop-meta"
+        ).innerHTML =
+
+            onlineCount +
+            " surfaces online";
+
+        document.getElementById(
+            "operations-meta"
+        ).innerHTML =
+
+            "Owner: " +
+            data.current_owner;
+
+    } catch (err) {
+
+        setCritical(
+            "node-tabletop",
+            "TABLETOP UNAVAILABLE"
+        );
+    }
+}
+
+async function loadRetentionEvents() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/retention-events"
+        );
+
+        const data =
+        await response.json();
+
+        const count =
+        (data.events || []).length;
+
+        document.getElementById(
+            "retention-meta"
+        ).innerHTML =
+
+            count +
+            " retention events tracked";
+
+    } catch (err) {
+
+        setWarning(
+            "node-retention-events",
+            "RETENTION API WARNING"
+        );
+    }
+}
+
+async function loadContinuityEvents() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/continuity-events"
+        );
+
+        const data =
+        await response.json();
+
+        const count =
+        (data.events || []).length;
+
+        document.getElementById(
+            "continuity-events-meta"
+        ).innerHTML =
+
+            count +
+            " continuity events active";
+
+    } catch (err) {
+
+        setWarning(
+            "node-continuity-events",
+            "CONTINUITY WARNING"
+        );
+    }
+}
+
+async function loadBroadcasts() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/continuity-broadcasts"
+        );
+
+        const data =
+        await response.json();
+
+        const broadcasts =
+        data.broadcasts || [];
+
+        document.getElementById(
+            "broadcast-meta"
+        ).innerHTML =
+
+            broadcasts.length +
+            " broadcasts issued";
+
+        const hasCritical =
+        broadcasts.some(
+            b => b.severity === "CRITICAL"
+        );
+
+        if (hasCritical) {
+
+            setCritical(
+                "node-broadcasts",
+                "CRITICAL BROADCAST"
+            );
+        }
+
+    } catch (err) {
+
+        setCritical(
+            "node-broadcasts",
+            "BROADCAST FAILURE"
+        );
+    }
+}
+
+function setWarning(
+    nodeId,
+    statusText
+) {
+
+    const node =
+    document.getElementById(
+        nodeId
+    );
+
+    node.classList.remove(
+        "online",
+        "critical"
+    );
+
+    node.classList.add(
+        "warning"
+    );
+
+    node.querySelector(
+        ".nodeStatus"
+    ).innerHTML = statusText;
+
+    node.querySelector(
+        ".nodeStatus"
+    ).className =
+    "nodeStatus status-warning";
+}
+
+function setCritical(
+    nodeId,
+    statusText
+) {
+
+    const node =
+    document.getElementById(
+        nodeId
+    );
+
+    node.classList.remove(
+        "online",
+        "warning"
+    );
+
+    node.classList.add(
+        "critical"
+    );
+
+    node.querySelector(
+        ".nodeStatus"
+    ).innerHTML = statusText;
+
+    node.querySelector(
+        ".nodeStatus"
+    ).className =
+    "nodeStatus status-critical";
+}
+
+function go(path) {
+
+    window.location.href = path;
+}
+
+loadOperationsMap();
+
+setInterval(
+    loadOperationsMap,
+    5000
+);
+
+</script>
+
+</body>
+</html>
