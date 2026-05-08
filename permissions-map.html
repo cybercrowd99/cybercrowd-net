@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Permissions Map</title>
+
+<style>
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+    text-align: center;
+    color: #00ffff;
+    font-size: 34px;
+    letter-spacing: 4px;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.72;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+#map {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: grid;
+    gap: 16px;
+}
+
+.permissionRow {
+
+    border-radius: 20px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+
+    padding: 18px;
+
+    display: grid;
+
+    grid-template-columns:
+    1.2fr
+    1fr
+    1fr
+    1fr;
+
+    gap: 16px;
+
+    align-items: center;
+}
+
+.sectionTitle {
+    color: #00ffff;
+    font-size: 18px;
+}
+
+.permissionTag {
+
+    display: inline-block;
+
+    padding:
+    8px 12px;
+
+    border-radius: 12px;
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+    text-align: center;
+}
+
+.public {
+    background: rgba(0,255,255,0.14);
+    color: #00ffff;
+}
+
+.free {
+    background: rgba(0,255,170,0.14);
+    color: #00ffaa;
+}
+
+.subscriber {
+    background: rgba(255,170,0,0.14);
+    color: #ffaa00;
+}
+
+.creator {
+    background: rgba(255,80,180,0.14);
+    color: #ff66cc;
+}
+
+.admin {
+    background: rgba(255,60,60,0.14);
+    color: #ff5555;
+}
+
+.description {
+    opacity: 0.82;
+    line-height: 1.45;
+    font-size: 13px;
+}
+
+#legend {
+
+    max-width: 1200px;
+    margin: 28px auto 0 auto;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background: #101010;
+
+    border:
+    1px solid rgba(0,255,170,0.35);
+
+    line-height: 1.6;
+}
+
+button {
+
+    width: 100%;
+
+    margin-top: 28px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: #00ffff;
+
+    color: black;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+@media (max-width: 920px) {
+
+    .permissionRow {
+
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+PERMISSIONS MAP
+</div>
+
+<div id="subtitle">
+Cybercrowd interaction ownership and environmental access structure.
+</div>
+
+<div id="map">
+
+<div class="permissionRow">
+
+    <div class="sectionTitle">
+    Landing Beacon
+    </div>
+
+    <div>
+        <span class="permissionTag public">
+        PUBLIC
+        </span>
+    </div>
+
+    <div class="description">
+    Atmosphere entry and public discovery layer.
+    </div>
+
+    <div>
+    index.html
+    </div>
+
+</div>
+
+<div class="permissionRow">
+
+    <div class="sectionTitle">
+    NAV Environment
+    </div>
+
+    <div>
+        <span class="permissionTag public">
+        PUBLIC
+        </span>
+    </div>
+
+    <div class="description">
+    Open route exploration and environmental movement.
+    </div>
+
+    <div>
+    nav.html
+    </div>
+
+</div>
+
+<div class="permissionRow">
+
+    <div class="sectionTitle">
+    Profile Room
+    </div>
+
+    <div>
+        <span class="permissionTag free">
+        FREE VERIFIED
+        </span>
+    </div>
+
+    <div class="description">
+    Personal room customization and card-stack identity.
+    </div>
+
+    <div>
+    profile-room.html
+    </div>
+
+</div>
+
+<div class="permissionRow">
+
+    <div class="sectionTitle">
+    Magic Cursor V5
+    </div>
+
+    <div>
+        <span class="permissionTag free">
+        FREE VERIFIED
+        </span>
+    </div>
+
+    <div class="description">
+    Persistent shared sandbox with transferable interaction ownership.
+    </div>
+
+    <div>
+    magic-cursor-launch.html
+    </div>
+
+</div>
+
+<div class="permissionRow">
+
+    <div class="sectionTitle">
+    Route Engine
+    </div>
+
+    <div>
+        <span class="permissionTag admin">
+        ADMIN PREVIEW
+        </span>
+    </div>
+
+    <div class="description">
+    Curiosity progression and adaptive environmental behavior layer.
+    </div>
+
+    <div>
+    route-engine.html
+    </div>
+
+</div>
+
+<div class="permissionRow">
+
+    <div class="sectionTitle">
+    Creator Systems
+    </div>
+
+    <div>
+        <span class="permissionTag subscriber">
+        SUBSCRIBER
+        </span>
+    </div>
+
+    <div class="description">
+    Monetized creator tools and advanced broadcasting systems.
+    </div>
+
+    <div>
+    future creator routes
+    </div>
+
+</div>
+
+<div class="permissionRow">
+
+    <div class="sectionTitle">
+    Payout Systems
+    </div>
+
+    <div>
+        <span class="permissionTag creator">
+        CREATOR VERIFIED
+        </span>
+    </div>
+
+    <div class="description">
+    Earnings, trust verification, and creator distribution systems.
+    </div>
+
+    <div>
+    future payout routes
+    </div>
+
+</div>
+
+<div class="permissionRow">
+
+    <div class="sectionTitle">
+    Emergency Override
+    </div>
+
+    <div>
+        <span class="permissionTag admin">
+        ADMIN
+        </span>
+    </div>
+
+    <div class="description">
+    Moderator control, emergency ownership transfer, and system protection.
+    </div>
+
+    <div>
+    future admin systems
+    </div>
+
+</div>
+
+</div>
+
+<div id="legend">
+
+<strong>PERMISSION PHILOSOPHY</strong>
+
+<br><br>
+
+Cybercrowd permissions are not designed to trap users behind walls.
+
+<br><br>
+
+Permissions exist to:
+<br>
+• preserve trust
+<br>
+• protect environments
+<br>
+• prevent chaos
+<br>
+• stage progression naturally
+<br>
+• allow growth through interaction ownership
+
+<br><br>
+
+The environment remains explorable.
+Ownership evolves with trust.
+
+</div>
+
+<button onclick="window.location.href='environment-stack.html'">
+RETURN TO ENVIRONMENT STACK
+</button>
+
+</div>
+
+</body>
+</html>
