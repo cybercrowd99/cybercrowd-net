@@ -1,0 +1,41 @@
+{
+  "registry_name": "Cybercrowd Surface Registry",
+  "version": "V1",
+
+  "surfaces": {
+    "laptop": {
+      "id": "laptop",
+      "label": "Laptop Surface",
+      "type": "primary",
+      "route": "/",
+      "trusted": true,
+      "can_own_control": true,
+      "can_watch": true,
+      "can_move_pointer": false
+    },
+
+    "phone": {
+      "id": "phone",
+      "label": "Phone Surface",
+      "type": "mobile",
+      "route": "/client",
+      "trusted": true,
+      "can_own_control": true,
+      "can_watch": true,
+      "can_move_pointer": true
+    }
+  },
+
+  "ownership": {
+    "current_owner": "phone",
+    "fallback_owner": "laptop"
+  },
+
+  "doctrine": [
+    "multi-device awareness",
+    "trusted surfaces only",
+    "interaction ownership must be visible",
+    "watching is not the same as controlling",
+    "serviceable surface registry"
+  ]
+}
