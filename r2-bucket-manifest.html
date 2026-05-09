@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 BUCKET MANIFEST</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.manifestTitle{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:12px;
+}
+
+.manifestSub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.bucketGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+    gap:22px;
+}
+
+.bucketCard{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+}
+
+.bucketId{
+    color:#00ffff;
+    font-size:13px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.bucketName{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.bucketMeta{
+    line-height:1.8;
+    opacity:.84;
+    font-size:14px;
+}
+
+.bucketTag{
+    display:inline-block;
+    margin-top:18px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid rgba(0,255,255,.28);
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:1px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="manifestTitle">
+CYBERCROWD R2 BUCKET MANIFEST
+</div>
+
+<div class="manifestSub">
+Canonical storage compartment registry for CyberCrowd operational survivability.
+</div>
+
+<div class="bucketGrid">
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-001</div>
+<div class="bucketName">cybercrowd-ledger-events</div>
+<div class="bucketMeta">
+Canonical ledger event storage.
+Append-only survivability chain.
+</div>
+<div class="bucketTag">LEDGER CORE</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-002</div>
+<div class="bucketName">cybercrowd-deadletter</div>
+<div class="bucketMeta">
+Failed event quarantine and malformed payload isolation.
+</div>
+<div class="bucketTag">DEAD LETTER</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-003</div>
+<div class="bucketName">cybercrowd-replay</div>
+<div class="bucketMeta">
+Replayable operational simulations and event reconstruction.
+</div>
+<div class="bucketTag">REPLAY ENGINE</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-004</div>
+<div class="bucketName">cybercrowd-sequester</div>
+<div class="bucketMeta">
+Raw intake holding compartment before verification.
+</div>
+<div class="bucketTag">SEQUESTER</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-005</div>
+<div class="bucketName">cybercrowd-archive</div>
+<div class="bucketMeta">
+Immutable archive and canonical historical storage.
+</div>
+<div class="bucketTag">CANON ARCHIVE</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-006</div>
+<div class="bucketName">cybercrowd-lineage</div>
+<div class="bucketMeta">
+Operational lineage and provenance authority layer.
+</div>
+<div class="bucketTag">LINEAGE</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-007</div>
+<div class="bucketName">cybercrowd-governance</div>
+<div class="bucketMeta">
+Governance overrides, treasury logs, and audit authority.
+</div>
+<div class="bucketTag">GOVERNANCE</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-008</div>
+<div class="bucketName">cybercrowd-node-heartbeats</div>
+<div class="bucketMeta">
+Mesh telemetry, uptime verification, and heartbeat routing.
+</div>
+<div class="bucketTag">NODE HEARTBEAT</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-009</div>
+<div class="bucketName">cybercrowd-surface-cache</div>
+<div class="bucketMeta">
+Public edge cache and accelerated delivery surface.
+</div>
+<div class="bucketTag">SURFACE CACHE</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-010</div>
+<div class="bucketName">cybercrowd-graphics</div>
+<div class="bucketMeta">
+Static graphics, overlays, and UI visual assets.
+</div>
+<div class="bucketTag">GRAPHICS</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-011</div>
+<div class="bucketName">cybercrowd-teasers</div>
+<div class="bucketMeta">
+Short-form teaser and promotional media delivery.
+</div>
+<div class="bucketTag">TEASERS</div>
+</div>
+
+<div class="bucketCard">
+<div class="bucketId">CC-BUCKET-012</div>
+<div class="bucketName">cybercrowd-album</div>
+<div class="bucketMeta">
+Long-form media archive and creator collections.
+</div>
+<div class="bucketTag">ALBUM ARCHIVE</div>
+</div>
+
+</div>
+
+</body>
+</html>
