@@ -1,0 +1,1999 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cybercrowd.net/schemas/drop-device-event-schema.v1.json",
+  "title": "Cybercrowd DROP DEVICE EVENT SCHEMA V1",
+  "description": "Canonical event schema for Cybercrowd cross-device pointer, control, HID bridge, clipboard, drag-transfer, pairing, authorization, safety stop, and ledger recording.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "event",
+    "ledger",
+    "origin",
+    "target",
+    "session",
+    "security",
+    "payload"
+  ],
+  "properties": {
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "status",
+        "namespace"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "const": "DROP_DEVICE_EVENT_SCHEMA"
+        },
+        "version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "active",
+            "deprecated",
+            "locked"
+          ],
+          "default": "active"
+        },
+        "namespace": {
+          "type": "string",
+          "const": "cybercrowd.device.drop"
+        },
+        "created_by": {
+          "type": "string",
+          "default": "Cybercrowd"
+        },
+        "created_for": {
+          "type": "string",
+          "default": "Magic Cursor / Cross-Device HID Bridge"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "event_type",
+        "event_family",
+        "event_status",
+        "created_at"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "minLength": 12,
+          "maxLength": 128,
+          "description": "Unique event identifier. Recommended format: evt_ulid_or_uuid."
+        },
+        "parent_event_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "event_type": {
+          "type": "string",
+          "enum": [
+            "PAIRING_REQUEST",
+            "PAIRING_ACCEPTED",
+            "PAIRING_REJECTED",
+            "PAIRING_EXPIRED",
+            "SESSION_OPENED",
+            "SESSION_REFRESHED",
+            "SESSION_CLOSED",
+            "DEVICE_DISCOVERED",
+            "DEVICE_REGISTERED",
+            "DEVICE_VERIFIED",
+            "DEVICE_REVOKED",
+            "POINTER_ENTER",
+            "POINTER_EXIT",
+            "POINTER_MOVE",
+            "POINTER_DOWN",
+            "POINTER_UP",
+            "POINTER_CLICK",
+            "POINTER_DOUBLE_CLICK",
+            "POINTER_SCROLL",
+            "POINTER_DRAG_START",
+            "POINTER_DRAG_MOVE",
+            "POINTER_DRAG_DROP",
+            "POINTER_DRAG_CANCEL",
+            "KEY_DOWN",
+            "KEY_UP",
+            "TEXT_INPUT",
+            "HID_COMMAND",
+            "CLIPBOARD_OFFER",
+            "CLIPBOARD_ACCEPTED",
+            "CLIPBOARD_REJECTED",
+            "CLIPBOARD_TRANSFER",
+            "FILE_OFFER",
+            "FILE_ACCEPTED",
+            "FILE_REJECTED",
+            "FILE_TRANSFER_START",
+            "FILE_TRANSFER_PROGRESS",
+            "FILE_TRANSFER_COMPLETE",
+            "FILE_TRANSFER_FAILED",
+            "CONTROL_COMMAND",
+            "AUDIO_ROUTE_EVENT",
+            "CAMERA_ROUTE_EVENT",
+            "ACCESSIBILITY_EVENT",
+            "LEDGER_NOTE",
+            "SECURITY_ALERT",
+            "SAFETY_STOP",
+            "KILL_STOP",
+            "ERROR",
+            "HEARTBEAT"
+          ]
+        },
+        "event_family": {
+          "type": "string",
+          "enum": [
+            "pairing",
+            "session",
+            "device",
+            "pointer",
+            "keyboard",
+            "hid",
+            "clipboard",
+            "file",
+            "control",
+            "media",
+            "accessibility",
+            "security",
+            "ledger",
+            "system"
+          ]
+        },
+        "event_status": {
+          "type": "string",
+          "enum": [
+            "created",
+            "queued",
+            "sent",
+            "received",
+            "validated",
+            "applied",
+            "rejected",
+            "failed",
+            "expired",
+            "archived"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "received_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Monotonic sequence number inside the active session."
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "normal",
+            "high",
+            "critical"
+          ],
+          "default": "normal"
+        },
+        "ttl_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 30000
+        },
+        "retry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        }
+      }
+    },
+    "ledger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ledger_id",
+        "ledger_mode",
+        "write_policy",
+        "integrity"
+      ],
+      "properties": {
+        "ledger_id": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "ledger_mode": {
+          "type": "string",
+          "enum": [
+            "local_only",
+            "session_chain",
+            "cloud_anchor",
+            "hardware_anchor",
+            "full_audit"
+          ],
+          "default": "session_chain"
+        },
+        "write_policy": {
+          "type": "string",
+          "enum": [
+            "append_only",
+            "append_with_redaction_pointer",
+            "ephemeral",
+            "debug_only"
+          ],
+          "default": "append_only"
+        },
+        "previous_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "event_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "chain_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "integrity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "hash_algorithm",
+            "signature_required",
+            "tamper_response"
+          ],
+          "properties": {
+            "hash_algorithm": {
+              "type": "string",
+              "enum": [
+                "SHA-256",
+                "SHA-384",
+                "SHA-512",
+                "BLAKE3"
+              ],
+              "default": "SHA-256"
+            },
+            "signature_required": {
+              "type": "boolean",
+              "default": true
+            },
+            "signature_algorithm": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "Ed25519",
+                "ECDSA-P256",
+                "RSA-PSS",
+                null
+              ],
+              "default": "Ed25519"
+            },
+            "signature": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 2048
+            },
+            "tamper_response": {
+              "type": "string",
+              "enum": [
+                "log_only",
+                "quarantine_event",
+                "close_session",
+                "revoke_device",
+                "kill_stop"
+              ],
+              "default": "quarantine_event"
+            }
+          }
+        },
+        "retention": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "retention_class": {
+              "type": "string",
+              "enum": [
+                "ephemeral",
+                "short_audit",
+                "standard_audit",
+                "legal_hold",
+                "development_archive"
+              ],
+              "default": "standard_audit"
+            },
+            "retention_days": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 365
+            },
+            "contains_sensitive_data": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    },
+    "origin": {
+      "$ref": "#/$defs/device_endpoint"
+    },
+    "target": {
+      "$ref": "#/$defs/device_endpoint"
+    },
+    "session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session_id",
+        "pairing_id",
+        "session_state",
+        "transport",
+        "permissions"
+      ],
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "pairing_id": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "session_state": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "active",
+            "paused",
+            "closing",
+            "closed",
+            "revoked",
+            "expired"
+          ]
+        },
+        "pairing_method": {
+          "type": "string",
+          "enum": [
+            "qr_code",
+            "manual_code",
+            "local_discovery",
+            "nfc",
+            "hardware_token",
+            "trusted_account"
+          ],
+          "default": "qr_code"
+        },
+        "pairing_code_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "expires_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "transport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "protocol",
+            "channel_security"
+          ],
+          "properties": {
+            "protocol": {
+              "type": "string",
+              "enum": [
+                "tcp",
+                "udp",
+                "websocket",
+                "webrtc_datachannel",
+                "bluetooth_le",
+                "usb",
+                "local_loopback"
+              ]
+            },
+            "host": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 255
+            },
+            "port": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0,
+              "maximum": 65535
+            },
+            "channel_security": {
+              "type": "string",
+              "enum": [
+                "none_dev_only",
+                "tls",
+                "dtls",
+                "noise_protocol",
+                "webrtc_secure",
+                "hardware_bound"
+              ],
+              "default": "tls"
+            },
+            "network_scope": {
+              "type": "string",
+              "enum": [
+                "same_device",
+                "same_lan",
+                "trusted_lan",
+                "internet_relay",
+                "offline_hardware"
+              ],
+              "default": "same_lan"
+            }
+          }
+        },
+        "permissions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pointer",
+            "keyboard",
+            "clipboard",
+            "file_transfer",
+            "media_control",
+            "system_control"
+          ],
+          "properties": {
+            "pointer": {
+              "$ref": "#/$defs/permission_state"
+            },
+            "keyboard": {
+              "$ref": "#/$defs/permission_state"
+            },
+            "clipboard": {
+              "$ref": "#/$defs/permission_state"
+            },
+            "file_transfer": {
+              "$ref": "#/$defs/permission_state"
+            },
+            "media_control": {
+              "$ref": "#/$defs/permission_state"
+            },
+            "system_control": {
+              "$ref": "#/$defs/permission_state"
+            },
+            "accessibility_control": {
+              "$ref": "#/$defs/permission_state"
+            },
+            "hardware_anchor": {
+              "$ref": "#/$defs/permission_state"
+            }
+          }
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "auth_state",
+        "authorization_scope",
+        "input_safety",
+        "audit_logging"
+      ],
+      "properties": {
+        "auth_state": {
+          "type": "string",
+          "enum": [
+            "unauthenticated",
+            "pairing_pending",
+            "authenticated",
+            "verified",
+            "rejected",
+            "revoked"
+          ]
+        },
+        "authorization_scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "read_device_state",
+              "send_pointer",
+              "send_keyboard",
+              "send_text",
+              "send_clipboard",
+              "send_file",
+              "control_audio",
+              "control_camera",
+              "control_accessibility",
+              "control_session",
+              "write_ledger",
+              "admin_revoke",
+              "admin_kill_stop"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "actor": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "actor_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 128
+            },
+            "actor_role": {
+              "type": "string",
+              "enum": [
+                "owner",
+                "trusted_user",
+                "guest",
+                "observer",
+                "admin",
+                "system",
+                "unknown"
+              ],
+              "default": "unknown"
+            },
+            "presence_confirmed": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "input_safety": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rate_limit_applied",
+            "allowed_zone_check",
+            "dangerous_action_check"
+          ],
+          "properties": {
+            "rate_limit_applied": {
+              "type": "boolean"
+            },
+            "max_events_per_second": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 120
+            },
+            "allowed_zone_check": {
+              "type": "boolean"
+            },
+            "dangerous_action_check": {
+              "type": "boolean"
+            },
+            "dangerous_action_result": {
+              "type": "string",
+              "enum": [
+                "not_applicable",
+                "allowed",
+                "requires_confirmation",
+                "blocked"
+              ],
+              "default": "not_applicable"
+            },
+            "kill_phrase_detected": {
+              "type": "boolean",
+              "default": false
+            },
+            "kill_phrase": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            }
+          }
+        },
+        "audit_logging": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "level"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "level": {
+              "type": "string",
+              "enum": [
+                "none",
+                "minimal",
+                "standard",
+                "full",
+                "forensic"
+              ],
+              "default": "standard"
+            },
+            "redact_clipboard_content": {
+              "type": "boolean",
+              "default": true
+            },
+            "redact_file_names": {
+              "type": "boolean",
+              "default": false
+            },
+            "redact_text_input": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "payload": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/pairing_payload"
+        },
+        {
+          "$ref": "#/$defs/session_payload"
+        },
+        {
+          "$ref": "#/$defs/device_payload"
+        },
+        {
+          "$ref": "#/$defs/pointer_payload"
+        },
+        {
+          "$ref": "#/$defs/keyboard_payload"
+        },
+        {
+          "$ref": "#/$defs/hid_payload"
+        },
+        {
+          "$ref": "#/$defs/clipboard_payload"
+        },
+        {
+          "$ref": "#/$defs/file_payload"
+        },
+        {
+          "$ref": "#/$defs/control_payload"
+        },
+        {
+          "$ref": "#/$defs/media_payload"
+        },
+        {
+          "$ref": "#/$defs/accessibility_payload"
+        },
+        {
+          "$ref": "#/$defs/security_payload"
+        },
+        {
+          "$ref": "#/$defs/system_payload"
+        }
+      ]
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "client_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "server_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "latency_ms": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "clock_skew_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "battery_percent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "network_strength": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "unknown",
+            "poor",
+            "fair",
+            "good",
+            "excellent",
+            null
+          ]
+        },
+        "debug_note": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2000
+        }
+      }
+    }
+  },
+  "$defs": {
+    "permission_state": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "ask_each_time",
+        "session_allowed",
+        "always_allowed",
+        "blocked"
+      ]
+    },
+    "device_endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "device_id",
+        "device_role",
+        "device_type",
+        "platform",
+        "trust_state"
+      ],
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128
+        },
+        "device_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "device_role": {
+          "type": "string",
+          "enum": [
+            "server",
+            "client",
+            "controller",
+            "receiver",
+            "relay",
+            "observer",
+            "hardware_anchor",
+            "unknown"
+          ]
+        },
+        "device_type": {
+          "type": "string",
+          "enum": [
+            "laptop",
+            "desktop",
+            "phone",
+            "tablet",
+            "wearable",
+            "camera",
+            "audio_controller",
+            "hardware_module",
+            "browser",
+            "virtual_device",
+            "unknown"
+          ]
+        },
+        "platform": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "os",
+            "runtime"
+          ],
+          "properties": {
+            "os": {
+              "type": "string",
+              "enum": [
+                "windows",
+                "macos",
+                "linux",
+                "android",
+                "ios",
+                "chromeos",
+                "browser_only",
+                "embedded",
+                "unknown"
+              ]
+            },
+            "os_version": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 64
+            },
+            "runtime": {
+              "type": "string",
+              "enum": [
+                "native_app",
+                "browser",
+                "pwa",
+                "python_node",
+                "nodejs",
+                "embedded_firmware",
+                "unknown"
+              ]
+            },
+            "runtime_version": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 64
+            }
+          }
+        },
+        "trust_state": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "untrusted",
+            "pairing_pending",
+            "trusted_session",
+            "trusted_persistent",
+            "revoked",
+            "quarantined"
+          ]
+        },
+        "public_key_fingerprint": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "screen": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "width_px": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "height_px": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "scale": {
+              "type": "number",
+              "minimum": 0
+            },
+            "orientation": {
+              "type": "string",
+              "enum": [
+                "portrait",
+                "landscape",
+                "square",
+                "unknown"
+              ],
+              "default": "unknown"
+            }
+          }
+        },
+        "input_capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "pointer",
+              "touch",
+              "keyboard",
+              "clipboard",
+              "file_drag",
+              "audio",
+              "camera",
+              "speech_to_text",
+              "blind_mode",
+              "haptics",
+              "hardware_button"
+            ]
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "coordinate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "space"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "space": {
+          "type": "string",
+          "enum": [
+            "screen_px",
+            "normalized_0_1",
+            "viewport_px",
+            "element_local_px",
+            "virtual_canvas"
+          ]
+        },
+        "z": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "pairing_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "pairing_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "pairing"
+        },
+        "pairing_action": {
+          "type": "string",
+          "enum": [
+            "request",
+            "accept",
+            "reject",
+            "expire",
+            "rotate_code",
+            "verify_device"
+          ]
+        },
+        "qr_data_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "human_readable_code_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "requested_permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "pairing_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        }
+      }
+    },
+    "session_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "session_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "session"
+        },
+        "session_action": {
+          "type": "string",
+          "enum": [
+            "open",
+            "refresh",
+            "pause",
+            "resume",
+            "close",
+            "expire",
+            "revoke"
+          ]
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        }
+      }
+    },
+    "device_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "device_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "device"
+        },
+        "device_action": {
+          "type": "string",
+          "enum": [
+            "discover",
+            "register",
+            "verify",
+            "update_capabilities",
+            "revoke",
+            "quarantine"
+          ]
+        },
+        "capability_delta": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        }
+      }
+    },
+    "pointer_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "pointer_action",
+        "position"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "pointer"
+        },
+        "pointer_action": {
+          "type": "string",
+          "enum": [
+            "enter",
+            "exit",
+            "move",
+            "down",
+            "up",
+            "click",
+            "double_click",
+            "scroll",
+            "drag_start",
+            "drag_move",
+            "drag_drop",
+            "drag_cancel"
+          ]
+        },
+        "position": {
+          "$ref": "#/$defs/coordinate"
+        },
+        "previous_position": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/coordinate"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "button": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "left",
+            "right",
+            "middle",
+            "back",
+            "forward",
+            "touch_primary",
+            "stylus",
+            null
+          ]
+        },
+        "buttons_down": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "left",
+              "right",
+              "middle",
+              "back",
+              "forward",
+              "touch_primary",
+              "stylus"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "scroll": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "delta_x": {
+              "type": "number",
+              "default": 0
+            },
+            "delta_y": {
+              "type": "number",
+              "default": 0
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "pixel",
+                "line",
+                "page"
+              ],
+              "default": "pixel"
+            }
+          }
+        },
+        "drag": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "drag_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 128
+            },
+            "drag_kind": {
+              "type": "string",
+              "enum": [
+                "none",
+                "file",
+                "text",
+                "url",
+                "object",
+                "internal_route"
+              ],
+              "default": "none"
+            },
+            "drop_allowed": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "edge_transition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "from_edge": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "left",
+                "right",
+                "top",
+                "bottom",
+                null
+              ]
+            },
+            "to_edge": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "left",
+                "right",
+                "top",
+                "bottom",
+                null
+              ]
+            },
+            "transition_allowed": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    },
+    "keyboard_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "keyboard_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "keyboard"
+        },
+        "keyboard_action": {
+          "type": "string",
+          "enum": [
+            "key_down",
+            "key_up",
+            "text_input"
+          ]
+        },
+        "key": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "text": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 4096
+        },
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "shift",
+              "control",
+              "alt",
+              "meta",
+              "caps_lock",
+              "fn"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "repeat": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "hid_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "hid_action",
+        "hid_class"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "hid"
+        },
+        "hid_action": {
+          "type": "string",
+          "enum": [
+            "send_report",
+            "request_report",
+            "set_feature",
+            "clear_feature",
+            "emulate_pointer",
+            "emulate_keyboard"
+          ]
+        },
+        "hid_class": {
+          "type": "string",
+          "enum": [
+            "mouse",
+            "keyboard",
+            "consumer_control",
+            "gamepad",
+            "custom",
+            "unknown"
+          ]
+        },
+        "report_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 255
+        },
+        "report_encoding": {
+          "type": "string",
+          "enum": [
+            "base64",
+            "hex",
+            "json_fields"
+          ],
+          "default": "json_fields"
+        },
+        "report_data": {
+          "type": [
+            "string",
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "clipboard_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "clipboard_action",
+        "content_type"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "clipboard"
+        },
+        "clipboard_action": {
+          "type": "string",
+          "enum": [
+            "offer",
+            "accept",
+            "reject",
+            "transfer",
+            "clear"
+          ]
+        },
+        "content_type": {
+          "type": "string",
+          "enum": [
+            "text/plain",
+            "text/html",
+            "text/uri-list",
+            "image/png",
+            "image/jpeg",
+            "application/json",
+            "application/octet-stream",
+            "redacted"
+          ]
+        },
+        "content_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "content_preview": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "content_data": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1048576
+        },
+        "redacted": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "file_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "file_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "file"
+        },
+        "file_action": {
+          "type": "string",
+          "enum": [
+            "offer",
+            "accept",
+            "reject",
+            "transfer_start",
+            "transfer_progress",
+            "transfer_complete",
+            "transfer_failed"
+          ]
+        },
+        "transfer_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "file_id",
+              "size_bytes"
+            ],
+            "properties": {
+              "file_id": {
+                "type": "string",
+                "maxLength": 128
+              },
+              "file_name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 512
+              },
+              "mime_type": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 128
+              },
+              "size_bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "hash": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 256
+              }
+            }
+          }
+        },
+        "progress": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "bytes_sent": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "bytes_total": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "failure_reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        }
+      }
+    },
+    "control_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "control_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "control"
+        },
+        "control_action": {
+          "type": "string",
+          "enum": [
+            "open_route",
+            "close_route",
+            "toggle_route",
+            "wake_screen",
+            "lock_screen",
+            "request_confirmation",
+            "confirm_action",
+            "cancel_action",
+            "run_safe_command"
+          ]
+        },
+        "route_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "command_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "command_label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "requires_user_confirmation": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "media_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "media_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "media"
+        },
+        "media_action": {
+          "type": "string",
+          "enum": [
+            "audio_route_changed",
+            "camera_route_changed",
+            "microphone_route_changed",
+            "play",
+            "pause",
+            "stop",
+            "mute",
+            "unmute",
+            "volume_set"
+          ]
+        },
+        "device_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        },
+        "volume": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "muted": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "accessibility_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "accessibility_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "accessibility"
+        },
+        "accessibility_action": {
+          "type": "string",
+          "enum": [
+            "blind_mode_on",
+            "blind_mode_off",
+            "caption_on",
+            "caption_off",
+            "speech_to_text_on",
+            "speech_to_text_off",
+            "braille_output_on",
+            "braille_output_off",
+            "haptics_on",
+            "haptics_off",
+            "deaf_companion_on",
+            "deaf_companion_off"
+          ]
+        },
+        "mode_level": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "maximum",
+            null
+          ]
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 32
+        }
+      }
+    },
+    "security_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "security_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "security"
+        },
+        "security_action": {
+          "type": "string",
+          "enum": [
+            "alert",
+            "rate_limit",
+            "permission_denied",
+            "tamper_detected",
+            "device_quarantined",
+            "device_revoked",
+            "safety_stop",
+            "kill_stop"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ],
+          "default": "medium"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1024
+        },
+        "action_taken": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 512
+        }
+      }
+    },
+    "system_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_type",
+        "system_action"
+      ],
+      "properties": {
+        "payload_type": {
+          "type": "string",
+          "const": "system"
+        },
+        "system_action": {
+          "type": "string",
+          "enum": [
+            "heartbeat",
+            "error",
+            "warning",
+            "ledger_note",
+            "debug_note"
+          ]
+        },
+        "message": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2000
+        },
+        "error_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 128
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "schema": {
+        "name": "DROP_DEVICE_EVENT_SCHEMA",
+        "version": "1.0.0",
+        "status": "active",
+        "namespace": "cybercrowd.device.drop",
+        "created_by": "Cybercrowd",
+        "created_for": "Magic Cursor / Cross-Device HID Bridge"
+      },
+      "event": {
+        "event_id": "evt_01HV_MAGIC_CURSOR_MOVE",
+        "parent_event_id": null,
+        "event_type": "POINTER_MOVE",
+        "event_family": "pointer",
+        "event_status": "created",
+        "created_at": "2026-05-08T18:00:00Z",
+        "received_at": null,
+        "sequence": 42,
+        "priority": "normal",
+        "ttl_ms": 30000,
+        "retry_count": 0
+      },
+      "ledger": {
+        "ledger_id": "ledger_session_01HV",
+        "ledger_mode": "session_chain",
+        "write_policy": "append_only",
+        "previous_hash": null,
+        "event_hash": null,
+        "chain_index": 42,
+        "integrity": {
+          "hash_algorithm": "SHA-256",
+          "signature_required": true,
+          "signature_algorithm": "Ed25519",
+          "signature": null,
+          "tamper_response": "quarantine_event"
+        },
+        "retention": {
+          "retention_class": "standard_audit",
+          "retention_days": 365,
+          "contains_sensitive_data": false
+        }
+      },
+      "origin": {
+        "device_id": "dev_laptop_001",
+        "device_label": "Laptop Server",
+        "device_role": "server",
+        "device_type": "laptop",
+        "platform": {
+          "os": "windows",
+          "os_version": null,
+          "runtime": "native_app",
+          "runtime_version": null
+        },
+        "trust_state": "trusted_session",
+        "public_key_fingerprint": null,
+        "screen": {
+          "width_px": 1920,
+          "height_px": 1080,
+          "scale": 1,
+          "orientation": "landscape"
+        },
+        "input_capabilities": [
+          "pointer",
+          "keyboard",
+          "clipboard",
+          "file_drag"
+        ]
+      },
+      "target": {
+        "device_id": "dev_phone_001",
+        "device_label": "Phone Client",
+        "device_role": "client",
+        "device_type": "phone",
+        "platform": {
+          "os": "android",
+          "os_version": null,
+          "runtime": "native_app",
+          "runtime_version": null
+        },
+        "trust_state": "trusted_session",
+        "public_key_fingerprint": null,
+        "screen": {
+          "width_px": 1080,
+          "height_px": 2400,
+          "scale": 3,
+          "orientation": "portrait"
+        },
+        "input_capabilities": [
+          "touch",
+          "clipboard",
+          "haptics"
+        ]
+      },
+      "session": {
+        "session_id": "sess_01HV_MAGIC_CURSOR",
+        "pairing_id": "pair_01HV_QR",
+        "session_state": "active",
+        "pairing_method": "qr_code",
+        "pairing_code_hash": null,
+        "expires_at": null,
+        "transport": {
+          "protocol": "websocket",
+          "host": "192.168.1.25",
+          "port": 8787,
+          "channel_security": "tls",
+          "network_scope": "same_lan"
+        },
+        "permissions": {
+          "pointer": "session_allowed",
+          "keyboard": "ask_each_time",
+          "clipboard": "ask_each_time",
+          "file_transfer": "ask_each_time",
+          "media_control": "disabled",
+          "system_control": "blocked",
+          "accessibility_control": "session_allowed",
+          "hardware_anchor": "disabled"
+        }
+      },
+      "security": {
+        "auth_state": "authenticated",
+        "authorization_scope": [
+          "send_pointer",
+          "write_ledger"
+        ],
+        "actor": {
+          "actor_id": "owner",
+          "actor_role": "owner",
+          "presence_confirmed": true
+        },
+        "input_safety": {
+          "rate_limit_applied": true,
+          "max_events_per_second": 120,
+          "allowed_zone_check": true,
+          "dangerous_action_check": true,
+          "dangerous_action_result": "not_applicable",
+          "kill_phrase_detected": false,
+          "kill_phrase": null
+        },
+        "audit_logging": {
+          "enabled": true,
+          "level": "standard",
+          "redact_clipboard_content": true,
+          "redact_file_names": false,
+          "redact_text_input": true
+        }
+      },
+      "payload": {
+        "payload_type": "pointer",
+        "pointer_action": "move",
+        "position": {
+          "x": 0.42,
+          "y": 0.66,
+          "space": "normalized_0_1",
+          "z": null
+        },
+        "previous_position": {
+          "x": 0.41,
+          "y": 0.65,
+          "space": "normalized_0_1",
+          "z": null
+        },
+        "button": null,
+        "buttons_down": [],
+        "drag": {
+          "drag_id": null,
+          "drag_kind": "none",
+          "drop_allowed": false
+        },
+        "edge_transition": {
+          "from_edge": null,
+          "to_edge": null,
+          "transition_allowed": false
+        }
+      },
+      "diagnostics": {
+        "client_version": "0.1.0",
+        "server_version": "0.1.0",
+        "latency_ms": 12.5,
+        "clock_skew_ms": 3,
+        "battery_percent": 91,
+        "network_strength": "excellent",
+        "debug_note": null
+      }
+    }
+  ]
+}
