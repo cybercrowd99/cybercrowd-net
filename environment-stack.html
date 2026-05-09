@@ -1,136 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- STACK V14 : OPERATIONAL CORE -->
 
-<title>Cybercrowd Operating Environment Stack</title>
+<a class="stackCard" href="compartment-crosswalk.html">
+    <div class="stackTitle">Compartment Crosswalk</div>
+    <div class="stackDesc">
+        Operational translation layer between doctrine compartments,
+        lanes, buckets, and public surface routing.
+    </div>
+</a>
 
-<style>
-html,
-body {
-    margin: 0;
-    padding: 0;
-    background: #050505;
-    color: white;
-    font-family: Arial, sans-serif;
-}
+<a class="stackCard" href="compartment-hierarchy.html">
+    <div class="stackTitle">Compartment Hierarchy</div>
+    <div class="stackDesc">
+        Structural hierarchy of CyberCrowd continuity,
+        governance, intake, processing, archive, and surface lanes.
+    </div>
+</a>
 
-#stage {
-    min-height: 100vh;
-    padding: 24px;
-    box-sizing: border-box;
+<a class="stackCard" href="compartment-doctrine.html">
+    <div class="stackTitle">Compartment Doctrine</div>
+    <div class="stackDesc">
+        Survivability doctrine governing operational isolation,
+        authority, truth lineage, and continuity behavior.
+    </div>
+</a>
 
-    background:
-    radial-gradient(
-        circle at center,
-        rgba(0,255,255,0.10),
-        transparent 42%
-    ),
-    #050505;
-}
+<a class="stackCard" href="ledger-formula-sheet.html">
+    <div class="stackTitle">Ledger Formula Sheet</div>
+    <div class="stackDesc">
+        Core economic equations, CRWD pressure tracking,
+        payout routing, and governance override mathematics.
+    </div>
+</a>
 
-#title {
-    color: #00ffff;
-    font-size: 34px;
-    letter-spacing: 4px;
-    text-align: center;
-}
+<a class="stackCard" href="ledger-event-schema.html">
+    <div class="stackTitle">Ledger Event Schema</div>
+    <div class="stackDesc">
+        Canonical ledger event structure for subscriptions,
+        payouts, governance, archive, and CRWD settlement logic.
+    </div>
+</a>
 
-#subtitle {
-    text-align: center;
-    opacity: 0.75;
-    margin-top: 8px;
-    margin-bottom: 30px;
-}
+<a class="stackCard" href="ledger-event-simulator.html">
+    <div class="stackTitle">Ledger Event Simulator</div>
+    <div class="stackDesc">
+        Event-chain simulator for replay testing,
+        pressure tracing, and survivability verification.
+    </div>
+</a>
 
-#stack {
-    max-width: 1400px;
-    margin: 0 auto;
+<a class="stackCard" href="r2-routing-doctrine.html">
+    <div class="stackTitle">R2 Routing Doctrine</div>
+    <div class="stackDesc">
+        Bucket routing logic, survivable storage lanes,
+        overflow isolation, and operational propagation mapping.
+    </div>
+</a>
 
-    display: grid;
+<a class="stackCard" href="deployment-lane-map.html">
+    <div class="stackTitle">Deployment Lane Map</div>
+    <div class="stackDesc">
+        Operational deployment topology for surfaces,
+        continuity lanes, transport rails, and archive propagation.
+    </div>
+</a>
 
-    grid-template-columns:
-    repeat(auto-fit, minmax(240px, 1fr));
+<a class="stackCard" href="magic-cursor.html">
+    <div class="stackTitle">Magic Cursor</div>
+    <div class="stackDesc">
+        Cross-device pointer environment,
+        HID bridge topology, and surface control framework.
+    </div>
+</a>
 
-    gap: 18px;
-}
+<a class="stackCard" href="magic-cursor-launch.html">
+    <div class="stackTitle">Magic Cursor Launch</div>
+    <div class="stackDesc">
+        Launch surface for session pairing,
+        transport negotiation, and operational bridge testing.
+    </div>
+</a>
 
-.stackCard {
+<a class="stackCard" href="device-event-schema.html">
+    <div class="stackTitle">Device Event Schema</div>
+    <div class="stackDesc">
+        Canonical event definitions for pointer transfer,
+        clipboard propagation, HID routing, and kill-stop logic.
+    </div>
+</a>
 
-    min-height: 160px;
+<a class="stackCard" href="device-event-simulator.html">
+    <div class="stackTitle">Device Event Simulator</div>
+    <div class="stackDesc">
+        Simulated device event physics before live transport,
+        OS bridge attachment, and real HID execution.
+    </div>
+</a>
 
-    border-radius: 22px;
+<a class="stackCard" href="operations-dashboard.html">
+    <div class="stackTitle">Operations Dashboard</div>
+    <div class="stackDesc">
+        Live operational monitoring surface for survivability,
+        routing, continuity, and deployment state.
+    </div>
+</a>
 
-    border:
-    1px solid rgba(0,255,255,0.35);
+<a class="stackCard" href="operations-map.html">
+    <div class="stackTitle">Operations Map</div>
+    <div class="stackDesc">
+        Visual operations topology linking surfaces,
+        lanes, buckets, deployment rails, and routing paths.
+    </div>
+</a>
 
-    background:
-    rgba(10,10,10,0.9);
-
-    padding: 22px;
-
-    box-sizing: border-box;
-
-    cursor: pointer;
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border .2s ease;
-}
-
-.stackCard:hover {
-
-    transform: scale(1.03);
-
-    border:
-    1px solid rgba(0,255,255,0.8);
-
-    box-shadow:
-    0 0 22px rgba(0,255,255,0.22);
-}
-
-.cardTitle {
-    color: #00ffff;
-    font-size: 21px;
-    margin-bottom: 10px;
-}
-
-.cardText {
-    opacity: 0.82;
-    line-height: 1.5;
-    font-size: 14px;
-}
-
-#footer {
-    text-align: center;
-    margin-top: 34px;
-    opacity: 0.55;
-    font-size: 12px;
-    letter-spacing: 2px;
-}
-</style>
-</head>
-
-<body>
-
-<div id="stage">
-
-<div id="title">
-CYBERCROWD STACK
-</div>
-
-<div id="subtitle">
-Operating environment launcher. No squash. Every system stands.
-</div>
-
-<div id="stack">
-
-<div class="stackCard" onclick="go('operations-dashboard.html')">
-<div class="cardTitle">
-Operations Dashboard
-</div>
-<div class="cardText">
-Primary operational coordination surface with tabletop,
-retention, broadcasts,
+<!-- END STACK V14 -->
