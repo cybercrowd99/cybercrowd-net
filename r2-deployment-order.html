@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 DEPLOYMENT ORDER</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.phase{
+    margin-bottom:28px;
+    padding:26px;
+    border-radius:18px;
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+}
+
+.phaseId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.phaseTitle{
+    font-size:26px;
+    margin-bottom:18px;
+}
+
+.phaseBlock{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.88;
+    font-size:14px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="title">
+CYBERCROWD R2 DEPLOYMENT ORDER
+</div>
+
+<div class="sub">
+Canonical deployment sequence for CyberCrowd operational survivability infrastructure.
+Deployment order is mandatory to prevent routing corruption and compartment collapse.
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-001
+</div>
+
+<div class="phaseTitle">
+Doctrine Lock
+</div>
+
+<div class="phaseBlock">
+Finalize:
+- bucket manifest
+- topology
+- deployment order
+- retention doctrine
+- compartment hierarchy
+- survivable lane doctrine
+
+No live bucket creation yet.
+No worker bindings yet.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-002
+</div>
+
+<div class="phaseTitle">
+Core Ledger Buckets
+</div>
+
+<div class="phaseBlock">
+Create first:
+
+1. cybercrowd-ledger-events
+2. cybercrowd-replay
+3. cybercrowd-deadletter
+
+Reason:
+Everything else later depends on canonical event survivability.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-003
+</div>
+
+<div class="phaseTitle">
+Archive + Governance Buckets
+</div>
+
+<div class="phaseBlock">
+Create:
+
+1. cybercrowd-archive
+2. cybercrowd-lineage
+3. cybercrowd-governance
+
+Reason:
+Historical authority and override survivability
+must exist before public scaling.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-004
+</div>
+
+<div class="phaseTitle">
+Node + Mesh Infrastructure
+</div>
+
+<div class="phaseBlock">
+Create:
+
+1. cybercrowd-node-heartbeats
+2. cybercrowd-sequester
+
+Reason:
+Mesh telemetry and intake quarantine
+must be isolated from public delivery systems.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-005
+</div>
+
+<div class="phaseTitle">
+Public Delivery Buckets
+</div>
+
+<div class="phaseBlock">
+Create:
+
+1. cybercrowd-graphics
+2. cybercrowd-teasers
+3. cybercrowd-surface-cache
+
+Reason:
+Public acceleration layers are intentionally replaceable
+and should never become canonical authority sources.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-006
+</div>
+
+<div class="phaseTitle">
+Long Form Media
+</div>
+
+<div class="phaseBlock">
+Create:
+
+1. cybercrowd-album
+
+Reason:
+Large media scaling occurs after survivability rails are stable.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-007
+</div>
+
+<div class="phaseTitle">
+Worker Binding Validation
+</div>
+
+<div class="phaseBlock">
+Bind buckets gradually to:
+- worker.js
+- route engine
+- replay engine
+- continuity systems
+- device event systems
+
+Validation required after every binding.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-008
+</div>
+
+<div class="phaseTitle">
+Replay + Ledger Validation
+</div>
+
+<div class="phaseBlock">
+Validate:
+- append-only behavior
+- replay survivability
+- deadletter routing
+- corruption isolation
+- event restoration
+- route continuity
+
+No public scaling until replay survives failures.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-009
+</div>
+
+<div class="phaseTitle">
+Controlled Public Scaling
+</div>
+
+<div class="phaseBlock">
+Enable:
+- creator uploads
+- teaser media
+- replay exports
+- public edge delivery
+- cache acceleration
+- device mesh propagation
+
+Public systems scale only after
+canonical rails survive testing.
+</div>
+
+</div>
+
+
+
+<div class="phase">
+
+<div class="phaseId">
+PHASE-010
+</div>
+
+<div class="phaseTitle">
+Automation Activation
+</div>
+
+<div class="phaseBlock">
+Only after all prior phases pass:
+
+- auto bucket provisioning
+- auto retention
+- replay automation
+- lifecycle automation
+- mesh propagation automation
+- deployment automation
+
+Automation never precedes survivability.
+</div>
+
+</div>
+
+
+
+</body>
+</html>
