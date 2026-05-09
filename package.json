@@ -1,12 +1,21 @@
 {
   "name": "cybercrowd-net",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "description": "CyberCrowd operational infrastructure",
+  "scripts": {
+    "start": "node server.js",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
   "dependencies": {
-    "@x402/hono": "latest",
-    "@x402/evm": "latest",
-    "@x402/core": "latest",
-    "hono": "latest"
+    "miniflare": "^3.20250508.0",
+    "workerd": "^1.20250508.0"
+  },
+  "optionalDependencies": {
+    "@cloudflare/workerd-linux-64": "^1.20250508.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
