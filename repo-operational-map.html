@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD REPO OPERATIONAL MAP V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD REPO OPERATIONAL MAP V1
+</div>
+
+<div class="sub">
+Operational repository authority map for CyberCrowd.
+This document defines what belongs in GitHub,
+what belongs in Pages,
+what belongs in R2,
+and what must remain separated.
+</div>
+
+<div class="card">
+<div class="cardId">REPO-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+The repository is not the platform.
+
+The repository defines:
+structure
+logic
+routing
+surfaces
+authority rules
+deployment law
+
+The repository does not hold:
+live canon
+replay truth
+quarantine payloads
+heartbeat streams
+public intake overflow
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-002</div>
+<div class="cardTitle">Primary Separation Rule</div>
+
+<table>
+
+<tr>
+<th>System</th>
+<th>Purpose</th>
+<th>Authority Type</th>
+<th>Mutation Pattern</th>
+</tr>
+
+<tr>
+<td>GitHub Repo</td>
+<td>source logic + structure</td>
+<td>version authority</td>
+<td>controlled commits</td>
+</tr>
+
+<tr>
+<td>Cloudflare Pages</td>
+<td>deployment surface</td>
+<td>runtime authority</td>
+<td>deployment regeneration</td>
+</tr>
+
+<tr>
+<td>R2 Buckets</td>
+<td>operational storage lattice</td>
+<td>event/data authority</td>
+<td>continuous runtime writes</td>
+</tr>
+
+<tr>
+<td>Replay Layer</td>
+<td>continuity reconstruction</td>
+<td>reconstruction authority</td>
+<td>append/replay</td>
+</tr>
+
+<tr>
+<td>Governance Layer</td>
+<td>override annotation</td>
+<td>administrative authority</td>
+<td>reviewed mutation</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-003</div>
+<div class="cardTitle">Recommended Repo Structure</div>
+
+<div class="block">
+/public
+Static public assets
+Landing surfaces
+Icons
+Base graphics
+
+/pages
+Static HTML surfaces
+Public route pages
+Page shells
+
+/styles
+CSS layers
+Visual systems
+Theme layers
+
+/scripts
+Frontend logic
+Surface interaction
+Transport simulation
+
+/router
+Session router logic
+Authority router logic
+Replay router logic
+
+/governance
+Governance definitions
+Freeze rules
+Emergency rules
+
+/replay
+Replay schemas
+Replay reconstruction logic
+Continuity definitions
+
+/intake
+Validation schemas
+Sequester logic
+Payload classification
+
+/heartbeat
+Heartbeat schemas
+Node continuity logic
+
+/docs
+Architecture doctrine
+Operational matrices
+Planning files
+
+/tests
+Simulation systems
+Transport testing
+Failure injection
+
+/config
+Safe deployment configuration
+Environment separation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-004</div>
+<div class="cardTitle">What Must NEVER Live In Repo</div>
+
+<div class="block">
+Forbidden in repo:
+- live replay streams
+- live heartbeat streams
+- quarantine payloads
+- deadletter payloads
+- archive storage
+- canonical runtime event streams
+- session secrets
+- transport payload history
+- raw user intake overflow
+
+These belong in:
+R2 operational lattice
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-005</div>
+<div class="cardTitle">What Belongs In R2</div>
+
+<table>
+
+<tr>
+<th>Bucket</th>
+<th>Operational Role</th>
+<th>Persistence Type</th>
+</tr>
+
+<tr>
+<td>LEDGER_EVENTS</td>
+<td>canonical event truth</td>
+<td>append authority</td>
+</tr>
+
+<tr>
+<td>REPLAY</td>
+<td>continuity reconstruction</td>
+<td>replay continuity</td>
+</tr>
+
+<tr>
+<td>LINEAGE</td>
+<td>ownership continuity</td>
+<td>ancestry continuity</td>
+</tr>
+
+<tr>
+<td>GOVERNANCE</td>
+<td>override annotation</td>
+<td>review continuity</td>
+</tr>
+
+<tr>
+<td>ARCHIVE</td>
+<td>cold preservation</td>
+<td>historical persistence</td>
+</tr>
+
+<tr>
+<td>DEADLETTER</td>
+<td>failure containment</td>
+<td>containment persistence</td>
+</tr>
+
+<tr>
+<td>SEQUESTER</td>
+<td>quarantine intake</td>
+<td>temporary containment</td>
+</tr>
+
+<tr>
+<td>NODE_HEARTBEATS</td>
+<td>mesh continuity</td>
+<td>telemetry continuity</td>
+</tr>
+
+<tr>
+<td>SURFACE_CACHE</td>
+<td>edge acceleration</td>
+<td>temporary acceleration</td>
+</tr>
+
+<tr>
+<td>GRAPHICS</td>
+<td>public graphics delivery</td>
+<td>media persistence</td>
+</tr>
+
+<tr>
+<td>TEASERS</td>
+<td>preview media</td>
+<td>public preview persistence</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-006</div>
+<div class="cardTitle">Pages Authority Discovery</div>
+
+<div class="block">
+Critical discovery:
+
+Cloudflare Pages owns deployment regeneration.
+
+Generated Workers are runtime artifacts.
+
+Persistent bindings belong in:
+Pages Functions bindings
+
+Not:
+Workers settings API
+
+This became a foundational operational rule.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-007</div>
+<div class="cardTitle">Static vs Dynamic Separation</div>
+
+<div class="block">
+Static:
+repo
+Pages surfaces
+CSS
+frontend logic
+public assets
+
+Dynamic:
+R2 event streams
+heartbeat streams
+replay streams
+intake payloads
+continuity reconstruction
+
+Static surfaces should not become:
+operational truth storage.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-008</div>
+<div class="cardTitle">Deployment Discipline</div>
+
+<div class="block">
+Deployment rules:
+- controlled commits
+- single-purpose mutations
+- verify after deployment
+- preserve binding state
+- avoid broad auto-write behavior
+- avoid uncontrolled optimization
+- freeze after successful mutation
+
+Pages regeneration is expected behavior.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-009</div>
+<div class="cardTitle">Future Expansion Zones</div>
+
+<div class="block">
+Future repo systems:
+- Magic Cursor transport
+- VR continuity
+- live observer mesh
+- creator broadcast tools
+- accessibility systems
+- Deaf Companion
+- Slate continuity
+- adWorm routing
+- Atomic Cricket replay systems
+
+Future R2 systems:
+- live transport payloads
+- continuity event chains
+- replay snapshots
+- moderation evidence
+- distributed node telemetry
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">REPO-010</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd survives through:
+separation of authority.
+
+Repo defines structure.
+Pages deploys surfaces.
+R2 preserves operational continuity.
+
+Do not collapse these layers together.
+</div>
+</div>
+
+</body>
+</html>
