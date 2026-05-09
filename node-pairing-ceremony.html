@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD NODE PAIRING CEREMONY V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD NODE PAIRING CEREMONY V1
+</div>
+
+<div class="sub">
+Human-facing pairing doctrine for CyberCrowd distributed continuity systems.
+This document defines how devices visibly and safely establish continuity relationships before transport begins.
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Pairing must be visible,
+intentional,
+replayable,
+and reviewable.
+
+No hidden pairing.
+No silent authority grant.
+No invisible transport activation.
+
+The user must understand:
+what is pairing,
+what is allowed,
+and what continuity begins.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-002</div>
+<div class="cardTitle">Primary Pairing Methods</div>
+
+<table>
+
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+<th>Typical Use</th>
+</tr>
+
+<tr>
+<td>QR scan</td>
+<td>fast continuity enrollment</td>
+<td>phone ↔ laptop</td>
+</tr>
+
+<tr>
+<td>manual code</td>
+<td>fallback secure enrollment</td>
+<td>offline/manual pairing</td>
+</tr>
+
+<tr>
+<td>governance enrollment</td>
+<td>high-trust controlled pairing</td>
+<td>administrative systems</td>
+</tr>
+
+<tr>
+<td>sandbox enrollment</td>
+<td>isolated experimentation</td>
+<td>factory-reset devices</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-003</div>
+<div class="cardTitle">Pairing Ceremony Flow</div>
+
+<div class="block">
+1. node announces pairing request
+2. QR scan or manual code exchanged
+3. device identity package exchanged
+4. device name selected
+5. device class displayed
+6. trust level displayed
+7. allowed scope displayed
+8. replay scope displayed
+9. heartbeat scope displayed
+10. transport eligibility displayed
+11. user confirms pairing
+12. replay registration begins
+13. heartbeat enrollment begins
+14. continuity becomes active
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-004</div>
+<div class="cardTitle">Displayed Pairing Information</div>
+
+<div class="block">
+User-visible pairing data:
+- device name
+- device class
+- trust level
+- session scope
+- replay scope
+- heartbeat scope
+- transport eligibility
+- sandbox status
+- Production eligibility
+
+No hidden authority assumptions.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-005</div>
+<div class="cardTitle">Trust Negotiation Display</div>
+
+<table>
+
+<tr>
+<th>Trust Level</th>
+<th>User Meaning</th>
+<th>Typical Scope</th>
+</tr>
+
+<tr>
+<td>Level 0</td>
+<td>unverified</td>
+<td>registration only</td>
+</tr>
+
+<tr>
+<td>Level 1</td>
+<td>observer</td>
+<td>view + heartbeat</td>
+</tr>
+
+<tr>
+<td>Level 2</td>
+<td>sandbox continuity</td>
+<td>simulation only</td>
+</tr>
+
+<tr>
+<td>Level 3</td>
+<td>verified continuity</td>
+<td>controlled transport</td>
+</tr>
+
+<tr>
+<td>Level 4+</td>
+<td>reviewed authority</td>
+<td>restricted operations</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-006</div>
+<div class="cardTitle">Allowed Scope Negotiation</div>
+
+<div class="block">
+Pairing negotiates:
+- replay participation
+- heartbeat participation
+- transport participation
+- observer continuity
+- creator continuity
+- sandbox participation
+
+Pairing does not automatically grant:
+- governance authority
+- canon authority
+- archive authority
+- unrestricted transport
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-007</div>
+<div class="cardTitle">Replay Initiation</div>
+
+<div class="block">
+Successful pairing begins replay registration.
+
+Replay records:
+- source node
+- target node
+- trust level
+- allowed scope
+- timestamp continuity
+- pairing method
+- continuity activation state
+
+Every pairing becomes replay-visible.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-008</div>
+<div class="cardTitle">Heartbeat Initiation</div>
+
+<div class="block">
+Successful pairing begins heartbeat enrollment.
+
+Heartbeat lane depends on:
+- trust level
+- sandbox status
+- environment scope
+- transport eligibility
+
+Sandbox pairing:
+DEV_HEARTBEATS
+or
+STAGING_HEARTBEATS
+
+Production pairing:
+NODE_HEARTBEATS
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-009</div>
+<div class="cardTitle">Rejection Behavior</div>
+
+<div class="block">
+Reject pairing when:
+- fingerprint mismatch detected
+- duplicate node detected
+- trust scope conflict exists
+- governance freeze active
+- replay scope invalid
+- sandbox attempts Production escalation
+- transport eligibility invalid
+
+Rejected pairing routes:
+SEQUESTER
++
+review logging
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-010</div>
+<div class="cardTitle">Quarantine Behavior</div>
+
+<div class="block">
+Quarantine pairing when:
+- spoof behavior detected
+- authority claim mismatch occurs
+- replay continuity conflict occurs
+- suspicious transport negotiation occurs
+- heartbeat continuity unstable
+
+Quarantine preserves:
+- replay evidence
+- handshake history
+- fingerprint history
+- transport negotiation history
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-011</div>
+<div class="cardTitle">Old Hardware Ceremony</div>
+
+<div class="block">
+Factory-reset old devices may pair safely as:
+- observer nodes
+- sandbox nodes
+- replay simulation nodes
+- relay nodes
+
+Old hardware begins with:
+low trust
+restricted scope
+isolated continuity
+
+Trust grows through stable participation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-012</div>
+<div class="cardTitle">Future Pairing Extensions</div>
+
+<div class="block">
+Future pairing systems:
+- VR continuity pairing
+- observer swarm enrollment
+- wall-display pairing
+- creator-stage pairing
+- accessibility continuity pairing
+- Deaf Companion continuity
+- Slate continuity
+- transport swarm continuity
+
+All future continuity begins with governed pairing.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CEREMONY-013</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd pairing is not:
+"connect blindly."
+
+CyberCrowd pairing means:
+recognize
+negotiate
+scope
+confirm
+replay
+heartbeat
+then continuity begins.
+</div>
+</div>
+
+</body>
+</html>
