@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 BUCKET CREATION PROMPTS</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.promptCard{
+    margin-bottom:26px;
+    padding:24px;
+    border-radius:18px;
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+}
+
+.promptId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.promptTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.promptBlock{
+    background:#020406;
+    border:1px solid rgba(0,255,255,.14);
+    border-radius:12px;
+    padding:18px;
+    white-space:pre-wrap;
+    line-height:1.7;
+    overflow:auto;
+    font-size:13px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="title">
+CYBERCROWD R2 BUCKET CREATION PROMPTS
+</div>
+
+<div class="sub">
+Canonical bucket deployment prompts for Cloudflare R2 operational survivability.
+Use these prompts when creating live infrastructure buckets.
+</div>
+
+
+<div class="promptCard">
+
+<div class="promptId">
+CC-R2-PROMPT-001
+</div>
+
+<div class="promptTitle">
+Ledger Events Bucket
+</div>
+
+<div class="promptBlock">
+Create Cloudflare R2 bucket:
+
+Bucket Name:
+cybercrowd-ledger-events
+
+Bucket Purpose:
+Append-only ledger event authority.
+
+Bucket Visibility:
+Private
+
+Lifecycle:
+Persistent
+
+Retention:
+Long-term
+
+Encryption:
+Enabled
+
+Primary Role:
+Store canonical ledger event chains,
+device events,
+replay references,
+governance receipts,
+and operational continuity records.
+
+Failure Policy:
+Never auto-delete.
+
+Replay Support:
+Enabled.
+
+Audit Survivability:
+Maximum.
+</div>
+
+</div>
+
+
+
+<div class="promptCard">
+
+<div class="promptId">
+CC-R2-PROMPT-002
+</div>
+
+<div class="promptTitle">
+Deadletter Bucket
+</div>
+
+<div class="promptBlock">
+Create Cloudflare R2 bucket:
+
+Bucket Name:
+cybercrowd-deadletter
+
+Bucket Purpose:
+Malformed payload isolation and failed event quarantine.
+
+Bucket Visibility:
+Private
+
+Lifecycle:
+Short-to-medium retention
+
+Retention:
+30-90 days
+
+Encryption:
+Enabled
+
+Primary Role:
+Store rejected payloads,
+routing failures,
+event corruption,
+and replay anomalies.
+
+Failure Policy:
+Allow expiration after retention window.
+
+Replay Support:
+Optional.
+
+Audit Survivability:
+Medium.
+</div>
+
+</div>
+
+
+
+<div class="promptCard">
+
+<div class="promptId">
+CC-R2-PROMPT-003
+</div>
+
+<div class="promptTitle">
+Replay Bucket
+</div>
+
+<div class="promptBlock">
+Create Cloudflare R2 bucket:
+
+Bucket Name:
+cybercrowd-replay
+
+Bucket Purpose:
+Replay engine and operational simulation storage.
+
+Bucket Visibility:
+Private
+
+Lifecycle:
+Persistent
+
+Retention:
+Long-term
+
+Encryption:
+Enabled
+
+Primary Role:
+Store replayable event chains,
+simulation frames,
+device mesh playback,
+and operational reconstruction states.
+
+Failure Policy:
+Never auto-delete.
+
+Replay Support:
+Core system dependency.
+
+Audit Survivability:
+High.
+</div>
+
+</div>
+
+
+
+<div class="promptCard">
+
+<div class="promptId">
+CC-R2-PROMPT-004
+</div>
+
+<div class="promptTitle">
+Surface Cache Bucket
+</div>
+
+<div class="promptBlock">
+Create Cloudflare R2 bucket:
+
+Bucket Name:
+cybercrowd-surface-cache
+
+Bucket Purpose:
+Public accelerated edge delivery cache.
+
+Bucket Visibility:
+Public-read
+
+Lifecycle:
+Replaceable cache layer
+
+Retention:
+Short-term
+
+Encryption:
+Optional
+
+Primary Role:
+Serve graphics,
+media previews,
+surface assets,
+and cached public delivery objects.
+
+Failure Policy:
+Cache rebuild allowed.
+
+Replay Support:
+Disabled.
+
+Audit Survivability:
+Low.
+</div>
+
+</div>
+
+
+
+<div class="promptCard">
+
+<div class="promptId">
+CC-R2-PROMPT-005
+</div>
+
+<div class="promptTitle">
+Archive Bucket
+</div>
+
+<div class="promptBlock">
+Create Cloudflare R2 bucket:
+
+Bucket Name:
+cybercrowd-archive
+
+Bucket Purpose:
+Immutable historical continuity archive.
+
+Bucket Visibility:
+Private
+
+Lifecycle:
+Permanent
+
+Retention:
+Never expire
+
+Encryption:
+Enabled
+
+Primary Role:
+Store canonical media,
+historical snapshots,
+lineage records,
+continuity captures,
+and preservation artifacts.
+
+Failure Policy:
+Never auto-delete.
+
+Replay Support:
+Enabled.
+
+Audit Survivability:
+Maximum.
+</div>
+
+</div>
+
+
+</body>
+</html>
