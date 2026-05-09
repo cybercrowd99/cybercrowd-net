@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD MAGIC CURSOR CONTINUITY LAYER V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD MAGIC CURSOR CONTINUITY LAYER V1
+</div>
+
+<div class="sub">
+Cross-device continuity layer for Magic Cursor.
+This document defines how cursor authority, device handoff,
+session migration, replay continuity, and heartbeat continuity
+survive across multiple surfaces.
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Magic Cursor is not a loose pointer.
+
+Magic Cursor is a controlled continuity rail.
+
+Every cursor action must belong to:
+- one session
+- one device owner
+- one authority scope
+- one replay chain
+- one heartbeat chain
+- one active surface
+
+No orphan cursor authority.
+No silent device takeover.
+No untracked handoff.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-002</div>
+<div class="cardTitle">Continuity Identity</div>
+
+<div class="block">
+Every Magic Cursor session receives:
+
+cursor_session_id
+device_origin_id
+device_target_id
+continuity_id
+replay_id
+heartbeat_id
+authority_scope
+handoff_state
+
+Purpose:
+preserve cursor history across device movement.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-003</div>
+<div class="cardTitle">Cursor Ownership</div>
+
+<table>
+<tr>
+<th>Ownership State</th>
+<th>Description</th>
+<th>Allowed Action</th>
+<th>Failure Route</th>
+</tr>
+
+<tr>
+<td>unclaimed</td>
+<td>No active cursor authority.</td>
+<td>request session</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>claimed</td>
+<td>One device owns cursor control.</td>
+<td>move, click, route</td>
+<td>REPLAY</td>
+</tr>
+
+<tr>
+<td>handoff_pending</td>
+<td>Cursor is moving between devices.</td>
+<td>freeze until confirmed</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>handoff_confirmed</td>
+<td>Target device accepts authority.</td>
+<td>resume cursor control</td>
+<td>REPLAY</td>
+</tr>
+
+<tr>
+<td>revoked</td>
+<td>Authority removed.</td>
+<td>none</td>
+<td>GOVERNANCE</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-004</div>
+<div class="cardTitle">Device Handoff Route</div>
+
+<div class="block">
+Handoff sequence:
+
+1. origin device requests handoff
+2. session authority validates request
+3. heartbeat confirms origin device alive
+4. target device confirms readiness
+5. replay records pre-handoff state
+6. cursor authority freezes
+7. target device claims cursor
+8. replay records post-handoff state
+9. heartbeat continuity continues
+
+If any step fails:
+route event to DEADLETTER or SEQUESTER.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-005</div>
+<div class="cardTitle">Session Migration</div>
+
+<div class="block">
+Session migration occurs when:
+- phone becomes controller
+- laptop becomes controller
+- tablet joins surface
+- observer station takes role
+- creator station resumes control
+- VR node becomes active
+
+Migration must preserve:
+- session identity
+- replay continuity
+- lineage reference
+- authority scope
+- heartbeat chain
+- last known cursor state
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-006</div>
+<div class="cardTitle">Heartbeat Continuity</div>
+
+<div class="block">
+NODE_HEARTBEATS records:
+- active device
+- standby device
+- latency
+- last cursor state
+- handoff timing
+- session liveness
+- drop detection
+
+Heartbeat loss may:
+- freeze cursor authority
+- trigger replay reconstruction
+- route failure to DEADLETTER
+- request governance review
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-007</div>
+<div class="cardTitle">Replay Reconstruction</div>
+
+<div class="block">
+REPLAY records:
+- cursor position
+- active device
+- target surface
+- click state
+- drag state
+- clipboard state
+- handoff state
+- failure state
+
+Replay can reconstruct cursor state after:
+- dropped connection
+- device sleep
+- refresh
+- accidental disconnect
+- session timeout
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-008</div>
+<div class="cardTitle">Authority Preservation</div>
+
+<div class="block">
+Cursor handoff cannot change authority class.
+
+A viewer does not become creator.
+A device does not become owner.
+A session does not become governance.
+A replay does not become canon.
+
+Authority follows verified identity,
+not hardware possession.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-009</div>
+<div class="cardTitle">Clipboard + Drag Continuity</div>
+
+<div class="block">
+Clipboard and drag transfer require:
+- active session
+- allowed device pair
+- replay registration
+- source surface
+- target surface
+- payload classification
+- sequester fallback
+
+Forbidden:
+clipboard payload bypassing SEQUESTER when suspicious
+drag payload reaching public lane without validation
+device-originated file entering ARCHIVE directly
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-010</div>
+<div class="cardTitle">Interruption Recovery</div>
+
+<div class="block">
+If continuity breaks:
+
+1. freeze cursor action
+2. preserve last replay state
+3. preserve heartbeat loss event
+4. mark session degraded
+5. route failure to DEADLETTER
+6. attempt safe reconstruction
+7. require re-confirmation before control resumes
+
+No blind resume.
+No silent takeover.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-011</div>
+<div class="cardTitle">Mesh-Aware Cursor Routing</div>
+
+<table>
+<tr>
+<th>Event</th>
+<th>Primary Route</th>
+<th>Authority Requirement</th>
+<th>Failure Route</th>
+</tr>
+
+<tr>
+<td>cursor move</td>
+<td>REPLAY</td>
+<td>active session</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>cursor handoff</td>
+<td>REPLAY + NODE_HEARTBEATS</td>
+<td>verified device pair</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>clipboard transfer</td>
+<td>SEQUESTER</td>
+<td>verified session</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>drag transfer</td>
+<td>SEQUESTER</td>
+<td>verified session + payload check</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>session freeze</td>
+<td>GOVERNANCE</td>
+<td>governance authority</td>
+<td>LEDGER_EVENTS</td>
+</tr>
+
+<tr>
+<td>continuity restored</td>
+<td>REPLAY</td>
+<td>verified reconstruction</td>
+<td>DEADLETTER</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">CURSOR-012</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+Magic Cursor must feel seamless to the user,
+but it must never be invisible to the system.
+
+Seamless surface.
+Traceable interior.
+
+Every motion,
+handoff,
+pause,
+failure,
+and recovery
+must have a replayable authority path.
+</div>
+</div>
+
+</body>
+</html>
