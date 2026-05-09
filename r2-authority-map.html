@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 AUTHORITY MAP</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:12px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.9;
+    font-size:14px;
+}
+
+.authority{
+    color:#00ffaa;
+}
+
+.transport{
+    color:#ffd166;
+}
+
+.publiclane{
+    color:#6ec1ff;
+}
+
+.quarantine{
+    color:#ff7676;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD R2 AUTHORITY MAP
+</div>
+
+<div class="sub">
+Permanent bucket doctrine reference for CyberCrowd compartment authority.
+Defines operational role, mutation tolerance, survivability class,
+and infrastructure containment boundaries.
+</div>
+
+<div class="card">
+<div class="cardId">AUTHORITY-001</div>
+<div class="cardTitle">Append-Only Authority Systems</div>
+
+<div class="block">
+<span class="authority">
+cybercrowd-ledger-events
+</span>
+
+Purpose:
+canonical ledger events
+
+Rules:
+append-only preferred
+mutation discouraged
+deletion governed
+timeline reconstructable
+replay traceable
+
+
+
+<span class="authority">
+cybercrowd-governance
+</span>
+
+Purpose:
+override records
+treasury actions
+administrative authority
+
+Rules:
+full audit visibility
+override events recorded
+silent mutation forbidden
+
+
+
+<span class="authority">
+cybercrowd-lineage
+</span>
+
+Purpose:
+ownership lineage
+asset ancestry
+creator continuity
+
+Rules:
+history preserved
+ownership transitions append-forward
+no destructive overwrite
+
+
+
+<span class="authority">
+cybercrowd-archive
+</span>
+
+Purpose:
+long-term preservation
+historical continuity
+sealed snapshots
+
+Rules:
+cold storage preferred
+mutation heavily restricted
+archive integrity prioritized
+</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">AUTHORITY-002</div>
+<div class="cardTitle">Replay + Operations Systems</div>
+
+<div class="block">
+<span class="transport">
+cybercrowd-replay
+</span>
+
+Purpose:
+replay continuity
+event restoration
+transport reconstruction
+
+Rules:
+high write activity
+replayable state
+temporary operational mutation allowed
+
+
+
+<span class="transport">
+cybercrowd-node-heartbeats
+</span>
+
+Purpose:
+node liveness
+mesh continuity
+uptime verification
+
+Rules:
+high frequency writes
+replaceable operational data
+non-canonical
+
+
+
+<span class="transport">
+cybercrowd-surface-cache
+</span>
+
+Purpose:
+temporary render cache
+surface acceleration
+delivery optimization
+
+Rules:
+fully replaceable
+cache-first
+non-authoritative
+</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">AUTHORITY-003</div>
+<div class="cardTitle">Public Media + Creator Systems</div>
+
+<div class="block">
+<span class="publiclane">
+cybercrowd-graphics
+</span>
+
+Purpose:
+public graphics
+visual delivery
+platform imagery
+
+Rules:
+public CDN delivery
+replaceable assets
+non-canonical
+
+
+
+<span class="publiclane">
+cybercrowd-teasers
+</span>
+
+Purpose:
+preview media
+teaser delivery
+promotional surfaces
+
+Rules:
+high cache tolerance
+public-facing
+replaceable media
+
+
+
+<span class="publiclane">
+cybercrowd-album
+</span>
+
+Purpose:
+creator inventory
+for-sale media
+commercial presentation
+
+Rules:
+mutable inventory allowed
+product rotation allowed
+transaction truth stored elsewhere
+not canonical authority
+</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">AUTHORITY-004</div>
+<div class="cardTitle">Quarantine + Containment Systems</div>
+
+<div class="block">
+<span class="quarantine">
+cybercrowd-deadletter
+</span>
+
+Purpose:
+failed events
+routing fallout
+unprocessable payloads
+
+Rules:
+quarantine first
+manual review preferred
+never treated as canonical truth
+
+
+
+<span class="quarantine">
+cybercrowd-sequester
+</span>
+
+Purpose:
+suspicious payload isolation
+security containment
+forensic hold
+
+Rules:
+restricted access
+isolated review
+high audit sensitivity
+</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">AUTHORITY-005</div>
+<div class="cardTitle">Core Operational Rule</div>
+
+<div class="block">
+No public cache writes canon.
+
+No replay lane overrides governance.
+
+No creator inventory mutates ledger truth.
+
+No quarantine lane becomes authority.
+
+No authority lane depends on cache survival.
+
+Rule:
+build empty boxes first
+verify connections second
+live transport last
+</div>
+</div>
+
+</body>
+</html>
