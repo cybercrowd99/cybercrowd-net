@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD SESSION EVENT ROUTER V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD SESSION EVENT ROUTER V1
+</div>
+
+<div class="sub">
+Operational session event routing architecture for CyberCrowd.
+This document defines how events move through the verified
+R2 operational lattice under session authority rules.
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-001</div>
+<div class="cardTitle">Core Routing Rule</div>
+
+<div class="block">
+No event routes without:
+- session owner
+- authority scope
+- replay eligibility
+- containment fallback
+- destination lane
+
+Every session event must be:
+traceable
+replayable
+containable
+reviewable
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-002</div>
+<div class="cardTitle">Primary Session Event Routing Matrix</div>
+
+<table>
+
+<tr>
+<th>Session Event</th>
+<th>Authority Required</th>
+<th>Primary Route</th>
+<th>Replay Eligible</th>
+<th>Failure Route</th>
+</tr>
+
+<tr>
+<td>public view request</td>
+<td>anonymous/public</td>
+<td>SURFACE_CACHE</td>
+<td>limited</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>teaser playback</td>
+<td>observer</td>
+<td>TEASERS</td>
+<td>yes</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>graphics request</td>
+<td>public or verified</td>
+<td>GRAPHICS</td>
+<td>optional</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>creator upload</td>
+<td>creator session</td>
+<td>SEQUESTER</td>
+<td>mandatory</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>creator ownership update</td>
+<td>creator session</td>
+<td>LINEAGE</td>
+<td>mandatory</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>heartbeat pulse</td>
+<td>device/session verified</td>
+<td>NODE_HEARTBEATS</td>
+<td>yes</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>session replay request</td>
+<td>verified session</td>
+<td>REPLAY</td>
+<td>mandatory</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>canonical event commit</td>
+<td>verified authority</td>
+<td>LEDGER_EVENTS</td>
+<td>mandatory</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>administrative override</td>
+<td>governance authority</td>
+<td>GOVERNANCE</td>
+<td>mandatory</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>archive rollover</td>
+<td>system authority</td>
+<td>ARCHIVE</td>
+<td>mandatory</td>
+<td>DEADLETTER</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-003</div>
+<div class="cardTitle">Session Ownership Rule</div>
+
+<div class="block">
+Every event must belong to:
+- one session
+- one authority scope
+- one replay lineage
+- one device continuity chain
+
+No orphan events allowed.
+
+Anonymous events may exist,
+but anonymous replay authority is limited.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-004</div>
+<div class="cardTitle">Replay Registration Rule</div>
+
+<div class="block">
+Replay registration occurs when:
+- event origin is known
+- authority scope exists
+- replay lane is assigned
+- lineage chain exists
+- heartbeat continuity exists
+
+Replay records:
+who
+what
+when
+where
+which session
+which authority
+which lane
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-005</div>
+<div class="cardTitle">Containment Rule</div>
+
+<div class="block">
+Events route to SEQUESTER when:
+- authority mismatch occurs
+- ownership conflict occurs
+- session anomaly occurs
+- replay continuity breaks
+- suspicious upload occurs
+- governance freeze exists
+
+Events route to DEADLETTER when:
+- routing fails
+- schema fails
+- replay registration fails
+- event integrity fails
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-006</div>
+<div class="cardTitle">Cache Eligibility</div>
+
+<div class="block">
+Only non-canonical public objects may enter:
+SURFACE_CACHE
+
+Forbidden:
+- canonical ledger writes
+- governance records
+- lineage authority
+- replay canon
+- quarantine objects
+
+Cache exists for acceleration,
+not truth ownership.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-007</div>
+<div class="cardTitle">Heartbeat Continuity</div>
+
+<div class="block">
+NODE_HEARTBEATS tracks:
+- session liveness
+- device continuity
+- replay continuity
+- mesh continuity
+- route stability
+
+Heartbeat loss does not erase canon.
+
+Heartbeat loss may:
+- freeze replay
+- freeze transport
+- trigger governance review
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-008</div>
+<div class="cardTitle">Governance Oversight</div>
+
+<div class="block">
+Governance may:
+- freeze routes
+- quarantine sessions
+- suspend replay
+- annotate canon
+- trigger emergency containment
+
+Governance may not:
+- erase lineage
+- silently mutate canon
+- bypass replay recording
+- bypass audit continuity
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-009</div>
+<div class="cardTitle">Future Router Extensions</div>
+
+<div class="block">
+Future routing systems:
+- Magic Cursor routing
+- live event mesh
+- observer swarm routing
+- emergency beacon routing
+- cross-device session migration
+- VR continuity routing
+- audio/video transport routing
+- adWorm event routing
+- Atomic Cricket routing
+
+The routing lattice is now operationally defined.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ROUTER-010</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd routes events through:
+authority
++
+lineage
++
+containment
++
+replayability
++
+verification
+
+No session event becomes trusted
+without a replayable authority path.
+</div>
+</div>
+
+</body>
+</html>
