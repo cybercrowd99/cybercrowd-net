@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD DEPLOYMENT FREEZE RELEASE CHANNELS V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD DEPLOYMENT FREEZE RELEASE CHANNELS V1
+</div>
+
+<div class="sub">
+Deployment freeze and release-channel doctrine for CyberCrowd.
+This document defines how changes move from planning to production
+without breaking continuity, bindings, routing, replay, or authority.
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Production is not a playground.
+
+Every release must preserve:
+- Pages Functions bindings
+- R2 authority lattice
+- replay continuity
+- routing authority
+- intake containment
+- identity/session authority
+- Magic Cursor continuity doctrine
+
+No uncontrolled production mutation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-002</div>
+<div class="cardTitle">Release Channels</div>
+
+<table>
+<tr>
+<th>Channel</th>
+<th>Purpose</th>
+<th>Allowed Activity</th>
+<th>Production Risk</th>
+</tr>
+
+<tr>
+<td>DEV</td>
+<td>experimental design and local testing</td>
+<td>new files, drafts, simulations, fake data</td>
+<td>none</td>
+</tr>
+
+<tr>
+<td>STAGING</td>
+<td>deployment validation before production</td>
+<td>route testing, binding checks, replay simulation</td>
+<td>controlled</td>
+</tr>
+
+<tr>
+<td>PRODUCTION</td>
+<td>live public system</td>
+<td>verified releases only</td>
+<td>high</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-003</div>
+<div class="cardTitle">Production Freeze Conditions</div>
+
+<div class="block">
+Freeze production immediately when:
+- binding count changes unexpectedly
+- Pages Functions bindings disappear
+- route index breaks
+- asset sweep includes node_modules
+- R2 privacy changes unexpectedly
+- public cache writes canon
+- replay overwrites canon
+- governance authority disappears
+- live transport behaves untraceably
+- emergency command "1" is triggered
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-004</div>
+<div class="cardTitle">Release Verification Sequence</div>
+
+<div class="block">
+Before production release:
+
+1. inspect Production Pages bindings
+2. verify binding count
+3. verify route index renders
+4. verify R2 lattice pages render
+5. verify intake doctrine renders
+6. verify session router renders
+7. verify Magic Cursor gate renders
+8. verify no node_modules asset upload
+9. verify no private bucket exposure
+10. verify no Worker settings API drift
+
+Release only after all checks pass.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-005</div>
+<div class="cardTitle">Cloudflare Mutation Rule</div>
+
+<div class="block">
+Cloudflare changes follow:
+
+TASK:
+one exact directive only
+
+DO NOT:
+containment boundaries
+
+ONLY:
+allowed mutation lane
+
+REPORT ONLY:
+verification output
+
+No broad auto-write authority.
+No multi-action repair prompts.
+No assumed merge-state behavior.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-006</div>
+<div class="cardTitle">Binding Preservation Rule</div>
+
+<div class="block">
+Every binding mutation must restate the full current active Production binding list.
+
+Current stable binding lattice must be preserved unless deliberately changed:
+
+ARCHIVE
+DEADLETTER
+GOVERNANCE
+GRAPHICS
+LEDGER_EVENTS
+LINEAGE
+NODE_HEARTBEATS
+REPLAY
+SEQUESTER
+SURFACE_CACHE
+TEASERS
+
+If any binding disappears:
+freeze release.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-007</div>
+<div class="cardTitle">Rollback Rule</div>
+
+<div class="block">
+Rollback is required when:
+- production surface fails
+- binding lattice breaks
+- R2 route law breaks
+- Pages deployment resets bindings
+- public/private boundary changes
+- replay continuity becomes unsafe
+- intake bypasses SEQUESTER
+- deadletter routing fails
+
+Rollback must preserve:
+- ledger events
+- lineage
+- governance
+- archive
+- replay evidence
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-008</div>
+<div class="cardTitle">Replay-Safe Deployment</div>
+
+<div class="block">
+A deployment is replay-safe only when:
+- route changes are traceable
+- event schema remains compatible
+- replay reconstruction still works
+- failed events route to DEADLETTER
+- suspicious events route to SEQUESTER
+- governance annotations remain intact
+
+Deployment must not destroy historical reconstruction.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-009</div>
+<div class="cardTitle">Governance Freeze Authority</div>
+
+<div class="block">
+Governance may freeze:
+- release channel
+- route expansion
+- transport testing
+- public intake
+- creator upload
+- Magic Cursor live transport
+- cache acceleration
+
+Governance freeze must be:
+recorded
+reviewable
+replayable
+and reversible only through authority review.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-010</div>
+<div class="cardTitle">Emergency Rollback</div>
+
+<div class="block">
+Emergency rollback is triggered by:
+- live corruption
+- private bucket exposure
+- binding lattice collapse
+- uncontrolled transport
+- canon overwrite
+- replay destruction
+- governance loss
+
+Emergency rollback sequence:
+1. freeze production
+2. stop live transport
+3. preserve R2 evidence
+4. inspect binding state
+5. restore last known stable lattice
+6. verify route index
+7. verify public surface
+8. report only
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-011</div>
+<div class="cardTitle">Production Release Gate</div>
+
+<div class="block">
+Production release requires:
+- verified repo commit
+- verified Pages deployment
+- verified binding lattice
+- verified route index
+- verified no asset contamination
+- verified public/private boundaries
+- verified rollback plan
+
+No release by excitement.
+No release by panic.
+No release by timeout repair.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">RELEASE-012</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd production survives by freezing chaos
+before it reaches the public surface.
+
+Build slowly.
+Verify deeply.
+Release deliberately.
+
+The living system must not be broken by the next commit.
+</div>
+</div>
+
+</body>
+</html>
