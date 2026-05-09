@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD DEV STAGING EXPERIMENT LANES V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD DEV STAGING EXPERIMENT LANES V1
+</div>
+
+<div class="sub">
+Safe experimentation doctrine for CyberCrowd.
+This document separates sandbox work, staged proof work, and protected production continuity.
+</div>
+
+<div class="card">
+<div class="cardId">LANE-001</div>
+<div class="cardTitle">Core Protection Wall</div>
+
+<div class="block">
+Safe experimentation wall:
+
+no live R2 contamination
+no production binding mutation
+no public transport testing
+no creator upload testing in production
+
+Experiments belong in DEV.
+Proof belongs in STAGING.
+Continuity belongs in PRODUCTION.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-002</div>
+<div class="cardTitle">Environment Roles</div>
+
+<table>
+<tr>
+<th>Environment</th>
+<th>Purpose</th>
+<th>Allowed Behavior</th>
+<th>Forbidden Behavior</th>
+</tr>
+
+<tr>
+<td>DEV</td>
+<td>break things safely</td>
+<td>mock events, fake buckets, simulated transport, draft files</td>
+<td>live Production R2 writes</td>
+</tr>
+
+<tr>
+<td>STAGING</td>
+<td>prove before release</td>
+<td>test routes, controlled replay, preview bindings, fake intake</td>
+<td>public creator traffic</td>
+</tr>
+
+<tr>
+<td>PRODUCTION</td>
+<td>protected live surface</td>
+<td>verified releases only</td>
+<td>experiments</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-003</div>
+<div class="cardTitle">DEV Rules</div>
+
+<div class="block">
+DEV may use:
+- fake events
+- mock replay chains
+- local test payloads
+- simulated Magic Cursor events
+- fake heartbeat pulses
+- fake uploads
+- draft route experiments
+
+DEV must not:
+- write to Production R2
+- mutate Production bindings
+- expose public transport
+- process real creator uploads
+- create permanent canon
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-004</div>
+<div class="cardTitle">STAGING Rules</div>
+
+<div class="block">
+STAGING may test:
+- route rendering
+- binding visibility
+- fake replay writes
+- fake heartbeat writes
+- fake intake validation
+- transport simulation
+- failure routing
+- rollback behavior
+
+STAGING must preserve:
+- separate test keys
+- separate test prefixes
+- no real creator uploads
+- no public transport
+- no canon mutation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-005</div>
+<div class="cardTitle">PRODUCTION Rules</div>
+
+<div class="block">
+PRODUCTION may only receive:
+- verified pages
+- approved releases
+- known-safe route changes
+- persistent Pages Functions bindings
+- intentional public media
+- governed operational writes
+
+PRODUCTION must reject:
+- experiments
+- uncontrolled auto-write
+- unverified uploads
+- live transport tests
+- random cache injection
+- unscoped AI repair
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-006</div>
+<div class="cardTitle">R2 Experiment Rule</div>
+
+<div class="block">
+Production R2 buckets are not testing buckets.
+
+Experimental writes must use:
+- local fake data
+- DEV-only mock files
+- STAGING-only test prefixes
+- explicit test object keys
+
+Forbidden:
+writing fake events into live canon lanes without test prefix.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-007</div>
+<div class="cardTitle">Test Prefix Rule</div>
+
+<div class="block">
+Any non-production test object must use an obvious prefix:
+
+test/
+dev/
+staging/
+simulation/
+mock/
+failure-test/
+
+No hidden test object may appear in canon paths.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-008</div>
+<div class="cardTitle">Transport Experiment Rule</div>
+
+<div class="block">
+Magic Cursor transport experiments must begin as simulation.
+
+Allowed:
+- fake cursor move
+- fake heartbeat
+- fake replay registration
+- fake handoff
+- fake clipboard event
+- fake drag event
+
+Forbidden:
+- uncontrolled live pointer control
+- invisible clipboard transfer
+- drag transfer to public lane
+- device takeover
+- transport without replay
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-009</div>
+<div class="cardTitle">Creator Upload Experiment Rule</div>
+
+<div class="block">
+Creator upload testing must not begin in PRODUCTION.
+
+Upload testing sequence:
+1. DEV fake upload
+2. STAGING fake upload
+3. STAGING validation
+4. STAGING sequester route
+5. STAGING deadletter route
+6. Production release gate
+7. limited live upload
+
+No public creator intake before validation chain exists.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-010</div>
+<div class="cardTitle">Binding Mutation Rule</div>
+
+<div class="block">
+Production binding changes require:
+- one TASK only
+- full active binding restatement
+- Pages Functions path
+- no Workers settings API
+- no broad auto-write authority
+- report-only verification
+- freeze after success
+
+Production binding mutation is not experimentation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-011</div>
+<div class="cardTitle">Rollback-Safe Testing</div>
+
+<div class="block">
+Every test must answer:
+
+Can this be stopped?
+Can this be reversed?
+Can this be replayed?
+Can this be isolated?
+Can this be explained?
+
+If no:
+the test is not safe.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LANE-012</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd grows by controlled experimentation,
+not production gambling.
+
+DEV can be messy.
+STAGING must prove.
+PRODUCTION must survive.
+</div>
+</div>
+
+</body>
+</html>
