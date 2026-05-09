@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 AUTHORITY SPINE LOCK</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.pass{
+    color:#00ffaa;
+}
+
+.pending{
+    color:#ffd166;
+}
+
+.locked{
+    color:#ff7676;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD R2 AUTHORITY SPINE LOCK
+</div>
+
+<div class="sub">
+First operational authority spine snapshot for CyberCrowd infrastructure.
+This lock freezes the verified authority topology before operational,
+cache, quarantine, and heartbeat systems attach.
+</div>
+
+<div class="card">
+<div class="cardId">SPINE-001</div>
+<div class="cardTitle">Active Authority Bindings</div>
+
+<div class="block">
+ASSETS
+status: <span class="pass">ACTIVE</span>
+
+LEDGER_EVENTS
+bucket: cybercrowd-ledger-events
+status: <span class="pass">ACTIVE</span>
+
+REPLAY
+bucket: cybercrowd-replay
+status: <span class="pass">ACTIVE</span>
+
+LINEAGE
+bucket: cybercrowd-lineage
+status: <span class="pass">ACTIVE</span>
+
+GOVERNANCE
+bucket: cybercrowd-governance
+status: <span class="pass">ACTIVE</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SPINE-002</div>
+<div class="cardTitle">Authority Separation</div>
+
+<div class="block">
+LEDGER_EVENTS
+canonical event truth
+
+REPLAY
+reconstructable continuity
+
+LINEAGE
+ownership and ancestry continuity
+
+GOVERNANCE
+authority and override continuity
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SPINE-003</div>
+<div class="cardTitle">Verified State</div>
+
+<div class="block">
+LEDGER_EVENTS
+binding: <span class="pass">PASS</span>
+write: <span class="pass">PASS</span>
+read: <span class="pass">PASS</span>
+
+REPLAY
+binding: <span class="pass">PASS</span>
+write/read: <span class="pending">PENDING</span>
+
+LINEAGE
+binding: <span class="pass">PASS</span>
+write/read: <span class="pending">NOT STARTED</span>
+
+GOVERNANCE
+binding: <span class="pass">PASS</span>
+write/read: <span class="pending">NOT STARTED</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SPINE-004</div>
+<div class="cardTitle">Operational Status</div>
+
+<div class="block">
+No live transport mesh.
+No creator commerce routing.
+No public object authority.
+No replay stress testing.
+No heartbeat flood traffic.
+No cache acceleration layer.
+
+Current state:
+foundation-first architecture
+controlled expansion preserved
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SPINE-005</div>
+<div class="cardTitle">Next Safe Attachments</div>
+
+<div class="block">
+ARCHIVE
+→ cold canon preservation
+
+DEADLETTER
+→ failed event containment
+
+SEQUESTER
+→ suspicious intake isolation
+
+NODE_HEARTBEATS
+→ mesh liveness telemetry
+
+SURFACE_CACHE
+→ delivery acceleration layer
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SPINE-006</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Authority before transport.
+
+Containment before scale.
+
+Verification before automation.
+
+One lane.
+One binding.
+One verification.
+</div>
+</div>
+
+</body>
+</html>
