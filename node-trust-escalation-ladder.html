@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD NODE TRUST ESCALATION LADDER V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD NODE TRUST ESCALATION LADDER V1
+</div>
+
+<div class="sub">
+Operational trust doctrine for distributed CyberCrowd hardware.
+This matrix defines how devices gradually earn trust participation
+without automatically receiving authority escalation.
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Participation is not authority.
+
+A device may:
+participate
+observe
+relay
+heartbeat
+replay
+simulate
+
+without receiving:
+canon authority
+governance authority
+lineage authority
+archive authority
+
+Trust escalates slowly.
+Authority escalates carefully.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-002</div>
+<div class="cardTitle">Trust Levels</div>
+
+<table>
+
+<tr>
+<th>Trust Level</th>
+<th>Description</th>
+<th>Typical Device</th>
+<th>Authority Scope</th>
+</tr>
+
+<tr>
+<td>Level 0</td>
+<td>unknown/unverified</td>
+<td>new device</td>
+<td>none</td>
+</tr>
+
+<tr>
+<td>Level 1</td>
+<td>observer trust</td>
+<td>factory-reset phone</td>
+<td>view + heartbeat</td>
+</tr>
+
+<tr>
+<td>Level 2</td>
+<td>probationary continuity</td>
+<td>stable sandbox node</td>
+<td>limited replay</td>
+</tr>
+
+<tr>
+<td>Level 3</td>
+<td>verified continuity</td>
+<td>stable creator/relay node</td>
+<td>controlled transport</td>
+</tr>
+
+<tr>
+<td>Level 4</td>
+<td>governance-reviewed</td>
+<td>trusted workstation</td>
+<td>review authority</td>
+</tr>
+
+<tr>
+<td>Level 5</td>
+<td>restricted operational authority</td>
+<td>secured governance node</td>
+<td>high-trust operations</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-003</div>
+<div class="cardTitle">Level 0 Rules</div>
+
+<div class="block">
+Unknown devices:
+- may not access replay
+- may not transport payloads
+- may not mutate routes
+- may not participate in governance
+
+Allowed:
+- initial registration
+- sandbox enrollment
+- heartbeat probation
+
+Default state:
+isolated
+restricted
+non-authoritative
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-004</div>
+<div class="cardTitle">Level 1 Observer Trust</div>
+
+<div class="block">
+Observer trust allows:
+- public surface rendering
+- teaser playback
+- heartbeat continuity
+- limited replay observation
+
+Forbidden:
+- creator upload
+- unrestricted transport
+- governance participation
+- archive access
+- lineage mutation
+
+Typical use:
+old phones
+observer tablets
+view-only nodes
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-005</div>
+<div class="cardTitle">Level 2 Probationary Continuity</div>
+
+<div class="block">
+Probationary nodes may:
+- participate in sandbox replay
+- simulate continuity
+- perform controlled transport tests
+- participate in isolated handoff testing
+
+Requirements:
+- stable heartbeat history
+- replay consistency
+- no quarantine triggers
+- verified sandbox isolation
+
+Probationary trust is still restricted.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-006</div>
+<div class="cardTitle">Level 3 Verified Continuity</div>
+
+<div class="block">
+Verified continuity allows:
+- controlled transport participation
+- replay continuity participation
+- creator continuity
+- relay continuity
+- controlled mesh participation
+
+Still forbidden:
+- governance override
+- archive mutation
+- canon rewrite
+- unrestricted escalation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-007</div>
+<div class="cardTitle">Level 4 Governance-Reviewed Trust</div>
+
+<div class="block">
+Governance-reviewed nodes require:
+- verified identity
+- replay continuity history
+- stable heartbeat continuity
+- audit history
+- controlled environment
+- review eligibility
+
+May:
+- approve release review
+- approve rollback review
+- freeze transport
+- quarantine suspicious nodes
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-008</div>
+<div class="cardTitle">Level 5 Restricted Operational Authority</div>
+
+<div class="block">
+Highest-trust nodes may:
+- participate in governance operations
+- coordinate continuity restoration
+- coordinate rollback
+- coordinate replay reconstruction
+- coordinate operational freeze
+
+Still forbidden:
+silent canon rewrite
+silent replay destruction
+silent lineage destruction
+untracked governance mutation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-009</div>
+<div class="cardTitle">Trust Escalation Requirements</div>
+
+<table>
+
+<tr>
+<th>Escalation</th>
+<th>Requirements</th>
+<th>Review Needed</th>
+</tr>
+
+<tr>
+<td>0 → 1</td>
+<td>verified registration</td>
+<td>minimal</td>
+</tr>
+
+<tr>
+<td>1 → 2</td>
+<td>stable heartbeat + sandbox participation</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>2 → 3</td>
+<td>replay continuity + no failures</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>3 → 4</td>
+<td>audit continuity + governance review</td>
+<td>mandatory</td>
+</tr>
+
+<tr>
+<td>4 → 5</td>
+<td>restricted operational approval</td>
+<td>mandatory</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-010</div>
+<div class="cardTitle">Quarantine Triggers</div>
+
+<div class="block">
+Automatic downgrade or quarantine:
+- replay corruption
+- heartbeat instability
+- unauthorized transport
+- lineage mutation attempts
+- governance spoofing
+- repeated deadletter failures
+- cache poisoning attempts
+- silent route mutation
+
+Quarantine route:
+SEQUESTER
++
+GOVERNANCE review
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-011</div>
+<div class="cardTitle">Downgrade + Rehabilitation</div>
+
+<div class="block">
+Trust is reversible.
+
+A device may be downgraded after:
+- instability
+- suspicious routing
+- failed replay continuity
+- governance violation
+
+Rehabilitation path:
+sandbox isolation
++
+replay verification
++
+heartbeat stabilization
++
+review approval
+
+No permanent silent exile without review.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TRUST-012</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd survives distributed scale
+by separating:
+hardware participation
+from
+authority ownership.
+
+A cheap device may earn trust slowly.
+
+Trust is proven through continuity,
+not assumed through presence.
+</div>
+</div>
+
+</body>
+</html>
