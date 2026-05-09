@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD ARTIFICIAL OPERATIONAL SANDBOXES V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD ARTIFICIAL OPERATIONAL SANDBOXES V1
+</div>
+
+<div class="sub">
+Artificial operational sandbox doctrine for CyberCrowd.
+This document defines isolated experimentation environments
+that protect live continuity systems from simulated traffic.
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Fake systems test behavior.
+
+Real systems preserve truth.
+
+Simulation must never silently contaminate:
+- replay continuity
+- lineage continuity
+- governance continuity
+- archive continuity
+- canonical continuity
+
+Artificial operational sandboxes exist
+to isolate experimentation from living operational truth.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-002</div>
+<div class="cardTitle">DEV Sandbox Buckets</div>
+
+<table>
+
+<tr>
+<th>Bucket</th>
+<th>Purpose</th>
+<th>Allowed Content</th>
+</tr>
+
+<tr>
+<td>DEV_REPLAY</td>
+<td>fake continuity testing</td>
+<td>simulated replay chains</td>
+</tr>
+
+<tr>
+<td>DEV_HEARTBEATS</td>
+<td>heartbeat simulation</td>
+<td>fake node pulses</td>
+</tr>
+
+<tr>
+<td>DEV_SEQUESTER</td>
+<td>intake experimentation</td>
+<td>fake payloads</td>
+</tr>
+
+<tr>
+<td>DEV_DEADLETTER</td>
+<td>failure injection</td>
+<td>simulated failures</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-003</div>
+<div class="cardTitle">STAGING Sandbox Buckets</div>
+
+<table>
+
+<tr>
+<th>Bucket</th>
+<th>Purpose</th>
+<th>Allowed Content</th>
+</tr>
+
+<tr>
+<td>STAGING_REPLAY</td>
+<td>controlled replay validation</td>
+<td>near-production replay simulation</td>
+</tr>
+
+<tr>
+<td>STAGING_HEARTBEATS</td>
+<td>continuity validation</td>
+<td>controlled heartbeat tests</td>
+</tr>
+
+<tr>
+<td>STAGING_SEQUESTER</td>
+<td>validation proofing</td>
+<td>controlled intake tests</td>
+</tr>
+
+<tr>
+<td>STAGING_DEADLETTER</td>
+<td>rollback-safe failures</td>
+<td>controlled failure scenarios</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-004</div>
+<div class="cardTitle">Forbidden Sandbox Behavior</div>
+
+<div class="block">
+Forbidden:
+DEV → Production replay lane
+
+Forbidden:
+STAGING → Production canon writes
+
+Forbidden:
+fake events → LEDGER_EVENTS
+
+Forbidden:
+sandbox heartbeat → live heartbeat lane
+
+Forbidden:
+simulated uploads → ARCHIVE
+
+Forbidden:
+test governance → live governance
+
+Forbidden:
+sandbox routes bypassing SEQUESTER
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-005</div>
+<div class="cardTitle">Why No DEV_LEDGER_EVENTS</div>
+
+<div class="block">
+No DEV_LEDGER_EVENTS bucket exists.
+
+Reason:
+canon truth should never become fake truth.
+
+Replay may simulate continuity.
+
+Heartbeat may simulate liveness.
+
+Transport may simulate movement.
+
+But canon lanes preserve operational truth.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-006</div>
+<div class="cardTitle">Sandbox Prefix Rule</div>
+
+<div class="block">
+All sandbox objects must use visible prefixes:
+
+dev/
+staging/
+mock/
+simulation/
+failure-test/
+
+Forbidden:
+hidden fake objects in live operational paths.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-007</div>
+<div class="cardTitle">Sandbox Replay Rule</div>
+
+<div class="block">
+Sandbox replay systems may:
+- reconstruct fake sessions
+- reconstruct fake handoffs
+- simulate continuity recovery
+- simulate interruption
+
+Sandbox replay systems may not:
+- mutate Production replay
+- overwrite canon
+- inject lineage history
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-008</div>
+<div class="cardTitle">Sandbox Transport Rule</div>
+
+<div class="block">
+Sandbox transport may test:
+- fake cursor movement
+- fake clipboard events
+- fake drag events
+- fake handoff continuity
+- fake latency
+- fake disconnects
+
+Sandbox transport must remain:
+isolated
+replayable
+containable
+non-public
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-009</div>
+<div class="cardTitle">Promotion Rule</div>
+
+<div class="block">
+Feature promotion sequence:
+
+DEV
+→ STAGING
+→ controlled proof
+→ governance review
+→ Production release
+
+No direct DEV → Production jump.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-010</div>
+<div class="cardTitle">Cloudflare Discipline Rule</div>
+
+<div class="block">
+Sandbox bucket creation must follow:
+<[team build]>
+
+Meaning:
+- one TASK only
+- explicit containment
+- full active binding restatement
+- no broad auto-write authority
+- verify before next mutation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-011</div>
+<div class="cardTitle">Future Sandbox Expansion</div>
+
+<div class="block">
+Future artificial sandbox systems:
+- DEV_CURSOR_TRANSPORT
+- DEV_VR_CONTINUITY
+- DEV_OBSERVER_SWARM
+- STAGING_CURSOR_TRANSPORT
+- STAGING_MESH_ROUTER
+- STAGING_REPLAY_RECOVERY
+
+Expansion remains compartmentalized.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">SANDBOX-012</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd experiments safely
+by building artificial operational worlds
+separate from living continuity.
+
+Sandbox systems exist
+so the real platform can survive growth.
+</div>
+</div>
+
+</body>
+</html>
