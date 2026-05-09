@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD MAGIC CURSOR TRANSPORT GATE V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD MAGIC CURSOR TRANSPORT GATE V1
+</div>
+
+<div class="sub">
+Operational activation gate for Magic Cursor transport systems.
+This document defines when cross-device transport becomes eligible
+for live activation and when transport must freeze or terminate.
+</div>
+
+<div class="card">
+<div class="cardId">GATE-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Magic Cursor transport is forbidden by default.
+
+Transport becomes eligible only after:
+- continuity verification
+- authority verification
+- replay registration
+- heartbeat continuity
+- containment readiness
+- session validation
+
+Convenience never overrides traceability.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-002</div>
+<div class="cardTitle">Transport Activation Conditions</div>
+
+<table>
+
+<tr>
+<th>Requirement</th>
+<th>Status Needed</th>
+<th>Failure Route</th>
+</tr>
+
+<tr>
+<td>verified session</td>
+<td>mandatory</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>device trust pair</td>
+<td>mandatory</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>heartbeat continuity</td>
+<td>mandatory</td>
+<td>NODE_HEARTBEATS</td>
+</tr>
+
+<tr>
+<td>replay continuity</td>
+<td>mandatory</td>
+<td>REPLAY</td>
+</tr>
+
+<tr>
+<td>authority scope validation</td>
+<td>mandatory</td>
+<td>GOVERNANCE</td>
+</tr>
+
+<tr>
+<td>containment readiness</td>
+<td>mandatory</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>lineage eligibility</td>
+<td>required for creator actions</td>
+<td>LINEAGE</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-003</div>
+<div class="cardTitle">Allowed Transport Operations</div>
+
+<div class="block">
+Allowed after gate approval:
+- cursor movement
+- session migration
+- clipboard transfer
+- drag transfer
+- cross-device playback continuity
+- observer continuity
+- creator continuity
+- replay reconstruction
+
+Forbidden until verified:
+- silent device claiming
+- hidden clipboard routing
+- untracked payload transfer
+- anonymous creator authority
+- replay bypass
+- cache injection
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-004</div>
+<div class="cardTitle">Transport Freeze Conditions</div>
+
+<div class="block">
+Transport must freeze when:
+- heartbeat continuity breaks
+- replay continuity fails
+- authority mismatch occurs
+- governance freeze exists
+- suspicious payload detected
+- device identity changes unexpectedly
+- session duplication detected
+- latency exceeds safe continuity threshold
+
+Freeze behavior:
+- stop cursor authority
+- preserve replay state
+- preserve lineage chain
+- preserve last known heartbeat
+- route anomaly to SEQUESTER or DEADLETTER
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-005</div>
+<div class="cardTitle">Clipboard Transport Rules</div>
+
+<div class="block">
+Clipboard transport requires:
+- verified source session
+- verified target session
+- payload classification
+- replay registration
+- authority compatibility
+- heartbeat continuity
+
+Clipboard payloads may route to:
+SEQUESTER
+before target release.
+
+Forbidden:
+clipboard bypass of containment lanes.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-006</div>
+<div class="cardTitle">Drag Transport Rules</div>
+
+<div class="block">
+Drag transport requires:
+- source device known
+- target device known
+- session continuity active
+- payload replay ID
+- transfer lineage record
+
+Large or suspicious payloads:
+→ SEQUESTER
+
+Failed transfers:
+→ DEADLETTER
+
+Archive writes directly from drag operations are forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-007</div>
+<div class="cardTitle">Emergency Stop Behavior</div>
+
+<div class="block">
+Emergency stop command:
+"1"
+
+Effects:
+- freeze live cursor authority
+- stop transport propagation
+- preserve replay continuity
+- preserve lineage continuity
+- preserve governance continuity
+- preserve heartbeat records
+- isolate active transfer states
+
+Emergency stop may not:
+erase replay
+erase lineage
+erase canon
+erase governance records
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-008</div>
+<div class="cardTitle">Transport Replay Requirements</div>
+
+<div class="block">
+Every transport event must record:
+- source device
+- target device
+- timestamp chain
+- replay ID
+- authority scope
+- payload type
+- continuity state
+- freeze state
+- recovery state
+
+Transport without replay registration is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-009</div>
+<div class="cardTitle">Live Testing Eligibility</div>
+
+<div class="block">
+Live testing becomes eligible only when:
+- storage lattice stable
+- routing matrix stable
+- intake containment stable
+- identity authority stable
+- replay continuity stable
+- heartbeat continuity stable
+- governance freeze path verified
+- DEADLETTER path verified
+- SEQUESTER path verified
+
+Live testing without these conditions is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-010</div>
+<div class="cardTitle">Future Transport Extensions</div>
+
+<div class="block">
+Future transport layers:
+- VR surface continuity
+- observer swarm transport
+- creator broadcast continuity
+- live audio transport
+- live camera transport
+- haptic continuity
+- Slate accessibility continuity
+- Deaf Companion continuity
+- mobile-to-wall transport
+- live event beam routing
+
+Transport spine now gated.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-011</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+Magic Cursor transport must never become:
+invisible,
+untraceable,
+or authority-less.
+
+Every transfer,
+handoff,
+clipboard,
+drag,
+freeze,
+failure,
+and recovery
+must remain:
+replayable
+containable
+reviewable
+and lineage-aware.
+</div>
+</div>
+
+</body>
+</html>
