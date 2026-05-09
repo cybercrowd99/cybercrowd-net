@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 NEXT BINDING SEQUENCE</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:12px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.9;
+    font-size:14px;
+}
+
+.pass{ color:#00ffaa; }
+.pending{ color:#ffd166; }
+.locked{ color:#ff7676; }
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD R2 NEXT BINDING SEQUENCE
+</div>
+
+<div class="sub">
+Controlled one-lane-at-a-time R2 binding sequence.
+This prevents cross-lane contamination, permission drift,
+and accidental public exposure.
+</div>
+
+<div class="card">
+<div class="cardId">CURRENT-STATE</div>
+<div class="cardTitle">Verified Bindings</div>
+<div class="block">
+ASSETS
+status: <span class="pass">ACTIVE</span>
+
+LEDGER_EVENTS → cybercrowd-ledger-events
+binding: <span class="pass">PASS</span>
+write: <span class="pass">PASS</span>
+read: <span class="pass">PASS</span>
+
+REPLAY → cybercrowd-replay
+binding: <span class="pass">PASS</span>
+write: <span class="pending">PENDING</span>
+read: <span class="pending">PENDING</span>
+reason: Cloudflare authority containment
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">NEXT-001</div>
+<div class="cardTitle">Bind LINEAGE Next</div>
+<div class="block">
+Variable:
+LINEAGE
+
+Bucket:
+cybercrowd-lineage
+
+Reason:
+Lineage supports ownership, provenance, creator continuity,
+and future archive relationships.
+
+Risk:
+Low public exposure risk.
+
+Action:
+Bind only.
+Do not write until binding confirmed.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">NEXT-002</div>
+<div class="cardTitle">Bind GOVERNANCE</div>
+<div class="block">
+Variable:
+GOVERNANCE
+
+Bucket:
+cybercrowd-governance
+
+Reason:
+Governance must exist before any future override,
+permission expansion, or bucket-policy mutation.
+
+Risk:
+High authority sensitivity.
+
+Action:
+Bind only after LINEAGE binding passes.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">NEXT-003</div>
+<div class="cardTitle">Bind ARCHIVE</div>
+<div class="block">
+Variable:
+ARCHIVE
+
+Bucket:
+cybercrowd-archive
+
+Reason:
+Archive receives finalized canon snapshots only after lineage
+and governance lanes exist.
+
+Risk:
+Permanent storage contamination.
+
+Action:
+Bind only after GOVERNANCE binding passes.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">NEXT-004</div>
+<div class="cardTitle">Bind DEADLETTER</div>
+<div class="block">
+Variable:
+DEADLETTER
+
+Bucket:
+cybercrowd-deadletter
+
+Reason:
+Failure routing must exist before live transport, replay stress,
+or Magic Cursor session testing.
+
+Risk:
+Low, quarantine-only.
+
+Action:
+Bind after authority lanes are present.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">NEXT-005</div>
+<div class="cardTitle">Bind SEQUESTER</div>
+<div class="block">
+Variable:
+SEQUESTER
+
+Bucket:
+cybercrowd-sequester
+
+Reason:
+Raw intake must have isolation before uploads,
+device payloads, or enrollment artifacts are introduced.
+
+Risk:
+Medium security sensitivity.
+
+Action:
+Bind after DEADLETTER.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">NEXT-006</div>
+<div class="cardTitle">Bind NODE_HEARTBEATS</div>
+<div class="block">
+Variable:
+NODE_HEARTBEATS
+
+Bucket:
+cybercrowd-node-heartbeats
+
+Reason:
+Device mesh and Magic Cursor transport need heartbeat telemetry.
+
+Risk:
+High write volume later.
+
+Action:
+Bind after sequester.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">NEXT-007</div>
+<div class="cardTitle">Bind SURFACE_CACHE</div>
+<div class="block">
+Variable:
+SURFACE_CACHE
+
+Bucket:
+cybercrowd-surface-cache
+
+Reason:
+Surface cache is public-delivery support, not authority.
+It comes after private safety lanes.
+
+Risk:
+Public traffic pressure.
+
+Action:
+Bind last in this sequence.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LOCKED-OUT</div>
+<div class="cardTitle">Do Not Bind Yet</div>
+<div class="block">
+Do not bind yet:
+
+ALBUM → cybercrowd-album
+GRAPHICS → cybercrowd-graphics
+TEASERS → cybercrowd-teasers
+
+Reason:
+These are media / inventory / public delivery lanes.
+They already contain data or public-facing assets.
+Bind only after private authority lanes are fully classified.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINAL-RULE</div>
+<div class="cardTitle">Controlled Expansion Rule</div>
+<div class="block">
+One binding at a time.
+One verification at a time.
+One lane at a time.
+
+No batch binding.
+No architecture optimization.
+No public exposure drift.
+
+Build empty boxes first.
+Verify connections second.
+Live transport last.
+</div>
+</div>
+
+</body>
+</html>
