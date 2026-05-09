@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 WORKER BINDING MAP</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.bindingCard{
+    margin-bottom:28px;
+    padding:26px;
+    border-radius:18px;
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+}
+
+.bindingId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.bindingTitle{
+    font-size:26px;
+    margin-bottom:18px;
+}
+
+.bindingBlock{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.88;
+    font-size:14px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="title">
+CYBERCROWD R2 WORKER BINDING MAP
+</div>
+
+<div class="sub">
+Canonical Worker-to-bucket authority map for CyberCrowd operational survivability.
+Workers must remain compartmentalized to prevent cascading failure,
+cross-lane contamination,
+and canonical corruption.
+</div>
+
+
+
+<div class="bindingCard">
+
+<div class="bindingId">
+BINDING-001
+</div>
+
+<div class="bindingTitle">
+Ledger Worker
+</div>
+
+<div class="bindingBlock">
+Worker:
+worker.js
+
+Primary Purpose:
+Canonical ledger routing and append-only event handling.
+
+Allowed Buckets:
+- cybercrowd-ledger-events
+- cybercrowd-deadletter
+- cybercrowd-replay
+
+Permissions:
+ledger-events:
+READ + WRITE
+
+deadletter:
+WRITE ONLY
+
+replay:
+READ + WRITE
+
+Forbidden:
+- graphics
+- teaser media
+- public cache
+- album archive mutation
+
+Reason:
+Canonical event authority must remain isolated
+from public delivery systems.
+</div>
+
+</div>
+
+
+
+<div class="bindingCard">
+
+<div class="bindingId">
+BINDING-002
+</div>
+
+<div class="bindingTitle">
+Replay Engine Worker
+</div>
+
+<div class="bindingBlock">
+Worker:
+continuity-event-loader.js
+
+Primary Purpose:
+Replay survivability and operational reconstruction.
+
+Allowed Buckets:
+- cybercrowd-ledger-events
+- cybercrowd-replay
+- cybercrowd-archive
+
+Permissions:
+ledger-events:
+READ ONLY
+
+replay:
+READ + WRITE
+
+archive:
+READ ONLY
+
+Forbidden:
+- governance mutation
+- public cache mutation
+
+Reason:
+Replay systems reconstruct history
+but do not rewrite canonical authority.
+</div>
+
+</div>
+
+
+
+<div class="bindingCard">
+
+<div class="bindingId">
+BINDING-003
+</div>
+
+<div class="bindingTitle">
+Governance Worker
+</div>
+
+<div class="bindingBlock">
+Worker:
+os-authority-windows.js
+
+Primary Purpose:
+Governance overrides,
+treasury intervention,
+administrative audit logging.
+
+Allowed Buckets:
+- cybercrowd-governance
+- cybercrowd-lineage
+- cybercrowd-ledger-events
+
+Permissions:
+governance:
+READ + WRITE
+
+lineage:
+READ + WRITE
+
+ledger-events:
+APPEND ONLY
+
+Forbidden:
+- surface cache
+- teaser media
+- graphics routing
+
+Reason:
+Administrative authority must remain isolated
+from public-facing systems.
+</div>
+
+</div>
+
+
+
+<div class="bindingCard">
+
+<div class="bindingId">
+BINDING-004
+</div>
+
+<div class="bindingTitle">
+Mesh + Heartbeat Worker
+</div>
+
+<div class="bindingBlock">
+Worker:
+surface-heartbeat.js
+
+Primary Purpose:
+Device telemetry,
+mesh survivability,
+uptime monitoring,
+and heartbeat propagation.
+
+Allowed Buckets:
+- cybercrowd-node-heartbeats
+- cybercrowd-sequester
+- cybercrowd-deadletter
+
+Permissions:
+node-heartbeats:
+READ + WRITE
+
+sequester:
+WRITE ONLY
+
+deadletter:
+WRITE ONLY
+
+Forbidden:
+- archive authority
+- governance authority
+- public media authority
+
+Reason:
+Telemetry systems remain isolated
+from canonical historical systems.
+</div>
+
+</div>
+
+
+
+<div class="bindingCard">
+
+<div class="bindingId">
+BINDING-005
+</div>
+
+<div class="bindingTitle">
+Public Surface Worker
+</div>
+
+<div class="bindingBlock">
+Worker:
+route-engine.html
+surface-registry-loader.js
+
+Primary Purpose:
+Public asset delivery,
+cache routing,
+and accelerated edge rendering.
+
+Allowed Buckets:
+- cybercrowd-surface-cache
+- cybercrowd-graphics
+- cybercrowd-teasers
+
+Permissions:
+surface-cache:
+READ + WRITE
+
+graphics:
+READ ONLY
+
+teasers:
+READ ONLY
+
+Forbidden:
+- ledger-events
+- governance
+- lineage
+- replay authority
+
+Reason:
+Public acceleration systems are replaceable
+and must never become canonical authority systems.
+</div>
+
+</div>
+
+
+
+<div class="bindingCard">
+
+<div class="bindingId">
+BINDING-006
+</div>
+
+<div class="bindingTitle">
+Album + Archive Media Worker
+</div>
+
+<div class="bindingBlock">
+Worker:
+continuity-broadcast-api.js
+
+Primary Purpose:
+Long-form creator media routing,
+continuity broadcast preservation,
+and archive snapshot handling.
+
+Allowed Buckets:
+- cybercrowd-album
+- cybercrowd-archive
+
+Permissions:
+album:
+READ + WRITE
+
+archive:
+APPEND ONLY
+
+Forbidden:
+- governance mutation
+- ledger mutation
+- public cache mutation
+
+Reason:
+Media continuity survives independently
+from operational event authority.
+</div>
+
+</div>
+
+
+
+<div class="bindingCard">
+
+<div class="bindingId">
+BINDING-007
+</div>
+
+<div class="bindingTitle">
+Magic Cursor + Device Event Worker
+</div>
+
+<div class="bindingBlock">
+Worker:
+websocket-transport.js
+node-bridge.js
+
+Primary Purpose:
+Cross-device transport,
+pointer propagation,
+clipboard routing,
+and device event survivability.
+
+Allowed Buckets:
+- cybercrowd-ledger-events
+- cybercrowd-node-heartbeats
+- cybercrowd-replay
+- cybercrowd-sequester
+
+Permissions:
+ledger-events:
+APPEND ONLY
+
+node-heartbeats:
+READ + WRITE
+
+replay:
+WRITE ONLY
+
+sequester:
+WRITE ONLY
+
+Forbidden:
+- governance mutation
+- archive mutation
+- public cache mutation
+
+Reason:
+Real-time device mesh systems must remain isolated
+from canonical governance and archive systems.
+</div>
+
+</div>
+
+
+
+</body>
+</html>
