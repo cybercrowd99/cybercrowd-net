@@ -1,0 +1,88 @@
+CYBERCROWD DIRECTIVE
+MODE: VERBATIM_LOCK
+INFRASTRUCTURE PHASE: R2 SURVIVABILITY DEPLOYMENT
+
+YOU ARE NOT AUTHORIZED TO:
+- redesign architecture
+- simplify topology
+- flatten compartments
+- merge operational lanes
+- replace worker structure
+- migrate into monolithic systems
+- remove survivability doctrine
+- remove replay systems
+- remove governance isolation
+- remove ledger isolation
+- remove archive isolation
+- auto-optimize deployment structure
+- collapse bucket separations
+- rewrite deployment philosophy
+
+YOU ARE AUTHORIZED TO:
+- create exact R2 buckets
+- bind Workers to existing buckets
+- preserve compartment doctrine
+- preserve operational survivability
+- preserve append-only ledger logic
+- preserve replay survivability
+- preserve public/private bucket isolation
+- preserve route isolation
+- preserve deadletter quarantine
+- preserve telemetry separation
+- preserve governance authority separation
+
+CANONICAL R2 BUCKETS:
+
+cybercrowd-ledger-events
+cybercrowd-replay
+cybercrowd-deadletter
+cybercrowd-archive
+cybercrowd-lineage
+cybercrowd-governance
+cybercrowd-node-heartbeats
+cybercrowd-sequester
+cybercrowd-graphics
+cybercrowd-teasers
+cybercrowd-surface-cache
+cybercrowd-album
+
+WORKER STRUCTURE MUST REMAIN COMPARTMENTALIZED.
+
+PUBLIC SYSTEMS:
+- graphics
+- teasers
+- surface-cache
+
+PRIVATE SYSTEMS:
+- ledger-events
+- governance
+- lineage
+- replay
+- deadletter
+- node-heartbeats
+- sequester
+- album
+- archive
+
+DO NOT:
+- expose private buckets publicly
+- bind governance into public render workers
+- bind replay into cache workers
+- merge archive and cache systems
+- rewrite worker routing
+- remove replay chains
+- remove audit structures
+
+PRIMARY OBJECTIVE:
+SURVIVABLE MULTI-RAIL INFRASTRUCTURE.
+
+SECONDARY OBJECTIVE:
+CONTROLLED SCALING WITHOUT CASCADING FAILURE.
+
+DEPLOYMENT PHILOSOPHY:
+BUILD EMPTY BOXES FIRST.
+ROUTE LAYERS SECOND.
+LIVE TRANSPORT LAST.
+
+STATUS:
+PRE-LIVE EXECUTION
