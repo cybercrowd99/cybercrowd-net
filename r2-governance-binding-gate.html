@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 GOVERNANCE BINDING GATE</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.9;
+    font-size:14px;
+}
+
+.pass{
+    color:#00ffaa;
+}
+
+.pending{
+    color:#ffd166;
+}
+
+.locked{
+    color:#ff7676;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD R2 GOVERNANCE BINDING GATE
+</div>
+
+<div class="sub">
+Controlled expansion gate for the next R2 authority lane.
+This page prepares the GOVERNANCE binding step without forcing live execution.
+</div>
+
+<div class="card">
+<div class="cardId">GATE-001</div>
+<div class="cardTitle">Current Binding State</div>
+<div class="block">
+ASSETS
+status: <span class="pass">ACTIVE</span>
+
+LEDGER_EVENTS → cybercrowd-ledger-events
+status: <span class="pass">ACTIVE</span>
+write/read: <span class="pass">VERIFIED</span>
+
+REPLAY → cybercrowd-replay
+status: <span class="pass">ACTIVE</span>
+write/read: <span class="pending">PENDING</span>
+
+LINEAGE → cybercrowd-lineage
+status: <span class="pass">ACTIVE</span>
+write/read: <span class="pending">NOT STARTED</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-002</div>
+<div class="cardTitle">Next Allowed Binding</div>
+<div class="block">
+Variable name:
+GOVERNANCE
+
+Bucket:
+cybercrowd-governance
+
+Allowed action:
+Bind bucket to existing CyberCrowd Worker.
+
+Not allowed:
+No object writes.
+No script edits.
+No route edits.
+No DNS edits.
+No Pages edits.
+No public exposure.
+No wrangler.toml edits.
+No additional bindings.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-003</div>
+<div class="cardTitle">Governance Purpose</div>
+<div class="block">
+GOVERNANCE exists to support:
+
+- override receipts
+- authority decisions
+- administrative review
+- treasury-rule changes
+- future rule-set changes
+- audit history
+- intervention logging
+
+GOVERNANCE does not replace:
+- LEDGER_EVENTS
+- LINEAGE
+- REPLAY
+- ARCHIVE
+
+Governance annotates authority.
+It does not silently rewrite history.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-004</div>
+<div class="cardTitle">Cloudflare Prompt</div>
+<div class="block">
+TASK:
+Add ONE additional R2 bucket binding to the existing CyberCrowd Worker.
+
+DO NOT:
+- modify routes
+- modify DNS
+- modify Pages
+- remove existing bindings
+- edit wrangler.toml
+- expose buckets publicly
+- optimize architecture
+- create additional bindings beyond this one
+- upload objects
+- modify Worker script content
+
+ONLY:
+Create R2 binding:
+
+Variable name:
+GOVERNANCE
+
+Bucket:
+cybercrowd-governance
+
+Preserve existing bindings:
+- ASSETS
+- LEDGER_EVENTS
+- REPLAY
+- LINEAGE
+
+Then save the Worker configuration.
+
+REPORT ONLY:
+- binding added yes/no
+- variable name
+- bucket name
+- active binding list
+- any errors
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-005</div>
+<div class="cardTitle">Pass Condition</div>
+<div class="block">
+This gate passes only when Cloudflare reports:
+
+binding added: yes
+variable name: GOVERNANCE
+bucket: cybercrowd-governance
+errors: none
+
+No object write is required at this stage.
+No script mutation is required at this stage.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">GATE-006</div>
+<div class="cardTitle">Stop Condition</div>
+<div class="block">
+Stop immediately if Cloudflare attempts to:
+
+- edit Worker code
+- change routes
+- change Pages
+- change DNS
+- expose buckets publicly
+- create test objects
+- bind additional buckets
+- optimize architecture
+- rewrite deployment settings
+
+Rule:
+one lane
+one binding
+one verification
+</div>
+</div>
+
+</body>
+</html>
