@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 COST SURVIVABILITY MODEL</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.modelCard{
+    margin-bottom:28px;
+    padding:26px;
+    border-radius:18px;
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+}
+
+.modelId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.modelTitle{
+    font-size:26px;
+    margin-bottom:18px;
+}
+
+.modelBlock{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.88;
+    font-size:14px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="title">
+CYBERCROWD R2 COST SURVIVABILITY MODEL
+</div>
+
+<div class="sub">
+Canonical survivability and infrastructure cost doctrine for CyberCrowd R2 operations.
+Infrastructure must survive scaling,
+public growth,
+mesh propagation,
+and replay pressure
+without creating hidden operational collapse.
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-001
+</div>
+
+<div class="modelTitle">
+Canonical vs Replaceable Storage
+</div>
+
+<div class="modelBlock">
+Canonical Data:
+- ledger events
+- lineage
+- governance
+- archive snapshots
+
+Replaceable Data:
+- surface cache
+- teaser cache
+- generated previews
+- temporary telemetry
+
+Rule:
+Canonical systems receive survivability priority.
+Replaceable systems absorb scaling pressure first.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-002
+</div>
+
+<div class="modelTitle">
+Surface Cache Pressure
+</div>
+
+<div class="modelBlock">
+Bucket:
+cybercrowd-surface-cache
+
+Risk:
+Public traffic amplification.
+
+Failure Pattern:
+Large egress spikes from viral traffic.
+
+Mitigation:
+- cache expiration
+- replaceable edge rendering
+- compressed media
+- thumbnail layering
+- replay isolation
+
+Rule:
+Public cache must never become canonical authority.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-003
+</div>
+
+<div class="modelTitle">
+Replay Growth
+</div>
+
+<div class="modelBlock">
+Bucket:
+cybercrowd-replay
+
+Risk:
+Replay chain amplification from event duplication.
+
+Failure Pattern:
+Infinite replay accumulation.
+
+Mitigation:
+- replay summarization
+- replay indexing
+- timeline partitioning
+- replay retention policies
+
+Rule:
+Replay survives operationally
+without storing unnecessary duplication forever.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-004
+</div>
+
+<div class="modelTitle">
+Telemetry Expansion
+</div>
+
+<div class="modelBlock">
+Bucket:
+cybercrowd-node-heartbeats
+
+Risk:
+Massive mesh heartbeat accumulation.
+
+Failure Pattern:
+Millions of small writes creating invisible scaling debt.
+
+Mitigation:
+- heartbeat summarization
+- rolling expiration
+- compressed telemetry windows
+- anomaly-only preservation
+
+Rule:
+Raw telemetry expires.
+Operational summaries survive.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-005
+</div>
+
+<div class="modelTitle">
+Archive Preservation
+</div>
+
+<div class="modelBlock">
+Bucket:
+cybercrowd-archive
+
+Risk:
+Unlimited permanent storage growth.
+
+Failure Pattern:
+Historical preservation becomes financially unsustainable.
+
+Mitigation:
+- archive classification
+- cold-storage strategy
+- deduplication
+- snapshot intervals
+- lineage references instead of full duplication
+
+Rule:
+Archive survives permanently,
+but intelligently.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-006
+</div>
+
+<div class="modelTitle">
+Media Scaling
+</div>
+
+<div class="modelBlock">
+Buckets:
+cybercrowd-album
+cybercrowd-teasers
+
+Risk:
+Video egress explosion.
+
+Failure Pattern:
+Public playback overwhelms infrastructure budget.
+
+Mitigation:
+- teaser compression
+- bitrate ladders
+- thumbnail-first loading
+- edge cache separation
+- archive offloading
+
+Rule:
+Teasers scale publicly.
+Masters remain protected.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-007
+</div>
+
+<div class="modelTitle">
+Deadletter Survivability
+</div>
+
+<div class="modelBlock">
+Bucket:
+cybercrowd-deadletter
+
+Risk:
+Infinite malformed payload accumulation.
+
+Failure Pattern:
+Error systems become permanent storage debt.
+
+Mitigation:
+- automatic expiration
+- forensic retention windows
+- quarantined replay limits
+
+Rule:
+Deadletter exists for investigation,
+not permanent accumulation.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-008
+</div>
+
+<div class="modelTitle">
+Automation Cost Risk
+</div>
+
+<div class="modelBlock">
+Risk:
+Auto-provisioning creates uncontrolled buckets,
+copies,
+snapshots,
+or replay chains.
+
+Failure Pattern:
+Invisible operational explosion.
+
+Mitigation:
+- deployment authority
+- quota enforcement
+- bucket governance
+- compartment doctrine
+- worker isolation
+
+Rule:
+Automation never bypasses survivability governance.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-009
+</div>
+
+<div class="modelTitle">
+Operational Debt Doctrine
+</div>
+
+<div class="modelBlock">
+CyberCrowd survivability principle:
+
+Infrastructure must scale slower than collapse pressure.
+
+Meaning:
+- no hidden liabilities
+- no infinite retention
+- no silent replication
+- no uncontrolled replay
+- no unrestricted public egress
+- no canonical corruption
+
+Rule:
+Growth without survivability is infrastructure debt.
+</div>
+
+</div>
+
+
+
+<div class="modelCard">
+
+<div class="modelId">
+COST-010
+</div>
+
+<div class="modelTitle">
+CRWD Infrastructure Alignment
+</div>
+
+<div class="modelBlock">
+Future Principle:
+
+As CyberCrowd grows,
+CRWD operational value offsets survivability costs.
+
+Potential future pressure offsets:
+- creator rails
+- replay access
+- premium continuity
+- archive preservation
+- node participation
+- mesh routing
+
+Rule:
+Infrastructure survivability precedes speculative scaling.
+</div>
+
+</div>
+
+
+
+</body>
+</html>
