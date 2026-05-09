@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Device Event Simulator</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.card {
+    margin-top: 18px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+p {
+    line-height: 1.65;
+    opacity: 0.88;
+}
+
+.buttonGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+button {
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: #00ffff;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.warning {
+    background: #ffaa00;
+}
+
+button.critical {
+    background: #ff3355;
+    color: white;
+}
+
+.eventItem {
+    margin-top: 12
