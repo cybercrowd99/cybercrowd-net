@@ -4,128 +4,170 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Cybercrowd Route Registry</title>
+<title>CYBERCROWD ROUTE REGISTRY</title>
 
 <style>
 
-html,
-body {
-
-    margin: 0;
-    padding: 0;
-
-    background: #050505;
-
-    color: white;
-
-    font-family: Arial, sans-serif;
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-#stage {
-
-    min-height: 100vh;
-
-    padding: 24px;
-
-    box-sizing: border-box;
-
-    background:
-    radial-gradient(
-        circle at center,
-        rgba(0,255,255,0.10),
-        transparent 42%
-    ),
-    #050505;
+.registryTitle{
+    font-size:42px;
+    color:#00ffff;
+    margin-bottom:10px;
+    letter-spacing:3px;
 }
 
-#title {
-
-    text-align: center;
-
-    color: #00ffff;
-
-    font-size: 34px;
-
-    letter-spacing: 4px;
+.registrySub{
+    opacity:.72;
+    margin-bottom:40px;
+    line-height:1.6;
 }
 
-#subtitle {
-
-    text-align: center;
-
-    opacity: 0.74;
-
-    margin-top: 8px;
-
-    margin-bottom: 30px;
+.registryGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+    gap:18px;
 }
 
-#registry {
-
-    max-width: 1200px;
-
-    margin: 0 auto;
-
-    display: grid;
-
-    gap: 16px;
+.routeCard{
+    padding:22px;
+    border-radius:18px;
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
 }
 
-.routeRow {
-
-    border-radius: 20px;
-
-    border:
-    1px solid rgba(0,255,255,0.30);
-
-    background:
-    rgba(10,10,10,0.92);
-
-    padding: 18px;
-
-    display: grid;
-
-    grid-template-columns:
-    1.2fr
-    1fr
-    1fr
-    1fr;
-
-    gap: 16px;
-
-    align-items: center;
+.routeId{
+    color:#00ffff;
+    font-size:14px;
+    letter-spacing:2px;
+    margin-bottom:10px;
 }
 
-.routeName {
-
-    color: #00ffff;
-
-    font-size: 18px;
+.routeTitle{
+    font-size:24px;
+    margin-bottom:14px;
 }
 
-.routeType {
-
-    display: inline-block;
-
-    padding:
-    8px 12px;
-
-    border-radius: 12px;
-
-    font-size: 12px;
-
-    text-align: center;
-
-    letter-spacing: 1px;
-
-    background:
-    rgba(0,255,255,0.12);
-
-    color: #00ffff;
+.routeMeta{
+    opacity:.78;
+    line-height:1.7;
+    font-size:14px;
 }
 
-.routeDescription {
+.routeLane{
+    display:inline-block;
+    margin-top:18px;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid rgba(0,255,255,.28);
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:1px;
+}
 
-    opacity: 0.82;
+</style>
+</head>
+<body>
 
-    line-height: 1 
+<div class="registryTitle">
+CYBERCROWD ROUTE REGISTRY
+</div>
+
+<div class="registrySub">
+Canonical operational route authority for CyberCrowd surfaces,
+lanes, simulators, doctrine systems, deployment infrastructure,
+and survivable routing topology.
+</div>
+
+<div class="registryGrid">
+
+<div class="routeCard">
+    <div class="routeId">CC-ROUTE-001</div>
+    <div class="routeTitle">Compartment Crosswalk</div>
+    <div class="routeMeta">
+        Translation authority between doctrine compartments,
+        survivable lanes, routing buckets, and public surfaces.
+    </div>
+    <div class="routeLane">DOCTRINE</div>
+</div>
+
+<div class="routeCard">
+    <div class="routeId">CC-ROUTE-002</div>
+    <div class="routeTitle">Ledger Formula Sheet</div>
+    <div class="routeMeta">
+        Economic routing equations, CRWD pressure modeling,
+        payout structure, and governance override math.
+    </div>
+    <div class="routeLane">LEDGER</div>
+</div>
+
+<div class="routeCard">
+    <div class="routeId">CC-ROUTE-003</div>
+    <div class="routeTitle">Ledger Event Simulator</div>
+    <div class="routeMeta">
+        Event replay surface for transaction survivability,
+        audit tracing, and ledger event propagation.
+    </div>
+    <div class="routeLane">SIMULATION</div>
+</div>
+
+<div class="routeCard">
+    <div class="routeId">CC-ROUTE-004</div>
+    <div class="routeTitle">Magic Cursor</div>
+    <div class="routeMeta">
+        Cross-device pointer mesh and HID routing environment
+        connecting phone, laptop, and operational surfaces.
+    </div>
+    <div class="routeLane">DEVICE MESH</div>
+</div>
+
+<div class="routeCard">
+    <div class="routeId">CC-ROUTE-005</div>
+    <div class="routeTitle">Device Event Schema</div>
+    <div class="routeMeta">
+        Canonical event routing definitions for pointer,
+        clipboard, HID, drag transfer, and kill-stop control.
+    </div>
+    <div class="routeLane">EVENT PHYSICS</div>
+</div>
+
+<div class="routeCard">
+    <div class="routeId">CC-ROUTE-006</div>
+    <div class="routeTitle">R2 Routing Doctrine</div>
+    <div class="routeMeta">
+        Bucket survivability topology, overflow isolation,
+        routing continuity, and propagation structure.
+    </div>
+    <div class="routeLane">R2 STORAGE</div>
+</div>
+
+<div class="routeCard">
+    <div class="routeId">CC-ROUTE-007</div>
+    <div class="routeTitle">Operations Dashboard</div>
+    <div class="routeMeta">
+        Live operational visibility layer for routing health,
+        deployment state, continuity, and system survivability.
+    </div>
+    <div class="routeLane">OPERATIONS</div>
+</div>
+
+<div class="routeCard">
+    <div class="routeId">CC-ROUTE-008</div>
+    <div class="routeTitle">Continuity Events</div>
+    <div class="routeMeta">
+        Persistent operational memory for replayable events,
+        system lineage, and continuity audit behavior.
+    </div>
+    <div class="routeLane">CONTINUITY</div>
+</div>
+
+</div>
+
+</body>
+</html>
