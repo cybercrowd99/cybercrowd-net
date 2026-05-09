@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD SANDBOX BINDING STRATEGY V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD SANDBOX BINDING STRATEGY V1
+</div>
+
+<div class="sub">
+Binding strategy for CyberCrowd artificial operational sandboxes.
+This document defines how DEV and STAGING sandbox buckets connect
+without contaminating Production Pages Functions bindings.
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Sandbox bindings must never replace,
+erase,
+or mutate Production bindings.
+
+Production remains the protected continuity surface.
+
+Sandbox bindings exist for testing only.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-002</div>
+<div class="cardTitle">Production Binding Preservation</div>
+
+<div class="block">
+Current Production binding lattice must remain preserved:
+
+ARCHIVE
+DEADLETTER
+GOVERNANCE
+GRAPHICS
+LEDGER_EVENTS
+LINEAGE
+NODE_HEARTBEATS
+REPLAY
+SEQUESTER
+SURFACE_CACHE
+TEASERS
+
+Any Production binding mutation must restate the full active set.
+Sandbox work must not remove or replace this lattice.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-003</div>
+<div class="cardTitle">DEV Binding Namespace</div>
+
+<table>
+<tr>
+<th>Binding Variable</th>
+<th>Bucket</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>DEV_REPLAY</td>
+<td>cybercrowd-dev-replay</td>
+<td>fake replay continuity</td>
+</tr>
+
+<tr>
+<td>DEV_HEARTBEATS</td>
+<td>cybercrowd-dev-heartbeats</td>
+<td>fake heartbeat telemetry</td>
+</tr>
+
+<tr>
+<td>DEV_SEQUESTER</td>
+<td>cybercrowd-dev-sequester</td>
+<td>fake intake containment</td>
+</tr>
+
+<tr>
+<td>DEV_DEADLETTER</td>
+<td>cybercrowd-dev-deadletter</td>
+<td>failure injection</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-004</div>
+<div class="cardTitle">STAGING Binding Namespace</div>
+
+<table>
+<tr>
+<th>Binding Variable</th>
+<th>Bucket</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>STAGING_REPLAY</td>
+<td>cybercrowd-staging-replay</td>
+<td>controlled replay proof</td>
+</tr>
+
+<tr>
+<td>STAGING_HEARTBEATS</td>
+<td>cybercrowd-staging-heartbeats</td>
+<td>controlled heartbeat proof</td>
+</tr>
+
+<tr>
+<td>STAGING_SEQUESTER</td>
+<td>cybercrowd-staging-sequester</td>
+<td>controlled intake validation</td>
+</tr>
+
+<tr>
+<td>STAGING_DEADLETTER</td>
+<td>cybercrowd-staging-deadletter</td>
+<td>controlled rollback-safe failures</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-005</div>
+<div class="cardTitle">Environment Attachment Rule</div>
+
+<div class="block">
+DEV sandbox bindings attach only to DEV/local testing surfaces.
+
+STAGING sandbox bindings attach only to Preview/STAGING environments.
+
+Production bindings remain Production-only.
+
+No sandbox binding may be added to Production unless explicitly approved
+as a controlled test prefix path,
+and even then it must remain non-authoritative.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-006</div>
+<div class="cardTitle">Preview Environment Strategy</div>
+
+<div class="block">
+Recommended approach:
+
+Production:
+live operational lattice only
+
+Preview:
+STAGING bindings only
+
+Local DEV:
+DEV bindings only
+
+This prevents:
+- fake replay contamination
+- fake heartbeat pollution
+- sandbox intake reaching live lineage
+- simulated failures entering live deadletter
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-007</div>
+<div class="cardTitle">No Crossover Rule</div>
+
+<div class="block">
+Forbidden:
+DEV_REPLAY bound to Production
+
+Forbidden:
+STAGING_REPLAY bound to Production canon
+
+Forbidden:
+DEV_HEARTBEATS bound to NODE_HEARTBEATS
+
+Forbidden:
+STAGING_SEQUESTER replacing SEQUESTER
+
+Forbidden:
+sandbox deadletter replacing Production DEADLETTER
+
+Forbidden:
+sandbox binding names matching Production names
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-008</div>
+<div class="cardTitle">Promotion-Safe Binding Discipline</div>
+
+<div class="block">
+Promotion from sandbox to Production never means moving sandbox bindings.
+
+Promotion means:
+- prove behavior in DEV
+- prove behavior in STAGING
+- review results
+- implement clean Production route
+- preserve Production binding names
+- verify Production lattice
+
+Sandbox bindings are training wheels.
+Production bindings are operational rails.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-009</div>
+<div class="cardTitle">Cloudflare Binding Discipline</div>
+
+<div class="block">
+All binding work follows:
+<[team build]>
+
+TASK:
+one directive only
+
+DO NOT:
+containment boundaries
+
+ONLY:
+allowed binding action
+
+REPORT ONLY:
+verification output
+
+Never authorize broad auto-write.
+Never assume merge-state behavior.
+Never bind sandbox systems into Production accidentally.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-010</div>
+<div class="cardTitle">Verification Requirement</div>
+
+<div class="block">
+After each sandbox binding:
+
+1. inspect target environment bindings
+2. verify Production binding count unchanged
+3. verify Production binding names unchanged
+4. verify sandbox binding exists only where intended
+5. verify no public exposure
+6. freeze
+7. continue
+
+Verification before expansion.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">BINDING-011</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+Sandbox bindings exist to let CyberCrowd learn safely.
+
+Production bindings exist to let CyberCrowd survive.
+
+Do not confuse the two.
+</div>
+</div>
+
+</body>
+</html>
