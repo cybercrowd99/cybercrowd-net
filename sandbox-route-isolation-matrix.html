@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD SANDBOX ROUTE ISOLATION MATRIX V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD SANDBOX ROUTE ISOLATION MATRIX V1
+</div>
+
+<div class="sub">
+Route isolation doctrine for CyberCrowd artificial operational sandboxes.
+This matrix defines what DEV and STAGING systems may touch,
+what they must never touch,
+and how controlled promotion may occur.
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Sandbox systems are not Production systems.
+
+DEV may break safely.
+
+STAGING may prove safely.
+
+PRODUCTION must remain clean.
+
+No sandbox route may silently write into live operational truth.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-002</div>
+<div class="cardTitle">Environment Isolation Matrix</div>
+
+<table>
+<tr>
+<th>Environment</th>
+<th>May Write To</th>
+<th>May Read From</th>
+<th>Must Never Write To</th>
+</tr>
+
+<tr>
+<td>DEV</td>
+<td>DEV_REPLAY, DEV_HEARTBEATS, DEV_SEQUESTER, DEV_DEADLETTER</td>
+<td>static docs, mock fixtures, local schemas</td>
+<td>Production R2, Production Pages bindings, live canon</td>
+</tr>
+
+<tr>
+<td>STAGING</td>
+<td>STAGING_REPLAY, STAGING_HEARTBEATS, STAGING_SEQUESTER, STAGING_DEADLETTER</td>
+<td>approved fixtures, copied test-only snapshots</td>
+<td>Production canon, Production lineage, Production governance</td>
+</tr>
+
+<tr>
+<td>PRODUCTION</td>
+<td>Production R2 lattice only under authority rules</td>
+<td>Production R2 lattice</td>
+<td>DEV buckets, STAGING buckets, fake simulation paths</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-003</div>
+<div class="cardTitle">Allowed DEV Routes</div>
+
+<div class="block">
+DEV may route:
+
+fake cursor event
+→ DEV_REPLAY
+
+fake heartbeat
+→ DEV_HEARTBEATS
+
+fake upload
+→ DEV_SEQUESTER
+
+fake failure
+→ DEV_DEADLETTER
+
+fake drag transfer
+→ DEV_SEQUESTER
+
+fake clipboard event
+→ DEV_SEQUESTER
+
+DEV may not route to:
+LEDGER_EVENTS
+LINEAGE
+GOVERNANCE
+ARCHIVE
+Production REPLAY
+Production NODE_HEARTBEATS
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-004</div>
+<div class="cardTitle">Allowed STAGING Routes</div>
+
+<div class="block">
+STAGING may route:
+
+controlled replay test
+→ STAGING_REPLAY
+
+controlled heartbeat test
+→ STAGING_HEARTBEATS
+
+controlled intake test
+→ STAGING_SEQUESTER
+
+controlled failure test
+→ STAGING_DEADLETTER
+
+controlled transport simulation
+→ STAGING_REPLAY + STAGING_HEARTBEATS
+
+STAGING may not route to Production authority lanes
+unless a governance-reviewed promotion is explicitly approved.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-005</div>
+<div class="cardTitle">Production Isolation Rule</div>
+
+<div class="block">
+PRODUCTION may never consume sandbox state as truth.
+
+Sandbox data may become Production eligible only through:
+
+1. export as reviewed artifact
+2. governance review
+3. schema validation
+4. replay compatibility check
+5. lineage eligibility check
+6. controlled release gate
+
+Sandbox object promotion is not automatic.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-006</div>
+<div class="cardTitle">One-Way Promotion Path</div>
+
+<div class="block">
+Allowed promotion direction:
+
+DEV
+→ STAGING
+→ governance review
+→ release gate
+→ PRODUCTION
+
+Forbidden promotion direction:
+
+PRODUCTION
+→ DEV overwrite
+
+STAGING
+→ Production live canon without review
+
+DEV
+→ Production direct
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-007</div>
+<div class="cardTitle">Replay Isolation</div>
+
+<div class="block">
+DEV_REPLAY may contain fake replay chains.
+
+STAGING_REPLAY may contain controlled replay proof.
+
+Production REPLAY may contain only Production-authorized replay records.
+
+Forbidden:
+sandbox replay object in Production replay path.
+
+Forbidden:
+Production replay overwrite by sandbox replay.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-008</div>
+<div class="cardTitle">Heartbeat Isolation</div>
+
+<div class="block">
+DEV_HEARTBEATS may contain fake pulses.
+
+STAGING_HEARTBEATS may contain controlled liveness tests.
+
+Production NODE_HEARTBEATS may contain live node continuity only.
+
+Forbidden:
+fake heartbeat pulse entering Production liveness telemetry.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-009</div>
+<div class="cardTitle">Cache Isolation</div>
+
+<div class="block">
+Sandbox cache tests may not populate Production SURFACE_CACHE.
+
+Production SURFACE_CACHE may only receive:
+- approved public media
+- approved render assets
+- approved cache objects
+- intentional acceleration artifacts
+
+Fake cache objects must remain:
+DEV or STAGING only.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-010</div>
+<div class="cardTitle">Governance Review Gate</div>
+
+<div class="block">
+A sandbox result may influence Production only when GOVERNANCE records:
+
+- reviewed artifact
+- review timestamp
+- reviewer authority
+- affected route
+- affected bucket
+- release condition
+- rollback condition
+
+No invisible promotion.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-011</div>
+<div class="cardTitle">Forbidden Cross-Lane Routing</div>
+
+<div class="block">
+Forbidden:
+DEV_REPLAY → Production REPLAY
+
+Forbidden:
+DEV_HEARTBEATS → NODE_HEARTBEATS
+
+Forbidden:
+DEV_SEQUESTER → Production SEQUESTER
+
+Forbidden:
+STAGING_DEADLETTER → Production DEADLETTER
+
+Forbidden:
+sandbox upload → ARCHIVE
+
+Forbidden:
+sandbox identity → LINEAGE
+
+Forbidden:
+sandbox override → GOVERNANCE
+
+Forbidden:
+sandbox object → SURFACE_CACHE public release
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ISOLATION-012</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+Artificial worlds are allowed to fail.
+
+The living system is not.
+
+Sandbox lanes exist so CyberCrowd can learn,
+break,
+simulate,
+rebuild,
+and prove
+without contaminating Production truth.
+</div>
+</div>
+
+</body>
+</html>
