@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Magic Cursor Topology</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 42%),
+    #050505;
+}
+
+#wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #00ffff;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 30px;
+}
+
+.card {
+    margin-top: 18px;
+    padding: 22px;
+    border-radius: 22px;
+    border: 1px solid rgba(0,255,255,0.30);
+    background: rgba(10,10,10,0.92);
+}
+
+h2 {
+    color: #00ffaa;
+    margin-top: 0;
+}
+
+p, li {
+    line-height: 1.65;
+    opacity: 0.88;
+}
+
+ul {
+    padding-left: 22px;
+}
+
+.code {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(0,0,0,0.58);
+    border: 1px solid rgba(0,255,255,0.18);
+    font-family: Consolas, monospace;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    color: #e8ffff;
+    overflow-x: auto;
+}
+
+.lockLine {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(0,255,255,0.35);
+    background: rgba(0,255,255,0.06);
+    color: #00ffaa;
+    font-size: 21px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.mini {
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0,255,255,0.05);
+    border: 1px solid rgba(0,255,255,0.16);
+}
+
+.miniTitle {
+    color: #00ffff;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.good {
+    color: #00ffaa;
+    font-weight: bold;
+}
+
+.warning {
+    color: #ffaa00;
+    font-weight: bold;
+}
+
+.critical {
+    color: #ff3355;
+    font-weight: bold;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 34px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+<div id="wrap">
+
+<h1>CYBERCROWD MAGIC CURSOR TOPOLOGY</h1>
+
+<div id="subtitle">
+Existing file map, device mesh roles, transport boundaries, and safe bridge plan.
+</div>
+
+<div class="lockLine">
+Identify existing subsystems before adding live transport.
+</div>
+
+<div class="card">
+<h2>1. Purpose</h2>
+
+<p>
+Magic Cursor is not a new prototype. It already has an existing stack.
+This page maps the current subsystems so live phone/laptop pointer transport can be connected without overwriting active work.
+</p>
+
+<div class="code">Goal:
+phone touch node
++
+laptop pointer node
++
+surface display
++
+shared transport
++
+safe session authority
+
+without:
+duplicate sockets
+pointer recursion
+clipboard loops
+untrusted pairing
+or destroyed existing files</div>
+</div>
+
+<div class="card">
+<h2>2. Existing Magic Cursor Stack</h2>
+
+<div class="grid">
+
+<div class="mini">
+<div class="miniTitle">magic-cursor.html</div>
+<p>Main Magic Cursor surface or previous cursor interaction page.</p>
+<p class="warning">Role: existing cursor surface — do not overwrite blindly.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">magic-cursor-launch.html</div>
+<p>Launcher surface for Magic Cursor V5 and operational entry.</p>
+<p class="good">Role: launch point.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">WDIGRequestHandler</div>
+<p>Existing request handler artifact related to WDIG / device interaction routing.</p>
+<p class="warning">Role: inspect before wiring live commands.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">bridge-config.json</div>
+<p>Configuration artifact for bridge behavior, likely device or route mapping.</p>
+<p class="good">Role: bridge map candidate.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">websocket-transport.js</div>
+<p>WebSocket transport layer for real-time communication.</p>
+<p class="good">Role: likely live transport spine.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">node-bridge.js</div>
+<p>Node bridge logic connecting transport events to runtime actions.</p>
+<p class="good">Role: server-side bridge candidate.</p>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>3. Existing Surface / Registry Stack</h2>
+
+<div class="grid">
+
+<div class="mini">
+<div class="miniTitle">surface-registry.json</div>
+<p>Registry for known surfaces and current device roles.</p>
+<p class="good">Role: node identity map.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">surface-registry-loader.js</div>
+<p>Loader for registry state.</p>
+<p class="good">Role: registry access layer.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">surface-heartbeat.js</div>
+<p>Heartbeat system for tracking live surfaces.</p>
+<p class="good">Role: liveness detector.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">laptop-surface.html</div>
+<p>Laptop-side operational surface.</p>
+<p class="good">Role: laptop node.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">phone-surface.html</div>
+<p>Phone-side operational surface.</p>
+<p class="good">Role: phone touch node.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">lock-mech.html</div>
+<p>Trust, pairing, QR, or entry authority mechanism.</p>
+<p class="good">Role: enrollment / pairing gate.</p>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>4. Existing Cursor Style Stack</h2>
+
+<div class="grid">
+
+<div class="mini">
+<div class="miniTitle">cursor-preferences.json</div>
+<p>Cursor preferences and style configuration.</p>
+<p class="good">Role: pointer identity / appearance.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">cursor-style-loader.js</div>
+<p>Loads cursor style preferences.</p>
+<p class="good">Role: visual cursor configuration.</p>
+</div>
+
+<div class="mini">
+<div class="miniTitle">NOTICE_CYBERCROWD_MAGIC_CURSOR.txt</div>
+<p>Protocol notice or doctrine note for Magic Cursor.</p>
+<p class="warning">Role: preserve as authority reference.</p>
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>5. Current Device Mesh Interpretation</h2>
+
+<p>
+The current physical workflow already proves the device mesh concept:
+phone, laptop, and monitor are operating as separate surfaces with different control roles.
+</p>
+
+<div class="code">Phone
+= touch intake node
+
+Laptop
+= processing / research / operator node
+
+Monitor
+= visible surface lane
+
+Mouse / pointer
+= active control surface
+
+HDMI / adapter
+= temporary physical transport bridge</div>
+
+<p>
+The software goal is to replace physical transport with a live software bridge.
+</p>
+</div>
+
+<div class="card">
+<h2>6. Desired Software Mesh</h2>
+
+<div class="code">Phone Surface
+→ touch event
+→ WebSocket transport
+→ Node bridge
+→ surface registry
+→ laptop / monitor surface
+→ cursor event rendered or executed
+
+Laptop Surface
+→ pointer event
+→ WebSocket transport
+→ Node bridge
+→ phone surface
+→ clipboard / command / edge event
+
+Magic Cursor
+→ shared event fabric
+→ no second mouse required</div>
+</div>
+
+<div class="card">
+<h2>7. Missing Bridge Layers</h2>
+
+<ul>
+<li>Safe pairing session between phone and laptop.</li>
+<li>Explicit device role assignment.</li>
+<li>Pointer event schema.</li>
+<li>Clipboard event schema.</li>
+<li>Drag payload event schema.</li>
+<li>Edge-crossing rule.</li>
+<li>Loop prevention rule.</li>
+<li>Authority timeout rule.</li>
+<li>Session kill-stop rule.</li>
+<li>Ledger event mapping for device actions.</li>
+</ul>
+
+<div class="code">Missing core:
+device event schema
++
+live session authority
++
+loop prevention
++
+safe transport binding</div>
+</div>
+
+<div class="card">
+<h2>8. Must Not Happen</h2>
+
+<ul>
+<li>No duplicate WebSocket transports.</li>
+<li>No pointer recursion.</li>
+<li>No clipboard infinite loop.</li>
+<li>No untrusted phone controls laptop.</li>
+<li>No laptop controls phone without pairing.</li>
+<li>No Magic Cursor file overwritten blindly.</li>
+<li>No live OS control before simulator and enrollment pass.</li>
+<li>No hidden device ownership change.</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>9. Safe Development Order</h2>
+
+<div class="code">1. Map existing Magic Cursor stack.
+2. Define device event schema.
+3. Define pairing / enrollment shell.
+4. Define phone pointer event.
+5. Define laptop pointer event.
+6. Define shared clipboard event.
+7. Define edge-crossing event.
+8. Simulate without OS control.
+9. Connect WebSocket transport.
+10. Stress test loop prevention.
+11. Only then connect native control / HID / OS actions.</div>
+</div>
+
+<div class="card">
+<h2>10. Magic Cursor Event Physics</h2>
+
+<p>
+Magic Cursor events must follow the same event physics as the ledger:
+arrival, propagation, replay ID, authority state, canon record, and surface visibility.
+</p>
+
+<div class="code">Pointer Event =
+event_id
+device_id
+surface_id
+origin_surface
+target_surface
+x
+y
+intent
+timestamp
+session_id
+replay_id
+authority_state
+status
+
+Rule:
+device control must be traceable before it becomes executable</div>
+</div>
+
+<div class="card">
+<h2>11. Topology Lock</h2>
+
+<p>
+Magic Cursor is not a separate toy.
+It is the device-control expression of CyberCrowd’s survivable lane doctrine.
+</p>
+
+<div class="code">Magic Cursor =
+device mesh rail
++
+pointer propagation
++
+surface authority
++
+event physics
+
+small target fails
+whole environment survives</div>
+</div>
+
+<div id="footer">
+CYBERCROWD MAGIC CURSOR TOPOLOGY V1
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
