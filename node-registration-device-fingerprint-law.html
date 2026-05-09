@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD NODE REGISTRATION DEVICE FINGERPRINT LAW V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD NODE REGISTRATION DEVICE FINGERPRINT LAW V1
+</div>
+
+<div class="sub">
+Node registration and device fingerprint doctrine for CyberCrowd.
+This document defines how devices become known to the system without automatically becoming trusted authority.
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Device identity is not device authority.
+
+Registration means:
+the device is known.
+
+Fingerprinting means:
+the device can be recognized again.
+
+Trust means:
+the device has earned scoped participation.
+
+Authority means:
+the device is permitted to perform a governed action.
+
+These are separate states.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-002</div>
+<div class="cardTitle">Registration Record</div>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+<th>Required</th>
+</tr>
+
+<tr>
+<td>node_id</td>
+<td>stable CyberCrowd node identifier</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>device_label</td>
+<td>human readable name</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>device_class</td>
+<td>observer, creator, relay, sandbox, governance, archive, VR, mesh</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>fingerprint_hash</td>
+<td>privacy-preserving device recognition hash</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>trust_level</td>
+<td>current node trust level</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>session_scope</td>
+<td>allowed session participation</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>heartbeat_scope</td>
+<td>allowed liveness lane</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>replay_scope</td>
+<td>allowed replay lane</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>registered_at</td>
+<td>registration timestamp</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>last_seen_at</td>
+<td>last known heartbeat or session contact</td>
+<td>yes</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-003</div>
+<div class="cardTitle">Fingerprint Sources</div>
+
+<div class="block">
+Device fingerprint may include privacy-safe derived signals:
+
+- device class
+- browser/runtime family
+- screen class
+- operating system family
+- local app install identity
+- generated device key
+- node registration secret
+- public key fingerprint
+
+Fingerprint must not depend on invasive tracking.
+
+CyberCrowd should prefer:
+generated keys
++
+user-approved registration
++
+public key fingerprints
+over hidden surveillance.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-004</div>
+<div class="cardTitle">Factory-Reset Device Onboarding</div>
+
+<div class="block">
+A factory-reset old phone may enter as:
+
+device_class:
+sandbox node
+or
+observer node
+
+initial trust:
+Level 0 or Level 1
+
+allowed actions:
+registration
+public viewing
+sandbox heartbeat
+sandbox replay simulation
+
+forbidden actions:
+canon writes
+governance authority
+lineage mutation
+archive mutation
+unrestricted transport
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-005</div>
+<div class="cardTitle">Old Hardware Reuse Rule</div>
+
+<div class="block">
+Old phones and laptops may become useful infrastructure when:
+
+- factory reset
+- registered as a node
+- assigned a device class
+- scoped to sandbox or observer lanes
+- heartbeat tested
+- replay tested
+- trust escalated slowly
+
+Discarded hardware becomes operational resource,
+not automatic authority.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-006</div>
+<div class="cardTitle">Registration Flow</div>
+
+<div class="block">
+1. device opens registration surface
+2. user assigns device label
+3. device class selected
+4. generated device key created
+5. fingerprint hash created
+6. node_id assigned
+7. initial trust level assigned
+8. heartbeat scope assigned
+9. replay scope assigned
+10. registration event recorded
+11. device enters probation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-007</div>
+<div class="cardTitle">Trust Linkage</div>
+
+<div class="block">
+Registration links to trust ladder.
+
+A registered device begins at:
+Level 0 or Level 1
+
+Escalation requires:
+- heartbeat stability
+- replay consistency
+- no quarantine triggers
+- reviewed participation history
+
+Registration alone never grants high trust.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-008</div>
+<div class="cardTitle">Replay Linkage</div>
+
+<div class="block">
+Every registered device may receive a replay scope.
+
+Replay scope defines:
+- whether the device can emit replay events
+- whether the device can read replay events
+- whether the device can participate in reconstruction
+- whether the device is sandbox-only
+
+Replay identity must remain tied to node_id.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-009</div>
+<div class="cardTitle">Heartbeat Linkage</div>
+
+<div class="block">
+Heartbeat scope defines where liveness is recorded.
+
+Sandbox devices:
+DEV_HEARTBEATS
+or
+STAGING_HEARTBEATS
+
+Production devices:
+NODE_HEARTBEATS
+
+A device must not emit heartbeat traffic into a higher authority lane than its trust scope allows.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-010</div>
+<div class="cardTitle">Re-Registration Rules</div>
+
+<div class="block">
+Re-registration is required when:
+
+- device is factory reset
+- device key changes
+- ownership changes
+- device class changes
+- suspicious behavior occurred
+- trust level was revoked
+- fingerprint mismatch occurs
+
+Re-registration does not restore previous trust automatically.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-011</div>
+<div class="cardTitle">Quarantine Triggers</div>
+
+<div class="block">
+Route device to SEQUESTER when:
+
+- fingerprint mismatch occurs
+- heartbeat pattern changes unexpectedly
+- replay ID conflicts
+- device claims higher authority than assigned
+- device attempts forbidden route
+- device appears duplicated
+- device emits suspicious transport behavior
+
+Quarantine requires review before reactivation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-012</div>
+<div class="cardTitle">Privacy Boundary</div>
+
+<div class="block">
+CyberCrowd device fingerprinting must remain bounded.
+
+Allowed:
+- user-approved registration
+- generated node keys
+- public key fingerprints
+- device class metadata
+- replay and heartbeat records
+
+Forbidden:
+- covert personal tracking
+- unnecessary surveillance
+- invisible cross-site tracking
+- collecting unrelated private data
+- authority escalation through hidden profiling
+
+The system recognizes devices for continuity,
+not exploitation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FINGERPRINT-013</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd may recognize a device,
+but must not blindly trust it.
+
+Registration creates identity.
+Heartbeat proves presence.
+Replay proves continuity.
+Governance approves escalation.
+</div>
+</div>
+
+</body>
+</html>
