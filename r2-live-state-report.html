@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 LIVE STATE REPORT</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:12px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.9;
+    font-size:14px;
+}
+
+.pass{
+    color:#00ffaa;
+}
+
+.pending{
+    color:#ffd166;
+}
+
+.locked{
+    color:#ff7676;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD R2 LIVE STATE REPORT
+</div>
+
+<div class="sub">
+Operational truth snapshot for current CyberCrowd R2 infrastructure state.
+This report freezes the verified deployment state before additional permissions,
+bindings, replay writes, governance lanes, lineage lanes, or transport expansion.
+</div>
+
+<div class="card">
+<div class="cardId">STATE-001</div>
+<div class="cardTitle">Existing Populated Buckets</div>
+
+<div class="block">
+cybercrowd-album
+status: populated
+classification: creator inventory / media shelf
+
+cybercrowd-graphics
+status: populated
+classification: public graphics lane
+
+cybercrowd-teasers
+status: populated
+classification: teaser / public media lane
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">STATE-002</div>
+<div class="cardTitle">New Clean Buckets</div>
+
+<div class="block">
+cybercrowd-archive
+status: empty / uncontaminated
+
+cybercrowd-deadletter
+status: empty / uncontaminated
+
+cybercrowd-governance
+status: empty / uncontaminated
+
+cybercrowd-ledger-events
+status: active authority lane
+
+cybercrowd-lineage
+status: empty / uncontaminated
+
+cybercrowd-node-heartbeats
+status: empty / uncontaminated
+
+cybercrowd-replay
+status: replay lane initialized
+
+cybercrowd-sequester
+status: empty / uncontaminated
+
+cybercrowd-surface-cache
+status: empty / uncontaminated
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">STATE-003</div>
+<div class="cardTitle">Worker Bindings</div>
+
+<div class="block">
+ASSETS
+type: assets
+status: preserved
+
+LEDGER_EVENTS
+type: r2_bucket
+bucket: cybercrowd-ledger-events
+status: <span class="pass">ACTIVE</span>
+
+REPLAY
+type: r2_bucket
+bucket: cybercrowd-replay
+status: <span class="pass">ACTIVE</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">STATE-004</div>
+<div class="cardTitle">Authority Lane Verification</div>
+
+<div class="block">
+LEDGER_EVENTS
+binding: <span class="pass">PASS</span>
+write test: <span class="pass">PASS</span>
+read test: <span class="pass">PASS</span>
+collateral mutation: <span class="pass">NONE</span>
+
+test object:
+test/ledger-binding-check.json
+
+verified object content:
+{
+  "status":"LEDGER_EVENTS_BINDING_ACTIVE",
+  "bucket":"cybercrowd-ledger-events",
+  "purpose":"first authority lane test object"
+}
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">STATE-005</div>
+<div class="cardTitle">Replay Lane State</div>
+
+<div class="block">
+REPLAY binding:
+<span class="pass">PASS</span>
+
+REPLAY object write:
+<span class="pending">PENDING</span>
+
+REPLAY object read:
+<span class="pending">PENDING</span>
+
+Reason:
+Cloudflare authority containment blocked:
+- direct object upload
+- Worker script mutation
+
+Containment discovery successful:
+binding authority != object authority != script authority
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">STATE-006</div>
+<div class="cardTitle">Permission Containment Discovery</div>
+
+<div class="block">
+Cloudflare currently operating in:
+ASK-ONLY CONTAINMENT MODE
+
+Confirmed behavior:
+- inspect allowed
+- verify allowed
+- binding creation allowed
+- deployment allowed
+
+Restricted behavior:
+- direct object upload restricted
+- Worker script mutation restricted
+
+Result:
+controlled expansion preserved
+uncontrolled mutation prevented
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">STATE-007</div>
+<div class="cardTitle">Operational Doctrine</div>
+
+<div class="block">
+Current build strategy:
+
+one lane at a time
+one binding at a time
+one authority expansion at a time
+one replay verification at a time
+
+Rule:
+build empty boxes first
+verify connections second
+live transport last
+
+Status:
+<span class="pass">FOUNDATION SURVIVING</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">STATE-008</div>
+<div class="cardTitle">Next Safe Actions</div>
+
+<div class="block">
+1.
+Manual replay object upload
+OR
+minimal authority expansion
+
+2.
+Verify replay write/read path
+
+3.
+Add LINEAGE binding
+
+4.
+Add NODE_HEARTBEATS binding
+
+5.
+Begin replay physics testing
+
+6.
+Begin Magic Cursor transport verification
+</div>
+</div>
+
+</body>
+</html>
