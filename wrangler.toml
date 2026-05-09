@@ -9,33 +9,13 @@ workers_dev = true
 [assets]
 directory = "./"
 
+binding = "ASSETS"
+
 run_worker_first = true
 
-exclude = [
-  "node_modules/**",
-  ".git/**",
-  ".github/**",
-  "*.log",
-  "*.zip",
-  "*.tar",
-  "*.gz",
-  "*.rar",
-  "*.7z",
-  "package.json",
-  "package-lock.json",
-  "wrangler.toml",
-  "README.md",
-  "LICENSE.md",
-  "NOTICE.md",
-  "**/*.mp4",
-  "**/*.mov",
-  "**/*.mkv",
-  "**/*.avi",
-  "**/*.psd",
-  "**/*.blend",
-  "**/*.iso",
-  "**/*.bin"
-]
+html_handling = "auto-trailing-slash"
+
+not_found_handling = "404-page"
 
 [observability.logs]
 enabled = true
