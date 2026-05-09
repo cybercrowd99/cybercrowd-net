@@ -30,4 +30,185 @@ body{
 }
 
 .card{
-    background:rgba(
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.danger{
+    color:#ff7676;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD CLOUDFLARE SANDBOX DISCIPLINE
+</div>
+
+<div class="sub">
+Operational discipline for using Cloudflare AI safely during CyberCrowd infrastructure work.
+This doctrine exists because Cloudflare mutation tools can replace state instead of merging state.
+</div>
+
+<div class="card">
+<div class="cardId">DISCIPLINE-001</div>
+<div class="cardTitle">The Six-Step Safe Cycle</div>
+
+<div class="block">
+1. inspect only
+2. report only
+3. define error only
+4. review
+5. apply one correction only
+6. verify only
+
+No combined research + repair + save prompts.
+No multi-action repair chains.
+No open-ended optimization requests.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DISCIPLINE-002</div>
+<div class="cardTitle">Prompt Structure</div>
+
+<div class="block">
+Every Cloudflare mutation prompt must use:
+
+TASK:
+one exact directive only
+
+DO NOT:
+containment boundaries
+
+ONLY:
+allowed action lane
+
+REPORT ONLY:
+verification output
+
+The word TASK must anchor one directive at a time.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DISCIPLINE-003</div>
+<div class="cardTitle">Binding Rule</div>
+
+<div class="block">
+Always restate the full active binding set during any binding mutation.
+
+Never assume merge-state behavior.
+
+Reason:
+Cloudflare may treat a patch as a replacement state.
+If existing bindings are omitted, they may disappear.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DISCIPLINE-004</div>
+<div class="cardTitle">Failure Mode</div>
+
+<div class="block">
+<span class="danger">Failure Mode:</span>
+
+timeout
+→ loses directive containment
+→ enters fast-fix mode
+→ strips configuration
+→ plugs one path
+→ returns partial success
+
+This is not acceptable for CyberCrowd infrastructure.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DISCIPLINE-005</div>
+<div class="cardTitle">Safe Mode</div>
+
+<div class="block">
+<span class="safe">Safe Mode:</span>
+
+small scoped tasks
++
+containment boundaries
++
+verification cycles
++
+state freezing
+
+One lane.
+One correction.
+One verification.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DISCIPLINE-006</div>
+<div class="cardTitle">Replace-State Warning</div>
+
+<div class="block">
+Cloudflare operations must be treated as replace-state unless proven otherwise.
+
+Do not say:
+add this one thing
+
+Say:
+preserve these existing things
+and add this one thing
+
+Then verify full state.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DISCIPLINE-007</div>
+<div class="cardTitle">CyberCrowd Rule</div>
+
+<div class="block">
+Controlled expansion beats fast repair.
+
+Infrastructure must not be trusted because it succeeded once.
+It must be verified after every mutation.
+
+Build empty boxes first.
+Verify connections second.
+Live transport last.
+</div>
+</div>
+
+</body>
+</html>
