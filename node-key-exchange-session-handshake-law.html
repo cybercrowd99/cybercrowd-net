@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD NODE KEY EXCHANGE SESSION HANDSHAKE LAW V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD NODE KEY EXCHANGE SESSION HANDSHAKE LAW V1
+</div>
+
+<div class="sub">
+Handshake and key exchange doctrine for CyberCrowd distributed continuity systems.
+This document defines how nodes safely introduce themselves,
+exchange continuity information,
+and negotiate session participation.
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+No device is trusted automatically.
+
+Every continuity relationship begins through:
+- registration
+- fingerprint recognition
+- key exchange
+- trust negotiation
+- replay registration
+- heartbeat enrollment
+- governed scope assignment
+
+Handshake begins continuity.
+Handshake does not grant unlimited authority.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-002</div>
+<div class="cardTitle">Node Identity Package</div>
+
+<table>
+
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>node_id</td>
+<td>stable CyberCrowd node identifier</td>
+</tr>
+
+<tr>
+<td>device_class</td>
+<td>observer, creator, relay, sandbox, governance, VR, mesh</td>
+</tr>
+
+<tr>
+<td>trust_level</td>
+<td>current node trust level</td>
+</tr>
+
+<tr>
+<td>public_key</td>
+<td>continuity-safe identity exchange</td>
+</tr>
+
+<tr>
+<td>fingerprint_hash</td>
+<td>device recognition continuity</td>
+</tr>
+
+<tr>
+<td>heartbeat_scope</td>
+<td>allowed heartbeat lane</td>
+</tr>
+
+<tr>
+<td>replay_scope</td>
+<td>allowed replay lane</td>
+</tr>
+
+<tr>
+<td>transport_scope</td>
+<td>allowed transport participation</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-003</div>
+<div class="cardTitle">Handshake Flow</div>
+
+<div class="block">
+1. node announces presence
+2. receiving node verifies registration
+3. fingerprint continuity checked
+4. public key exchanged
+5. trust level exchanged
+6. heartbeat scope negotiated
+7. replay scope negotiated
+8. transport eligibility checked
+9. session scope assigned
+10. replay registration begins
+11. heartbeat enrollment begins
+12. continuity becomes active
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-004</div>
+<div class="cardTitle">Replay-Safe Pairing</div>
+
+<div class="block">
+Pairing must become replay-visible.
+
+Every successful pairing records:
+- source node
+- target node
+- trust scope
+- session scope
+- replay scope
+- heartbeat scope
+- transport eligibility
+- timestamp continuity
+
+Invisible pairing is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-005</div>
+<div class="cardTitle">Heartbeat Enrollment</div>
+
+<div class="block">
+Heartbeat enrollment defines:
+where the node emits liveness continuity.
+
+Sandbox nodes:
+DEV_HEARTBEATS
+or
+STAGING_HEARTBEATS
+
+Production-approved nodes:
+NODE_HEARTBEATS
+
+Heartbeat lane must match trust scope.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-006</div>
+<div class="cardTitle">Trust Negotiation</div>
+
+<div class="block">
+Handshake negotiates:
+- allowed session scope
+- allowed replay participation
+- allowed transport scope
+- allowed continuity depth
+
+Handshake does not negotiate:
+canon authority
+governance authority
+archive authority
+
+Those require separate escalation review.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-007</div>
+<div class="cardTitle">Sandbox-Safe Pairing</div>
+
+<div class="block">
+Sandbox pairing rules:
+- sandbox nodes may pair only with sandbox lanes
+- sandbox replay remains sandbox replay
+- sandbox transport remains isolated
+- sandbox heartbeat remains isolated
+
+Forbidden:
+sandbox pairing directly into Production continuity lanes.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-008</div>
+<div class="cardTitle">Session Rejection Rules</div>
+
+<div class="block">
+Reject session immediately when:
+- fingerprint mismatch detected
+- trust scope conflict detected
+- replay scope exceeds trust level
+- transport eligibility mismatch occurs
+- duplicate node identity detected
+- stale heartbeat continuity detected
+- quarantine flag active
+- governance freeze active
+
+Rejected sessions route to:
+SEQUESTER
++
+review logging
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-009</div>
+<div class="cardTitle">Spoof Protection</div>
+
+<div class="block">
+Spoof prevention requires:
+- public/private key continuity
+- fingerprint continuity
+- replay registration continuity
+- heartbeat continuity
+- session scope verification
+
+A node claiming:
+higher trust
+higher authority
+or different identity
+than recorded
+must be quarantined.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-010</div>
+<div class="cardTitle">Transport Eligibility Negotiation</div>
+
+<div class="block">
+Transport negotiation checks:
+- trust level
+- replay continuity
+- heartbeat continuity
+- sandbox status
+- governance restrictions
+- session scope
+- continuity compatibility
+
+No node receives transport authority
+without continuity validation first.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-011</div>
+<div class="cardTitle">Continuity Initiation Rule</div>
+
+<div class="block">
+Continuity begins only after:
+- successful handshake
+- replay registration
+- heartbeat enrollment
+- scope validation
+- transport validation
+- session approval
+
+No silent continuity.
+No invisible participation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-012</div>
+<div class="cardTitle">Future Expansion</div>
+
+<div class="block">
+Future handshake layers:
+- VR continuity pairing
+- observer swarm enrollment
+- relay mesh negotiation
+- creator continuity migration
+- accessibility continuity pairing
+- mobile-to-wall continuity
+- live event beam continuity
+
+All future continuity begins with governed handshake.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">HANDSHAKE-013</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd continuity begins
+when devices can introduce themselves safely.
+
+The handshake creates:
+recognition
+scope
+continuity
+traceability
+and containment
+
+before transport ever begins.
+</div>
+</div>
+
+</body>
+</html>
