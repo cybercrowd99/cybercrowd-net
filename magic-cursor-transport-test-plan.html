@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD MAGIC CURSOR TRANSPORT TEST PLAN V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD MAGIC CURSOR TRANSPORT TEST PLAN V1
+</div>
+
+<div class="sub">
+Controlled transport simulation plan for Magic Cursor.
+This document defines how continuity and transport systems are tested
+before unrestricted live routing is allowed.
+</div>
+
+<div class="card">
+<div class="cardId">TEST-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Testing begins with simulation,
+not unrestricted transport.
+
+The goal is not speed.
+
+The goal is:
+traceable continuity
++
+replayability
++
+containment
++
+authority preservation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-002</div>
+<div class="cardTitle">Testing Sequence</div>
+
+<table>
+
+<tr>
+<th>Phase</th>
+<th>Action</th>
+<th>Live Authority Allowed</th>
+<th>Failure Route</th>
+</tr>
+
+<tr>
+<td>phase 1</td>
+<td>fake heartbeat simulation</td>
+<td>no</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>phase 2</td>
+<td>fake replay registration</td>
+<td>no</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>phase 3</td>
+<td>cursor continuity simulation</td>
+<td>limited</td>
+<td>REPLAY</td>
+</tr>
+
+<tr>
+<td>phase 4</td>
+<td>session migration simulation</td>
+<td>limited</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>phase 5</td>
+<td>clipboard simulation</td>
+<td>limited</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>phase 6</td>
+<td>drag transfer simulation</td>
+<td>limited</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>phase 7</td>
+<td>transport freeze simulation</td>
+<td>no</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>phase 8</td>
+<td>kill-stop simulation</td>
+<td>emergency only</td>
+<td>GOVERNANCE</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-003</div>
+<div class="cardTitle">Heartbeat Simulation</div>
+
+<div class="block">
+Heartbeat tests verify:
+- device continuity
+- liveness timing
+- replay continuity
+- handoff timing
+- disconnect detection
+- stale session detection
+
+Heartbeat simulation must never:
+modify canon
+modify lineage
+modify governance authority
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-004</div>
+<div class="cardTitle">Replay Simulation</div>
+
+<div class="block">
+Replay tests verify:
+- event ordering
+- continuity reconstruction
+- cursor restoration
+- session ancestry
+- replay freeze behavior
+- replay recovery
+
+Replay tests must confirm:
+Replay reconstructs canon.
+Replay never overwrites canon.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-005</div>
+<div class="cardTitle">Session Migration Simulation</div>
+
+<div class="block">
+Simulated migrations:
+- phone → laptop
+- laptop → tablet
+- observer → creator station
+- creator → VR node
+- reconnect after interruption
+
+Validation targets:
+- continuity survives
+- authority survives
+- replay survives
+- heartbeat survives
+- no orphan cursor ownership appears
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-006</div>
+<div class="cardTitle">Failure Injection</div>
+
+<div class="block">
+Artificial failures introduced:
+- dropped heartbeat
+- duplicate session
+- replay corruption
+- delayed handoff
+- clipboard mismatch
+- drag interruption
+- unauthorized authority escalation
+- stale replay state
+
+Expected behavior:
+freeze
+contain
+replay
+review
+recover
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-007</div>
+<div class="cardTitle">Kill-Stop Simulation</div>
+
+<div class="block">
+Emergency stop command:
+"1"
+
+Validation:
+- transport freeze
+- replay preservation
+- lineage preservation
+- heartbeat preservation
+- governance continuity
+- no canon destruction
+- no silent resume
+
+Kill-stop must remain:
+traceable
+replayable
+reviewable
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-008</div>
+<div class="cardTitle">Forbidden During Testing</div>
+
+<div class="block">
+Forbidden:
+- unrestricted public transport
+- unrestricted clipboard sharing
+- unrestricted drag sharing
+- hidden device claiming
+- bypassing SEQUESTER
+- bypassing replay registration
+- direct archive injection
+- governance bypass
+- anonymous creator authority
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-009</div>
+<div class="cardTitle">Pass Conditions</div>
+
+<div class="block">
+A phase passes only when:
+- replay continuity survives
+- heartbeat continuity survives
+- lineage continuity survives
+- freeze behavior works
+- DEADLETTER routes correctly
+- SEQUESTER routes correctly
+- governance freeze works
+- no orphan authority appears
+
+Success without replayability is failure.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-010</div>
+<div class="cardTitle">Failure Conditions</div>
+
+<div class="block">
+Automatic failure:
+- silent authority escalation
+- hidden replay mutation
+- orphan session creation
+- canon overwrite
+- transport without replay
+- clipboard bypass
+- drag bypass
+- invisible governance override
+
+Failure requires:
+freeze
+containment
+review
+reconstruction
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TEST-011</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd transport testing is not:
+"does it move?"
+
+The real question is:
+
+Can continuity survive
+movement,
+failure,
+pause,
+handoff,
+and recovery
+without losing authority truth?
+
+If not:
+transport is not ready.
+</div>
+</div>
+
+</body>
+</html>
