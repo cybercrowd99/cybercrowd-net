@@ -1,0 +1,143 @@
+name = "cybercrowd-net"
+
+main = "worker.js"
+
+compatibility_date = "2026-05-09"
+
+workers_dev = true
+
+[assets]
+directory = "./"
+
+binding = "ASSETS"
+
+run_worker_first = true
+
+html_handling = "auto-trailing-slash"
+
+not_found_handling = "404-page"
+
+
+
+##################################################
+# CANONICAL LEDGER
+##################################################
+
+[[r2_buckets]]
+binding = "LEDGER_EVENTS"
+bucket_name = "cybercrowd-ledger-events"
+
+
+
+##################################################
+# REPLAY ENGINE
+##################################################
+
+[[r2_buckets]]
+binding = "REPLAY"
+bucket_name = "cybercrowd-replay"
+
+
+
+##################################################
+# DEADLETTER
+##################################################
+
+[[r2_buckets]]
+binding = "DEADLETTER"
+bucket_name = "cybercrowd-deadletter"
+
+
+
+##################################################
+# ARCHIVE
+##################################################
+
+[[r2_buckets]]
+binding = "ARCHIVE"
+bucket_name = "cybercrowd-archive"
+
+
+
+##################################################
+# LINEAGE
+##################################################
+
+[[r2_buckets]]
+binding = "LINEAGE"
+bucket_name = "cybercrowd-lineage"
+
+
+
+##################################################
+# GOVERNANCE
+##################################################
+
+[[r2_buckets]]
+binding = "GOVERNANCE"
+bucket_name = "cybercrowd-governance"
+
+
+
+##################################################
+# NODE HEARTBEATS
+##################################################
+
+[[r2_buckets]]
+binding = "NODE_HEARTBEATS"
+bucket_name = "cybercrowd-node-heartbeats"
+
+
+
+##################################################
+# SEQUESTER
+##################################################
+
+[[r2_buckets]]
+binding = "SEQUESTER"
+bucket_name = "cybercrowd-sequester"
+
+
+
+##################################################
+# GRAPHICS
+##################################################
+
+[[r2_buckets]]
+binding = "GRAPHICS"
+bucket_name = "cybercrowd-graphics"
+
+
+
+##################################################
+# TEASERS
+##################################################
+
+[[r2_buckets]]
+binding = "TEASERS"
+bucket_name = "cybercrowd-teasers"
+
+
+
+##################################################
+# SURFACE CACHE
+##################################################
+
+[[r2_buckets]]
+binding = "SURFACE_CACHE"
+bucket_name = "cybercrowd-surface-cache"
+
+
+
+##################################################
+# ALBUM
+##################################################
+
+[[r2_buckets]]
+binding = "ALBUM"
+bucket_name = "cybercrowd-album"
+
+
+
+[observability.logs]
+enabled = true
