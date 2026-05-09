@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 RETENTION DOCTRINE</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.retentionCard{
+    margin-bottom:28px;
+    padding:26px;
+    border-radius:18px;
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+}
+
+.retentionId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.retentionTitle{
+    font-size:26px;
+    margin-bottom:18px;
+}
+
+.retentionBlock{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.88;
+    font-size:14px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="title">
+CYBERCROWD R2 RETENTION DOCTRINE
+</div>
+
+<div class="sub">
+Canonical retention and survivability authority for CyberCrowd operational infrastructure.
+Retention policy exists to preserve continuity,
+prevent silent loss,
+and isolate replaceable systems from canonical systems.
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-001
+</div>
+
+<div class="retentionTitle">
+Canonical Ledger Events
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-ledger-events
+
+Retention:
+Permanent
+
+Deletion:
+Forbidden
+
+Replay:
+Required
+
+Survivability:
+Maximum
+
+Purpose:
+Canonical append-only operational truth.
+
+Rules:
+- never overwrite
+- never mutate
+- never compact silently
+- replay integrity mandatory
+- corruption creates deadletter copy
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-002
+</div>
+
+<div class="retentionTitle">
+Deadletter Isolation
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-deadletter
+
+Retention:
+30-90 days
+
+Deletion:
+Allowed after expiration
+
+Replay:
+Optional
+
+Survivability:
+Medium
+
+Purpose:
+Quarantine malformed,
+corrupt,
+or rejected payloads.
+
+Rules:
+- never route back into canonical chain automatically
+- isolate contamination
+- preserve forensic visibility temporarily
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-003
+</div>
+
+<div class="retentionTitle">
+Replay Infrastructure
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-replay
+
+Retention:
+Long-term
+
+Deletion:
+Restricted
+
+Replay:
+Core requirement
+
+Survivability:
+High
+
+Purpose:
+Operational reconstruction,
+simulation,
+timeline replay,
+and survivability validation.
+
+Rules:
+- replay chain must remain reconstructable
+- replay gaps generate alerts
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-004
+</div>
+
+<div class="retentionTitle">
+Archive Authority
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-archive
+
+Retention:
+Permanent
+
+Deletion:
+Forbidden except legal authority workflow
+
+Replay:
+Supported
+
+Survivability:
+Maximum
+
+Purpose:
+Canonical historical continuity archive.
+
+Rules:
+- immutable preservation
+- historical snapshots preserved
+- lineage references preserved
+- archive never treated as cache
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-005
+</div>
+
+<div class="retentionTitle">
+Lineage Preservation
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-lineage
+
+Retention:
+Permanent
+
+Deletion:
+Forbidden
+
+Replay:
+Supported
+
+Survivability:
+Maximum
+
+Purpose:
+Ownership,
+provenance,
+inheritance,
+and continuity authority.
+
+Rules:
+- never silently modify ownership trails
+- preserve attribution history
+- preserve inheritance references
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-006
+</div>
+
+<div class="retentionTitle">
+Governance Records
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-governance
+
+Retention:
+Permanent
+
+Deletion:
+Restricted
+
+Replay:
+Required
+
+Survivability:
+Maximum
+
+Purpose:
+Override logging,
+treasury actions,
+administrative intervention,
+and audit survivability.
+
+Rules:
+- all overrides logged
+- no silent governance mutation
+- replay required for disputes
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-007
+</div>
+
+<div class="retentionTitle">
+Node Heartbeats
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-node-heartbeats
+
+Retention:
+30-180 days
+
+Deletion:
+Allowed after expiration
+
+Replay:
+Partial
+
+Survivability:
+Medium
+
+Purpose:
+Mesh telemetry,
+latency tracking,
+device uptime,
+and operational health monitoring.
+
+Rules:
+- summarized historical metrics may survive
+- raw telemetry may expire
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-008
+</div>
+
+<div class="retentionTitle">
+Surface Cache
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-surface-cache
+
+Retention:
+Short-term
+
+Deletion:
+Expected
+
+Replay:
+Disabled
+
+Survivability:
+Low
+
+Purpose:
+Accelerated public delivery cache.
+
+Rules:
+- cache is replaceable
+- never canonical
+- rebuild allowed
+- purge allowed
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-009
+</div>
+
+<div class="retentionTitle">
+Graphics + Teasers
+</div>
+
+<div class="retentionBlock">
+Buckets:
+cybercrowd-graphics
+cybercrowd-teasers
+
+Retention:
+Variable
+
+Deletion:
+Allowed
+
+Replay:
+Optional
+
+Survivability:
+Medium
+
+Purpose:
+Public overlays,
+graphics,
+teasers,
+and promotional media.
+
+Rules:
+- public media may rotate
+- canonical versions belong in archive
+</div>
+
+</div>
+
+
+
+<div class="retentionCard">
+
+<div class="retentionId">
+RETENTION-010
+</div>
+
+<div class="retentionTitle">
+Long Form Media
+</div>
+
+<div class="retentionBlock">
+Bucket:
+cybercrowd-album
+
+Retention:
+Long-term
+
+Deletion:
+Restricted
+
+Replay:
+Supported
+
+Survivability:
+High
+
+Purpose:
+Creator media preservation and continuity recordings.
+
+Rules:
+- public copies may rotate
+- master copies preserved
+- archive snapshots recommended
+</div>
+
+</div>
+
+
+
+</body>
+</html>
