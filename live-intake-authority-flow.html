@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD LIVE INTAKE AUTHORITY FLOW V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.danger{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD LIVE INTAKE AUTHORITY FLOW V1
+</div>
+
+<div class="sub">
+Live intake authority flow for CyberCrowd.
+This defines how objects enter the system before they become trusted,
+canonical, archived, cached, replayable, or publicly visible.
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-001</div>
+<div class="cardTitle">Core Rule</div>
+<div class="block">
+Nothing enters CyberCrowd as trusted.
+
+Every live object begins as intake.
+
+Every intake object must pass through:
+SEQUESTER
+before it can reach:
+LEDGER_EVENTS
+LINEAGE
+ARCHIVE
+REPLAY
+SURFACE_CACHE
+GRAPHICS
+TEASERS
+
+Rule:
+intake first
+trust later
+public last
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-002</div>
+<div class="cardTitle">Primary Intake Route</div>
+
+<table>
+<tr>
+<th>Object Type</th>
+<th>First Destination</th>
+<th>Validation Requirement</th>
+<th>Next Eligible Route</th>
+</tr>
+
+<tr>
+<td>creator upload</td>
+<td>SEQUESTER</td>
+<td>identity, file type, ownership, safety</td>
+<td>LINEAGE, ARCHIVE, SURFACE_CACHE</td>
+</tr>
+
+<tr>
+<td>public form payload</td>
+<td>SEQUESTER</td>
+<td>schema, spam, abuse, source check</td>
+<td>LEDGER_EVENTS or DEADLETTER</td>
+</tr>
+
+<tr>
+<td>device mesh payload</td>
+<td>SEQUESTER</td>
+<td>session, device trust, replay ID</td>
+<td>REPLAY, NODE_HEARTBEATS, LEDGER_EVENTS</td>
+</tr>
+
+<tr>
+<td>media preview</td>
+<td>SEQUESTER</td>
+<td>content type, size, release eligibility</td>
+<td>TEASERS or SURFACE_CACHE</td>
+</tr>
+
+<tr>
+<td>graphics asset</td>
+<td>SEQUESTER</td>
+<td>format, size, naming, route eligibility</td>
+<td>GRAPHICS or SURFACE_CACHE</td>
+</tr>
+
+<tr>
+<td>failed validation</td>
+<td>DEADLETTER</td>
+<td>failure reason recorded</td>
+<td>manual review only</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-003</div>
+<div class="cardTitle">Sequester Role</div>
+<div class="block">
+SEQUESTER is the first live holding lane.
+
+Purpose:
+- raw intake isolation
+- suspicious payload containment
+- untrusted upload holding
+- pre-public validation
+- pre-archive validation
+- pre-ledger eligibility check
+
+SEQUESTER is not:
+- public storage
+- archive storage
+- cache storage
+- final creator inventory
+- settlement truth
+
+Status:
+private
+controlled
+reviewable
+temporary until classified
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-004</div>
+<div class="cardTitle">Deadletter Role</div>
+<div class="block">
+DEADLETTER receives failed intake.
+
+A payload routes to DEADLETTER when:
+- schema fails
+- ownership cannot be proven
+- replay ID conflicts
+- payload is malformed
+- route is forbidden
+- security flags trigger
+- file is oversized for lane
+- public release condition fails
+
+DEADLETTER does not retry automatically.
+
+Manual review is required before re-entry.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-005</div>
+<div class="cardTitle">Authority Assignment</div>
+<div class="block">
+After validation, each object receives an authority class:
+
+CANON
+→ LEDGER_EVENTS
+
+OWNERSHIP
+→ LINEAGE
+
+PRESERVATION
+→ ARCHIVE
+
+REPLAYABLE
+→ REPLAY
+
+PUBLIC_DELIVERY
+→ SURFACE_CACHE, GRAPHICS, TEASERS
+
+TELEMETRY
+→ NODE_HEARTBEATS
+
+FAILED
+→ DEADLETTER
+
+QUARANTINED
+→ SEQUESTER
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-006</div>
+<div class="cardTitle">Release Conditions</div>
+<div class="block">
+An object may become public only when:
+
+- identity source is known
+- ownership status is assigned
+- file type is allowed
+- route target is correct
+- no security flag is active
+- no governance hold exists
+- lineage eligibility is recorded
+- cache eligibility is confirmed
+- public exposure is intentional
+
+Public release without these conditions is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-007</div>
+<div class="cardTitle">Forbidden Shortcuts</div>
+<div class="block">
+Forbidden:
+public upload → ARCHIVE
+
+Forbidden:
+public upload → SURFACE_CACHE without validation
+
+Forbidden:
+creator object → LINEAGE without ownership check
+
+Forbidden:
+device event → LEDGER_EVENTS without session authority
+
+Forbidden:
+failed payload → public lane
+
+Forbidden:
+cache object → canonical truth
+
+Forbidden:
+governance override → silent mutation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-008</div>
+<div class="cardTitle">Replay Registration</div>
+<div class="block">
+Replay registration occurs only after:
+
+- event ID exists
+- source is known
+- replay ID is unique
+- origin lane is recorded
+- target lane is recorded
+- failure route is known
+
+Replay is not canon.
+Replay reconstructs canon.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-009</div>
+<div class="cardTitle">Live Intake Sequence</div>
+<div class="block">
+1. object arrives
+2. object enters SEQUESTER
+3. object receives temporary intake ID
+4. validation runs
+5. route authority is assigned
+6. failure routes to DEADLETTER
+7. valid object receives lineage or ledger record
+8. archive eligibility is decided
+9. cache eligibility is decided
+10. public release occurs only after authority clears
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">INTAKE-010</div>
+<div class="cardTitle">Final Rule</div>
+<div class="block">
+CyberCrowd does not trust arrival.
+
+CyberCrowd trusts lineage,
+validation,
+authority,
+and replayable records.
+
+Build empty boxes first.
+Verify connections second.
+Live transport last.
+</div>
+</div>
+
+</body>
+</html>
