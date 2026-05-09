@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD CONTINUITY MEMORY TEMPORAL ANCHOR LAW V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD CONTINUITY MEMORY TEMPORAL ANCHOR LAW V1
+</div>
+
+<div class="sub">
+Memory and temporal anchor doctrine for CyberCrowd continuity systems.
+This document defines how long-running sessions, migration chains,
+replay ancestry, recovery lineage, and device continuity remain anchored over time.
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Continuity needs memory.
+
+Memory needs anchors.
+
+Anchors must be:
+stable
+timestamped
+replayable
+recoverable
+reviewable
+lineage-aware
+
+A session may move,
+pause,
+fail,
+recover,
+and migrate,
+but its continuity ancestry must remain traceable.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-002</div>
+<div class="cardTitle">Temporal Anchor Types</div>
+
+<table>
+<tr>
+<th>Anchor Type</th>
+<th>Purpose</th>
+<th>Primary Lane</th>
+</tr>
+
+<tr>
+<td>session_anchor</td>
+<td>root identity for a session lifetime</td>
+<td>REPLAY</td>
+</tr>
+
+<tr>
+<td>device_anchor</td>
+<td>persistent device continuity marker</td>
+<td>NODE_HEARTBEATS</td>
+</tr>
+
+<tr>
+<td>migration_anchor</td>
+<td>handoff/migration checkpoint</td>
+<td>REPLAY</td>
+</tr>
+
+<tr>
+<td>recovery_anchor</td>
+<td>resurrection/recovery checkpoint</td>
+<td>REPLAY</td>
+</tr>
+
+<tr>
+<td>lineage_anchor</td>
+<td>ownership/ancestry marker</td>
+<td>LINEAGE</td>
+</tr>
+
+<tr>
+<td>governance_anchor</td>
+<td>authority review or override marker</td>
+<td>GOVERNANCE</td>
+</tr>
+
+<tr>
+<td>archive_anchor</td>
+<td>cold preservation checkpoint</td>
+<td>ARCHIVE</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-003</div>
+<div class="cardTitle">Continuity Memory Record</div>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+<th>Required</th>
+</tr>
+
+<tr>
+<td>anchor_id</td>
+<td>stable unique anchor identifier</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>anchor_type</td>
+<td>session, device, migration, recovery, lineage, governance, archive</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>session_id</td>
+<td>associated session</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>node_id</td>
+<td>associated device/node</td>
+<td>conditional</td>
+</tr>
+
+<tr>
+<td>replay_id</td>
+<td>reconstruction chain</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>lineage_id</td>
+<td>ownership/ancestry chain</td>
+<td>conditional</td>
+</tr>
+
+<tr>
+<td>created_at</td>
+<td>anchor creation time</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>valid_until</td>
+<td>expiration or review time</td>
+<td>conditional</td>
+</tr>
+
+<tr>
+<td>authority_scope</td>
+<td>allowed continuity authority</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>anchor_status</td>
+<td>active, frozen, degraded, archived, revoked</td>
+<td>yes</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-004</div>
+<div class="cardTitle">Session Anchor Rule</div>
+
+<div class="block">
+Every long-running session requires a session_anchor.
+
+The session_anchor preserves:
+- session ancestry
+- replay root
+- migration history
+- recovery history
+- active authority scope
+- expiration rules
+
+A session without an anchor is temporary and restricted.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-005</div>
+<div class="cardTitle">Device Anchor Rule</div>
+
+<div class="block">
+Every registered node may receive a device_anchor.
+
+The device_anchor preserves:
+- node identity
+- fingerprint continuity
+- heartbeat lane
+- trust level history
+- last known participation
+- downgrade history
+- rehabilitation history
+
+Device anchors do not grant authority.
+They preserve continuity memory.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-006</div>
+<div class="cardTitle">Migration Anchor Rule</div>
+
+<div class="block">
+Every session migration creates a migration_anchor.
+
+The migration_anchor records:
+- origin node
+- target node
+- freeze state
+- handoff timestamp
+- resume timestamp
+- authority scope
+- replay continuity
+- migration outcome
+
+Migration without anchor is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-007</div>
+<div class="cardTitle">Recovery Anchor Rule</div>
+
+<div class="block">
+Every continuity resurrection creates a recovery_anchor.
+
+The recovery_anchor records:
+- failure source
+- lost node
+- recovered node
+- replay checkpoint
+- heartbeat gap
+- authority restoration status
+- governance review status
+- resume condition
+
+Recovery without anchor is invisible recovery.
+
+Invisible recovery is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-008</div>
+<div class="cardTitle">Lineage Anchor Rule</div>
+
+<div class="block">
+Creator continuity requires lineage anchors.
+
+Lineage anchors preserve:
+- creator ownership
+- asset ancestry
+- transfer history
+- upload provenance
+- recovery ownership
+- archive eligibility
+
+Lineage anchors prevent creator history from being lost during migration or recovery.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-009</div>
+<div class="cardTitle">Governance Anchor Rule</div>
+
+<div class="block">
+Governance anchors are required when:
+- authority changes
+- trust level escalates
+- trust level downgrades
+- emergency freeze occurs
+- release gate opens
+- rollback begins
+- quarantine recovery begins
+
+Governance anchors do not rewrite truth.
+They record authority decisions.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-010</div>
+<div class="cardTitle">Temporal Decay Rule</div>
+
+<div class="block">
+Not all continuity lasts forever.
+
+Anchors may decay into:
+- expired
+- archived
+- revoked
+- frozen
+- historical-only
+
+Decay must be explicit.
+
+Silent anchor disappearance is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-011</div>
+<div class="cardTitle">Anchor Recovery Rule</div>
+
+<div class="block">
+If continuity breaks,
+recovery begins from the strongest valid anchor.
+
+Recovery priority:
+1. governance_anchor
+2. lineage_anchor
+3. session_anchor
+4. replay_anchor
+5. device_anchor
+6. heartbeat evidence
+7. archived snapshot
+
+If no anchor exists,
+session recovery is restricted.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-012</div>
+<div class="cardTitle">Sandbox Anchor Rule</div>
+
+<div class="block">
+Sandbox anchors remain sandbox-only.
+
+DEV anchors may not become Production anchors.
+
+STAGING anchors may influence Production only through:
+- governance review
+- release gate
+- reviewed artifact
+- clean Production implementation
+
+Sandbox memory is training memory.
+Production memory is operational truth.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">ANCHOR-013</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd remembers through anchors.
+
+A device may fail.
+A session may migrate.
+A replay may reconstruct.
+A recovery may resurrect.
+
+But continuity survives only when memory has a place to stand.
+</div>
+</div>
+
+</body>
+</html>
