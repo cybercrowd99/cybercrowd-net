@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD IDENTITY SESSION AUTHORITY MATRIX V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD IDENTITY SESSION AUTHORITY MATRIX V1
+</div>
+
+<div class="sub">
+Identity and session authority framework for CyberCrowd.
+This matrix defines how identity, devices, sessions, replay,
+and authority interact inside the operational lattice.
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Identity is not trust.
+
+Session is not authority.
+
+Device is not ownership.
+
+Authority must be assigned,
+validated,
+scoped,
+and replayable.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-002</div>
+<div class="cardTitle">Identity Classes</div>
+
+<table>
+
+<tr>
+<th>Identity Class</th>
+<th>Authority Scope</th>
+<th>Verification Level</th>
+<th>Primary Lanes</th>
+</tr>
+
+<tr>
+<td>anonymous observer</td>
+<td>read-only public interaction</td>
+<td>none</td>
+<td>TEASERS, GRAPHICS</td>
+</tr>
+
+<tr>
+<td>verified observer</td>
+<td>session interaction</td>
+<td>basic verification</td>
+<td>REPLAY, NODE_HEARTBEATS</td>
+</tr>
+
+<tr>
+<td>creator</td>
+<td>content ownership</td>
+<td>identity verified</td>
+<td>LINEAGE, ARCHIVE, TEASERS</td>
+</tr>
+
+<tr>
+<td>moderator</td>
+<td>containment review</td>
+<td>elevated verification</td>
+<td>SEQUESTER, DEADLETTER</td>
+</tr>
+
+<tr>
+<td>governance authority</td>
+<td>administrative override</td>
+<td>multi-factor verified</td>
+<td>GOVERNANCE</td>
+</tr>
+
+<tr>
+<td>system node</td>
+<td>heartbeat and routing</td>
+<td>device trust required</td>
+<td>NODE_HEARTBEATS</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-003</div>
+<div class="cardTitle">Session Classes</div>
+
+<table>
+
+<tr>
+<th>Session Type</th>
+<th>Lifetime</th>
+<th>Authority Scope</th>
+<th>Replay Eligible</th>
+</tr>
+
+<tr>
+<td>public session</td>
+<td>temporary</td>
+<td>public viewing only</td>
+<td>limited</td>
+</tr>
+
+<tr>
+<td>verified session</td>
+<td>persistent</td>
+<td>interaction + replay</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>creator session</td>
+<td>persistent</td>
+<td>ownership actions</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>governance session</td>
+<td>short controlled duration</td>
+<td>override authority</td>
+<td>mandatory</td>
+</tr>
+
+<tr>
+<td>emergency session</td>
+<td>temporary lockdown</td>
+<td>containment only</td>
+<td>mandatory</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-004</div>
+<div class="cardTitle">Device Authority</div>
+
+<div class="block">
+Devices are assigned:
+- device ID
+- heartbeat lane
+- replay lane
+- session owner
+- authority scope
+
+A device cannot:
+- self-assign governance
+- self-assign creator authority
+- bypass SEQUESTER
+- write canon directly
+
+Devices may:
+- emit heartbeat pulses
+- maintain replay continuity
+- preserve session continuity
+- submit intake payloads
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-005</div>
+<div class="cardTitle">Cross-Device Continuity</div>
+
+<div class="block">
+Cross-device continuity requires:
+- verified session owner
+- replay continuity ID
+- active heartbeat
+- lineage eligibility
+- governance-clear transfer
+
+A session may migrate devices without:
+- losing replay continuity
+- losing ownership continuity
+- losing event ancestry
+
+Magic Cursor continuity later attaches here.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-006</div>
+<div class="cardTitle">Replay Ownership</div>
+
+<div class="block">
+Replay records must contain:
+- replay ID
+- session owner
+- source lane
+- target lane
+- authority scope
+- heartbeat continuity
+- timestamp chain
+
+Replay reconstructs activity.
+Replay does not overwrite canon.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-007</div>
+<div class="cardTitle">Governance Scope</div>
+
+<div class="block">
+Governance authority may:
+- suspend sessions
+- quarantine devices
+- annotate canon
+- freeze replay lanes
+- force archival hold
+- trigger emergency containment
+
+Governance authority may not:
+- silently rewrite canon
+- erase lineage history
+- bypass replay registration
+- bypass audit recording
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-008</div>
+<div class="cardTitle">Kill-Switch Authority</div>
+
+<div class="block">
+Emergency authority requires:
+- governance session
+- replay registration
+- audit logging
+- lineage preservation
+- mandatory DEADLETTER recording
+
+Emergency shutdown actions must remain:
+replayable
+traceable
+reviewable
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-009</div>
+<div class="cardTitle">Expiration Rules</div>
+
+<div class="block">
+Anonymous sessions:
+short expiration
+
+Verified sessions:
+renewable
+
+Governance sessions:
+forced expiration
+
+Emergency sessions:
+forced destruction after archive
+
+Replay continuity may survive session expiration
+when lineage authority permits continuation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">IDENTITY-010</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd does not trust:
+arrival,
+session,
+device,
+or role alone.
+
+Trust emerges from:
+identity
++
+authority
++
+lineage
++
+replayability
++
+containment
++
+verification
+
+Every action must belong to:
+someone,
+some session,
+some device,
+and some replayable authority path.
+</div>
+</div>
+
+</body>
+</html>
