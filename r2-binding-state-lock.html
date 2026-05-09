@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYBERCROWD R2 BINDING STATE LOCK</title>
+<style>
+body{margin:0;padding:40px;background:#05070b;color:white;font-family:Arial,Helvetica,sans-serif;}
+.title{font-size:42px;color:#00ffff;letter-spacing:3px;margin-bottom:14px;}
+.sub{opacity:.74;line-height:1.7;margin-bottom:40px;max-width:1200px;}
+.card{background:rgba(0,255,255,.04);border:1px solid rgba(0,255,255,.18);border-radius:18px;padding:24px;margin-bottom:24px;}
+.cardId{color:#00ffff;font-size:12px;letter-spacing:2px;margin-bottom:12px;}
+.cardTitle{font-size:24px;margin-bottom:18px;}
+.block{white-space:pre-wrap;line-height:1.8;opacity:.9;font-size:14px;}
+.pass{color:#00ffaa;}
+.pending{color:#ffd166;}
+</style>
+</head>
+<body>
+
+<div class="title">CYBERCROWD R2 BINDING STATE LOCK</div>
+
+<div class="sub">
+Verified infrastructure snapshot after first authority triangle binding.
+This file freezes the current truth before GOVERNANCE is attached.
+</div>
+
+<div class="card">
+<div class="cardId">LOCK-001</div>
+<div class="cardTitle">Active Worker Bindings</div>
+<div class="block">
+ASSETS
+status: <span class="pass">ACTIVE</span>
+
+LEDGER_EVENTS → cybercrowd-ledger-events
+status: <span class="pass">ACTIVE</span>
+
+REPLAY → cybercrowd-replay
+status: <span class="pass">ACTIVE</span>
+
+LINEAGE → cybercrowd-lineage
+status: <span class="pass">ACTIVE</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LOCK-002</div>
+<div class="cardTitle">Verified Lane State</div>
+<div class="block">
+LEDGER_EVENTS
+binding: <span class="pass">PASS</span>
+write: <span class="pass">PASS</span>
+read: <span class="pass">PASS</span>
+
+REPLAY
+binding: <span class="pass">PASS</span>
+write: <span class="pending">PENDING</span>
+read: <span class="pending">PENDING</span>
+
+LINEAGE
+binding: <span class="pass">PASS</span>
+write: <span class="pending">NOT STARTED</span>
+read: <span class="pending">NOT STARTED</span>
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LOCK-003</div>
+<div class="cardTitle">Authority Triangle</div>
+<div class="block">
+First authority triangle established:
+
+LEDGER_EVENTS
++
+REPLAY
++
+LINEAGE
+
+Meaning:
+- events can be recorded
+- replay lane exists
+- lineage lane exists
+- ownership/provenance mapping can later attach safely
+
+No live transport yet.
+No commerce routing yet.
+No public media routing yet.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LOCK-004</div>
+<div class="cardTitle">Next Safe Binding</div>
+<div class="block">
+Next binding:
+GOVERNANCE → cybercrowd-governance
+
+Do not bind until this state lock passes deployment.
+</div>
+</div>
+
+</body>
+</html>
