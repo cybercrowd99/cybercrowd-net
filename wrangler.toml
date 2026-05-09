@@ -1,8 +1,41 @@
 name = "cybercrowd-net"
-compatibility_date = "2026-05-08"
 
 main = "worker.js"
 
+compatibility_date = "2026-05-09"
+
+workers_dev = true
+
 [assets]
-directory = "."
-not_found_handling = "single-page-application"
+directory = "./"
+
+run_worker_first = true
+
+exclude = [
+  "node_modules/**",
+  ".git/**",
+  ".github/**",
+  "*.log",
+  "*.zip",
+  "*.tar",
+  "*.gz",
+  "*.rar",
+  "*.7z",
+  "package.json",
+  "package-lock.json",
+  "wrangler.toml",
+  "README.md",
+  "LICENSE.md",
+  "NOTICE.md",
+  "**/*.mp4",
+  "**/*.mov",
+  "**/*.mkv",
+  "**/*.avi",
+  "**/*.psd",
+  "**/*.blend",
+  "**/*.iso",
+  "**/*.bin"
+]
+
+[observability.logs]
+enabled = true
