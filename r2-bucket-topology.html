@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 BUCKET TOPOLOGY</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+    overflow-x:auto;
+}
+
+.topologyTitle{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.topologySub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.topologyShell{
+    min-width:1200px;
+}
+
+.topologyRow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:28px;
+    margin-bottom:42px;
+}
+
+.bucket{
+    width:220px;
+    min-height:120px;
+    padding:20px;
+    border-radius:18px;
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    position:relative;
+}
+
+.bucketId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:10px;
+}
+
+.bucketTitle{
+    font-size:22px;
+    margin-bottom:12px;
+}
+
+.bucketDesc{
+    font-size:13px;
+    opacity:.78;
+    line-height:1.6;
+}
+
+.connector{
+    color:#00ffff;
+    font-size:28px;
+    opacity:.7;
+}
+
+.layerTitle{
+    text-align:center;
+    color:#00ffff;
+    font-size:18px;
+    letter-spacing:3px;
+    margin-bottom:26px;
+    opacity:.84;
+}
+
+</style>
+</head>
+<body>
+
+<div class="topologyTitle">
+CYBERCROWD R2 BUCKET TOPOLOGY
+</div>
+
+<div class="topologySub">
+Operational survivability map for CyberCrowd storage routing,
+event propagation, archive continuity, replay isolation,
+and public surface delivery behavior.
+</div>
+
+<div class="topologyShell">
+
+
+<div class="layerTitle">
+INTAKE LAYER
+</div>
+
+<div class="topologyRow">
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-004</div>
+<div class="bucketTitle">SEQUESTER</div>
+<div class="bucketDesc">
+Raw intake holding layer before validation and routing.
+</div>
+</div>
+
+<div class="connector">
+→
+</div>
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-002</div>
+<div class="bucketTitle">DEADLETTER</div>
+<div class="bucketDesc">
+Failed payload quarantine and malformed event isolation.
+</div>
+</div>
+
+</div>
+
+
+
+<div class="layerTitle">
+LEDGER + EVENT FLOW
+</div>
+
+<div class="topologyRow">
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-001</div>
+<div class="bucketTitle">LEDGER EVENTS</div>
+<div class="bucketDesc">
+Canonical append-only event chain authority.
+</div>
+</div>
+
+<div class="connector">
+→
+</div>
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-003</div>
+<div class="bucketTitle">REPLAY</div>
+<div class="bucketDesc">
+Replayable simulation and survivability reconstruction.
+</div>
+</div>
+
+<div class="connector">
+→
+</div>
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-005</div>
+<div class="bucketTitle">ARCHIVE</div>
+<div class="bucketDesc">
+Immutable historical and continuity preservation layer.
+</div>
+</div>
+
+</div>
+
+
+
+<div class="layerTitle">
+LINEAGE + GOVERNANCE
+</div>
+
+<div class="topologyRow">
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-006</div>
+<div class="bucketTitle">LINEAGE</div>
+<div class="bucketDesc">
+Ownership trails, provenance, and inheritance authority.
+</div>
+</div>
+
+<div class="connector">
+↔
+</div>
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-007</div>
+<div class="bucketTitle">GOVERNANCE</div>
+<div class="bucketDesc">
+Override logs, treasury events, and audit authority.
+</div>
+</div>
+
+</div>
+
+
+
+<div class="layerTitle">
+DEVICE + NODE MESH
+</div>
+
+<div class="topologyRow">
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-008</div>
+<div class="bucketTitle">NODE HEARTBEATS</div>
+<div class="bucketDesc">
+Mesh telemetry, latency monitoring, and uptime signals.
+</div>
+</div>
+
+<div class="connector">
+→
+</div>
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-003</div>
+<div class="bucketTitle">REPLAY</div>
+<div class="bucketDesc">
+Operational playback and continuity simulation chain.
+</div>
+</div>
+
+</div>
+
+
+
+<div class="layerTitle">
+PUBLIC SURFACE DELIVERY
+</div>
+
+<div class="topologyRow">
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-010</div>
+<div class="bucketTitle">GRAPHICS</div>
+<div class="bucketDesc">
+Static overlays and visual asset delivery.
+</div>
+</div>
+
+<div class="connector">
+→
+</div>
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-011</div>
+<div class="bucketTitle">TEASERS</div>
+<div class="bucketDesc">
+Short-form media loops and public teaser delivery.
+</div>
+</div>
+
+<div class="connector">
+→
+</div>
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-009</div>
+<div class="bucketTitle">SURFACE CACHE</div>
+<div class="bucketDesc">
+Accelerated public edge cache and mirrored delivery.
+</div>
+</div>
+
+</div>
+
+
+
+<div class="layerTitle">
+LONG FORM MEDIA
+</div>
+
+<div class="topologyRow">
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-012</div>
+<div class="bucketTitle">ALBUM ARCHIVE</div>
+<div class="bucketDesc">
+Long-form creator media and continuity recordings.
+</div>
+</div>
+
+<div class="connector">
+→
+</div>
+
+<div class="bucket">
+<div class="bucketId">CC-BUCKET-005</div>
+<div class="bucketTitle">ARCHIVE</div>
+<div class="bucketDesc">
+Canonical historical preservation layer.
+</div>
+</div>
+
+</div>
+
+
+</div>
+
+</body>
+</html>
