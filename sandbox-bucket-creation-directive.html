@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD SANDBOX BUCKET CREATION DIRECTIVE V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD SANDBOX BUCKET CREATION DIRECTIVE V1
+</div>
+
+<div class="sub">
+Cloudflare-safe operational directive for artificial sandbox bucket creation.
+This document prepares isolated experimentation lanes
+for DEV and STAGING environments.
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Sandbox buckets exist to isolate experimentation.
+
+They must never:
+- contaminate Production continuity
+- mutate Production replay
+- pollute live telemetry
+- bypass containment law
+- silently receive public traffic
+
+Artificial worlds stay separated from living continuity.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-002</div>
+<div class="cardTitle">Sandbox Bucket Inventory</div>
+
+<table>
+
+<tr>
+<th>Bucket</th>
+<th>Environment</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>cybercrowd-dev-replay</td>
+<td>DEV</td>
+<td>fake replay continuity</td>
+</tr>
+
+<tr>
+<td>cybercrowd-dev-heartbeats</td>
+<td>DEV</td>
+<td>fake heartbeat telemetry</td>
+</tr>
+
+<tr>
+<td>cybercrowd-dev-sequester</td>
+<td>DEV</td>
+<td>fake intake containment</td>
+</tr>
+
+<tr>
+<td>cybercrowd-dev-deadletter</td>
+<td>DEV</td>
+<td>failure injection</td>
+</tr>
+
+<tr>
+<td>cybercrowd-staging-replay</td>
+<td>STAGING</td>
+<td>controlled replay proof</td>
+</tr>
+
+<tr>
+<td>cybercrowd-staging-heartbeats</td>
+<td>STAGING</td>
+<td>controlled heartbeat proof</td>
+</tr>
+
+<tr>
+<td>cybercrowd-staging-sequester</td>
+<td>STAGING</td>
+<td>controlled intake validation</td>
+</tr>
+
+<tr>
+<td>cybercrowd-staging-deadletter</td>
+<td>STAGING</td>
+<td>controlled rollback-safe failures</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-003</div>
+<div class="cardTitle">Creation Order</div>
+
+<div class="block">
+Recommended order:
+
+1. cybercrowd-dev-replay
+2. cybercrowd-dev-heartbeats
+3. cybercrowd-dev-sequester
+4. cybercrowd-dev-deadletter
+
+freeze
+verify
+
+5. cybercrowd-staging-replay
+6. cybercrowd-staging-heartbeats
+7. cybercrowd-staging-sequester
+8. cybercrowd-staging-deadletter
+
+freeze
+verify
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-004</div>
+<div class="cardTitle">Cloudflare Sandbox Discipline</div>
+
+<div class="block">
+All bucket creation follows:
+<[team build]>
+
+Meaning:
+
+1. identify Cloudflare involvement
+2. give one TASK only
+3. include DO NOT boundaries
+4. include ONLY action
+5. include REPORT ONLY output
+6. wait for Cloudflare result
+7. verify before next step
+
+No broad auto-write authority.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-005</div>
+<div class="cardTitle">One Task Mutation Law</div>
+
+<div class="block">
+Only ONE bucket creation per mutation cycle.
+
+Forbidden:
+bulk bucket creation
+multi-action mutation
+auto-generated repair sweeps
+simultaneous binding mutations
+
+Reason:
+containment visibility
+verification stability
+replace-state awareness
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-006</div>
+<div class="cardTitle">Isolation Guarantees</div>
+
+<div class="block">
+Sandbox buckets must remain:
+non-public
+non-canonical
+non-authoritative
+non-production
+
+Sandbox replay may simulate continuity.
+
+Sandbox heartbeat may simulate liveness.
+
+Sandbox systems must not become operational truth.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-007</div>
+<div class="cardTitle">Verification Sequence</div>
+
+<div class="block">
+After each bucket creation:
+
+1. inspect bucket existence
+2. inspect Production bindings
+3. verify Production binding count unchanged
+4. verify Pages deployment unchanged
+5. verify no public exposure
+6. verify no route mutation
+7. freeze
+8. continue
+
+Verification before expansion.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-008</div>
+<div class="cardTitle">Forbidden Sandbox Behavior</div>
+
+<div class="block">
+Forbidden:
+sandbox bucket auto-binding into Production
+
+Forbidden:
+sandbox replay merged into Production replay
+
+Forbidden:
+sandbox heartbeat merged into Production heartbeat
+
+Forbidden:
+sandbox intake routed into live lineage
+
+Forbidden:
+sandbox deadletter polluting live failures
+
+Forbidden:
+sandbox objects entering ARCHIVE
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-009</div>
+<div class="cardTitle">Future Expansion</div>
+
+<div class="block">
+Future artificial environments:
+- DEV_CURSOR_TRANSPORT
+- DEV_VR_MESH
+- DEV_OBSERVER_SWARM
+- STAGING_CURSOR_TRANSPORT
+- STAGING_CONTINUITY_GATE
+- STAGING_REPLAY_RECOVERY
+
+Expansion remains compartmentalized.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DIRECTIVE-010</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd experiments safely
+by creating isolated artificial worlds
+before touching living continuity.
+
+The sandbox exists
+so Production can survive learning.
+</div>
+</div>
+
+</body>
+</html>
