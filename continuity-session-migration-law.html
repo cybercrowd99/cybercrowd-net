@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD CONTINUITY SESSION MIGRATION LAW V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD CONTINUITY SESSION MIGRATION LAW V1
+</div>
+
+<div class="sub">
+Session migration doctrine for CyberCrowd continuity systems.
+This document defines how a verified session moves between devices
+without losing authority, replay, heartbeat, or cursor continuity.
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+A session may move.
+
+Authority may not silently expand.
+
+Device migration must preserve:
+- session identity
+- replay continuity
+- heartbeat continuity
+- cursor continuity
+- trust scope
+- lineage scope
+- governance restrictions
+
+Migration is a controlled transfer,
+not a hidden takeover.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-002</div>
+<div class="cardTitle">Migration Types</div>
+
+<table>
+<tr>
+<th>Migration Type</th>
+<th>Example</th>
+<th>Authority Requirement</th>
+<th>Failure Route</th>
+</tr>
+
+<tr>
+<td>phone to laptop</td>
+<td>mobile controller moves to desktop surface</td>
+<td>verified session + paired devices</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>laptop to phone</td>
+<td>desktop continuity resumes on mobile</td>
+<td>verified session + replay continuity</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>creator station transfer</td>
+<td>creator resumes from another trusted device</td>
+<td>creator authority + lineage scope</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>observer surface transfer</td>
+<td>viewer moves from phone to tablet</td>
+<td>observer scope</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>sandbox migration</td>
+<td>test session moves between sandbox devices</td>
+<td>sandbox-only scope</td>
+<td>DEV_DEADLETTER or STAGING_DEADLETTER</td>
+</tr>
+
+<tr>
+<td>VR node migration</td>
+<td>session enters immersive surface</td>
+<td>verified continuity + transport gate</td>
+<td>SEQUESTER</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-003</div>
+<div class="cardTitle">Required Migration Record</div>
+
+<table>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+<th>Required</th>
+</tr>
+
+<tr>
+<td>migration_id</td>
+<td>unique migration event identifier</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>session_id</td>
+<td>session being migrated</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>origin_node_id</td>
+<td>device releasing active control</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>target_node_id</td>
+<td>device receiving active control</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>authority_scope</td>
+<td>allowed scope during and after migration</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>replay_id</td>
+<td>continuity reconstruction chain</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>heartbeat_id</td>
+<td>liveness chain</td>
+<td>yes</td>
+</tr>
+
+<tr>
+<td>cursor_state</td>
+<td>last known cursor/control state</td>
+<td>conditional</td>
+</tr>
+
+<tr>
+<td>migration_status</td>
+<td>pending, frozen, accepted, rejected, restored</td>
+<td>yes</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-004</div>
+<div class="cardTitle">Migration Sequence</div>
+
+<div class="block">
+1. origin device requests migration
+2. target device confirms availability
+3. session authority is checked
+4. trust scope is checked
+5. replay continuity is frozen
+6. heartbeat continuity is checked
+7. cursor/control state is snapshotted
+8. transport authority is paused
+9. target device accepts migration
+10. replay continuity resumes
+11. heartbeat continuity resumes
+12. transport authority resumes only if allowed
+13. migration record is finalized
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-005</div>
+<div class="cardTitle">Transport Freeze During Migration</div>
+
+<div class="block">
+During migration:
+- cursor movement freezes
+- clipboard transfer freezes
+- drag transfer freezes
+- active transport freezes
+- authority escalation freezes
+
+Allowed during freeze:
+- replay snapshot
+- heartbeat check
+- target confirmation
+- governance review if needed
+
+No active control resumes until migration clears.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-006</div>
+<div class="cardTitle">Replay Preservation</div>
+
+<div class="block">
+Replay must preserve:
+- pre-migration state
+- freeze event
+- origin node
+- target node
+- handoff timestamp
+- post-migration state
+- failure state if migration fails
+
+Replay reconstructs migration history.
+
+Replay does not rewrite canon.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-007</div>
+<div class="cardTitle">Heartbeat Preservation</div>
+
+<div class="block">
+Heartbeat must record:
+- origin node last seen
+- target node readiness
+- gap duration
+- resume timestamp
+- stale heartbeat warnings
+- degraded continuity markers
+
+Heartbeat loss during migration triggers:
+freeze
++
+DEADLETTER or SEQUESTER routing.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-008</div>
+<div class="cardTitle">Cursor Continuity Preservation</div>
+
+<div class="block">
+Cursor continuity must preserve:
+- cursor position
+- active surface
+- active device
+- click/drag state
+- clipboard state
+- last authority scope
+- freeze timestamp
+
+No cursor resumes blind.
+
+Resume requires:
+target confirmation
++
+replay state
++
+heartbeat confirmation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-009</div>
+<div class="cardTitle">Partial Migration Failure</div>
+
+<div class="block">
+Partial migration failure occurs when:
+- origin releases but target fails
+- target accepts but heartbeat fails
+- replay freezes but cannot resume
+- cursor state cannot restore
+- authority scope mismatch appears
+
+Required behavior:
+1. freeze session
+2. preserve replay state
+3. mark migration degraded
+4. route anomaly to DEADLETTER or SEQUESTER
+5. require user reconfirmation
+6. resume only after safe reconstruction
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-010</div>
+<div class="cardTitle">Authority Preservation</div>
+
+<div class="block">
+Migration cannot upgrade authority.
+
+Observer session remains observer.
+Creator session remains creator.
+Sandbox session remains sandbox.
+Governance session remains governance-restricted.
+
+Device change does not create new power.
+Authority follows verified session scope.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-011</div>
+<div class="cardTitle">Interruption Recovery</div>
+
+<div class="block">
+If interruption occurs:
+- freeze active session
+- preserve replay continuity
+- preserve heartbeat evidence
+- preserve cursor snapshot
+- mark session degraded
+- require reconfirmation
+
+No silent recovery.
+No hidden takeover.
+No invisible resume.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-012</div>
+<div class="cardTitle">Sandbox Migration Rule</div>
+
+<div class="block">
+Sandbox migration remains sandbox-only.
+
+DEV migration routes to:
+DEV_REPLAY
+DEV_HEARTBEATS
+DEV_DEADLETTER
+DEV_SEQUESTER
+
+STAGING migration routes to:
+STAGING_REPLAY
+STAGING_HEARTBEATS
+STAGING_DEADLETTER
+STAGING_SEQUESTER
+
+Sandbox migration cannot touch Production continuity.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MIGRATION-013</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd continuity may move between devices,
+but it must never become untraceable.
+
+A good migration feels smooth to the user
+and remains fully visible to the system.
+
+Seamless surface.
+Traceable interior.
+</div>
+</div>
+
+</body>
+</html>
