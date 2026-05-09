@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD R2 ROUTING AUTHORITY MATRIX V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.live{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD R2 ROUTING AUTHORITY MATRIX V1
+</div>
+
+<div class="sub">
+First operational routing matrix for the CyberCrowd persistent R2 lattice.
+This document defines what routes where, under what authority, and under
+what containment rules.
+</div>
+
+<div class="card">
+<div class="cardId">MATRIX-001</div>
+<div class="cardTitle">Canonical Authority Rule</div>
+
+<div class="block">
+Rule:
+Canonical truth never routes through cache.
+
+Replay never overwrites canon.
+
+Governance annotates authority but does not silently mutate canon.
+
+Deadletter and Sequester isolate failure and suspicion away from live lanes.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MATRIX-002</div>
+<div class="cardTitle">Primary Routing Matrix</div>
+
+<table>
+
+<tr>
+<th>Source</th>
+<th>Destination</th>
+<th>Authority Rule</th>
+<th>Visibility</th>
+<th>Failure Route</th>
+</tr>
+
+<tr>
+<td>event commit</td>
+<td>LEDGER_EVENTS</td>
+<td>canonical write only</td>
+<td>private</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>replay reconstruction</td>
+<td>REPLAY</td>
+<td>read-only from canon</td>
+<td>private</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>creator ownership update</td>
+<td>LINEAGE</td>
+<td>append-only authority</td>
+<td>private</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>administrative override</td>
+<td>GOVERNANCE</td>
+<td>annotate authority only</td>
+<td>private</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>public teaser request</td>
+<td>TEASERS</td>
+<td>public media allowed</td>
+<td>public</td>
+<td>SURFACE_CACHE</td>
+</tr>
+
+<tr>
+<td>graphics request</td>
+<td>GRAPHICS</td>
+<td>public asset delivery</td>
+<td>public</td>
+<td>SURFACE_CACHE</td>
+</tr>
+
+<tr>
+<td>archive rollover</td>
+<td>ARCHIVE</td>
+<td>cold-preservation only</td>
+<td>private</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>heartbeat pulse</td>
+<td>NODE_HEARTBEATS</td>
+<td>append-only pulse</td>
+<td>private</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>cache acceleration</td>
+<td>SURFACE_CACHE</td>
+<td>non-canonical only</td>
+<td>edge/public</td>
+<td>refresh from origin</td>
+</tr>
+
+<tr>
+<td>suspicious intake</td>
+<td>SEQUESTER</td>
+<td>quarantine isolation</td>
+<td>private</td>
+<td>manual review</td>
+</tr>
+
+<tr>
+<td>failed route/event</td>
+<td>DEADLETTER</td>
+<td>containment only</td>
+<td>private</td>
+<td>manual recovery</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+<div class="cardId">MATRIX-003</div>
+<div class="cardTitle">Authority Separation</div>
+
+<div class="block">
+Canon:
+LEDGER_EVENTS
+
+Replay:
+REPLAY
+
+Ownership:
+LINEAGE
+
+Authority:
+GOVERNANCE
+
+Containment:
+DEADLETTER
+SEQUESTER
+
+Acceleration:
+SURFACE_CACHE
+
+Telemetry:
+NODE_HEARTBEATS
+
+Public delivery:
+GRAPHICS
+TEASERS
+
+Cold retention:
+ARCHIVE
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MATRIX-004</div>
+<div class="cardTitle">Forbidden Routing</div>
+
+<div class="block">
+Forbidden:
+SURFACE_CACHE
+→ canonical writes
+
+Forbidden:
+REPLAY
+→ overwrite canon
+
+Forbidden:
+GOVERNANCE
+→ silent canonical mutation
+
+Forbidden:
+public uploads
+→ bypass SEQUESTER
+
+Forbidden:
+heartbeat flood
+→ direct canon writes
+
+Forbidden:
+failed routes
+→ return to public lane
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MATRIX-005</div>
+<div class="cardTitle">Operational Safety</div>
+
+<div class="block">
+Every route must define:
+- authority
+- visibility
+- containment
+- replay behavior
+- fallback behavior
+
+No route is allowed to exist without:
+- ownership definition
+- failure destination
+- authority scope
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">MATRIX-006</div>
+<div class="cardTitle">Next Architecture Layer</div>
+
+<div class="block">
+Future routing systems:
+- live creator upload intake
+- replay playback engine
+- Magic Cursor continuity routing
+- device mesh routing
+- observer authority routing
+- emergency override routing
+- cache invalidation rules
+- public/private edge separation
+
+The storage spine now has routing law.
+</div>
+</div>
+
+</body>
+</html>
