@@ -239,6 +239,17 @@ ROUTE CARD
     color: #ffaa00;
 }
 
+.openRoute {
+
+    border:
+    1px solid rgba(0,255,170,0.35);
+}
+
+.openRoute .routeTitle {
+
+    color: #00ffaa;
+}
+
 /*
 =====================================
 STATUS BAR
@@ -283,6 +294,51 @@ OPERATING ENVIRONMENT ROUTING SURFACE
 </div>
 
 <div id="routeGrid">
+
+<!-- FREE SIGNUP -->
+
+<div class="routeCard openRoute"
+onclick="window.location.href='continuity-enrollment-gate.html'">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+Free Signup
+</div>
+
+<div class="routeText">
+Create a free continuity identity,
+verify email,
+and enter the CyberCrowd ecosystem.
+</div>
+
+</div>
+</div>
+
+<!-- ABOUT -->
+
+<div class="routeCard openRoute"
+onclick="window.location.href='about.html'">
+
+<div class="routeGlow"></div>
+
+<div class="routeContent">
+
+<div class="routeTitle">
+About Cybercrowd
+</div>
+
+<div class="routeText">
+Read the CyberCrowd story,
+mission,
+doctrine,
+and operating environment foundation.
+</div>
+
+</div>
+</div>
 
 <!-- SANDBOX -->
 
@@ -457,27 +513,6 @@ and layered voice surfaces.
 </div>
 </div>
 
-<!-- ABOUT -->
-
-<div class="routeCard"
-onclick="window.location.href='signup.html'">
-
-<div class="routeGlow"></div>
-
-<div class="routeContent">
-
-<div class="routeTitle">
-About Cybercrowd
-</div>
-
-<div class="routeText">
-Enter the Cybercrowd sign-up area
-and explore the expanding operating environment.
-</div>
-
-</div>
-</div>
-
 </div>
 
 <div id="statusBar">
@@ -488,7 +523,14 @@ RUNTIME EXPLORATION ACTIVE
 
 </div>
 
+<script src="continuity-entry-guard.js"></script>
+
 <script>
+
+if(window.CCEntryGuard){
+
+    CCEntryGuard.requireVerifiedSession();
+}
 
 let lockedTouches = 0;
 
