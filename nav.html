@@ -30,12 +30,6 @@ body {
     color: white;
 }
 
-/*
-=====================================
-BACKGROUND
-=====================================
-*/
-
 #background {
 
     position: fixed;
@@ -51,12 +45,6 @@ BACKGROUND
 
     z-index: 0;
 }
-
-/*
-=====================================
-MAIN ENVIRONMENT
-=====================================
-*/
 
 #environment {
 
@@ -75,12 +63,6 @@ MAIN ENVIRONMENT
 
     overflow-y: auto;
 }
-
-/*
-=====================================
-HEADER
-=====================================
-*/
 
 #header {
 
@@ -111,12 +93,6 @@ HEADER
     letter-spacing: 2px;
 }
 
-/*
-=====================================
-ROUTE GRID
-=====================================
-*/
-
 #routeGrid {
 
     width: 92%;
@@ -134,12 +110,6 @@ ROUTE GRID
 
     padding-bottom: 60px;
 }
-
-/*
-=====================================
-ROUTE CARD
-=====================================
-*/
 
 .routeCard {
 
@@ -250,12 +220,6 @@ ROUTE CARD
     color: #00ffaa;
 }
 
-/*
-=====================================
-STATUS BAR
-=====================================
-*/
-
 #statusBar {
 
     width: 100%;
@@ -295,8 +259,6 @@ OPERATING ENVIRONMENT ROUTING SURFACE
 
 <div id="routeGrid">
 
-<!-- FREE SIGNUP -->
-
 <div class="routeCard openRoute"
 onclick="window.location.href='continuity-enrollment-gate.html'">
 
@@ -316,8 +278,6 @@ and enter the CyberCrowd ecosystem.
 
 </div>
 </div>
-
-<!-- ABOUT -->
 
 <div class="routeCard openRoute"
 onclick="window.location.href='about.html'">
@@ -340,8 +300,6 @@ and operating environment foundation.
 </div>
 </div>
 
-<!-- SANDBOX -->
-
 <div class="routeCard"
 onclick="window.location.href='server.html'">
 
@@ -361,10 +319,8 @@ Shared sandbox authority transfer.
 </div>
 </div>
 
-<!-- ATOMIC CRICKET -->
-
 <div class="routeCard locked"
-onclick="openWindow('Atomic Cricket')">
+onclick="openDistrict('atomiccricket')">
 
 <div class="routeGlow"></div>
 
@@ -375,17 +331,17 @@ Atomic Cricket
 </div>
 
 <div class="routeText">
-Media archive systems, publications,
-event memory, and layered discovery.
+Media archive systems,
+publications,
+event memory,
+and layered discovery.
 </div>
 
 </div>
 </div>
-
-<!-- OBSERVER -->
 
 <div class="routeCard locked"
-onclick="openWindow('Observer Broadcast')">
+onclick="openDistrict('observerbroadcast')">
 
 <div class="routeGlow"></div>
 
@@ -404,10 +360,8 @@ and creator visibility.
 </div>
 </div>
 
-<!-- CREATOR -->
-
 <div class="routeCard locked"
-onclick="openWindow('Creator Route')">
+onclick="openDistrict('creatorroute')">
 
 <div class="routeGlow"></div>
 
@@ -418,17 +372,16 @@ Creator Route
 </div>
 
 <div class="routeText">
-Build channels, creator systems,
+Build channels,
+creator systems,
 and live participation tools.
 </div>
 
 </div>
 </div>
 
-<!-- CUEBERCARE -->
-
 <div class="routeCard locked"
-onclick="openWindow('CueberCare')">
+onclick="openDistrict('cuebercare')">
 
 <div class="routeGlow"></div>
 
@@ -439,7 +392,8 @@ CueberCare
 </div>
 
 <div class="routeText">
-Accessibility, support routing,
+Accessibility,
+support routing,
 community assistance,
 and care ecosystems.
 </div>
@@ -447,10 +401,8 @@ and care ecosystems.
 </div>
 </div>
 
-<!-- MULTICAM -->
-
 <div class="routeCard locked"
-onclick="openWindow('Multi-Cam')">
+onclick="openDistrict('multicam')">
 
 <div class="routeGlow"></div>
 
@@ -469,10 +421,8 @@ and environmental visibility.
 </div>
 </div>
 
-<!-- LIVE EVENTS -->
-
 <div class="routeCard locked"
-onclick="openWindow('Live Events')">
+onclick="openDistrict('liveevents')">
 
 <div class="routeGlow"></div>
 
@@ -491,10 +441,8 @@ and connected participation.
 </div>
 </div>
 
-<!-- AUDIO -->
-
 <div class="routeCard locked"
-onclick="openWindow('Cybercrowd Audio')">
+onclick="openDistrict('cybercrowdaudio')">
 
 <div class="routeGlow"></div>
 
@@ -527,6 +475,8 @@ RUNTIME EXPLORATION ACTIVE
 
 <script src="ecosystem-window-launcher.js"></script>
 
+<script src="ecosystem-window-registry.js"></script>
+
 <script>
 
 if(window.CCEntryGuard){
@@ -534,34 +484,22 @@ if(window.CCEntryGuard){
     CCEntryGuard.requireVerifiedSession();
 }
 
-function openWindow(title){
+function openDistrict(key){
+
+const district =
+CCWindowRegistry[key];
+
+if(!district){
+return;
+}
 
 CCWindow.create({
 
-id:
-title.toLowerCase().replace(/\s/g,''),
+id:key,
 
-title:title,
+title:district.title,
 
-content:`
-
-<div style="
-line-height:1.8;
-opacity:.86;
-">
-
-${title}
-continuity district is currently
-operating in controlled development mode.
-
-Subscriber continuity layers,
-interactive systems,
-and live operational surfaces
-will expand here.
-
-</div>
-
-`
+content:district.content
 
 });
 
