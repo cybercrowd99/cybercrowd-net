@@ -7,6 +7,12 @@ if(existing){
 
 existing.style.display = 'block';
 
+if(window.CCSound){
+
+CCSound.open();
+
+}
+
 return;
 }
 
@@ -72,9 +78,7 @@ ${config.title}
 </div>
 
 <button
-onclick="
-document.getElementById('${config.id}').remove()
-"
+id="${config.id}_close"
 style="
 background:none;
 border:none;
@@ -102,6 +106,43 @@ ${config.content}
 
 document.body.appendChild(win);
 
+const closeBtn =
+document.getElementById(
+config.id + '_close'
+);
+
+closeBtn.addEventListener(
+'mouseenter',
+function(){
+
+if(window.CCSound){
+
+CCSound.hover();
+
+}
+
+});
+
+closeBtn.addEventListener(
+'click',
+function(){
+
+if(window.CCSound){
+
+CCSound.close();
+
+}
+
+win.remove();
+
+});
+
+if(window.CCSound){
+
+CCSound.open();
+
+}
+
 enableWindowDrag(win);
 
 }
@@ -127,6 +168,18 @@ e.clientX - win.offsetLeft;
 
 offsetY =
 e.clientY - win.offsetTop;
+
+});
+
+header.addEventListener(
+'mouseenter',
+function(){
+
+if(window.CCSound){
+
+CCSound.hover();
+
+}
 
 });
 
