@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD FORENSIC CONTINUITY INCIDENT RESPONSE LAW V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD FORENSIC CONTINUITY INCIDENT RESPONSE LAW V1
+</div>
+
+<div class="sub">
+Incident response and forensic continuity doctrine for CyberCrowd.
+This document defines how continuity alarms, compromise events,
+transport anomalies, and security incidents are detected,
+contained, preserved, reviewed, and recovered.
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+An incident must not erase truth.
+
+CyberCrowd incident response must:
+detect
+freeze
+contain
+preserve
+trace
+review
+recover
+
+without silently rewriting continuity history.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-002</div>
+<div class="cardTitle">Incident Trigger Classes</div>
+
+<table>
+
+<tr>
+<th>Trigger</th>
+<th>Example</th>
+<th>Initial Action</th>
+</tr>
+
+<tr>
+<td>heartbeat anomaly</td>
+<td>unstable node continuity</td>
+<td>alarm + monitor</td>
+</tr>
+
+<tr>
+<td>duplicate node identity</td>
+<td>same node active in impossible locations</td>
+<td>freeze + quarantine</td>
+</tr>
+
+<tr>
+<td>transport anomaly</td>
+<td>unexpected route mutation</td>
+<td>freeze transport</td>
+</tr>
+
+<tr>
+<td>token anomaly</td>
+<td>unauthorized connector behavior</td>
+<td>connector revoke</td>
+</tr>
+
+<tr>
+<td>replay divergence</td>
+<td>unexpected replay mismatch</td>
+<td>preserve replay + isolate</td>
+</tr>
+
+<tr>
+<td>authority anomaly</td>
+<td>unexpected escalation attempt</td>
+<td>freeze authority</td>
+</tr>
+
+<tr>
+<td>platform compromise</td>
+<td>external connector breach</td>
+<td>route isolation</td>
+</tr>
+
+<tr>
+<td>migration instability</td>
+<td>broken continuity transfer</td>
+<td>freeze migration</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-003</div>
+<div class="cardTitle">Alarm Topology</div>
+
+<div class="block">
+Alarms attach to continuity compartments.
+
+Alarm targets may include:
+- route
+- node
+- connector
+- transport lane
+- replay segment
+- migration chain
+- heartbeat chain
+- governance lane
+- archive lane
+
+The system should isolate the affected compartment,
+not collapse the entire continuity fabric.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-004</div>
+<div class="cardTitle">Automatic Containment Rule</div>
+
+<div class="block">
+Containment may automatically:
+- freeze transport
+- revoke connector tokens
+- isolate affected routes
+- quarantine compromised nodes
+- preserve replay evidence
+- preserve heartbeat evidence
+- preserve route topology
+- preserve event chronology
+
+Containment automatic.
+Authority manual.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-005</div>
+<div class="cardTitle">Manual Authority Restoration Rule</div>
+
+<div class="block">
+The system may NOT automatically:
+- restore creator authority
+- restart live deployment
+- promote replacement nodes
+- reconnect external routes
+- restore governance authority
+- restore archive authority
+
+Restoration requires:
+human verification
+human approval
+human activation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-006</div>
+<div class="cardTitle">Replacement Continuity Node Rule</div>
+
+<div class="block">
+If a continuity compartment fails:
+
+- damaged node remains quarantined
+- replay remains preserved
+- heartbeat evidence remains preserved
+- route topology remains preserved
+
+A replacement continuity node may:
+resume continuity elsewhere
+while damaged compartments remain observable.
+
+No silent destruction of evidence.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-007</div>
+<div class="cardTitle">Forensic Preservation Requirements</div>
+
+<table>
+
+<tr>
+<th>Evidence Class</th>
+<th>Preserve?</th>
+<th>Purpose</th>
+</tr>
+
+<tr>
+<td>replay history</td>
+<td>required</td>
+<td>event reconstruction</td>
+</tr>
+
+<tr>
+<td>heartbeat history</td>
+<td>required</td>
+<td>continuity timing</td>
+</tr>
+
+<tr>
+<td>route graph</td>
+<td>required</td>
+<td>propagation mapping</td>
+</tr>
+
+<tr>
+<td>connector state</td>
+<td>required</td>
+<td>platform audit</td>
+</tr>
+
+<tr>
+<td>token state metadata</td>
+<td>required</td>
+<td>authorization audit</td>
+</tr>
+
+<tr>
+<td>authority scope</td>
+<td>required</td>
+<td>permission analysis</td>
+</tr>
+
+<tr>
+<td>migration records</td>
+<td>required</td>
+<td>continuity analysis</td>
+</tr>
+
+<tr>
+<td>alarm chronology</td>
+<td>required</td>
+<td>incident sequencing</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-008</div>
+<div class="cardTitle">Route Damage Evaluation</div>
+
+<div class="block">
+Incident review should evaluate:
+- affected route
+- affected nodes
+- affected replay segments
+- affected connectors
+- affected authority scopes
+- affected revenue routes
+- affected archives
+- affected migrations
+- affected audiences
+
+Damage evaluation must remain replay-visible.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-009</div>
+<div class="cardTitle">Incident Monitoring Systems</div>
+
+<div class="block">
+Monitoring systems may observe:
+- route stability
+- connector stability
+- heartbeat continuity
+- replay continuity
+- transport anomalies
+- geographic anomalies
+- authority anomalies
+- token anomalies
+- route propagation anomalies
+
+Monitoring exists for continuity protection,
+not hidden surveillance.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-010</div>
+<div class="cardTitle">Forensic Audit Reconstruction</div>
+
+<div class="block">
+A forensic audit should reconstruct:
+- incident origin
+- propagation path
+- affected continuity compartments
+- affected authority scopes
+- replay chronology
+- migration chronology
+- connector behavior
+- containment actions
+- recovery actions
+
+The audit reconstructs truth.
+The audit does not fabricate blame.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-011</div>
+<div class="cardTitle">Live Incident Visibility</div>
+
+<div class="block">
+Incident visibility should display:
+- active alarms
+- degraded routes
+- quarantined compartments
+- replay preservation status
+- heartbeat preservation status
+- route freeze status
+- connector health
+- authority freeze status
+
+Visibility should remain understandable during crisis.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-012</div>
+<div class="cardTitle">Emergency Stop Preservation</div>
+
+<div class="block">
+Universal stop command:
+"1"
+
+must:
+- stop propagation
+- freeze transport
+- preserve replay
+- preserve heartbeat evidence
+- preserve route topology
+- preserve forensic chronology
+
+The stop command is a continuity preservation mechanism.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-013</div>
+<div class="cardTitle">Forbidden Incident Behavior</div>
+
+<div class="block">
+Forbidden:
+silent evidence deletion
+
+Forbidden:
+automatic authority restoration
+
+Forbidden:
+hidden route continuation
+
+Forbidden:
+replay destruction after incident
+
+Forbidden:
+silent quarantine bypass
+
+Forbidden:
+connector reactivation without approval
+
+Forbidden:
+incident concealment from authorized review
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">FORENSIC-014</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd survives incidents
+because continuity compartments can fail independently.
+
+A hack alarm should not collapse the entire fabric.
+
+The system:
+isolates
+preserves
+reroutes
+records
+and recovers
+
+while humans retain authority over restoration.
+</div>
+</div>
+
+</body>
+</html>
