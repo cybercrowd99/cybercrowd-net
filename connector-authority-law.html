@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD CONNECTOR AUTHORITY LAW V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD CONNECTOR AUTHORITY LAW V1
+</div>
+
+<div class="sub">
+External platform connector authority doctrine for CyberCrowd.
+This document defines how CyberCrowd safely connects to outside platforms
+without surrendering creator control, token safety, replay visibility,
+or continuity authority.
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+An external connector is not CyberCrowd authority.
+
+A connector may route,
+publish,
+stream,
+or report status
+only inside its approved scope.
+
+CyberCrowd must never allow an outside platform connector
+to silently control creator continuity,
+internal replay,
+governance,
+lineage,
+or forensic systems.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-002</div>
+<div class="cardTitle">Connector Classes</div>
+
+<table>
+<tr>
+<th>Connector Class</th>
+<th>Purpose</th>
+<th>Authority Risk</th>
+</tr>
+
+<tr>
+<td>live platform connector</td>
+<td>route live streams to external platforms</td>
+<td>high</td>
+</tr>
+
+<tr>
+<td>social share connector</td>
+<td>publish links or announcements</td>
+<td>medium</td>
+</tr>
+
+<tr>
+<td>sponsor connector</td>
+<td>route sponsored campaigns or contract events</td>
+<td>high</td>
+</tr>
+
+<tr>
+<td>analytics connector</td>
+<td>read metrics and audience signals</td>
+<td>medium</td>
+</tr>
+
+<tr>
+<td>payment connector</td>
+<td>support revenue routing and payouts</td>
+<td>high</td>
+</tr>
+
+<tr>
+<td>archive connector</td>
+<td>support approved preservation/export workflows</td>
+<td>high</td>
+</tr>
+
+<tr>
+<td>sandbox connector</td>
+<td>test integrations without Production authority</td>
+<td>low</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-003</div>
+<div class="cardTitle">Token Scope Rule</div>
+
+<div class="block">
+Connector tokens must be:
+- scoped
+- revocable
+- private
+- environment-specific
+- destination-specific when possible
+- never stored in public repo
+- never exposed to public pages
+- never reused outside approved connector scope
+
+Token access does not equal platform authority.
+Token possession does not equal creator consent.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-004</div>
+<div class="cardTitle">Connector Isolation</div>
+
+<div class="block">
+Every connector must be isolated from:
+- GOVERNANCE unless explicitly approved
+- LINEAGE unless ownership action is required
+- ARCHIVE unless preservation is approved
+- LEDGER_EVENTS unless event truth must be recorded
+- REPLAY except for route-visible replay records
+- SEQUESTER except for quarantine/failure handling
+- DEADLETTER except for failure routing
+
+Connector failure must not collapse CyberCrowd continuity.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-005</div>
+<div class="cardTitle">Connector Activation Flow</div>
+
+<div class="block">
+1. creator selects connector
+2. connector status is displayed
+3. token scope is verified
+4. destination account is displayed
+5. destination route is displayed
+6. creator confirms activation
+7. replay registration begins
+8. connector heartbeat begins
+9. route becomes active
+10. stop control remains visible
+
+No hidden connector activation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-006</div>
+<div class="cardTitle">Connector Heartbeat</div>
+
+<div class="block">
+Each active connector should report:
+- connector status
+- route health
+- token validity
+- last contact time
+- destination status
+- degraded state
+- failure state
+- stop state
+
+Connector heartbeat supports visibility.
+Connector heartbeat does not become hidden surveillance.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-007</div>
+<div class="cardTitle">Connector Replay Visibility</div>
+
+<div class="block">
+Connector actions must be replay-visible.
+
+Replay should record:
+- connector ID
+- destination platform
+- creator session ID
+- activation time
+- stop time
+- token scope reference
+- route health events
+- degraded events
+- failure events
+- recovery events
+
+Replay records connector behavior.
+Replay does not grant connector authority.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-008</div>
+<div class="cardTitle">Connector Downgrade</div>
+
+<div class="block">
+A connector may be downgraded when:
+- route instability occurs
+- token warning appears
+- destination behavior changes
+- replay mismatch appears
+- abnormal traffic pattern appears
+- rate limits trigger
+- creator revokes permission
+
+Downgrade may:
+- disable live routing
+- allow status-only mode
+- require reconnection
+- require human review
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-009</div>
+<div class="cardTitle">Connector Revocation</div>
+
+<div class="block">
+Connector revocation may occur when:
+- token compromise is suspected
+- unauthorized destination activation occurs
+- platform account mismatch appears
+- creator revokes access
+- governance freezes connector
+- verified hack alarm triggers
+
+Revocation must:
+- stop route
+- preserve replay
+- preserve connector heartbeat history
+- preserve token metadata
+- preserve audit visibility
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-010</div>
+<div class="cardTitle">Connector Sandbox Testing</div>
+
+<div class="block">
+New connectors must test first in sandbox.
+
+Sandbox connector tests may use:
+- mock tokens
+- test destinations
+- fake route events
+- simulated stream starts
+- simulated route failures
+- simulated token revocation
+
+Sandbox connectors may not touch Production live routes.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-011</div>
+<div class="cardTitle">Connector Failure Containment</div>
+
+<div class="block">
+If connector failure occurs:
+- mark connector degraded
+- stop affected route if required
+- preserve replay record
+- preserve heartbeat record
+- route failure to DEADLETTER
+- quarantine suspicious behavior in SEQUESTER
+- keep unaffected routes alive
+
+One connector failure must not collapse all destinations.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-012</div>
+<div class="cardTitle">Recovery Approval Rule</div>
+
+<div class="block">
+Connector recovery requires:
+- token review
+- route review
+- replay review
+- heartbeat review
+- creator approval if creator-owned
+- governance approval if compromised
+
+Containment may be automatic.
+Connector restoration is manual.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-013</div>
+<div class="cardTitle">Forbidden Connector Behavior</div>
+
+<div class="block">
+Forbidden:
+hidden connector activation
+
+Forbidden:
+silent token reuse
+
+Forbidden:
+external platform route without creator approval
+
+Forbidden:
+connector controlling governance
+
+Forbidden:
+connector mutating lineage without authority
+
+Forbidden:
+connector continuing after stop command
+
+Forbidden:
+connector hiding failure from dashboard
+
+Forbidden:
+connector exposing private tokens
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">CONNECTOR-014</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd may connect to many outside platforms,
+but outside platforms do not own CyberCrowd continuity.
+
+Connectors are doors.
+
+Doors must have:
+locks
+labels
+alarms
+logs
+stop controls
+and human approval.
+</div>
+</div>
+
+</body>
+</html>
