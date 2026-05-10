@@ -60,6 +60,8 @@ win.style.overflow = 'hidden';
 win.innerHTML = `
 
 <div style="
+position:relative;
+z-index:2;
 padding:18px;
 background:${theme.header};
 display:flex;
@@ -92,6 +94,8 @@ cursor:pointer;
 </div>
 
 <div style="
+position:relative;
+z-index:2;
 padding:22px;
 color:white;
 line-height:1.7;
@@ -105,6 +109,12 @@ ${config.content}
 `;
 
 document.body.appendChild(win);
+
+if(window.CCParticles){
+
+CCParticles.create(win,theme);
+
+}
 
 const closeBtn =
 document.getElementById(
