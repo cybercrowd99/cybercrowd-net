@@ -479,6 +479,8 @@ RUNTIME EXPLORATION ACTIVE
 
 <script src="ecosystem-window-registry.js"></script>
 
+<script src="window-action-router.js"></script>
+
 <script>
 
 if(window.CCEntryGuard){
@@ -495,13 +497,22 @@ if(!district){
 return;
 }
 
+const actions =
+CCWindowActions.build({
+
+openPath:
+district.openPath || null
+
+});
+
 CCWindow.create({
 
 id:key,
 
 title:district.title,
 
-content:district.content
+content:
+district.content + actions
 
 });
 
