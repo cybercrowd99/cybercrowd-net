@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD MULTI PLATFORM LIVE ROUTER LAW V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD MULTI PLATFORM LIVE ROUTER LAW V1
+</div>
+
+<div class="sub">
+Multi-platform live routing doctrine for CyberCrowd.
+This document defines how one creator live source may route to many platform destinations
+without losing consent, authority, replay visibility, revenue traceability, or stop control.
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+CyberCrowd is not only a destination.
+
+CyberCrowd is a governed live routing layer.
+
+One creator live source may route to many destinations,
+but every destination must remain:
+visible
+authorized
+revocable
+replayable
+auditable
+and human-controlled.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-002</div>
+<div class="cardTitle">One Source, Many Destinations</div>
+
+<div class="block">
+Creator source:
+camera
+microphone
+screen
+overlay
+caption
+accessibility track
+metadata
+event identity
+
+Possible destination classes:
+CyberCrowd live room
+external live platform
+private event room
+sponsored event lane
+ticketed access lane
+archive capture lane
+replay lane
+observer distribution lane
+
+The creator starts one governed session.
+CyberCrowd routes that session outward by approved destination.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-003</div>
+<div class="cardTitle">Destination Authorization Matrix</div>
+
+<table>
+<tr>
+<th>Destination Type</th>
+<th>Required Consent</th>
+<th>Required Authority</th>
+<th>Failure Route</th>
+</tr>
+
+<tr>
+<td>CyberCrowd live room</td>
+<td>creator consent</td>
+<td>creator session</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>external platform live</td>
+<td>creator consent + platform token approval</td>
+<td>creator session + platform authorization</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>private event link</td>
+<td>creator consent + access scope</td>
+<td>event authority</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>sponsored route</td>
+<td>creator consent + contract scope</td>
+<td>revenue contract authority</td>
+<td>GOVERNANCE</td>
+</tr>
+
+<tr>
+<td>ticketed route</td>
+<td>creator consent + ticket scope</td>
+<td>access-control authority</td>
+<td>DEADLETTER</td>
+</tr>
+
+<tr>
+<td>archive capture</td>
+<td>creator consent + archive eligibility</td>
+<td>archive authority</td>
+<td>SEQUESTER</td>
+</tr>
+
+<tr>
+<td>replay capture</td>
+<td>creator consent + replay registration</td>
+<td>replay authority</td>
+<td>DEADLETTER</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-004</div>
+<div class="cardTitle">External Platform Token Rule</div>
+
+<div class="block">
+External platform routing requires platform-specific authorization.
+
+Examples:
+- stream key
+- OAuth token
+- platform live permission
+- account connection
+- event endpoint
+- destination channel ID
+
+Tokens must be:
+private
+revocable
+scoped
+not exposed publicly
+not stored in public repo
+not leaked into client pages
+
+Platform authorization does not grant CyberCrowd ownership of creator identity.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-005</div>
+<div class="cardTitle">Route Activation Flow</div>
+
+<div class="block">
+1. creator opens live session
+2. device permission is requested
+3. camera/mic source is confirmed
+4. CyberCrowd live session ID is created
+5. creator selects destinations
+6. each destination shows permission status
+7. creator confirms route activation
+8. replay registration begins
+9. heartbeat continuity begins
+10. destination routes activate
+11. visible live status appears
+12. stop controls remain available
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-006</div>
+<div class="cardTitle">Destination Status Visibility</div>
+
+<div class="block">
+Each active destination must show:
+- destination name
+- account or channel label
+- route status
+- token status
+- replay status
+- revenue status if applicable
+- stop button
+- error status
+- last heartbeat
+- audience visibility if available
+
+No hidden live destination.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-007</div>
+<div class="cardTitle">Revenue Contract Route</div>
+
+<div class="block">
+A destination may carry a revenue contract.
+
+Revenue route may define:
+- sponsor
+- platform
+- creator share
+- platform share
+- CyberCrowd service share
+- event share
+- referral share
+- archive/replay share
+- payout terms
+- reporting terms
+
+Revenue contract must be visible before activation.
+Hidden monetization routing is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-008</div>
+<div class="cardTitle">Replay and Audit Requirements</div>
+
+<div class="block">
+Every live route must record:
+- creator session ID
+- destination ID
+- route start time
+- route stop time
+- token scope reference
+- replay ID
+- heartbeat ID
+- error events
+- freeze events
+- revenue route reference if applicable
+- user stop events
+
+Replay records route behavior.
+Replay does not claim ownership of creator content.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-009</div>
+<div class="cardTitle">Emergency Stop Rule</div>
+
+<div class="block">
+Universal stop command:
+"1"
+
+Effects:
+- stop all outbound routes
+- freeze replay state
+- preserve heartbeat record
+- preserve route audit
+- preserve revenue audit
+- stop camera/mic propagation
+- prevent silent restart
+
+Emergency stop must override:
+destination routes
+automation
+replay transport
+external platform routing
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-010</div>
+<div class="cardTitle">Forbidden Live Router Behavior</div>
+
+<div class="block">
+Forbidden:
+hidden destination activation
+
+Forbidden:
+camera/mic reuse without creator approval
+
+Forbidden:
+silent platform token use
+
+Forbidden:
+routing to external platform without visible status
+
+Forbidden:
+revenue routing without contract visibility
+
+Forbidden:
+external live route continuing after CyberCrowd stop
+
+Forbidden:
+browser exposure becoming bridge authority
+
+Forbidden:
+destination route becoming creator ownership
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-011</div>
+<div class="cardTitle">Platform Failure Handling</div>
+
+<div class="block">
+If one destination fails:
+- mark destination degraded
+- preserve route replay
+- preserve error event
+- do not collapse all destinations unless required
+- keep creator informed
+- allow destination-specific retry
+- route failure to DEADLETTER or SEQUESTER
+
+One failed platform should not erase the entire live session.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-012</div>
+<div class="cardTitle">CyberCrowd Meaning</div>
+
+<div class="block">
+CyberCrowd means:
+one live source
+many governed crowds
+many destinations
+one visible authority surface
+
+The crowd is not trapped in one platform.
+
+CyberCrowd routes presence across platforms
+while preserving creator control.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-013</div>
+<div class="cardTitle">Future Expansion</div>
+
+<div class="block">
+Future live router systems:
+- platform connector registry
+- stream key vault
+- OAuth connector manager
+- destination health dashboard
+- revenue contract ledger
+- route replay viewer
+- multi-platform chat collector
+- audience aggregation
+- creator control console
+- live stop console
+- archive/replay splitter
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">LIVE-ROUTER-014</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd does not force the creator into one platform.
+
+CyberCrowd gives the creator one controlled source
+and many governed exits.
+
+The live system must remain:
+human-controlled
+destination-visible
+revenue-visible
+replayable
+revocable
+and stoppable.
+</div>
+</div>
+
+</body>
+</html>
