@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Access Granted</title>
+
+<style>
+
+html,body{
+
+    margin:0;
+    padding:0;
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    background:#020508;
+
+    color:white;
+
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+#bg{
+
+    position:fixed;
+    inset:0;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,.10),
+        transparent 42%
+    ),
+    linear-gradient(
+        to bottom,
+        #020406,
+        #071018
+    );
+}
+
+#wrap{
+
+    position:relative;
+    z-index:5;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+    box-sizing:border-box;
+}
+
+#panel{
+
+    width:100%;
+    max-width:620px;
+
+    border-radius:28px;
+
+    background:
+    rgba(0,0,0,.72);
+
+    border:
+    1px solid rgba(0,255,255,.24);
+
+    padding:40px;
+
+    box-sizing:border-box;
+
+    text-align:center;
+
+    backdrop-filter:blur(8px);
+
+    box-shadow:
+    0 0 40px rgba(0,255,255,.08);
+}
+
+#title{
+
+    color:#00ffff;
+
+    font-size:42px;
+
+    letter-spacing:6px;
+
+    margin-bottom:20px;
+}
+
+#sub{
+
+    opacity:.82;
+
+    line-height:1.9;
+
+    margin-bottom:34px;
+
+    font-size:16px;
+}
+
+#status{
+
+    display:inline-block;
+
+    padding:14px 24px;
+
+    border-radius:999px;
+
+    background:
+    rgba(0,255,170,.10);
+
+    border:
+    1px solid rgba(0,255,170,.30);
+
+    color:#00ffaa;
+
+    margin-bottom:34px;
+
+    letter-spacing:2px;
+
+    font-size:13px;
+}
+
+#enterBtn{
+
+    width:100%;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:20px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #00ffff,
+        #00ffaa
+    );
+
+    color:black;
+
+    font-weight:bold;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+#enterBtn:hover{
+
+    transform:scale(1.02);
+
+    box-shadow:
+    0 0 24px rgba(0,255,255,.28);
+}
+
+#footer{
+
+    margin-top:28px;
+
+    opacity:.42;
+
+    font-size:11px;
+
+    letter-spacing:2px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="bg"></div>
+
+<div id="wrap">
+
+<div id="panel">
+
+<div id="title">
+ACCESS GRANTED
+</div>
+
+<div id="sub">
+Continuity identity verified.<br>
+The ecosystem now recognizes your presence.
+</div>
+
+<div id="status">
+VERIFIED CONTINUITY SESSION ACTIVE
+</div>
+
+<button id="enterBtn">
+ENTER ECOSYSTEM
+</button>
+
+<div id="footer">
+CYBERCROWD VERIFY SUCCESS ROUTE V1
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+document
+.getElementById('enterBtn')
+.addEventListener(
+'click',
+function(){
+
+window.location.href='nav.html';
+
+});
+
+</script>
+
+</body>
+</html>
