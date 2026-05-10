@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD INCIDENT ALARM STATUS DASHBOARD LAW V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+.alarm{
+    border-left:6px solid #ff4d6d;
+}
+
+.degraded{
+    border-left:6px solid #ffd166;
+}
+
+.stable{
+    border-left:6px solid #00ffaa;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD INCIDENT ALARM STATUS DASHBOARD LAW V1
+</div>
+
+<div class="sub">
+Operational alarm dashboard doctrine for CyberCrowd continuity systems.
+This document defines how active incidents, degraded continuity compartments,
+route failures, quarantines, and recovery states are displayed to humans.
+</div>
+
+<div class="card stable">
+<div class="cardId">DASHBOARD-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Incidents must become understandable.
+
+A continuity fabric may contain:
+- many nodes
+- many routes
+- many connectors
+- many migrations
+- many live deployments
+
+The dashboard exists to:
+surface truth
+without hiding operational state.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-002</div>
+<div class="cardTitle">Dashboard Visibility Requirements</div>
+
+<div class="block">
+The dashboard must display:
+- active alarms
+- degraded compartments
+- quarantined nodes
+- frozen routes
+- replay preservation state
+- heartbeat preservation state
+- connector health
+- migration health
+- authority freeze state
+- recovery approval requirements
+- active containment actions
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-003</div>
+<div class="cardTitle">Alarm Severity Classes</div>
+
+<table>
+
+<tr>
+<th>Severity</th>
+<th>Meaning</th>
+<th>Typical Action</th>
+</tr>
+
+<tr>
+<td>INFO</td>
+<td>status notification</td>
+<td>monitor</td>
+</tr>
+
+<tr>
+<td>NOTICE</td>
+<td>minor degradation</td>
+<td>observe continuity</td>
+</tr>
+
+<tr>
+<td>WARNING</td>
+<td>potential instability</td>
+<td>prepare containment</td>
+</tr>
+
+<tr>
+<td>ALARM</td>
+<td>verified continuity problem</td>
+<td>freeze affected compartment</td>
+</tr>
+
+<tr>
+<td>CRITICAL</td>
+<td>verified compromise or propagation risk</td>
+<td>automatic containment</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card alarm">
+<div class="cardId">DASHBOARD-004</div>
+<div class="cardTitle">Compartment Status Display</div>
+
+<div class="block">
+Every compartment should display:
+- compartment ID
+- compartment type
+- continuity status
+- route health
+- replay health
+- heartbeat health
+- authority status
+- connector state
+- quarantine state
+- last event time
+- active alarms
+
+The system should show:
+what is affected
+without implying total collapse.
+</div>
+</div>
+
+<div class="card degraded">
+<div class="cardId">DASHBOARD-005</div>
+<div class="cardTitle">Live Route Health Panel</div>
+
+<div class="block">
+Live routing status should show:
+- destination platform
+- route status
+- latency/degradation state
+- replay registration state
+- heartbeat continuity
+- audience continuity
+- token validity
+- containment state
+- stop availability
+
+One failed route must not visually imply all routes are compromised.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-006</div>
+<div class="cardTitle">Forensic Timeline Panel</div>
+
+<div class="block">
+The dashboard should expose:
+- alarm chronology
+- route chronology
+- migration chronology
+- freeze chronology
+- connector chronology
+- replay preservation chronology
+- recovery chronology
+
+The timeline reconstructs:
+what happened
+and when.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-007</div>
+<div class="cardTitle">Human Approval Queue</div>
+
+<div class="block">
+The dashboard should identify actions requiring humans:
+
+Examples:
+- restore authority
+- reconnect platform
+- approve migration
+- promote replacement node
+- release quarantine
+- restore live deployment
+- restore governance authority
+
+Containment may automate.
+Authority restoration requires humans.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-008</div>
+<div class="cardTitle">Alarm Notification Methods</div>
+
+<div class="block">
+Alarm notification may include:
+- visual indicators
+- flashing compartment state
+- audible alerts
+- haptic alerts
+- replay-visible alarms
+- accessibility-compatible alerts
+- mobile continuity alerts
+- creator cockpit alerts
+
+Alarm visibility must remain accessible.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-009</div>
+<div class="cardTitle">Incident Mapping View</div>
+
+<div class="block">
+The dashboard should support topology mapping.
+
+Mapping may show:
+- affected nodes
+- affected routes
+- propagation path
+- quarantine boundaries
+- surviving continuity lanes
+- rerouted continuity paths
+- isolated connectors
+- replacement continuity nodes
+
+The map should help humans understand:
+what survived.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-010</div>
+<div class="cardTitle">Accessibility Dashboard Rule</div>
+
+<div class="block">
+Dashboard visibility must support:
+- screen readers
+- caption-compatible alerts
+- blind-mode readability
+- haptic warnings
+- simplified alarm language
+- color-independent warnings
+- Deaf Companion compatibility
+- Slate compatibility
+
+Critical alarms must not depend on hearing or color alone.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-011</div>
+<div class="cardTitle">Dashboard Integrity Rule</div>
+
+<div class="block">
+The dashboard must not:
+hide active incidents
+erase alarm history
+silently clear containment state
+conceal route degradation
+conceal replay corruption
+conceal authority freeze
+
+The dashboard exists to expose continuity truth.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">DASHBOARD-012</div>
+<div class="cardTitle">Universal Stop Visibility</div>
+
+<div class="block">
+Universal stop command:
+"1"
+
+must visibly display:
+- stop activation
+- frozen compartments
+- preserved replay state
+- preserved heartbeat state
+- preserved route graph
+- preserved chronology
+
+The stop state must remain reviewable.
+</div>
+</div>
+
+<div class="card stable">
+<div class="cardId">DASHBOARD-013</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd continuity survives incidents
+because humans can see the operational truth.
+
+The dashboard exists to transform:
+hidden chaos
+into visible continuity state.
+
+A visible system is governable.
+An invisible system is dangerous.
+</div>
+</div>
+
+</body>
+</html>
