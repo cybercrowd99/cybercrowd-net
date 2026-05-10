@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Auth Path Ledger V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+
+    background:#04070c;
+    color:white;
+
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+#title{
+    color:#00ffff;
+
+    font-size:40px;
+
+    letter-spacing:4px;
+
+    margin-bottom:16px;
+}
+
+#sub{
+    opacity:.76;
+
+    line-height:1.8;
+
+    margin-bottom:40px;
+
+    max-width:1200px;
+}
+
+.card{
+
+    margin-bottom:24px;
+
+    border-radius:22px;
+
+    border:
+    1px solid rgba(0,255,255,.20);
+
+    background:
+    rgba(0,255,255,.04);
+
+    padding:24px;
+}
+
+.cardTitle{
+
+    color:#00ffaa;
+
+    font-size:22px;
+
+    margin-bottom:16px;
+}
+
+.path{
+
+    background:
+    rgba(0,0,0,.45);
+
+    border-radius:14px;
+
+    padding:18px;
+
+    line-height:2;
+
+    overflow:auto;
+
+    font-family:monospace;
+
+    font-size:14px;
+}
+
+.note{
+    margin-top:16px;
+
+    opacity:.82;
+
+    line-height:1.7;
+}
+
+.warn{
+    color:#ffcc66;
+}
+
+.good{
+    color:#00ffaa;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="title">
+AUTH PATH LEDGER V1
+</div>
+
+<div id="sub">
+Operational continuity auth structure ledger.
+
+This document locks the active auth tree
+for CyberCrowd continuity enrollment systems.
+</div>
+
+<div class="card">
+
+<div class="cardTitle">
+ACTIVE CONTINUITY AUTH TREE
+</div>
+
+<div class="path">
+
+/continuity-enrollment-gate.html
+
+/auth-bridge.js
+
+/verify.html
+
+/api/
+&nbsp;&nbsp;&nbsp;&nbsp;auth/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;signup.js
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verify.js
+
+</div>
+
+<div class="note">
+<span class="good">
+LOCKED ACTIVE PATH
+</span>
+
+Only one operational auth tree should exist.
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="cardTitle">
+KNOWN CONTINUITY FLOW
+</div>
+
+<div class="path">
+
+LANDING
+↓
+ENTER
+↓
+continuity-enrollment-gate.html
+↓
+auth-bridge.js
+↓
+/api/auth/signup.js
+↓
+verify.html
+↓
+/api/auth/verify.js
+↓
+ecosystem access foundation
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="cardTitle">
+PATH DRIFT WARNING
+</div>
+
+<div class="note">
+
+<span class="warn">
+Duplicate api/auth folders create continuity fragmentation.
+</span>
+
+If multiple auth trees appear:
+- stop
+- inspect path structure
+- verify correct api/auth location
+- remove duplicate trees
+- preserve only the active continuity auth path
+
+This ledger acts as the continuity reference anchor.
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="cardTitle">
+FIRST OPERATIONAL CONTINUITY LAYER
+</div>
+
+<div class="note">
+The following systems now exist:
+
+- continuity enrollment gate
+- continuity auth bridge
+- signup endpoint
+- verification page
+- verification endpoint
+
+CyberCrowd now contains
+its first persistent continuity identity layer.
+</div>
+
+</div>
+
+</body>
+</html>
