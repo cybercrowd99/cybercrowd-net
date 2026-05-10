@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD TOKEN VAULT ISOLATION LAW V1</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD TOKEN VAULT ISOLATION LAW V1
+</div>
+
+<div class="sub">
+Credential isolation doctrine for CyberCrowd continuity systems.
+This document defines how connector credentials,
+platform tokens,
+creator authorizations,
+and operational secrets are compartmentalized,
+protected,
+recovered,
+revoked,
+and audited.
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Tokens are continuity keys.
+
+A token must never:
+silently inherit authority
+silently escape containment
+silently cross environment boundaries
+silently expose creator trust
+
+Token possession does not equal governance authority.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-002</div>
+<div class="cardTitle">Vault Segmentation</div>
+
+<table>
+
+<tr>
+<th>Vault</th>
+<th>Purpose</th>
+<th>Isolation Level</th>
+</tr>
+
+<tr>
+<td>creator vault</td>
+<td>creator connector credentials</td>
+<td>high</td>
+</tr>
+
+<tr>
+<td>sponsor vault</td>
+<td>sponsor route credentials</td>
+<td>high</td>
+</tr>
+
+<tr>
+<td>payment vault</td>
+<td>payment/revenue systems</td>
+<td>critical</td>
+</tr>
+
+<tr>
+<td>governance vault</td>
+<td>operational authority systems</td>
+<td>critical</td>
+</tr>
+
+<tr>
+<td>sandbox vault</td>
+<td>testing connectors/tokens</td>
+<td>isolated non-production</td>
+</tr>
+
+<tr>
+<td>archive vault</td>
+<td>preservation/export authorization</td>
+<td>high</td>
+</tr>
+
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-003</div>
+<div class="cardTitle">Environment Separation</div>
+
+<div class="block">
+Sandbox tokens may never:
+touch Production routes
+touch Production replay
+touch Production governance
+touch Production monetization
+
+Production tokens may never:
+appear in public source code
+appear in public route payloads
+appear in public logs
+appear in replay exports
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-004</div>
+<div class="cardTitle">Token Lineage</div>
+
+<div class="block">
+Token systems should preserve:
+- creation chronology
+- scope chronology
+- activation chronology
+- downgrade chronology
+- revocation chronology
+- recovery chronology
+
+Token lineage supports:
+forensic continuity
+trust reconstruction
+incident review
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-005</div>
+<div class="cardTitle">Replay Visibility Rule</div>
+
+<div class="block">
+Replay may record:
+- token reference ID
+- scope class
+- activation events
+- revocation events
+- degradation events
+- environment class
+
+Replay must not expose:
+raw secrets
+private keys
+hidden credentials
+authentication payloads
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-006</div>
+<div class="cardTitle">Breach Containment</div>
+
+<div class="block">
+If token compromise is suspected:
+- isolate affected connector
+- freeze affected routes
+- preserve replay chronology
+- preserve heartbeat chronology
+- preserve route topology
+- preserve forensic evidence
+- revoke compromised token
+- require manual restoration
+
+Containment automatic.
+Restoration manual.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-007</div>
+<div class="cardTitle">Creator Token Separation</div>
+
+<div class="block">
+One creator token must not:
+silently inherit another creator scope
+silently cross creator ownership
+silently route unrelated continuity
+
+Creator continuity remains compartmentalized.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-008</div>
+<div class="cardTitle">Token Recovery Handling</div>
+
+<div class="block">
+Recovery requires:
+- identity verification
+- route verification
+- replay review if compromised
+- creator confirmation
+- governance review if required
+
+Recovery actions must become replay-visible.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-009</div>
+<div class="cardTitle">Token Severance Handling</div>
+
+<div class="block">
+Compromised token systems may enter:
+SEQUESTER
+or
+DECchamber
+
+for:
+- forensic review
+- anomaly reconstruction
+- replay preservation
+- containment verification
+- restoration review
+
+Evidence survives severance.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-010</div>
+<div class="cardTitle">Forbidden Token Behavior</div>
+
+<div class="block">
+Forbidden:
+hardcoded Production secrets
+
+Forbidden:
+public credential exposure
+
+Forbidden:
+silent token escalation
+
+Forbidden:
+cross-environment token bleed
+
+Forbidden:
+connector access without replay visibility
+
+Forbidden:
+token restoration without approval
+
+Forbidden:
+hidden governance credential usage
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">TOKEN-011</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd continuity depends on trust.
+
+Trust depends on:
+compartmentalization
+visibility
+containment
+recovery discipline
+and human authority.
+
+A vault exists to preserve continuity,
+not to centralize invisible power.
+</div>
+</div>
+
+</body>
+</html>
