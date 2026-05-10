@@ -364,7 +364,7 @@ Shared sandbox authority transfer.
 <!-- ATOMIC CRICKET -->
 
 <div class="routeCard locked"
-onclick="lockedFeature('Atomic Cricket')">
+onclick="openWindow('Atomic Cricket')">
 
 <div class="routeGlow"></div>
 
@@ -385,7 +385,7 @@ event memory, and layered discovery.
 <!-- OBSERVER -->
 
 <div class="routeCard locked"
-onclick="lockedFeature('Observer Broadcast')">
+onclick="openWindow('Observer Broadcast')">
 
 <div class="routeGlow"></div>
 
@@ -407,7 +407,7 @@ and creator visibility.
 <!-- CREATOR -->
 
 <div class="routeCard locked"
-onclick="lockedFeature('Creator Route')">
+onclick="openWindow('Creator Route')">
 
 <div class="routeGlow"></div>
 
@@ -428,7 +428,7 @@ and live participation tools.
 <!-- CUEBERCARE -->
 
 <div class="routeCard locked"
-onclick="lockedFeature('CueberCare')">
+onclick="openWindow('CueberCare')">
 
 <div class="routeGlow"></div>
 
@@ -450,7 +450,7 @@ and care ecosystems.
 <!-- MULTICAM -->
 
 <div class="routeCard locked"
-onclick="lockedFeature('Multi-Cam')">
+onclick="openWindow('Multi-Cam')">
 
 <div class="routeGlow"></div>
 
@@ -472,7 +472,7 @@ and environmental visibility.
 <!-- LIVE EVENTS -->
 
 <div class="routeCard locked"
-onclick="lockedFeature('Live Events')">
+onclick="openWindow('Live Events')">
 
 <div class="routeGlow"></div>
 
@@ -494,7 +494,7 @@ and connected participation.
 <!-- AUDIO -->
 
 <div class="routeCard locked"
-onclick="lockedFeature('Cybercrowd Audio')">
+onclick="openWindow('Cybercrowd Audio')">
 
 <div class="routeGlow"></div>
 
@@ -525,6 +525,8 @@ RUNTIME EXPLORATION ACTIVE
 
 <script src="continuity-entry-guard.js"></script>
 
+<script src="ecosystem-window-launcher.js"></script>
+
 <script>
 
 if(window.CCEntryGuard){
@@ -532,28 +534,37 @@ if(window.CCEntryGuard){
     CCEntryGuard.requireVerifiedSession();
 }
 
-let lockedTouches = 0;
+function openWindow(title){
 
-function lockedFeature(featureName) {
+CCWindow.create({
 
-    lockedTouches++;
+id:
+title.toLowerCase().replace(/\s/g,''),
 
-    if (lockedTouches >= 4) {
+title:title,
 
-        alert(
-        "You’ve discovered subscriber-level features.\n\n" +
-        "Your 7-day Cybercrowd trial is now available."
-        );
+content:`
 
-        lockedTouches = 0;
+<div style="
+line-height:1.8;
+opacity:.86;
+">
 
-    } else {
+${title}
+continuity district is currently
+operating in controlled development mode.
 
-        alert(
-        featureName +
-        " is currently operating in subscriber-level access mode."
-        );
-    }
+Subscriber continuity layers,
+interactive systems,
+and live operational surfaces
+will expand here.
+
+</div>
+
+`
+
+});
+
 }
 
 </script>
