@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CYBERCROWD CONTINUITY TRANSPARENCY AUDIT VISIBILITY LAW V1</title>
+
+<style>
+body{
+    margin:0;
+    padding:40px;
+    background:#05070b;
+    color:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.title{
+    font-size:42px;
+    color:#00ffff;
+    letter-spacing:3px;
+    margin-bottom:14px;
+}
+
+.sub{
+    opacity:.74;
+    line-height:1.7;
+    margin-bottom:40px;
+    max-width:1200px;
+}
+
+.card{
+    background:rgba(0,255,255,.04);
+    border:1px solid rgba(0,255,255,.18);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.cardId{
+    color:#00ffff;
+    font-size:12px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.cardTitle{
+    font-size:24px;
+    margin-bottom:18px;
+}
+
+.block{
+    white-space:pre-wrap;
+    line-height:1.8;
+    opacity:.92;
+    font-size:14px;
+}
+
+.safe{
+    color:#00ffaa;
+}
+
+.warn{
+    color:#ffd166;
+}
+
+.lock{
+    color:#ff7676;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:12px;
+}
+
+th,td{
+    border:1px solid rgba(0,255,255,.18);
+    padding:12px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:rgba(0,255,255,.08);
+    color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+CYBERCROWD CONTINUITY TRANSPARENCY AUDIT VISIBILITY LAW V1
+</div>
+
+<div class="sub">
+Transparency and audit visibility doctrine for CyberCrowd continuity systems.
+This document defines how users can see, review, understand,
+and challenge continuity activity.
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-001</div>
+<div class="cardTitle">Core Rule</div>
+
+<div class="block">
+Continuity must be visible.
+
+If a system is active,
+the user must be able to see it.
+
+If a device is participating,
+the user must be able to identify it.
+
+If transport is moving,
+the user must be able to review it.
+
+Invisible continuity is forbidden.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-002</div>
+<div class="cardTitle">Live Continuity Visibility</div>
+
+<div class="block">
+Users must be able to see:
+- active session
+- active devices
+- active node class
+- active trust level
+- active authority scope
+- active replay state
+- active heartbeat state
+- active transport state
+- active migration state
+- active freeze state
+
+The system must expose continuity state in plain language.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-003</div>
+<div class="cardTitle">Transport Visibility</div>
+
+<div class="block">
+Transport visibility must show:
+- source device
+- target device
+- transport type
+- cursor state
+- clipboard state
+- drag state
+- payload class
+- replay ID
+- authorization scope
+- stop option
+
+No hidden remote control.
+No hidden clipboard transfer.
+No hidden drag transfer.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-004</div>
+<div class="cardTitle">Replay Visibility</div>
+
+<div class="block">
+Replay visibility must show:
+- replay ID
+- session ID
+- node ID
+- event type
+- event time
+- source lane
+- target lane
+- authority scope
+- recovery state
+- freeze state
+
+Replay logs must be understandable enough
+for a human to review.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-005</div>
+<div class="cardTitle">Node Visibility</div>
+
+<div class="block">
+Node visibility must show:
+- device name
+- node class
+- trust level
+- last seen time
+- heartbeat lane
+- replay lane
+- sandbox or Production status
+- allowed scope
+- current participation
+
+A user should know which devices are part of their continuity.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-006</div>
+<div class="cardTitle">Heartbeat Visibility</div>
+
+<div class="block">
+Heartbeat visibility must show:
+- node liveness
+- last heartbeat
+- stale heartbeat warning
+- degraded continuity warning
+- migration gap
+- recovery gap
+- heartbeat lane
+
+Heartbeat systems must not become hidden surveillance.
+They are continuity indicators.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-007</div>
+<div class="cardTitle">Migration Visibility</div>
+
+<div class="block">
+Migration visibility must show:
+- origin device
+- target device
+- migration status
+- authority scope
+- frozen state
+- replay checkpoint
+- heartbeat checkpoint
+- resume state
+
+Users must see when continuity moves between devices.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-008</div>
+<div class="cardTitle">Authority Visibility</div>
+
+<div class="block">
+Authority visibility must show:
+- who has authority
+- what scope is active
+- what actions are allowed
+- what actions are forbidden
+- whether governance freeze exists
+- whether emergency stop is available
+- whether authority was escalated or downgraded
+
+Authority must not be hidden behind automation.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-009</div>
+<div class="cardTitle">User-Readable Audit Trail</div>
+
+<table>
+<tr>
+<th>Audit Item</th>
+<th>User-Readable Meaning</th>
+<th>Visibility Requirement</th>
+</tr>
+
+<tr>
+<td>pairing event</td>
+<td>a device connected</td>
+<td>visible</td>
+</tr>
+
+<tr>
+<td>migration event</td>
+<td>session moved devices</td>
+<td>visible</td>
+</tr>
+
+<tr>
+<td>transport event</td>
+<td>control or data moved</td>
+<td>visible</td>
+</tr>
+
+<tr>
+<td>freeze event</td>
+<td>continuity paused</td>
+<td>visible</td>
+</tr>
+
+<tr>
+<td>recovery event</td>
+<td>continuity restored</td>
+<td>visible</td>
+</tr>
+
+<tr>
+<td>governance event</td>
+<td>authority action occurred</td>
+<td>visible with scope</td>
+</tr>
+
+<tr>
+<td>quarantine event</td>
+<td>something was isolated</td>
+<td>visible with safe detail</td>
+</tr>
+</table>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-010</div>
+<div class="cardTitle">Public vs Private Audit Boundary</div>
+
+<div class="block">
+Public audit may show:
+- system status
+- service health
+- public release status
+- public media route status
+- general incident status
+
+Private audit may show:
+- device names
+- session IDs
+- replay IDs
+- migration records
+- user-specific continuity
+- sensitive transport details
+
+Private continuity details must not leak into public audit surfaces.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-011</div>
+<div class="cardTitle">Challenge and Review Rule</div>
+
+<div class="block">
+Users must be able to challenge:
+- unexpected pairing
+- unexpected transport
+- unexpected migration
+- unexpected replay enrollment
+- unexpected authority scope
+- unexpected heartbeat participation
+
+Challenge routes may trigger:
+SEQUESTER
+GOVERNANCE review
+session freeze
+node downgrade
+continuity revoke
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-012</div>
+<div class="cardTitle">Accessibility Visibility</div>
+
+<div class="block">
+Transparency must be accessible.
+
+Visibility surfaces should support:
+- readable text
+- captions
+- blind-mode readability
+- screen reader compatibility
+- haptic status cues
+- simplified consent language
+- Deaf Companion compatible alerts
+- Slate compatible continuity summaries
+
+Transparency must not depend on perfect vision or hearing.
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-013</div>
+<div class="cardTitle">Visibility Failure Rule</div>
+
+<div class="block">
+If visibility fails,
+continuity must degrade.
+
+If the user cannot see what is active,
+the system should not silently continue high-risk transport.
+
+Visibility failure may trigger:
+- transport freeze
+- session warning
+- replay note
+- governance review
+- emergency stop recommendation
+</div>
+</div>
+
+<div class="card">
+<div class="cardId">VISIBILITY-014</div>
+<div class="cardTitle">Final Rule</div>
+
+<div class="block">
+CyberCrowd continuity must be a glass system.
+
+The user does not need to see every machine detail,
+but the user must see enough to understand:
+what is active,
+what is connected,
+what is moving,
+who has authority,
+and how to stop it.
+
+Invisible power is forbidden.
+Visible continuity is law.
+</div>
+</div>
+
+</body>
+</html>
