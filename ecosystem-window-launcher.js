@@ -10,6 +10,15 @@ existing.style.display = 'block';
 return;
 }
 
+const theme =
+(window.CCWindowThemes && window.CCWindowThemes[config.id])
+? window.CCWindowThemes[config.id]
+: {
+border:'rgba(0,255,255,0.35)',
+glow:'rgba(0,255,255,0.18)',
+header:'rgba(0,255,255,0.08)'
+};
+
 const win =
 document.createElement('div');
 
@@ -29,14 +38,14 @@ win.style.background =
 'rgba(5,10,18,0.96)';
 
 win.style.border =
-'1px solid rgba(0,255,255,0.35)';
+'1px solid ' + theme.border;
 
 win.style.borderRadius = '22px';
 
 win.style.backdropFilter = 'blur(10px)';
 
 win.style.boxShadow =
-'0 0 26px rgba(0,255,255,0.18)';
+'0 0 26px ' + theme.glow;
 
 win.style.zIndex = '99999';
 
@@ -46,11 +55,12 @@ win.innerHTML = `
 
 <div style="
 padding:18px;
-background:rgba(0,255,255,0.08);
+background:${theme.header};
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-bottom:1px solid rgba(0,255,255,0.18);
+border-bottom:1px solid ${theme.border};
+cursor:move;
 ">
 
 <div style="
