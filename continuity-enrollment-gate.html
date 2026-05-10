@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberCrowd Continuity Enrollment</title>
+
+<style>
+
+html, body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#03060a;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+}
+
+#bg{
+    position:fixed;
+    inset:0;
+
+    background:
+    radial-gradient(circle at center,
+    rgba(0,255,255,.08),
+    transparent 45%),
+    linear-gradient(to bottom,
+    #020406,
+    #071018);
+
+    overflow:hidden;
+}
+
+.rain{
+    position:absolute;
+    width:1px;
+    height:120px;
+    background:linear-gradient(
+        transparent,
+        rgba(0,255,255,.55)
+    );
+
+    animation:fall linear infinite;
+    opacity:.55;
+}
+
+@keyframes fall{
+    from{
+        transform:translateY(-140px);
+    }
+    to{
+        transform:translateY(110vh);
+    }
+}
+
+#wrap{
+    position:relative;
+    z-index:5;
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+    box-sizing:border-box;
+}
+
+#panel{
+
+    width:100%;
+    max-width:520px;
+
+    border-radius:24px;
+
+    background:
+    rgba(0,0,0,.72);
+
+    border:
+    1px solid rgba(0,255,255,.24);
+
+    box-shadow:
+    0 0 40px rgba(0,255,255,.08);
+
+    padding:34px;
+    box-sizing:border-box;
+
+    backdrop-filter:blur(8px);
+}
+
+#title{
+    text-align:center;
+    color:#00ffff;
+    font-size:34px;
+    letter-spacing:5px;
+    margin-bottom:10px;
+}
+
+#sub{
+    text-align:center;
+    opacity:.78;
+    line-height:1.7;
+    margin-bottom:30px;
+}
+
+.field{
+    margin-bottom:18px;
+}
+
+.field label{
+    display:block;
+    margin-bottom:8px;
+    color:#00ffaa;
+    font-size:13px;
+    letter-spacing:1px;
+}
+
+.field input{
+
+    width:100%;
+    padding:14px;
+
+    border-radius:14px;
+
+    border:
+    1px solid rgba(0,255,255,.20);
+
+    background:
+    rgba(255,255,255,.03);
+
+    color:white;
+
+    font-size:15px;
+    box-sizing:border-box;
+}
+
+.field input:focus{
+    outline:none;
+
+    border:
+    1px solid rgba(0,255,255,.65);
+
+    box-shadow:
+    0 0 12px rgba(0,255,255,.22);
+}
+
+#captchaBox{
+
+    margin-top:22px;
+
+    border-radius:18px;
+
+    border:
+    1px solid rgba(0,255,255,.18);
+
+    background:
+    rgba(0,255,255,.04);
+
+    padding:18px;
+}
+
+#captchaRow{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+#captchaRow input{
+    width:20px;
+    height:20px;
+}
+
+#captchaText{
+    opacity:.82;
+    line-height:1.5;
+}
+
+#enterBtn{
+
+    margin-top:26px;
+
+    width:100%;
+    padding:16px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #00ffff,
+        #00ffaa
+    );
+
+    color:black;
+
+    font-weight:bold;
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+#enterBtn:hover{
+
+    transform:scale(1.02);
+
+    box-shadow:
+    0 0 22px rgba(0,255,255,.30);
+}
+
+#freeText{
+    margin-top:18px;
+    text-align:center;
+    opacity:.68;
+    line-height:1.7;
+    font-size:13px;
+}
+
+#footer{
+    margin-top:28px;
+    text-align:center;
+    opacity:.42;
+    font-size:11px;
+    letter-spacing:2px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="bg"></div>
+
+<div id="wrap">
+
+<div id="panel">
+
+<div id="title">
+ENTERING
+</div>
+
+<div id="sub">
+Create your free continuity identity.<br>
+Verify your email.<br>
+Enter the ecosystem.
+</div>
+
+<form id="signupForm">
+
+<div class="field">
+<label>Email</label>
+
+<input
+type="email"
+placeholder="you@example.com"
+required>
+</div>
+
+<div class="field">
+<label>Password</label>
+
+<input
+type="password"
+placeholder="Create password"
+required>
+</div>
+
+<div class="field">
+<label>Confirm Password</label>
+
+<input
+type="password"
+placeholder="Confirm password"
+required>
+</div>
+
+<div id="captchaBox">
+
+<div id="captchaRow">
+
+<input
+type="checkbox"
+required>
+
+<div id="captchaText">
+I am human and request continuity access.
+</div>
+
+</div>
+
+</div>
+
+<button id="enterBtn" type="submit">
+VERIFY & ENTER
+</button>
+
+</form>
+
+<div id="freeText">
+Free membership required for ecosystem access.<br>
+Returning devices may enter automatically after verification.
+</div>
+
+<div id="footer">
+CYBERCROWD CONTINUITY ENROLLMENT GATE V1
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+for(let i=0;i<180;i++){
+
+    const r=document.createElement('div');
+
+    r.className='rain';
+
+    r.style.left=Math.random()*100+'vw';
+
+    r.style.animationDuration=
+    (Math.random()*1.6+0.6)+'s';
+
+    r.style.opacity=
+    Math.random()*0.6;
+
+    r.style.height=
+    (Math.random()*120+40)+'px';
+
+    document.getElementById('bg').appendChild(r);
+}
+
+document
+.getElementById('signupForm')
+.addEventListener('submit',function(e){
+
+    e.preventDefault();
+
+    alert(
+    'Continuity verification routing will connect here.'
+    );
+});
+
+</script>
+
+</body>
+</html>
