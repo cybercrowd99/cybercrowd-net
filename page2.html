@@ -329,6 +329,128 @@ button:disabled {
     color: #00ffaa;
 }
 
+#introLeadTag {
+    margin-top: 20px;
+
+    color: #00ffaa;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    line-height: 1.6;
+
+    text-align: center;
+}
+
+#introTagStage {
+    min-height: 84px;
+
+    margin-top: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+#whereWeBelongTag {
+    opacity: 0;
+
+    transform:
+    scale(0.36)
+    translateY(18px);
+
+    color: #00ffff;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    letter-spacing: 4px;
+
+    text-align: center;
+
+    line-height: 1.25;
+
+    text-shadow:
+    0 0 10px rgba(0,255,255,0.50),
+    0 0 24px rgba(0,255,170,0.25);
+}
+
+#introWindow.introActive #whereWeBelongTag {
+    animation:
+    whereWeBelongZoom 1.4s cubic-bezier(.16,.84,.28,1.2) 5.8s forwards,
+    whereWeBelongPulse 2.4s ease-in-out 7.2s infinite;
+}
+
+@keyframes whereWeBelongZoom {
+    0% {
+        opacity: 0;
+
+        transform:
+        scale(0.36)
+        translateY(18px);
+
+        filter: blur(3px);
+    }
+
+    45% {
+        opacity: 1;
+
+        transform:
+        scale(1.20)
+        translateY(0);
+
+        filter: blur(0);
+    }
+
+    70% {
+        opacity: 1;
+
+        transform:
+        scale(0.96)
+        translateY(0);
+
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+
+        transform:
+        scale(1)
+        translateY(0);
+
+        filter: blur(0);
+    }
+}
+
+@keyframes whereWeBelongPulse {
+    0% {
+        text-shadow:
+        0 0 10px rgba(0,255,255,0.45),
+        0 0 22px rgba(0,255,170,0.22);
+    }
+
+    50% {
+        text-shadow:
+        0 0 16px rgba(0,255,255,0.82),
+        0 0 34px rgba(0,255,170,0.42);
+    }
+
+    100% {
+        text-shadow:
+        0 0 10px rgba(0,255,255,0.45),
+        0 0 22px rgba(0,255,170,0.22);
+    }
+}
+
 #introClose {
     margin-top: 14px;
 
@@ -435,10 +557,17 @@ Show up. Go live. Build culture.
 </strong>
 <br><br>
 CyberCrowd keeps it all connected so nothing gets lost and everyone stays in the loop.
-<br><br>
-<strong>
-One platform. One flow. One crowd. CyberCrowd where we belong.
-</strong>
+
+<div id="introLeadTag">
+ONE PLATFORM. ONE FLOW. ONE CROWD.
+</div>
+
+<div id="introTagStage">
+<div id="whereWeBelongTag">
+WHERE WE BELONG
+</div>
+</div>
+
 </div>
 
 <button id="introClose">
@@ -468,7 +597,7 @@ READY
 </div>
 
 <div id="footer">
-CYBERCROWD PAGE2 SECURITY GATE V4
+CYBERCROWD PAGE2 SECURITY GATE V5
 </div>
 
 </div>
@@ -722,14 +851,28 @@ introBtn.addEventListener(
 'click',
 function() {
 
+    introWindow.classList.remove(
+        'introActive'
+    );
+
     introWindow.style.display =
     'block';
+
+    void introWindow.offsetWidth;
+
+    introWindow.classList.add(
+        'introActive'
+    );
 }
 );
 
 introClose.addEventListener(
 'click',
 function() {
+
+    introWindow.classList.remove(
+        'introActive'
+    );
 
     introWindow.style.display =
     'none';
