@@ -218,6 +218,14 @@ button:hover {
     0 0 22px rgba(0,255,255,0.28);
 }
 
+button:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+}
+
 .secondaryButton {
     background:
     rgba(255,255,255,0.08);
@@ -240,6 +248,38 @@ button:hover {
     letter-spacing: 2px;
 
     font-size: 12px;
+
+    line-height: 1.6;
+}
+
+#pendingBox {
+    display: none;
+
+    margin-top: 18px;
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    background:
+    rgba(0,255,255,0.05);
+
+    border:
+    1px solid rgba(0,255,255,0.22);
+
+    color: white;
+
+    line-height: 1.6;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+#pendingEmail {
+    color: #00ffaa;
+
+    word-break: break-word;
 }
 
 #footer {
@@ -268,8 +308,8 @@ SECURITY GATE
 </h1>
 
 <p>
-Free CyberCrowd entry requires a verified continuity identity.
-Enter your email and confirm human access to continue.
+Free CyberCrowd entry requires email verification.
+Enter your email and confirm human access to request your verification link.
 </p>
 
 <div class="statusBox">
@@ -311,7 +351,7 @@ I am human and request free CyberCrowd entry.
 </div>
 
 <button id="verifyBtn">
-VERIFY FREE ENTRY
+REQUEST VERIFY EMAIL
 </button>
 
 <button
@@ -320,12 +360,28 @@ class="secondaryButton">
 ABOUT CYBERCROWD
 </button>
 
+<div id="pendingBox">
+
+Verification request created for:
+
+<br><br>
+
+<span id="pendingEmail">
+pending
+</span>
+
+<br><br>
+
+Check your email and click the CyberCrowd verification link to continue.
+
+</div>
+
 <div id="message">
 READY
 </div>
 
 <div id="footer">
-CYBERCROWD PAGE2 SECURITY GATE V2
+CYBERCROWD PAGE2 SECURITY GATE V3
 </div>
 
 </div>
@@ -333,6 +389,14 @@ CYBERCROWD PAGE2 SECURITY GATE V2
 </div>
 
 <script>
+
+localStorage.removeItem(
+'cc_verified_session'
+);
+
+localStorage.removeItem(
+'cc_verified_email'
+);
 
 const emailInput =
 document.getElementById(
@@ -364,153 +428,196 @@ document.getElementById(
 'message'
 );
 
-const NEXT_MENU_URL =
-'menu.html';
+const pendingBox =
+document.getElementById(
+'pendingBox'
+);
+
+const pendingEmail =
+document.getElementById(
+'pendingEmail'
+);
 
 function validEmail(value) {
 
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function saveVerifiedSession(email) {
-
-    const session = {
-
-        verified: true,
-
-        email: email,
-
-        created: Date.now(),
-
-        gate: 'page2.html',
-
-        next: NEXT_MENU_URL
-
-    };
-
-    localStorage.setItem(
-        'cc_verified_email',
-        email
-    );
-
-    localStorage.setItem(
-        'cc_verified_session',
-        JSON.stringify(session)
-    );
-}
-
-function goMenu() {
-
-    window.location.href =
-    NEXT_MENU_URL;
-}
-
-function grantAccess(email) {
-
-    saveVerifiedSession(email);
+function setWaitingState() {
 
     gateStatus.innerText =
-    'VERIFIED';
+    'WAITING';
 
     message.innerText =
-    'ACCESS GRANTED';
+    'READY';
+
+    verifyBtn.disabled =
+    false;
 
     verifyBtn.innerText =
-    'ENTERING MENU';
-
-    setTimeout(function() {
-
-        goMenu();
-
-    }, 900);
+    'REQUEST VERIFY EMAIL';
 }
 
-function loadExistingSession() {
+function setBlockedState(text) {
 
-    const existingSession =
-    localStorage.getItem(
-        'cc_verified_session'
+    gateStatus.innerText =
+    'BLOCKED';
+
+    message.innerText =
+    text;
+}
+
+function setSendingState() {
+
+    gateStatus.innerText =
+    'SENDING';
+
+    message.innerText =
+    'CREATING VERIFICATION REQUEST';
+
+    verifyBtn.disabled =
+    true;
+
+    verifyBtn.innerText =
+    'SENDING';
+}
+
+function setPendingState(email) {
+
+    gateStatus.innerText =
+    'EMAIL PENDING';
+
+    message.innerText =
+    'CHECK YOUR EMAIL';
+
+    pendingEmail.innerText =
+    email;
+
+    pendingBox.style.display =
+    'block';
+
+    verifyBtn.disabled =
+    false;
+
+    verifyBtn.innerText =
+    'RESEND VERIFY EMAIL';
+}
+
+async function requestVerification(email) {
+
+    const response =
+    await fetch(
+        '/api/auth/signup',
+        {
+            method: 'POST',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body:
+            JSON.stringify({
+                email: email
+            })
+        }
     );
 
-    if (!existingSession) {
-        return false;
-    }
+    let data = {};
 
     try {
 
-        const parsed =
-        JSON.parse(existingSession);
+        data =
+        await response.json();
 
-        if (parsed && parsed.verified === true) {
+    } catch(error) {
 
-            gateStatus.innerText =
-            'VERIFIED';
+        data = {};
+    }
 
-            message.innerText =
-            'RETURNING VERIFIED SESSION';
+    if (!response.ok || data.success !== true) {
 
-            verifyBtn.innerText =
-            'CONTINUE TO MENU';
-
-            return true;
-        }
-
-    } catch (error) {
-
-        localStorage.removeItem(
-            'cc_verified_session'
+        throw new Error(
+            data.message ||
+            'Verification request failed.'
         );
     }
 
-    return false;
+    return data;
 }
-
-let returningVerified =
-loadExistingSession();
 
 verifyBtn.addEventListener(
 'click',
-function() {
-
-    if (returningVerified) {
-
-        goMenu();
-
-        return;
-    }
+async function() {
 
     const email =
     emailInput.value.trim().toLowerCase();
 
+    pendingBox.style.display =
+    'none';
+
     if (!validEmail(email)) {
 
-        gateStatus.innerText =
-        'BLOCKED';
-
-        message.innerText =
-        'VALID EMAIL REQUIRED';
+        setBlockedState(
+            'VALID EMAIL REQUIRED'
+        );
 
         return;
     }
 
     if (!humanCheck.checked) {
 
-        gateStatus.innerText =
-        'BLOCKED';
-
-        message.innerText =
-        'HUMAN CHECK REQUIRED';
+        setBlockedState(
+            'HUMAN CHECK REQUIRED'
+        );
 
         return;
     }
 
-    gateStatus.innerText =
-    'VERIFYING';
+    setSendingState();
 
-    message.innerText =
-    'FREE ENTRY VERIFIED';
+    try {
 
-    grantAccess(email);
+        const result =
+        await requestVerification(email);
+
+        localStorage.setItem(
+            'cc_pending_verify_email',
+            email
+        );
+
+        if (result.verifyToken) {
+
+            localStorage.setItem(
+                'cc_pending_verify_token',
+                result.verifyToken
+            );
+        }
+
+        if (result.verifyUrl) {
+
+            localStorage.setItem(
+                'cc_pending_verify_url',
+                result.verifyUrl
+            );
+        }
+
+        setPendingState(email);
+
+    } catch(error) {
+
+        gateStatus.innerText =
+        'ERROR';
+
+        message.innerText =
+        error.message ||
+        'VERIFICATION REQUEST FAILED';
+
+        verifyBtn.disabled =
+        false;
+
+        verifyBtn.innerText =
+        'REQUEST VERIFY EMAIL';
+    }
 }
 );
 
@@ -522,6 +629,8 @@ function() {
     '/about/';
 }
 );
+
+setWaitingState();
 
 </script>
 
