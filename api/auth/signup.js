@@ -10,28 +10,12 @@ const email =
 .trim()
 .toLowerCase();
 
-const password =
-body.password || '';
-
-if(!email || !password){
+if(!email){
 
 return Response.json({
 
 success:false,
-message:'Missing continuity credentials.'
-
-},{
-status:400
-});
-
-}
-
-if(password.length < 6){
-
-return Response.json({
-
-success:false,
-message:'Password too short.'
+message:'Email required.'
 
 },{
 status:400
@@ -55,43 +39,51 @@ status:400
 
 }
 
-/*
-CONTINUITY STORAGE LAYER
---------------------------------
-Future database lookup goes here.
-
-Example:
-- existing user check
-- hashed password storage
-- verification token generation
-- session creation
-- continuity weight tracking
---------------------------------
-*/
-
 const verifyToken =
 crypto.randomUUID();
 
+const requestUrl =
+new URL(context.request.url);
+
+const origin =
+requestUrl.origin;
+
+const verifyUrl =
+origin +
+'/api/auth/verify?token=' +
+encodeURIComponent(verifyToken) +
+'&email=' +
+encodeURIComponent(email);
+
 console.log(
-'NEW CONTINUITY ENROLLMENT:',
+'CYBERCROWD FREE ENTRY REQUEST:',
 email
 );
 
 console.log(
-'VERIFY TOKEN:',
+'CYBERCROWD VERIFY TOKEN:',
 verifyToken
 );
 
-/*
-EMAIL ROUTING PLACEHOLDER
---------------------------------
-Future email service goes here.
+console.log(
+'CYBERCROWD VERIFY URL:',
+verifyUrl
+);
 
-Example:
+/*
+EMAIL DELIVERY LAYER
+--------------------------------
+This endpoint now creates the verification token and verification URL.
+
+The next required production connection is an email sender:
 - Resend
 - SendGrid
 - MailChannels
 - AWS SES
+- Cloudflare Email Worker route
+
+Until email sending is connected, this endpoint returns the verifyUrl
+so the flow can be tested without granting access locally.
 --------------------------------
 */
 
@@ -99,10 +91,16 @@ return Response.json({
 
 success:true,
 
-message:
-'Continuity verification initiated.',
+status:'pending_verification',
 
-verifyToken
+message:
+'Verification created. Email delivery layer must send the verification URL.',
+
+email,
+
+verifyToken,
+
+verifyUrl
 
 },{
 status:200
@@ -110,7 +108,10 @@ status:200
 
 }catch(error){
 
-console.error(error);
+console.error(
+'CYBERCROWD SIGNUP ERROR:',
+error
+);
 
 return Response.json({
 
