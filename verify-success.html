@@ -2,33 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>CyberCrowd Access Granted</title>
 
 <style>
 
-html,body{
+html,
+body {
 
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
 
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
 
-    overflow:hidden;
+    overflow: hidden;
 
-    background:#020508;
+    background: #020508;
 
-    color:white;
+    color: white;
 
-    font-family:Arial,Helvetica,sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-#bg{
+#bg {
 
-    position:fixed;
-    inset:0;
+    position: fixed;
+
+    inset: 0;
 
     background:
     radial-gradient(
@@ -43,28 +46,33 @@ html,body{
     );
 }
 
-#wrap{
+#wrap {
 
-    position:relative;
-    z-index:5;
+    position: relative;
 
-    width:100%;
-    height:100%;
+    z-index: 5;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    width: 100%;
+    height: 100%;
 
-    padding:20px;
-    box-sizing:border-box;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
 }
 
-#panel{
+#panel {
 
-    width:100%;
-    max-width:620px;
+    width: 100%;
 
-    border-radius:28px;
+    max-width: 620px;
+
+    border-radius: 28px;
 
     background:
     rgba(0,0,0,.72);
@@ -72,47 +80,47 @@ html,body{
     border:
     1px solid rgba(0,255,255,.24);
 
-    padding:40px;
+    padding: 40px;
 
-    box-sizing:border-box;
+    box-sizing: border-box;
 
-    text-align:center;
+    text-align: center;
 
-    backdrop-filter:blur(8px);
+    backdrop-filter: blur(8px);
 
     box-shadow:
     0 0 40px rgba(0,255,255,.08);
 }
 
-#title{
+#title {
 
-    color:#00ffff;
+    color: #00ffff;
 
-    font-size:42px;
+    font-size: 42px;
 
-    letter-spacing:6px;
+    letter-spacing: 6px;
 
-    margin-bottom:20px;
+    margin-bottom: 20px;
 }
 
-#sub{
+#sub {
 
-    opacity:.82;
+    opacity: .82;
 
-    line-height:1.9;
+    line-height: 1.9;
 
-    margin-bottom:34px;
+    margin-bottom: 28px;
 
-    font-size:16px;
+    font-size: 16px;
 }
 
-#status{
+#status {
 
-    display:inline-block;
+    display: inline-block;
 
-    padding:14px 24px;
+    padding: 14px 24px;
 
-    border-radius:999px;
+    border-radius: 999px;
 
     background:
     rgba(0,255,170,.10);
@@ -120,24 +128,61 @@ html,body{
     border:
     1px solid rgba(0,255,170,.30);
 
-    color:#00ffaa;
+    color: #00ffaa;
 
-    margin-bottom:34px;
+    margin-bottom: 26px;
 
-    letter-spacing:2px;
+    letter-spacing: 2px;
 
-    font-size:13px;
+    font-size: 13px;
 }
 
-#enterBtn{
+#emailBox {
 
-    width:100%;
+    margin-bottom: 28px;
 
-    padding:18px;
+    padding: 16px;
 
-    border:none;
+    border-radius: 18px;
 
-    border-radius:20px;
+    background:
+    rgba(0,255,255,.05);
+
+    border:
+    1px solid rgba(0,255,255,.18);
+
+    line-height: 1.7;
+
+    word-break: break-word;
+}
+
+#emailLabel {
+
+    color: #00ffaa;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 8px;
+}
+
+#emailValue {
+
+    color: white;
+
+    opacity: .9;
+}
+
+#enterBtn {
+
+    width: 100%;
+
+    padding: 18px;
+
+    border: none;
+
+    border-radius: 20px;
 
     background:
     linear-gradient(
@@ -146,36 +191,54 @@ html,body{
         #00ffaa
     );
 
-    color:black;
+    color: black;
 
-    font-weight:bold;
+    font-weight: bold;
 
-    font-size:17px;
+    font-size: 17px;
 
-    cursor:pointer;
+    letter-spacing: 2px;
+
+    cursor: pointer;
 
     transition:
     transform .2s ease,
     box-shadow .2s ease;
 }
 
-#enterBtn:hover{
+#enterBtn:hover {
 
-    transform:scale(1.02);
+    transform: scale(1.02);
 
     box-shadow:
     0 0 24px rgba(0,255,255,.28);
 }
 
-#footer{
+#footer {
 
-    margin-top:28px;
+    margin-top: 28px;
 
-    opacity:.42;
+    opacity: .42;
 
-    font-size:11px;
+    font-size: 11px;
 
-    letter-spacing:2px;
+    letter-spacing: 2px;
+}
+
+.blocked {
+
+    color: #ff7777 !important;
+}
+
+.blockedStatus {
+
+    background:
+    rgba(255,90,90,.10) !important;
+
+    border:
+    1px solid rgba(255,90,90,.35) !important;
+
+    color: #ff9999 !important;
 }
 
 </style>
@@ -202,33 +265,200 @@ The ecosystem now recognizes your presence.
 VERIFIED CONTINUITY SESSION ACTIVE
 </div>
 
+<div id="emailBox">
+
+<div id="emailLabel">
+VERIFIED EMAIL
+</div>
+
+<div id="emailValue">
+loading...
+</div>
+
+</div>
+
 <button id="enterBtn">
-ENTER ECOSYSTEM
+ENTER MENU
 </button>
 
 <div id="footer">
-CYBERCROWD VERIFY SUCCESS ROUTE V1
+CYBERCROWD VERIFY SUCCESS ROUTE V2
 </div>
 
 </div>
 
 </div>
-
-<script src="verified-session-memory.js"></script>
 
 <script>
 
-CCSession.create();
+const title =
+document.getElementById(
+'title'
+);
 
-document
-.getElementById('enterBtn')
-.addEventListener(
-'click',
-function(){
+const sub =
+document.getElementById(
+'sub'
+);
 
-window.location.href='nav.html';
+const statusBox =
+document.getElementById(
+'status'
+);
 
-});
+const emailValue =
+document.getElementById(
+'emailValue'
+);
+
+const enterBtn =
+document.getElementById(
+'enterBtn'
+);
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const verified =
+params.get(
+'verified'
+) === '1';
+
+const email =
+(
+params.get(
+'email'
+) || ''
+)
+.trim()
+.toLowerCase();
+
+const token =
+params.get(
+'token'
+) || '';
+
+const emailPattern =
+/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const validLink =
+verified &&
+token &&
+emailPattern.test(
+email
+);
+
+function createVerifiedSession() {
+
+    const session = {
+
+        verified: true,
+
+        email: email,
+
+        token: token,
+
+        verifiedAt: Date.now(),
+
+        route: 'verify-success.html',
+
+        next: 'menu.html'
+
+    };
+
+    localStorage.setItem(
+        'cc_verified_email',
+        email
+    );
+
+    localStorage.setItem(
+        'cc_verified_session',
+        JSON.stringify(session)
+    );
+
+    localStorage.removeItem(
+        'cc_pending_verify_email'
+    );
+
+    localStorage.removeItem(
+        'cc_pending_verify_token'
+    );
+
+    localStorage.removeItem(
+        'cc_pending_verify_url'
+    );
+}
+
+function activateSuccess() {
+
+    createVerifiedSession();
+
+    title.innerText =
+    'ACCESS GRANTED';
+
+    sub.innerHTML =
+    'Continuity identity verified.<br>The ecosystem now recognizes your presence.';
+
+    statusBox.innerText =
+    'VERIFIED CONTINUITY SESSION ACTIVE';
+
+    emailValue.innerText =
+    email;
+
+    enterBtn.innerText =
+    'ENTER MENU';
+
+    enterBtn.onclick =
+    function() {
+
+        window.location.href =
+        'menu.html';
+    };
+}
+
+function activateBlocked() {
+
+    title.innerText =
+    'ACCESS BLOCKED';
+
+    title.classList.add(
+        'blocked'
+    );
+
+    sub.innerHTML =
+    'Verification link is missing, invalid, or expired.<br>Return to the security gate and request a new verification link.';
+
+    statusBox.innerText =
+    'VERIFICATION LINK REQUIRED';
+
+    statusBox.classList.add(
+        'blockedStatus'
+    );
+
+    emailValue.innerText =
+    'No verified email';
+
+    enterBtn.innerText =
+    'RETURN TO SECURITY GATE';
+
+    enterBtn.onclick =
+    function() {
+
+        window.location.href =
+        'page2.html';
+    };
+}
+
+if (validLink) {
+
+    activateSuccess();
+
+} else {
+
+    activateBlocked();
+}
 
 </script>
 
