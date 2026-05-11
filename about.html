@@ -1,101 +1,458 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-function launchDistrict(name){
+<title>About CyberCrowd</title>
 
-const existing =
-document.getElementById(
-'about_window'
-);
+<style>
 
-if(existing){
+html,
+body {
 
-existing.remove();
+    margin: 0;
+    padding: 0;
 
+    background: #050505;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    overflow-x:hidden;
 }
 
-const win =
-document.createElement('div');
+#stage {
 
-win.id = 'about_window';
+    min-height: 100vh;
 
-win.style.position = 'fixed';
+    padding: 24px;
 
-win.style.top = '120px';
+    box-sizing: border-box;
 
-win.style.left = '50%';
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
 
-win.style.transform =
-'translateX(-50%)';
+#wrap {
 
-win.style.width = '420px';
+    max-width: 980px;
 
-win.style.padding = '24px';
+    margin: 0 auto;
+}
 
-win.style.borderRadius = '22px';
+h1 {
 
-win.style.background =
-'rgba(5,10,18,.96)';
+    color: #00ffff;
 
-win.style.border =
-'1px solid rgba(0,255,255,.35)';
+    font-size: 38px;
 
-win.style.boxShadow =
-'0 0 24px rgba(0,255,255,.22)';
+    letter-spacing: 4px;
 
-win.style.zIndex = '99999';
+    text-align: center;
+}
 
-win.innerHTML = `
+h2 {
 
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:18px;
-">
+    color: #00ffaa;
 
-<div style="
-color:#00ffff;
-font-size:20px;
-letter-spacing:2px;
-">
-${name.toUpperCase()}
+    margin-top: 34px;
+}
+
+p {
+
+    line-height: 1.68;
+
+    opacity: 0.88;
+
+    font-size: 16px;
+}
+
+ul {
+
+    line-height: 1.7;
+
+    opacity: 0.88;
+}
+
+.card {
+
+    margin-top: 22px;
+
+    padding: 22px;
+
+    border-radius: 22px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+}
+
+#tagline {
+
+    text-align: center;
+
+    color: #00ffaa;
+
+    opacity: 0.85;
+
+    margin-bottom: 30px;
+}
+
+#operations {
+
+    margin-top: 34px;
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 16px;
+}
+
+.operationCard {
+
+    border-radius: 18px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(0,255,255,0.05);
+
+    padding: 18px;
+
+    cursor: pointer;
+
+    transition:
+    transform .2s ease,
+    border .2s ease,
+    box-shadow .2s ease;
+}
+
+.operationCard:hover {
+
+    transform: scale(1.03);
+
+    border:
+    1px solid rgba(0,255,255,0.80);
+
+    box-shadow:
+    0 0 18px rgba(0,255,255,0.22);
+}
+
+.operationTitle {
+
+    color: #00ffff;
+
+    font-size: 18px;
+
+    margin-bottom: 10px;
+}
+
+.operationText {
+
+    opacity: 0.82;
+
+    line-height: 1.5;
+
+    font-size: 14px;
+}
+
+#footer {
+
+    text-align: center;
+
+    margin-top: 40px;
+
+    opacity: 0.55;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    padding-bottom:40px;
+}
+
+#aboutWindow {
+
+    position:fixed;
+
+    top:120px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:420px;
+
+    max-width:90%;
+
+    background:
+    rgba(5,10,18,.96);
+
+    border:
+    1px solid rgba(0,255,255,.35);
+
+    border-radius:22px;
+
+    box-shadow:
+    0 0 24px rgba(0,255,255,.22);
+
+    z-index:99999;
+
+    display:none;
+
+    overflow:hidden;
+}
+
+#aboutWindowHeader {
+
+    padding:18px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:
+    1px solid rgba(0,255,255,.22);
+
+    background:
+    rgba(0,255,255,.05);
+}
+
+#aboutWindowTitle {
+
+    color:#00ffff;
+
+    font-size:20px;
+
+    letter-spacing:2px;
+}
+
+#aboutWindowClose {
+
+    background:none;
+
+    border:none;
+
+    color:#00ffaa;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
+#aboutWindowBody {
+
+    padding:22px;
+
+    line-height:1.8;
+
+    opacity:.88;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+<div id="wrap">
+
+<h1>ABOUT CYBERCROWD</h1>
+
+<div id="tagline">
+Built for truth, creators, governance, continuity, and operational resilience.
 </div>
 
-<button
-onclick="
-document.getElementById(
-'about_window'
-).remove()
-"
-style="
-background:none;
-border:none;
-color:#00ffaa;
-font-size:20px;
-cursor:pointer;
-">
+<div class="card">
+
+<h2>About James G. Taylor II</h2>
+
+<p>
+James G. Taylor II is the Founder and President/CEO of CyberCrowd, RETEN Records, and Atomic Kricket.
+</p>
+
+<p>
+If the world does not offer a lane, build one.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Operational Environment Access</h2>
+
+<p>
+The systems below expose portions of the live architecture.
+</p>
+
+<div id="operations">
+
+<div class="operationCard"
+onclick="openAboutWindow(
+'Environment Stack',
+'Operational launcher and modular infrastructure surface now responding.'
+)">
+
+<div class="operationTitle">
+Environment Stack
+</div>
+
+<div class="operationText">
+Operational launcher and modular infrastructure surface.
+</div>
+
+</div>
+
+<div class="operationCard"
+onclick="openAboutWindow(
+'Tabletop Status',
+'Surface awareness and operational behavior testing dashboard active.'
+)">
+
+<div class="operationTitle">
+Tabletop Status
+</div>
+
+<div class="operationText">
+Surface awareness and operational behavior testing dashboard.
+</div>
+
+</div>
+
+<div class="operationCard"
+onclick="openAboutWindow(
+'Retention Doctrine',
+'Visible accountability boundaries and retention transparency responding.'
+)">
+
+<div class="operationTitle">
+Retention Doctrine
+</div>
+
+<div class="operationText">
+Visible accountability boundaries and retention transparency.
+</div>
+
+</div>
+
+<div class="operationCard"
+onclick="openAboutWindow(
+'Continuity Status',
+'Operational resilience and continuity awareness systems active.'
+)">
+
+<div class="operationTitle">
+Continuity Status
+</div>
+
+<div class="operationText">
+Operational resilience and continuity awareness systems.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD ABOUT PAGE V2
+</div>
+
+</div>
+</div>
+
+<div id="aboutWindow">
+
+<div id="aboutWindowHeader">
+
+<div id="aboutWindowTitle">
+WINDOW
+</div>
+
+<button id="aboutWindowClose">
 ✕
 </button>
 
 </div>
 
-<div style="
-line-height:1.8;
-opacity:.88;
-">
+<div id="aboutWindowBody">
 
-${name.toUpperCase()} routing surface active.
-
-<br><br>
-
-CyberCrowd operational environment responding.
+Waiting...
 
 </div>
 
+</div>
+
+<script>
+
+const aboutWindow =
+document.getElementById(
+'aboutWindow'
+);
+
+const aboutWindowTitle =
+document.getElementById(
+'aboutWindowTitle'
+);
+
+const aboutWindowBody =
+document.getElementById(
+'aboutWindowBody'
+);
+
+document
+.getElementById(
+'aboutWindowClose'
+)
+.addEventListener(
+'click',
+function(){
+
+aboutWindow.style.display =
+'none';
+
+}
+);
+
+function openAboutWindow(
+title,
+text
+){
+
+aboutWindowTitle.innerText =
+title;
+
+aboutWindowBody.innerHTML =
+`
+${text}
+
+<br><br>
+
+CyberCrowd operational continuity layer responding.
 `;
 
-document.body.appendChild(win);
+aboutWindow.style.display =
+'block';
 
 }
 
 </script>
+
+</body>
+</html>
