@@ -282,6 +282,65 @@ button:disabled {
     word-break: break-word;
 }
 
+#introWindow {
+    display: none;
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    border-radius: 18px;
+
+    background:
+    rgba(0,0,0,0.62);
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    box-shadow:
+    0 0 18px rgba(0,255,255,0.10);
+}
+
+#introTitle {
+    color: #00ffff;
+
+    font-size: 17px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 12px;
+
+    text-align: center;
+}
+
+#introBody {
+    color: white;
+
+    opacity: 0.88;
+
+    line-height: 1.68;
+
+    font-size: 14px;
+
+    text-align: center;
+}
+
+#introBody strong {
+    color: #00ffaa;
+}
+
+#introClose {
+    margin-top: 14px;
+
+    background:
+    rgba(255,255,255,0.06);
+
+    color: #00ffaa;
+
+    border:
+    1px solid rgba(0,255,255,0.18);
+}
+
 #footer {
     margin-top: 24px;
 
@@ -355,10 +414,38 @@ REQUEST VERIFY EMAIL
 </button>
 
 <button
-id="aboutBtn"
+id="introBtn"
 class="secondaryButton">
-ABOUT CYBERCROWD
+INTRODUCTION TO CYBERCROWD
 </button>
+
+<div id="introWindow">
+
+<div id="introTitle">
+INTRODUCTION TO CYBERCROWD
+</div>
+
+<div id="introBody">
+CyberCrowd is the live-culture platform built for the moment.
+<br><br>
+A unified space where broadcasts, communities, creators, and archives move together in real time — no noise, no clutter, no algorithmic roulette. Just pure signal.
+<br><br>
+<strong>
+Show up. Go live. Build culture.
+</strong>
+<br><br>
+CyberCrowd keeps it all connected so nothing gets lost and everyone stays in the loop.
+<br><br>
+<strong>
+One platform. One flow. One crowd. CyberCrowd where we belong.
+</strong>
+</div>
+
+<button id="introClose">
+CLOSE INTRODUCTION
+</button>
+
+</div>
 
 <div id="pendingBox">
 
@@ -381,7 +468,7 @@ READY
 </div>
 
 <div id="footer">
-CYBERCROWD PAGE2 SECURITY GATE V3
+CYBERCROWD PAGE2 SECURITY GATE V4
 </div>
 
 </div>
@@ -413,9 +500,19 @@ document.getElementById(
 'verifyBtn'
 );
 
-const aboutBtn =
+const introBtn =
 document.getElementById(
-'aboutBtn'
+'introBtn'
+);
+
+const introWindow =
+document.getElementById(
+'introWindow'
+);
+
+const introClose =
+document.getElementById(
+'introClose'
 );
 
 const gateStatus =
@@ -621,12 +718,21 @@ async function() {
 }
 );
 
-aboutBtn.addEventListener(
+introBtn.addEventListener(
 'click',
 function() {
 
-    window.location.href =
-    '/about/';
+    introWindow.style.display =
+    'block';
+}
+);
+
+introClose.addEventListener(
+'click',
+function() {
+
+    introWindow.style.display =
+    'none';
 }
 );
 
