@@ -55,6 +55,106 @@ encodeURIComponent(verifyToken) +
 '&email=' +
 encodeURIComponent(email);
 
+const serviceReplyEmail =
+'cybercrowd_services@yahoo.com';
+
+const fromEmail =
+context.env.CC_EMAIL_FROM ||
+'CyberCrowd <onboarding@cybercrowd.net>';
+
+const resendApiKey =
+context.env.RESEND_API_KEY || '';
+
+const emailSubject =
+'Verify your CyberCrowd free entry';
+
+const emailText =
+[
+'CyberCrowd Free Entry Verification',
+'',
+'You requested free CyberCrowd access.',
+'',
+'Click this verification link to continue:',
+verifyUrl,
+'',
+'If you did not request this, ignore this email.',
+'',
+'CyberCrowd Services:',
+serviceReplyEmail
+].join('\n');
+
+const emailHtml =
+`
+<div style="
+font-family:Arial,sans-serif;
+background:#050505;
+color:white;
+padding:28px;
+">
+<div style="
+max-width:620px;
+margin:0 auto;
+border:1px solid rgba(0,255,255,.35);
+border-radius:22px;
+padding:26px;
+background:rgba(5,10,18,.96);
+">
+<h1 style="
+color:#00ffff;
+letter-spacing:2px;
+">
+CyberCrowd Free Entry
+</h1>
+
+<p style="
+line-height:1.7;
+opacity:.88;
+">
+You requested free CyberCrowd access.
+Click the verification button below to continue.
+</p>
+
+<p>
+<a href="${verifyUrl}" style="
+display:inline-block;
+padding:16px 22px;
+border-radius:16px;
+background:linear-gradient(90deg,#00ffff,#00ffaa);
+color:black;
+font-weight:bold;
+text-decoration:none;
+letter-spacing:1px;
+">
+VERIFY CYBERCROWD ENTRY
+</a>
+</p>
+
+<p style="
+line-height:1.7;
+opacity:.72;
+font-size:13px;
+">
+If the button does not work, copy and paste this link:
+<br>
+<span style="
+color:#00ffaa;
+word-break:break-all;
+">
+${verifyUrl}
+</span>
+</p>
+
+<p style="
+margin-top:24px;
+font-size:12px;
+opacity:.62;
+">
+CyberCrowd Services: ${serviceReplyEmail}
+</p>
+</div>
+</div>
+`;
+
 console.log(
 'CYBERCROWD FREE ENTRY REQUEST:',
 email
@@ -70,22 +170,101 @@ console.log(
 verifyUrl
 );
 
-/*
-EMAIL DELIVERY LAYER
---------------------------------
-This endpoint now creates the verification token and verification URL.
+let emailDelivery = 'not_configured';
 
-The next required production connection is an email sender:
-- Resend
-- SendGrid
-- MailChannels
-- AWS SES
-- Cloudflare Email Worker route
+if(resendApiKey){
 
-Until email sending is connected, this endpoint returns the verifyUrl
-so the flow can be tested without granting access locally.
---------------------------------
-*/
+const sendResponse =
+await fetch(
+'https://api.resend.com/emails',
+{
+method:'POST',
+
+headers:{
+'Authorization':'Bearer ' + resendApiKey,
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify({
+
+from:fromEmail,
+
+to:[
+email
+],
+
+reply_to:
+serviceReplyEmail,
+
+subject:
+emailSubject,
+
+html:
+emailHtml,
+
+text:
+emailText
+
+})
+}
+);
+
+let sendData = {};
+
+try{
+
+sendData =
+await sendResponse.json();
+
+}catch(error){
+
+sendData = {};
+}
+
+if(!sendResponse.ok){
+
+console.error(
+'CYBERCROWD EMAIL SEND FAILURE:',
+sendData
+);
+
+return Response.json({
+
+success:false,
+
+message:
+'Verification created, but email delivery failed.',
+
+email,
+
+status:
+'email_delivery_failed',
+
+verifyToken,
+
+verifyUrl,
+
+emailDelivery:
+'failed',
+
+details:
+sendData
+
+},{
+status:502
+});
+
+}
+
+emailDelivery =
+'sent';
+
+console.log(
+'CYBERCROWD VERIFY EMAIL SENT:',
+email
+);
+
+}
 
 return Response.json({
 
@@ -94,13 +273,19 @@ success:true,
 status:'pending_verification',
 
 message:
-'Verification created. Email delivery layer must send the verification URL.',
+emailDelivery === 'sent'
+? 'Verification email sent. Check your inbox.'
+: 'Verification created. Email API key is not configured yet.',
 
 email,
 
 verifyToken,
 
-verifyUrl
+verifyUrl,
+
+emailDelivery,
+
+serviceReplyEmail
 
 },{
 status:200
