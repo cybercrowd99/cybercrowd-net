@@ -1,300 +1,529 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-  <title>CyberCrowd Official Site | CyberCrowd.net</title>
-  <meta name="description" content="CyberCrowd.net is the official CyberCrowd platform for live broadcast access, creator subscriptions, viewer access, WDIG device pairing, Magic Cursor control, QR authentication, and adWorm perimeter advertising.">
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://cybercrowd.net/page2.html" />
+<title>CyberCrowd Security Gate</title>
 
-  <meta property="og:title" content="CyberCrowd.net — Official Digital Media Platform" />
-  <meta property="og:description" content="CyberCrowd.net is the official home of CyberCrowd: live events, creator tools, audience participation, accessibility, Atomic Kricket network development, Reten Records music production, CyberCare, and WDIG." />
-  <meta property="og:url" content="https://cybercrowd.net/page2.html" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="CyberCrowd" />
+<meta name="description"
+content="CyberCrowd free entry security gate for verified visitor access.">
 
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="CyberCrowd.net — Official Digital Media Platform" />
-  <meta name="twitter:description" content="CyberCrowd.net is the official home of CyberCrowd: live events, creator tools, audience participation, accessibility, Atomic Kricket network development, Reten Records music production, CyberCare, and WDIG." />
+<meta name="robots"
+content="index, follow">
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "CyberCrowd.net",
-    "alternateName": "CyberCrowd",
-    "url": "https://cybercrowd.net/",
-    "description": "CyberCrowd.net is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Kricket network development, Reten Records music production, CyberCare support systems, WDIG device pairing, and community-driven publishing."
-  }
-  </script>
+<link rel="canonical"
+href="https://cybercrowd.net/page2.html">
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "CyberCrowd",
-    "alternateName": "CyberCrowd.net",
-    "url": "https://cybercrowd.net/",
-    "description": "CyberCrowd is a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, accessibility tools, Atomic Kricket network development, Reten Records music production, CyberCare support systems, WDIG device pairing, and community-driven publishing.",
-    "knowsAbout": [
-      "CyberCrowd.net",
-      "live event discovery",
-      "creator participation",
-      "audience participation",
-      "multi-angle viewing",
-      "observer interaction",
-      "accessibility tools",
-      "Atomic Kricket network development",
-      "Reten Records music production",
-      "CyberCare",
-      "WDIG device pairing",
-      "community-driven publishing"
-    ]
-  }
-  </script>
+<style>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+html,
+body {
+    margin: 0;
+    padding: 0;
 
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    width: 100%;
+    min-height: 100%;
 
-    body {
-      min-height: 100vh;
-      background: black;
-      color: #ffffff;
-      font-family: "Playfair Display", serif;
-      font-style: italic;
-      font-weight: 900;
-      text-align: center;
-      overflow: hidden;
-      padding-bottom: 78px;
-    }
+    background: #050505;
+    color: white;
 
-    main {
-      min-height: calc(100vh - 78px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 22px;
-    }
+    font-family: Arial, sans-serif;
+}
 
-    .page-wrap {
-      width: min(980px, 100%);
-      position: relative;
-      z-index: 2;
-    }
+#stage {
+    min-height: 100vh;
 
-    h1 {
-      color: #ffffff;
-      font-size: clamp(40px, 12vw, 90px);
-      letter-spacing: 2px;
-      margin-bottom: 4px;
-      text-shadow: 0 0 18px rgba(255,255,255,0.22);
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .domain-line {
-      color: #7CFF7C;
-      font-size: clamp(18px, 5vw, 38px);
-      letter-spacing: 3px;
-      margin-bottom: 14px;
-      text-shadow: 0 0 18px rgba(124,255,124,0.65);
-    }
+    padding: 24px;
 
-    .motto {
-      color: #FFD700;
-      font-size: 13px;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-      text-shadow: 0 0 10px rgba(255,215,0,0.6);
-    }
+    box-sizing: border-box;
 
-    .identity-copy {
-      max-width: 840px;
-      margin: 0 auto;
-      color: rgba(255,255,255,0.78);
-      font-family: Arial, sans-serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 13px;
-      line-height: 1.6;
-    }
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
 
-    .identity-copy p {
-      margin-bottom: 11px;
-    }
+#gate {
+    width: 92%;
+    max-width: 520px;
 
-    .identity-copy strong {
-      color: #7CFF7C;
-      font-weight: 700;
-    }
+    background:
+    rgba(12,12,12,0.94);
 
-    .tool-menu {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 10px;
-      background: rgba(0,0,0,0.82);
-      border-top: 1px solid rgba(255,0,0,0.25);
-      z-index: 99;
-    }
+    border:
+    1px solid rgba(0,255,255,0.42);
 
-    .tool-menu a,
-    .cybershop-button {
-      color: #7CFF7C;
-      text-decoration: none;
-      border: 1px solid rgba(124,255,124,0.75);
-      padding: 7px 11px;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-shadow: 0 0 8px rgba(124,255,124,0.55);
-      background: rgba(0,0,0,0.45);
-      font-family: Arial, sans-serif;
-      font-style: normal;
-      font-weight: 700;
-      cursor: pointer;
-    }
+    border-radius: 22px;
 
-    .tool-menu a:hover,
-    .tool-menu a:focus,
-    .cybershop-button:hover,
-    .cybershop-button:focus {
-      color: #FFFFFF;
-      border-color: #7CFF7C;
-      box-shadow: 0 0 18px rgba(124,255,124,0.65);
-      outline: none;
-    }
+    padding: 28px;
 
-    .checkout-form {
-      display: inline;
-    }
+    box-shadow:
+    0 0 28px rgba(0,255,255,0.18);
 
-    @media (max-width: 600px) {
-      body { padding-bottom: 124px; }
-      main { min-height: calc(100vh - 124px); }
-      .identity-copy { font-size: 12px; }
-      .tool-menu a,
-      .cybershop-button {
-        font-size: 10px;
-        padding: 7px 8px;
-      }
-    }
+    box-sizing: border-box;
+}
 
-    .seo-identity {
-      position: fixed;
-      left: 12px;
-      bottom: 46px;
-      max-width: 420px;
-      padding: 10px 12px;
-      z-index: 100;
-      color: #d8ffd8;
-      background: rgba(0, 0, 0, 0.72);
-      border: 1px solid rgba(124, 255, 124, 0.35);
-      font-family: Arial, sans-serif;
-      font-size: 12px;
-      line-height: 1.35;
-      text-align: left;
-    }
+h1 {
+    color: #00ffff;
 
-    .seo-identity h2 {
-      font-size: 14px;
-      margin: 0 0 6px;
-      color: #7CFF7C;
-    }
+    margin-top: 0;
 
-    .seo-identity p {
-      margin: 0 0 6px;
-    }
-  </style>
+    letter-spacing: 3px;
+
+    text-align: center;
+}
+
+p {
+    opacity: 0.86;
+
+    line-height: 1.55;
+
+    text-align: center;
+}
+
+.statusBox {
+    margin-top: 18px;
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    background: #151515;
+
+    border:
+    1px solid rgba(0,255,170,0.45);
+}
+
+.label {
+    color: #00ffaa;
+
+    font-size: 12px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 6px;
+}
+
+.value {
+    font-size: 18px;
+}
+
+.field {
+    margin-top: 18px;
+}
+
+input[type="email"] {
+    width: 100%;
+
+    padding: 15px;
+
+    border-radius: 14px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(255,255,255,0.04);
+
+    color: white;
+
+    font-size: 16px;
+
+    box-sizing: border-box;
+}
+
+input[type="email"]:focus {
+    outline: none;
+
+    border:
+    1px solid rgba(0,255,255,0.75);
+
+    box-shadow:
+    0 0 14px rgba(0,255,255,0.22);
+}
+
+#humanRow {
+    margin-top: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    background:
+    rgba(0,255,255,0.05);
+
+    border:
+    1px solid rgba(0,255,255,0.22);
+}
+
+#humanCheck {
+    width: 22px;
+    height: 22px;
+
+    cursor: pointer;
+}
+
+#humanText {
+    line-height: 1.5;
+
+    opacity: 0.86;
+}
+
+button {
+    width: 100%;
+
+    margin-top: 14px;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #00ffff,
+        #00ffaa
+    );
+
+    color: black;
+
+    font-weight: bold;
+
+    font-size: 16px;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+}
+
+button:hover {
+    box-shadow:
+    0 0 22px rgba(0,255,255,0.28);
+}
+
+.secondaryButton {
+    background:
+    rgba(255,255,255,0.08);
+
+    color: white;
+
+    border:
+    1px solid rgba(255,255,255,0.14);
+}
+
+#message {
+    margin-top: 16px;
+
+    min-height: 20px;
+
+    color: #00ffaa;
+
+    text-align: center;
+
+    letter-spacing: 2px;
+
+    font-size: 12px;
+}
+
+#footer {
+    margin-top: 24px;
+
+    text-align: center;
+
+    opacity: 0.42;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+}
+
+</style>
 </head>
 
 <body>
-  <audio id="atomic-kricket-audio" preload="auto" loop playsinline>
-    <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Atomic%20Kricket_60s.teaser" type="audio/mpeg">
-    <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Atomic%20Kricket_60s.teaser.mp3" type="audio/mpeg">
-  </audio>
 
-  <main>
-    <div class="page-wrap">
-      <h1>CYBERCROWD</h1>
-      <div class="domain-line">CYBERCROWD.NET</div>
-      <div class="motto">WHERE WE BELONG</div>
+<div id="stage">
 
-      <section class="identity-copy" aria-label="CyberCrowd.net official platform identity">
-        <p>
-          <strong>CyberCrowd.net</strong> is the official home of CyberCrowd, a developing digital media platform for live event discovery, creator participation, audience participation, multi-angle viewing, observer interaction, accessibility tools, Atomic Kricket network development, Reten Records music production, CyberCare support systems, WDIG device pairing, and community-driven publishing.
-        </p>
+<div id="gate">
 
-        <p>
-          CyberCrowd is being built for live culture, creators, viewers, observers, accessibility-first participation, searchable media experiences, verified records, care pathways, and future platform services.
-        </p>
+<h1>
+SECURITY GATE
+</h1>
 
-        <p>
-          CyberCrowd.net is the official CyberCrowd platform project: a digital media and audience participation system under development.
-        </p>
-      </section>
-    </div>
-  </main>
+<p>
+Free CyberCrowd entry requires a verified continuity identity.
+Enter your email and confirm human access to continue.
+</p>
 
-  <nav class="tool-menu" aria-label="CyberCrowd Page 2 tool menu">
-    <a href="/shop.html">CyberShop</a>
-<a href="/intake.html">Intake</a>
-<a href="/access.html">Access</a>
-<a href="/cybercourt.html">CyberCourt</a>
-<a href="/broadcast.html">Broadcast</a>
+<div class="statusBox">
 
-    <form action="/create-checkout-session" method="POST" class="checkout-form">
-      <button type="submit" class="cybershop-button">Load CRWD</button>
-    </form>
+<div class="label">
+GATE STATUS
+</div>
 
-    <a href="#monetary-benefits-cost">Monetary System</a>
-    <a href="wdig-trial.html">WDIG Trial</a>
-    <a href="#contact-us">Contact</a>
-    <a href="#about-us">About</a>
-  </nav>
+<div class="value" id="gateStatus">
+WAITING
+</div>
 
-  <script>
-    const atomicAudio = document.getElementById("atomic-kricket-audio");
+</div>
 
-    async function startAtomicKricket() {
-      if (!atomicAudio) return;
+<div class="field">
 
-      try {
-        atomicAudio.muted = false;
-        atomicAudio.volume = 1;
-        atomicAudio.setAttribute("playsinline", "");
-        atomicAudio.setAttribute("webkit-playsinline", "");
+<div class="label">
+EMAIL
+</div>
 
-        if (atomicAudio.readyState === 0) {
-          atomicAudio.load();
-        }
+<input
+id="emailInput"
+type="email"
+placeholder="you@example.com"
+autocomplete="email">
 
-        await atomicAudio.play();
-        console.log("Atomic Kricket audio started on Page 2.");
-      } catch (err) {
-        console.warn("Atomic Kricket audio blocked or source not ready yet.", err);
-      }
+</div>
+
+<div id="humanRow">
+
+<input
+id="humanCheck"
+type="checkbox">
+
+<div id="humanText">
+I am human and request free CyberCrowd entry.
+</div>
+
+</div>
+
+<button id="verifyBtn">
+VERIFY FREE ENTRY
+</button>
+
+<button
+id="aboutBtn"
+class="secondaryButton">
+ABOUT CYBERCROWD
+</button>
+
+<div id="message">
+READY
+</div>
+
+<div id="footer">
+CYBERCROWD PAGE2 SECURITY GATE V1
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const emailInput =
+document.getElementById(
+'emailInput'
+);
+
+const humanCheck =
+document.getElementById(
+'humanCheck'
+);
+
+const verifyBtn =
+document.getElementById(
+'verifyBtn'
+);
+
+const aboutBtn =
+document.getElementById(
+'aboutBtn'
+);
+
+const gateStatus =
+document.getElementById(
+'gateStatus'
+);
+
+const message =
+document.getElementById(
+'message'
+);
+
+const NEXT_MENU_URL =
+'menu.html';
+
+function validEmail(value) {
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function saveVerifiedSession(email) {
+
+    const session = {
+
+        verified: true,
+
+        email: email,
+
+        created: Date.now(),
+
+        gate: 'page2.html',
+
+        next: NEXT_MENU_URL
+
+    };
+
+    localStorage.setItem(
+        'cc_verified_email',
+        email
+    );
+
+    localStorage.setItem(
+        'cc_verified_session',
+        JSON.stringify(session)
+    );
+}
+
+function goMenu() {
+
+    window.location.href =
+    NEXT_MENU_URL;
+}
+
+function grantAccess(email) {
+
+    saveVerifiedSession(email);
+
+    gateStatus.innerText =
+    'VERIFIED';
+
+    message.innerText =
+    'ACCESS GRANTED';
+
+    verifyBtn.innerText =
+    'ENTERING MENU';
+
+    setTimeout(function() {
+
+        goMenu();
+
+    }, 900);
+}
+
+function loadExistingSession() {
+
+    const existingSession =
+    localStorage.getItem(
+        'cc_verified_session'
+    );
+
+    if (!existingSession) {
+        return false;
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-      startAtomicKricket();
-      setTimeout(startAtomicKricket, 350);
-      setTimeout(startAtomicKricket, 1200);
-    });
+    try {
 
-    document.addEventListener("pointerdown", startAtomicKricket, { once: true });
-    document.addEventListener("click", startAtomicKricket, { once: true });
-    document.addEventListener("keydown", startAtomicKricket, { once: true });
-    document.addEventListener("touchstart", startAtomicKricket, { once: true });
-  </script>
+        const parsed =
+        JSON.parse(existingSession);
+
+        if (parsed && parsed.verified === true) {
+
+            gateStatus.innerText =
+            'VERIFIED';
+
+            message.innerText =
+            'RETURNING VERIFIED SESSION';
+
+            verifyBtn.innerText =
+            'CONTINUE TO MENU';
+
+            return true;
+        }
+
+    } catch (error) {
+
+        localStorage.removeItem(
+            'cc_verified_session'
+        );
+    }
+
+    return false;
+}
+
+let returningVerified =
+loadExistingSession();
+
+verifyBtn.addEventListener(
+'click',
+function() {
+
+    if (returningVerified) {
+
+        goMenu();
+
+        return;
+    }
+
+    const email =
+    emailInput.value.trim().toLowerCase();
+
+    if (!validEmail(email)) {
+
+        gateStatus.innerText =
+        'BLOCKED';
+
+        message.innerText =
+        'VALID EMAIL REQUIRED';
+
+        return;
+    }
+
+    if (!humanCheck.checked) {
+
+        gateStatus.innerText =
+        'BLOCKED';
+
+        message.innerText =
+        'HUMAN CHECK REQUIRED';
+
+        return;
+    }
+
+    gateStatus.innerText =
+    'VERIFYING';
+
+    message.innerText =
+    'FREE ENTRY VERIFIED';
+
+    grantAccess(email);
+}
+);
+
+aboutBtn.addEventListener(
+'click',
+function() {
+
+    window.location.href =
+    '/about/';
+}
+);
+
+</script>
+
 </body>
 </html>
