@@ -39,6 +39,31 @@ status:400
 
 }
 
+const resendApiKey =
+context.env.RESEND_API_KEY || '';
+
+if(!resendApiKey){
+
+return Response.json({
+
+success:false,
+message:'RESEND_API_KEY is missing. Verification email was not sent.',
+status:'email_not_sent',
+emailDelivery:'missing_api_key'
+
+},{
+status:500
+});
+
+}
+
+const fromEmail =
+context.env.CC_EMAIL_FROM ||
+'CyberCrowd <onboarding@cybercrowd.net>';
+
+const serviceReplyEmail =
+'cybercrowd_services@yahoo.com';
+
 const verifyToken =
 crypto.randomUUID();
 
@@ -54,16 +79,6 @@ origin +
 encodeURIComponent(verifyToken) +
 '&email=' +
 encodeURIComponent(email);
-
-const serviceReplyEmail =
-'cybercrowd_services@yahoo.com';
-
-const fromEmail =
-context.env.CC_EMAIL_FROM ||
-'CyberCrowd <onboarding@cybercrowd.net>';
-
-const resendApiKey =
-context.env.RESEND_API_KEY || '';
 
 const emailSubject =
 'Verify your CyberCrowd free entry';
@@ -170,11 +185,6 @@ console.log(
 verifyUrl
 );
 
-let emailDelivery =
-'not_configured';
-
-if(resendApiKey){
-
 const sendResponse =
 await fetch(
 'https://api.resend.com/emails',
@@ -213,14 +223,25 @@ emailText
 
 let sendData = {};
 
+let sendText = '';
+
 try{
 
+sendText =
+await sendResponse.text();
+
+if(sendText){
+
 sendData =
-await sendResponse.json();
+JSON.parse(sendText);
+
+}
 
 }catch(error){
 
-sendData = {};
+sendData = {
+raw:sendText
+};
 
 }
 
@@ -236,7 +257,9 @@ return Response.json({
 success:false,
 
 message:
-'Verification created, but email delivery failed.',
+sendData.message ||
+sendData.error ||
+'Resend rejected the verification email.',
 
 email,
 
@@ -250,6 +273,9 @@ verifyUrl,
 emailDelivery:
 'failed',
 
+resendStatus:
+sendResponse.status,
+
 details:
 sendData
 
@@ -259,26 +285,63 @@ status:502
 
 }
 
-emailDelivery =
-'sent';
+const resendEmailId =
+sendData.id || '';
+
+if(!resendEmailId){
+
+console.error(
+'CYBERCROWD EMAIL SEND WARNING: RESEND ACCEPTED WITHOUT ID',
+sendData
+);
+
+return Response.json({
+
+success:false,
+
+message:
+'Resend response did not include an email id. Verification email was not confirmed sent.',
+
+email,
+
+status:
+'email_delivery_unconfirmed',
+
+verifyToken,
+
+verifyUrl,
+
+emailDelivery:
+'unconfirmed',
+
+details:
+sendData
+
+},{
+status:502
+});
+
+}
 
 console.log(
 'CYBERCROWD VERIFY EMAIL SENT:',
 email
 );
 
-}
+console.log(
+'CYBERCROWD RESEND EMAIL ID:',
+resendEmailId
+);
 
 return Response.json({
 
 success:true,
 
-status:'pending_verification',
+status:
+'pending_verification',
 
 message:
-emailDelivery === 'sent'
-? 'Verification email sent. Check your inbox.'
-: 'Verification created. Email API key is not configured yet.',
+'Verification email sent. Check your inbox.',
 
 email,
 
@@ -286,7 +349,10 @@ verifyToken,
 
 verifyUrl,
 
-emailDelivery,
+emailDelivery:
+'sent',
+
+resendEmailId,
 
 serviceReplyEmail
 
