@@ -15,6 +15,12 @@ const tier =
 .trim()
 .toLowerCase();
 
+const humanConfirmed =
+body.humanConfirmed === true ||
+body.human_confirmed === true ||
+body.humanConfirmed === 'true' ||
+body.human_confirmed === 'true';
+
 const allowedTiers =
 [
 'visitor',
@@ -67,16 +73,30 @@ status:400
 
 }
 
-const resendApiKey =
-context.env.RESEND_API_KEY || '';
-
-if(!resendApiKey){
+if(!humanConfirmed){
 
 return Response.json({
 
 success:false,
-status:'missing_resend_api_key',
-message:'Enrollment server is missing RESEND_API_KEY.'
+status:'human_not_confirmed',
+message:'Human confirmation required.'
+
+},{
+status:400
+});
+
+}
+
+const enrollmentDb =
+context.env.ENROLLMENT_DB;
+
+if(!enrollmentDb){
+
+return Response.json({
+
+success:false,
+status:'missing_enrollment_db',
+message:'Enrollment database binding ENROLLMENT_DB is missing.'
 
 },{
 status:500
@@ -100,6 +120,13 @@ tier === 'visitor'
 ? 'Standard Member'
 : 'Content Creator';
 
+const nextStep =
+tier === 'visitor'
+? 'visitor_access'
+: tier === 'member'
+? 'member_payment_pending'
+: 'creator_verification_pending';
+
 const verifyUrl =
 origin +
 '/api/auth/verify?enrollment=' +
@@ -117,6 +144,117 @@ const serviceContactEmail =
 
 const subject =
 'CyberCrowd enrollment access';
+
+const initialDetails =
+{
+source:'api_enrollment_start',
+stage:'created_before_email',
+email,
+tier,
+tierLabel,
+nextStep
+};
+
+await enrollmentDb
+.prepare(
+`INSERT INTO enrollments (
+enrollment_id,
+email,
+tier,
+human_confirmed,
+status,
+email_delivery,
+resend_email_id,
+resend_status,
+sender_used,
+verify_url,
+next_step,
+details_json
+)
+VALUES (
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?,
+?
+)`
+)
+.bind(
+enrollmentId,
+email,
+tier,
+1,
+'enrollment_recorded',
+'not_attempted',
+null,
+null,
+fromEmail,
+verifyUrl,
+nextStep,
+JSON.stringify(initialDetails)
+)
+.run();
+
+const resendApiKey =
+context.env.RESEND_API_KEY || '';
+
+if(!resendApiKey){
+
+const details =
+{
+source:'api_enrollment_start',
+stage:'resend_not_configured',
+message:'RESEND_API_KEY missing',
+email,
+tier,
+tierLabel,
+nextStep
+};
+
+await enrollmentDb
+.prepare(
+`UPDATE enrollments
+SET
+status = ?,
+email_delivery = ?,
+details_json = ?,
+updated_at = CURRENT_TIMESTAMP
+WHERE enrollment_id = ?`
+)
+.bind(
+'enrollment_recorded_email_not_configured',
+'email_service_inactive',
+JSON.stringify(details),
+enrollmentId
+)
+.run();
+
+return Response.json({
+
+success:true,
+status:'enrollment_recorded_email_not_configured',
+message:'CyberCrowd enrollment was recorded, but email service is not configured.',
+email,
+tier,
+tierLabel,
+enrollmentId,
+verifyUrl,
+nextStep,
+emailDelivery:'email_service_inactive',
+senderUsed:fromEmail
+
+},{
+status:200
+});
+
+}
 
 const text =
 [
@@ -300,33 +438,100 @@ raw:sendText
 
 if(!sendResponse.ok){
 
+const failedDetails =
+{
+source:'api_enrollment_start',
+stage:'resend_failed_after_d1_record',
+email,
+tier,
+tierLabel,
+nextStep,
+resendStatus:sendResponse.status,
+resendResponse:sendData
+};
+
+await enrollmentDb
+.prepare(
+`UPDATE enrollments
+SET
+status = ?,
+email_delivery = ?,
+resend_status = ?,
+sender_used = ?,
+details_json = ?,
+updated_at = CURRENT_TIMESTAMP
+WHERE enrollment_id = ?`
+)
+.bind(
+'enrollment_recorded_email_failed',
+'failed',
+sendResponse.status,
+fromEmail,
+JSON.stringify(failedDetails),
+enrollmentId
+)
+.run();
+
 return Response.json({
 
-success:false,
-status:'resend_send_failed',
-message:
-sendData.message ||
-sendData.error ||
-'Resend send failed.',
-
+success:true,
+status:'enrollment_recorded_email_failed',
+message:'CyberCrowd enrollment was recorded, but email delivery failed.',
 email,
 tier,
 tierLabel,
 enrollmentId,
-senderUsed:
-fromEmail,
-
-resendStatus:
-sendResponse.status,
-
-details:
-sendData
+verifyUrl,
+nextStep,
+emailDelivery:'failed',
+resendStatus:sendResponse.status,
+senderUsed:fromEmail,
+details:sendData
 
 },{
-status:502
+status:200
 });
 
 }
+
+const resendEmailId =
+sendData.id || '';
+
+const successDetails =
+{
+source:'api_enrollment_start',
+stage:'resend_accepted_after_d1_record',
+email,
+tier,
+tierLabel,
+nextStep,
+resendEmailId,
+resendStatus:sendResponse.status
+};
+
+await enrollmentDb
+.prepare(
+`UPDATE enrollments
+SET
+status = ?,
+email_delivery = ?,
+resend_email_id = ?,
+resend_status = ?,
+sender_used = ?,
+details_json = ?,
+updated_at = CURRENT_TIMESTAMP
+WHERE enrollment_id = ?`
+)
+.bind(
+'enrollment_started',
+'accepted_by_resend',
+resendEmailId,
+sendResponse.status,
+fromEmail,
+JSON.stringify(successDetails),
+enrollmentId
+)
+.run();
 
 return Response.json({
 
@@ -338,12 +543,10 @@ tier,
 tierLabel,
 enrollmentId,
 verifyUrl,
+nextStep,
 emailDelivery:'accepted_by_resend',
-resendEmailId:
-sendData.id || '',
-
-senderUsed:
-fromEmail
+resendEmailId,
+senderUsed:fromEmail
 
 },{
 status:200
