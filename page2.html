@@ -250,6 +250,14 @@ button:disabled {
     font-size: 12px;
 
     line-height: 1.6;
+
+    word-break: break-word;
+}
+
+#message.errorMessage {
+    color: #ff7777;
+
+    letter-spacing: 1px;
 }
 
 #pendingBox {
@@ -597,7 +605,7 @@ READY
 </div>
 
 <div id="footer">
-CYBERCROWD PAGE2 SECURITY GATE V5
+CYBERCROWD PAGE2 SECURITY GATE V6
 </div>
 
 </div>
@@ -669,10 +677,22 @@ function validEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function cleanServerText(value) {
+
+    return String(value || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 260);
+}
+
 function setWaitingState() {
 
     gateStatus.innerText =
     'WAITING';
+
+    message.classList.remove(
+        'errorMessage'
+    );
 
     message.innerText =
     'READY';
@@ -689,6 +709,10 @@ function setBlockedState(text) {
     gateStatus.innerText =
     'BLOCKED';
 
+    message.classList.add(
+        'errorMessage'
+    );
+
     message.innerText =
     text;
 }
@@ -697,6 +721,10 @@ function setSendingState() {
 
     gateStatus.innerText =
     'SENDING';
+
+    message.classList.remove(
+        'errorMessage'
+    );
 
     message.innerText =
     'CREATING VERIFICATION REQUEST';
@@ -712,6 +740,10 @@ function setPendingState(email) {
 
     gateStatus.innerText =
     'EMAIL PENDING';
+
+    message.classList.remove(
+        'errorMessage'
+    );
 
     message.innerText =
     'CHECK YOUR EMAIL';
@@ -729,42 +761,93 @@ function setPendingState(email) {
     'RESEND VERIFY EMAIL';
 }
 
-async function requestVerification(email) {
+function setErrorState(text) {
 
-    const response =
-    await fetch(
-        '/api/auth/signup',
-        {
-            method: 'POST',
+    gateStatus.innerText =
+    'ERROR';
 
-            headers: {
-                'Content-Type': 'application/json'
-            },
-
-            body:
-            JSON.stringify({
-                email: email
-            })
-        }
+    message.classList.add(
+        'errorMessage'
     );
 
-    let data = {};
+    message.innerText =
+    text;
+
+    verifyBtn.disabled =
+    false;
+
+    verifyBtn.innerText =
+    'REQUEST VERIFY EMAIL';
+}
+
+async function requestVerification(email) {
+
+    let response;
 
     try {
 
-        data =
-        await response.json();
+        response =
+        await fetch(
+            '/api/auth/signup',
+            {
+                method: 'POST',
 
-    } catch(error) {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
 
-        data = {};
+                body:
+                JSON.stringify({
+                    email: email
+                })
+            }
+        );
+
+    } catch(networkError) {
+
+        throw new Error(
+            'NETWORK ERROR: ' +
+            cleanServerText(
+                networkError.message
+            )
+        );
+    }
+
+    const responseText =
+    await response.text();
+
+    let data = {};
+
+    if (responseText) {
+
+        try {
+
+            data =
+            JSON.parse(
+                responseText
+            );
+
+        } catch(parseError) {
+
+            data = {};
+        }
     }
 
     if (!response.ok || data.success !== true) {
 
+        const serverMessage =
+        data.error ||
+        data.message ||
+        cleanServerText(
+            responseText
+        ) ||
+        'Verification request failed.';
+
         throw new Error(
-            data.message ||
-            'Verification request failed.'
+            'SIGNUP ' +
+            response.status +
+            ': ' +
+            serverMessage
         );
     }
 
@@ -831,18 +914,10 @@ async function() {
 
     } catch(error) {
 
-        gateStatus.innerText =
-        'ERROR';
-
-        message.innerText =
-        error.message ||
-        'VERIFICATION REQUEST FAILED';
-
-        verifyBtn.disabled =
-        false;
-
-        verifyBtn.innerText =
-        'REQUEST VERIFY EMAIL';
+        setErrorState(
+            error.message ||
+            'VERIFICATION REQUEST FAILED'
+        );
     }
 }
 );
