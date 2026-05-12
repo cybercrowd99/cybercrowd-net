@@ -15,7 +15,8 @@ if(!email){
 return Response.json({
 
 success:false,
-message:'Email required.'
+message:'Email required.',
+status:'missing_email'
 
 },{
 status:400
@@ -31,7 +32,8 @@ if(!emailPattern.test(email)){
 return Response.json({
 
 success:false,
-message:'Invalid email format.'
+message:'Invalid email format.',
+status:'invalid_email'
 
 },{
 status:400
@@ -57,9 +59,20 @@ status:500
 
 }
 
+/*
+CYBERCROWD SENDER FORCE
+-----------------------
+This forces the same Resend starter sender path that already reached the inbox.
+
+Do not use CC_EMAIL_FROM in this version.
+Do not use onboarding@cybercrowd.net in this version.
+
+Reply/contact remains CyberCrowd services.
+-----------------------
+*/
+
 const fromEmail =
-context.env.CC_EMAIL_FROM ||
-'CyberCrowd <onboarding@cybercrowd.net>';
+'onboarding@resend.dev';
 
 const serviceReplyEmail =
 'cybercrowd_services@yahoo.com';
@@ -176,6 +189,11 @@ email
 );
 
 console.log(
+'CYBERCROWD FORCE SENDER:',
+fromEmail
+);
+
+console.log(
 'CYBERCROWD VERIFY TOKEN:',
 verifyToken
 );
@@ -222,7 +240,6 @@ emailText
 );
 
 let sendData = {};
-
 let sendText = '';
 
 try{
@@ -276,6 +293,12 @@ emailDelivery:
 resendStatus:
 sendResponse.status,
 
+senderUsed:
+fromEmail,
+
+replyTo:
+serviceReplyEmail,
+
 details:
 sendData
 
@@ -313,6 +336,12 @@ verifyUrl,
 
 emailDelivery:
 'unconfirmed',
+
+senderUsed:
+fromEmail,
+
+replyTo:
+serviceReplyEmail,
 
 details:
 sendData
@@ -354,6 +383,9 @@ emailDelivery:
 
 resendEmailId,
 
+senderUsed:
+fromEmail,
+
 serviceReplyEmail
 
 },{
@@ -370,7 +402,8 @@ error
 return Response.json({
 
 success:false,
-message:'Continuity enrollment failure.'
+message:'Continuity enrollment failure.',
+status:'signup_exception'
 
 },{
 status:500
