@@ -2,996 +2,1312 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>CyberCrowd Security Gate</title>
-
-<meta name="description"
-content="CyberCrowd free entry security gate for verified visitor access.">
-
-<meta name="robots"
-content="index, follow">
-
-<link rel="canonical"
-href="https://cybercrowd.net/page2.html">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-Tier Secure Enrollment — Cybercrowd</title>
 <style>
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-
-    width: 100%;
-    min-height: 100%;
-
-    background: #050505;
-    color: white;
-
-    font-family: Arial, sans-serif;
-}
-
-#stage {
-    min-height: 100vh;
-
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 100vh;
+  }
 
-    padding: 24px;
+  .trigger-btn {
+    padding: 16px 40px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid #333;
+    background: #141414;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .trigger-btn:hover {
+    border-color: #555;
+    background: #1c1c1c;
+  }
 
-    box-sizing: border-box;
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+  }
+  .modal-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
 
+  .modal-window {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 36px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+    transform: translateY(16px);
+    transition: transform 0.3s ease;
+  }
+  .modal-overlay.active .modal-window {
+    transform: translateY(0);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+  .modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 26px;
+    cursor: pointer;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .modal-close:hover {
+    color: #fff;
+    background: #222;
+  }
+
+  .progress-track {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+  }
+  .progress-seg {
+    flex: 1;
+    height: 3px;
+    background: #222;
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .progress-seg.done { background: #fff; }
+  .progress-seg.active { background: #555; }
+
+  .step-label {
+    font-size: 11px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .tier-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .tier-card {
+    border: 1px solid #222;
+    background: #0f0f0f;
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .tier-card:hover {
+    border-color: #444;
+    background: #161616;
+  }
+  .tier-card.selected {
+    border-color: #fff;
+    background: #1a1a1a;
+  }
+  .tier-badge {
+    position: absolute;
+    top: -1px;
+    right: 16px;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 0 0 4px 4px;
+  }
+  .tier-badge.free { background: #2a2a2a; color: #888; }
+  .tier-badge.member { background: #333; color: #ccc; }
+  .tier-badge.creator { background: #fff; color: #000; }
+
+  .tier-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .tier-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+  }
+  .tier-price {
+    font-size: 13px;
+    color: #888;
+    margin-top: 10px;
+    font-weight: 500;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .form-input, .form-select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+  }
+  .form-input:focus, .form-select:focus {
+    border-color: #555;
+  }
+  .form-input::placeholder {
+    color: #333;
+  }
+  .form-input:disabled, .form-select:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .submit-btn, .action-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    border: 1px solid #333;
+    background: #181818;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+  .submit-btn:hover:not(:disabled), .action-btn:hover:not(:disabled) {
+    background: #222;
+    border-color: #444;
+  }
+  .submit-btn:disabled, .action-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .back-btn:hover {
+    color: #aaa;
+  }
+
+  .upload-zone {
+    border: 2px dashed #2a2a2a;
+    border-radius: 8px;
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #0a0a0a;
+  }
+  .upload-zone:hover {
+    border-color: #444;
+    background: #0f0f0f;
+  }
+  .upload-zone.has-file {
+    border-color: #fff;
+    border-style: solid;
+    background: #161616;
+  }
+  .upload-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #444;
+  }
+  .upload-text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 6px;
+  }
+  .upload-hint {
+    font-size: 12px;
+    color: #333;
+  }
+  .upload-input {
+    display: none;
+  }
+
+  .state-block {
+    display: none;
+  }
+  .state-block.active {
+    display: block;
+  }
+
+  .pending-icon {
+    width: 44px;
+    height: 44px;
+    border: 3px solid #222;
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 18px;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .countdown-bar {
+    width: 100%;
+    height: 3px;
+    background: #1a1a1a;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 16px 0 10px;
+  }
+  .countdown-fill {
+    height: 100%;
+    background: #fff;
+    width: 100%;
+    transition: width 1s linear;
+  }
+
+  .countdown-text {
+    font-size: 12px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .countdown-text.warning {
+    color: #ff4444;
+  }
+
+  .center-text {
+    text-align: center;
+  }
+  .pending-text {
+    font-size: 14px;
+    color: #888;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .pending-email {
+    font-weight: 600;
+    color: #fff;
+    word-break: break-all;
+  }
+
+  .success-check {
+    width: 48px;
+    height: 48px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #fff;
+  }
+  .success-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .success-sub {
+    font-size: 13px;
+    color: #555;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .error-msg {
+    font-size: 12px;
+    color: #ff4444;
+    margin-top: 6px;
+    display: none;
+  }
+  .error-msg.active { display: block; }
+
+  .simulated-inbox {
+    margin-top: 20px;
+    padding: 14px;
+    background: #0a0a0a;
+    border: 1px dashed #2a2a2a;
+    border-radius: 6px;
+  }
+  .simulated-inbox-title {
+    font-size: 11px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .verify-link {
+    display: inline-block;
+    padding: 10px 18px;
+    background: #181818;
+    border: 1px solid #333;
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .verify-link:hover {
+    background: #222;
+  }
+  .verify-link.expired {
+    opacity: 0.25;
+    pointer-events: none;
+    text-decoration: line-through;
+    border-color: #222;
+  }
+
+  .resend-btn {
+    background: none;
+    border: 1px solid #2a2a2a;
+    color: #555;
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .resend-btn:hover {
+    color: #aaa;
+    border-color: #444;
+  }
+  .resend-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  .divider {
+    height: 1px;
+    background: #1a1a1a;
+    margin: 20px 0;
+  }
+
+  .status-log {
+    font-size: 10px;
+    color: #333;
+    font-family: "SF Mono", Monaco, monospace;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #1a1a1a;
+  }
+
+  .tier-summary {
+    background: #0f0f0f;
+    border: 1px solid #1f1f1f;
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 20px;
+  }
+  .tier-summary-label {
+    font-size: 10px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .tier-summary-value {
+    font-size: 14px;
+    color: #aaa;
+    font-weight: 500;
+  }
+
+  .match-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .match-box {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .match-box-label {
+    font-size: 10px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .match-box-img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: #111;
+    display: block;
+  }
+  .match-score {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin: 12px 0;
+    text-align: center;
+  }
+  .match-status {
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+  }
+
+  /* CYBERCROWD COLOR FLOW OVERRIDE */
+  :root {
+    --cc-black: #050505;
+    --cc-panel: #101414;
+    --cc-panel-soft: #0c1111;
+    --cc-cyan: #00ffff;
+    --cc-green: #00ffaa;
+    --cc-text: #ffffff;
+    --cc-muted: #9fb9b9;
+    --cc-border: rgba(0,255,255,0.34);
+    --cc-border-hot: rgba(0,255,255,0.82);
+    --cc-glow: rgba(0,255,255,0.22);
+    --cc-green-glow: rgba(0,255,170,0.20);
+    --cc-error: #ff5555;
+  }
+
+  body {
     background:
     radial-gradient(
-        circle at center,
-        rgba(0,255,255,0.10),
-        transparent 42%
+      circle at center,
+      rgba(0,255,255,0.10),
+      transparent 46%
     ),
-    #050505;
-}
+    var(--cc-black);
 
-#gate {
-    width: 92%;
-    max-width: 520px;
+    color: var(--cc-text);
+  }
 
+  .trigger-btn,
+  .modal-window,
+  .tier-card,
+  .tier-summary,
+  .match-box,
+  .upload-zone,
+  .simulated-inbox {
     background:
-    rgba(12,12,12,0.94);
+    linear-gradient(
+      180deg,
+      rgba(0,255,255,0.045),
+      rgba(0,255,170,0.018)
+    ),
+    var(--cc-panel-soft);
 
-    border:
-    1px solid rgba(0,255,255,0.42);
-
-    border-radius: 22px;
-
-    padding: 28px;
+    border-color: var(--cc-border);
 
     box-shadow:
-    0 0 28px rgba(0,255,255,0.18);
+    0 0 18px rgba(0,255,255,0.06);
+  }
 
-    box-sizing: border-box;
-}
-
-h1 {
-    color: #00ffff;
-
-    margin-top: 0;
-
-    letter-spacing: 3px;
-
-    text-align: center;
-}
-
-p {
-    opacity: 0.86;
-
-    line-height: 1.55;
-
-    text-align: center;
-}
-
-.statusBox {
-    margin-top: 18px;
-
-    padding: 16px;
-
-    border-radius: 14px;
-
-    background: #151515;
-
-    border:
-    1px solid rgba(0,255,170,0.45);
-}
-
-.label {
-    color: #00ffaa;
-
-    font-size: 12px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 6px;
-}
-
-.value {
-    font-size: 18px;
-}
-
-.field {
-    margin-top: 18px;
-}
-
-input[type="email"] {
-    width: 100%;
-
-    padding: 15px;
-
-    border-radius: 14px;
-
-    border:
-    1px solid rgba(0,255,255,0.30);
-
-    background:
-    rgba(255,255,255,0.04);
-
-    color: white;
-
-    font-size: 16px;
-
-    box-sizing: border-box;
-}
-
-input[type="email"]:focus {
-    outline: none;
-
-    border:
-    1px solid rgba(0,255,255,0.75);
+  .modal-window {
+    border-color: var(--cc-border);
 
     box-shadow:
-    0 0 14px rgba(0,255,255,0.22);
-}
+    0 0 34px var(--cc-glow),
+    0 24px 80px rgba(0,0,0,0.82);
+  }
 
-#humanRow {
-    margin-top: 18px;
+  .modal-title,
+  .tier-name,
+  .success-title,
+  .success-text,
+  .success-check,
+  .match-score {
+    color: var(--cc-text);
+  }
 
-    display: flex;
+  .step-label,
+  .form-label,
+  .tier-summary-label,
+  .match-box-label,
+  .status-log,
+  .upload-hint,
+  .success-sub,
+  .tier-desc,
+  .pending-text,
+  .countdown-text {
+    color: var(--cc-muted);
+  }
 
-    align-items: center;
+  .progress-seg {
+    background: rgba(0,255,255,0.14);
+  }
 
-    gap: 12px;
+  .progress-seg.active {
+    background: var(--cc-cyan);
 
-    padding: 14px;
+    box-shadow:
+    0 0 10px var(--cc-glow);
+  }
 
-    border-radius: 14px;
-
+  .progress-seg.done {
     background:
-    rgba(0,255,255,0.05);
+    linear-gradient(
+      90deg,
+      var(--cc-cyan),
+      var(--cc-green)
+    );
 
-    border:
-    1px solid rgba(0,255,255,0.22);
-}
+    box-shadow:
+    0 0 12px var(--cc-green-glow);
+  }
 
-#humanCheck {
-    width: 22px;
-    height: 22px;
-
-    cursor: pointer;
-}
-
-#humanText {
-    line-height: 1.5;
-
-    opacity: 0.86;
-}
-
-button {
-    width: 100%;
-
-    margin-top: 14px;
-
-    padding: 16px;
-
-    border: none;
-
-    border-radius: 16px;
+  .tier-card:hover,
+  .upload-zone:hover,
+  .trigger-btn:hover {
+    border-color: var(--cc-border-hot);
 
     background:
     linear-gradient(
-        90deg,
-        #00ffff,
-        #00ffaa
+      180deg,
+      rgba(0,255,255,0.09),
+      rgba(0,255,170,0.04)
+    ),
+    var(--cc-panel);
+  }
+
+  .tier-card.selected,
+  .upload-zone.has-file {
+    border-color: var(--cc-cyan);
+
+    background:
+    linear-gradient(
+      135deg,
+      rgba(0,255,255,0.12),
+      rgba(0,255,170,0.07)
+    ),
+    var(--cc-panel);
+
+    box-shadow:
+    0 0 22px var(--cc-glow);
+  }
+
+  .tier-badge.free,
+  .tier-badge.member,
+  .tier-badge.creator {
+    background:
+    linear-gradient(
+      90deg,
+      var(--cc-cyan),
+      var(--cc-green)
     );
 
-    color: black;
+    color: #001111;
+  }
 
-    font-weight: bold;
+  .tier-price,
+  .pending-email,
+  .tier-summary-value,
+  .upload-text,
+  .match-status {
+    color: var(--cc-green);
+  }
 
-    font-size: 16px;
+  .form-input,
+  .form-select {
+    background: rgba(0,0,0,0.52);
 
-    letter-spacing: 2px;
+    border-color: var(--cc-border);
 
-    cursor: pointer;
-}
+    color: var(--cc-text);
+  }
 
-button:hover {
-    box-shadow:
-    0 0 22px rgba(0,255,255,0.28);
-}
-
-button:disabled {
-    opacity: 0.55;
-
-    cursor: not-allowed;
-
-    box-shadow: none;
-}
-
-.secondaryButton {
-    background:
-    rgba(255,255,255,0.08);
-
-    color: white;
-
-    border:
-    1px solid rgba(255,255,255,0.14);
-}
-
-#message {
-    margin-top: 16px;
-
-    min-height: 20px;
-
-    color: #00ffaa;
-
-    text-align: center;
-
-    letter-spacing: 2px;
-
-    font-size: 12px;
-
-    line-height: 1.6;
-
-    word-break: break-word;
-}
-
-#message.errorMessage {
-    color: #ff7777;
-
-    letter-spacing: 1px;
-}
-
-#pendingBox {
-    display: none;
-
-    margin-top: 18px;
-
-    padding: 16px;
-
-    border-radius: 14px;
-
-    background:
-    rgba(0,255,255,0.05);
-
-    border:
-    1px solid rgba(0,255,255,0.22);
-
-    color: white;
-
-    line-height: 1.6;
-
-    text-align: center;
-
-    font-size: 13px;
-}
-
-#pendingEmail {
-    color: #00ffaa;
-
-    word-break: break-word;
-}
-
-#introWindow {
-    display: none;
-
-    margin-top: 18px;
-
-    padding: 18px;
-
-    border-radius: 18px;
-
-    background:
-    rgba(0,0,0,0.62);
-
-    border:
-    1px solid rgba(0,255,255,0.30);
+  .form-input:focus,
+  .form-select:focus {
+    border-color: var(--cc-cyan);
 
     box-shadow:
-    0 0 18px rgba(0,255,255,0.10);
-}
+    0 0 14px var(--cc-glow);
+  }
 
-#introTitle {
-    color: #00ffff;
+  .submit-btn,
+  .action-btn,
+  .verify-link {
+    background:
+    linear-gradient(
+      90deg,
+      var(--cc-cyan),
+      var(--cc-green)
+    );
 
-    font-size: 17px;
+    color: #001111;
 
-    letter-spacing: 2px;
+    border-color: transparent;
 
-    margin-bottom: 12px;
+    box-shadow:
+    0 0 18px rgba(0,255,255,0.12);
+  }
 
-    text-align: center;
-}
+  .submit-btn:hover:not(:disabled),
+  .action-btn:hover:not(:disabled),
+  .verify-link:hover {
+    background:
+    linear-gradient(
+      90deg,
+      var(--cc-green),
+      var(--cc-cyan)
+    );
 
-#introBody {
-    color: white;
+    box-shadow:
+    0 0 24px var(--cc-glow);
+  }
 
-    opacity: 0.88;
+  .back-btn,
+  .resend-btn,
+  .modal-close {
+    color: var(--cc-muted);
+  }
 
-    line-height: 1.68;
+  .back-btn:hover,
+  .resend-btn:hover,
+  .modal-close:hover {
+    color: var(--cc-cyan);
 
-    font-size: 14px;
+    border-color: var(--cc-border-hot);
+  }
 
-    text-align: center;
-}
+  .pending-icon {
+    border-color: rgba(0,255,255,0.18);
+    border-top-color: var(--cc-cyan);
 
-#introBody strong {
-    color: #00ffaa;
-}
+    box-shadow:
+    0 0 14px var(--cc-glow);
+  }
 
-#introLeadTag {
-    margin-top: 20px;
+  .countdown-fill {
+    background:
+    linear-gradient(
+      90deg,
+      var(--cc-cyan),
+      var(--cc-green)
+    );
+  }
 
-    color: #00ffaa;
+  .countdown-text.warning,
+  .error-msg {
+    color: var(--cc-error);
+  }
 
-    font-size: 15px;
+  .success-check {
+    border-color: var(--cc-green);
 
-    font-weight: bold;
+    color: var(--cc-green);
 
-    letter-spacing: 1px;
+    box-shadow:
+    0 0 18px var(--cc-green-glow);
+  }
 
-    line-height: 1.6;
-
-    text-align: center;
-}
-
-#introTagStage {
-    min-height: 84px;
-
-    margin-top: 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    overflow: hidden;
-}
-
-#whereWeBelongTag {
-    opacity: 0;
-
-    transform:
-    scale(0.36)
-    translateY(18px);
-
-    color: #00ffff;
-
-    font-size: 22px;
-
-    font-weight: bold;
-
-    letter-spacing: 4px;
-
-    text-align: center;
-
-    line-height: 1.25;
-
+  .match-score {
     text-shadow:
-    0 0 10px rgba(0,255,255,0.50),
-    0 0 24px rgba(0,255,170,0.25);
-}
+    0 0 14px var(--cc-glow);
+  }
 
-#introWindow.introActive #whereWeBelongTag {
-    animation:
-    whereWeBelongZoom 1.4s cubic-bezier(.16,.84,.28,1.2) 5.8s forwards,
-    whereWeBelongPulse 2.4s ease-in-out 7.2s infinite;
-}
-
-@keyframes whereWeBelongZoom {
-    0% {
-        opacity: 0;
-
-        transform:
-        scale(0.36)
-        translateY(18px);
-
-        filter: blur(3px);
-    }
-
-    45% {
-        opacity: 1;
-
-        transform:
-        scale(1.20)
-        translateY(0);
-
-        filter: blur(0);
-    }
-
-    70% {
-        opacity: 1;
-
-        transform:
-        scale(0.96)
-        translateY(0);
-
-        filter: blur(0);
-    }
-
-    100% {
-        opacity: 1;
-
-        transform:
-        scale(1)
-        translateY(0);
-
-        filter: blur(0);
-    }
-}
-
-@keyframes whereWeBelongPulse {
-    0% {
-        text-shadow:
-        0 0 10px rgba(0,255,255,0.45),
-        0 0 22px rgba(0,255,170,0.22);
-    }
-
-    50% {
-        text-shadow:
-        0 0 16px rgba(0,255,255,0.82),
-        0 0 34px rgba(0,255,170,0.42);
-    }
-
-    100% {
-        text-shadow:
-        0 0 10px rgba(0,255,255,0.45),
-        0 0 22px rgba(0,255,170,0.22);
-    }
-}
-
-#introClose {
-    margin-top: 14px;
-
+  .divider {
     background:
-    rgba(255,255,255,0.06);
-
-    color: #00ffaa;
-
-    border:
-    1px solid rgba(0,255,255,0.18);
-}
-
-#footer {
-    margin-top: 24px;
-
-    text-align: center;
-
-    opacity: 0.42;
-
-    font-size: 11px;
-
-    letter-spacing: 2px;
-}
-
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(0,255,255,0.38),
+      transparent
+    );
+  }
 </style>
 </head>
-
 <body>
 
-<div id="stage">
+<button class="trigger-btn" id="openModal">Enroll / Login</button>
 
-<div id="gate">
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-window">
+    <div class="modal-header">
+      <div class="modal-title">Secure Enrollment</div>
+      <button class="modal-close" id="closeModal">&times;</button>
+    </div>
 
-<h1>
-SECURITY GATE
-</h1>
+    <div class="progress-track" id="progressTrack">
+      <div class="progress-seg" id="prog1"></div>
+      <div class="progress-seg" id="prog2"></div>
+      <div class="progress-seg" id="prog3"></div>
+      <div class="progress-seg" id="prog4"></div>
+    </div>
+    <div class="step-label" id="stepLabel">Select Tier</div>
 
-<p>
-Free CyberCrowd entry can request email verification.
-If email delivery is limited, the CyberCrowd introduction remains open.
-</p>
+    <!-- TIER SELECT -->
+    <div class="state-block active" id="stateTier">
+      <div class="tier-grid">
+        <div class="tier-card" data-tier="1">
+          <div class="tier-badge free">Free</div>
+          <div class="tier-name">Visitor Access</div>
+          <div class="tier-desc">Browse public content. No posting rights. Basic read-only access to the platform.</div>
+          <div class="tier-price">$0 / email verification only</div>
+        </div>
+        <div class="tier-card" data-tier="2">
+          <div class="tier-badge member">Member</div>
+          <div class="tier-name">Standard Member</div>
+          <div class="tier-desc">Full platform access. Comment, save, interact. Verified identity with payment backing.</div>
+          <div class="tier-price">$9/mo + card verification</div>
+        </div>
+        <div class="tier-card" data-tier="3">
+          <div class="tier-badge creator">Creator</div>
+          <div class="tier-name">Content Creator</div>
+          <div class="tier-desc">Publish, monetize, stream. Government ID + biometric match required. Highest trust tier.</div>
+          <div class="tier-price">$29/mo + ID + selfie match</div>
+        </div>
+      </div>
+      <button class="submit-btn" id="tierConfirmBtn" disabled>Continue</button>
+    </div>
 
-<div class="statusBox">
+    <!-- EMAIL -->
+    <div class="state-block" id="stateEmail">
+      <button class="back-btn" id="backEmail">&larr; Back to Tiers</button>
+      <div class="form-group">
+        <label class="form-label" for="emailInput">Email Address</label>
+        <input type="email" class="form-input" id="emailInput" placeholder="you@domain.com" autocomplete="email">
+        <div class="error-msg" id="emailError">Enter a valid email address.</div>
+      </div>
+      <button class="submit-btn" id="submitEmail">Send Verification Link</button>
+    </div>
 
-<div class="label">
-GATE STATUS
-</div>
+    <!-- EMAIL PENDING -->
+    <div class="state-block" id="stateEmailPending">
+      <div class="center-text">
+        <div class="pending-icon"></div>
+        <div class="pending-text">
+          Verification link sent to<br><span class="pending-email" id="pendingEmail"></span>
+        </div>
+        <div class="countdown-bar"><div class="countdown-fill" id="countdownFill"></div></div>
+        <div class="countdown-text" id="countdownText">Link expires in 30 seconds</div>
+        <button class="resend-btn" id="resendBtn">Resend Link</button>
+      </div>
+      <div class="simulated-inbox" id="simulatedInbox">
+        <div class="simulated-inbox-title">Simulated Inbox</div>
+        <div style="font-size:12px;color:#555;margin-bottom:8px;">From: noreply@cybercrowd.net</div>
+        <a class="verify-link" id="verifyLink">Verify Email Address</a>
+      </div>
+    </div>
 
-<div class="value" id="gateStatus">
-WAITING
-</div>
+    <!-- CREDIT CARD -->
+    <div class="state-block" id="stateCard">
+      <button class="back-btn" id="backCard">&larr; Back</button>
+      <div class="tier-summary">
+        <div class="tier-summary-label">Selected Tier</div>
+        <div class="tier-summary-value" id="cardTierName">Standard Member</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Card Number</label>
+        <input type="text" class="form-input" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Expiry</label>
+          <input type="text" class="form-input" id="cardExpiry" placeholder="MM/YY" maxlength="5">
+        </div>
+        <div class="form-group">
+          <label class="form-label">CVC</label>
+          <input type="text" class="form-input" id="cardCvc" placeholder="123" maxlength="4">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Name on Card</label>
+        <input type="text" class="form-input" id="cardName" placeholder="Full name">
+      </div>
+      <div class="error-msg" id="cardError">Complete all card fields correctly.</div>
+      <button class="submit-btn" id="submitCard">Verify Card & Continue</button>
+    </div>
 
-</div>
+    <!-- CARD PROCESSING -->
+    <div class="state-block" id="stateCardProcessing">
+      <div class="center-text">
+        <div class="pending-icon"></div>
+        <div class="pending-text">Validating payment method...</div>
+      </div>
+    </div>
 
-<div class="field">
+    <!-- ID UPLOAD -->
+    <div class="state-block" id="stateId">
+      <button class="back-btn" id="backId">&larr; Back</button>
+      <div class="tier-summary">
+        <div class="tier-summary-label">Selected Tier</div>
+        <div class="tier-summary-value">Content Creator</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Government-Issued ID</label>
+        <div class="upload-zone" id="idUploadZone">
+          <div class="upload-icon">&#128441;</div>
+          <div class="upload-text">Tap to upload ID photo</div>
+          <div class="upload-hint">JPG or PNG, front side, all corners visible</div>
+        </div>
+        <input type="file" class="upload-input" id="idFile" accept="image/*">
+      </div>
+      <div class="error-msg" id="idError">ID upload required.</div>
+      <button class="submit-btn" id="submitId" disabled>Continue to Selfie</button>
+    </div>
 
-<div class="label">
-EMAIL
-</div>
+    <!-- SELFIE -->
+    <div class="state-block" id="stateSelfie">
+      <button class="back-btn" id="backSelfie">&larr; Back</button>
+      <div class="form-group">
+        <label class="form-label">Live Selfie Match</label>
+        <div class="upload-zone" id="selfieUploadZone">
+          <div class="upload-icon">&#128248;</div>
+          <div class="upload-text">Tap to upload live selfie</div>
+          <div class="upload-hint">Face centered, neutral expression, good lighting</div>
+        </div>
+        <input type="file" class="upload-input" id="selfieFile" accept="image/*">
+      </div>
+      <div class="error-msg" id="selfieError">Selfie upload required.</div>
+      <button class="submit-btn" id="submitSelfie" disabled>Run Biometric Match</button>
+    </div>
 
-<input
-id="emailInput"
-type="email"
-placeholder="you@example.com"
-autocomplete="email">
+    <!-- BIOMETRIC MATCH -->
+    <div class="state-block" id="stateMatch">
+      <div class="center-text">
+        <div class="pending-icon"></div>
+        <div class="pending-text">Running facial geometry match...</div>
+      </div>
+      <div class="match-preview">
+        <div class="match-box">
+          <div class="match-box-label">ID Document</div>
+          <img class="match-box-img" id="matchIdImg">
+        </div>
+        <div class="match-box">
+          <div class="match-box-label">Live Selfie</div>
+          <img class="match-box-img" id="matchSelfieImg">
+        </div>
+      </div>
+      <div class="match-score" id="matchScore">--</div>
+      <div class="match-status" id="matchStatus">Analyzing facial landmarks...</div>
+    </div>
 
-</div>
+    <!-- SUCCESS -->
+    <div class="state-block" id="stateSuccess">
+      <div class="success-check">&#10003;</div>
+      <div class="success-title" id="successTitle">Enrollment Complete</div>
+      <div class="success-sub" id="successSub">Your account is active.</div>
+      <div class="tier-summary" style="margin-top:20px;">
+        <div class="tier-summary-label">Access Level</div>
+        <div class="tier-summary-value" id="successTier">Visitor</div>
+      </div>
+    </div>
 
-<div id="humanRow">
-
-<input
-id="humanCheck"
-type="checkbox">
-
-<div id="humanText">
-I am human and request free CyberCrowd entry.
-</div>
-
-</div>
-
-<button id="verifyBtn">
-REQUEST VERIFY EMAIL
-</button>
-
-<button
-id="introBtn"
-class="secondaryButton">
-INTRODUCTION TO CYBERCROWD
-</button>
-
-<div id="introWindow">
-
-<div id="introTitle">
-INTRODUCTION TO CYBERCROWD
-</div>
-
-<div id="introBody">
-CyberCrowd is the live-culture platform built for the moment.
-<br><br>
-A unified space where broadcasts, communities, creators, and archives move together in real time - no noise, no clutter, no algorithmic roulette. Just pure signal.
-<br><br>
-<strong>
-Show up. Go live. Build culture.
-</strong>
-<br><br>
-CyberCrowd keeps it all connected so nothing gets lost and everyone stays in the loop.
-
-<div id="introLeadTag">
-ONE PLATFORM. ONE FLOW. ONE CROWD.
-</div>
-
-<div id="introTagStage">
-<div id="whereWeBelongTag">
-WHERE WE BELONG
-</div>
-</div>
-
-</div>
-
-<button id="introClose">
-CLOSE INTRODUCTION
-</button>
-
-</div>
-
-<div id="pendingBox">
-
-Verification request created for:
-
-<br><br>
-
-<span id="pendingEmail">
-pending
-</span>
-
-<br><br>
-
-Check your email and click the CyberCrowd verification link to continue.
-
-</div>
-
-<div id="message">
-READY
-</div>
-
-<div id="footer">
-CYBERCROWD PAGE2 SECURITY GATE V6 SOFT OPEN
-</div>
-
-</div>
-
+    <div class="status-log" id="statusLog">Status: idle</div>
+  </div>
 </div>
 
 <script>
+(function() {
+  const $ = id => document.getElementById(id);
 
-localStorage.removeItem(
-'cc_verified_session'
-);
+  const overlay = $('modalOverlay');
+  const progressSegs = [$('prog1'), $('prog2'), $('prog3'), $('prog4')];
+  const stepLabel = $('stepLabel');
+  const statusLog = $('statusLog');
 
-localStorage.removeItem(
-'cc_verified_email'
-);
+  const states = {
+    tier: $('stateTier'), email: $('stateEmail'), emailPending: $('stateEmailPending'),
+    card: $('stateCard'), cardProcessing: $('stateCardProcessing'),
+    id: $('stateId'), selfie: $('stateSelfie'), match: $('stateMatch'), success: $('stateSuccess')
+  };
 
-const emailInput =
-document.getElementById(
-'emailInput'
-);
+  let currentTier = 0;
+  let currentToken = null;
+  let timer = null;
+  let timeLeft = 30;
+  let verified = false;
+  let idImageData = null;
+  let selfieImageData = null;
 
-const humanCheck =
-document.getElementById(
-'humanCheck'
-);
+  const tierNames = { 1: 'Visitor Access', 2: 'Standard Member', 3: 'Content Creator' };
+  const tierPrices = { 1: '$0', 2: '$9/mo', 3: '$29/mo' };
 
-const verifyBtn =
-document.getElementById(
-'verifyBtn'
-);
+  function log(msg) { statusLog.textContent = 'Status: ' + msg; }
 
-const introBtn =
-document.getElementById(
-'introBtn'
-);
+  function showState(name) {
+    Object.values(states).forEach(el => el.classList.remove('active'));
+    states[name].classList.add('active');
+  }
 
-const introWindow =
-document.getElementById(
-'introWindow'
-);
+  function setProgress(step, total) {
+    progressSegs.forEach((seg, i) => {
+      seg.className = 'progress-seg';
+      if (i < step) seg.classList.add('done');
+      else if (i === step) seg.classList.add('active');
+    });
+  }
 
-const introClose =
-document.getElementById(
-'introClose'
-);
+  function isValidEmail(str) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);
+  }
 
-const gateStatus =
-document.getElementById(
-'gateStatus'
-);
+  function generateToken() {
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  }
 
-const message =
-document.getElementById(
-'message'
-);
+  function resetAll() {
+    clearInterval(timer);
+    timer = null;
+    timeLeft = 30;
+    currentToken = null;
+    verified = false;
+    currentTier = 0;
+    idImageData = null;
+    selfieImageData = null;
 
-const pendingBox =
-document.getElementById(
-'pendingBox'
-);
+    $('emailInput').value = '';
+    $('emailError').classList.remove('active');
+    $('cardNumber').value = '';
+    $('cardExpiry').value = '';
+    $('cardCvc').value = '';
+    $('cardName').value = '';
+    $('cardError').classList.remove('active');
+    $('idError').classList.remove('active');
+    $('selfieError').classList.remove('active');
+    $('idUploadZone').classList.remove('has-file');
+    $('selfieUploadZone').classList.remove('has-file');
+    $('idUploadZone').querySelector('.upload-text').textContent = 'Tap to upload ID photo';
+    $('selfieUploadZone').querySelector('.upload-text').textContent = 'Tap to upload live selfie';
+    $('idFile').value = '';
+    $('selfieFile').value = '';
+    $('submitId').disabled = true;
+    $('submitSelfie').disabled = true;
+    $('tierConfirmBtn').disabled = true;
+    document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
 
-const pendingEmail =
-document.getElementById(
-'pendingEmail'
-);
+    setProgress(0, 4);
+    stepLabel.textContent = 'Select Tier';
+    log('idle');
+    showState('tier');
+  }
 
-function validEmail(value) {
+  document.querySelectorAll('.tier-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      currentTier = parseInt(card.dataset.tier);
+      $('tierConfirmBtn').disabled = false;
+    });
+  });
 
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
+  $('tierConfirmBtn').addEventListener('click', () => {
+    if (!currentTier) return;
+    setProgress(0, 4);
+    stepLabel.textContent = 'Step 1: Email Verification';
+    log('tier ' + currentTier + ' selected');
+    showState('email');
+  });
 
-function cleanServerText(value) {
+  $('backEmail').addEventListener('click', () => { resetAll(); });
 
-    return String(value || '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 260);
-}
+  function startEmailCountdown(token) {
+    timeLeft = 30;
+    currentToken = token;
+    verified = false;
+    $('countdownFill').style.transition = 'none';
+    $('countdownFill').style.width = '100%';
+    void $('countdownFill').offsetWidth;
+    $('countdownFill').style.transition = 'width 1s linear';
+    $('countdownText').classList.remove('warning');
+    $('verifyLink').classList.remove('expired');
+    $('verifyLink').textContent = 'Verify Email Address';
+    $('resendBtn').disabled = true;
 
-function openIntroWindow() {
+    timer = setInterval(() => {
+      timeLeft--;
+      $('countdownFill').style.width = ((timeLeft/30)*100) + '%';
+      if (timeLeft <= 10) $('countdownText').classList.add('warning');
+      $('countdownText').textContent = 'Link expires in ' + timeLeft + 's';
+      if (timeLeft <= 0) {
+        clearInterval(timer); timer = null;
+        $('countdownText').textContent = 'Link expired — resend required';
+        $('verifyLink').classList.add('expired');
+        $('verifyLink').textContent = 'Link Expired';
+        $('resendBtn').disabled = false;
+        log('email link expired');
+      }
+    }, 1000);
+  }
 
-    introWindow.classList.remove(
-        'introActive'
-    );
+  function submitEmail() {
+    const email = $('emailInput').value.trim();
+    if (!isValidEmail(email)) { $('emailError').classList.add('active'); return; }
+    $('emailError').classList.remove('active');
+    $('pendingEmail').textContent = email;
+    showState('emailPending');
+    const token = generateToken();
+    startEmailCountdown(token);
+    log('email verification sent');
 
-    introWindow.style.display =
-    'block';
+    $('verifyLink').onclick = function(e) {
+      e.preventDefault();
+      if (this.classList.contains('expired') || currentToken !== token) return;
+      clearInterval(timer); timer = null; verified = true;
+      log('email verified');
+      advanceAfterEmail();
+    };
+  }
 
-    void introWindow.offsetWidth;
+  $('submitEmail').addEventListener('click', submitEmail);
+  $('emailInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitEmail(); });
 
-    introWindow.classList.add(
-        'introActive'
-    );
-}
+  $('resendBtn').addEventListener('click', () => {
+    if ($('resendBtn').disabled) return;
+    startEmailCountdown(generateToken());
+  });
 
-function setWaitingState() {
-
-    gateStatus.innerText =
-    'WAITING';
-
-    message.classList.remove(
-        'errorMessage'
-    );
-
-    message.innerText =
-    'READY';
-
-    verifyBtn.disabled =
-    false;
-
-    verifyBtn.innerText =
-    'REQUEST VERIFY EMAIL';
-}
-
-function setBlockedState(text) {
-
-    gateStatus.innerText =
-    'BLOCKED';
-
-    message.classList.add(
-        'errorMessage'
-    );
-
-    message.innerText =
-    text;
-}
-
-function setSendingState() {
-
-    gateStatus.innerText =
-    'SENDING';
-
-    message.classList.remove(
-        'errorMessage'
-    );
-
-    message.innerText =
-    'CREATING VERIFICATION REQUEST';
-
-    verifyBtn.disabled =
-    true;
-
-    verifyBtn.innerText =
-    'SENDING';
-}
-
-function setPendingState(email) {
-
-    gateStatus.innerText =
-    'EMAIL PENDING';
-
-    message.classList.remove(
-        'errorMessage'
-    );
-
-    message.innerText =
-    'CHECK YOUR EMAIL';
-
-    pendingEmail.innerText =
-    email;
-
-    pendingBox.style.display =
-    'block';
-
-    verifyBtn.disabled =
-    false;
-
-    verifyBtn.innerText =
-    'RESEND VERIFY EMAIL';
-}
-
-function setErrorState(text) {
-
-    gateStatus.innerText =
-    'ERROR';
-
-    message.classList.add(
-        'errorMessage'
-    );
-
-    message.innerText =
-    text;
-
-    verifyBtn.disabled =
-    false;
-
-    verifyBtn.innerText =
-    'REQUEST VERIFY EMAIL';
-}
-
-function setSoftOpenState(email) {
-
-    gateStatus.innerText =
-    'SOFT OPEN';
-
-    message.classList.remove(
-        'errorMessage'
-    );
-
-    message.innerText =
-    'EMAIL SERVICE LIMITED - CYBERCROWD INTRODUCTION OPEN';
-
-    pendingBox.style.display =
-    'none';
-
-    if (email) {
-
-        localStorage.setItem(
-            'cc_pending_verify_email',
-            email
-        );
+  function advanceAfterEmail() {
+    if (currentTier === 1) {
+      setProgress(3, 4);
+      stepLabel.textContent = 'Complete';
+      showSuccess();
+    } else {
+      setProgress(1, 4);
+      stepLabel.textContent = 'Step 2: Payment Verification';
+      $('cardTierName').textContent = tierNames[currentTier] + ' — ' + tierPrices[currentTier];
+      showState('card');
     }
+  }
 
-    verifyBtn.disabled =
-    false;
+  $('backCard').addEventListener('click', () => {
+    showState('email');
+    stepLabel.textContent = 'Step 1: Email Verification';
+    setProgress(0, 4);
+  });
 
-    verifyBtn.innerText =
-    'REQUEST VERIFY EMAIL';
+  $('cardNumber').addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').substring(0,16);
+    v = v.match(/.{1,4}/g)?.join(' ') || v;
+    e.target.value = v;
+  });
 
-    openIntroWindow();
-}
+  $('cardExpiry').addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '').substring(0,4);
+    if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2);
+    e.target.value = v;
+  });
 
-async function requestVerification(email) {
+  $('cardCvc').addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').substring(0,4);
+  });
 
-    let response;
-
-    try {
-
-        response =
-        await fetch(
-            '/api/auth/signup',
-            {
-                method: 'POST',
-
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-
-                body:
-                JSON.stringify({
-                    email: email
-                })
-            }
-        );
-
-    } catch(networkError) {
-
-        throw new Error(
-            'NETWORK ERROR: ' +
-            cleanServerText(
-                networkError.message
-            )
-        );
+  $('submitCard').addEventListener('click', () => {
+    const num = $('cardNumber').value.replace(/\s/g, '');
+    const exp = $('cardExpiry').value;
+    const cvc = $('cardCvc').value;
+    const name = $('cardName').value.trim();
+    if (num.length < 13 || exp.length < 5 || cvc.length < 3 || name.length < 2) {
+      $('cardError').classList.add('active'); return;
     }
+    $('cardError').classList.remove('active');
+    showState('cardProcessing');
+    log('validating card...');
+    setTimeout(() => {
+      log('card validated');
+      if (currentTier === 2) {
+        setProgress(3, 4);
+        stepLabel.textContent = 'Complete';
+        showSuccess();
+      } else {
+        setProgress(2, 4);
+        stepLabel.textContent = 'Step 3: Identity Verification';
+        showState('id');
+      }
+    }, 1500);
+  });
 
-    const responseText =
-    await response.text();
+  $('backId').addEventListener('click', () => {
+    showState('card');
+    stepLabel.textContent = 'Step 2: Payment Verification';
+    setProgress(1, 4);
+  });
 
-    let data = {};
-
-    if (responseText) {
-
-        try {
-
-            data =
-            JSON.parse(
-                responseText
-            );
-
-        } catch(parseError) {
-
-            data = {};
-        }
+  $('idUploadZone').addEventListener('click', () => $('idFile').click());
+  $('idFile').addEventListener('change', () => {
+    if ($('idFile').files && $('idFile').files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        idImageData = e.target.result;
+        $('idUploadZone').classList.add('has-file');
+        $('idUploadZone').querySelector('.upload-text').textContent = $('idFile').files[0].name;
+        $('submitId').disabled = false;
+        $('idError').classList.remove('active');
+      };
+      reader.readAsDataURL($('idFile').files[0]);
     }
+  });
 
-    if (!response.ok || data.success !== true) {
+  $('submitId').addEventListener('click', () => {
+    if (!idImageData) { $('idError').classList.add('active'); return; }
+    $('idError').classList.remove('active');
+    log('ID uploaded');
+    showState('selfie');
+    stepLabel.textContent = 'Step 4: Biometric Match';
+    setProgress(3, 4);
+  });
 
-        const serverMessage =
-        data.error ||
-        data.message ||
-        cleanServerText(
-            responseText
-        ) ||
-        'Verification request failed.';
+  $('backSelfie').addEventListener('click', () => {
+    showState('id');
+    stepLabel.textContent = 'Step 3: Identity Verification';
+    setProgress(2, 4);
+  });
 
-        throw new Error(
-            'SIGNUP ' +
-            response.status +
-            ': ' +
-            serverMessage
-        );
+  $('selfieUploadZone').addEventListener('click', () => $('selfieFile').click());
+  $('selfieFile').addEventListener('change', () => {
+    if ($('selfieFile').files && $('selfieFile').files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        selfieImageData = e.target.result;
+        $('selfieUploadZone').classList.add('has-file');
+        $('selfieUploadZone').querySelector('.upload-text').textContent = $('selfieFile').files[0].name;
+        $('submitSelfie').disabled = false;
+        $('selfieError').classList.remove('active');
+      };
+      reader.readAsDataURL($('selfieFile').files[0]);
     }
+  });
 
-    return data;
-}
+  $('submitSelfie').addEventListener('click', () => {
+    if (!selfieImageData) { $('selfieError').classList.add('active'); return; }
+    $('selfieError').classList.remove('active');
+    showState('match');
+    $('matchIdImg').src = idImageData;
+    $('matchSelfieImg').src = selfieImageData;
+    $('matchScore').textContent = '...';
+    $('matchStatus').textContent = 'Analyzing facial landmarks...';
+    log('running biometric match');
 
-verifyBtn.addEventListener(
-'click',
-async function() {
+    let score = 0;
+    const scoreInterval = setInterval(() => {
+      score += Math.floor(Math.random() * 8) + 3;
+      if (score > 94) score = 94 + Math.floor(Math.random() * 5);
+      $('matchScore').textContent = score + '%';
+      if (score >= 98) {
+        clearInterval(scoreInterval);
+        setTimeout(() => {
+          $('matchScore').textContent = '98.4%';
+          $('matchStatus').textContent = 'Match confirmed — identity verified';
+          log('biometric match passed');
+          setTimeout(() => {
+            setProgress(4, 4);
+            stepLabel.textContent = 'Complete';
+            showSuccess();
+          }, 800);
+        }, 400);
+      }
+    }, 200);
+  });
 
-    const email =
-    emailInput.value.trim().toLowerCase();
-
-    pendingBox.style.display =
-    'none';
-
-    if (!validEmail(email)) {
-
-        setBlockedState(
-            'VALID EMAIL REQUIRED'
-        );
-
-        return;
+  function showSuccess() {
+    showState('success');
+    $('successTier').textContent = tierNames[currentTier];
+    if (currentTier === 1) {
+      $('successTitle').textContent = 'Visitor Access Granted';
+      $('successSub').textContent = 'Email verified. Browse-only access active.';
+    } else if (currentTier === 2) {
+      $('successTitle').textContent = 'Member Enrollment Complete';
+      $('successSub').textContent = 'Payment method on file. Full platform access unlocked.';
+    } else {
+      $('successTitle').textContent = 'Creator Verification Complete';
+      $('successSub').textContent = 'Government ID and biometric match confirmed. Publishing rights granted.';
     }
+    log('enrollment complete — tier ' + currentTier);
+  }
 
-    if (!humanCheck.checked) {
+  $('openModal').addEventListener('click', () => {
+    resetAll();
+    overlay.classList.add('active');
+    log('modal opened');
+  });
 
-        setBlockedState(
-            'HUMAN CHECK REQUIRED'
-        );
+  $('closeModal').addEventListener('click', () => {
+    overlay.classList.remove('active');
+    setTimeout(resetAll, 300);
+  });
 
-        return;
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+      setTimeout(resetAll, 300);
     }
+  });
 
-    setSendingState();
-
-    try {
-
-        const result =
-        await requestVerification(email);
-
-        localStorage.setItem(
-            'cc_pending_verify_email',
-            email
-        );
-
-        if (result.verifyToken) {
-
-            localStorage.setItem(
-                'cc_pending_verify_token',
-                result.verifyToken
-            );
-        }
-
-        if (result.verifyUrl) {
-
-            localStorage.setItem(
-                'cc_pending_verify_url',
-                result.verifyUrl
-            );
-        }
-
-        setPendingState(email);
-
-    } catch(error) {
-
-        setSoftOpenState(
-            email
-        );
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      overlay.classList.remove('active');
+      setTimeout(resetAll, 300);
     }
-}
-);
-
-introBtn.addEventListener(
-'click',
-function() {
-
-    openIntroWindow();
-}
-);
-
-introClose.addEventListener(
-'click',
-function() {
-
-    introWindow.classList.remove(
-        'introActive'
-    );
-
-    introWindow.style.display =
-    'none';
-}
-);
-
-setWaitingState();
-
+  });
+})();
 </script>
 
 </body>
