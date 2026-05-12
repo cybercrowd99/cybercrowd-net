@@ -6,6 +6,7 @@
 <title>3-Tier Secure Enrollment — Cybercrowd</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: #0a0a0a;
@@ -28,6 +29,7 @@
     transition: all 0.2s;
     letter-spacing: 0.3px;
   }
+
   .trigger-btn:hover {
     border-color: #555;
     background: #1c1c1c;
@@ -45,6 +47,7 @@
     transition: opacity 0.3s ease;
     padding: 20px;
   }
+
   .modal-overlay.active {
     display: flex;
     opacity: 1;
@@ -63,6 +66,7 @@
     transform: translateY(16px);
     transition: transform 0.3s ease;
   }
+
   .modal-overlay.active .modal-window {
     transform: translateY(0);
   }
@@ -73,12 +77,14 @@
     align-items: center;
     margin-bottom: 28px;
   }
+
   .modal-title {
     font-size: 20px;
     font-weight: 700;
     color: #fff;
     letter-spacing: -0.3px;
   }
+
   .modal-close {
     background: none;
     border: none;
@@ -94,6 +100,7 @@
     border-radius: 6px;
     transition: all 0.2s;
   }
+
   .modal-close:hover {
     color: #fff;
     background: #222;
@@ -104,6 +111,7 @@
     gap: 4px;
     margin-bottom: 28px;
   }
+
   .progress-seg {
     flex: 1;
     height: 3px;
@@ -111,6 +119,7 @@
     border-radius: 2px;
     transition: background 0.3s;
   }
+
   .progress-seg.done { background: #fff; }
   .progress-seg.active { background: #555; }
 
@@ -129,6 +138,7 @@
     gap: 12px;
     margin-bottom: 8px;
   }
+
   .tier-card {
     border: 1px solid #222;
     background: #0f0f0f;
@@ -138,14 +148,17 @@
     transition: all 0.2s;
     position: relative;
   }
+
   .tier-card:hover {
     border-color: #444;
     background: #161616;
   }
+
   .tier-card.selected {
     border-color: #fff;
     background: #1a1a1a;
   }
+
   .tier-badge {
     position: absolute;
     top: -1px;
@@ -157,6 +170,7 @@
     letter-spacing: 0.5px;
     border-radius: 0 0 4px 4px;
   }
+
   .tier-badge.free { background: #2a2a2a; color: #888; }
   .tier-badge.member { background: #333; color: #ccc; }
   .tier-badge.creator { background: #fff; color: #000; }
@@ -167,11 +181,13 @@
     color: #fff;
     margin-bottom: 6px;
   }
+
   .tier-desc {
     font-size: 13px;
     color: #666;
     line-height: 1.5;
   }
+
   .tier-price {
     font-size: 13px;
     color: #888;
@@ -182,6 +198,7 @@
   .form-group {
     margin-bottom: 18px;
   }
+
   .form-label {
     display: block;
     font-size: 12px;
@@ -191,7 +208,9 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-  .form-input, .form-select {
+
+  .form-input,
+  .form-select {
     width: 100%;
     padding: 12px 14px;
     font-size: 15px;
@@ -203,13 +222,18 @@
     transition: border-color 0.2s;
     font-family: inherit;
   }
-  .form-input:focus, .form-select:focus {
+
+  .form-input:focus,
+  .form-select:focus {
     border-color: #555;
   }
+
   .form-input::placeholder {
     color: #333;
   }
-  .form-input:disabled, .form-select:disabled {
+
+  .form-input:disabled,
+  .form-select:disabled {
     opacity: 0.4;
     cursor: not-allowed;
   }
@@ -220,7 +244,8 @@
     gap: 12px;
   }
 
-  .submit-btn, .action-btn {
+  .submit-btn,
+  .action-btn {
     width: 100%;
     padding: 14px;
     font-size: 15px;
@@ -233,11 +258,15 @@
     transition: all 0.2s;
     margin-top: 4px;
   }
-  .submit-btn:hover:not(:disabled), .action-btn:hover:not(:disabled) {
+
+  .submit-btn:hover:not(:disabled),
+  .action-btn:hover:not(:disabled) {
     background: #222;
     border-color: #444;
   }
-  .submit-btn:disabled, .action-btn:disabled {
+
+  .submit-btn:disabled,
+  .action-btn:disabled {
     opacity: 0.3;
     cursor: not-allowed;
   }
@@ -255,6 +284,7 @@
     gap: 6px;
     transition: color 0.2s;
   }
+
   .back-btn:hover {
     color: #aaa;
   }
@@ -268,29 +298,35 @@
     transition: all 0.2s;
     background: #0a0a0a;
   }
+
   .upload-zone:hover {
     border-color: #444;
     background: #0f0f0f;
   }
+
   .upload-zone.has-file {
     border-color: #fff;
     border-style: solid;
     background: #161616;
   }
+
   .upload-icon {
     font-size: 28px;
     margin-bottom: 10px;
     color: #444;
   }
+
   .upload-text {
     font-size: 14px;
     color: #666;
     margin-bottom: 6px;
   }
+
   .upload-hint {
     font-size: 12px;
     color: #333;
   }
+
   .upload-input {
     display: none;
   }
@@ -298,6 +334,7 @@
   .state-block {
     display: none;
   }
+
   .state-block.active {
     display: block;
   }
@@ -311,6 +348,7 @@
     animation: spin 1s linear infinite;
     margin: 0 auto 18px;
   }
+
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
@@ -323,6 +361,7 @@
     overflow: hidden;
     margin: 16px 0 10px;
   }
+
   .countdown-fill {
     height: 100%;
     background: #fff;
@@ -336,6 +375,7 @@
     text-align: center;
     margin-bottom: 16px;
   }
+
   .countdown-text.warning {
     color: #ff4444;
   }
@@ -343,12 +383,14 @@
   .center-text {
     text-align: center;
   }
+
   .pending-text {
     font-size: 14px;
     color: #888;
     line-height: 1.6;
     margin-bottom: 8px;
   }
+
   .pending-email {
     font-weight: 600;
     color: #fff;
@@ -367,6 +409,7 @@
     font-size: 22px;
     color: #fff;
   }
+
   .success-title {
     font-size: 17px;
     font-weight: 600;
@@ -374,6 +417,7 @@
     margin-bottom: 6px;
     text-align: center;
   }
+
   .success-sub {
     font-size: 13px;
     color: #555;
@@ -387,7 +431,10 @@
     margin-top: 6px;
     display: none;
   }
-  .error-msg.active { display: block; }
+
+  .error-msg.active {
+    display: block;
+  }
 
   .simulated-inbox {
     margin-top: 20px;
@@ -396,6 +443,7 @@
     border: 1px dashed #2a2a2a;
     border-radius: 6px;
   }
+
   .simulated-inbox-title {
     font-size: 11px;
     color: #444;
@@ -404,6 +452,7 @@
     margin-bottom: 10px;
     font-weight: 600;
   }
+
   .verify-link {
     display: inline-block;
     padding: 10px 18px;
@@ -416,9 +465,11 @@
     cursor: pointer;
     transition: all 0.2s;
   }
+
   .verify-link:hover {
     background: #222;
   }
+
   .verify-link.expired {
     opacity: 0.25;
     pointer-events: none;
@@ -436,10 +487,12 @@
     border-radius: 4px;
     transition: all 0.2s;
   }
+
   .resend-btn:hover {
     color: #aaa;
     border-color: #444;
   }
+
   .resend-btn:disabled {
     opacity: 0.2;
     cursor: not-allowed;
@@ -467,6 +520,7 @@
     padding: 14px;
     margin-bottom: 20px;
   }
+
   .tier-summary-label {
     font-size: 10px;
     color: #444;
@@ -474,6 +528,7 @@
     letter-spacing: 0.5px;
     margin-bottom: 6px;
   }
+
   .tier-summary-value {
     font-size: 14px;
     color: #aaa;
@@ -486,6 +541,7 @@
     gap: 12px;
     margin: 16px 0;
   }
+
   .match-box {
     background: #0a0a0a;
     border: 1px solid #222;
@@ -493,6 +549,7 @@
     padding: 12px;
     text-align: center;
   }
+
   .match-box-label {
     font-size: 10px;
     color: #444;
@@ -500,6 +557,7 @@
     letter-spacing: 0.5px;
     margin-bottom: 8px;
   }
+
   .match-box-img {
     width: 100%;
     height: 100px;
@@ -508,6 +566,7 @@
     background: #111;
     display: block;
   }
+
   .match-score {
     font-size: 24px;
     font-weight: 700;
@@ -515,13 +574,13 @@
     margin: 12px 0;
     text-align: center;
   }
+
   .match-status {
     font-size: 13px;
     color: #888;
     text-align: center;
   }
 
-  /* CYBERCROWD COLOR FLOW OVERRIDE */
   :root {
     --cc-black: #050505;
     --cc-panel: #101414;
@@ -784,15 +843,26 @@
   }
 </style>
 </head>
+
 <body>
 
-<button class="trigger-btn" id="openModal">Enroll / Login</button>
+<button
+class="trigger-btn"
+id="openModal"
+onclick="document.getElementById('modalOverlay').classList.add('active'); return false;">
+Enroll / Login
+</button>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-window">
     <div class="modal-header">
       <div class="modal-title">Secure Enrollment</div>
-      <button class="modal-close" id="closeModal">&times;</button>
+      <button
+      class="modal-close"
+      id="closeModal"
+      onclick="document.getElementById('modalOverlay').classList.remove('active'); return false;">
+      &times;
+      </button>
     </div>
 
     <div class="progress-track" id="progressTrack">
@@ -801,9 +871,9 @@
       <div class="progress-seg" id="prog3"></div>
       <div class="progress-seg" id="prog4"></div>
     </div>
+
     <div class="step-label" id="stepLabel">Select Tier</div>
 
-    <!-- TIER SELECT -->
     <div class="state-block active" id="stateTier">
       <div class="tier-grid">
         <div class="tier-card" data-tier="1">
@@ -812,12 +882,14 @@
           <div class="tier-desc">Browse public content. No posting rights. Basic read-only access to the platform.</div>
           <div class="tier-price">$0 / email verification only</div>
         </div>
+
         <div class="tier-card" data-tier="2">
           <div class="tier-badge member">Member</div>
           <div class="tier-name">Standard Member</div>
           <div class="tier-desc">Full platform access. Comment, save, interact. Verified identity with payment backing.</div>
           <div class="tier-price">$9/mo + card verification</div>
         </div>
+
         <div class="tier-card" data-tier="3">
           <div class="tier-badge creator">Creator</div>
           <div class="tier-name">Content Creator</div>
@@ -825,31 +897,40 @@
           <div class="tier-price">$29/mo + ID + selfie match</div>
         </div>
       </div>
+
       <button class="submit-btn" id="tierConfirmBtn" disabled>Continue</button>
     </div>
 
-    <!-- EMAIL -->
     <div class="state-block" id="stateEmail">
       <button class="back-btn" id="backEmail">&larr; Back to Tiers</button>
+
       <div class="form-group">
         <label class="form-label" for="emailInput">Email Address</label>
         <input type="email" class="form-input" id="emailInput" placeholder="you@domain.com" autocomplete="email">
         <div class="error-msg" id="emailError">Enter a valid email address.</div>
       </div>
+
       <button class="submit-btn" id="submitEmail">Send Verification Link</button>
     </div>
 
-    <!-- EMAIL PENDING -->
     <div class="state-block" id="stateEmailPending">
       <div class="center-text">
         <div class="pending-icon"></div>
+
         <div class="pending-text">
-          Verification link sent to<br><span class="pending-email" id="pendingEmail"></span>
+          Verification link sent to<br>
+          <span class="pending-email" id="pendingEmail"></span>
         </div>
-        <div class="countdown-bar"><div class="countdown-fill" id="countdownFill"></div></div>
+
+        <div class="countdown-bar">
+          <div class="countdown-fill" id="countdownFill"></div>
+        </div>
+
         <div class="countdown-text" id="countdownText">Link expires in 30 seconds</div>
+
         <button class="resend-btn" id="resendBtn">Resend Link</button>
       </div>
+
       <div class="simulated-inbox" id="simulatedInbox">
         <div class="simulated-inbox-title">Live Enrollment Response</div>
         <div style="font-size:12px;color:#555;margin-bottom:8px;">Returned by /api/enrollment/start</div>
@@ -857,36 +938,41 @@
       </div>
     </div>
 
-    <!-- CREDIT CARD -->
     <div class="state-block" id="stateCard">
       <button class="back-btn" id="backCard">&larr; Back</button>
+
       <div class="tier-summary">
         <div class="tier-summary-label">Selected Tier</div>
         <div class="tier-summary-value" id="cardTierName">Standard Member</div>
       </div>
+
       <div class="form-group">
         <label class="form-label">Card Number</label>
         <input type="text" class="form-input" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19">
       </div>
+
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Expiry</label>
           <input type="text" class="form-input" id="cardExpiry" placeholder="MM/YY" maxlength="5">
         </div>
+
         <div class="form-group">
           <label class="form-label">CVC</label>
           <input type="text" class="form-input" id="cardCvc" placeholder="123" maxlength="4">
         </div>
       </div>
+
       <div class="form-group">
         <label class="form-label">Name on Card</label>
         <input type="text" class="form-input" id="cardName" placeholder="Full name">
       </div>
+
       <div class="error-msg" id="cardError">Complete all card fields correctly.</div>
+
       <button class="submit-btn" id="submitCard">Verify Card & Continue</button>
     </div>
 
-    <!-- CARD PROCESSING -->
     <div class="state-block" id="stateCardProcessing">
       <div class="center-text">
         <div class="pending-icon"></div>
@@ -894,67 +980,78 @@
       </div>
     </div>
 
-    <!-- ID UPLOAD -->
     <div class="state-block" id="stateId">
       <button class="back-btn" id="backId">&larr; Back</button>
+
       <div class="tier-summary">
         <div class="tier-summary-label">Selected Tier</div>
         <div class="tier-summary-value">Content Creator</div>
       </div>
+
       <div class="form-group">
         <label class="form-label">Government-Issued ID</label>
+
         <div class="upload-zone" id="idUploadZone">
           <div class="upload-icon">&#128441;</div>
           <div class="upload-text">Tap to upload ID photo</div>
           <div class="upload-hint">JPG or PNG, front side, all corners visible</div>
         </div>
+
         <input type="file" class="upload-input" id="idFile" accept="image/*">
       </div>
+
       <div class="error-msg" id="idError">ID upload required.</div>
+
       <button class="submit-btn" id="submitId" disabled>Continue to Selfie</button>
     </div>
 
-    <!-- SELFIE -->
     <div class="state-block" id="stateSelfie">
       <button class="back-btn" id="backSelfie">&larr; Back</button>
+
       <div class="form-group">
         <label class="form-label">Live Selfie Match</label>
+
         <div class="upload-zone" id="selfieUploadZone">
           <div class="upload-icon">&#128248;</div>
           <div class="upload-text">Tap to upload live selfie</div>
           <div class="upload-hint">Face centered, neutral expression, good lighting</div>
         </div>
+
         <input type="file" class="upload-input" id="selfieFile" accept="image/*">
       </div>
+
       <div class="error-msg" id="selfieError">Selfie upload required.</div>
+
       <button class="submit-btn" id="submitSelfie" disabled>Run Biometric Match</button>
     </div>
 
-    <!-- BIOMETRIC MATCH -->
     <div class="state-block" id="stateMatch">
       <div class="center-text">
         <div class="pending-icon"></div>
         <div class="pending-text">Running facial geometry match...</div>
       </div>
+
       <div class="match-preview">
         <div class="match-box">
           <div class="match-box-label">ID Document</div>
           <img class="match-box-img" id="matchIdImg">
         </div>
+
         <div class="match-box">
           <div class="match-box-label">Live Selfie</div>
           <img class="match-box-img" id="matchSelfieImg">
         </div>
       </div>
+
       <div class="match-score" id="matchScore">--</div>
       <div class="match-status" id="matchStatus">Analyzing facial landmarks...</div>
     </div>
 
-    <!-- SUCCESS -->
     <div class="state-block" id="stateSuccess">
       <div class="success-check">&#10003;</div>
       <div class="success-title" id="successTitle">Enrollment Complete</div>
       <div class="success-sub" id="successSub">Your account is active.</div>
+
       <div class="tier-summary" style="margin-top:20px;">
         <div class="tier-summary-label">Access Level</div>
         <div class="tier-summary-value" id="successTier">Visitor</div>
@@ -967,43 +1064,89 @@
 
 <script>
 (function() {
-  const $ = id => document.getElementById(id);
-
-  const overlay = $('modalOverlay');
-  const progressSegs = [$('prog1'), $('prog2'), $('prog3'), $('prog4')];
-  const stepLabel = $('stepLabel');
-  const statusLog = $('statusLog');
-
-  const states = {
-    tier: $('stateTier'), email: $('stateEmail'), emailPending: $('stateEmailPending'),
-    card: $('stateCard'), cardProcessing: $('stateCardProcessing'),
-    id: $('stateId'), selfie: $('stateSelfie'), match: $('stateMatch'), success: $('stateSuccess')
-  };
-
-  let currentTier = 0;
-  let currentToken = null;
-  let timer = null;
-  let timeLeft = 30;
-  let verified = false;
-  let idImageData = null;
-  let selfieImageData = null;
-
-  const tierNames = { 1: 'Visitor Access', 2: 'Standard Member', 3: 'Content Creator' };
-  const tierPrices = { 1: '$0', 2: '$9/mo', 3: '$29/mo' };
-
-  function log(msg) { statusLog.textContent = 'Status: ' + msg; }
-
-  function showState(name) {
-    Object.values(states).forEach(el => el.classList.remove('active'));
-    states[name].classList.add('active');
+  function $(id) {
+    return document.getElementById(id);
   }
 
-  function setProgress(step, total) {
-    progressSegs.forEach((seg, i) => {
-      seg.className = 'progress-seg';
-      if (i < step) seg.classList.add('done');
-      else if (i === step) seg.classList.add('active');
-    });
+  function addEvent(el, eventName, handler) {
+    if (el) {
+      el.addEventListener(eventName, handler);
+    }
+  }
+
+  var overlay = $('modalOverlay');
+  var openBtn = $('openModal');
+  var closeBtn = $('closeModal');
+  var progressSegs = [$('prog1'), $('prog2'), $('prog3'), $('prog4')];
+  var stepLabel = $('stepLabel');
+  var statusLog = $('statusLog');
+
+  var states = {
+    tier: $('stateTier'),
+    email: $('stateEmail'),
+    emailPending: $('stateEmailPending'),
+    card: $('stateCard'),
+    cardProcessing: $('stateCardProcessing'),
+    id: $('stateId'),
+    selfie: $('stateSelfie'),
+    match: $('stateMatch'),
+    success: $('stateSuccess')
+  };
+
+  var currentTier = 0;
+  var currentToken = null;
+  var timer = null;
+  var timeLeft = 30;
+  var verified = false;
+  var idImageData = null;
+  var selfieImageData = null;
+
+  var tierNames = {
+    1: 'Visitor Access',
+    2: 'Standard Member',
+    3: 'Content Creator'
+  };
+
+  var tierPrices = {
+    1: '$0',
+    2: '$9/mo',
+    3: '$29/mo'
+  };
+
+  function log(msg) {
+    if (statusLog) {
+      statusLog.textContent = 'Status: ' + msg;
+    }
+  }
+
+  function showState(name) {
+    var key;
+
+    for (key in states) {
+      if (states.hasOwnProperty(key) && states[key]) {
+        states[key].classList.remove('active');
+      }
+    }
+
+    if (states[name]) {
+      states[name].classList.add('active');
+    }
+  }
+
+  function setProgress(step) {
+    var i;
+
+    for (i = 0; i < progressSegs.length; i++) {
+      if (progressSegs[i]) {
+        progressSegs[i].className = 'progress-seg';
+
+        if (i < step) {
+          progressSegs[i].classList.add('done');
+        } else if (i === step) {
+          progressSegs[i].classList.add('active');
+        }
+      }
+    }
   }
 
   function isValidEmail(str) {
@@ -1015,7 +1158,13 @@
   }
 
   function resetAll() {
-    clearInterval(timer);
+    var tierCards;
+    var i;
+
+    if (timer) {
+      clearInterval(timer);
+    }
+
     timer = null;
     timeLeft = 30;
     currentToken = null;
@@ -1024,131 +1173,14 @@
     idImageData = null;
     selfieImageData = null;
 
-    $('emailInput').value = '';
-    $('emailError').classList.remove('active');
-    $('cardNumber').value = '';
-    $('cardExpiry').value = '';
-    $('cardCvc').value = '';
-    $('cardName').value = '';
-    $('cardError').classList.remove('active');
-    $('idError').classList.remove('active');
-    $('selfieError').classList.remove('active');
-    $('idUploadZone').classList.remove('has-file');
-    $('selfieUploadZone').classList.remove('has-file');
-    $('idUploadZone').querySelector('.upload-text').textContent = 'Tap to upload ID photo';
-    $('selfieUploadZone').querySelector('.upload-text').textContent = 'Tap to upload live selfie';
-    $('idFile').value = '';
-    $('selfieFile').value = '';
-    $('submitId').disabled = true;
-    $('submitSelfie').disabled = true;
-    $('tierConfirmBtn').disabled = true;
-    document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
-
-    setProgress(0, 4);
-    stepLabel.textContent = 'Select Tier';
-    log('idle');
-    showState('tier');
-  }
-
-  document.querySelectorAll('.tier-card').forEach(card => {
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.tier-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      currentTier = parseInt(card.dataset.tier);
-      $('tierConfirmBtn').disabled = false;
-    });
-  });
-
-  $('tierConfirmBtn').addEventListener('click', () => {
-    if (!currentTier) return;
-    setProgress(0, 4);
-    stepLabel.textContent = 'Step 1: Email Verification';
-    log('tier ' + currentTier + ' selected');
-    showState('email');
-  });
-
-  $('backEmail').addEventListener('click', () => { resetAll(); });
-
-  function startEmailCountdown(token) {
-    timeLeft = 30;
-    currentToken = token;
-    verified = false;
-    $('countdownFill').style.transition = 'none';
-    $('countdownFill').style.width = '100%';
-    void $('countdownFill').offsetWidth;
-    $('countdownFill').style.transition = 'width 1s linear';
-    $('countdownText').classList.remove('warning');
-    $('verifyLink').classList.remove('expired');
-    $('verifyLink').textContent = 'Continue CyberCrowd Enrollment';
-    $('resendBtn').disabled = true;
-
-    timer = setInterval(() => {
-      timeLeft--;
-      $('countdownFill').style.width = ((timeLeft/30)*100) + '%';
-      if (timeLeft <= 10) $('countdownText').classList.add('warning');
-      $('countdownText').textContent = 'Link expires in ' + timeLeft + 's';
-      if (timeLeft <= 0) {
-        clearInterval(timer); timer = null;
-        $('countdownText').textContent = 'Link expired — resend required';
-        $('verifyLink').classList.add('expired');
-        $('verifyLink').textContent = 'Link Expired';
-        $('resendBtn').disabled = false;
-        log('email link expired');
-      }
-    }, 1000);
-  }
-
-  async function submitEmail() {
-    const email =
-    $('emailInput').value.trim().toLowerCase();
-
-    const tierMap = {
-      1: 'visitor',
-      2: 'member',
-      3: 'creator'
-    };
-
-    const tier =
-    tierMap[currentTier] ||
-    'visitor';
-
-    if (!isValidEmail(email)) {
-
-      $('emailError').textContent =
-      'Enter a valid email address.';
-
-      $('emailError').classList.add(
-        'active'
-      );
-
-      return;
-    }
-
-    $('emailError').classList.remove(
-      'active'
-    );
-
-    $('submitEmail').disabled =
-    true;
-
-    $('submitEmail').textContent =
-    'Starting Enrollment...';
-
-    log(
-      'starting dynamic enrollment: ' +
-      tier
-    );
-
-    let data = {};
-
-    try {
-
-      const response =
-      await fetch(
-        '/api/enrollment/start',
-        {
-          method: 'POST',
-
-          headers: {
-            'Content-Type': 'application/json'
-          },
+    if ($('emailInput')) $('emailInput').value = '';
+    if ($('emailError')) $('emailError').classList.remove('active');
+    if ($('cardNumber')) $('cardNumber').value = '';
+    if ($('cardExpiry')) $('cardExpiry').value = '';
+    if ($('cardCvc')) $('cardCvc').value = '';
+    if ($('cardName')) $('cardName').value = '';
+    if ($('cardError')) $('cardError').classList.remove('active');
+    if ($('idError')) $('idError').classList.remove('active');
+    if ($('selfieError')) $('selfieError').classList.remove('active');
+    if ($('idUploadZone')) $('idUploadZone').classList.remove('has-file');
+    if ($('selfieUploadZone')) $('selfieUploadZone').classList.remove('has-file');
