@@ -15,7 +15,7 @@ if(!email){
 return Response.json({
 
 success:false,
-message:'Email required.',
+message:'Access denied.',
 status:'missing_email'
 
 },{
@@ -32,7 +32,7 @@ if(!emailPattern.test(email)){
 return Response.json({
 
 success:false,
-message:'Invalid email format.',
+message:'Access denied.',
 status:'invalid_email'
 
 },{
@@ -50,7 +50,7 @@ return Response.json({
 
 success:false,
 message:'Verification email service is not active.',
-status:'email_not_sent',
+status:'email_service_inactive',
 emailDelivery:'missing_api_key'
 
 },{
@@ -60,24 +60,26 @@ status:500
 }
 
 /*
-CYBERCROWD LIVE PUBLIC SENDER
------------------------------
-cybercrowd.net is verified in Resend.
-
-This version forces the live verified CyberCrowd domain sender.
+CYBERCROWD LIVE PUBLIC EMAIL ENVELOPE
+------------------------------------
+This is the live sender envelope.
 
 Do not use onboarding@resend.dev.
-Do not use CC_EMAIL_FROM.
-Do not use sandbox/test sender logic.
+Do not use Yahoo as reply_to.
+Do not use mixed sender identity.
 
-This is the public access lane.
------------------------------
+Sender:
+onboarding@cybercrowd.net
+
+Support/contact in body only:
+cybercrowd_services@yahoo.com
+------------------------------------
 */
 
 const fromEmail =
-'CyberCrowd <onboarding@cybercrowd.net>';
+'onboarding@cybercrowd.net';
 
-const serviceReplyEmail =
+const serviceContactEmail =
 'cybercrowd_services@yahoo.com';
 
 const verifyToken =
@@ -97,102 +99,123 @@ encodeURIComponent(verifyToken) +
 encodeURIComponent(email);
 
 const emailSubject =
-'Verify your CyberCrowd free entry';
+'CyberCrowd access verification';
 
 const emailText =
 [
-'CyberCrowd Free Entry Verification',
+'CyberCrowd access verification',
 '',
-'You requested free CyberCrowd access.',
+'Open this link to verify your CyberCrowd access:',
 '',
-'Click this verification link to continue:',
 verifyUrl,
 '',
-'If you did not request this, ignore this email.',
+'If you did not request this email, ignore it.',
 '',
 'CyberCrowd Services:',
-serviceReplyEmail
+serviceContactEmail
 ].join('\n');
 
 const emailHtml =
 `
-<div style="
-font-family:Arial,sans-serif;
-background:#050505;
-color:white;
-padding:28px;
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CyberCrowd access verification</title>
+</head>
+<body style="
+margin:0;
+padding:0;
+background:#ffffff;
+color:#111111;
+font-family:Arial,Helvetica,sans-serif;
 ">
-<div style="
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+<tr>
+<td style="padding:24px;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="
 max-width:620px;
 margin:0 auto;
-border:1px solid rgba(0,255,255,.35);
-border-radius:22px;
-padding:26px;
-background:rgba(5,10,18,.96);
+border:1px solid #dddddd;
+border-radius:12px;
 ">
+<tr>
+<td style="padding:24px;">
 <h1 style="
-color:#00ffff;
-letter-spacing:2px;
+margin:0 0 16px 0;
+font-size:24px;
+line-height:1.25;
+color:#111111;
 ">
-CyberCrowd Free Entry
+CyberCrowd access verification
 </h1>
 
 <p style="
-line-height:1.7;
-opacity:.88;
+font-size:16px;
+line-height:1.6;
+margin:0 0 18px 0;
 ">
-You requested free CyberCrowd access.
-Click the verification button below to continue.
+Open the link below to verify your CyberCrowd access.
 </p>
 
-<p>
+<p style="
+margin:0 0 22px 0;
+">
 <a href="${verifyUrl}" style="
 display:inline-block;
-padding:16px 22px;
-border-radius:16px;
-background:linear-gradient(90deg,#00ffff,#00ffaa);
-color:black;
-font-weight:bold;
+padding:14px 18px;
+background:#111111;
+color:#ffffff;
 text-decoration:none;
-letter-spacing:1px;
+border-radius:8px;
+font-weight:bold;
 ">
-VERIFY CYBERCROWD ENTRY
+Verify CyberCrowd Access
 </a>
 </p>
 
 <p style="
-line-height:1.7;
-opacity:.72;
-font-size:13px;
+font-size:14px;
+line-height:1.6;
+margin:0 0 18px 0;
 ">
-If the button does not work, copy and paste this link:
+Copy link:
 <br>
-<span style="
-color:#00ffaa;
+<a href="${verifyUrl}" style="
+color:#0057cc;
 word-break:break-all;
 ">
 ${verifyUrl}
-</span>
+</a>
 </p>
 
 <p style="
-margin-top:24px;
-font-size:12px;
-opacity:.62;
+font-size:13px;
+line-height:1.6;
+margin:0;
+color:#555555;
 ">
-CyberCrowd Services: ${serviceReplyEmail}
+If you did not request this email, ignore it.
+<br>
+CyberCrowd Services: ${serviceContactEmail}
 </p>
-</div>
-</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
 `;
 
 console.log(
-'CYBERCROWD FREE ENTRY REQUEST:',
+'CYBERCROWD LIVE ACCESS REQUEST:',
 email
 );
 
 console.log(
-'CYBERCROWD LIVE DOMAIN SENDER:',
+'CYBERCROWD LIVE EMAIL FROM:',
 fromEmail
 );
 
@@ -222,12 +245,8 @@ body:JSON.stringify({
 from:
 fromEmail,
 
-to:[
-email
-],
-
-reply_to:
-serviceReplyEmail,
+to:
+email,
 
 subject:
 emailSubject,
@@ -279,7 +298,7 @@ success:false,
 message:
 sendData.message ||
 sendData.error ||
-'Verification email was not accepted by the email provider.',
+'Access denied.',
 
 email,
 
@@ -299,9 +318,6 @@ sendResponse.status,
 senderUsed:
 fromEmail,
 
-replyTo:
-serviceReplyEmail,
-
 details:
 sendData
 
@@ -317,7 +333,7 @@ sendData.id || '';
 if(!resendEmailId){
 
 console.error(
-'CYBERCROWD LIVE EMAIL SEND WARNING: RESEND ACCEPTED WITHOUT ID',
+'CYBERCROWD LIVE EMAIL SEND UNCONFIRMED:',
 sendData
 );
 
@@ -343,9 +359,6 @@ emailDelivery:
 senderUsed:
 fromEmail,
 
-replyTo:
-serviceReplyEmail,
-
 details:
 sendData
 
@@ -356,7 +369,7 @@ status:502
 }
 
 console.log(
-'CYBERCROWD LIVE VERIFY EMAIL SENT:',
+'CYBERCROWD LIVE VERIFY EMAIL ACCEPTED:',
 email
 );
 
@@ -389,7 +402,7 @@ resendEmailId,
 senderUsed:
 fromEmail,
 
-serviceReplyEmail
+serviceContactEmail
 
 },{
 status:200
@@ -405,7 +418,7 @@ error
 return Response.json({
 
 success:false,
-message:'Continuity enrollment failure.',
+message:'Access denied.',
 status:'signup_exception'
 
 },{
