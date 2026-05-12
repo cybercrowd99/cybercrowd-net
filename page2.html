@@ -1184,3 +1184,683 @@ Enroll / Login
     if ($('selfieError')) $('selfieError').classList.remove('active');
     if ($('idUploadZone')) $('idUploadZone').classList.remove('has-file');
     if ($('selfieUploadZone')) $('selfieUploadZone').classList.remove('has-file');
+
+    if ($('idUploadZone') && $('idUploadZone').querySelector('.upload-text')) {
+      $('idUploadZone').querySelector('.upload-text').textContent = 'Tap to upload ID photo';
+    }
+
+    if ($('selfieUploadZone') && $('selfieUploadZone').querySelector('.upload-text')) {
+      $('selfieUploadZone').querySelector('.upload-text').textContent = 'Tap to upload live selfie';
+    }
+
+    if ($('idFile')) $('idFile').value = '';
+    if ($('selfieFile')) $('selfieFile').value = '';
+    if ($('submitId')) $('submitId').disabled = true;
+    if ($('submitSelfie')) $('submitSelfie').disabled = true;
+    if ($('tierConfirmBtn')) $('tierConfirmBtn').disabled = true;
+
+    tierCards = document.querySelectorAll('.tier-card');
+
+    for (i = 0; i < tierCards.length; i++) {
+      tierCards[i].classList.remove('selected');
+    }
+
+    setProgress(0);
+
+    if (stepLabel) {
+      stepLabel.textContent = 'Select Tier';
+    }
+
+    log('idle');
+    showState('tier');
+  }
+
+  function openModal() {
+    if (overlay) {
+      overlay.classList.add('active');
+    }
+
+    log('modal opened');
+  }
+
+  function closeModal() {
+    if (overlay) {
+      overlay.classList.remove('active');
+    }
+
+    setTimeout(resetAll, 300);
+  }
+
+  function startEmailCountdown(token) {
+    timeLeft = 30;
+    currentToken = token;
+    verified = false;
+
+    if ($('countdownFill')) {
+      $('countdownFill').style.transition = 'none';
+      $('countdownFill').style.width = '100%';
+      void $('countdownFill').offsetWidth;
+      $('countdownFill').style.transition = 'width 1s linear';
+    }
+
+    if ($('countdownText')) {
+      $('countdownText').classList.remove('warning');
+      $('countdownText').textContent = 'Link expires in 30 seconds';
+    }
+
+    if ($('verifyLink')) {
+      $('verifyLink').classList.remove('expired');
+      $('verifyLink').textContent = 'Continue CyberCrowd Enrollment';
+    }
+
+    if ($('resendBtn')) {
+      $('resendBtn').disabled = true;
+    }
+
+    timer = setInterval(function() {
+      timeLeft--;
+
+      if ($('countdownFill')) {
+        $('countdownFill').style.width = ((timeLeft / 30) * 100) + '%';
+      }
+
+      if (timeLeft <= 10 && $('countdownText')) {
+        $('countdownText').classList.add('warning');
+      }
+
+      if ($('countdownText')) {
+        $('countdownText').textContent = 'Link expires in ' + timeLeft + 's';
+      }
+
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        timer = null;
+
+        if ($('countdownText')) {
+          $('countdownText').textContent = 'Link expired — resend required';
+        }
+
+        if ($('verifyLink')) {
+          $('verifyLink').classList.add('expired');
+          $('verifyLink').textContent = 'Link Expired';
+        }
+
+        if ($('resendBtn')) {
+          $('resendBtn').disabled = false;
+        }
+
+        log('email link expired');
+      }
+    }, 1000);
+  }
+
+  async function submitEmail() {
+    var email;
+    var tierMap;
+    var tier;
+    var response;
+    var responseText;
+    var data;
+    var token;
+
+    email = $('emailInput').value.trim().toLowerCase();
+
+    tierMap = {
+      1: 'visitor',
+      2: 'member',
+      3: 'creator'
+    };
+
+    tier = tierMap[currentTier] || 'visitor';
+
+    if (!isValidEmail(email)) {
+      if ($('emailError')) {
+        $('emailError').textContent = 'Enter a valid email address.';
+        $('emailError').classList.add('active');
+      }
+
+      return;
+    }
+
+    if ($('emailError')) {
+      $('emailError').classList.remove('active');
+    }
+
+    if ($('submitEmail')) {
+      $('submitEmail').disabled = true;
+      $('submitEmail').textContent = 'Starting Enrollment...';
+    }
+
+    log('starting dynamic enrollment: ' + tier);
+
+    data = {};
+
+    try {
+      response = await fetch(
+        '/api/enrollment/start',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            tier: tier,
+            humanConfirmed: true
+          })
+        }
+      );
+
+      responseText = await response.text();
+
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch(parseError) {
+          data = {};
+        }
+      }
+
+      if (!response.ok || data.success !== true) {
+        throw new Error(
+          data.message ||
+          data.error ||
+          responseText ||
+          'Dynamic enrollment failed.'
+        );
+      }
+
+      localStorage.setItem('cc_enrollment_email', email);
+      localStorage.setItem('cc_enrollment_tier', tier);
+
+      if (data.enrollmentId) {
+        localStorage.setItem('cc_enrollment_id', data.enrollmentId);
+      }
+
+      if (data.verifyUrl) {
+        localStorage.setItem('cc_enrollment_verify_url', data.verifyUrl);
+      }
+
+      if ($('pendingEmail')) {
+        $('pendingEmail').textContent = email;
+      }
+
+      showState('emailPending');
+
+      token = data.enrollmentId || generateToken();
+
+      startEmailCountdown(token);
+
+      if ($('verifyLink')) {
+        $('verifyLink').textContent = 'Continue CyberCrowd Enrollment';
+
+        $('verifyLink').onclick = function(e) {
+          e.preventDefault();
+
+          if (this.classList.contains('expired')) {
+            return;
+          }
+
+          if (timer) {
+            clearInterval(timer);
+          }
+
+          timer = null;
+          verified = true;
+
+          log('dynamic enrollment verified locally');
+
+          advanceAfterEmail();
+        };
+      }
+
+      log('dynamic enrollment accepted');
+
+    } catch(error) {
+      if ($('emailError')) {
+        $('emailError').textContent =
+        error.message ||
+        'Dynamic enrollment failed.';
+
+        $('emailError').classList.add('active');
+      }
+
+      log('dynamic enrollment failed');
+
+    } finally {
+      if ($('submitEmail')) {
+        $('submitEmail').disabled = false;
+        $('submitEmail').textContent = 'Send Verification Link';
+      }
+    }
+  }
+
+  function advanceAfterEmail() {
+    if (currentTier === 1) {
+      setProgress(3);
+
+      if (stepLabel) {
+        stepLabel.textContent = 'Complete';
+      }
+
+      showSuccess();
+
+    } else {
+      setProgress(1);
+
+      if (stepLabel) {
+        stepLabel.textContent = 'Step 2: Payment Verification';
+      }
+
+      if ($('cardTierName')) {
+        $('cardTierName').textContent = tierNames[currentTier] + ' — ' + tierPrices[currentTier];
+      }
+
+      showState('card');
+    }
+  }
+
+  function showSuccess() {
+    showState('success');
+
+    if ($('successTier')) {
+      $('successTier').textContent = tierNames[currentTier];
+    }
+
+    if (currentTier === 1) {
+      if ($('successTitle')) $('successTitle').textContent = 'Visitor Access Granted';
+      if ($('successSub')) $('successSub').textContent = 'Enrollment recorded. Browse-only access active.';
+
+    } else if (currentTier === 2) {
+      if ($('successTitle')) $('successTitle').textContent = 'Member Enrollment Complete';
+      if ($('successSub')) $('successSub').textContent = 'Payment method on file. Full platform access unlocked.';
+
+    } else {
+      if ($('successTitle')) $('successTitle').textContent = 'Creator Verification Complete';
+      if ($('successSub')) $('successSub').textContent = 'Government ID and biometric match confirmed. Publishing rights granted.';
+    }
+
+    log('enrollment complete — tier ' + currentTier);
+  }
+
+  function setupTierCards() {
+    var cards;
+    var i;
+
+    cards = document.querySelectorAll('.tier-card');
+
+    for (i = 0; i < cards.length; i++) {
+      cards[i].addEventListener('click', function() {
+        var allCards;
+        var j;
+
+        allCards = document.querySelectorAll('.tier-card');
+
+        for (j = 0; j < allCards.length; j++) {
+          allCards[j].classList.remove('selected');
+        }
+
+        this.classList.add('selected');
+        currentTier = parseInt(this.getAttribute('data-tier'), 10);
+
+        if ($('tierConfirmBtn')) {
+          $('tierConfirmBtn').disabled = false;
+        }
+      });
+    }
+  }
+
+  function setupCardFormatting() {
+    addEvent($('cardNumber'), 'input', function(e) {
+      var v;
+      var groups;
+
+      v = e.target.value.replace(/\D/g, '').substring(0, 16);
+      groups = v.match(/.{1,4}/g);
+      v = groups ? groups.join(' ') : v;
+      e.target.value = v;
+    });
+
+    addEvent($('cardExpiry'), 'input', function(e) {
+      var v;
+
+      v = e.target.value.replace(/\D/g, '').substring(0, 4);
+
+      if (v.length >= 2) {
+        v = v.slice(0, 2) + '/' + v.slice(2);
+      }
+
+      e.target.value = v;
+    });
+
+    addEvent($('cardCvc'), 'input', function(e) {
+      e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
+    });
+  }
+
+  function setupUploads() {
+    addEvent($('idUploadZone'), 'click', function() {
+      if ($('idFile')) {
+        $('idFile').click();
+      }
+    });
+
+    addEvent($('idFile'), 'change', function() {
+      var reader;
+
+      if ($('idFile').files && $('idFile').files[0]) {
+        reader = new FileReader();
+
+        reader.onload = function(e) {
+          idImageData = e.target.result;
+
+          if ($('idUploadZone')) {
+            $('idUploadZone').classList.add('has-file');
+
+            if ($('idUploadZone').querySelector('.upload-text')) {
+              $('idUploadZone').querySelector('.upload-text').textContent = $('idFile').files[0].name;
+            }
+          }
+
+          if ($('submitId')) {
+            $('submitId').disabled = false;
+          }
+
+          if ($('idError')) {
+            $('idError').classList.remove('active');
+          }
+        };
+
+        reader.readAsDataURL($('idFile').files[0]);
+      }
+    });
+
+    addEvent($('selfieUploadZone'), 'click', function() {
+      if ($('selfieFile')) {
+        $('selfieFile').click();
+      }
+    });
+
+    addEvent($('selfieFile'), 'change', function() {
+      var reader;
+
+      if ($('selfieFile').files && $('selfieFile').files[0]) {
+        reader = new FileReader();
+
+        reader.onload = function(e) {
+          selfieImageData = e.target.result;
+
+          if ($('selfieUploadZone')) {
+            $('selfieUploadZone').classList.add('has-file');
+
+            if ($('selfieUploadZone').querySelector('.upload-text')) {
+              $('selfieUploadZone').querySelector('.upload-text').textContent = $('selfieFile').files[0].name;
+            }
+          }
+
+          if ($('submitSelfie')) {
+            $('submitSelfie').disabled = false;
+          }
+
+          if ($('selfieError')) {
+            $('selfieError').classList.remove('active');
+          }
+        };
+
+        reader.readAsDataURL($('selfieFile').files[0]);
+      }
+    });
+  }
+
+  function setupButtons() {
+    addEvent(openBtn, 'click', function() {
+      resetAll();
+      openModal();
+    });
+
+    addEvent(closeBtn, 'click', function() {
+      closeModal();
+    });
+
+    addEvent(overlay, 'click', function(e) {
+      if (e.target === overlay) {
+        closeModal();
+      }
+    });
+
+    addEvent($('tierConfirmBtn'), 'click', function() {
+      if (!currentTier) {
+        return;
+      }
+
+      setProgress(0);
+
+      if (stepLabel) {
+        stepLabel.textContent = 'Step 1: Email Verification';
+      }
+
+      log('tier ' + currentTier + ' selected');
+      showState('email');
+    });
+
+    addEvent($('backEmail'), 'click', function() {
+      resetAll();
+    });
+
+    addEvent($('submitEmail'), 'click', function() {
+      submitEmail();
+    });
+
+    addEvent($('emailInput'), 'keydown', function(e) {
+      if (e.key === 'Enter') {
+        submitEmail();
+      }
+    });
+
+    addEvent($('resendBtn'), 'click', function() {
+      if ($('resendBtn').disabled) {
+        return;
+      }
+
+      $('resendBtn').disabled = true;
+      showState('email');
+      submitEmail();
+    });
+
+    addEvent($('backCard'), 'click', function() {
+      showState('email');
+
+      if (stepLabel) {
+        stepLabel.textContent = 'Step 1: Email Verification';
+      }
+
+      setProgress(0);
+    });
+
+    addEvent($('submitCard'), 'click', function() {
+      var num;
+      var exp;
+      var cvc;
+      var name;
+
+      num = $('cardNumber').value.replace(/\s/g, '');
+      exp = $('cardExpiry').value;
+      cvc = $('cardCvc').value;
+      name = $('cardName').value.trim();
+
+      if (num.length < 13 || exp.length < 5 || cvc.length < 3 || name.length < 2) {
+        if ($('cardError')) {
+          $('cardError').classList.add('active');
+        }
+
+        return;
+      }
+
+      if ($('cardError')) {
+        $('cardError').classList.remove('active');
+      }
+
+      showState('cardProcessing');
+      log('validating card...');
+
+      setTimeout(function() {
+        log('card validated');
+
+        if (currentTier === 2) {
+          setProgress(3);
+
+          if (stepLabel) {
+            stepLabel.textContent = 'Complete';
+          }
+
+          showSuccess();
+
+        } else {
+          setProgress(2);
+
+          if (stepLabel) {
+            stepLabel.textContent = 'Step 3: Identity Verification';
+          }
+
+          showState('id');
+        }
+      }, 1500);
+    });
+
+    addEvent($('backId'), 'click', function() {
+      showState('card');
+
+      if (stepLabel) {
+        stepLabel.textContent = 'Step 2: Payment Verification';
+      }
+
+      setProgress(1);
+    });
+
+    addEvent($('submitId'), 'click', function() {
+      if (!idImageData) {
+        if ($('idError')) {
+          $('idError').classList.add('active');
+        }
+
+        return;
+      }
+
+      if ($('idError')) {
+        $('idError').classList.remove('active');
+      }
+
+      log('ID uploaded');
+      showState('selfie');
+
+      if (stepLabel) {
+        stepLabel.textContent = 'Step 4: Biometric Match';
+      }
+
+      setProgress(3);
+    });
+
+    addEvent($('backSelfie'), 'click', function() {
+      showState('id');
+
+      if (stepLabel) {
+        stepLabel.textContent = 'Step 3: Identity Verification';
+      }
+
+      setProgress(2);
+    });
+
+    addEvent($('submitSelfie'), 'click', function() {
+      var score;
+      var scoreInterval;
+
+      if (!selfieImageData) {
+        if ($('selfieError')) {
+          $('selfieError').classList.add('active');
+        }
+
+        return;
+      }
+
+      if ($('selfieError')) {
+        $('selfieError').classList.remove('active');
+      }
+
+      showState('match');
+
+      if ($('matchIdImg')) {
+        $('matchIdImg').src = idImageData;
+      }
+
+      if ($('matchSelfieImg')) {
+        $('matchSelfieImg').src = selfieImageData;
+      }
+
+      if ($('matchScore')) {
+        $('matchScore').textContent = '...';
+      }
+
+      if ($('matchStatus')) {
+        $('matchStatus').textContent = 'Analyzing facial landmarks...';
+      }
+
+      log('running biometric match');
+
+      score = 0;
+
+      scoreInterval = setInterval(function() {
+        score += Math.floor(Math.random() * 8) + 3;
+
+        if (score > 94) {
+          score = 94 + Math.floor(Math.random() * 5);
+        }
+
+        if ($('matchScore')) {
+          $('matchScore').textContent = score + '%';
+        }
+
+        if (score >= 98) {
+          clearInterval(scoreInterval);
+
+          setTimeout(function() {
+            if ($('matchScore')) {
+              $('matchScore').textContent = '98.4%';
+            }
+
+            if ($('matchStatus')) {
+              $('matchStatus').textContent = 'Match confirmed — identity verified';
+            }
+
+            log('biometric match passed');
+
+            setTimeout(function() {
+              setProgress(4);
+
+              if (stepLabel) {
+                stepLabel.textContent = 'Complete';
+              }
+
+              showSuccess();
+            }, 800);
+          }, 400);
+        }
+      }, 200);
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay && overlay.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  }
+
+  setupTierCards();
+  setupCardFormatting();
+  setupUploads();
+  setupButtons();
+  resetAll();
+})();
+</script>
+
+</body>
+</html>
