@@ -69,7 +69,7 @@ Do not use Yahoo as reply_to.
 Do not use mixed sender identity.
 
 Sender:
-onboarding@cybercrowd.net
+CyberCrowd <welcome@cybercrowd.net>
 
 Support/contact in body only:
 cybercrowd_services@yahoo.com
@@ -77,7 +77,7 @@ cybercrowd_services@yahoo.com
 */
 
 const fromEmail =
-'onboarding@cybercrowd.net';
+'CyberCrowd <welcome@cybercrowd.net>';
 
 const serviceContactEmail =
 'cybercrowd_services@yahoo.com';
