@@ -851,9 +851,9 @@
         <button class="resend-btn" id="resendBtn">Resend Link</button>
       </div>
       <div class="simulated-inbox" id="simulatedInbox">
-        <div class="simulated-inbox-title">Simulated Inbox</div>
-        <div style="font-size:12px;color:#555;margin-bottom:8px;">From: noreply@cybercrowd.net</div>
-        <a class="verify-link" id="verifyLink">Verify Email Address</a>
+        <div class="simulated-inbox-title">Live Enrollment Response</div>
+        <div style="font-size:12px;color:#555;margin-bottom:8px;">Returned by /api/enrollment/start</div>
+        <a class="verify-link" id="verifyLink">Continue CyberCrowd Enrollment</a>
       </div>
     </div>
 
@@ -1079,7 +1079,7 @@
     $('countdownFill').style.transition = 'width 1s linear';
     $('countdownText').classList.remove('warning');
     $('verifyLink').classList.remove('expired');
-    $('verifyLink').textContent = 'Verify Email Address';
+    $('verifyLink').textContent = 'Continue CyberCrowd Enrollment';
     $('resendBtn').disabled = true;
 
     timer = setInterval(() => {
@@ -1098,217 +1098,57 @@
     }, 1000);
   }
 
-  function submitEmail() {
-    const email = $('emailInput').value.trim();
-    if (!isValidEmail(email)) { $('emailError').classList.add('active'); return; }
-    $('emailError').classList.remove('active');
-    $('pendingEmail').textContent = email;
-    showState('emailPending');
-    const token = generateToken();
-    startEmailCountdown(token);
-    log('email verification sent');
+  async function submitEmail() {
+    const email =
+    $('emailInput').value.trim().toLowerCase();
 
-    $('verifyLink').onclick = function(e) {
-      e.preventDefault();
-      if (this.classList.contains('expired') || currentToken !== token) return;
-      clearInterval(timer); timer = null; verified = true;
-      log('email verified');
-      advanceAfterEmail();
+    const tierMap = {
+      1: 'visitor',
+      2: 'member',
+      3: 'creator'
     };
-  }
 
-  $('submitEmail').addEventListener('click', submitEmail);
-  $('emailInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitEmail(); });
+    const tier =
+    tierMap[currentTier] ||
+    'visitor';
 
-  $('resendBtn').addEventListener('click', () => {
-    if ($('resendBtn').disabled) return;
-    startEmailCountdown(generateToken());
-  });
+    if (!isValidEmail(email)) {
 
-  function advanceAfterEmail() {
-    if (currentTier === 1) {
-      setProgress(3, 4);
-      stepLabel.textContent = 'Complete';
-      showSuccess();
-    } else {
-      setProgress(1, 4);
-      stepLabel.textContent = 'Step 2: Payment Verification';
-      $('cardTierName').textContent = tierNames[currentTier] + ' — ' + tierPrices[currentTier];
-      showState('card');
+      $('emailError').textContent =
+      'Enter a valid email address.';
+
+      $('emailError').classList.add(
+        'active'
+      );
+
+      return;
     }
-  }
 
-  $('backCard').addEventListener('click', () => {
-    showState('email');
-    stepLabel.textContent = 'Step 1: Email Verification';
-    setProgress(0, 4);
-  });
+    $('emailError').classList.remove(
+      'active'
+    );
 
-  $('cardNumber').addEventListener('input', e => {
-    let v = e.target.value.replace(/\D/g, '').substring(0,16);
-    v = v.match(/.{1,4}/g)?.join(' ') || v;
-    e.target.value = v;
-  });
+    $('submitEmail').disabled =
+    true;
 
-  $('cardExpiry').addEventListener('input', e => {
-    let v = e.target.value.replace(/\D/g, '').substring(0,4);
-    if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2);
-    e.target.value = v;
-  });
+    $('submitEmail').textContent =
+    'Starting Enrollment...';
 
-  $('cardCvc').addEventListener('input', e => {
-    e.target.value = e.target.value.replace(/\D/g, '').substring(0,4);
-  });
+    log(
+      'starting dynamic enrollment: ' +
+      tier
+    );
 
-  $('submitCard').addEventListener('click', () => {
-    const num = $('cardNumber').value.replace(/\s/g, '');
-    const exp = $('cardExpiry').value;
-    const cvc = $('cardCvc').value;
-    const name = $('cardName').value.trim();
-    if (num.length < 13 || exp.length < 5 || cvc.length < 3 || name.length < 2) {
-      $('cardError').classList.add('active'); return;
-    }
-    $('cardError').classList.remove('active');
-    showState('cardProcessing');
-    log('validating card...');
-    setTimeout(() => {
-      log('card validated');
-      if (currentTier === 2) {
-        setProgress(3, 4);
-        stepLabel.textContent = 'Complete';
-        showSuccess();
-      } else {
-        setProgress(2, 4);
-        stepLabel.textContent = 'Step 3: Identity Verification';
-        showState('id');
-      }
-    }, 1500);
-  });
+    let data = {};
 
-  $('backId').addEventListener('click', () => {
-    showState('card');
-    stepLabel.textContent = 'Step 2: Payment Verification';
-    setProgress(1, 4);
-  });
+    try {
 
-  $('idUploadZone').addEventListener('click', () => $('idFile').click());
-  $('idFile').addEventListener('change', () => {
-    if ($('idFile').files && $('idFile').files[0]) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        idImageData = e.target.result;
-        $('idUploadZone').classList.add('has-file');
-        $('idUploadZone').querySelector('.upload-text').textContent = $('idFile').files[0].name;
-        $('submitId').disabled = false;
-        $('idError').classList.remove('active');
-      };
-      reader.readAsDataURL($('idFile').files[0]);
-    }
-  });
+      const response =
+      await fetch(
+        '/api/enrollment/start',
+        {
+          method: 'POST',
 
-  $('submitId').addEventListener('click', () => {
-    if (!idImageData) { $('idError').classList.add('active'); return; }
-    $('idError').classList.remove('active');
-    log('ID uploaded');
-    showState('selfie');
-    stepLabel.textContent = 'Step 4: Biometric Match';
-    setProgress(3, 4);
-  });
-
-  $('backSelfie').addEventListener('click', () => {
-    showState('id');
-    stepLabel.textContent = 'Step 3: Identity Verification';
-    setProgress(2, 4);
-  });
-
-  $('selfieUploadZone').addEventListener('click', () => $('selfieFile').click());
-  $('selfieFile').addEventListener('change', () => {
-    if ($('selfieFile').files && $('selfieFile').files[0]) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        selfieImageData = e.target.result;
-        $('selfieUploadZone').classList.add('has-file');
-        $('selfieUploadZone').querySelector('.upload-text').textContent = $('selfieFile').files[0].name;
-        $('submitSelfie').disabled = false;
-        $('selfieError').classList.remove('active');
-      };
-      reader.readAsDataURL($('selfieFile').files[0]);
-    }
-  });
-
-  $('submitSelfie').addEventListener('click', () => {
-    if (!selfieImageData) { $('selfieError').classList.add('active'); return; }
-    $('selfieError').classList.remove('active');
-    showState('match');
-    $('matchIdImg').src = idImageData;
-    $('matchSelfieImg').src = selfieImageData;
-    $('matchScore').textContent = '...';
-    $('matchStatus').textContent = 'Analyzing facial landmarks...';
-    log('running biometric match');
-
-    let score = 0;
-    const scoreInterval = setInterval(() => {
-      score += Math.floor(Math.random() * 8) + 3;
-      if (score > 94) score = 94 + Math.floor(Math.random() * 5);
-      $('matchScore').textContent = score + '%';
-      if (score >= 98) {
-        clearInterval(scoreInterval);
-        setTimeout(() => {
-          $('matchScore').textContent = '98.4%';
-          $('matchStatus').textContent = 'Match confirmed — identity verified';
-          log('biometric match passed');
-          setTimeout(() => {
-            setProgress(4, 4);
-            stepLabel.textContent = 'Complete';
-            showSuccess();
-          }, 800);
-        }, 400);
-      }
-    }, 200);
-  });
-
-  function showSuccess() {
-    showState('success');
-    $('successTier').textContent = tierNames[currentTier];
-    if (currentTier === 1) {
-      $('successTitle').textContent = 'Visitor Access Granted';
-      $('successSub').textContent = 'Email verified. Browse-only access active.';
-    } else if (currentTier === 2) {
-      $('successTitle').textContent = 'Member Enrollment Complete';
-      $('successSub').textContent = 'Payment method on file. Full platform access unlocked.';
-    } else {
-      $('successTitle').textContent = 'Creator Verification Complete';
-      $('successSub').textContent = 'Government ID and biometric match confirmed. Publishing rights granted.';
-    }
-    log('enrollment complete — tier ' + currentTier);
-  }
-
-  $('openModal').addEventListener('click', () => {
-    resetAll();
-    overlay.classList.add('active');
-    log('modal opened');
-  });
-
-  $('closeModal').addEventListener('click', () => {
-    overlay.classList.remove('active');
-    setTimeout(resetAll, 300);
-  });
-
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) {
-      overlay.classList.remove('active');
-      setTimeout(resetAll, 300);
-    }
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && overlay.classList.contains('active')) {
-      overlay.classList.remove('active');
-      setTimeout(resetAll, 300);
-    }
-  });
-})();
-</script>
-
-</body>
-</html>
+          headers: {
+            'Content-Type': 'application/json'
+          },
