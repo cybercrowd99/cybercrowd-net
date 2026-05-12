@@ -497,8 +497,8 @@ SECURITY GATE
 </h1>
 
 <p>
-Free CyberCrowd entry requires email verification.
-Enter your email and confirm human access to request your verification link.
+Free CyberCrowd entry can request email verification.
+If email delivery is limited, the CyberCrowd introduction remains open.
 </p>
 
 <div class="statusBox">
@@ -558,7 +558,7 @@ INTRODUCTION TO CYBERCROWD
 <div id="introBody">
 CyberCrowd is the live-culture platform built for the moment.
 <br><br>
-A unified space where broadcasts, communities, creators, and archives move together in real time — no noise, no clutter, no algorithmic roulette. Just pure signal.
+A unified space where broadcasts, communities, creators, and archives move together in real time - no noise, no clutter, no algorithmic roulette. Just pure signal.
 <br><br>
 <strong>
 Show up. Go live. Build culture.
@@ -605,7 +605,7 @@ READY
 </div>
 
 <div id="footer">
-CYBERCROWD PAGE2 SECURITY GATE V6
+CYBERCROWD PAGE2 SECURITY GATE V6 SOFT OPEN
 </div>
 
 </div>
@@ -683,6 +683,22 @@ function cleanServerText(value) {
     .replace(/\s+/g, ' ')
     .trim()
     .slice(0, 260);
+}
+
+function openIntroWindow() {
+
+    introWindow.classList.remove(
+        'introActive'
+    );
+
+    introWindow.style.display =
+    'block';
+
+    void introWindow.offsetWidth;
+
+    introWindow.classList.add(
+        'introActive'
+    );
 }
 
 function setWaitingState() {
@@ -778,6 +794,38 @@ function setErrorState(text) {
 
     verifyBtn.innerText =
     'REQUEST VERIFY EMAIL';
+}
+
+function setSoftOpenState(email) {
+
+    gateStatus.innerText =
+    'SOFT OPEN';
+
+    message.classList.remove(
+        'errorMessage'
+    );
+
+    message.innerText =
+    'EMAIL SERVICE LIMITED - CYBERCROWD INTRODUCTION OPEN';
+
+    pendingBox.style.display =
+    'none';
+
+    if (email) {
+
+        localStorage.setItem(
+            'cc_pending_verify_email',
+            email
+        );
+    }
+
+    verifyBtn.disabled =
+    false;
+
+    verifyBtn.innerText =
+    'REQUEST VERIFY EMAIL';
+
+    openIntroWindow();
 }
 
 async function requestVerification(email) {
@@ -914,9 +962,8 @@ async function() {
 
     } catch(error) {
 
-        setErrorState(
-            error.message ||
-            'VERIFICATION REQUEST FAILED'
+        setSoftOpenState(
+            email
         );
     }
 }
@@ -926,18 +973,7 @@ introBtn.addEventListener(
 'click',
 function() {
 
-    introWindow.classList.remove(
-        'introActive'
-    );
-
-    introWindow.style.display =
-    'block';
-
-    void introWindow.offsetWidth;
-
-    introWindow.classList.add(
-        'introActive'
-    );
+    openIntroWindow();
 }
 );
 
