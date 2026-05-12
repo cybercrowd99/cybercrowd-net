@@ -49,7 +49,7 @@ if(!resendApiKey){
 return Response.json({
 
 success:false,
-message:'RESEND_API_KEY is missing. Verification email was not sent.',
+message:'Verification email service is not active.',
 status:'email_not_sent',
 emailDelivery:'missing_api_key'
 
@@ -60,19 +60,22 @@ status:500
 }
 
 /*
-CYBERCROWD SENDER FORCE
------------------------
-This forces the same Resend starter sender path that already reached the inbox.
+CYBERCROWD LIVE PUBLIC SENDER
+-----------------------------
+cybercrowd.net is verified in Resend.
 
-Do not use CC_EMAIL_FROM in this version.
-Do not use onboarding@cybercrowd.net in this version.
+This version forces the live verified CyberCrowd domain sender.
 
-Reply/contact remains CyberCrowd services.
------------------------
+Do not use onboarding@resend.dev.
+Do not use CC_EMAIL_FROM.
+Do not use sandbox/test sender logic.
+
+This is the public access lane.
+-----------------------------
 */
 
 const fromEmail =
-'onboarding@resend.dev';
+'CyberCrowd <onboarding@cybercrowd.net>';
 
 const serviceReplyEmail =
 'cybercrowd_services@yahoo.com';
@@ -189,7 +192,7 @@ email
 );
 
 console.log(
-'CYBERCROWD FORCE SENDER:',
+'CYBERCROWD LIVE DOMAIN SENDER:',
 fromEmail
 );
 
@@ -265,7 +268,7 @@ raw:sendText
 if(!sendResponse.ok){
 
 console.error(
-'CYBERCROWD EMAIL SEND FAILURE:',
+'CYBERCROWD LIVE EMAIL SEND FAILURE:',
 sendData
 );
 
@@ -276,7 +279,7 @@ success:false,
 message:
 sendData.message ||
 sendData.error ||
-'Resend rejected the verification email.',
+'Verification email was not accepted by the email provider.',
 
 email,
 
@@ -314,7 +317,7 @@ sendData.id || '';
 if(!resendEmailId){
 
 console.error(
-'CYBERCROWD EMAIL SEND WARNING: RESEND ACCEPTED WITHOUT ID',
+'CYBERCROWD LIVE EMAIL SEND WARNING: RESEND ACCEPTED WITHOUT ID',
 sendData
 );
 
@@ -323,7 +326,7 @@ return Response.json({
 success:false,
 
 message:
-'Resend response did not include an email id. Verification email was not confirmed sent.',
+'Verification email was not confirmed sent.',
 
 email,
 
@@ -353,7 +356,7 @@ status:502
 }
 
 console.log(
-'CYBERCROWD VERIFY EMAIL SENT:',
+'CYBERCROWD LIVE VERIFY EMAIL SENT:',
 email
 );
 
