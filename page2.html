@@ -1346,6 +1346,7 @@ Enroll / Login
           body: JSON.stringify({
             email: email,
             tier: tier,
+            next: '/page2.html?verified=1',
             humanConfirmed: true
           })
         }
@@ -1367,6 +1368,13 @@ Enroll / Login
           data.error ||
           responseText ||
           'Dynamic enrollment failed.'
+        );
+      }
+
+      if (data.emailDelivery !== 'accepted_by_resend' || !data.resendEmailId) {
+        throw new Error(
+          data.message ||
+          'Verification email was not accepted by Resend.'
         );
       }
 
@@ -1414,7 +1422,7 @@ Enroll / Login
         };
       }
 
-      log('dynamic enrollment accepted');
+      log('verification email accepted by Resend: ' + data.resendEmailId);
 
     } catch(error) {
       if ($('emailError')) {
