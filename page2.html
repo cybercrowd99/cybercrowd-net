@@ -3,844 +3,660 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3-Tier Secure Enrollment — Cybercrowd</title>
+
+<title>CyberCrowd Access Services | Enrollment</title>
+
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
+:root {
+  --cc-black: #050505;
+  --cc-panel: #101414;
+  --cc-panel-soft: #0c1111;
+  --cc-cyan: #00ffff;
+  --cc-green: #00ffaa;
+  --cc-text: #ffffff;
+  --cc-muted: #9fb9b9;
+  --cc-border: rgba(0,255,255,0.34);
+  --cc-border-hot: rgba(0,255,255,0.82);
+  --cc-glow: rgba(0,255,255,0.22);
+  --cc-green-glow: rgba(0,255,170,0.20);
+  --cc-error: #ff5555;
+  --cc-warn: #ffcc66;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background:
+    radial-gradient(circle at center, rgba(0,255,255,0.10), transparent 46%),
+    var(--cc-black);
+  color: var(--cc-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.trigger-btn {
+  padding: 16px 40px;
+  font-size: 16px;
+  font-weight: 700;
+  border: 1px solid var(--cc-border);
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.018)),
+    var(--cc-panel-soft);
+  color: #fff;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 18px rgba(0,255,255,0.10);
+}
+
+.trigger-btn:hover {
+  border-color: var(--cc-border-hot);
+  box-shadow: 0 0 24px var(--cc-glow);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.90);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-window {
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.018)),
+    var(--cc-panel-soft);
+  border: 1px solid var(--cc-border);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 34px;
+  box-shadow:
+    0 0 34px var(--cc-glow),
+    0 24px 80px rgba(0,0,0,0.82);
+  transform: translateY(16px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-window {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--cc-text);
+  letter-spacing: 0.5px;
+}
+
+.modal-close {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--cc-muted);
+  font-size: 26px;
+  cursor: pointer;
+  line-height: 1;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  color: var(--cc-cyan);
+  border-color: var(--cc-border-hot);
+  background: rgba(0,255,255,0.05);
+}
+
+.progress-track {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 28px;
+}
+
+.progress-seg {
+  flex: 1;
+  height: 3px;
+  background: rgba(0,255,255,0.14);
+  border-radius: 2px;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.progress-seg.active {
+  background: var(--cc-cyan);
+  box-shadow: 0 0 10px var(--cc-glow);
+}
+
+.progress-seg.done {
+  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
+  box-shadow: 0 0 12px var(--cc-green-glow);
+}
+
+.step-label {
+  font-size: 11px;
+  color: var(--cc-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.state-block {
+  display: none;
+}
+
+.state-block.active {
+  display: block;
+}
+
+.tier-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.tier-card {
+  border: 1px solid var(--cc-border);
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.018)),
+    var(--cc-panel-soft);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  box-shadow: 0 0 18px rgba(0,255,255,0.06);
+}
+
+.tier-card:hover {
+  border-color: var(--cc-border-hot);
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.09), rgba(0,255,170,0.04)),
+    var(--cc-panel);
+}
+
+.tier-card.selected {
+  border-color: var(--cc-cyan);
+  background:
+    linear-gradient(135deg, rgba(0,255,255,0.12), rgba(0,255,170,0.07)),
+    var(--cc-panel);
+  box-shadow: 0 0 22px var(--cc-glow);
+}
+
+.tier-badge {
+  position: absolute;
+  top: -1px;
+  right: 16px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
+  color: #001111;
+}
+
+.tier-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--cc-text);
+  margin-bottom: 6px;
+}
+
+.tier-desc {
+  font-size: 13px;
+  color: var(--cc-muted);
+  line-height: 1.5;
+}
+
+.tier-price {
+  font-size: 13px;
+  color: var(--cc-green);
+  margin-top: 10px;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cc-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  background: rgba(0,0,0,0.52);
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  color: var(--cc-text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--cc-cyan);
+  box-shadow: 0 0 14px var(--cc-glow);
+}
+
+.form-input::placeholder {
+  color: rgba(159,185,185,0.48);
+}
+
+.form-input:disabled,
+.form-select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.submit-btn,
+.action-btn,
+.verify-link {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  border: 1px solid transparent;
+  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
+  color: #001111;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  margin-top: 4px;
+  box-shadow: 0 0 18px rgba(0,255,255,0.12);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.submit-btn:hover:not(:disabled),
+.action-btn:hover:not(:disabled),
+.verify-link:hover {
+  background: linear-gradient(90deg, var(--cc-green), var(--cc-cyan));
+  box-shadow: 0 0 24px var(--cc-glow);
+}
+
+.submit-btn:disabled,
+.action-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--cc-muted);
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: var(--cc-cyan);
+}
+
+.upload-zone {
+  border: 2px dashed var(--cc-border);
+  border-radius: 10px;
+  padding: 32px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.018)),
+    var(--cc-panel-soft);
+}
+
+.upload-zone:hover {
+  border-color: var(--cc-border-hot);
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.09), rgba(0,255,170,0.04)),
+    var(--cc-panel);
+}
+
+.upload-zone.has-file {
+  border-color: var(--cc-cyan);
+  border-style: solid;
+  background:
+    linear-gradient(135deg, rgba(0,255,255,0.12), rgba(0,255,170,0.07)),
+    var(--cc-panel);
+}
+
+.upload-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: var(--cc-muted);
+}
+
+.upload-text {
+  font-size: 14px;
+  color: var(--cc-green);
+  margin-bottom: 6px;
+}
+
+.upload-hint {
+  font-size: 12px;
+  color: var(--cc-muted);
+}
+
+.upload-input {
+  display: none;
+}
+
+.pending-icon {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(0,255,255,0.18);
+  border-top-color: var(--cc-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 18px;
+  box-shadow: 0 0 14px var(--cc-glow);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.countdown-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(0,255,255,0.14);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 16px 0 10px;
+}
+
+.countdown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
+  width: 100%;
+  transition: width 1s linear;
+}
+
+.countdown-text {
+  font-size: 12px;
+  color: var(--cc-muted);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.countdown-text.warning {
+  color: var(--cc-error);
+}
+
+.center-text {
+  text-align: center;
+}
+
+.pending-text {
+  font-size: 14px;
+  color: var(--cc-muted);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.pending-email {
+  font-weight: 800;
+  color: var(--cc-text);
+  word-break: break-all;
+}
+
+.success-check {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--cc-green);
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--cc-green);
+  box-shadow: 0 0 18px var(--cc-green-glow);
+}
+
+.success-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--cc-text);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.success-sub {
+  font-size: 13px;
+  color: var(--cc-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.error-msg {
+  font-size: 12px;
+  color: var(--cc-error);
+  margin-top: 6px;
+  display: none;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.error-msg.active {
+  display: block;
+}
+
+.simulated-inbox {
+  margin-top: 20px;
+  padding: 14px;
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.018)),
+    var(--cc-panel-soft);
+  border: 1px dashed var(--cc-border);
+  border-radius: 8px;
+}
+
+.simulated-inbox-title {
+  font-size: 11px;
+  color: var(--cc-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.verify-link.expired {
+  opacity: 0.25;
+  pointer-events: none;
+  text-decoration: line-through;
+  border-color: rgba(255,255,255,0.15);
+}
+
+.resend-btn {
+  background: none;
+  border: 1px solid var(--cc-border);
+  color: var(--cc-muted);
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.resend-btn:hover {
+  color: var(--cc-cyan);
+  border-color: var(--cc-border-hot);
+}
+
+.resend-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.divider {
+  height: 1px;
+  background:
+    linear-gradient(90deg, transparent, rgba(0,255,255,0.38), transparent);
+  margin: 20px 0;
+}
+
+.status-log {
+  font-size: 10px;
+  color: var(--cc-muted);
+  font-family: "SF Mono", Monaco, Consolas, monospace;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0,255,255,0.18);
+  word-break: break-word;
+}
+
+.tier-summary {
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.018)),
+    var(--cc-panel-soft);
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.tier-summary-label {
+  font-size: 10px;
+  color: var(--cc-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.tier-summary-value {
+  font-size: 14px;
+  color: var(--cc-green);
+  font-weight: 800;
+}
+
+.match-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.match-box {
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.018)),
+    var(--cc-panel-soft);
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.match-box-label {
+  font-size: 10px;
+  color: var(--cc-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.match-box-img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #111;
+  display: block;
+}
+
+.match-score {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--cc-text);
+  margin: 12px 0;
+  text-align: center;
+  text-shadow: 0 0 14px var(--cc-glow);
+}
+
+.match-status {
+  font-size: 13px;
+  color: var(--cc-green);
+  text-align: center;
+}
+
+@media (max-width: 520px) {
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: #0a0a0a;
-    color: #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-  }
-
-  .trigger-btn {
-    padding: 16px 40px;
-    font-size: 16px;
-    font-weight: 600;
-    border: 1px solid #333;
-    background: #141414;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s;
-    letter-spacing: 0.3px;
-  }
-
-  .trigger-btn:hover {
-    border-color: #555;
-    background: #1c1c1c;
-  }
-
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.9);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    padding: 20px;
-  }
-
-  .modal-overlay.active {
-    display: flex;
-    opacity: 1;
+    padding: 12px;
   }
 
   .modal-window {
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 480px;
-    max-height: 90vh;
-    overflow-y: auto;
-    padding: 36px;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.8);
-    transform: translateY(16px);
-    transition: transform 0.3s ease;
-  }
-
-  .modal-overlay.active .modal-window {
-    transform: translateY(0);
-  }
-
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 28px;
-  }
-
-  .modal-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.3px;
-  }
-
-  .modal-close {
-    background: none;
-    border: none;
-    color: #555;
-    font-size: 26px;
-    cursor: pointer;
-    line-height: 1;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-
-  .modal-close:hover {
-    color: #fff;
-    background: #222;
-  }
-
-  .progress-track {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 28px;
-  }
-
-  .progress-seg {
-    flex: 1;
-    height: 3px;
-    background: #222;
-    border-radius: 2px;
-    transition: background 0.3s;
-  }
-
-  .progress-seg.done { background: #fff; }
-  .progress-seg.active { background: #555; }
-
-  .step-label {
-    font-size: 11px;
-    color: #444;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 20px;
-    font-weight: 600;
-  }
-
-  .tier-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 8px;
-  }
-
-  .tier-card {
-    border: 1px solid #222;
-    background: #0f0f0f;
-    border-radius: 8px;
-    padding: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-  }
-
-  .tier-card:hover {
-    border-color: #444;
-    background: #161616;
-  }
-
-  .tier-card.selected {
-    border-color: #fff;
-    background: #1a1a1a;
-  }
-
-  .tier-badge {
-    position: absolute;
-    top: -1px;
-    right: 16px;
-    padding: 4px 10px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-radius: 0 0 4px 4px;
-  }
-
-  .tier-badge.free { background: #2a2a2a; color: #888; }
-  .tier-badge.member { background: #333; color: #ccc; }
-  .tier-badge.creator { background: #fff; color: #000; }
-
-  .tier-name {
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 6px;
-  }
-
-  .tier-desc {
-    font-size: 13px;
-    color: #666;
-    line-height: 1.5;
-  }
-
-  .tier-price {
-    font-size: 13px;
-    color: #888;
-    margin-top: 10px;
-    font-weight: 500;
-  }
-
-  .form-group {
-    margin-bottom: 18px;
-  }
-
-  .form-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: #555;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .form-input,
-  .form-select {
-    width: 100%;
-    padding: 12px 14px;
-    font-size: 15px;
-    background: #0a0a0a;
-    border: 1px solid #2a2a2a;
-    border-radius: 6px;
-    color: #fff;
-    outline: none;
-    transition: border-color 0.2s;
-    font-family: inherit;
-  }
-
-  .form-input:focus,
-  .form-select:focus {
-    border-color: #555;
-  }
-
-  .form-input::placeholder {
-    color: #333;
-  }
-
-  .form-input:disabled,
-  .form-select:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+    padding: 24px;
   }
 
   .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr;
   }
-
-  .submit-btn,
-  .action-btn {
-    width: 100%;
-    padding: 14px;
-    font-size: 15px;
-    font-weight: 600;
-    border: 1px solid #333;
-    background: #181818;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s;
-    margin-top: 4px;
-  }
-
-  .submit-btn:hover:not(:disabled),
-  .action-btn:hover:not(:disabled) {
-    background: #222;
-    border-color: #444;
-  }
-
-  .submit-btn:disabled,
-  .action-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-
-  .back-btn {
-    background: none;
-    border: none;
-    color: #555;
-    font-size: 13px;
-    cursor: pointer;
-    margin-bottom: 16px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.2s;
-  }
-
-  .back-btn:hover {
-    color: #aaa;
-  }
-
-  .upload-zone {
-    border: 2px dashed #2a2a2a;
-    border-radius: 8px;
-    padding: 32px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: #0a0a0a;
-  }
-
-  .upload-zone:hover {
-    border-color: #444;
-    background: #0f0f0f;
-  }
-
-  .upload-zone.has-file {
-    border-color: #fff;
-    border-style: solid;
-    background: #161616;
-  }
-
-  .upload-icon {
-    font-size: 28px;
-    margin-bottom: 10px;
-    color: #444;
-  }
-
-  .upload-text {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 6px;
-  }
-
-  .upload-hint {
-    font-size: 12px;
-    color: #333;
-  }
-
-  .upload-input {
-    display: none;
-  }
-
-  .state-block {
-    display: none;
-  }
-
-  .state-block.active {
-    display: block;
-  }
-
-  .pending-icon {
-    width: 44px;
-    height: 44px;
-    border: 3px solid #222;
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 18px;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .countdown-bar {
-    width: 100%;
-    height: 3px;
-    background: #1a1a1a;
-    border-radius: 2px;
-    overflow: hidden;
-    margin: 16px 0 10px;
-  }
-
-  .countdown-fill {
-    height: 100%;
-    background: #fff;
-    width: 100%;
-    transition: width 1s linear;
-  }
-
-  .countdown-text {
-    font-size: 12px;
-    color: #555;
-    text-align: center;
-    margin-bottom: 16px;
-  }
-
-  .countdown-text.warning {
-    color: #ff4444;
-  }
-
-  .center-text {
-    text-align: center;
-  }
-
-  .pending-text {
-    font-size: 14px;
-    color: #888;
-    line-height: 1.6;
-    margin-bottom: 8px;
-  }
-
-  .pending-email {
-    font-weight: 600;
-    color: #fff;
-    word-break: break-all;
-  }
-
-  .success-check {
-    width: 48px;
-    height: 48px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    margin: 0 auto 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: #fff;
-  }
-
-  .success-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 6px;
-    text-align: center;
-  }
-
-  .success-sub {
-    font-size: 13px;
-    color: #555;
-    text-align: center;
-    line-height: 1.5;
-  }
-
-  .error-msg {
-    font-size: 12px;
-    color: #ff4444;
-    margin-top: 6px;
-    display: none;
-  }
-
-  .error-msg.active {
-    display: block;
-  }
-
-  .simulated-inbox {
-    margin-top: 20px;
-    padding: 14px;
-    background: #0a0a0a;
-    border: 1px dashed #2a2a2a;
-    border-radius: 6px;
-  }
-
-  .simulated-inbox-title {
-    font-size: 11px;
-    color: #444;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
-    font-weight: 600;
-  }
-
-  .verify-link {
-    display: inline-block;
-    padding: 10px 18px;
-    background: #181818;
-    border: 1px solid #333;
-    color: #fff;
-    text-decoration: none;
-    font-size: 13px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .verify-link:hover {
-    background: #222;
-  }
-
-  .verify-link.expired {
-    opacity: 0.25;
-    pointer-events: none;
-    text-decoration: line-through;
-    border-color: #222;
-  }
-
-  .resend-btn {
-    background: none;
-    border: 1px solid #2a2a2a;
-    color: #555;
-    padding: 8px 16px;
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.2s;
-  }
-
-  .resend-btn:hover {
-    color: #aaa;
-    border-color: #444;
-  }
-
-  .resend-btn:disabled {
-    opacity: 0.2;
-    cursor: not-allowed;
-  }
-
-  .divider {
-    height: 1px;
-    background: #1a1a1a;
-    margin: 20px 0;
-  }
-
-  .status-log {
-    font-size: 10px;
-    color: #333;
-    font-family: "SF Mono", Monaco, monospace;
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid #1a1a1a;
-  }
-
-  .tier-summary {
-    background: #0f0f0f;
-    border: 1px solid #1f1f1f;
-    border-radius: 6px;
-    padding: 14px;
-    margin-bottom: 20px;
-  }
-
-  .tier-summary-label {
-    font-size: 10px;
-    color: #444;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
-
-  .tier-summary-value {
-    font-size: 14px;
-    color: #aaa;
-    font-weight: 500;
-  }
-
-  .match-preview {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 16px 0;
-  }
-
-  .match-box {
-    background: #0a0a0a;
-    border: 1px solid #222;
-    border-radius: 6px;
-    padding: 12px;
-    text-align: center;
-  }
-
-  .match-box-label {
-    font-size: 10px;
-    color: #444;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-  }
-
-  .match-box-img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 4px;
-    background: #111;
-    display: block;
-  }
-
-  .match-score {
-    font-size: 24px;
-    font-weight: 700;
-    color: #fff;
-    margin: 12px 0;
-    text-align: center;
-  }
-
-  .match-status {
-    font-size: 13px;
-    color: #888;
-    text-align: center;
-  }
-
-  :root {
-    --cc-black: #050505;
-    --cc-panel: #101414;
-    --cc-panel-soft: #0c1111;
-    --cc-cyan: #00ffff;
-    --cc-green: #00ffaa;
-    --cc-text: #ffffff;
-    --cc-muted: #9fb9b9;
-    --cc-border: rgba(0,255,255,0.34);
-    --cc-border-hot: rgba(0,255,255,0.82);
-    --cc-glow: rgba(0,255,255,0.22);
-    --cc-green-glow: rgba(0,255,170,0.20);
-    --cc-error: #ff5555;
-  }
-
-  body {
-    background:
-    radial-gradient(
-      circle at center,
-      rgba(0,255,255,0.10),
-      transparent 46%
-    ),
-    var(--cc-black);
-
-    color: var(--cc-text);
-  }
-
-  .trigger-btn,
-  .modal-window,
-  .tier-card,
-  .tier-summary,
-  .match-box,
-  .upload-zone,
-  .simulated-inbox {
-    background:
-    linear-gradient(
-      180deg,
-      rgba(0,255,255,0.045),
-      rgba(0,255,170,0.018)
-    ),
-    var(--cc-panel-soft);
-
-    border-color: var(--cc-border);
-
-    box-shadow:
-    0 0 18px rgba(0,255,255,0.06);
-  }
-
-  .modal-window {
-    border-color: var(--cc-border);
-
-    box-shadow:
-    0 0 34px var(--cc-glow),
-    0 24px 80px rgba(0,0,0,0.82);
-  }
-
-  .modal-title,
-  .tier-name,
-  .success-title,
-  .success-text,
-  .success-check,
-  .match-score {
-    color: var(--cc-text);
-  }
-
-  .step-label,
-  .form-label,
-  .tier-summary-label,
-  .match-box-label,
-  .status-log,
-  .upload-hint,
-  .success-sub,
-  .tier-desc,
-  .pending-text,
-  .countdown-text {
-    color: var(--cc-muted);
-  }
-
-  .progress-seg {
-    background: rgba(0,255,255,0.14);
-  }
-
-  .progress-seg.active {
-    background: var(--cc-cyan);
-
-    box-shadow:
-    0 0 10px var(--cc-glow);
-  }
-
-  .progress-seg.done {
-    background:
-    linear-gradient(
-      90deg,
-      var(--cc-cyan),
-      var(--cc-green)
-    );
-
-    box-shadow:
-    0 0 12px var(--cc-green-glow);
-  }
-
-  .tier-card:hover,
-  .upload-zone:hover,
-  .trigger-btn:hover {
-    border-color: var(--cc-border-hot);
-
-    background:
-    linear-gradient(
-      180deg,
-      rgba(0,255,255,0.09),
-      rgba(0,255,170,0.04)
-    ),
-    var(--cc-panel);
-  }
-
-  .tier-card.selected,
-  .upload-zone.has-file {
-    border-color: var(--cc-cyan);
-
-    background:
-    linear-gradient(
-      135deg,
-      rgba(0,255,255,0.12),
-      rgba(0,255,170,0.07)
-    ),
-    var(--cc-panel);
-
-    box-shadow:
-    0 0 22px var(--cc-glow);
-  }
-
-  .tier-badge.free,
-  .tier-badge.member,
-  .tier-badge.creator {
-    background:
-    linear-gradient(
-      90deg,
-      var(--cc-cyan),
-      var(--cc-green)
-    );
-
-    color: #001111;
-  }
-
-  .tier-price,
-  .pending-email,
-  .tier-summary-value,
-  .upload-text,
-  .match-status {
-    color: var(--cc-green);
-  }
-
-  .form-input,
-  .form-select {
-    background: rgba(0,0,0,0.52);
-
-    border-color: var(--cc-border);
-
-    color: var(--cc-text);
-  }
-
-  .form-input:focus,
-  .form-select:focus {
-    border-color: var(--cc-cyan);
-
-    box-shadow:
-    0 0 14px var(--cc-glow);
-  }
-
-  .submit-btn,
-  .action-btn,
-  .verify-link {
-    background:
-    linear-gradient(
-      90deg,
-      var(--cc-cyan),
-      var(--cc-green)
-    );
-
-    color: #001111;
-
-    border-color: transparent;
-
-    box-shadow:
-    0 0 18px rgba(0,255,255,0.12);
-  }
-
-  .submit-btn:hover:not(:disabled),
-  .action-btn:hover:not(:disabled),
-  .verify-link:hover {
-    background:
-    linear-gradient(
-      90deg,
-      var(--cc-green),
-      var(--cc-cyan)
-    );
-
-    box-shadow:
-    0 0 24px var(--cc-glow);
-  }
-
-  .back-btn,
-  .resend-btn,
-  .modal-close {
-    color: var(--cc-muted);
-  }
-
-  .back-btn:hover,
-  .resend-btn:hover,
-  .modal-close:hover {
-    color: var(--cc-cyan);
-
-    border-color: var(--cc-border-hot);
-  }
-
-  .pending-icon {
-    border-color: rgba(0,255,255,0.18);
-    border-top-color: var(--cc-cyan);
-
-    box-shadow:
-    0 0 14px var(--cc-glow);
-  }
-
-  .countdown-fill {
-    background:
-    linear-gradient(
-      90deg,
-      var(--cc-cyan),
-      var(--cc-green)
-    );
-  }
-
-  .countdown-text.warning,
-  .error-msg {
-    color: var(--cc-error);
-  }
-
-  .success-check {
-    border-color: var(--cc-green);
-
-    color: var(--cc-green);
-
-    box-shadow:
-    0 0 18px var(--cc-green-glow);
-  }
-
-  .match-score {
-    text-shadow:
-    0 0 14px var(--cc-glow);
-  }
-
-  .divider {
-    background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(0,255,255,0.38),
-      transparent
-    );
-  }
+}
 </style>
 </head>
 
@@ -876,21 +692,21 @@ Enroll / Login
 
     <div class="state-block active" id="stateTier">
       <div class="tier-grid">
-        <div class="tier-card" data-tier="1">
+        <div class="tier-card" data-tier="visitor">
           <div class="tier-badge free">Free</div>
           <div class="tier-name">Visitor Access</div>
           <div class="tier-desc">Browse public content. No posting rights. Basic read-only access to the platform.</div>
           <div class="tier-price">$0 / email verification only</div>
         </div>
 
-        <div class="tier-card" data-tier="2">
+        <div class="tier-card" data-tier="member">
           <div class="tier-badge member">Member</div>
           <div class="tier-name">Standard Member</div>
           <div class="tier-desc">Full platform access. Comment, save, interact. Verified identity with payment backing.</div>
           <div class="tier-price">$9/mo + card verification</div>
         </div>
 
-        <div class="tier-card" data-tier="3">
+        <div class="tier-card" data-tier="creator">
           <div class="tier-badge creator">Creator</div>
           <div class="tier-name">Content Creator</div>
           <div class="tier-desc">Publish, monetize, stream. Government ID + biometric match required. Highest trust tier.</div>
@@ -903,6 +719,11 @@ Enroll / Login
 
     <div class="state-block" id="stateEmail">
       <button class="back-btn" id="backEmail">&larr; Back to Tiers</button>
+
+      <div class="tier-summary">
+        <div class="tier-summary-label">Selected Tier</div>
+        <div class="tier-summary-value" id="emailTierName">Visitor Access</div>
+      </div>
 
       <div class="form-group">
         <label class="form-label" for="emailInput">Email Address</label>
@@ -933,8 +754,8 @@ Enroll / Login
 
       <div class="simulated-inbox" id="simulatedInbox">
         <div class="simulated-inbox-title">Live Enrollment Response</div>
-        <div style="font-size:12px;color:#555;margin-bottom:8px;">Returned by /api/enrollment/start</div>
-        <a class="verify-link" id="verifyLink">Continue CyberCrowd Enrollment</a>
+        <div style="font-size:12px;color:#9fb9b9;margin-bottom:8px;">Returned by /api/enrollment/start</div>
+        <a class="verify-link" id="verifyLink" href="#" target="_self">Continue CyberCrowd Enrollment</a>
       </div>
     </div>
 
@@ -947,24 +768,24 @@ Enroll / Login
       </div>
 
       <div class="form-group">
-        <label class="form-label">Card Number</label>
+        <label class="form-label" for="cardNumber">Card Number</label>
         <input type="text" class="form-input" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19">
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Expiry</label>
+          <label class="form-label" for="cardExpiry">Expiry</label>
           <input type="text" class="form-input" id="cardExpiry" placeholder="MM/YY" maxlength="5">
         </div>
 
         <div class="form-group">
-          <label class="form-label">CVC</label>
+          <label class="form-label" for="cardCvc">CVC</label>
           <input type="text" class="form-input" id="cardCvc" placeholder="123" maxlength="4">
         </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Name on Card</label>
+        <label class="form-label" for="cardName">Name on Card</label>
         <input type="text" class="form-input" id="cardName" placeholder="Full name">
       </div>
 
@@ -1034,12 +855,12 @@ Enroll / Login
       <div class="match-preview">
         <div class="match-box">
           <div class="match-box-label">ID Document</div>
-          <img class="match-box-img" id="matchIdImg">
+          <img class="match-box-img" id="matchIdImg" alt="ID preview">
         </div>
 
         <div class="match-box">
           <div class="match-box-label">Live Selfie</div>
-          <img class="match-box-img" id="matchSelfieImg">
+          <img class="match-box-img" id="matchSelfieImg" alt="Selfie preview">
         </div>
       </div>
 
@@ -1063,802 +884,752 @@ Enroll / Login
 </div>
 
 <script>
-(function() {
-  function $(id) {
-    return document.getElementById(id);
-  }
+(function () {
+  "use strict";
 
-  function addEvent(el, eventName, handler) {
-    if (el) {
-      el.addEventListener(eventName, handler);
-    }
-  }
+  var selectedTier = null;
+  var selectedTierLabel = "";
+  var selectedEmail = "";
+  var lastVerifyUrl = "";
+  var countdownTimer = null;
+  var countdownSeconds = 30;
+  var idImageData = "";
+  var selfieImageData = "";
 
-  var overlay = $('modalOverlay');
-  var openBtn = $('openModal');
-  var closeBtn = $('closeModal');
-  var progressSegs = [$('prog1'), $('prog2'), $('prog3'), $('prog4')];
-  var stepLabel = $('stepLabel');
-  var statusLog = $('statusLog');
+  var tierCards = Array.prototype.slice.call(document.querySelectorAll(".tier-card"));
+  var tierConfirmBtn = document.getElementById("tierConfirmBtn");
 
-  var states = {
-    tier: $('stateTier'),
-    email: $('stateEmail'),
-    emailPending: $('stateEmailPending'),
-    card: $('stateCard'),
-    cardProcessing: $('stateCardProcessing'),
-    id: $('stateId'),
-    selfie: $('stateSelfie'),
-    match: $('stateMatch'),
-    success: $('stateSuccess')
-  };
+  var stateTier = document.getElementById("stateTier");
+  var stateEmail = document.getElementById("stateEmail");
+  var stateEmailPending = document.getElementById("stateEmailPending");
+  var stateCard = document.getElementById("stateCard");
+  var stateCardProcessing = document.getElementById("stateCardProcessing");
+  var stateId = document.getElementById("stateId");
+  var stateSelfie = document.getElementById("stateSelfie");
+  var stateMatch = document.getElementById("stateMatch");
+  var stateSuccess = document.getElementById("stateSuccess");
 
-  var currentTier = 0;
-  var currentToken = null;
-  var timer = null;
-  var timeLeft = 30;
-  var verified = false;
-  var idImageData = null;
-  var selfieImageData = null;
+  var stepLabel = document.getElementById("stepLabel");
+  var progressSegments = [
+    document.getElementById("prog1"),
+    document.getElementById("prog2"),
+    document.getElementById("prog3"),
+    document.getElementById("prog4")
+  ];
 
-  var tierNames = {
-    1: 'Visitor Access',
-    2: 'Standard Member',
-    3: 'Content Creator'
-  };
+  var emailInput = document.getElementById("emailInput");
+  var emailError = document.getElementById("emailError");
+  var submitEmail = document.getElementById("submitEmail");
+  var pendingEmail = document.getElementById("pendingEmail");
+  var verifyLink = document.getElementById("verifyLink");
+  var resendBtn = document.getElementById("resendBtn");
+  var countdownFill = document.getElementById("countdownFill");
+  var countdownText = document.getElementById("countdownText");
 
-  var tierPrices = {
-    1: '$0',
-    2: '$9/mo',
-    3: '$29/mo'
-  };
+  var emailTierName = document.getElementById("emailTierName");
+  var cardTierName = document.getElementById("cardTierName");
+  var statusLog = document.getElementById("statusLog");
 
-  function log(msg) {
+  var backEmail = document.getElementById("backEmail");
+  var backCard = document.getElementById("backCard");
+  var backId = document.getElementById("backId");
+  var backSelfie = document.getElementById("backSelfie");
+
+  var cardNumber = document.getElementById("cardNumber");
+  var cardExpiry = document.getElementById("cardExpiry");
+  var cardCvc = document.getElementById("cardCvc");
+  var cardName = document.getElementById("cardName");
+  var cardError = document.getElementById("cardError");
+  var submitCard = document.getElementById("submitCard");
+
+  var idUploadZone = document.getElementById("idUploadZone");
+  var idFile = document.getElementById("idFile");
+  var idError = document.getElementById("idError");
+  var submitId = document.getElementById("submitId");
+
+  var selfieUploadZone = document.getElementById("selfieUploadZone");
+  var selfieFile = document.getElementById("selfieFile");
+  var selfieError = document.getElementById("selfieError");
+  var submitSelfie = document.getElementById("submitSelfie");
+
+  var matchIdImg = document.getElementById("matchIdImg");
+  var matchSelfieImg = document.getElementById("matchSelfieImg");
+  var matchScore = document.getElementById("matchScore");
+  var matchStatus = document.getElementById("matchStatus");
+
+  var successTitle = document.getElementById("successTitle");
+  var successSub = document.getElementById("successSub");
+  var successTier = document.getElementById("successTier");
+
+  function setStatus(message) {
     if (statusLog) {
-      statusLog.textContent = 'Status: ' + msg;
+      statusLog.textContent = "Status: " + message;
     }
   }
 
-  function showState(name) {
-    var key;
+  function showState(stateId) {
+    var states = [
+      stateTier,
+      stateEmail,
+      stateEmailPending,
+      stateCard,
+      stateCardProcessing,
+      stateId,
+      stateSelfie,
+      stateMatch,
+      stateSuccess
+    ];
 
-    for (key in states) {
-      if (states.hasOwnProperty(key) && states[key]) {
-        states[key].classList.remove('active');
+    states.forEach(function (state) {
+      if (state) {
+        state.classList.remove("active");
       }
-    }
+    });
 
-    if (states[name]) {
-      states[name].classList.add('active');
+    var target = document.getElementById(stateId);
+
+    if (target) {
+      target.classList.add("active");
     }
   }
 
-  function setProgress(step) {
-    var i;
-
-    for (i = 0; i < progressSegs.length; i++) {
-      if (progressSegs[i]) {
-        progressSegs[i].className = 'progress-seg';
-
-        if (i < step) {
-          progressSegs[i].classList.add('done');
-        } else if (i === step) {
-          progressSegs[i].classList.add('active');
-        }
+  function setProgress(stepNumber) {
+    progressSegments.forEach(function (segment, index) {
+      if (!segment) {
+        return;
       }
-    }
+
+      segment.classList.remove("active");
+      segment.classList.remove("done");
+
+      if (index + 1 < stepNumber) {
+        segment.classList.add("done");
+      }
+
+      if (index + 1 === stepNumber) {
+        segment.classList.add("active");
+      }
+    });
   }
 
-  function isValidEmail(str) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);
-  }
-
-  function generateToken() {
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
-  }
-
-  function resetAll() {
-    var tierCards;
-    var i;
-
-    if (timer) {
-      clearInterval(timer);
-    }
-
-    timer = null;
-    timeLeft = 30;
-    currentToken = null;
-    verified = false;
-    currentTier = 0;
-    idImageData = null;
-    selfieImageData = null;
-
-    if ($('emailInput')) $('emailInput').value = '';
-    if ($('emailError')) $('emailError').classList.remove('active');
-    if ($('cardNumber')) $('cardNumber').value = '';
-    if ($('cardExpiry')) $('cardExpiry').value = '';
-    if ($('cardCvc')) $('cardCvc').value = '';
-    if ($('cardName')) $('cardName').value = '';
-    if ($('cardError')) $('cardError').classList.remove('active');
-    if ($('idError')) $('idError').classList.remove('active');
-    if ($('selfieError')) $('selfieError').classList.remove('active');
-    if ($('idUploadZone')) $('idUploadZone').classList.remove('has-file');
-    if ($('selfieUploadZone')) $('selfieUploadZone').classList.remove('has-file');
-
-    if ($('idUploadZone') && $('idUploadZone').querySelector('.upload-text')) {
-      $('idUploadZone').querySelector('.upload-text').textContent = 'Tap to upload ID photo';
-    }
-
-    if ($('selfieUploadZone') && $('selfieUploadZone').querySelector('.upload-text')) {
-      $('selfieUploadZone').querySelector('.upload-text').textContent = 'Tap to upload live selfie';
-    }
-
-    if ($('idFile')) $('idFile').value = '';
-    if ($('selfieFile')) $('selfieFile').value = '';
-    if ($('submitId')) $('submitId').disabled = true;
-    if ($('submitSelfie')) $('submitSelfie').disabled = true;
-    if ($('tierConfirmBtn')) $('tierConfirmBtn').disabled = true;
-
-    tierCards = document.querySelectorAll('.tier-card');
-
-    for (i = 0; i < tierCards.length; i++) {
-      tierCards[i].classList.remove('selected');
-    }
-
-    setProgress(0);
-
+  function setStep(text, stepNumber) {
     if (stepLabel) {
-      stepLabel.textContent = 'Select Tier';
+      stepLabel.textContent = text;
     }
 
-    log('idle');
-    showState('tier');
+    setProgress(stepNumber);
   }
 
-  function openModal() {
-    if (overlay) {
-      overlay.classList.add('active');
+  function clearError(element) {
+    if (element) {
+      element.classList.remove("active");
     }
-
-    log('modal opened');
   }
 
-  function closeModal() {
-    if (overlay) {
-      overlay.classList.remove('active');
+  function showError(element, message) {
+    if (element) {
+      element.textContent = message;
+      element.classList.add("active");
     }
 
-    setTimeout(resetAll, 300);
+    setStatus(message);
   }
 
-  function startEmailCountdown(token) {
-    timeLeft = 30;
-    currentToken = token;
-    verified = false;
+  function validEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
-    if ($('countdownFill')) {
-      $('countdownFill').style.transition = 'none';
-      $('countdownFill').style.width = '100%';
-      void $('countdownFill').offsetWidth;
-      $('countdownFill').style.transition = 'width 1s linear';
+  function getTierLabel(tier) {
+    if (tier === "visitor") {
+      return "Visitor Access";
     }
 
-    if ($('countdownText')) {
-      $('countdownText').classList.remove('warning');
-      $('countdownText').textContent = 'Link expires in 30 seconds';
+    if (tier === "member") {
+      return "Standard Member";
     }
 
-    if ($('verifyLink')) {
-      $('verifyLink').classList.remove('expired');
-      $('verifyLink').textContent = 'Continue CyberCrowd Enrollment';
+    if (tier === "creator") {
+      return "Content Creator";
     }
 
-    if ($('resendBtn')) {
-      $('resendBtn').disabled = true;
+    return "Visitor Access";
+  }
+
+  function buildApiFailureMessage(data, fallback) {
+    var parts = [];
+
+    if (data && data.message) {
+      parts.push(data.message);
     }
 
-    timer = setInterval(function() {
-      timeLeft--;
+    if (data && data.status) {
+      parts.push("Status: " + data.status);
+    }
 
-      if ($('countdownFill')) {
-        $('countdownFill').style.width = ((timeLeft / 30) * 100) + '%';
+    if (data && data.emailDelivery) {
+      parts.push("Email delivery: " + data.emailDelivery);
+    }
+
+    if (data && data.provider) {
+      parts.push("Provider: " + data.provider);
+    }
+
+    if (data && data.providerStatus) {
+      parts.push("Provider status: " + data.providerStatus);
+    }
+
+    if (data && data.required_secret) {
+      parts.push("Required secret: " + data.required_secret);
+    }
+
+    if (data && data.details) {
+      try {
+        parts.push("Details: " + JSON.stringify(data.details));
+      } catch (error) {
+        parts.push("Details returned by provider.");
+      }
+    }
+
+    return parts.join(" | ") || fallback || "Verification email was not sent.";
+  }
+
+  function stopCountdown() {
+    if (countdownTimer) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+  }
+
+  function startCountdown() {
+    stopCountdown();
+
+    countdownSeconds = 30;
+
+    if (countdownFill) {
+      countdownFill.style.width = "100%";
+    }
+
+    if (countdownText) {
+      countdownText.textContent = "Link expires in 30 seconds";
+      countdownText.classList.remove("warning");
+    }
+
+    if (verifyLink) {
+      verifyLink.classList.remove("expired");
+    }
+
+    countdownTimer = setInterval(function () {
+      countdownSeconds = countdownSeconds - 1;
+
+      var percent = Math.max(0, (countdownSeconds / 30) * 100);
+
+      if (countdownFill) {
+        countdownFill.style.width = percent + "%";
       }
 
-      if (timeLeft <= 10 && $('countdownText')) {
-        $('countdownText').classList.add('warning');
+      if (countdownText) {
+        countdownText.textContent = "Link expires in " + countdownSeconds + " seconds";
+
+        if (countdownSeconds <= 10) {
+          countdownText.classList.add("warning");
+        }
       }
 
-      if ($('countdownText')) {
-        $('countdownText').textContent = 'Link expires in ' + timeLeft + 's';
-      }
+      if (countdownSeconds <= 0) {
+        stopCountdown();
 
-      if (timeLeft <= 0) {
-        clearInterval(timer);
-        timer = null;
-
-        if ($('countdownText')) {
-          $('countdownText').textContent = 'Link expired — resend required';
+        if (countdownText) {
+          countdownText.textContent = "Link expired. Request a new link.";
+          countdownText.classList.add("warning");
         }
 
-        if ($('verifyLink')) {
-          $('verifyLink').classList.add('expired');
-          $('verifyLink').textContent = 'Link Expired';
+        if (verifyLink) {
+          verifyLink.classList.add("expired");
         }
-
-        if ($('resendBtn')) {
-          $('resendBtn').disabled = false;
-        }
-
-        log('email link expired');
       }
     }, 1000);
   }
 
-  async function submitEmail() {
-    var email;
-    var tierMap;
-    var tier;
-    var response;
-    var responseText;
-    var data;
-    var token;
+  async function dispatchVerificationEmail(event) {
+    if (event && typeof event.preventDefault === "function") {
+      event.preventDefault();
+    }
 
-    email = $('emailInput').value.trim().toLowerCase();
+    clearError(emailError);
 
-    tierMap = {
-      1: 'visitor',
-      2: 'member',
-      3: 'creator'
-    };
+    var email = emailInput ? emailInput.value.trim().toLowerCase() : "";
 
-    tier = tierMap[currentTier] || 'visitor';
+    if (!validEmail(email)) {
+      showError(emailError, "Enter a valid email address.");
+      return false;
+    }
 
-    if (!isValidEmail(email)) {
-      if ($('emailError')) {
-        $('emailError').textContent = 'Enter a valid email address.';
-        $('emailError').classList.add('active');
+    selectedEmail = email;
+
+    if (submitEmail) {
+      submitEmail.disabled = true;
+      submitEmail.textContent = "Sending...";
+    }
+
+    setStatus("Calling /api/enrollment/start");
+
+    try {
+      var response = await fetch("/api/enrollment/start", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: email,
+          tier: selectedTier || "visitor",
+          next: "/page2.html?verified=1"
+        })
+      });
+
+      var responseText = await response.text();
+      var data = null;
+
+      try {
+        data = responseText ? JSON.parse(responseText) : {};
+      } catch (parseError) {
+        console.error("CYBERCROWD EMAIL DISPATCH NON JSON RESPONSE:", responseText);
+        showError(emailError, "Email dispatch route returned non-JSON. Worker/API route is not returning the expected JSON.");
+        return false;
       }
 
+      console.log("CYBERCROWD EMAIL DISPATCH RESPONSE:", {
+        httpStatus: response.status,
+        data: data
+      });
+
+      if (data.success === true && data.emailDelivery === "sent") {
+        if (pendingEmail) {
+          pendingEmail.textContent = email;
+        }
+
+        if (verifyLink) {
+          if (data.verifyUrl) {
+            verifyLink.href = data.verifyUrl;
+          } else {
+            verifyLink.href = "#";
+          }
+        }
+
+        lastVerifyUrl = data.verifyUrl || "";
+
+        setStatus("Verification email accepted by provider.");
+        setStep("Email Verification Sent", 2);
+        showState("stateEmailPending");
+        startCountdown();
+
+        return true;
+      }
+
+      var failureMessage = buildApiFailureMessage(data, "Verification email was not sent.");
+
+      showError(emailError, failureMessage);
+
+      console.error("CYBERCROWD EMAIL DISPATCH FAILURE:", data);
+
+      return false;
+    } catch (error) {
+      console.error("CYBERCROWD EMAIL DISPATCH REQUEST ERROR:", error);
+      showError(emailError, "Email dispatch request failed: " + error.message);
+      return false;
+    } finally {
+      if (submitEmail) {
+        submitEmail.disabled = false;
+        submitEmail.textContent = "Send Verification Link";
+      }
+    }
+  }
+
+  function routeAfterVerifiedEmail() {
+    if (selectedTier === "visitor") {
+      finishEnrollment("Visitor Access Active", "Your visitor access is active.", "Visitor Access");
       return;
     }
 
-    if ($('emailError')) {
-      $('emailError').classList.remove('active');
+    if (selectedTier === "member") {
+      setStep("Card Verification", 3);
+
+      if (cardTierName) {
+        cardTierName.textContent = "Standard Member";
+      }
+
+      showState("stateCard");
+      return;
     }
 
-    if ($('submitEmail')) {
-      $('submitEmail').disabled = true;
-      $('submitEmail').textContent = 'Starting Enrollment...';
+    if (selectedTier === "creator") {
+      setStep("Card Verification", 3);
+
+      if (cardTierName) {
+        cardTierName.textContent = "Content Creator";
+      }
+
+      showState("stateCard");
+      return;
     }
 
-    log('starting dynamic enrollment: ' + tier);
-
-    data = {};
-
-    try {
-      response = await fetch(
-        '/api/enrollment/start',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: email,
-            tier: tier,
-            humanConfirmed: true
-          })
-        }
-      );
-
-      responseText = await response.text();
-
-      if (responseText) {
-        try {
-          data = JSON.parse(responseText);
-        } catch(parseError) {
-          data = {};
-        }
-      }
-
-      if (!response.ok || data.success !== true) {
-        throw new Error(
-          data.message ||
-          data.error ||
-          responseText ||
-          'Dynamic enrollment failed.'
-        );
-      }
-
-      localStorage.setItem('cc_enrollment_email', email);
-      localStorage.setItem('cc_enrollment_tier', tier);
-
-      if (data.enrollmentId) {
-        localStorage.setItem('cc_enrollment_id', data.enrollmentId);
-      }
-
-      if (data.verifyUrl) {
-        localStorage.setItem('cc_enrollment_verify_url', data.verifyUrl);
-      }
-
-      if ($('pendingEmail')) {
-        $('pendingEmail').textContent = email;
-      }
-
-      showState('emailPending');
-
-      token = data.enrollmentId || generateToken();
-
-      startEmailCountdown(token);
-
-      if ($('verifyLink')) {
-        $('verifyLink').textContent = 'Continue CyberCrowd Enrollment';
-
-        $('verifyLink').onclick = function(e) {
-          e.preventDefault();
-
-          if (this.classList.contains('expired')) {
-            return;
-          }
-
-          if (timer) {
-            clearInterval(timer);
-          }
-
-          timer = null;
-          verified = true;
-
-          log('dynamic enrollment verified locally');
-
-          advanceAfterEmail();
-        };
-      }
-
-      log('dynamic enrollment accepted');
-
-    } catch(error) {
-      if ($('emailError')) {
-        $('emailError').textContent =
-        error.message ||
-        'Dynamic enrollment failed.';
-
-        $('emailError').classList.add('active');
-      }
-
-      log('dynamic enrollment failed');
-
-    } finally {
-      if ($('submitEmail')) {
-        $('submitEmail').disabled = false;
-        $('submitEmail').textContent = 'Send Verification Link';
-      }
-    }
+    finishEnrollment("Enrollment Complete", "Your account is active.", "Visitor Access");
   }
 
-  function advanceAfterEmail() {
-    if (currentTier === 1) {
-      setProgress(3);
+  function finishEnrollment(title, subtitle, tierLabel) {
+    stopCountdown();
 
-      if (stepLabel) {
-        stepLabel.textContent = 'Complete';
-      }
-
-      showSuccess();
-
-    } else {
-      setProgress(1);
-
-      if (stepLabel) {
-        stepLabel.textContent = 'Step 2: Payment Verification';
-      }
-
-      if ($('cardTierName')) {
-        $('cardTierName').textContent = tierNames[currentTier] + ' — ' + tierPrices[currentTier];
-      }
-
-      showState('card');
+    if (successTitle) {
+      successTitle.textContent = title;
     }
+
+    if (successSub) {
+      successSub.textContent = subtitle;
+    }
+
+    if (successTier) {
+      successTier.textContent = tierLabel;
+    }
+
+    setStep("Complete", 4);
+    showState("stateSuccess");
+    setStatus("complete");
   }
 
-  function showSuccess() {
-    showState('success');
+  function validateCardFields() {
+    var numberValue = cardNumber ? cardNumber.value.replace(/\s+/g, "") : "";
+    var expiryValue = cardExpiry ? cardExpiry.value.trim() : "";
+    var cvcValue = cardCvc ? cardCvc.value.trim() : "";
+    var nameValue = cardName ? cardName.value.trim() : "";
 
-    if ($('successTier')) {
-      $('successTier').textContent = tierNames[currentTier];
-    }
-
-    if (currentTier === 1) {
-      if ($('successTitle')) $('successTitle').textContent = 'Visitor Access Granted';
-      if ($('successSub')) $('successSub').textContent = 'Enrollment recorded. Browse-only access active.';
-
-    } else if (currentTier === 2) {
-      if ($('successTitle')) $('successTitle').textContent = 'Member Enrollment Complete';
-      if ($('successSub')) $('successSub').textContent = 'Payment method on file. Full platform access unlocked.';
-
-    } else {
-      if ($('successTitle')) $('successTitle').textContent = 'Creator Verification Complete';
-      if ($('successSub')) $('successSub').textContent = 'Government ID and biometric match confirmed. Publishing rights granted.';
-    }
-
-    log('enrollment complete — tier ' + currentTier);
+    return numberValue.length >= 12 &&
+      expiryValue.length >= 4 &&
+      cvcValue.length >= 3 &&
+      nameValue.length >= 2;
   }
 
-  function setupTierCards() {
-    var cards;
-    var i;
+  function processCard(event) {
+    if (event && typeof event.preventDefault === "function") {
+      event.preventDefault();
+    }
 
-    cards = document.querySelectorAll('.tier-card');
+    clearError(cardError);
 
-    for (i = 0; i < cards.length; i++) {
-      cards[i].addEventListener('click', function() {
-        var allCards;
-        var j;
+    if (!validateCardFields()) {
+      showError(cardError, "Complete all card fields correctly.");
+      return false;
+    }
 
-        allCards = document.querySelectorAll('.tier-card');
+    setStep("Card Processing", 3);
+    showState("stateCardProcessing");
+    setStatus("validating payment method");
 
-        for (j = 0; j < allCards.length; j++) {
-          allCards[j].classList.remove('selected');
-        }
+    setTimeout(function () {
+      if (selectedTier === "member") {
+        finishEnrollment("Member Enrollment Complete", "Your standard member account is active.", "Standard Member");
+        return;
+      }
 
-        this.classList.add('selected');
-        currentTier = parseInt(this.getAttribute('data-tier'), 10);
+      if (selectedTier === "creator") {
+        setStep("Identity Verification", 4);
+        showState("stateId");
+        setStatus("identity verification required");
+        return;
+      }
 
-        if ($('tierConfirmBtn')) {
-          $('tierConfirmBtn').disabled = false;
-        }
+      finishEnrollment("Enrollment Complete", "Your account is active.", selectedTierLabel || "Visitor Access");
+    }, 900);
+
+    return true;
+  }
+
+  function readImageFile(file, callback) {
+    if (!file) {
+      return;
+    }
+
+    var reader = new FileReader();
+
+    reader.onload = function (event) {
+      callback(event.target.result);
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  function handleIdFile(file) {
+    readImageFile(file, function (dataUrl) {
+      idImageData = dataUrl;
+
+      if (idUploadZone) {
+        idUploadZone.classList.add("has-file");
+        idUploadZone.querySelector(".upload-text").textContent = "ID photo loaded";
+      }
+
+      if (submitId) {
+        submitId.disabled = false;
+      }
+
+      clearError(idError);
+      setStatus("ID image loaded");
+    });
+  }
+
+  function handleSelfieFile(file) {
+    readImageFile(file, function (dataUrl) {
+      selfieImageData = dataUrl;
+
+      if (selfieUploadZone) {
+        selfieUploadZone.classList.add("has-file");
+        selfieUploadZone.querySelector(".upload-text").textContent = "Selfie loaded";
+      }
+
+      if (submitSelfie) {
+        submitSelfie.disabled = false;
+      }
+
+      clearError(selfieError);
+      setStatus("selfie image loaded");
+    });
+  }
+
+  function runBiometricMatch(event) {
+    if (event && typeof event.preventDefault === "function") {
+      event.preventDefault();
+    }
+
+    clearError(selfieError);
+
+    if (!selfieImageData) {
+      showError(selfieError, "Selfie upload required.");
+      return false;
+    }
+
+    if (matchIdImg) {
+      matchIdImg.src = idImageData;
+    }
+
+    if (matchSelfieImg) {
+      matchSelfieImg.src = selfieImageData;
+    }
+
+    showState("stateMatch");
+    setStatus("running facial geometry match");
+
+    var score = 78;
+
+    if (matchScore) {
+      matchScore.textContent = "--";
+    }
+
+    if (matchStatus) {
+      matchStatus.textContent = "Analyzing facial landmarks...";
+    }
+
+    setTimeout(function () {
+      score = 94;
+
+      if (matchScore) {
+        matchScore.textContent = score + "%";
+      }
+
+      if (matchStatus) {
+        matchStatus.textContent = "Biometric match accepted.";
+      }
+
+      setStatus("biometric match accepted");
+
+      setTimeout(function () {
+        finishEnrollment("Creator Enrollment Complete", "Your creator access is active.", "Content Creator");
+      }, 900);
+    }, 1200);
+
+    return true;
+  }
+
+  tierCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      tierCards.forEach(function (item) {
+        item.classList.remove("selected");
       });
-    }
-  }
 
-  function setupCardFormatting() {
-    addEvent($('cardNumber'), 'input', function(e) {
-      var v;
-      var groups;
+      card.classList.add("selected");
+      selectedTier = card.getAttribute("data-tier") || "visitor";
+      selectedTierLabel = getTierLabel(selectedTier);
 
-      v = e.target.value.replace(/\D/g, '').substring(0, 16);
-      groups = v.match(/.{1,4}/g);
-      v = groups ? groups.join(' ') : v;
-      e.target.value = v;
-    });
-
-    addEvent($('cardExpiry'), 'input', function(e) {
-      var v;
-
-      v = e.target.value.replace(/\D/g, '').substring(0, 4);
-
-      if (v.length >= 2) {
-        v = v.slice(0, 2) + '/' + v.slice(2);
+      if (tierConfirmBtn) {
+        tierConfirmBtn.disabled = false;
       }
 
-      e.target.value = v;
+      setStatus("selected tier: " + selectedTierLabel);
     });
+  });
 
-    addEvent($('cardCvc'), 'input', function(e) {
-      e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
-    });
-  }
-
-  function setupUploads() {
-    addEvent($('idUploadZone'), 'click', function() {
-      if ($('idFile')) {
-        $('idFile').click();
-      }
-    });
-
-    addEvent($('idFile'), 'change', function() {
-      var reader;
-
-      if ($('idFile').files && $('idFile').files[0]) {
-        reader = new FileReader();
-
-        reader.onload = function(e) {
-          idImageData = e.target.result;
-
-          if ($('idUploadZone')) {
-            $('idUploadZone').classList.add('has-file');
-
-            if ($('idUploadZone').querySelector('.upload-text')) {
-              $('idUploadZone').querySelector('.upload-text').textContent = $('idFile').files[0].name;
-            }
-          }
-
-          if ($('submitId')) {
-            $('submitId').disabled = false;
-          }
-
-          if ($('idError')) {
-            $('idError').classList.remove('active');
-          }
-        };
-
-        reader.readAsDataURL($('idFile').files[0]);
-      }
-    });
-
-    addEvent($('selfieUploadZone'), 'click', function() {
-      if ($('selfieFile')) {
-        $('selfieFile').click();
-      }
-    });
-
-    addEvent($('selfieFile'), 'change', function() {
-      var reader;
-
-      if ($('selfieFile').files && $('selfieFile').files[0]) {
-        reader = new FileReader();
-
-        reader.onload = function(e) {
-          selfieImageData = e.target.result;
-
-          if ($('selfieUploadZone')) {
-            $('selfieUploadZone').classList.add('has-file');
-
-            if ($('selfieUploadZone').querySelector('.upload-text')) {
-              $('selfieUploadZone').querySelector('.upload-text').textContent = $('selfieFile').files[0].name;
-            }
-          }
-
-          if ($('submitSelfie')) {
-            $('submitSelfie').disabled = false;
-          }
-
-          if ($('selfieError')) {
-            $('selfieError').classList.remove('active');
-          }
-        };
-
-        reader.readAsDataURL($('selfieFile').files[0]);
-      }
-    });
-  }
-
-  function setupButtons() {
-    addEvent(openBtn, 'click', function() {
-      resetAll();
-      openModal();
-    });
-
-    addEvent(closeBtn, 'click', function() {
-      closeModal();
-    });
-
-    addEvent(overlay, 'click', function(e) {
-      if (e.target === overlay) {
-        closeModal();
-      }
-    });
-
-    addEvent($('tierConfirmBtn'), 'click', function() {
-      if (!currentTier) {
+  if (tierConfirmBtn) {
+    tierConfirmBtn.addEventListener("click", function () {
+      if (!selectedTier) {
         return;
       }
 
-      setProgress(0);
-
-      if (stepLabel) {
-        stepLabel.textContent = 'Step 1: Email Verification';
+      if (emailTierName) {
+        emailTierName.textContent = selectedTierLabel;
       }
 
-      log('tier ' + currentTier + ' selected');
-      showState('email');
+      setStep("Email Verification", 2);
+      showState("stateEmail");
+      setStatus("waiting for email");
     });
+  }
 
-    addEvent($('backEmail'), 'click', function() {
-      resetAll();
+  if (backEmail) {
+    backEmail.addEventListener("click", function () {
+      setStep("Select Tier", 1);
+      showState("stateTier");
+      setStatus("back to tier selection");
     });
+  }
 
-    addEvent($('submitEmail'), 'click', function() {
-      submitEmail();
+  if (backCard) {
+    backCard.addEventListener("click", function () {
+      setStep("Email Verification", 2);
+      showState("stateEmailPending");
+      setStatus("back to email verification");
     });
+  }
 
-    addEvent($('emailInput'), 'keydown', function(e) {
-      if (e.key === 'Enter') {
-        submitEmail();
-      }
+  if (backId) {
+    backId.addEventListener("click", function () {
+      setStep("Card Verification", 3);
+      showState("stateCard");
+      setStatus("back to card verification");
     });
+  }
 
-    addEvent($('resendBtn'), 'click', function() {
-      if ($('resendBtn').disabled) {
-        return;
-      }
-
-      $('resendBtn').disabled = true;
-      showState('email');
-      submitEmail();
+  if (backSelfie) {
+    backSelfie.addEventListener("click", function () {
+      setStep("Identity Verification", 4);
+      showState("stateId");
+      setStatus("back to ID upload");
     });
+  }
 
-    addEvent($('backCard'), 'click', function() {
-      showState('email');
+  if (submitEmail) {
+    submitEmail.onclick = dispatchVerificationEmail;
+  }
 
-      if (stepLabel) {
-        stepLabel.textContent = 'Step 1: Email Verification';
-      }
+  if (resendBtn) {
+    resendBtn.addEventListener("click", function (event) {
+      event.preventDefault();
 
-      setProgress(0);
-    });
+      stopCountdown();
+      showState("stateEmail");
 
-    addEvent($('submitCard'), 'click', function() {
-      var num;
-      var exp;
-      var cvc;
-      var name;
-
-      num = $('cardNumber').value.replace(/\s/g, '');
-      exp = $('cardExpiry').value;
-      cvc = $('cardCvc').value;
-      name = $('cardName').value.trim();
-
-      if (num.length < 13 || exp.length < 5 || cvc.length < 3 || name.length < 2) {
-        if ($('cardError')) {
-          $('cardError').classList.add('active');
-        }
-
-        return;
+      if (emailInput && selectedEmail) {
+        emailInput.value = selectedEmail;
       }
 
-      if ($('cardError')) {
-        $('cardError').classList.remove('active');
+      setStatus("ready to resend verification");
+    });
+  }
+
+  if (verifyLink) {
+    verifyLink.addEventListener("click", function (event) {
+      if (!lastVerifyUrl || verifyLink.classList.contains("expired")) {
+        event.preventDefault();
+        setStatus("verification link unavailable or expired");
+        return false;
       }
 
-      showState('cardProcessing');
-      log('validating card...');
-
-      setTimeout(function() {
-        log('card validated');
-
-        if (currentTier === 2) {
-          setProgress(3);
-
-          if (stepLabel) {
-            stepLabel.textContent = 'Complete';
-          }
-
-          showSuccess();
-
-        } else {
-          setProgress(2);
-
-          if (stepLabel) {
-            stepLabel.textContent = 'Step 3: Identity Verification';
-          }
-
-          showState('id');
-        }
-      }, 1500);
+      setStatus("opening verification link");
+      return true;
     });
+  }
 
-    addEvent($('backId'), 'click', function() {
-      showState('card');
+  if (submitCard) {
+    submitCard.addEventListener("click", processCard);
+  }
 
-      if (stepLabel) {
-        stepLabel.textContent = 'Step 2: Payment Verification';
+  if (cardNumber) {
+    cardNumber.addEventListener("input", function () {
+      var value = cardNumber.value.replace(/\D/g, "").slice(0, 16);
+      cardNumber.value = value.replace(/(.{4})/g, "$1 ").trim();
+    });
+  }
+
+  if (cardExpiry) {
+    cardExpiry.addEventListener("input", function () {
+      var value = cardExpiry.value.replace(/\D/g, "").slice(0, 4);
+
+      if (value.length >= 3) {
+        value = value.slice(0, 2) + "/" + value.slice(2);
       }
 
-      setProgress(1);
+      cardExpiry.value = value;
+    });
+  }
+
+  if (cardCvc) {
+    cardCvc.addEventListener("input", function () {
+      cardCvc.value = cardCvc.value.replace(/\D/g, "").slice(0, 4);
+    });
+  }
+
+  if (idUploadZone && idFile) {
+    idUploadZone.addEventListener("click", function () {
+      idFile.click();
     });
 
-    addEvent($('submitId'), 'click', function() {
+    idFile.addEventListener("change", function () {
+      handleIdFile(idFile.files[0]);
+    });
+  }
+
+  if (submitId) {
+    submitId.addEventListener("click", function (event) {
+      event.preventDefault();
+
+      clearError(idError);
+
       if (!idImageData) {
-        if ($('idError')) {
-          $('idError').classList.add('active');
-        }
-
-        return;
+        showError(idError, "ID upload required.");
+        return false;
       }
 
-      if ($('idError')) {
-        $('idError').classList.remove('active');
-      }
-
-      log('ID uploaded');
-      showState('selfie');
-
-      if (stepLabel) {
-        stepLabel.textContent = 'Step 4: Biometric Match';
-      }
-
-      setProgress(3);
-    });
-
-    addEvent($('backSelfie'), 'click', function() {
-      showState('id');
-
-      if (stepLabel) {
-        stepLabel.textContent = 'Step 3: Identity Verification';
-      }
-
-      setProgress(2);
-    });
-
-    addEvent($('submitSelfie'), 'click', function() {
-      var score;
-      var scoreInterval;
-
-      if (!selfieImageData) {
-        if ($('selfieError')) {
-          $('selfieError').classList.add('active');
-        }
-
-        return;
-      }
-
-      if ($('selfieError')) {
-        $('selfieError').classList.remove('active');
-      }
-
-      showState('match');
-
-      if ($('matchIdImg')) {
-        $('matchIdImg').src = idImageData;
-      }
-
-      if ($('matchSelfieImg')) {
-        $('matchSelfieImg').src = selfieImageData;
-      }
-
-      if ($('matchScore')) {
-        $('matchScore').textContent = '...';
-      }
-
-      if ($('matchStatus')) {
-        $('matchStatus').textContent = 'Analyzing facial landmarks...';
-      }
-
-      log('running biometric match');
-
-      score = 0;
-
-      scoreInterval = setInterval(function() {
-        score += Math.floor(Math.random() * 8) + 3;
-
-        if (score > 94) {
-          score = 94 + Math.floor(Math.random() * 5);
-        }
-
-        if ($('matchScore')) {
-          $('matchScore').textContent = score + '%';
-        }
-
-        if (score >= 98) {
-          clearInterval(scoreInterval);
-
-          setTimeout(function() {
-            if ($('matchScore')) {
-              $('matchScore').textContent = '98.4%';
-            }
-
-            if ($('matchStatus')) {
-              $('matchStatus').textContent = 'Match confirmed — identity verified';
-            }
-
-            log('biometric match passed');
-
-            setTimeout(function() {
-              setProgress(4);
-
-              if (stepLabel) {
-                stepLabel.textContent = 'Complete';
-              }
-
-              showSuccess();
-            }, 800);
-          }, 400);
-        }
-      }, 200);
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && overlay && overlay.classList.contains('active')) {
-        closeModal();
-      }
+      setStep("Selfie Match", 4);
+      showState("stateSelfie");
+      setStatus("selfie required");
+      return true;
     });
   }
 
-  setupTierCards();
-  setupCardFormatting();
-  setupUploads();
-  setupButtons();
-  resetAll();
+  if (selfieUploadZone && selfieFile) {
+    selfieUploadZone.addEventListener("click", function () {
+      selfieFile.click();
+    });
+
+    selfieFile.addEventListener("change", function () {
+      handleSelfieFile(selfieFile.files[0]);
+    });
+  }
+
+  if (submitSelfie) {
+    submitSelfie.addEventListener("click", runBiometricMatch);
+  }
+
+  window.addEventListener("DOMContentLoaded", function () {
+    setStep("Select Tier", 1);
+    setStatus("idle");
+  });
+
+  window.CyberCrowdEnrollment = {
+    dispatchVerificationEmail: dispatchVerificationEmail,
+    routeAfterVerifiedEmail: routeAfterVerifiedEmail,
+    getSelectedTier: function () {
+      return selectedTier;
+    },
+    getSelectedEmail: function () {
+      return selectedEmail;
+    }
+  };
 })();
 </script>
 
