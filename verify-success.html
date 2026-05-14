@@ -2,464 +2,310 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CyberCrowd Access Granted</title>
+<title>CyberCrowd Access Verified</title>
 
 <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --cc-black: #050505;
+  --cc-panel: #101414;
+  --cc-cyan: #00ffff;
+  --cc-green: #00ffaa;
+  --cc-text: #ffffff;
+  --cc-muted: #9fb9b9;
+  --cc-border: rgba(0,255,255,0.34);
+  --cc-border-hot: rgba(0,255,255,0.82);
+  --cc-glow: rgba(0,255,255,0.22);
+  --cc-error: #ff5555;
+}
 
 html,
 body {
-
-    margin: 0;
-    padding: 0;
-
-    width: 100%;
-    height: 100%;
-
-    overflow: hidden;
-
-    background: #020508;
-
-    color: white;
-
-    font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  min-height: 100%;
 }
 
-#bg {
-
-    position: fixed;
-
-    inset: 0;
-
-    background:
-    radial-gradient(
-        circle at center,
-        rgba(0,255,255,.10),
-        transparent 42%
-    ),
-    linear-gradient(
-        to bottom,
-        #020406,
-        #071018
-    );
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at center, rgba(0,255,255,0.13), transparent 48%),
+    var(--cc-black);
+  color: var(--cc-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
 }
 
-#wrap {
-
-    position: relative;
-
-    z-index: 5;
-
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    box-sizing: border-box;
+.panel {
+  width: 100%;
+  max-width: 680px;
+  border: 1px solid var(--cc-border);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.055), rgba(0,255,170,0.025)),
+    var(--cc-panel);
+  box-shadow:
+    0 0 36px var(--cc-glow),
+    0 24px 90px rgba(0,0,0,0.85);
+  padding: 34px;
+  text-align: center;
 }
 
-#panel {
-
-    width: 100%;
-
-    max-width: 620px;
-
-    border-radius: 28px;
-
-    background:
-    rgba(0,0,0,.72);
-
-    border:
-    1px solid rgba(0,255,255,.24);
-
-    padding: 40px;
-
-    box-sizing: border-box;
-
-    text-align: center;
-
-    backdrop-filter: blur(8px);
-
-    box-shadow:
-    0 0 40px rgba(0,255,255,.08);
+.badge {
+  width: 74px;
+  height: 74px;
+  border: 3px solid var(--cc-green);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+  color: var(--cc-green);
+  font-size: 38px;
+  box-shadow: 0 0 22px rgba(0,255,170,0.24);
 }
 
-#title {
-
-    color: #00ffff;
-
-    font-size: 42px;
-
-    letter-spacing: 6px;
-
-    margin-bottom: 20px;
+h1 {
+  color: var(--cc-cyan);
+  font-size: clamp(30px, 7vw, 56px);
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
 }
 
-#sub {
-
-    opacity: .82;
-
-    line-height: 1.9;
-
-    margin-bottom: 28px;
-
-    font-size: 16px;
+p {
+  color: var(--cc-muted);
+  line-height: 1.7;
+  font-size: 16px;
+  margin-bottom: 18px;
 }
 
-#status {
-
-    display: inline-block;
-
-    padding: 14px 24px;
-
-    border-radius: 999px;
-
-    background:
-    rgba(0,255,170,.10);
-
-    border:
-    1px solid rgba(0,255,170,.30);
-
-    color: #00ffaa;
-
-    margin-bottom: 26px;
-
-    letter-spacing: 2px;
-
-    font-size: 13px;
+.status-box {
+  border: 1px solid var(--cc-border);
+  border-radius: 16px;
+  padding: 18px;
+  margin: 22px 0;
+  text-align: left;
+  background: rgba(0,0,0,0.25);
 }
 
-#emailBox {
-
-    margin-bottom: 28px;
-
-    padding: 16px;
-
-    border-radius: 18px;
-
-    background:
-    rgba(0,255,255,.05);
-
-    border:
-    1px solid rgba(0,255,255,.18);
-
-    line-height: 1.7;
-
-    word-break: break-word;
+.label {
+  color: var(--cc-green);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
-#emailLabel {
-
-    color: #00ffaa;
-
-    font-size: 12px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 8px;
+.value {
+  color: var(--cc-text);
+  font-weight: 800;
+  word-break: break-word;
 }
 
-#emailValue {
-
-    color: white;
-
-    opacity: .9;
+.actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 24px;
 }
 
-#enterBtn {
-
-    width: 100%;
-
-    padding: 18px;
-
-    border: none;
-
-    border-radius: 20px;
-
-    background:
-    linear-gradient(
-        90deg,
-        #00ffff,
-        #00ffaa
-    );
-
-    color: black;
-
-    font-weight: bold;
-
-    font-size: 17px;
-
-    letter-spacing: 2px;
-
-    cursor: pointer;
-
-    transition:
-    transform .2s ease,
-    box-shadow .2s ease;
+button,
+a.button {
+  display: block;
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
+  color: #001111;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-#enterBtn:hover {
-
-    transform: scale(1.02);
-
-    box-shadow:
-    0 0 24px rgba(0,255,255,.28);
+button.secondary,
+a.button.secondary {
+  background: rgba(0,0,0,0.18);
+  color: var(--cc-muted);
+  border-color: var(--cc-border);
 }
 
-#footer {
-
-    margin-top: 28px;
-
-    opacity: .42;
-
-    font-size: 11px;
-
-    letter-spacing: 2px;
+.error {
+  color: var(--cc-error);
 }
 
-.blocked {
-
-    color: #ff7777 !important;
+.small {
+  font-size: 12px;
+  opacity: 0.78;
 }
-
-.blockedStatus {
-
-    background:
-    rgba(255,90,90,.10) !important;
-
-    border:
-    1px solid rgba(255,90,90,.35) !important;
-
-    color: #ff9999 !important;
-}
-
 </style>
 </head>
 
 <body>
 
-<div id="bg"></div>
+<main class="panel">
+  <div class="badge">✓</div>
 
-<div id="wrap">
+  <h1>Access Verified</h1>
 
-<div id="panel">
+  <p>
+    CyberCrowd email verification is complete.
+    The verified session cookie has been set by the server.
+  </p>
 
-<div id="title">
-ACCESS GRANTED
-</div>
+  <div class="status-box">
+    <div class="label">Session Status</div>
+    <div class="value" id="sessionStatus">Checking verified session...</div>
+  </div>
 
-<div id="sub">
-Continuity identity verified.<br>
-The ecosystem now recognizes your presence.
-</div>
+  <div class="status-box">
+    <div class="label">Verified Email</div>
+    <div class="value" id="verifiedEmail">Reading...</div>
+  </div>
 
-<div id="status">
-VERIFIED CONTINUITY SESSION ACTIVE
-</div>
+  <div class="status-box">
+    <div class="label">Next Page</div>
+    <div class="value" id="nextPage">Reading...</div>
+  </div>
 
-<div id="emailBox">
+  <div class="actions">
+    <a class="button" id="continueButton" href="/">Enter CyberCrowd</a>
+    <a class="button secondary" href="/api/enrollment/close">Close Door</a>
+  </div>
 
-<div id="emailLabel">
-VERIFIED EMAIL
-</div>
-
-<div id="emailValue">
-loading...
-</div>
-
-</div>
-
-<button id="enterBtn">
-ENTER MENU
-</button>
-
-<div id="footer">
-CYBERCROWD VERIFY SUCCESS ROUTE V2
-</div>
-
-</div>
-
-</div>
+  <p class="small" id="autoText">
+    Auto-entry begins after session check.
+  </p>
+</main>
 
 <script>
+(function () {
+  "use strict";
 
-const title =
-document.getElementById(
-'title'
-);
+  var params = new URLSearchParams(window.location.search);
 
-const sub =
-document.getElementById(
-'sub'
-);
+  var verified = params.get("verified") || "";
+  var email = params.get("email") || "";
+  var next = params.get("next") || "/";
 
-const statusBox =
-document.getElementById(
-'status'
-);
+  var sessionStatus = document.getElementById("sessionStatus");
+  var verifiedEmail = document.getElementById("verifiedEmail");
+  var nextPage = document.getElementById("nextPage");
+  var continueButton = document.getElementById("continueButton");
+  var autoText = document.getElementById("autoText");
 
-const emailValue =
-document.getElementById(
-'emailValue'
-);
+  function sanitizeNext(value) {
+    if (!value) {
+      return "/";
+    }
 
-const enterBtn =
-document.getElementById(
-'enterBtn'
-);
+    if (value.indexOf("/") !== 0 || value.indexOf("//") === 0) {
+      return "/";
+    }
 
-const params =
-new URLSearchParams(
-window.location.search
-);
+    if (value.indexOf("/verify-success.html") === 0) {
+      return "/";
+    }
 
-const verified =
-params.get(
-'verified'
-) === '1';
+    if (value.indexOf("/page2.html?verified=1") === 0) {
+      return "/";
+    }
 
-const email =
-(
-params.get(
-'email'
-) || ''
-)
-.trim()
-.toLowerCase();
+    return value;
+  }
 
-const token =
-params.get(
-'token'
-) || '';
+  next = sanitizeNext(next);
 
-const emailPattern =
-/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (verifiedEmail) {
+    verifiedEmail.textContent = email || "Verified email not shown.";
+  }
 
-const validLink =
-verified &&
-token &&
-emailPattern.test(
-email
-);
+  if (nextPage) {
+    nextPage.textContent = next;
+  }
 
-function createVerifiedSession() {
+  if (continueButton) {
+    continueButton.href = next;
+  }
 
-    const session = {
+  if (verified !== "1") {
+    if (sessionStatus) {
+      sessionStatus.textContent = "Missing verified flag.";
+      sessionStatus.classList.add("error");
+    }
 
-        verified: true,
+    if (autoText) {
+      autoText.textContent = "Use the verification link from your email.";
+    }
 
-        email: email,
+    return;
+  }
 
-        token: token,
+  async function checkSession() {
+    try {
+      var response = await fetch(
+        "/api/enrollment/session",
+        {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
 
-        verifiedAt: Date.now(),
+      var data = await response.json();
 
-        route: 'verify-success.html',
+      if (data.verified === true) {
+        if (sessionStatus) {
+          sessionStatus.textContent = "Verified session active.";
+        }
 
-        next: 'menu.html'
+        if (data.email && verifiedEmail) {
+          verifiedEmail.textContent = data.email;
+        }
 
-    };
+        if (autoText) {
+          autoText.textContent = "Verified. Continue into CyberCrowd.";
+        }
 
-    localStorage.setItem(
-        'cc_verified_email',
-        email
-    );
+        return;
+      }
 
-    localStorage.setItem(
-        'cc_verified_session',
-        JSON.stringify(session)
-    );
+      if (sessionStatus) {
+        sessionStatus.textContent = "No verified session cookie found.";
+        sessionStatus.classList.add("error");
+      }
 
-    localStorage.removeItem(
-        'cc_pending_verify_email'
-    );
+      if (autoText) {
+        autoText.textContent = "The email link was reached, but the session cookie is missing.";
+      }
+    } catch (error) {
+      if (sessionStatus) {
+        sessionStatus.textContent = "Session check failed: " + error.message;
+        sessionStatus.classList.add("error");
+      }
 
-    localStorage.removeItem(
-        'cc_pending_verify_token'
-    );
+      if (autoText) {
+        autoText.textContent = "Session check failed.";
+      }
+    }
+  }
 
-    localStorage.removeItem(
-        'cc_pending_verify_url'
-    );
-}
-
-function activateSuccess() {
-
-    createVerifiedSession();
-
-    title.innerText =
-    'ACCESS GRANTED';
-
-    sub.innerHTML =
-    'Continuity identity verified.<br>The ecosystem now recognizes your presence.';
-
-    statusBox.innerText =
-    'VERIFIED CONTINUITY SESSION ACTIVE';
-
-    emailValue.innerText =
-    email;
-
-    enterBtn.innerText =
-    'ENTER MENU';
-
-    enterBtn.onclick =
-    function() {
-
-        window.location.href =
-        'menu.html';
-    };
-}
-
-function activateBlocked() {
-
-    title.innerText =
-    'ACCESS BLOCKED';
-
-    title.classList.add(
-        'blocked'
-    );
-
-    sub.innerHTML =
-    'Verification link is missing, invalid, or expired.<br>Return to the security gate and request a new verification link.';
-
-    statusBox.innerText =
-    'VERIFICATION LINK REQUIRED';
-
-    statusBox.classList.add(
-        'blockedStatus'
-    );
-
-    emailValue.innerText =
-    'No verified email';
-
-    enterBtn.innerText =
-    'RETURN TO SECURITY GATE';
-
-    enterBtn.onclick =
-    function() {
-
-        window.location.href =
-        'page2.html';
-    };
-}
-
-if (validLink) {
-
-    activateSuccess();
-
-} else {
-
-    activateBlocked();
-}
-
+  checkSession();
+})();
 </script>
 
 </body>
