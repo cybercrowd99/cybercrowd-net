@@ -1,68 +1,253 @@
+function textEncoder() {
+  return new TextEncoder();
+}
+
+function base64UrlEncodeBytes(bytes) {
+  let binary = "";
+
+  for (let i = 0; i < bytes.length; i += 1) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+async function signPayloadPart(payloadPart, secret) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    textEncoder().encode(secret),
+    {
+      name: "HMAC",
+      hash: "SHA-256"
+    },
+    false,
+    [
+      "sign"
+    ]
+  );
+
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    textEncoder().encode(payloadPart)
+  );
+
+  return new Uint8Array(signature);
+}
+
+async function createSignedToken(payload, secret) {
+  const payloadJson = JSON.stringify(payload);
+  const payloadPart = base64UrlEncodeBytes(textEncoder().encode(payloadJson));
+  const signatureBytes = await signPayloadPart(payloadPart, secret);
+  const signaturePart = base64UrlEncodeBytes(signatureBytes);
+
+  return payloadPart + "." + signaturePart;
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function sanitizeNext(value) {
+  if (!value) {
+    return "/";
+  }
+
+  const raw = String(value).trim();
+
+  if (!raw.startsWith("/")) {
+    return "/";
+  }
+
+  if (raw.startsWith("//")) {
+    return "/";
+  }
+
+  try {
+    const parsed = new URL(raw, "https://cybercrowd.net");
+    const safe = parsed.pathname + parsed.search + parsed.hash;
+
+    if (safe === "/page2.html" || safe.startsWith("/page2.html?verified=1")) {
+      return "/";
+    }
+
+    if (safe === "/verify-success.html" || safe.startsWith("/verify-success.html")) {
+      return "/";
+    }
+
+    return safe;
+  } catch (error) {
+    return "/";
+  }
+}
+
+function getNextFromReferer(request) {
+  const referer = request.headers.get("Referer") || "";
+
+  if (!referer) {
+    return "";
+  }
+
+  try {
+    const refererUrl = new URL(referer);
+    return refererUrl.searchParams.get("next") || "";
+  } catch (error) {
+    return "";
+  }
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 export async function onRequestPost(context) {
   try {
-    const body = await context.request.json();
+    const request = context.request;
+    const env = context.env;
 
-    const email = (body.email || "")
+    let body = {};
+
+    try {
+      body = await request.json();
+    } catch (error) {
+      body = {};
+    }
+
+    const email = String(body.email || "")
       .trim()
       .toLowerCase();
 
     if (!email) {
-      return Response.json({
-        success: false,
-        message: "Email required.",
-        status: "email_required",
-        emailDelivery: "not_sent"
-      }, {
-        status: 400
-      });
+      return Response.json(
+        {
+          success: false,
+          status: "email_required",
+          emailDelivery: "not_sent",
+          message: "Email required."
+        },
+        {
+          status: 400,
+          headers: {
+            "Cache-Control": "no-store"
+          }
+        }
+      );
     }
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(email)) {
-      return Response.json({
-        success: false,
-        message: "Invalid email format.",
-        status: "invalid_email",
-        emailDelivery: "not_sent"
-      }, {
-        status: 400
-      });
+    if (!isValidEmail(email)) {
+      return Response.json(
+        {
+          success: false,
+          status: "invalid_email",
+          emailDelivery: "not_sent",
+          message: "Invalid email format."
+        },
+        {
+          status: 400,
+          headers: {
+            "Cache-Control": "no-store"
+          }
+        }
+      );
     }
 
-    const verifyToken = crypto.randomUUID();
+    const sessionSecret = env.CC_SESSION_SECRET || "";
 
-    const requestUrl = new URL(context.request.url);
+    if (!sessionSecret) {
+      return Response.json(
+        {
+          success: false,
+          status: "session_secret_missing",
+          emailDelivery: "not_sent",
+          message: "CC_SESSION_SECRET is missing. Verification email was not sent because the verification token cannot be signed.",
+          required_secret: "CC_SESSION_SECRET"
+        },
+        {
+          status: 500,
+          headers: {
+            "Cache-Control": "no-store"
+          }
+        }
+      );
+    }
+
+    const resendApiKey = env.RESEND_API_KEY || "";
+
+    if (!resendApiKey) {
+      return Response.json(
+        {
+          success: false,
+          status: "email_provider_not_configured",
+          emailDelivery: "not_configured",
+          provider: "resend",
+          message: "RESEND_API_KEY is missing. Verification email was not sent.",
+          required_secret: "RESEND_API_KEY"
+        },
+        {
+          status: 500,
+          headers: {
+            "Cache-Control": "no-store"
+          }
+        }
+      );
+    }
+
+    const requestUrl = new URL(request.url);
     const origin = requestUrl.origin;
+
+    const bodyNext = body.next || "";
+    const refererNext = getNextFromReferer(request);
+    const next = sanitizeNext(refererNext || bodyNext || "/");
+
+    const now = Math.floor(Date.now() / 1000);
+    const verifyExpiresAt = now + (15 * 60);
+
+    const verifyToken = await createSignedToken(
+      {
+        type: "verify",
+        email,
+        next,
+        iat: now,
+        exp: verifyExpiresAt
+      },
+      sessionSecret
+    );
 
     const verifyUrl =
       origin +
       "/api/enrollment/verify?token=" +
-      encodeURIComponent(verifyToken) +
-      "&email=" +
-      encodeURIComponent(email);
+      encodeURIComponent(verifyToken);
 
     const serviceReplyEmail =
-      context.env.CC_REPLY_TO ||
+      env.CC_REPLY_TO ||
       "access@cybercrowd.net";
 
     const fromEmail =
-      context.env.CC_EMAIL_FROM ||
+      env.CC_EMAIL_FROM ||
       "CyberCrowd <welcome@cybercrowd.net>";
 
-    const resendApiKey =
-      context.env.RESEND_API_KEY || "";
+    const safeEmail = escapeHtml(email);
+    const safeVerifyUrl = escapeHtml(verifyUrl);
 
-    const emailSubject =
-      "Verify your CyberCrowd free entry";
+    const subject = "Verify your CyberCrowd access";
 
-    const emailText = [
-      "CyberCrowd Free Entry Verification",
+    const text = [
+      "CyberCrowd Access Verification",
       "",
-      "You requested free CyberCrowd access.",
+      "You requested CyberCrowd access for:",
+      email,
       "",
-      "Click this verification link to continue:",
+      "Click this verification link:",
       verifyUrl,
+      "",
+      "This link expires in 15 minutes.",
       "",
       "If you did not request this, ignore this email.",
       "",
@@ -70,237 +255,142 @@ export async function onRequestPost(context) {
       serviceReplyEmail
     ].join("\n");
 
-    const emailHtml =
-      `
-<div style="
-font-family:Arial,sans-serif;
-background:#050505;
-color:white;
-padding:28px;
-">
-<div style="
-max-width:620px;
-margin:0 auto;
-border:1px solid rgba(0,255,255,.35);
-border-radius:22px;
-padding:26px;
-background:rgba(5,10,18,.96);
-">
-<h1 style="
-color:#00ffff;
-letter-spacing:2px;
-">
-CyberCrowd Free Entry
-</h1>
+    const html = `
+<div style="font-family:Arial,sans-serif;background:#050505;color:white;padding:28px;">
+  <div style="max-width:620px;margin:0 auto;border:1px solid rgba(0,255,255,.35);border-radius:22px;padding:26px;background:rgba(5,10,18,.96);">
+    <h1 style="color:#00ffff;letter-spacing:2px;">CyberCrowd Access Verification</h1>
 
-<p style="
-line-height:1.7;
-opacity:.88;
-">
-You requested free CyberCrowd access.
-Click the verification button below to continue.
-</p>
+    <p style="line-height:1.7;opacity:.88;">
+      You requested CyberCrowd access for:
+      <br>
+      <strong style="color:#00ffaa;">${safeEmail}</strong>
+    </p>
 
-<p>
-<a href="${verifyUrl}" style="
-display:inline-block;
-padding:16px 22px;
-border-radius:16px;
-background:linear-gradient(90deg,#00ffff,#00ffaa);
-color:black;
-font-weight:bold;
-text-decoration:none;
-letter-spacing:1px;
-">
-VERIFY CYBERCROWD ENTRY
-</a>
-</p>
+    <p>
+      <a href="${safeVerifyUrl}" style="display:inline-block;padding:16px 22px;border-radius:16px;background:linear-gradient(90deg,#00ffff,#00ffaa);color:black;font-weight:bold;text-decoration:none;letter-spacing:1px;">
+        VERIFY CYBERCROWD ACCESS
+      </a>
+    </p>
 
-<p style="
-line-height:1.7;
-opacity:.72;
-font-size:13px;
-">
-If the button does not work, copy and paste this link:
-<br>
-<span style="
-color:#00ffaa;
-word-break:break-all;
-">
-${verifyUrl}
-</span>
-</p>
+    <p style="line-height:1.7;opacity:.72;font-size:13px;">
+      This link expires in 15 minutes.
+    </p>
 
-<p style="
-margin-top:24px;
-font-size:12px;
-opacity:.62;
-">
-CyberCrowd Access: ${serviceReplyEmail}
-</p>
-</div>
+    <p style="line-height:1.7;opacity:.72;font-size:13px;">
+      If the button does not work, copy and paste this link:
+      <br>
+      <span style="color:#00ffaa;word-break:break-all;">${safeVerifyUrl}</span>
+    </p>
+
+    <p style="margin-top:24px;font-size:12px;opacity:.62;">
+      CyberCrowd Access: ${escapeHtml(serviceReplyEmail)}
+    </p>
+  </div>
 </div>
 `;
 
-    console.log("CYBERCROWD ENROLLMENT REQUEST RECEIVED:", email);
-    console.log("CYBERCROWD EMAIL FROM:", fromEmail);
-    console.log("CYBERCROWD EMAIL REPLY TO:", serviceReplyEmail);
-
-    if (!resendApiKey) {
-      console.error("CYBERCROWD EMAIL SEND BLOCKED: RESEND_API_KEY missing.");
-
-      return Response.json({
-        success: false,
-        message: "Email provider key is missing. Verification email was not sent.",
-        status: "email_provider_not_configured",
-        email,
-        emailDelivery: "not_configured",
-        provider: "resend",
-        required_secret: "RESEND_API_KEY",
-        verifyUrl
-      }, {
-        status: 500
-      });
-    }
-
-    console.log("CYBERCROWD EMAIL SEND STARTING:", email);
+    console.log("CYBERCROWD EMAIL VERIFICATION START:", {
+      email,
+      next,
+      fromEmail,
+      serviceReplyEmail
+    });
 
     const sendResponse = await fetch(
       "https://api.resend.com/emails",
       {
         method: "POST",
-
         headers: {
           "Authorization": "Bearer " + resendApiKey,
           "Content-Type": "application/json"
         },
-
         body: JSON.stringify({
           from: fromEmail,
-
           to: [
             email
           ],
-
           reply_to: serviceReplyEmail,
-
-          subject: emailSubject,
-
-          html: emailHtml,
-
-          text: emailText
+          subject,
+          html,
+          text
         })
       }
     );
 
-    const sendText =
-      await sendResponse.text();
+    const responseText = await sendResponse.text();
 
-    let sendData = {};
+    let providerResponse = {};
 
     try {
-      sendData =
-        sendText
-          ? JSON.parse(sendText)
-          : {};
+      providerResponse = responseText ? JSON.parse(responseText) : {};
     } catch (error) {
-      sendData = {
-        raw: sendText
+      providerResponse = {
+        raw: responseText
       };
     }
 
-    console.log("CYBERCROWD EMAIL SEND RESULT:", {
+    console.log("CYBERCROWD RESEND RESPONSE:", {
       ok: sendResponse.ok,
       status: sendResponse.status,
-      data: sendData
+      providerResponse
     });
 
     if (!sendResponse.ok) {
-      console.error(
-        "CYBERCROWD EMAIL SEND FAILURE:",
-        sendData
+      return Response.json(
+        {
+          success: false,
+          status: "email_delivery_failed",
+          emailDelivery: "failed",
+          provider: "resend",
+          providerStatus: sendResponse.status,
+          message: "Verification email was not sent. Resend rejected the request.",
+          details: providerResponse
+        },
+        {
+          status: 502,
+          headers: {
+            "Cache-Control": "no-store"
+          }
+        }
       );
-
-      return Response.json({
-        success: false,
-
-        message:
-          "Verification email was not sent. Resend rejected the request.",
-
-        email,
-
-        status:
-          "email_delivery_failed",
-
-        provider:
-          "resend",
-
-        providerStatus:
-          sendResponse.status,
-
-        emailDelivery:
-          "failed",
-
-        verifyUrl,
-
-        details:
-          sendData
-      }, {
-        status: 502
-      });
     }
 
-    console.log(
-      "CYBERCROWD VERIFY EMAIL ACCEPTED BY RESEND:",
-      email
+    return Response.json(
+      {
+        success: true,
+        status: "verification_email_sent",
+        emailDelivery: "sent",
+        provider: "resend",
+        providerStatus: sendResponse.status,
+        providerResponse,
+        email,
+        next,
+        message: "Verification email accepted by provider. Check your inbox."
+      },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "no-store"
+        }
+      }
     );
-
-    return Response.json({
-      success: true,
-
-      status:
-        "pending_verification",
-
-      message:
-        "Verification email accepted by provider. Check your inbox.",
-
-      email,
-
-      provider:
-        "resend",
-
-      providerStatus:
-        sendResponse.status,
-
-      providerResponse:
-        sendData,
-
-      verifyToken,
-
-      verifyUrl,
-
-      emailDelivery:
-        "sent",
-
-      serviceReplyEmail
-    }, {
-      status: 200
-    });
-
   } catch (error) {
-    console.error(
-      "CYBERCROWD SIGNUP ERROR:",
-      error
-    );
+    console.error("CYBERCROWD SIGNUP ERROR:", error);
 
-    return Response.json({
-      success: false,
-      message: "Continuity enrollment failure.",
-      status: "signup_exception",
-      emailDelivery: "not_sent",
-      error: String(error && error.message ? error.message : error)
-    }, {
-      status: 500
-    });
+    return Response.json(
+      {
+        success: false,
+        status: "signup_exception",
+        emailDelivery: "not_sent",
+        message: "CyberCrowd verification start failed.",
+        error: String(error && error.message ? error.message : error)
+      },
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store"
+        }
+      }
+    );
   }
 }
