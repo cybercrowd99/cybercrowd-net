@@ -1,90 +1,77 @@
-export async function onRequestPost(context){
+export async function onRequestPost(context) {
+  try {
+    const body = await context.request.json();
 
-try{
+    const email = (body.email || "")
+      .trim()
+      .toLowerCase();
 
-const body =
-await context.request.json();
+    if (!email) {
+      return Response.json({
+        success: false,
+        message: "Email required.",
+        status: "email_required",
+        emailDelivery: "not_sent"
+      }, {
+        status: 400
+      });
+    }
 
-const email =
-(body.email || '')
-.trim()
-.toLowerCase();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-if(!email){
+    if (!emailPattern.test(email)) {
+      return Response.json({
+        success: false,
+        message: "Invalid email format.",
+        status: "invalid_email",
+        emailDelivery: "not_sent"
+      }, {
+        status: 400
+      });
+    }
 
-return Response.json({
+    const verifyToken = crypto.randomUUID();
 
-success:false,
-message:'Email required.'
+    const requestUrl = new URL(context.request.url);
+    const origin = requestUrl.origin;
 
-},{
-status:400
-});
+    const verifyUrl =
+      origin +
+      "/api/enrollment/verify?token=" +
+      encodeURIComponent(verifyToken) +
+      "&email=" +
+      encodeURIComponent(email);
 
-}
+    const serviceReplyEmail =
+      context.env.CC_REPLY_TO ||
+      "access@cybercrowd.net";
 
-const emailPattern =
-/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const fromEmail =
+      context.env.CC_EMAIL_FROM ||
+      "CyberCrowd <welcome@cybercrowd.net>";
 
-if(!emailPattern.test(email)){
+    const resendApiKey =
+      context.env.RESEND_API_KEY || "";
 
-return Response.json({
+    const emailSubject =
+      "Verify your CyberCrowd free entry";
 
-success:false,
-message:'Invalid email format.'
+    const emailText = [
+      "CyberCrowd Free Entry Verification",
+      "",
+      "You requested free CyberCrowd access.",
+      "",
+      "Click this verification link to continue:",
+      verifyUrl,
+      "",
+      "If you did not request this, ignore this email.",
+      "",
+      "CyberCrowd Access:",
+      serviceReplyEmail
+    ].join("\n");
 
-},{
-status:400
-});
-
-}
-
-const verifyToken =
-crypto.randomUUID();
-
-const requestUrl =
-new URL(context.request.url);
-
-const origin =
-requestUrl.origin;
-
-const verifyUrl =
-origin +
-'/api/auth/verify?token=' +
-encodeURIComponent(verifyToken) +
-'&email=' +
-encodeURIComponent(email);
-
-const serviceReplyEmail =
-'cybercrowd_services@yahoo.com';
-
-const fromEmail =
-context.env.CC_EMAIL_FROM ||
-'CyberCrowd <onboarding@cybercrowd.net>';
-
-const resendApiKey =
-context.env.RESEND_API_KEY || '';
-
-const emailSubject =
-'Verify your CyberCrowd free entry';
-
-const emailText =
-[
-'CyberCrowd Free Entry Verification',
-'',
-'You requested free CyberCrowd access.',
-'',
-'Click this verification link to continue:',
-verifyUrl,
-'',
-'If you did not request this, ignore this email.',
-'',
-'CyberCrowd Services:',
-serviceReplyEmail
-].join('\n');
-
-const emailHtml =
-`
+    const emailHtml =
+      `
 <div style="
 font-family:Arial,sans-serif;
 background:#050505;
@@ -149,164 +136,171 @@ margin-top:24px;
 font-size:12px;
 opacity:.62;
 ">
-CyberCrowd Services: ${serviceReplyEmail}
+CyberCrowd Access: ${serviceReplyEmail}
 </p>
 </div>
 </div>
 `;
 
-console.log(
-'CYBERCROWD FREE ENTRY REQUEST:',
-email
-);
+    console.log("CYBERCROWD ENROLLMENT REQUEST RECEIVED:", email);
+    console.log("CYBERCROWD EMAIL FROM:", fromEmail);
+    console.log("CYBERCROWD EMAIL REPLY TO:", serviceReplyEmail);
 
-console.log(
-'CYBERCROWD VERIFY TOKEN:',
-verifyToken
-);
+    if (!resendApiKey) {
+      console.error("CYBERCROWD EMAIL SEND BLOCKED: RESEND_API_KEY missing.");
 
-console.log(
-'CYBERCROWD VERIFY URL:',
-verifyUrl
-);
+      return Response.json({
+        success: false,
+        message: "Email provider key is missing. Verification email was not sent.",
+        status: "email_provider_not_configured",
+        email,
+        emailDelivery: "not_configured",
+        provider: "resend",
+        required_secret: "RESEND_API_KEY",
+        verifyUrl
+      }, {
+        status: 500
+      });
+    }
 
-let emailDelivery = 'not_configured';
+    console.log("CYBERCROWD EMAIL SEND STARTING:", email);
 
-if(resendApiKey){
+    const sendResponse = await fetch(
+      "https://api.resend.com/emails",
+      {
+        method: "POST",
 
-const sendResponse =
-await fetch(
-'https://api.resend.com/emails',
-{
-method:'POST',
+        headers: {
+          "Authorization": "Bearer " + resendApiKey,
+          "Content-Type": "application/json"
+        },
 
-headers:{
-'Authorization':'Bearer ' + resendApiKey,
-'Content-Type':'application/json'
-},
+        body: JSON.stringify({
+          from: fromEmail,
 
-body:JSON.stringify({
+          to: [
+            email
+          ],
 
-from:fromEmail,
+          reply_to: serviceReplyEmail,
 
-to:[
-email
-],
+          subject: emailSubject,
 
-reply_to:
-serviceReplyEmail,
+          html: emailHtml,
 
-subject:
-emailSubject,
+          text: emailText
+        })
+      }
+    );
 
-html:
-emailHtml,
+    const sendText =
+      await sendResponse.text();
 
-text:
-emailText
+    let sendData = {};
 
-})
-}
-);
+    try {
+      sendData =
+        sendText
+          ? JSON.parse(sendText)
+          : {};
+    } catch (error) {
+      sendData = {
+        raw: sendText
+      };
+    }
 
-let sendData = {};
+    console.log("CYBERCROWD EMAIL SEND RESULT:", {
+      ok: sendResponse.ok,
+      status: sendResponse.status,
+      data: sendData
+    });
 
-try{
+    if (!sendResponse.ok) {
+      console.error(
+        "CYBERCROWD EMAIL SEND FAILURE:",
+        sendData
+      );
 
-sendData =
-await sendResponse.json();
+      return Response.json({
+        success: false,
 
-}catch(error){
+        message:
+          "Verification email was not sent. Resend rejected the request.",
 
-sendData = {};
-}
+        email,
 
-if(!sendResponse.ok){
+        status:
+          "email_delivery_failed",
 
-console.error(
-'CYBERCROWD EMAIL SEND FAILURE:',
-sendData
-);
+        provider:
+          "resend",
 
-return Response.json({
+        providerStatus:
+          sendResponse.status,
 
-success:false,
+        emailDelivery:
+          "failed",
 
-message:
-'Verification created, but email delivery failed.',
+        verifyUrl,
 
-email,
+        details:
+          sendData
+      }, {
+        status: 502
+      });
+    }
 
-status:
-'email_delivery_failed',
+    console.log(
+      "CYBERCROWD VERIFY EMAIL ACCEPTED BY RESEND:",
+      email
+    );
 
-verifyToken,
+    return Response.json({
+      success: true,
 
-verifyUrl,
+      status:
+        "pending_verification",
 
-emailDelivery:
-'failed',
+      message:
+        "Verification email accepted by provider. Check your inbox.",
 
-details:
-sendData
+      email,
 
-},{
-status:502
-});
+      provider:
+        "resend",
 
-}
+      providerStatus:
+        sendResponse.status,
 
-emailDelivery =
-'sent';
+      providerResponse:
+        sendData,
 
-console.log(
-'CYBERCROWD VERIFY EMAIL SENT:',
-email
-);
+      verifyToken,
 
-}
+      verifyUrl,
 
-return Response.json({
+      emailDelivery:
+        "sent",
 
-success:true,
+      serviceReplyEmail
+    }, {
+      status: 200
+    });
 
-status:'pending_verification',
+  } catch (error) {
+    console.error(
+      "CYBERCROWD SIGNUP ERROR:",
+      error
+    );
 
-message:
-emailDelivery === 'sent'
-? 'Verification email sent. Check your inbox.'
-: 'Verification created. Email API key is not configured yet.',
-
-email,
-
-verifyToken,
-
-verifyUrl,
-
-emailDelivery,
-
-serviceReplyEmail
-
-},{
-status:200
-});
-
-}catch(error){
-
-console.error(
-'CYBERCROWD SIGNUP ERROR:',
-error
-);
-
-return Response.json({
-
-success:false,
-message:'Continuity enrollment failure.'
-
-},{
-status:500
-});
-
-}
-
+    return Response.json({
+      success: false,
+      message: "Continuity enrollment failure.",
+      status: "signup_exception",
+      emailDelivery: "not_sent",
+      error: String(error && error.message ? error.message : error)
+    }, {
+      status: 500
+    });
+  }
 }
