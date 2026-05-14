@@ -26,7 +26,6 @@
   --cc-glow: rgba(0,255,255,0.22);
   --cc-green-glow: rgba(0,255,170,0.20);
   --cc-error: #ff5555;
-  --cc-warn: #ffcc66;
 }
 
 html,
@@ -51,12 +50,12 @@ body {
 .trigger-btn {
   padding: 16px 40px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 800;
   border: 1px solid var(--cc-border);
   background:
     linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.018)),
     var(--cc-panel-soft);
-  color: #fff;
+  color: var(--cc-text);
   cursor: pointer;
   border-radius: 10px;
   transition: all 0.2s;
@@ -94,19 +93,13 @@ body {
   border: 1px solid var(--cc-border);
   border-radius: 18px;
   width: 100%;
-  max-width: 520px;
+  max-width: 560px;
   max-height: 92vh;
   overflow-y: auto;
   padding: 34px;
   box-shadow:
     0 0 34px var(--cc-glow),
     0 24px 80px rgba(0,0,0,0.82);
-  transform: translateY(16px);
-  transition: transform 0.3s ease;
-}
-
-.modal-overlay.active .modal-window {
-  transform: translateY(0);
 }
 
 .modal-header {
@@ -117,8 +110,8 @@ body {
 }
 
 .modal-title {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 22px;
+  font-weight: 900;
   color: var(--cc-text);
   letter-spacing: 0.5px;
 }
@@ -127,7 +120,7 @@ body {
   background: none;
   border: 1px solid transparent;
   color: var(--cc-muted);
-  font-size: 26px;
+  font-size: 28px;
   cursor: pointer;
   line-height: 1;
   width: 34px;
@@ -147,15 +140,15 @@ body {
 
 .progress-track {
   display: flex;
-  gap: 4px;
+  gap: 5px;
   margin-bottom: 28px;
 }
 
 .progress-seg {
   flex: 1;
-  height: 3px;
+  height: 4px;
   background: rgba(0,255,255,0.14);
-  border-radius: 2px;
+  border-radius: 3px;
   transition: background 0.3s, box-shadow 0.3s;
 }
 
@@ -170,12 +163,12 @@ body {
 }
 
 .step-label {
-  font-size: 11px;
-  color: var(--cc-muted);
+  font-size: 12px;
+  color: var(--cc-cyan);
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.7px;
   margin-bottom: 20px;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 .state-block {
@@ -189,8 +182,8 @@ body {
 .tier-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
 .tier-card {
@@ -225,34 +218,35 @@ body {
   position: absolute;
   top: -1px;
   right: 16px;
-  padding: 4px 10px;
+  padding: 5px 12px;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-radius: 0 0 4px 4px;
+  letter-spacing: 0.6px;
+  border-radius: 0 0 5px 5px;
   background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
   color: #001111;
 }
 
 .tier-name {
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 900;
   color: var(--cc-text);
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 }
 
 .tier-desc {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--cc-muted);
   line-height: 1.5;
+  padding-right: 12px;
 }
 
 .tier-price {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--cc-green);
   margin-top: 10px;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 .form-group {
@@ -262,39 +256,36 @@ body {
 .form-label {
   display: block;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 900;
   color: var(--cc-muted);
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.form-input,
-.form-select {
+.form-input {
   width: 100%;
-  padding: 12px 14px;
-  font-size: 15px;
-  background: rgba(0,0,0,0.52);
-  border: 1px solid var(--cc-border);
-  border-radius: 8px;
-  color: var(--cc-text);
+  padding: 14px 15px;
+  font-size: 16px;
+  background: rgba(255,255,255,0.96);
+  border: 2px solid var(--cc-cyan);
+  border-radius: 9px;
+  color: #001111;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
   font-family: inherit;
 }
 
-.form-input:focus,
-.form-select:focus {
-  border-color: var(--cc-cyan);
-  box-shadow: 0 0 14px var(--cc-glow);
+.form-input:focus {
+  border-color: var(--cc-green);
+  box-shadow: 0 0 16px var(--cc-glow);
 }
 
 .form-input::placeholder {
-  color: rgba(159,185,185,0.48);
+  color: rgba(0,17,17,0.45);
 }
 
-.form-input:disabled,
-.form-select:disabled {
+.form-input:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
@@ -309,14 +300,14 @@ body {
 .action-btn,
 .verify-link {
   width: 100%;
-  padding: 14px;
-  font-size: 15px;
-  font-weight: 800;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 900;
   border: 1px solid transparent;
   background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
   color: #001111;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 9px;
   transition: all 0.2s;
   margin-top: 4px;
   box-shadow: 0 0 18px rgba(0,255,255,0.12);
@@ -341,8 +332,8 @@ body {
 .back-btn {
   background: none;
   border: none;
-  color: var(--cc-muted);
-  font-size: 13px;
+  color: var(--cc-cyan);
+  font-size: 14px;
   cursor: pointer;
   margin-bottom: 16px;
   padding: 0;
@@ -350,10 +341,20 @@ body {
   align-items: center;
   gap: 6px;
   transition: color 0.2s;
+  font-weight: 800;
 }
 
 .back-btn:hover {
-  color: var(--cc-cyan);
+  color: var(--cc-green);
+}
+
+.email-panel {
+  display: block;
+  padding: 18px;
+  border: 1px solid var(--cc-border);
+  border-radius: 12px;
+  background: rgba(0,0,0,0.26);
+  margin-bottom: 16px;
 }
 
 .upload-zone {
@@ -378,9 +379,6 @@ body {
 .upload-zone.has-file {
   border-color: var(--cc-cyan);
   border-style: solid;
-  background:
-    linear-gradient(135deg, rgba(0,255,255,0.12), rgba(0,255,170,0.07)),
-    var(--cc-panel);
 }
 
 .upload-icon {
@@ -423,9 +421,9 @@ body {
 
 .countdown-bar {
   width: 100%;
-  height: 3px;
+  height: 4px;
   background: rgba(0,255,255,0.14);
-  border-radius: 2px;
+  border-radius: 3px;
   overflow: hidden;
   margin: 16px 0 10px;
 }
@@ -460,7 +458,7 @@ body {
 }
 
 .pending-email {
-  font-weight: 800;
+  font-weight: 900;
   color: var(--cc-text);
   word-break: break-all;
 }
@@ -480,8 +478,8 @@ body {
 }
 
 .success-title {
-  font-size: 17px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 900;
   color: var(--cc-text);
   margin-bottom: 6px;
   text-align: center;
@@ -495,9 +493,9 @@ body {
 }
 
 .error-msg {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--cc-error);
-  margin-top: 6px;
+  margin-top: 8px;
   display: none;
   line-height: 1.45;
   word-break: break-word;
@@ -523,7 +521,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 10px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .verify-link.expired {
@@ -554,16 +552,9 @@ body {
   cursor: not-allowed;
 }
 
-.divider {
-  height: 1px;
-  background:
-    linear-gradient(90deg, transparent, rgba(0,255,255,0.38), transparent);
-  margin: 20px 0;
-}
-
 .status-log {
-  font-size: 10px;
-  color: var(--cc-muted);
+  font-size: 11px;
+  color: var(--cc-text);
   font-family: "SF Mono", Monaco, Consolas, monospace;
   margin-top: 20px;
   padding-top: 16px;
@@ -592,7 +583,7 @@ body {
 .tier-summary-value {
   font-size: 14px;
   color: var(--cc-green);
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .match-preview {
@@ -631,7 +622,7 @@ body {
 
 .match-score {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 900;
   color: var(--cc-text);
   margin: 12px 0;
   text-align: center;
@@ -720,18 +711,20 @@ Enroll / Login
     <div class="state-block" id="stateEmail">
       <button class="back-btn" id="backEmail">&larr; Back to Tiers</button>
 
-      <div class="tier-summary">
-        <div class="tier-summary-label">Selected Tier</div>
-        <div class="tier-summary-value" id="emailTierName">Visitor Access</div>
-      </div>
+      <div class="email-panel">
+        <div class="tier-summary">
+          <div class="tier-summary-label">Selected Tier</div>
+          <div class="tier-summary-value" id="emailTierName">Visitor Access</div>
+        </div>
 
-      <div class="form-group">
-        <label class="form-label" for="emailInput">Email Address</label>
-        <input type="email" class="form-input" id="emailInput" placeholder="you@domain.com" autocomplete="email">
-        <div class="error-msg" id="emailError">Enter a valid email address.</div>
-      </div>
+        <div class="form-group">
+          <label class="form-label" for="emailInput">Email Address</label>
+          <input type="email" class="form-input" id="emailInput" placeholder="you@domain.com" autocomplete="email">
+          <div class="error-msg" id="emailError">Enter a valid email address.</div>
+        </div>
 
-      <button class="submit-btn" id="submitEmail">Send Verification Link</button>
+        <button class="submit-btn" id="submitEmail">Send Verification Link</button>
+      </div>
     </div>
 
     <div class="state-block" id="stateEmailPending">
@@ -1476,7 +1469,7 @@ Enroll / Login
 
       setStep("Email Verification", 2);
       showState("stateEmail");
-      setStatus("waiting for email");
+      setStatus("waiting for email input");
     });
   }
 
