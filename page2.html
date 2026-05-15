@@ -396,6 +396,7 @@ room plug: waiting</div>
 
     localStorage.setItem("cc_pending_email", cleanEmail);
     localStorage.setItem("cc_requested_next", nextPath);
+    localStorage.setItem("cc_requested_tier", "visitor");
 
     try {
       response = await fetch(
@@ -408,7 +409,10 @@ room plug: waiting</div>
           },
           body: JSON.stringify({
             email: cleanEmail,
-            next: nextPath
+            next: nextPath,
+            tier: "visitor",
+            humanConfirmed: true,
+            human_confirmed: true
           })
         }
       );
