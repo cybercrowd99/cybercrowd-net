@@ -9,8 +9,6 @@
 <meta name="description" content="CyberCrowd verified entry gate.">
 <meta name="robots" content="index, follow">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 * {
   box-sizing: border-box;
@@ -126,7 +124,9 @@ input[type="text"]:focus {
   display: none;
 }
 
-button {
+button,
+a.buttonLike {
+  display: block;
   width: 100%;
   margin-top: 16px;
   padding: 16px;
@@ -138,9 +138,12 @@ button {
   font-size: 16px;
   letter-spacing: 2px;
   cursor: pointer;
+  text-align: center;
+  text-decoration: none;
 }
 
-button:hover:not(:disabled) {
+button:hover:not(:disabled),
+a.buttonLike:hover {
   box-shadow: 0 0 22px rgba(0,255,255,0.28);
 }
 
@@ -196,7 +199,7 @@ button:disabled {
 
     <div id="gateIntro">
       Enter your email. CyberCrowd sends one live entry link.
-      Click it once and the NAV room opens.
+      Click it once and the verified room opens.
     </div>
 
     <div class="statusBox">
@@ -220,6 +223,8 @@ button:disabled {
 
     <button id="sendBtn">SEND ENTRY LINK</button>
 
+    <a class="buttonLike" id="continueBtn" href="/nav.html" style="display:none;">ENTER CYBERCROWD</a>
+
     <div id="message">READY</div>
 
     <div id="plugBox">PLUG TRACE:
@@ -230,72 +235,44 @@ session plug: waiting
 room plug: waiting</div>
 
     <div id="footer">
-      PAGE2 SECURITY ONLY · PAGE3 NAV AFTER VERIFY
+      PAGE2 WORKER SECURITY · RESEND EMAIL · COOKIE VERIFY
     </div>
 
   </div>
 </div>
 
 <script>
-/*
-  CYBERCROWD LIVE SUPABASE CONFIG
-  THIS IS THE ONLY SPOT YOU PASTE SUPABASE VALUES.
-
-  Supabase Dashboard:
-  Project Settings -> API
-
-  Paste:
-  Project URL into SUPABASE_URL
-  anon public / publishable key into SUPABASE_ANON_KEY
-
-  Do NOT use:
-  service_role key
-  database password
-  JWT secret
-*/
-
-var SUPABASE_URL = 'PASTE_SUPABASE_PROJECT_URL_HERE';
-var SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_PUBLIC_KEY_HERE';
-</script>
-
-<script>
 (function() {
-  /*
-    ROUTE LOCK:
-    index.html -> page2.html
-    page2.html -> Supabase email link
-    Supabase email click -> page2.html?verified=1
-    page2 verified session -> page3.html
-  */
+  "use strict";
 
-  var PAGE3_URL = '/page3.html';
-  var RETURN_URL = window.location.origin + '/page2.html?verified=1';
+  var START_ENDPOINT = "/api/enrollment/start";
+  var SESSION_ENDPOINT = "/api/enrollment/session";
+  var DEFAULT_NEXT = "/nav.html";
 
-  var supabaseClient = null;
-
-  var emailInput = document.getElementById('emailInput');
-  var websiteInput = document.getElementById('websiteInput');
-  var sendBtn = document.getElementById('sendBtn');
-  var gateStatus = document.getElementById('gateStatus');
-  var message = document.getElementById('message');
-  var plugBox = document.getElementById('plugBox');
+  var emailInput = document.getElementById("emailInput");
+  var websiteInput = document.getElementById("websiteInput");
+  var sendBtn = document.getElementById("sendBtn");
+  var continueBtn = document.getElementById("continueBtn");
+  var gateStatus = document.getElementById("gateStatus");
+  var message = document.getElementById("message");
+  var plugBox = document.getElementById("plugBox");
 
   var plugState = {
-    config: 'checking',
-    email: 'waiting',
-    redirect: 'waiting',
-    session: 'waiting',
-    room: 'waiting'
+    config: "checking",
+    email: "waiting",
+    redirect: "waiting",
+    session: "waiting",
+    room: "waiting"
   };
 
   function renderPlugTrace() {
     plugBox.innerText =
-      'PLUG TRACE:\n' +
-      'config plug: ' + plugState.config + '\n' +
-      'email plug: ' + plugState.email + '\n' +
-      'redirect plug: ' + plugState.redirect + '\n' +
-      'session plug: ' + plugState.session + '\n' +
-      'room plug: ' + plugState.room;
+      "PLUG TRACE:\n" +
+      "config plug: " + plugState.config + "\n" +
+      "email plug: " + plugState.email + "\n" +
+      "redirect plug: " + plugState.redirect + "\n" +
+      "session plug: " + plugState.session + "\n" +
+      "room plug: " + plugState.room;
   }
 
   function setPlug(name, value) {
@@ -305,12 +282,12 @@ var SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_PUBLIC_KEY_HERE';
 
   function setStatus(statusText, messageText, isError) {
     gateStatus.innerText = statusText;
-    message.innerText = messageText || '';
+    message.innerText = messageText || "";
 
     if (isError) {
-      message.classList.add('error');
+      message.classList.add("error");
     } else {
-      message.classList.remove('error');
+      message.classList.remove("error");
     }
   }
 
@@ -318,239 +295,170 @@ var SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_PUBLIC_KEY_HERE';
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
 
-  function getRequestedTier() {
-    var tier = localStorage.getItem('cc_requested_tier');
-
-    if (!tier) {
-      tier = 'visitor';
-      localStorage.setItem('cc_requested_tier', tier);
+  function sanitizeNext(value) {
+    if (!value) {
+      return DEFAULT_NEXT;
     }
 
-    return tier;
+    if (value.indexOf("/") !== 0 || value.indexOf("//") === 0) {
+      return DEFAULT_NEXT;
+    }
+
+    if (value.indexOf("/page2.html") === 0) {
+      return DEFAULT_NEXT;
+    }
+
+    if (value.indexOf("/verify-success.html") === 0) {
+      return DEFAULT_NEXT;
+    }
+
+    return value;
   }
 
-  function clearOldLocalSessionIfNeeded() {
-    localStorage.removeItem('cc_pending_verify_token');
-    localStorage.removeItem('cc_pending_verify_url');
-    localStorage.removeItem('cc_resend_email_id');
-    localStorage.removeItem('cc_email_delivery');
+  function getNextPath() {
+    var params = new URLSearchParams(window.location.search);
+    return sanitizeNext(params.get("next") || DEFAULT_NEXT);
   }
 
-  function configLooksReady() {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-      return false;
+  function setControlsForVerified(nextPath) {
+    if (sendBtn) {
+      sendBtn.style.display = "none";
     }
 
-    if (SUPABASE_URL === 'PASTE_SUPABASE_PROJECT_URL_HERE') {
-      return false;
+    if (continueBtn) {
+      continueBtn.href = nextPath;
+      continueBtn.style.display = "block";
     }
-
-    if (SUPABASE_ANON_KEY === 'PASTE_SUPABASE_ANON_PUBLIC_KEY_HERE') {
-      return false;
-    }
-
-    if (SUPABASE_URL.indexOf('https://') !== 0) {
-      return false;
-    }
-
-    if (SUPABASE_URL.indexOf('.supabase.co') === -1) {
-      return false;
-    }
-
-    if (SUPABASE_ANON_KEY.length < 40) {
-      return false;
-    }
-
-    return true;
   }
 
-  function initSupabase() {
-    if (!configLooksReady()) {
-      setPlug('config', 'FAILED - paste Supabase URL/key in top config block');
+  async function checkExistingSession() {
+    var nextPath = getNextPath();
 
-      setStatus(
-        'CONFIG REQUIRED',
-        'Paste Supabase Project URL and anon public key in the top config block.',
-        true
-      );
-
-      return false;
-    }
+    setPlug("config", "worker auth lane active");
+    setPlug("redirect", "next = " + nextPath);
+    setPlug("session", "checking " + SESSION_ENDPOINT);
+    setStatus("CHECKING", "Looking for verified CyberCrowd session.", false);
 
     try {
-      supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
+      var response = await fetch(
+        SESSION_ENDPOINT,
         {
-          auth: {
-            detectSessionInUrl: true,
-            persistSession: true,
-            autoRefreshToken: true
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
           }
         }
       );
 
-      setPlug('config', 'connected');
-      setPlug('redirect', 'return URL = ' + RETURN_URL);
+      var data = await response.json();
 
-      return true;
+      if (data && data.verified === true) {
+        setPlug("session", "verified cookie found: " + (data.email || "user"));
+        setPlug("room", "ready = " + nextPath);
+        setStatus("VERIFIED", "Verified session active. Enter CyberCrowd.", false);
+        setControlsForVerified(nextPath);
+        return;
+      }
 
-    } catch(error) {
-      setPlug('config', 'FAILED - ' + error.message);
-      setStatus('CONFIG ERROR', error.message, true);
-      return false;
+      setPlug("session", "no verified cookie yet");
+      setStatus("WAITING", "Enter email to receive your entry link.", false);
+    } catch (error) {
+      setPlug("session", "FAILED - " + error.message);
+      setStatus("SESSION CHECK FAILED", "Enter email to request a fresh link.", true);
     }
   }
 
-  async function checkSession() {
-    var result;
-    var session;
-    var user;
-    var requestedTier;
-
-    if (!supabaseClient) {
-      return;
-    }
-
-    setPlug('session', 'checking');
-    setStatus('CHECKING', 'Looking for verified session.', false);
-
-    try {
-      result = await supabaseClient.auth.getSession();
-    } catch(error) {
-      setPlug('session', 'FAILED - getSession threw error');
-      setStatus('SESSION ERROR', error.message, true);
-      return;
-    }
-
-    if (result.error) {
-      setPlug('session', 'FAILED - ' + result.error.message);
-      setStatus('SESSION ERROR', result.error.message, true);
-      return;
-    }
-
-    session = result.data && result.data.session
-      ? result.data.session
-      : null;
-
-    if (!session || !session.user) {
-      setPlug('session', 'no verified session yet');
-      setStatus('WAITING', 'Enter email to receive your entry link.', false);
-      return;
-    }
-
-    user = session.user;
-    requestedTier = getRequestedTier();
-
-    localStorage.setItem('cc_verified_session', 'supabase');
-    localStorage.setItem('cc_verified_email', user.email || '');
-    localStorage.setItem('cc_verified_user_id', user.id || '');
-    localStorage.setItem('cc_requested_tier', requestedTier);
-
-    setPlug('session', 'verified session found: ' + (user.email || 'user'));
-    setPlug('room', 'opening page3.html');
-
-    setStatus('VERIFIED', 'Opening CyberCrowd NAV.', false);
-
-    window.setTimeout(function() {
-      window.location.href = PAGE3_URL;
-    }, 450);
-  }
-
-  async function sendMagicLink() {
-    var email;
-    var tier;
-    var result;
-
-    if (!supabaseClient) {
-      setPlug('email', 'blocked - config not connected');
-      setStatus('CONFIG REQUIRED', 'Supabase is not connected yet.', true);
-      return;
-    }
-
-    email = emailInput.value.trim().toLowerCase();
-    tier = getRequestedTier();
+  async function sendEntryLink() {
+    var cleanEmail = emailInput.value.trim().toLowerCase();
+    var nextPath = getNextPath();
+    var response;
+    var data;
 
     if (websiteInput && websiteInput.value.trim()) {
-      setPlug('email', 'blocked - honeypot field filled');
-      setStatus('BLOCKED', 'Entry request blocked.', true);
+      setPlug("email", "blocked - honeypot field filled");
+      setStatus("BLOCKED", "Entry request blocked.", true);
       return;
     }
 
-    if (!validEmail(email)) {
-      setPlug('email', 'blocked - invalid email');
-      setStatus('BLOCKED', 'Valid email required.', true);
+    if (!validEmail(cleanEmail)) {
+      setPlug("email", "blocked - invalid email");
+      setStatus("BLOCKED", "Valid email required.", true);
       return;
     }
 
     sendBtn.disabled = true;
-    sendBtn.innerText = 'SENDING';
+    sendBtn.innerText = "SENDING";
 
-    setPlug('email', 'sending magic link request');
-    setPlug('redirect', 'return URL = ' + RETURN_URL);
+    setPlug("email", "posting to " + START_ENDPOINT);
+    setPlug("redirect", "next = " + nextPath);
+    setPlug("session", "pending email click");
+    setStatus("SENDING", "Sending live CyberCrowd entry link.", false);
 
-    setStatus('SENDING', 'Sending live entry link.', false);
-
-    clearOldLocalSessionIfNeeded();
-
-    localStorage.setItem('cc_pending_email', email);
-    localStorage.setItem('cc_requested_tier', tier);
+    localStorage.setItem("cc_pending_email", cleanEmail);
+    localStorage.setItem("cc_requested_next", nextPath);
 
     try {
-      result = await supabaseClient.auth.signInWithOtp({
-        email: email,
-        options: {
-          emailRedirectTo: RETURN_URL,
-          data: {
-            cybercrowd_entry: 'page2',
-            requested_tier: tier
-          }
+      response = await fetch(
+        START_ENDPOINT,
+        {
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: cleanEmail,
+            next: nextPath
+          })
         }
-      });
-    } catch(error) {
-      sendBtn.disabled = false;
-      sendBtn.innerText = 'SEND ENTRY LINK';
+      );
 
-      setPlug('email', 'FAILED - request threw error');
-      setStatus('SEND FAILED', error.message, true);
+      data = await response.json();
+    } catch (error) {
+      sendBtn.disabled = false;
+      sendBtn.innerText = "SEND ENTRY LINK";
+
+      setPlug("email", "FAILED - request threw error");
+      setStatus("SEND FAILED", error.message, true);
       return;
     }
 
     sendBtn.disabled = false;
-    sendBtn.innerText = 'SEND ENTRY LINK';
+    sendBtn.innerText = "SEND ENTRY LINK";
 
-    if (result.error) {
-      setPlug('email', 'FAILED - ' + result.error.message);
-      setStatus('SEND FAILED', result.error.message, true);
+    if (!response.ok || !data || data.success !== true) {
+      setPlug("email", "FAILED - " + (data && data.status ? data.status : "request failed"));
+      setStatus(
+        "SEND FAILED",
+        data && data.message ? data.message : "Verification email was not sent.",
+        true
+      );
       return;
     }
 
-    setPlug('email', 'magic link requested from Supabase');
-    setPlug('redirect', 'waiting for inbox click back to page2.html?verified=1');
-    setPlug('session', 'pending email click');
+    setPlug("email", "accepted by " + (data.provider || "email provider"));
+    setPlug("redirect", "email link will verify and continue to " + (data.next || nextPath));
+    setPlug("session", "pending email click");
 
     setStatus(
-      'EMAIL SENT',
-      'Check your inbox. One click opens CyberCrowd.',
+      "EMAIL SENT",
+      "Check your inbox. One click verifies CyberCrowd access.",
       false
     );
   }
 
-  sendBtn.addEventListener('click', function() {
-    sendMagicLink();
+  sendBtn.addEventListener("click", function() {
+    sendEntryLink();
   });
 
-  emailInput.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      sendMagicLink();
+  emailInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      sendEntryLink();
     }
   });
 
   renderPlugTrace();
-
-  if (initSupabase()) {
-    checkSession();
-  }
+  checkExistingSession();
 })();
 </script>
 
