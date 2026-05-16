@@ -1,273 +1,453 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>SECURITY GATE</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
+  <title>CyberCrowd Security Gate</title>
+  <meta name="description" content="CyberCrowd verified entry gate. Enter your email to receive one live entry link." />
+  <meta name="robots" content="noindex,nofollow" />
+
+  <style>
+    :root {
+      --cc-bg: #02060b;
+      --cc-cyan: #00f7ff;
+      --cc-cyan-soft: rgba(0, 247, 255, 0.24);
+      --cc-white: #eafcff;
+      --cc-muted: rgba(234, 252, 255, 0.72);
+      --cc-panel: rgba(0, 0, 0, 0.56);
+      --cc-panel-strong: rgba(0, 0, 0, 0.78);
+      --cc-border: rgba(0, 247, 255, 0.34);
+      --cc-danger: #ff5b7a;
+      --cc-good: #7dffb0;
+      --cc-warn: #ffd36b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
-        background:#000;
-        color:#e5e5e5;
-        font-family:Arial, sans-serif;
-        margin:0;
-        padding:0;
-        text-align:center;
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      padding: 0;
+      background: var(--cc-bg);
+      color: var(--cc-white);
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    .wrap {
-        padding:40px 20px;
-        max-width:420px;
-        margin:auto;
+    body {
+      overflow-x: hidden;
     }
 
-    h1 {
-        font-size:32px;
-        margin-bottom:10px;
-        letter-spacing:1px;
+    .cc-page {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 42px 16px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0, 247, 255, 0.08), transparent 28%),
+        radial-gradient(circle at 80% 12%, rgba(151, 88, 255, 0.08), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(0, 247, 255, 0.06), transparent 38%),
+        linear-gradient(180deg, #07101a 0%, #02060b 42%, #000 100%);
     }
 
-    .sub {
-        font-size:14px;
-        opacity:0.8;
-        margin-bottom:30px;
-        line-height:1.5em;
+    .cc-stars,
+    .cc-stars::before,
+    .cc-stars::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.72) 0 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(0,247,255,.5) 0 1px, transparent 1.5px);
+      background-size: 92px 92px, 147px 147px;
+      background-position: 0 0, 28px 45px;
+      opacity: .33;
     }
 
-    input {
-        width:100%;
-        padding:14px;
-        border:none;
-        border-radius:6px;
-        margin-bottom:20px;
-        font-size:16px;
-        box-sizing:border-box;
+    .cc-stars::before {
+      transform: translateY(-14px);
+      opacity: .22;
+      background-size: 121px 121px, 180px 180px;
     }
 
-    button {
-        width:100%;
-        padding:16px;
-        background:#00eaff;
-        border:none;
-        border-radius:6px;
-        font-size:18px;
-        font-weight:bold;
-        cursor:pointer;
+    .cc-stars::after {
+      transform: translateY(22px);
+      opacity: .16;
+      background-size: 70px 70px, 205px 205px;
     }
 
-    button:disabled {
-        opacity:0.55;
-        cursor:not-allowed;
+    .cc-wrap {
+      width: min(760px, 100%);
+      position: relative;
+      z-index: 2;
+      text-align: center;
     }
 
-    .status {
-        margin-top:20px;
-        color:#ff4444;
-        font-size:14px;
-        font-weight:bold;
-        min-height:22px;
-        line-height:1.5em;
+    .cc-title {
+      margin: 0 0 10px;
+      color: var(--cc-cyan);
+      font-size: clamp(28px, 5vw, 52px);
+      line-height: 1;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 10px rgba(0, 247, 255, .45),
+        0 0 30px rgba(0, 247, 255, .18);
     }
 
-    .plugbox {
-        margin-top:40px;
-        text-align:left;
-        font-family:monospace;
-        font-size:13px;
-        background:#111;
-        padding:15px;
-        border-radius:6px;
-        line-height:1.4em;
-        white-space:pre-line;
-        word-break:break-word;
+    .cc-instruction {
+      margin: 0 auto 28px;
+      max-width: 650px;
+      color: var(--cc-white);
+      font-size: clamp(15px, 2.2vw, 18px);
+      line-height: 1.55;
+      font-weight: 700;
+      text-shadow: 0 0 14px rgba(0, 0, 0, .9);
     }
 
-    footer {
-        margin-top:40px;
-        font-size:12px;
-        opacity:0.6;
+    .cc-form {
+      width: min(520px, 100%);
+      margin: 0 auto;
     }
 
-    .hidden-field {
-        display:none;
+    .cc-input {
+      display: block;
+      width: 100%;
+      height: 58px;
+      padding: 0 20px;
+      border: 1px solid rgba(255,255,255,.34);
+      border-radius: 8px;
+      outline: none;
+      background: rgba(235, 252, 255, .94);
+      color: #11202a;
+      font-size: 18px;
+      font-weight: 700;
+      box-shadow:
+        0 0 0 1px rgba(0, 247, 255, .08),
+        0 12px 40px rgba(0,0,0,.42);
     }
-</style>
+
+    .cc-input:focus {
+      border-color: var(--cc-cyan);
+      box-shadow:
+        0 0 0 3px rgba(0, 247, 255, .20),
+        0 12px 40px rgba(0,0,0,.42);
+    }
+
+    .cc-button {
+      display: block;
+      width: 100%;
+      min-height: 58px;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #20c8e9, #00f7ff, #1dd5e8);
+      color: rgba(0,0,0,.62);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow:
+        0 0 18px rgba(0, 247, 255, .30),
+        0 14px 38px rgba(0,0,0,.44);
+    }
+
+    .cc-button:disabled {
+      cursor: wait;
+      opacity: .82;
+      filter: saturate(.75);
+    }
+
+    .cc-status {
+      width: min(560px, 100%);
+      min-height: 28px;
+      margin: 22px auto 0;
+      color: var(--cc-cyan);
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.45;
+      text-shadow: 0 0 12px rgba(0, 247, 255, .42);
+      white-space: pre-wrap;
+    }
+
+    .cc-status.good {
+      color: var(--cc-good);
+    }
+
+    .cc-status.warn {
+      color: var(--cc-warn);
+    }
+
+    .cc-status.bad {
+      color: var(--cc-danger);
+    }
+
+    .cc-debug {
+      display: block;
+      width: min(640px, 100%);
+      min-height: 132px;
+      margin: 30px auto 0;
+      padding: 18px 20px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      background: var(--cc-panel);
+      color: #e9fbff;
+      font: 800 13px/1.45 Consolas, Monaco, "Courier New", monospace;
+      text-align: left;
+      white-space: pre-wrap;
+      overflow: auto;
+      box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    }
+
+    .cc-footer {
+      margin-top: 34px;
+      color: rgba(234, 252, 255, .82);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .cc-footer span {
+      color: rgba(234, 252, 255, .9);
+    }
+
+    .cc-hidden-link {
+      position: fixed;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 560px) {
+      .cc-page {
+        align-items: flex-start;
+        padding-top: 56px;
+      }
+
+      .cc-title {
+        font-size: 30px;
+      }
+
+      .cc-instruction {
+        font-size: 15px;
+        margin-bottom: 24px;
+      }
+
+      .cc-input,
+      .cc-button {
+        height: 56px;
+        font-size: 16px;
+      }
+
+      .cc-debug {
+        font-size: 12px;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <main class="cc-page">
+    <div class="cc-stars" aria-hidden="true"></div>
 
-<div class="wrap">
+    <section class="cc-wrap" aria-label="CyberCrowd Security Gate">
+      <h1 class="cc-title">Security Gate</h1>
 
-    <h1>SECURITY GATE</h1>
-
-    <div class="sub">
-        Enter your email. One live entry link is sent.<br>
+      <p class="cc-instruction">
+        Enter your email. One live entry link is sent.<br />
         Click it once. The verified room opens.
-    </div>
+      </p>
 
-    <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+      <form id="ccGateForm" class="cc-form" autocomplete="on">
+        <label class="cc-hidden-link" for="ccGateEmail">Email address</label>
 
-    <input id="website" class="hidden-field" type="text" tabindex="-1" autocomplete="off">
+        <input
+          id="ccGateEmail"
+          class="cc-input"
+          type="email"
+          name="email"
+          inputmode="email"
+          autocomplete="email"
+          placeholder="cybercrowd@yahoo.com"
+          required
+        />
 
-    <button id="sendButton" onclick="sendLink()">SEND ENTRY LINK</button>
+        <button id="ccGateButton" class="cc-button" type="submit">
+          Send Live Entry Link
+        </button>
+      </form>
 
-    <div id="status" class="status"></div>
+      <div id="ccGateStatus" class="cc-status" role="status" aria-live="polite">
+        Gate ready.
+      </div>
 
-    <div class="plugbox" id="plugtrace">config plug: worker auth lane active
-email plug: waiting
+      <pre id="ccGateDebug" class="cc-debug">config plug: worker auth lane active
+email plug: posting to /api/enrollment/start
 redirect plug: next = /nav.html
-session plug: pending email click
-room plug: idle</div>
+session plug: waiting for email submit
+room plug: sealed</pre>
 
-    <footer>
+      <div class="cc-footer">
         PAGE2 WORKER SECURITY · RESEND EMAIL · COOKIE VERIFY
-    </footer>
+      </div>
+    </section>
+  </main>
 
-</div>
+  <script>
+    const CC_GATE_ENDPOINT = "/api/enrollment/start";
+    const CC_NEXT_PAGE = "/nav.html";
+    const CC_TIMEOUT_MS = 15000;
 
-<script>
-(function() {
-    "use strict";
+    const ccForm = document.getElementById("ccGateForm");
+    const ccEmail = document.getElementById("ccGateEmail");
+    const ccButton = document.getElementById("ccGateButton");
+    const ccStatus = document.getElementById("ccGateStatus");
+    const ccDebug = document.getElementById("ccGateDebug");
 
-    const START_ENDPOINT = "/api/enrollment/start";
-    const NEXT_PATH = "/nav.html";
+    function ccSetStatus(message, mode) {
+      ccStatus.textContent = message;
+      ccStatus.classList.remove("good", "warn", "bad");
 
-    function setStatus(text, color) {
-        const status = document.getElementById("status");
-        status.innerHTML = text;
-        status.style.color = color;
+      if (mode) {
+        ccStatus.classList.add(mode);
+      }
+
+      console.log("[CYBERCROWD GATE STATUS]", message);
     }
 
-    function setPlug(text) {
-        document.getElementById("plugtrace").innerHTML = text;
+    function ccSetDebug(message) {
+      ccDebug.textContent = message;
+      console.log("[CYBERCROWD GATE DEBUG]", message);
     }
 
-    function validEmail(value) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    function ccSetButtonSending(isSending) {
+      ccButton.disabled = isSending;
+      ccButton.textContent = isSending ? "SENDING" : "SEND LIVE ENTRY LINK";
     }
 
-    window.sendLink = async function sendLink() {
-        const emailInput = document.getElementById("email");
-        const websiteInput = document.getElementById("website");
-        const button = document.getElementById("sendButton");
+    function ccValidEmail(value) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
 
-        const email = emailInput.value.trim().toLowerCase();
-        const website = websiteInput.value.trim();
+    async function ccStartEnrollment(email) {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(function () {
+        controller.abort();
+      }, CC_TIMEOUT_MS);
 
-        if (website) {
-            setStatus("Entry request blocked.", "#ff4444");
+      ccSetButtonSending(true);
 
-            setPlug(
-`config plug: worker auth lane active
-email plug: FAILED - bot_field_triggered
-redirect plug: next = ${NEXT_PATH}
-session plug: waiting
-room plug: idle`
-            );
+      ccSetStatus("Sending live entry link...", "");
+      ccSetDebug(
+        "config plug: worker auth lane active\n" +
+        "email plug: posting to " + CC_GATE_ENDPOINT + "\n" +
+        "redirect plug: next = " + CC_NEXT_PAGE + "\n" +
+        "session plug: pending email click\n" +
+        "room plug: sealed"
+      );
 
-            return;
-        }
+      try {
+        const response = await fetch(CC_GATE_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            next: CC_NEXT_PAGE,
+            source: "page2-security-gate"
+          }),
+          signal: controller.signal
+        });
 
-        if (!email || !validEmail(email)) {
-            setStatus("Valid email required.", "#ff4444");
+        const bodyText = await response.text();
 
-            setPlug(
-`config plug: worker auth lane active
-email plug: FAILED - invalid_email
-redirect plug: next = ${NEXT_PATH}
-session plug: waiting
-room plug: idle`
-            );
-
-            return;
-        }
-
-        button.disabled = true;
-        button.innerHTML = "SENDING";
-
-        setStatus("Sending live entry link...", "#00eaff");
-
-        setPlug(
-`config plug: worker auth lane active
-email plug: posting to ${START_ENDPOINT}
-redirect plug: next = ${NEXT_PATH}
-session plug: pending email click
-room plug: sealed`
+        ccSetDebug(
+          "config plug: worker auth lane active\n" +
+          "email plug: posted to " + CC_GATE_ENDPOINT + "\n" +
+          "http status: " + response.status + "\n" +
+          "ok: " + response.ok + "\n" +
+          "body: " + bodyText
         );
 
-        try {
-            const response = await fetch(
-                START_ENDPOINT,
-                {
-                    method:"POST",
-                    headers:{
-                        "Content-Type":"application/json",
-                        "Accept":"application/json"
-                    },
-                    body:JSON.stringify({
-                        email:email,
-                        tier:"visitor",
-                        next:NEXT_PATH,
-                        humanConfirmed:true,
-                        human_confirmed:true
-                    })
-                }
-            );
-
-            const data = await response.json();
-
-            button.disabled = false;
-            button.innerHTML = "SEND ENTRY LINK";
-
-            if (!response.ok || !data || data.success !== true) {
-                const statusCode = data && data.status ? data.status : "request_failed";
-                const message = data && data.message ? data.message : "Entry link failed.";
-
-                setStatus(message, "#ff4444");
-
-                setPlug(
-`config plug: worker auth lane active
-email plug: FAILED - ${statusCode}
-redirect plug: next = ${NEXT_PATH}
-session plug: waiting
-room plug: idle`
-                );
-
-                return;
-            }
-
-            const delivery =
-                data.emailDelivery ||
-                data.status ||
-                "link_dispatched";
-
-            setStatus("Entry link sent. Check your inbox.", "#00ff99");
-
-            setPlug(
-`config plug: worker auth lane active
-email plug: OK - ${delivery}
-redirect plug: next = ${NEXT_PATH}
-session plug: awaiting user click
-room plug: sealed`
-            );
-
-        } catch(error) {
-            button.disabled = false;
-            button.innerHTML = "SEND ENTRY LINK";
-
-            setStatus("Connection failed: " + error.message, "#ff4444");
-
-            setPlug(
-`config plug: worker auth lane active
-email plug: FAILED - connection_error
-redirect plug: next = ${NEXT_PATH}
-session plug: waiting
-room plug: idle`
-            );
+        if (!response.ok) {
+          ccSetStatus("Gate blocked. Backend returned HTTP " + response.status + ".", "bad");
+          return;
         }
-    };
-})();
-</script>
 
+        let parsed = null;
+
+        try {
+          parsed = JSON.parse(bodyText);
+        } catch (jsonError) {
+          parsed = null;
+        }
+
+        if (parsed && parsed.ok === false) {
+          ccSetStatus("Gate blocked. Backend answered with an error.", "bad");
+          return;
+        }
+
+        ccSetStatus("Live entry link sent. Check your email.", "good");
+      } catch (error) {
+        if (error && error.name === "AbortError") {
+          ccSetStatus("Gate timeout. /api/enrollment/start did not answer within 15 seconds.", "bad");
+          ccSetDebug(
+            "config plug: worker auth lane active\n" +
+            "email plug: timeout on " + CC_GATE_ENDPOINT + "\n" +
+            "http status: no response\n" +
+            "failure: request aborted after " + CC_TIMEOUT_MS + "ms"
+          );
+        } else {
+          ccSetStatus("Gate failed before backend response.", "bad");
+          ccSetDebug(
+            "config plug: worker auth lane active\n" +
+            "email plug: fetch crashed\n" +
+            "http status: no response\n" +
+            "failure: " + String(error)
+          );
+        }
+      } finally {
+        window.clearTimeout(timeoutId);
+        ccSetButtonSending(false);
+      }
+    }
+
+    ccForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const email = ccEmail.value.trim();
+
+      if (!ccValidEmail(email)) {
+        ccSetStatus("Enter a valid email address.", "warn");
+        ccSetDebug(
+          "config plug: worker auth lane active\n" +
+          "email plug: blocked before send\n" +
+          "failure: invalid email format\n" +
+          "room plug: sealed"
+        );
+        return;
+      }
+
+      ccStartEnrollment(email);
+    });
+
+    window.addEventListener("pageshow", function () {
+      ccSetButtonSending(false);
+    });
+
+    console.log("[CYBERCROWD] page2 security gate full drop armed");
+  </script>
 </body>
 </html>
