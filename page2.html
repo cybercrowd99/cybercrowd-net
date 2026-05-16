@@ -2,147 +2,161 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>CYBERCROWD SECURITY GATE</title>
+<title>CyberCrowd Secure Access</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
 
 <style>
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
-    width: 100%;
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background:
-        radial-gradient(circle at 50% 18%, rgba(0,255,255,0.14), transparent 38%),
-        radial-gradient(circle at 12% 80%, rgba(0,255,170,0.08), transparent 32%),
-        #040606;
-    color: #eaffff;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(0,255,255,0.14), transparent 38%),
+    radial-gradient(circle at 12% 80%, rgba(0,255,170,0.08), transparent 32%),
+    #040606;
+  color: #eaffff;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  overflow-x: hidden;
 }
 
 .wrap {
-    width: min(460px, calc(100% - 28px));
-    margin: 0 auto;
-    padding: 48px 0;
+  width: min(460px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 48px 0;
 }
 
 .gatePanel {
-    border: 1px solid rgba(0,255,255,0.34);
-    border-radius: 24px;
-    padding: 24px;
-    background:
-        linear-gradient(180deg, rgba(0,255,255,0.055), rgba(0,255,170,0.025)),
-        rgba(0,0,0,0.48);
-    box-shadow:
-        0 0 30px rgba(0,255,255,0.12),
-        0 24px 70px rgba(0,0,0,0.48);
+  border: 1px solid rgba(0,255,255,0.34);
+  border-radius: 24px;
+  padding: 24px;
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.055), rgba(0,255,170,0.025)),
+    rgba(0,0,0,0.48);
+  box-shadow:
+    0 0 30px rgba(0,255,255,0.12),
+    0 24px 70px rgba(0,0,0,0.48);
 }
 
 h1 {
-    margin: 0 0 10px;
-    color: #00ffff;
-    font-size: 31px;
-    letter-spacing: 2px;
-    line-height: 1.1;
+  margin: 0 0 10px;
+  color: #00ffff;
+  font-size: 30px;
+  letter-spacing: 2px;
+  line-height: 1.1;
 }
 
 .sub {
-    color: rgba(234,255,255,0.72);
-    font-size: 14px;
-    line-height: 1.55;
-    margin-bottom: 28px;
+  color: rgba(234,255,255,0.74);
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+
+.roomState {
+  border: 1px solid rgba(0,255,170,0.24);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 18px;
+  background: rgba(0,255,170,0.055);
+  color: #b8ffff;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+  white-space: pre-line;
 }
 
 input {
-    width: 100%;
-    padding: 15px 14px;
-    border: 1px solid rgba(0,255,255,0.28);
-    border-radius: 14px;
-    background: rgba(0,0,0,0.48);
-    color: #ffffff;
-    font-size: 16px;
-    outline: none;
-    margin-bottom: 14px;
+  width: 100%;
+  padding: 15px 14px;
+  border: 1px solid rgba(0,255,255,0.28);
+  border-radius: 14px;
+  background: rgba(0,0,0,0.48);
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 14px;
 }
 
 input:focus {
-    border-color: #00ffff;
-    box-shadow: 0 0 14px rgba(0,255,255,0.14);
+  border-color: #00ffff;
+  box-shadow: 0 0 14px rgba(0,255,255,0.14);
 }
 
 input::placeholder {
-    color: rgba(234,255,255,0.42);
+  color: rgba(234,255,255,0.42);
 }
 
 button {
-    width: 100%;
-    border: 0;
-    border-radius: 14px;
-    padding: 15px 14px;
-    background: linear-gradient(90deg, #00ffff, #00ffaa);
-    color: #001111;
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 15px 14px;
+  background: linear-gradient(90deg, #00ffff, #00ffaa);
+  color: #001111;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 button:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 0 22px rgba(0,255,255,0.28);
+  transform: translateY(-1px);
+  box-shadow: 0 0 22px rgba(0,255,255,0.28);
 }
 
 button:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .status {
-    margin-top: 18px;
-    min-height: 24px;
-    color: #ff4f64;
-    font-size: 14px;
-    font-weight: 800;
-    line-height: 1.5;
-    word-break: break-word;
+  margin-top: 18px;
+  min-height: 24px;
+  color: #ff4f64;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+  word-break: break-word;
 }
 
 .plugbox {
-    margin-top: 26px;
-    text-align: left;
-    font-family: Consolas, Monaco, monospace;
-    font-size: 12px;
-    line-height: 1.45;
-    color: rgba(234,255,255,0.78);
-    background: rgba(0,0,0,0.44);
-    border: 1px solid rgba(0,255,255,0.18);
-    border-radius: 16px;
-    padding: 14px;
-    white-space: pre-line;
-    word-break: break-word;
+  margin-top: 22px;
+  text-align: left;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(234,255,255,0.78);
+  background: rgba(0,0,0,0.44);
+  border: 1px solid rgba(0,255,255,0.18);
+  border-radius: 16px;
+  padding: 14px;
+  white-space: pre-line;
+  word-break: break-word;
 }
 
 footer {
-    margin-top: 22px;
-    color: rgba(234,255,255,0.48);
-    font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+  margin-top: 22px;
+  color: rgba(234,255,255,0.48);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .hidden-field {
-    display: none;
+  display: none;
 }
 </style>
 </head>
@@ -150,185 +164,196 @@ footer {
 <body>
 
 <div class="wrap">
-    <div class="gatePanel">
-        <h1>SECURITY GATE</h1>
+  <div class="gatePanel">
+    <h1>SECURE ACCESS</h1>
 
-        <div class="sub">
-            Enter your email to open CyberCrowd.<br>
-            Email is the identity base. The session opens the room.
-        </div>
-
-        <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
-
-        <input id="website" class="hidden-field" type="text" tabindex="-1" autocomplete="off">
-
-        <button id="sendButton" onclick="sendLink()">OPEN CYBERCROWD</button>
-
-        <div id="status" class="status"></div>
-
-        <div class="plugbox" id="plugtrace">config plug: worker auth lane active
-email plug: waiting
-redirect plug: next = /nav.html
-session plug: pending email submit
-room plug: idle</div>
-
-        <footer>
-            PAGE2 SECURITY GATE · EMAIL RECEIPT · COOKIE VERIFY
-        </footer>
+    <div class="sub">
+      The CyberCrowd member room is closed.<br>
+      Enter your email to receive an access link.
     </div>
+
+    <div class="roomState">ROOM_STATUS=CLOSED
+ACCESS_STATE=LOCKED
+USER_STATE=NOT_VERIFIED
+ENTRY_AUTHORITY=SERVER_ONLY
+EMAIL_LINK=REQUIRED</div>
+
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+
+    <input id="website" class="hidden-field" type="text" tabindex="-1" autocomplete="off">
+
+    <button id="sendButton" onclick="requestAccessLink()">SEND ACCESS LINK</button>
+
+    <div id="status" class="status">Waiting for email.</div>
+
+    <div class="plugbox" id="plugtrace">config plug: worker auth lane active
+room plug: closed
+email plug: waiting
+session plug: not verified
+nav plug: locked until email link click</div>
+
+    <footer>
+      PAGE2 SECURITY WINDOW · CLOSED ROOM · EMAIL LINK REQUIRED
+    </footer>
+  </div>
 </div>
 
 <script>
 (function() {
-    "use strict";
+  "use strict";
 
-    const START_ENDPOINT = "/api/enrollment/start";
-    const NEXT_PATH = "/nav.html";
+  const START_ENDPOINT = "/api/enrollment/start";
+  const DEFAULT_NEXT_PATH = "/nav.html";
 
-    function setStatus(text, color) {
-        const status = document.getElementById("status");
-        status.innerHTML = text;
-        status.style.color = color;
+  function getNextPath() {
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get("next") || DEFAULT_NEXT_PATH;
+
+    if (!next.startsWith("/") || next.startsWith("//")) {
+      return DEFAULT_NEXT_PATH;
     }
 
-    function setPlug(text) {
-        document.getElementById("plugtrace").innerHTML = text;
+    if (next.startsWith("/api/")) {
+      return DEFAULT_NEXT_PATH;
     }
 
-    function validEmail(value) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    if (next === "/page2.html" || next.startsWith("/page2.html?")) {
+      return DEFAULT_NEXT_PATH;
     }
 
-    window.sendLink = async function sendLink() {
-        const emailInput = document.getElementById("email");
-        const websiteInput = document.getElementById("website");
-        const button = document.getElementById("sendButton");
+    return next;
+  }
 
-        const email = emailInput.value.trim().toLowerCase();
-        const website = websiteInput.value.trim();
+  function setStatus(text, color) {
+    const status = document.getElementById("status");
+    status.textContent = text;
+    status.style.color = color;
+  }
 
-        if (website) {
-            setStatus("Entry request blocked.", "#ff4f64");
+  function setPlug(text) {
+    document.getElementById("plugtrace").textContent = text;
+  }
 
-            setPlug(
+  function validEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  window.requestAccessLink = async function requestAccessLink() {
+    const emailInput = document.getElementById("email");
+    const websiteInput = document.getElementById("website");
+    const button = document.getElementById("sendButton");
+
+    const email = emailInput.value.trim().toLowerCase();
+    const website = websiteInput.value.trim();
+    const nextPath = getNextPath();
+
+    if (website) {
+      setStatus("Request blocked.", "#ff4f64");
+
+      setPlug(
 `config plug: worker auth lane active
-email plug: FAILED - bot_field_triggered
-redirect plug: next = ${NEXT_PATH}
-session plug: waiting
-room plug: idle`
-            );
+room plug: closed
+email plug: blocked
+session plug: not verified
+nav plug: locked`
+      );
 
-            return;
-        }
+      return;
+    }
 
-        if (!email || !validEmail(email)) {
-            setStatus("Valid email required.", "#ff4f64");
+    if (!email || !validEmail(email)) {
+      setStatus("Valid email required.", "#ff4f64");
 
-            setPlug(
+      setPlug(
 `config plug: worker auth lane active
-email plug: FAILED - invalid_email
-redirect plug: next = ${NEXT_PATH}
-session plug: waiting
-room plug: idle`
-            );
+room plug: closed
+email plug: invalid_email
+session plug: not verified
+nav plug: locked`
+      );
 
-            return;
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "SENDING ACCESS LINK";
+
+    setStatus("Sending CyberCrowd access link...", "#00ffff");
+
+    setPlug(
+`config plug: worker auth lane active
+room plug: closed
+email plug: sending
+session plug: not verified
+nav plug: locked until email link click`
+    );
+
+    try {
+      const response = await fetch(
+        START_ENDPOINT,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            tier: "visitor",
+            next: nextPath,
+            humanConfirmed: true,
+            human_confirmed: true
+          })
         }
+      );
 
-        button.disabled = true;
-        button.innerHTML = "VERIFYING";
+      const data = await response.json();
 
-        setStatus("Verifying CyberCrowd access...", "#00ffff");
+      button.disabled = false;
+      button.textContent = "SEND ACCESS LINK";
+
+      if (!response.ok || !data || data.success !== true) {
+        const statusCode = data && data.status ? data.status : "request_failed";
+        const message = data && data.message ? data.message : "Access link request failed.";
+
+        setStatus(message, "#ff4f64");
 
         setPlug(
 `config plug: worker auth lane active
-email plug: posting to ${START_ENDPOINT}
-redirect plug: next = ${NEXT_PATH}
-session plug: pending server access
-room plug: sealed`
+room plug: closed
+email plug: failed - ${statusCode}
+session plug: not verified
+nav plug: locked`
         );
 
-        try {
-            const response = await fetch(
-                START_ENDPOINT,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        tier: "visitor",
-                        next: NEXT_PATH,
-                        humanConfirmed: true,
-                        human_confirmed: true
-                    })
-                }
-            );
+        return;
+      }
 
-            const data = await response.json();
+      setStatus("Access link sent. Open your email and click the link.", "#00ffaa");
 
-            if (!response.ok || !data || data.success !== true) {
-                button.disabled = false;
-                button.innerHTML = "OPEN CYBERCROWD";
-
-                const statusCode = data && data.status ? data.status : "request_failed";
-                const message = data && data.message ? data.message : "Entry request failed.";
-
-                setStatus(message, "#ff4f64");
-
-                setPlug(
+      setPlug(
 `config plug: worker auth lane active
-email plug: FAILED - ${statusCode}
-redirect plug: next = ${NEXT_PATH}
-session plug: waiting
-room plug: idle`
-                );
+room plug: closed
+email plug: sent
+session plug: awaiting email link proof
+nav plug: locked until email link click`
+      );
 
-                return;
-            }
+    } catch(error) {
+      button.disabled = false;
+      button.textContent = "SEND ACCESS LINK";
 
-            const delivery =
-                data.emailDelivery ||
-                data.status ||
-                "accepted_by_resend";
+      setStatus("Connection failed: " + error.message, "#ff4f64");
 
-            const openPath =
-                data.openPath ||
-                NEXT_PATH;
-
-            setStatus("Access verified. Opening CyberCrowd.", "#00ffaa");
-
-            setPlug(
+      setPlug(
 `config plug: worker auth lane active
-email plug: OK - ${delivery}
-redirect plug: opening ${openPath}
-session plug: access_granted
-room plug: open`
-            );
-
-            button.innerHTML = "OPENING";
-
-            window.setTimeout(function() {
-                window.location.href = openPath;
-            }, 1200);
-
-        } catch(error) {
-            button.disabled = false;
-            button.innerHTML = "OPEN CYBERCROWD";
-
-            setStatus("Connection failed: " + error.message, "#ff4f64");
-
-            setPlug(
-`config plug: worker auth lane active
-email plug: FAILED - connection_error
-redirect plug: next = ${NEXT_PATH}
-session plug: waiting
-room plug: idle`
-            );
-        }
-    };
+room plug: closed
+email plug: connection_error
+session plug: not verified
+nav plug: locked`
+      );
+    }
+  };
 })();
 </script>
 
