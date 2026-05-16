@@ -1,5 +1,9 @@
 import { onRequestPost as signupPost } from "./api/auth/signup.js";
 import { onRequestGet as verifyGet } from "./api/auth/verify.js";
+import {
+  onRequestGet as smokeGet,
+  onRequestPost as smokePost
+} from "./api/email/smoke.js";
 
 const COOKIE_NAME = "cc_access";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
@@ -8,6 +12,7 @@ const PUBLIC_EXACT_PATHS = new Set([
   "/",
   "/index.html",
   "/page2.html",
+  "/email-smoke.html",
   "/verify-success.html",
   "/robots.txt",
   "/sitemap.xml",
@@ -305,6 +310,41 @@ export default {
       });
     }
 
+    if (path === "/api/email/smoke" && request.method === "GET") {
+      return smokeGet({
+        request,
+        env,
+        ctx
+      });
+    }
+
+    if (path === "/api/email/smoke" && request.method === "POST") {
+      return smokePost({
+        request,
+        env,
+        ctx
+      });
+    }
+
+    if (path === "/api/email/smoke") {
+      return Response.json(
+        {
+          success: false,
+          status: "method_not_allowed",
+          allowed: [
+            "GET",
+            "POST"
+          ]
+        },
+        {
+          status: 405,
+          headers: {
+            "Cache-Control": "no-store"
+          }
+        }
+      );
+    }
+
     if (path === "/api/enrollment/session" && request.method === "GET") {
       const session = await getVerifiedSession(request, env);
 
@@ -350,6 +390,7 @@ export default {
           verify_route: "/api/enrollment/verify",
           session_route: "/api/enrollment/session",
           close_route: "/api/enrollment/close",
+          smoke_route: "/api/email/smoke",
           verified: Boolean(session),
           protected_html_rule: "any non-public .html page requires verified cookie",
           assets_fallback: true
