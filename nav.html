@@ -1,265 +1,1303 @@
-function createEcosystemWindow(config){
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const existing =
-document.getElementById(config.id);
+<title>CyberCrowd NAV Room</title>
 
-if(existing){
+<meta name="description" content="CyberCrowd verified NAV room with WDIG, AdWorm, Atomic Kricket, and RetenRecords windows.">
+<meta name="robots" content="noindex, nofollow">
 
-existing.style.display = 'block';
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-if(window.CCSound){
-
-CCSound.open();
-
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-return;
+:root {
+  --cc-black: #040606;
+  --cc-panel: #0b1111;
+  --cc-panel-hot: #101a1a;
+  --cc-cyan: #00ffff;
+  --cc-green: #00ffaa;
+  --cc-red: #ff4f64;
+  --cc-yellow: #fff38a;
+  --cc-text: #ffffff;
+  --cc-muted: #9fb9b9;
+  --cc-border: rgba(0,255,255,0.34);
+  --cc-border-hot: rgba(0,255,255,0.78);
+  --cc-glow: rgba(0,255,255,0.22);
+  --cc-green-glow: rgba(0,255,170,0.18);
 }
 
-const savedState =
-(window.CCDistrictMemory)
-? CCDistrictMemory.get(config.id)
-: null;
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
 
-const theme =
-(window.CCWindowThemes && window.CCWindowThemes[config.id])
-? window.CCWindowThemes[config.id]
-: {
-border:'rgba(0,255,255,0.35)',
-glow:'rgba(0,255,255,0.18)',
-header:'rgba(0,255,255,0.08)'
-};
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(0,255,255,0.12), transparent 38%),
+    radial-gradient(circle at 10% 80%, rgba(0,255,170,0.08), transparent 32%),
+    var(--cc-black);
+  color: var(--cc-text);
+  overflow-x: hidden;
+}
 
-const win =
-document.createElement('div');
+#authCover {
+  position: fixed;
+  inset: 0;
+  background: #020303;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cc-cyan);
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 24px;
+}
 
-win.id = config.id;
+#app {
+  display: none;
+  min-height: 100vh;
+  padding: 22px;
+}
 
-win.style.position = 'fixed';
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-win.style.top =
-(savedState && savedState.top)
-? savedState.top
-: (config.top || '120px');
+.brandBlock {
+  border: 1px solid var(--cc-border);
+  border-radius: 22px;
+  padding: 18px;
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.05), rgba(0,255,170,0.02)),
+    rgba(0,0,0,0.36);
+  box-shadow: 0 0 28px rgba(0,255,255,0.10);
+}
 
-win.style.left =
-(savedState && savedState.left)
-? savedState.left
-: (config.left || '120px');
+.brandTitle {
+  color: var(--cc-cyan);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  line-height: 1.1;
+}
 
-win.style.width = config.width || '420px';
+.brandSub {
+  margin-top: 8px;
+  color: var(--cc-muted);
+  font-size: 13px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+}
 
-win.style.minHeight = '240px';
+.userBlock {
+  min-width: 240px;
+  border: 1px solid var(--cc-border);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(0,0,0,0.36);
+}
 
-win.style.background =
-'rgba(5,10,18,0.96)';
+.userLabel {
+  color: var(--cc-green);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
 
-win.style.border =
-'1px solid ' + theme.border;
+.userEmail {
+  color: var(--cc-text);
+  font-size: 13px;
+  word-break: break-word;
+  margin-bottom: 10px;
+}
 
-win.style.borderRadius = '22px';
+button {
+  border: 0;
+  border-radius: 14px;
+  padding: 13px 14px;
+  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
+  color: #001111;
+  font-weight: 800;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
 
-win.style.backdropFilter = 'blur(10px)';
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 0 22px var(--cc-glow);
+}
 
-win.style.boxShadow =
-'0 0 26px ' + theme.glow;
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 
-win.style.zIndex = '99999';
+.smallButton {
+  width: 100%;
+  font-size: 12px;
+  padding: 11px;
+}
 
-win.style.overflow = 'hidden';
+.ghostButton {
+  background: rgba(255,255,255,0.07);
+  color: var(--cc-text);
+  border: 1px solid rgba(255,255,255,0.14);
+}
 
-win.innerHTML = `
+.dangerButton {
+  background: linear-gradient(90deg, #ff4f64, #ff9a9a);
+  color: #160000;
+}
 
-<div style="
-position:relative;
-z-index:2;
-padding:18px;
-background:${theme.header};
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid ${theme.border};
-cursor:move;
-">
+.navGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
 
-<div style="
-color:#00ffff;
-font-size:18px;
-letter-spacing:2px;
-">
-${config.title}
+.navCard {
+  border: 1px solid var(--cc-border);
+  border-radius: 22px;
+  padding: 18px;
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.045), rgba(0,255,170,0.02)),
+    rgba(0,0,0,0.42);
+  cursor: pointer;
+  min-height: 144px;
+  box-shadow: 0 0 18px rgba(0,255,255,0.06);
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.navCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--cc-border-hot);
+  box-shadow: 0 0 26px rgba(0,255,255,0.16);
+}
+
+.navKicker {
+  font-size: 11px;
+  color: var(--cc-green);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.navTitle {
+  color: var(--cc-text);
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.navDesc {
+  color: var(--cc-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.window {
+  display: none;
+  border: 1px solid var(--cc-border);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.04), rgba(0,255,170,0.018)),
+    rgba(0,0,0,0.48);
+  box-shadow: 0 0 32px rgba(0,255,255,0.09);
+  overflow: hidden;
+}
+
+.window.active {
+  display: block;
+}
+
+.windowBar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid rgba(0,255,255,0.18);
+  background: rgba(0,0,0,0.28);
+}
+
+.windowTitle {
+  color: var(--cc-cyan);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.windowBody {
+  padding: 18px;
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 16px;
+}
+
+.panel {
+  border: 1px solid rgba(0,255,255,0.18);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(0,0,0,0.30);
+}
+
+.panelTitle {
+  color: var(--cc-green);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.statusLine {
+  color: var(--cc-muted);
+  font-size: 13px;
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+#wdigVideo {
+  width: 100%;
+  min-height: 260px;
+  max-height: 58vh;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #020202;
+  border: 1px solid rgba(0,255,255,0.20);
+}
+
+.formInput,
+.formArea,
+.formSelect {
+  width: 100%;
+  background: rgba(0,0,0,0.48);
+  border: 1px solid rgba(0,255,255,0.26);
+  color: var(--cc-text);
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.formInput:focus,
+.formArea:focus,
+.formSelect:focus {
+  border-color: var(--cc-cyan);
+  box-shadow: 0 0 14px rgba(0,255,255,0.12);
+}
+
+.formArea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.recordList,
+.kricketList,
+.auditList {
+  display: grid;
+  gap: 10px;
+  max-height: 360px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.recordItem,
+.kricketItem,
+.auditItem {
+  border: 1px solid rgba(0,255,255,0.18);
+  border-radius: 14px;
+  padding: 12px;
+  background: rgba(0,0,0,0.28);
+}
+
+.itemTitle {
+  color: var(--cc-text);
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.itemMeta {
+  color: var(--cc-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.itemActions {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.itemActions a,
+.itemActions button {
+  width: auto;
+  padding: 9px 11px;
+  font-size: 11px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #001111;
+  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+#adWormStage {
+  position: relative;
+  min-height: 360px;
+  border: 1px solid rgba(0,255,255,0.18);
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at center, rgba(0,255,255,0.07), transparent 44%),
+    rgba(0,0,0,0.34);
+}
+
+.adWorm {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  animation: wormTravel 9s linear infinite;
+}
+
+.wormDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
+  box-shadow: 0 0 16px rgba(0,255,255,0.40);
+  animation: wormPulse 0.8s ease-in-out infinite alternate;
+}
+
+.wormDot:nth-child(2) { animation-delay: 0.08s; opacity: 0.88; }
+.wormDot:nth-child(3) { animation-delay: 0.16s; opacity: 0.78; }
+.wormDot:nth-child(4) { animation-delay: 0.24s; opacity: 0.68; }
+.wormDot:nth-child(5) { animation-delay: 0.32s; opacity: 0.58; }
+
+.adBubble {
+  position: absolute;
+  left: 24px;
+  bottom: 54px;
+  border: 1px solid rgba(0,255,255,0.28);
+  border-radius: 16px;
+  padding: 12px 14px;
+  width: 230px;
+  color: var(--cc-text);
+  background: rgba(0,0,0,0.62);
+  box-shadow: 0 0 22px rgba(0,255,255,0.10);
+}
+
+@keyframes wormTravel {
+  0% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(46vw) translateY(-42px); }
+  50% { transform: translateX(72vw) translateY(-8px); }
+  75% { transform: translateX(38vw) translateY(-68px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+@keyframes wormPulse {
+  from { transform: translateY(0) scale(0.88); }
+  to { transform: translateY(-7px) scale(1.08); }
+}
+
+.footerLog {
+  margin-top: 20px;
+  border: 1px solid rgba(0,255,255,0.14);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(0,0,0,0.28);
+  color: var(--cc-muted);
+  font-size: 12px;
+  line-height: 1.55;
+  font-family: Consolas, monospace;
+}
+
+@media (max-width: 920px) {
+  .header {
+    grid-template-columns: 1fr;
+  }
+
+  .navGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+
+  .toolGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  #app {
+    padding: 14px;
+  }
+
+  .brandTitle {
+    font-size: 22px;
+  }
+
+  .navGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .toolGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .windowBar {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="authCover">
+  Checking CyberCrowd verified session...
 </div>
 
-<button
-id="${config.id}_close"
-style="
-background:none;
-border:none;
-color:#00ffaa;
-font-size:18px;
-cursor:pointer;
-">
-✕
-</button>
+<div id="app">
+
+  <div class="header">
+    <div class="brandBlock">
+      <div class="brandTitle">CYBERCROWD NAV</div>
+      <div class="brandSub">
+        Page3 verified room. This is where the windows live: WDIG, AdWorm, Atomic Kricket, and RetenRecords.
+      </div>
+    </div>
+
+    <div class="userBlock">
+      <div class="userLabel">Verified User</div>
+      <div class="userEmail" id="userEmail">checking...</div>
+      <button class="smallButton ghostButton" id="signOutBtn">SIGN OUT</button>
+    </div>
+  </div>
+
+  <div class="navGrid">
+    <div class="navCard" data-window="wdigWindow">
+      <div class="navKicker">Live Window</div>
+      <div class="navTitle">WDIG Camera</div>
+      <div class="navDesc">Open a real camera preview, mute/unmute track, and feed RetenRecords.</div>
+    </div>
+
+    <div class="navCard" data-window="adWormWindow">
+      <div class="navKicker">Ad System</div>
+      <div class="navTitle">AdWorm</div>
+      <div class="navDesc">Animated ad unit with click tracking and corner behavior simulation.</div>
+    </div>
+
+    <div class="navCard" data-window="atomicWindow">
+      <div class="navKicker">Archive</div>
+      <div class="navTitle">Atomic Kricket</div>
+      <div class="navDesc">Searchable live-culture archive cards and addable notes.</div>
+    </div>
+
+    <div class="navCard" data-window="recordsWindow">
+      <div class="navKicker">Recorder</div>
+      <div class="navTitle">RetenRecords</div>
+      <div class="navDesc">Record the active WDIG camera stream and download the captured file.</div>
+    </div>
+  </div>
+
+  <div class="workspace">
+
+    <section class="window active" id="wdigWindow">
+      <div class="windowBar">
+        <div class="windowTitle">WDIG CAMERA WINDOW</div>
+        <button class="ghostButton" data-close-window="wdigWindow">HIDE WINDOW</button>
+      </div>
+
+      <div class="windowBody">
+        <div class="twoCol">
+          <div class="panel">
+            <div class="panelTitle">Live Camera</div>
+            <video id="wdigVideo" playsinline autoplay muted></video>
+          </div>
+
+          <div class="panel">
+            <div class="panelTitle">Controls</div>
+
+            <div class="toolGrid">
+              <button id="startCameraBtn">START CAMERA</button>
+              <button id="stopCameraBtn" class="ghostButton">STOP CAMERA</button>
+              <button id="toggleMuteBtn" class="ghostButton">MUTE AUDIO</button>
+              <button id="snapshotBtn" class="ghostButton">SNAPSHOT</button>
+            </div>
+
+            <div style="height:14px;"></div>
+
+            <div class="statusLine" id="wdigStatus">
+              WDIG idle. Press START CAMERA. Browser will ask permission.
+            </div>
+
+            <div style="height:14px;"></div>
+
+            <div class="panelTitle">Snapshot Preview</div>
+            <canvas id="snapshotCanvas" style="width:100%;border-radius:14px;border:1px solid rgba(0,255,255,0.18);background:#000;"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="window" id="adWormWindow">
+      <div class="windowBar">
+        <div class="windowTitle">ADWORM WINDOW</div>
+        <button class="ghostButton" data-close-window="adWormWindow">HIDE WINDOW</button>
+      </div>
+
+      <div class="windowBody">
+        <div class="twoCol">
+          <div id="adWormStage">
+            <div class="adBubble">
+              <div class="itemTitle">CyberCrowd Featured Drop</div>
+              <div class="itemMeta">Click the worm to simulate ad engagement. This is a working visual unit, not a document.</div>
+            </div>
+
+            <div class="adWorm" id="adWormUnit" title="Click AdWorm">
+              <div class="wormDot"></div>
+              <div class="wormDot"></div>
+              <div class="wormDot"></div>
+              <div class="wormDot"></div>
+              <div class="wormDot"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panelTitle">AdWorm Metrics</div>
+            <div class="statusLine" id="adWormStats">
+              impressions=0<br>
+              clicks=0<br>
+              engagement=0%
+            </div>
+
+            <div style="height:14px;"></div>
+
+            <button id="adImpressionBtn">ADD IMPRESSION</button>
+            <button id="resetAdWormBtn" class="ghostButton">RESET ADWORM</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="window" id="atomicWindow">
+      <div class="windowBar">
+        <div class="windowTitle">ATOMIC KRICKET WINDOW</div>
+        <button class="ghostButton" data-close-window="atomicWindow">HIDE WINDOW</button>
+      </div>
+
+      <div class="windowBody">
+        <div class="twoCol">
+          <div class="panel">
+            <div class="panelTitle">Search Archive</div>
+
+            <div class="formRow">
+              <input class="formInput" id="kricketSearch" placeholder="Search Atomic Kricket...">
+              <button id="clearKricketSearch" class="ghostButton">CLEAR</button>
+            </div>
+
+            <div class="kricketList" id="kricketList"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panelTitle">Add Archive Note</div>
+
+            <input class="formInput" id="kricketTitle" placeholder="Title">
+
+            <div style="height:10px;"></div>
+
+            <select class="formSelect" id="kricketType">
+              <option value="event">event</option>
+              <option value="lore">lore</option>
+              <option value="shop">shop</option>
+              <option value="creator">creator</option>
+            </select>
+
+            <div style="height:10px;"></div>
+
+            <textarea class="formArea" id="kricketBody" placeholder="Write the archive note..."></textarea>
+
+            <button id="addKricketBtn">ADD TO ATOMIC KRICKET</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="window" id="recordsWindow">
+      <div class="windowBar">
+        <div class="windowTitle">RETENRECORDS WINDOW</div>
+        <button class="ghostButton" data-close-window="recordsWindow">HIDE WINDOW</button>
+      </div>
+
+      <div class="windowBody">
+        <div class="twoCol">
+          <div class="panel">
+            <div class="panelTitle">Recorder Controls</div>
+
+            <div class="toolGrid">
+              <button id="startRecordBtn">START RECORD</button>
+              <button id="stopRecordBtn" class="dangerButton" disabled>STOP RECORD</button>
+              <button id="saveAuditBtn" class="ghostButton">SAVE AUDIT NOTE</button>
+              <button id="clearRecordsBtn" class="ghostButton">CLEAR LIST</button>
+            </div>
+
+            <div style="height:14px;"></div>
+
+            <textarea class="formArea" id="auditNote" placeholder="Add a field note for this record..."></textarea>
+
+            <div style="height:14px;"></div>
+
+            <div class="statusLine" id="recordStatus">
+              Recorder idle. Start WDIG camera first, then record.
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panelTitle">Records</div>
+            <div class="recordList" id="recordList"></div>
+
+            <div style="height:14px;"></div>
+
+            <div class="panelTitle">Audit Notes</div>
+            <div class="auditList" id="auditList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="footerLog" id="systemLog">
+    CyberCrowd Page3 booting...
+  </div>
 
 </div>
 
-<div style="
-position:relative;
-z-index:2;
-padding:22px;
-color:white;
-line-height:1.7;
-font-size:14px;
-">
+<script>
+(function() {
+  var SUPABASE_URL = 'PASTE_SUPABASE_URL_HERE';
+  var SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
 
-${config.content}
+  var PAGE2_GATE_URL = '/page2.html';
 
-</div>
+  var supabaseClient = null;
+  var verifiedUser = null;
 
-`;
+  var authCover = document.getElementById('authCover');
+  var app = document.getElementById('app');
+  var userEmail = document.getElementById('userEmail');
+  var signOutBtn = document.getElementById('signOutBtn');
+  var systemLog = document.getElementById('systemLog');
 
-document.body.appendChild(win);
+  var wdigVideo = document.getElementById('wdigVideo');
+  var startCameraBtn = document.getElementById('startCameraBtn');
+  var stopCameraBtn = document.getElementById('stopCameraBtn');
+  var toggleMuteBtn = document.getElementById('toggleMuteBtn');
+  var snapshotBtn = document.getElementById('snapshotBtn');
+  var snapshotCanvas = document.getElementById('snapshotCanvas');
+  var wdigStatus = document.getElementById('wdigStatus');
 
-if(window.CCParticles){
+  var wdigStream = null;
+  var audioMuted = false;
 
-CCParticles.create(win,theme);
+  var adWormUnit = document.getElementById('adWormUnit');
+  var adWormStats = document.getElementById('adWormStats');
+  var adImpressionBtn = document.getElementById('adImpressionBtn');
+  var resetAdWormBtn = document.getElementById('resetAdWormBtn');
+  var adStats = {
+    impressions: 0,
+    clicks: 0
+  };
 
-}
+  var kricketSearch = document.getElementById('kricketSearch');
+  var clearKricketSearch = document.getElementById('clearKricketSearch');
+  var kricketList = document.getElementById('kricketList');
+  var kricketTitle = document.getElementById('kricketTitle');
+  var kricketType = document.getElementById('kricketType');
+  var kricketBody = document.getElementById('kricketBody');
+  var addKricketBtn = document.getElementById('addKricketBtn');
 
-if(window.CCPresence){
+  var startRecordBtn = document.getElementById('startRecordBtn');
+  var stopRecordBtn = document.getElementById('stopRecordBtn');
+  var saveAuditBtn = document.getElementById('saveAuditBtn');
+  var clearRecordsBtn = document.getElementById('clearRecordsBtn');
+  var auditNote = document.getElementById('auditNote');
+  var recordStatus = document.getElementById('recordStatus');
+  var recordList = document.getElementById('recordList');
+  var auditList = document.getElementById('auditList');
 
-CCPresence.register(config.id);
+  var mediaRecorder = null;
+  var recordedChunks = [];
+  var records = [];
+  var auditNotes = [];
 
-}
+  var kricketItems = [
+    {
+      title: 'WDIG Live Camera Window',
+      type: 'event',
+      body: 'Working camera permission window for verified CyberCrowd users.'
+    },
+    {
+      title: 'AdWorm Lower-Corner Motion',
+      type: 'shop',
+      body: 'Animated ad unit with engagement metrics and click tracking.'
+    },
+    {
+      title: 'Atomic Kricket Archive',
+      type: 'lore',
+      body: 'Searchable archive for event media, lore, creator notes, and sales cards.'
+    },
+    {
+      title: 'RetenRecords Capture',
+      type: 'event',
+      body: 'Local browser recording window tied to the active WDIG stream.'
+    }
+  ];
 
-if(window.CCDistrictMemory){
+  function log(text) {
+    systemLog.innerText = new Date().toLocaleTimeString() + ' — ' + text;
+  }
 
-CCDistrictMemory.register(config.id,{
-top:win.style.top,
-left:win.style.left
-});
+  function showApp() {
+    authCover.style.display = 'none';
+    app.style.display = 'block';
+  }
 
-}
+  function redirectToGate() {
+    window.location.replace(PAGE2_GATE_URL);
+  }
 
-const closeBtn =
-document.getElementById(
-config.id + '_close'
-);
+  function initSupabase() {
+    if (
+      !SUPABASE_URL ||
+      !SUPABASE_ANON_KEY ||
+      SUPABASE_URL === 'PASTE_SUPABASE_URL_HERE' ||
+      SUPABASE_ANON_KEY === 'PASTE_SUPABASE_ANON_KEY_HERE'
+    ) {
+      authCover.innerText = 'Page3 missing Supabase config. Returning to Page2 gate.';
+      window.setTimeout(redirectToGate, 900);
+      return false;
+    }
 
-closeBtn.addEventListener(
-'mouseenter',
-function(){
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth: {
+          detectSessionInUrl: true,
+          persistSession: true,
+          autoRefreshToken: true
+        }
+      }
+    );
 
-if(window.CCSound){
+    return true;
+  }
 
-CCSound.hover();
+  async function requireVerifiedSession() {
+    var result;
+    var session;
 
-}
+    if (!supabaseClient) {
+      return;
+    }
 
-});
+    result = await supabaseClient.auth.getSession();
 
-closeBtn.addEventListener(
-'click',
-function(){
+    if (result.error) {
+      authCover.innerText = 'Session error. Returning to Page2 gate.';
+      window.setTimeout(redirectToGate, 900);
+      return;
+    }
 
-if(window.CCSound){
+    session = result.data && result.data.session ? result.data.session : null;
 
-CCSound.close();
+    if (!session || !session.user) {
+      localStorage.removeItem('cc_verified_session');
+      localStorage.removeItem('cc_verified_email');
+      localStorage.removeItem('cc_verified_user_id');
+      redirectToGate();
+      return;
+    }
 
-}
+    verifiedUser = session.user;
 
-if(window.CCPresence){
+    localStorage.setItem('cc_verified_session', 'supabase');
+    localStorage.setItem('cc_verified_email', verifiedUser.email || '');
+    localStorage.setItem('cc_verified_user_id', verifiedUser.id || '');
 
-CCPresence.remove(config.id);
+    userEmail.innerText = verifiedUser.email || 'verified user';
 
-}
+    showApp();
+    log('Verified Supabase session confirmed. Page3 NAV open.');
+  }
 
-win.remove();
+  function setupWindowNav() {
+    var cards = document.querySelectorAll('.navCard');
+    var closeButtons = document.querySelectorAll('[data-close-window]');
+    var i;
 
-});
+    for (i = 0; i < cards.length; i++) {
+      cards[i].addEventListener('click', function() {
+        var target = this.getAttribute('data-window');
+        var win = document.getElementById(target);
 
-if(window.CCSound){
+        if (win) {
+          win.classList.add('active');
+          win.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
 
-CCSound.open();
+          log('Opened window: ' + target);
+        }
+      });
+    }
 
-}
+    for (i = 0; i < closeButtons.length; i++) {
+      closeButtons[i].addEventListener('click', function() {
+        var target = this.getAttribute('data-close-window');
+        var win = document.getElementById(target);
 
-enableWindowDrag(win,config.id);
+        if (win) {
+          win.classList.remove('active');
+          log('Hidden window: ' + target);
+        }
+      });
+    }
+  }
 
-}
+  async function startCamera() {
+    try {
+      wdigStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+      });
 
-function enableWindowDrag(win,id){
+      wdigVideo.srcObject = wdigStream;
+      audioMuted = false;
 
-let isDragging = false;
+      wdigStatus.innerText = 'WDIG camera live. Video and audio tracks active.';
+      toggleMuteBtn.innerText = 'MUTE AUDIO';
 
-let offsetX = 0;
-let offsetY = 0;
+      log('WDIG camera started.');
 
-const header =
-win.firstElementChild;
+    } catch(error) {
+      wdigStatus.innerText = 'Camera failed: ' + error.message;
+      log('WDIG camera failed: ' + error.message);
+    }
+  }
 
-header.addEventListener(
-'mousedown',
-function(e){
+  function stopCamera() {
+    var tracks;
+    var i;
 
-isDragging = true;
+    if (!wdigStream) {
+      wdigStatus.innerText = 'No active WDIG camera stream.';
+      return;
+    }
 
-offsetX =
-e.clientX - win.offsetLeft;
+    tracks = wdigStream.getTracks();
 
-offsetY =
-e.clientY - win.offsetTop;
+    for (i = 0; i < tracks.length; i++) {
+      tracks[i].stop();
+    }
 
-});
+    wdigStream = null;
+    wdigVideo.srcObject = null;
 
-header.addEventListener(
-'mouseenter',
-function(){
+    wdigStatus.innerText = 'WDIG camera stopped.';
+    log('WDIG camera stopped.');
+  }
 
-if(window.CCSound){
+  function toggleMute() {
+    var audioTracks;
+    var i;
 
-CCSound.hover();
+    if (!wdigStream) {
+      wdigStatus.innerText = 'Start camera before muting audio.';
+      return;
+    }
 
-}
+    audioMuted = !audioMuted;
+    audioTracks = wdigStream.getAudioTracks();
 
-});
+    for (i = 0; i < audioTracks.length; i++) {
+      audioTracks[i].enabled = !audioMuted;
+    }
 
-document.addEventListener(
-'mousemove',
-function(e){
+    toggleMuteBtn.innerText = audioMuted ? 'UNMUTE AUDIO' : 'MUTE AUDIO';
+    wdigStatus.innerText = audioMuted ? 'WDIG audio muted.' : 'WDIG audio live.';
+    log(wdigStatus.innerText);
+  }
 
-if(!isDragging) return;
+  function takeSnapshot() {
+    var ctx;
+    var width;
+    var height;
 
-win.style.left =
-(e.clientX - offsetX) + 'px';
+    if (!wdigStream || !wdigVideo.videoWidth) {
+      wdigStatus.innerText = 'Start camera before taking snapshot.';
+      return;
+    }
 
-win.style.top =
-(e.clientY - offsetY) + 'px';
+    width = wdigVideo.videoWidth;
+    height = wdigVideo.videoHeight;
 
-if(window.CCDistrictMemory){
+    snapshotCanvas.width = width;
+    snapshotCanvas.height = height;
 
-CCDistrictMemory.register(id,{
-top:win.style.top,
-left:win.style.left
-});
+    ctx = snapshotCanvas.getContext('2d');
+    ctx.drawImage(wdigVideo, 0, 0, width, height);
 
-}
+    wdigStatus.innerText = 'Snapshot captured into preview canvas.';
+    log('WDIG snapshot captured.');
+  }
 
-});
+  function updateAdStats() {
+    var engagement;
 
-document.addEventListener(
-'mouseup',
-function(){
+    engagement = adStats.impressions > 0
+      ? Math.round((adStats.clicks / adStats.impressions) * 100)
+      : 0;
 
-isDragging = false;
+    adWormStats.innerHTML =
+      'impressions=' + adStats.impressions + '<br>' +
+      'clicks=' + adStats.clicks + '<br>' +
+      'engagement=' + engagement + '%';
+  }
 
-});
+  function renderKricketList() {
+    var query;
+    var filtered;
+    var html;
+    var i;
 
-}
+    query = kricketSearch.value.trim().toLowerCase();
 
-window.CCWindow = {
+    filtered = kricketItems.filter(function(item) {
+      return (
+        item.title.toLowerCase().indexOf(query) !== -1 ||
+        item.type.toLowerCase().indexOf(query) !== -1 ||
+        item.body.toLowerCase().indexOf(query) !== -1
+      );
+    });
 
-create:createEcosystemWindow
+    html = '';
 
-};
+    for (i = 0; i < filtered.length; i++) {
+      html +=
+        '<div class="kricketItem">' +
+          '<div class="itemTitle">' + escapeHtml(filtered[i].title) + '</div>' +
+          '<div class="itemMeta">type=' + escapeHtml(filtered[i].type) + '</div>' +
+          '<div class="itemMeta">' + escapeHtml(filtered[i].body) + '</div>' +
+        '</div>';
+    }
+
+    if (!html) {
+      html = '<div class="kricketItem"><div class="itemMeta">No Atomic Kricket records match.</div></div>';
+    }
+
+    kricketList.innerHTML = html;
+  }
+
+  function addKricketItem() {
+    var title;
+    var type;
+    var body;
+
+    title = kricketTitle.value.trim();
+    type = kricketType.value;
+    body = kricketBody.value.trim();
+
+    if (!title || !body) {
+      log('Atomic Kricket requires title and body.');
+      return;
+    }
+
+    kricketItems.unshift({
+      title: title,
+      type: type,
+      body: body
+    });
+
+    kricketTitle.value = '';
+    kricketBody.value = '';
+
+    renderKricketList();
+    log('Atomic Kricket note added.');
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function startRecording() {
+    if (!wdigStream) {
+      recordStatus.innerText = 'Start WDIG camera before recording.';
+      log('RetenRecords blocked: no WDIG stream.');
+      return;
+    }
+
+    recordedChunks = [];
+
+    try {
+      mediaRecorder = new MediaRecorder(wdigStream, {
+        mimeType: 'video/webm'
+      });
+    } catch(error) {
+      mediaRecorder = new MediaRecorder(wdigStream);
+    }
+
+    mediaRecorder.ondataavailable = function(event) {
+      if (event.data && event.data.size > 0) {
+        recordedChunks.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstop = function() {
+      var blob;
+      var url;
+      var title;
+
+      blob = new Blob(recordedChunks, {
+        type: 'video/webm'
+      });
+
+      url = URL.createObjectURL(blob);
+      title = 'CyberCrowd_RetenRecord_' + new Date().toISOString().replace(/[:.]/g, '-') + '.webm';
+
+      records.unshift({
+        title: title,
+        url: url,
+        size: blob.size,
+        created: new Date().toLocaleString()
+      });
+
+      renderRecords();
+
+      recordStatus.innerText = 'Recording saved locally and ready to download.';
+      log('RetenRecords capture saved.');
+    };
+
+    mediaRecorder.start();
+
+    startRecordBtn.disabled = true;
+    stopRecordBtn.disabled = false;
+
+    recordStatus.innerText = 'Recording active...';
+    log('RetenRecords recording started.');
+  }
+
+  function stopRecording() {
+    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+      return;
+    }
+
+    mediaRecorder.stop();
+
+    startRecordBtn.disabled = false;
+    stopRecordBtn.disabled = true;
+
+    recordStatus.innerText = 'Stopping recording...';
+  }
+
+  function renderRecords() {
+    var html;
+    var i;
+
+    html = '';
+
+    for (i = 0; i < records.length; i++) {
+      html +=
+        '<div class="recordItem">' +
+          '<div class="itemTitle">' + escapeHtml(records[i].title) + '</div>' +
+          '<div class="itemMeta">created=' + escapeHtml(records[i].created) + '</div>' +
+          '<div class="itemMeta">size=' + records[i].size + ' bytes</div>' +
+          '<div class="itemActions">' +
+            '<a href="' + records[i].url + '" download="' + escapeHtml(records[i].title) + '">DOWNLOAD</a>' +
+          '</div>' +
+        '</div>';
+    }
+
+    if (!html) {
+      html = '<div class="recordItem"><div class="itemMeta">No local records yet.</div></div>';
+    }
+
+    recordList.innerHTML = html;
+  }
+
+  function saveAuditNote() {
+    var note;
+
+    note = auditNote.value.trim();
+
+    if (!note) {
+      log('Audit note empty.');
+      return;
+    }
+
+    auditNotes.unshift({
+      note: note,
+      created: new Date().toLocaleString()
+    });
+
+    auditNote.value = '';
+
+    renderAuditNotes();
+    log('RetenRecords audit note saved.');
+  }
+
+  function renderAuditNotes() {
+    var html;
+    var i;
+
+    html = '';
+
+    for (i = 0; i < auditNotes.length; i++) {
+      html +=
+        '<div class="auditItem">' +
+          '<div class="itemMeta">created=' + escapeHtml(auditNotes[i].created) + '</div>' +
+          '<div class="itemTitle">' + escapeHtml(auditNotes[i].note) + '</div>' +
+        '</div>';
+    }
+
+    if (!html) {
+      html = '<div class="auditItem"><div class="itemMeta">No audit notes yet.</div></div>';
+    }
+
+    auditList.innerHTML = html;
+  }
+
+  function clearRecords() {
+    var i;
+
+    for (i = 0; i < records.length; i++) {
+      URL.revokeObjectURL(records[i].url);
+    }
+
+    records = [];
+    renderRecords();
+
+    recordStatus.innerText = 'Record list cleared.';
+    log('RetenRecords list cleared.');
+  }
+
+  function setupControls() {
+    signOutBtn.addEventListener('click', async function() {
+      if (supabaseClient) {
+        await supabaseClient.auth.signOut();
+      }
+
+      localStorage.removeItem('cc_verified_session');
+      localStorage.removeItem('cc_verified_email');
+      localStorage.removeItem('cc_verified_user_id');
+
+      redirectToGate();
+    });
+
+    startCameraBtn.addEventListener('click', startCamera);
+    stopCameraBtn.addEventListener('click', stopCamera);
+    toggleMuteBtn.addEventListener('click', toggleMute);
+    snapshotBtn.addEventListener('click', takeSnapshot);
+
+    adWormUnit.addEventListener('click', function() {
+      adStats.clicks++;
+      adStats.impressions++;
+      updateAdStats();
+      log('AdWorm clicked.');
+    });
+
+    adImpressionBtn.addEventListener('click', function() {
+      adStats.impressions++;
+      updateAdStats();
+      log('AdWorm impression added.');
+    });
+
+    resetAdWormBtn.addEventListener('click', function() {
+      adStats.impressions = 0;
+      adStats.clicks = 0;
+      updateAdStats();
+      log('AdWorm metrics reset.');
+    });
+
+    kricketSearch.addEventListener('input', renderKricketList);
+    clearKricketSearch.addEventListener('click', function() {
+      kricketSearch.value = '';
+      renderKricketList();
+    });
+
+    addKricketBtn.addEventListener('click', addKricketItem);
+
+    startRecordBtn.addEventListener('click', startRecording);
+    stopRecordBtn.addEventListener('click', stopRecording);
+    saveAuditBtn.addEventListener('click', saveAuditNote);
+    clearRecordsBtn.addEventListener('click', clearRecords);
+  }
+
+  setupWindowNav();
+  setupControls();
+  updateAdStats();
+  renderKricketList();
+  renderRecords();
+  renderAuditNotes();
+
+  if (initSupabase()) {
+    requireVerifiedSession();
+  }
+})();
+</script>
+
+</body>
+</html>
