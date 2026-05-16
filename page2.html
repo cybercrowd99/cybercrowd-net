@@ -101,8 +101,8 @@
     <h1>SECURITY GATE</h1>
 
     <div class="sub">
-        Enter your email. One live entry link is sent.<br>
-        Click it once. The verified room opens.
+        Enter your email. CyberCrowd verifies access.<br>
+        Email remains active as receipt only.
     </div>
 
     <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
@@ -116,11 +116,11 @@
     <div class="plugbox" id="plugtrace">config plug: worker auth lane active
 email plug: waiting
 redirect plug: next = /nav.html
-session plug: pending email click
+session plug: pending email submit
 room plug: idle</div>
 
     <footer>
-        PAGE2 WORKER SECURITY · RESEND EMAIL · COOKIE VERIFY
+        PAGE2 WORKER SECURITY · RESEND EMAIL RECEIPT · COOKIE VERIFY
     </footer>
 
 </div>
@@ -183,15 +183,15 @@ room plug: idle`
         }
 
         button.disabled = true;
-        button.innerHTML = "SENDING";
+        button.innerHTML = "VERIFYING";
 
-        setStatus("Sending live entry link...", "#00eaff");
+        setStatus("Verifying CyberCrowd access...", "#00eaff");
 
         setPlug(
 `config plug: worker auth lane active
 email plug: posting to ${START_ENDPOINT}
 redirect plug: next = ${NEXT_PATH}
-session plug: pending email click
+session plug: pending server access
 room plug: sealed`
         );
 
@@ -216,12 +216,12 @@ room plug: sealed`
 
             const data = await response.json();
 
-            button.disabled = false;
-            button.innerHTML = "SEND ENTRY LINK";
-
             if (!response.ok || !data || data.success !== true) {
+                button.disabled = false;
+                button.innerHTML = "SEND ENTRY LINK";
+
                 const statusCode = data && data.status ? data.status : "request_failed";
-                const message = data && data.message ? data.message : "Entry link failed.";
+                const message = data && data.message ? data.message : "Entry request failed.";
 
                 setStatus(message, "#ff4444");
 
@@ -239,17 +239,27 @@ room plug: idle`
             const delivery =
                 data.emailDelivery ||
                 data.status ||
-                "link_dispatched";
+                "accepted_by_resend";
 
-            setStatus("Entry link sent. Check your inbox.", "#00ff99");
+            const openPath =
+                data.openPath ||
+                NEXT_PATH;
+
+            setStatus("Access verified. Opening CyberCrowd.", "#00ff99");
 
             setPlug(
 `config plug: worker auth lane active
 email plug: OK - ${delivery}
-redirect plug: next = ${NEXT_PATH}
-session plug: awaiting user click
-room plug: sealed`
+redirect plug: opening ${openPath}
+session plug: access_granted
+room plug: open`
             );
+
+            button.innerHTML = "OPENING";
+
+            setTimeout(function() {
+                window.location.href = openPath;
+            }, 1500);
 
         } catch(error) {
             button.disabled = false;
