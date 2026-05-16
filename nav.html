@@ -9,8 +9,6 @@
 <meta name="description" content="CyberCrowd verified NAV room with WDIG, AdWorm, Atomic Kricket, and RetenRecords windows.">
 <meta name="robots" content="noindex, nofollow">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 * {
   box-sizing: border-box;
@@ -721,12 +719,8 @@ button:disabled {
 
 <script>
 (function() {
-  var SUPABASE_URL = 'PASTE_SUPABASE_URL_HERE';
-  var SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
-
   var PAGE2_GATE_URL = '/page2.html';
 
-  var supabaseClient = null;
   var verifiedUser = null;
 
   var authCover = document.getElementById('authCover');
@@ -813,69 +807,51 @@ button:disabled {
     window.location.replace(PAGE2_GATE_URL);
   }
 
-  function initSupabase() {
-    if (
-      !SUPABASE_URL ||
-      !SUPABASE_ANON_KEY ||
-      SUPABASE_URL === 'PASTE_SUPABASE_URL_HERE' ||
-      SUPABASE_ANON_KEY === 'PASTE_SUPABASE_ANON_KEY_HERE'
-    ) {
-      authCover.innerText = 'Page3 missing Supabase config. Returning to Page2 gate.';
-      window.setTimeout(redirectToGate, 900);
-      return false;
-    }
-
-    supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY,
-      {
-        auth: {
-          detectSessionInUrl: true,
-          persistSession: true,
-          autoRefreshToken: true
-        }
-      }
-    );
-
-    return true;
-  }
-
   async function requireVerifiedSession() {
-    var result;
-    var session;
+    var response;
+    var data;
 
-    if (!supabaseClient) {
-      return;
-    }
+    try {
+      response = await fetch('/api/enrollment/session', {
+        method: 'GET',
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
 
-    result = await supabaseClient.auth.getSession();
+      data = await response.json();
 
-    if (result.error) {
-      authCover.innerText = 'Session error. Returning to Page2 gate.';
+    } catch(error) {
+      authCover.innerText = 'Session check failed. Returning to Page2 gate.';
       window.setTimeout(redirectToGate, 900);
       return;
     }
 
-    session = result.data && result.data.session ? result.data.session : null;
-
-    if (!session || !session.user) {
+    if (!response.ok || !data || data.verified !== true) {
       localStorage.removeItem('cc_verified_session');
       localStorage.removeItem('cc_verified_email');
       localStorage.removeItem('cc_verified_user_id');
-      redirectToGate();
+
+      authCover.innerText = 'No verified CyberCrowd session. Returning to Page2 gate.';
+      window.setTimeout(redirectToGate, 900);
       return;
     }
 
-    verifiedUser = session.user;
+    verifiedUser = {
+      email: data.email || 'verified user',
+      id: data.enrollmentId || ''
+    };
 
-    localStorage.setItem('cc_verified_session', 'supabase');
+    localStorage.setItem('cc_verified_session', 'cc_access');
     localStorage.setItem('cc_verified_email', verifiedUser.email || '');
     localStorage.setItem('cc_verified_user_id', verifiedUser.id || '');
 
     userEmail.innerText = verifiedUser.email || 'verified user';
 
     showApp();
-    log('Verified Supabase session confirmed. Page3 NAV open.');
+    log('Verified cc_access session confirmed. Page3 NAV open.');
   }
 
   function setupWindowNav() {
@@ -1236,9 +1212,13 @@ button:disabled {
 
   function setupControls() {
     signOutBtn.addEventListener('click', async function() {
-      if (supabaseClient) {
-        await supabaseClient.auth.signOut();
-      }
+      try {
+        await fetch('/api/enrollment/session', {
+          method: 'DELETE',
+          credentials: 'same-origin',
+          cache: 'no-store'
+        });
+      } catch(error) {}
 
       localStorage.removeItem('cc_verified_session');
       localStorage.removeItem('cc_verified_email');
@@ -1292,10 +1272,7 @@ button:disabled {
   renderKricketList();
   renderRecords();
   renderAuditNotes();
-
-  if (initSupabase()) {
-    requireVerifiedSession();
-  }
+  requireVerifiedSession();
 })();
 </script>
 
