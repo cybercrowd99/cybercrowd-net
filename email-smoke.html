@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CyberCrowd Email Transport Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(0,255,255,0.14), transparent 38%),
+    radial-gradient(circle at 12% 80%, rgba(0,255,170,0.08), transparent 32%),
+    #040606;
+  color: #eaffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.wrap {
+  width: min(720px, calc(100% - 28px));
+  margin: 0 auto;
+  padding: 42px 0;
+}
+
+.panel {
+  border: 1px solid rgba(0,255,255,0.34);
+  border-radius: 24px;
+  padding: 24px;
+  background:
+    linear-gradient(180deg, rgba(0,255,255,0.055), rgba(0,255,170,0.025)),
+    rgba(0,0,0,0.48);
+  box-shadow:
+    0 0 30px rgba(0,255,255,0.12),
+    0 24px 70px rgba(0,0,0,0.48);
+}
+
+h1 {
+  margin: 0 0 10px;
+  color: #00ffff;
+  font-size: 30px;
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+
+.sub {
+  color: rgba(234,255,255,0.72);
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+
+.lock {
+  border: 1px solid rgba(0,255,170,0.22);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(0,255,170,0.06);
+  color: #b8ffff;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  margin-bottom: 20px;
+  white-space: pre-line;
+}
+
+input {
+  width: 100%;
+  padding: 15px 14px;
+  border: 1px solid rgba(0,255,255,0.28);
+  border-radius: 14px;
+  background: rgba(0,0,0,0.48);
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 14px;
+}
+
+input:focus {
+  border-color: #00ffff;
+  box-shadow: 0 0 14px rgba(0,255,255,0.14);
+}
+
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 15px 14px;
+  background: linear-gradient(90deg, #00ffff, #00ffaa);
+  color: #001111;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.status {
+  margin-top: 18px;
+  min-height: 24px;
+  color: #ff4f64;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.resultBox {
+  margin-top: 22px;
+  border: 1px solid rgba(0,255,255,0.18);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(0,0,0,0.44);
+  color: rgba(234,255,255,0.86);
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.pass {
+  color: #00ffaa;
+}
+
+.fail {
+  color: #ff4f64;
+}
+
+footer {
+  margin-top: 22px;
+  color: rgba(234,255,255,0.48);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+  <div class="panel">
+    <h1>CYBERCROWD EMAIL TRANSPORT</h1>
+
+    <div class="sub">
+      This page proves one thing only: CyberCrowd can send one real email to a real human inbox.
+    </div>
+
+    <div class="lock">ACTIVE ORDER:
+1. Email transport first
+2. Enrollment second
+3. Membership third
+4. CyberCrowdcoin growth after that
+
+THIS PAGE DOES NOT:
+create cookies
+open nav
+enroll members
+touch page2
+touch verify
+touch session
+touch CyberCrowdcoin</div>
+
+    <input id="toEmail" type="email" value="cybercrowd@yahoo.com" autocomplete="email">
+
+    <button id="sendButton" onclick="sendSmokeEmail()">SEND ONE REAL EMAIL</button>
+
+    <div id="status" class="status">Waiting.</div>
+
+    <div id="resultBox" class="resultBox">No test sent yet.</div>
+
+    <footer>
+      EMAIL TRANSPORT TEST · /api/email/smoke · NO ENROLLMENT
+    </footer>
+  </div>
+</div>
+
+<script>
+(function() {
+  "use strict";
+
+  const ENDPOINT = "/api/email/smoke";
+
+  function validEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function setStatus(text, className) {
+    const status = document.getElementById("status");
+    status.className = "status " + className;
+    status.textContent = text;
+  }
+
+  function setResult(data) {
+    document.getElementById("resultBox").textContent =
+      JSON.stringify(data, null, 2);
+  }
+
+  window.sendSmokeEmail = async function sendSmokeEmail() {
+    const input = document.getElementById("toEmail");
+    const button = document.getElementById("sendButton");
+
+    const to = input.value.trim().toLowerCase();
+
+    if (!validEmail(to)) {
+      setStatus("FAIL: valid recipient email required.", "fail");
+      setResult({
+        success: false,
+        status: "invalid_to_email"
+      });
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "SENDING ONE EMAIL";
+
+    setStatus("Sending one real CyberCrowd email...", "");
+
+    setResult({
+      endpoint: ENDPOINT,
+      to: to,
+      confirm: "SEND_ONE_EMAIL",
+      state: "posting"
+    });
+
+    try {
+      const response = await fetch(
+        ENDPOINT,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            confirm: "SEND_ONE_EMAIL",
+            to: to
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      button.disabled = false;
+      button.textContent = "SEND ONE REAL EMAIL";
+
+      setResult(data);
+
+      if (!response.ok || !data || data.success !== true) {
+        setStatus("FAIL: Resend did not accept the smoke email.", "fail");
+        return;
+      }
+
+      if (!data.resendEmailId) {
+        setStatus("FAIL: accepted response did not include resendEmailId.", "fail");
+        return;
+      }
+
+      setStatus("PASS: Resend accepted the email. Now check inbox and spam.", "pass");
+
+    } catch(error) {
+      button.disabled = false;
+      button.textContent = "SEND ONE REAL EMAIL";
+
+      setStatus("FAIL: request error.", "fail");
+
+      setResult({
+        success: false,
+        status: "request_exception",
+        message: error.message
+      });
+    }
+  };
+})();
+</script>
+
+</body>
+</html>
