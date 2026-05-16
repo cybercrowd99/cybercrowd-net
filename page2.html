@@ -2,467 +2,270 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>SECURITY GATE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CyberCrowd Security Gate</title>
-
-<meta name="description" content="CyberCrowd verified entry gate.">
-<meta name="robots" content="index, follow">
-
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    body {
+        background:#000;
+        color:#e5e5e5;
+        font-family:Arial, sans-serif;
+        margin:0;
+        padding:0;
+        text-align:center;
+    }
 
-:root {
-  --cc-black: #050505;
-  --cc-panel: rgba(10, 14, 14, 0.94);
-  --cc-panel-soft: rgba(0, 255, 255, 0.05);
-  --cc-cyan: #00ffff;
-  --cc-green: #00ffaa;
-  --cc-text: #ffffff;
-  --cc-muted: #9fb9b9;
-  --cc-error: #ff5555;
-  --cc-border: rgba(0, 255, 255, 0.38);
-  --cc-glow: rgba(0, 255, 255, 0.22);
-}
+    .wrap {
+        padding:40px 20px;
+        max-width:420px;
+        margin:auto;
+    }
 
-html,
-body {
-  width: 100%;
-  min-height: 100%;
-}
+    h1 {
+        font-size:32px;
+        margin-bottom:10px;
+        letter-spacing:1px;
+    }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background:
-    radial-gradient(circle at center, rgba(0,255,255,0.12), transparent 44%),
-    var(--cc-black);
-  color: var(--cc-text);
-}
+    .sub {
+        font-size:14px;
+        opacity:0.8;
+        margin-bottom:30px;
+        line-height:1.5em;
+    }
 
-#stage {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
+    input {
+        width:100%;
+        padding:14px;
+        border:none;
+        border-radius:6px;
+        margin-bottom:20px;
+        font-size:16px;
+        box-sizing:border-box;
+    }
 
-#gate {
-  width: 100%;
-  max-width: 520px;
-  background: var(--cc-panel);
-  border: 1px solid var(--cc-border);
-  border-radius: 22px;
-  padding: 30px;
-  box-shadow:
-    0 0 34px var(--cc-glow),
-    0 24px 80px rgba(0,0,0,0.82);
-}
+    button {
+        width:100%;
+        padding:16px;
+        background:#00eaff;
+        border:none;
+        border-radius:6px;
+        font-size:18px;
+        font-weight:bold;
+        cursor:pointer;
+    }
 
-h1 {
-  color: var(--cc-cyan);
-  text-align: center;
-  letter-spacing: 3px;
-  margin-bottom: 14px;
-}
+    button:disabled {
+        opacity:0.55;
+        cursor:not-allowed;
+    }
 
-#gateIntro {
-  color: var(--cc-muted);
-  line-height: 1.6;
-  text-align: center;
-  margin-bottom: 22px;
-}
+    .status {
+        margin-top:20px;
+        color:#ff4444;
+        font-size:14px;
+        font-weight:bold;
+        min-height:22px;
+        line-height:1.5em;
+    }
 
-.statusBox {
-  margin-top: 18px;
-  padding: 16px;
-  border-radius: 14px;
-  background: var(--cc-panel-soft);
-  border: 1px solid rgba(0,255,170,0.45);
-}
+    .plugbox {
+        margin-top:40px;
+        text-align:left;
+        font-family:monospace;
+        font-size:13px;
+        background:#111;
+        padding:15px;
+        border-radius:6px;
+        line-height:1.4em;
+        white-space:pre-line;
+        word-break:break-word;
+    }
 
-.label {
-  color: var(--cc-green);
-  font-size: 12px;
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
+    footer {
+        margin-top:40px;
+        font-size:12px;
+        opacity:0.6;
+    }
 
-.value {
-  font-size: 18px;
-  color: var(--cc-text);
-}
-
-.field {
-  margin-top: 18px;
-}
-
-input[type="email"],
-input[type="text"] {
-  width: 100%;
-  padding: 15px;
-  border-radius: 14px;
-  border: 1px solid rgba(0,255,255,0.30);
-  background: rgba(255,255,255,0.04);
-  color: var(--cc-text);
-  font-size: 16px;
-}
-
-input[type="email"]:focus,
-input[type="text"]:focus {
-  outline: none;
-  border: 1px solid rgba(0,255,255,0.75);
-  box-shadow: 0 0 14px rgba(0,255,255,0.22);
-}
-
-#botFieldWrap {
-  display: none;
-}
-
-button,
-a.buttonLike {
-  display: block;
-  width: 100%;
-  margin-top: 16px;
-  padding: 16px;
-  border: none;
-  border-radius: 16px;
-  background: linear-gradient(90deg, var(--cc-cyan), var(--cc-green));
-  color: #001111;
-  font-weight: bold;
-  font-size: 16px;
-  letter-spacing: 2px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-}
-
-button:hover:not(:disabled),
-a.buttonLike:hover {
-  box-shadow: 0 0 22px rgba(0,255,255,0.28);
-}
-
-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-#message {
-  margin-top: 16px;
-  min-height: 22px;
-  color: var(--cc-green);
-  text-align: center;
-  letter-spacing: 1px;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-#message.error {
-  color: var(--cc-error);
-}
-
-#plugBox {
-  margin-top: 18px;
-  padding: 14px;
-  border-radius: 14px;
-  background: rgba(0,0,0,0.42);
-  border: 1px dashed rgba(0,255,255,0.24);
-  color: var(--cc-muted);
-  font-family: Consolas, monospace;
-  font-size: 11px;
-  line-height: 1.55;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-#footer {
-  margin-top: 24px;
-  text-align: center;
-  opacity: 0.42;
-  font-size: 11px;
-  letter-spacing: 2px;
-}
+    .hidden-field {
+        display:none;
+    }
 </style>
 </head>
 
 <body>
 
-<div id="stage">
-  <div id="gate">
+<div class="wrap">
 
     <h1>SECURITY GATE</h1>
 
-    <div id="gateIntro">
-      Enter your email. CyberCrowd sends one live entry link.
-      Click it once and the verified room opens.
+    <div class="sub">
+        Enter your email. One live entry link is sent.<br>
+        Click it once. The verified room opens.
     </div>
 
-    <div class="statusBox">
-      <div class="label">Gate Status</div>
-      <div class="value" id="gateStatus">CHECKING</div>
-    </div>
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
 
-    <div class="field">
-      <div class="label">Email</div>
-      <input
-        id="emailInput"
-        type="email"
-        placeholder="you@example.com"
-        autocomplete="email">
-    </div>
+    <input id="website" class="hidden-field" type="text" tabindex="-1" autocomplete="off">
 
-    <div id="botFieldWrap">
-      <label for="websiteInput">Website</label>
-      <input id="websiteInput" type="text" tabindex="-1" autocomplete="off">
-    </div>
+    <button id="sendButton" onclick="sendLink()">SEND ENTRY LINK</button>
 
-    <button id="sendBtn">SEND ENTRY LINK</button>
+    <div id="status" class="status"></div>
 
-    <a class="buttonLike" id="continueBtn" href="/nav.html" style="display:none;">ENTER CYBERCROWD</a>
-
-    <div id="message">READY</div>
-
-    <div id="plugBox">PLUG TRACE:
-config plug: checking
+    <div class="plugbox" id="plugtrace">config plug: worker auth lane active
 email plug: waiting
-redirect plug: waiting
-session plug: waiting
-room plug: waiting</div>
+redirect plug: next = /nav.html
+session plug: pending email click
+room plug: idle</div>
 
-    <div id="footer">
-      PAGE2 WORKER SECURITY · RESEND EMAIL · COOKIE VERIFY
-    </div>
+    <footer>
+        PAGE2 WORKER SECURITY · RESEND EMAIL · COOKIE VERIFY
+    </footer>
 
-  </div>
 </div>
 
 <script>
 (function() {
-  "use strict";
+    "use strict";
 
-  var START_ENDPOINT = "/api/enrollment/start";
-  var SESSION_ENDPOINT = "/api/enrollment/session";
-  var DEFAULT_NEXT = "/nav.html";
+    const START_ENDPOINT = "/api/enrollment/start";
+    const NEXT_PATH = "/nav.html";
 
-  var emailInput = document.getElementById("emailInput");
-  var websiteInput = document.getElementById("websiteInput");
-  var sendBtn = document.getElementById("sendBtn");
-  var continueBtn = document.getElementById("continueBtn");
-  var gateStatus = document.getElementById("gateStatus");
-  var message = document.getElementById("message");
-  var plugBox = document.getElementById("plugBox");
-
-  var plugState = {
-    config: "checking",
-    email: "waiting",
-    redirect: "waiting",
-    session: "waiting",
-    room: "waiting"
-  };
-
-  function renderPlugTrace() {
-    plugBox.innerText =
-      "PLUG TRACE:\n" +
-      "config plug: " + plugState.config + "\n" +
-      "email plug: " + plugState.email + "\n" +
-      "redirect plug: " + plugState.redirect + "\n" +
-      "session plug: " + plugState.session + "\n" +
-      "room plug: " + plugState.room;
-  }
-
-  function setPlug(name, value) {
-    plugState[name] = value;
-    renderPlugTrace();
-  }
-
-  function setStatus(statusText, messageText, isError) {
-    gateStatus.innerText = statusText;
-    message.innerText = messageText || "";
-
-    if (isError) {
-      message.classList.add("error");
-    } else {
-      message.classList.remove("error");
-    }
-  }
-
-  function validEmail(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-  }
-
-  function sanitizeNext(value) {
-    if (!value) {
-      return DEFAULT_NEXT;
+    function setStatus(text, color) {
+        const status = document.getElementById("status");
+        status.innerHTML = text;
+        status.style.color = color;
     }
 
-    if (value.indexOf("/") !== 0 || value.indexOf("//") === 0) {
-      return DEFAULT_NEXT;
+    function setPlug(text) {
+        document.getElementById("plugtrace").innerHTML = text;
     }
 
-    if (value.indexOf("/page2.html") === 0) {
-      return DEFAULT_NEXT;
+    function validEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 
-    if (value.indexOf("/verify-success.html") === 0) {
-      return DEFAULT_NEXT;
-    }
+    window.sendLink = async function sendLink() {
+        const emailInput = document.getElementById("email");
+        const websiteInput = document.getElementById("website");
+        const button = document.getElementById("sendButton");
 
-    return value;
-  }
+        const email = emailInput.value.trim().toLowerCase();
+        const website = websiteInput.value.trim();
 
-  function getNextPath() {
-    var params = new URLSearchParams(window.location.search);
-    return sanitizeNext(params.get("next") || DEFAULT_NEXT);
-  }
+        if (website) {
+            setStatus("Entry request blocked.", "#ff4444");
 
-  function setControlsForVerified(nextPath) {
-    if (sendBtn) {
-      sendBtn.style.display = "none";
-    }
+            setPlug(
+`config plug: worker auth lane active
+email plug: FAILED - bot_field_triggered
+redirect plug: next = ${NEXT_PATH}
+session plug: waiting
+room plug: idle`
+            );
 
-    if (continueBtn) {
-      continueBtn.href = nextPath;
-      continueBtn.style.display = "block";
-    }
-  }
-
-  async function checkExistingSession() {
-    var nextPath = getNextPath();
-
-    setPlug("config", "worker auth lane active");
-    setPlug("redirect", "next = " + nextPath);
-    setPlug("session", "checking " + SESSION_ENDPOINT);
-    setStatus("CHECKING", "Looking for verified CyberCrowd session.", false);
-
-    try {
-      var response = await fetch(
-        SESSION_ENDPOINT,
-        {
-          method: "GET",
-          headers: {
-            "Accept": "application/json"
-          }
+            return;
         }
-      );
 
-      var data = await response.json();
+        if (!email || !validEmail(email)) {
+            setStatus("Valid email required.", "#ff4444");
 
-      if (data && data.verified === true) {
-        setPlug("session", "verified cookie found: " + (data.email || "user"));
-        setPlug("room", "ready = " + nextPath);
-        setStatus("VERIFIED", "Verified session active. Enter CyberCrowd.", false);
-        setControlsForVerified(nextPath);
-        return;
-      }
+            setPlug(
+`config plug: worker auth lane active
+email plug: FAILED - invalid_email
+redirect plug: next = ${NEXT_PATH}
+session plug: waiting
+room plug: idle`
+            );
 
-      setPlug("session", "no verified cookie yet");
-      setStatus("WAITING", "Enter email to receive your entry link.", false);
-    } catch (error) {
-      setPlug("session", "FAILED - " + error.message);
-      setStatus("SESSION CHECK FAILED", "Enter email to request a fresh link.", true);
-    }
-  }
-
-  async function sendEntryLink() {
-    var cleanEmail = emailInput.value.trim().toLowerCase();
-    var nextPath = getNextPath();
-    var response;
-    var data;
-
-    if (websiteInput && websiteInput.value.trim()) {
-      setPlug("email", "blocked - honeypot field filled");
-      setStatus("BLOCKED", "Entry request blocked.", true);
-      return;
-    }
-
-    if (!validEmail(cleanEmail)) {
-      setPlug("email", "blocked - invalid email");
-      setStatus("BLOCKED", "Valid email required.", true);
-      return;
-    }
-
-    sendBtn.disabled = true;
-    sendBtn.innerText = "SENDING";
-
-    setPlug("email", "posting to " + START_ENDPOINT);
-    setPlug("redirect", "next = " + nextPath);
-    setPlug("session", "pending email click");
-    setStatus("SENDING", "Sending live CyberCrowd entry link.", false);
-
-    localStorage.setItem("cc_pending_email", cleanEmail);
-    localStorage.setItem("cc_requested_next", nextPath);
-    localStorage.setItem("cc_requested_tier", "visitor");
-
-    try {
-      response = await fetch(
-        START_ENDPOINT,
-        {
-          method: "POST",
-          headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email: cleanEmail,
-            next: nextPath,
-            tier: "visitor",
-            humanConfirmed: true,
-            human_confirmed: true
-          })
+            return;
         }
-      );
 
-      data = await response.json();
-    } catch (error) {
-      sendBtn.disabled = false;
-      sendBtn.innerText = "SEND ENTRY LINK";
+        button.disabled = true;
+        button.innerHTML = "SENDING";
 
-      setPlug("email", "FAILED - request threw error");
-      setStatus("SEND FAILED", error.message, true);
-      return;
-    }
+        setStatus("Sending live entry link...", "#00eaff");
 
-    sendBtn.disabled = false;
-    sendBtn.innerText = "SEND ENTRY LINK";
+        setPlug(
+`config plug: worker auth lane active
+email plug: posting to ${START_ENDPOINT}
+redirect plug: next = ${NEXT_PATH}
+session plug: pending email click
+room plug: sealed`
+        );
 
-    if (!response.ok || !data || data.success !== true) {
-      setPlug("email", "FAILED - " + (data && data.status ? data.status : "request failed"));
-      setStatus(
-        "SEND FAILED",
-        data && data.message ? data.message : "Verification email was not sent.",
-        true
-      );
-      return;
-    }
+        try {
+            const response = await fetch(
+                START_ENDPOINT,
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json",
+                        "Accept":"application/json"
+                    },
+                    body:JSON.stringify({
+                        email:email,
+                        tier:"visitor",
+                        next:NEXT_PATH,
+                        humanConfirmed:true,
+                        human_confirmed:true
+                    })
+                }
+            );
 
-    setPlug("email", "accepted by " + (data.provider || "email provider"));
-    setPlug("redirect", "email link will verify and continue to " + (data.next || nextPath));
-    setPlug("session", "pending email click");
+            const data = await response.json();
 
-    setStatus(
-      "EMAIL SENT",
-      "Check your inbox. One click verifies CyberCrowd access.",
-      false
-    );
-  }
+            button.disabled = false;
+            button.innerHTML = "SEND ENTRY LINK";
 
-  sendBtn.addEventListener("click", function() {
-    sendEntryLink();
-  });
+            if (!response.ok || !data || data.success !== true) {
+                const statusCode = data && data.status ? data.status : "request_failed";
+                const message = data && data.message ? data.message : "Entry link failed.";
 
-  emailInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      sendEntryLink();
-    }
-  });
+                setStatus(message, "#ff4444");
 
-  renderPlugTrace();
-  checkExistingSession();
+                setPlug(
+`config plug: worker auth lane active
+email plug: FAILED - ${statusCode}
+redirect plug: next = ${NEXT_PATH}
+session plug: waiting
+room plug: idle`
+                );
+
+                return;
+            }
+
+            const delivery =
+                data.emailDelivery ||
+                data.status ||
+                "link_dispatched";
+
+            setStatus("Entry link sent. Check your inbox.", "#00ff99");
+
+            setPlug(
+`config plug: worker auth lane active
+email plug: OK - ${delivery}
+redirect plug: next = ${NEXT_PATH}
+session plug: awaiting user click
+room plug: sealed`
+            );
+
+        } catch(error) {
+            button.disabled = false;
+            button.innerHTML = "SEND ENTRY LINK";
+
+            setStatus("Connection failed: " + error.message, "#ff4444");
+
+            setPlug(
+`config plug: worker auth lane active
+email plug: FAILED - connection_error
+redirect plug: next = ${NEXT_PATH}
+session plug: waiting
+room plug: idle`
+            );
+        }
+    };
 })();
 </script>
 
