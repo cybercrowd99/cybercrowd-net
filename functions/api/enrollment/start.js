@@ -425,17 +425,59 @@ CyberCrowd Support: ${safeReplyTo}
       )
       .run();
 
+    // Create session cookie immediately — email is receipt, not gate
+    const sessionSecret = context.env.CC_SESSION_SECRET || "";
+
+    if (!sessionSecret) {
+      return Response.json(
+        {
+          success: false,
+          status: "session_secret_missing",
+          message: "CC_SESSION_SECRET is missing. Access cookie cannot be created.",
+          emailDelivery: "accepted_by_resend"
+        },
+        {
+          status: 500,
+          headers: {
+            "Cache-Control": "no-store"
+          }
+        }
+      );
+    }
+
+    const now = Math.floor(Date.now() / 1000);
+
+    const token = await createSignedToken(
+      {
+        type: "session",
+        email,
+        enrollmentId,
+        tier,
+        iat: now,
+        exp: now + 604800
+      },
+      sessionSecret
+    );
+
+    const cookieValue = [
+      "cc_access=" + encodeURIComponent(token),
+      "Path=/",
+      "HttpOnly",
+      "Secure",
+      "SameSite=Lax",
+      "Max-Age=604800"
+    ].join("; ");
+
     return Response.json(
       {
         success: true,
-        status: "enrollment_started",
-        message: "CyberCrowd enrollment started. Check your inbox.",
+        status: "access_granted_email_receipt_sent",
+        message: "Access verified. Opening CyberCrowd.",
+        emailDelivery: "accepted_by_resend",
+        openPath: "/nav.html",
         email,
         tier,
-        tierLabel,
         enrollmentId,
-        nextStep,
-        emailDelivery: "accepted_by_resend",
         resendEmailId,
         senderUsed: fromEmail,
         replyToEmail
@@ -443,7 +485,8 @@ CyberCrowd Support: ${safeReplyTo}
       {
         status: 200,
         headers: {
-          "Cache-Control": "no-store"
+          "Cache-Control": "no-store",
+          "Set-Cookie": cookieValue
         }
       }
     );
@@ -473,4 +516,51 @@ function escapeHtml(value) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function textEncoder() {
+  return new TextEncoder();
+}
+
+function base64UrlEncodeBytes(bytes) {
+  let binary = "";
+
+  for (let i = 0; i < bytes.length; i += 1) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
+}
+
+async function signPayloadPart(payloadPart, secret) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    textEncoder().encode(secret),
+    {
+      name: "HMAC",
+      hash: "SHA-256"
+    },
+    false,
+    ["sign"]
+  );
+
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    textEncoder().encode(payloadPart)
+  );
+
+  return new Uint8Array(signature);
+}
+
+async function createSignedToken(payload, secret) {
+  const payloadJson = JSON.stringify(payload);
+  const payloadPart = base64UrlEncodeBytes(textEncoder().encode(payloadJson));
+  const signatureBytes = await signPayloadPart(payloadPart, secret);
+  const signaturePart = base64UrlEncodeBytes(signatureBytes);
+
+  return payloadPart + "." + signaturePart;
 }
