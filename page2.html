@@ -2,127 +2,180 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SECURITY GATE</title>
+<title>CYBERCROWD SECURITY GATE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
 
 <style>
-    body {
-        background:#000;
-        color:#e5e5e5;
-        font-family:Arial, sans-serif;
-        margin:0;
-        padding:0;
-        text-align:center;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    .wrap {
-        padding:40px 20px;
-        max-width:420px;
-        margin:auto;
-    }
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-    h1 {
-        font-size:32px;
-        margin-bottom:10px;
-        letter-spacing:1px;
-    }
+body {
+    background:
+        radial-gradient(circle at 50% 18%, rgba(0,255,255,0.14), transparent 38%),
+        radial-gradient(circle at 12% 80%, rgba(0,255,170,0.08), transparent 32%),
+        #040606;
+    color: #eaffff;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+}
 
-    .sub {
-        font-size:14px;
-        opacity:0.8;
-        margin-bottom:30px;
-        line-height:1.5em;
-    }
+.wrap {
+    width: min(460px, calc(100% - 28px));
+    margin: 0 auto;
+    padding: 48px 0;
+}
 
-    input {
-        width:100%;
-        padding:14px;
-        border:none;
-        border-radius:6px;
-        margin-bottom:20px;
-        font-size:16px;
-        box-sizing:border-box;
-    }
+.gatePanel {
+    border: 1px solid rgba(0,255,255,0.34);
+    border-radius: 24px;
+    padding: 24px;
+    background:
+        linear-gradient(180deg, rgba(0,255,255,0.055), rgba(0,255,170,0.025)),
+        rgba(0,0,0,0.48);
+    box-shadow:
+        0 0 30px rgba(0,255,255,0.12),
+        0 24px 70px rgba(0,0,0,0.48);
+}
 
-    button {
-        width:100%;
-        padding:16px;
-        background:#00eaff;
-        border:none;
-        border-radius:6px;
-        font-size:18px;
-        font-weight:bold;
-        cursor:pointer;
-    }
+h1 {
+    margin: 0 0 10px;
+    color: #00ffff;
+    font-size: 31px;
+    letter-spacing: 2px;
+    line-height: 1.1;
+}
 
-    button:disabled {
-        opacity:0.55;
-        cursor:not-allowed;
-    }
+.sub {
+    color: rgba(234,255,255,0.72);
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 28px;
+}
 
-    .status {
-        margin-top:20px;
-        color:#ff4444;
-        font-size:14px;
-        font-weight:bold;
-        min-height:22px;
-        line-height:1.5em;
-    }
+input {
+    width: 100%;
+    padding: 15px 14px;
+    border: 1px solid rgba(0,255,255,0.28);
+    border-radius: 14px;
+    background: rgba(0,0,0,0.48);
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 14px;
+}
 
-    .plugbox {
-        margin-top:40px;
-        text-align:left;
-        font-family:monospace;
-        font-size:13px;
-        background:#111;
-        padding:15px;
-        border-radius:6px;
-        line-height:1.4em;
-        white-space:pre-line;
-        word-break:break-word;
-    }
+input:focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 14px rgba(0,255,255,0.14);
+}
 
-    footer {
-        margin-top:40px;
-        font-size:12px;
-        opacity:0.6;
-    }
+input::placeholder {
+    color: rgba(234,255,255,0.42);
+}
 
-    .hidden-field {
-        display:none;
-    }
+button {
+    width: 100%;
+    border: 0;
+    border-radius: 14px;
+    padding: 15px 14px;
+    background: linear-gradient(90deg, #00ffff, #00ffaa);
+    color: #001111;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 0 22px rgba(0,255,255,0.28);
+}
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.status {
+    margin-top: 18px;
+    min-height: 24px;
+    color: #ff4f64;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.plugbox {
+    margin-top: 26px;
+    text-align: left;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 12px;
+    line-height: 1.45;
+    color: rgba(234,255,255,0.78);
+    background: rgba(0,0,0,0.44);
+    border: 1px solid rgba(0,255,255,0.18);
+    border-radius: 16px;
+    padding: 14px;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+footer {
+    margin-top: 22px;
+    color: rgba(234,255,255,0.48);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.hidden-field {
+    display: none;
+}
 </style>
 </head>
 
 <body>
 
 <div class="wrap">
+    <div class="gatePanel">
+        <h1>SECURITY GATE</h1>
 
-    <h1>SECURITY GATE</h1>
+        <div class="sub">
+            Enter your email to open CyberCrowd.<br>
+            Email is the identity base. The session opens the room.
+        </div>
 
-    <div class="sub">
-        Enter your email. CyberCrowd verifies access.<br>
-        Email remains active as receipt only.
-    </div>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
 
-    <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+        <input id="website" class="hidden-field" type="text" tabindex="-1" autocomplete="off">
 
-    <input id="website" class="hidden-field" type="text" tabindex="-1" autocomplete="off">
+        <button id="sendButton" onclick="sendLink()">OPEN CYBERCROWD</button>
 
-    <button id="sendButton" onclick="sendLink()">SEND ENTRY LINK</button>
+        <div id="status" class="status"></div>
 
-    <div id="status" class="status"></div>
-
-    <div class="plugbox" id="plugtrace">config plug: worker auth lane active
+        <div class="plugbox" id="plugtrace">config plug: worker auth lane active
 email plug: waiting
 redirect plug: next = /nav.html
 session plug: pending email submit
 room plug: idle</div>
 
-    <footer>
-        PAGE2 WORKER SECURITY · RESEND EMAIL RECEIPT · COOKIE VERIFY
-    </footer>
-
+        <footer>
+            PAGE2 SECURITY GATE · EMAIL RECEIPT · COOKIE VERIFY
+        </footer>
+    </div>
 </div>
 
 <script>
@@ -155,7 +208,7 @@ room plug: idle</div>
         const website = websiteInput.value.trim();
 
         if (website) {
-            setStatus("Entry request blocked.", "#ff4444");
+            setStatus("Entry request blocked.", "#ff4f64");
 
             setPlug(
 `config plug: worker auth lane active
@@ -169,7 +222,7 @@ room plug: idle`
         }
 
         if (!email || !validEmail(email)) {
-            setStatus("Valid email required.", "#ff4444");
+            setStatus("Valid email required.", "#ff4f64");
 
             setPlug(
 `config plug: worker auth lane active
@@ -185,7 +238,7 @@ room plug: idle`
         button.disabled = true;
         button.innerHTML = "VERIFYING";
 
-        setStatus("Verifying CyberCrowd access...", "#00eaff");
+        setStatus("Verifying CyberCrowd access...", "#00ffff");
 
         setPlug(
 `config plug: worker auth lane active
@@ -199,17 +252,17 @@ room plug: sealed`
             const response = await fetch(
                 START_ENDPOINT,
                 {
-                    method:"POST",
-                    headers:{
-                        "Content-Type":"application/json",
-                        "Accept":"application/json"
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
                     },
-                    body:JSON.stringify({
-                        email:email,
-                        tier:"visitor",
-                        next:NEXT_PATH,
-                        humanConfirmed:true,
-                        human_confirmed:true
+                    body: JSON.stringify({
+                        email: email,
+                        tier: "visitor",
+                        next: NEXT_PATH,
+                        humanConfirmed: true,
+                        human_confirmed: true
                     })
                 }
             );
@@ -218,12 +271,12 @@ room plug: sealed`
 
             if (!response.ok || !data || data.success !== true) {
                 button.disabled = false;
-                button.innerHTML = "SEND ENTRY LINK";
+                button.innerHTML = "OPEN CYBERCROWD";
 
                 const statusCode = data && data.status ? data.status : "request_failed";
                 const message = data && data.message ? data.message : "Entry request failed.";
 
-                setStatus(message, "#ff4444");
+                setStatus(message, "#ff4f64");
 
                 setPlug(
 `config plug: worker auth lane active
@@ -245,7 +298,7 @@ room plug: idle`
                 data.openPath ||
                 NEXT_PATH;
 
-            setStatus("Access verified. Opening CyberCrowd.", "#00ff99");
+            setStatus("Access verified. Opening CyberCrowd.", "#00ffaa");
 
             setPlug(
 `config plug: worker auth lane active
@@ -257,15 +310,15 @@ room plug: open`
 
             button.innerHTML = "OPENING";
 
-            setTimeout(function() {
+            window.setTimeout(function() {
                 window.location.href = openPath;
-            }, 1500);
+            }, 1200);
 
         } catch(error) {
             button.disabled = false;
-            button.innerHTML = "SEND ENTRY LINK";
+            button.innerHTML = "OPEN CYBERCROWD";
 
-            setStatus("Connection failed: " + error.message, "#ff4444");
+            setStatus("Connection failed: " + error.message, "#ff4f64");
 
             setPlug(
 `config plug: worker auth lane active
