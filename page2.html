@@ -217,8 +217,9 @@ nav plug: locked until email link click</div>
       return DEFAULT_NEXT_PATH;
     }
 
-    if (next === "/page2.html" || next.startsWith("/page2.html?")) {
-      return DEFAULT_NEXT_PATH;
+    /* CHANGE 1 — remove page2 block */
+    if (next === "/verify-success.html" || next.startsWith("/verify-success.html")) {
+      return "/verify-success.html";
     }
 
     return next;
