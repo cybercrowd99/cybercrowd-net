@@ -18,5 +18,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          projectName: YOUR_REAL_CLOUDFLARE_PROJECT_NAME
+          projectName: cybercrowd-net
           directory: ./
