@@ -20,3 +20,4 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           projectName: cybercrowd99
           directory: ./
+          buildCommand: ""
