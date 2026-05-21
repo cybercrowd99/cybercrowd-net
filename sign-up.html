@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberCrowd Sign Up</title>
+
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+        height:100vh;
+        width:100vw;
+        background:#020608;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        font-family:Arial, sans-serif;
+        color:#e9fff7;
+    }
+
+    .panel {
+        width:420px;
+        background:rgba(0,0,0,0.75);
+        border:1px solid #0aff9d55;
+        border-radius:16px;
+        padding:28px;
+        backdrop-filter:blur(10px);
+    }
+
+    h1 {
+        color:#0aff9d;
+        margin-bottom:10px;
+        text-align:center;
+    }
+
+    p {
+        color:#b6ffe4;
+        margin-bottom:20px;
+        text-align:center;
+        font-size:0.95rem;
+    }
+
+    label {
+        display:block;
+        margin-bottom:6px;
+        font-size:0.9rem;
+    }
+
+    input {
+        width:100%;
+        padding:10px;
+        border-radius:8px;
+        border:1px solid #1f3b34;
+        background:#020608;
+        color:#e9fff7;
+        margin-bottom:14px;
+    }
+
+    .btn {
+        width:100%;
+        padding:12px;
+        border-radius:8px;
+        border:none;
+        background:#0aff9d;
+        color:#000;
+        font-weight:bold;
+        cursor:pointer;
+        margin-bottom:10px;
+        font-size:1rem;
+    }
+
+    .btn-secondary {
+        width:100%;
+        padding:10px;
+        border-radius:8px;
+        border:1px solid #0aff9d;
+        background:transparent;
+        color:#0aff9d;
+        cursor:pointer;
+        font-size:0.95rem;
+    }
+</style>
+</head>
+
+<body>
+
+    <div class="panel">
+        <h1>Create Account</h1>
+        <p>Sign up to access the CyberCrowd vault.</p>
+
+        <form action="dashboard.html" method="POST">
+            <label for="handle">Handle</label>
+            <input id="handle" name="handle" type="text" required>
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+
+            <label for="password">Passphrase</label>
+            <input id="password" name="password" type="password" required>
+
+            <button class="btn" type="submit">Create Account</button>
+        </form>
+
+        <button class="btn-secondary" onclick="window.location.href='sign-in.html'">
+            Already have an account? Sign In
+        </button>
+    </div>
+
+</body>
+</html>
