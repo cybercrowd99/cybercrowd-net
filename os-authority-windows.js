@@ -110,7 +110,7 @@ function moveMouseByRatio(xRatio, yRatio) {
         x +
         "," +
         y +
-        ");";
+        ")";
 
     execFile(
         "powershell.exe",
@@ -138,7 +138,7 @@ function clickMouse() {
         "'@;" +
         "[Mouse]::mouse_event(0x0002,0,0,0,0);" +
         "Start-Sleep -Milliseconds 40;" +
-        "[Mouse]::mouse_event(0x0004,0,0,0,0);";
+        "[Mouse]::mouse_event(0x0004,0,0,0,0)";
 
     execFile(
         "powershell.exe",
