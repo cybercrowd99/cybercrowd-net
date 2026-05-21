@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WDIG License Activated</title>
+</head>
+<body style="background:#000;color:#7CFF7C;font-family:Arial;text-align:center;padding:40px;">
+  <h1>WDIG License Payment Complete</h1>
+  <p>Click below to activate this device.</p>
+
+  <a id="activate-link" style="color:#7CFF7C;border:1px solid #7CFF7C;padding:12px 18px;display:inline-block;text-decoration:none;">
+    Activate WDIG Node
+  </a>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get("session_id");
+
+    document.getElementById("activate-link").href =
+      "http://localhost:8787/claim-license?session_id=" + encodeURIComponent(sessionId);
+  </script>
+</body>
+</html>
