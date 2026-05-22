@@ -8,24 +8,24 @@
     body {
       margin: 0;
       background: #000;
-      height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
+      width: 100%;
+      height: auto;
     }
 
     .vault-frame {
       position: relative;
       width: 100%;
       max-width: 1600px;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
+      height: auto;          /* full image height preserved */
+      overflow: visible;     /* no cropping */
     }
 
     .vault-frame img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;          /* full image displayed */
       display: block;
     }
 
@@ -70,10 +70,13 @@
     .teaser-hitbox {
       position: absolute;
       cursor: pointer;
+
+      /* adjust to match the display case on the full image */
       top: 26%;
       left: 36%;
       width: 28%;
       height: 42%;
+
       background: rgba(255,0,0,0);
     }
   </style>
