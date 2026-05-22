@@ -23,19 +23,19 @@
       overflow: visible;
     }
 
-    /* FULL IMAGE — RESPONSIVE SCALING */
+    /* DESKTOP PHYSICS (DEFAULT) */
     .vault-frame img {
       width: 100%;
       height: auto;
-      max-height: 100vh;     /* fits desktop */
-      object-fit: contain;   /* preserves full image */
+      max-height: none;      /* full image on desktop */
+      object-fit: contain;
       display: block;
     }
 
-    /* ANDROID / MOBILE OVERRIDE */
+    /* MOBILE PHYSICS (PHONE ONLY) */
     @media (max-width: 768px) {
       .vault-frame img {
-        max-height: 100vh;   /* fits phone screen */
+        max-height: 100vh;   /* scale to phone viewport */
         width: 100%;
         height: auto;
       }
@@ -56,17 +56,11 @@
       user-select: none;
     }
 
-    @keyframes breathe {
-      0%   { box-shadow: 0 0 8px rgba(212,175,55,0.35); }
-      50%  { box-shadow: 0 0 22px rgba(212,175,55,0.75); }
-      100% { box-shadow: 0 0 8px rgba(212,175,55,0.35); }
-    }
-
+    /* POSITIONS MATCH IMAGE COORDINATES */
     .register {
       top: 6%;
       left: 50%;
       transform: translateX(-50%);
-      animation: breathe 2.3s ease-in-out infinite;
     }
 
     .about {
@@ -95,9 +89,10 @@
   <div class="vault-frame">
     <img src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png" />
 
-    <div class="plaque register">Register</div>
-    <div class="plaque about">About Us</div>
-    <div class="plaque contents">Contents</div>
+    <!-- INTENTIONAL ERROR TARGETS UNTIL REAL PAGES EXIST -->
+    <div class="plaque register" onclick="location.href='errors/10000.html'">Register</div>
+    <div class="plaque about" onclick="location.href='errors/10000.html'">About Us</div>
+    <div class="plaque contents" onclick="location.href='errors/10000.html'">Contents</div>
 
     <div class="teaser-hitbox" onclick="playRandomTeaser()"></div>
   </div>
