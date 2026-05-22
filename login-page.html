@@ -10,10 +10,13 @@
     background: #000;
   }
 
-  /* IMAGE CONTAINER — REQUIRED BASE LAYER */
+  /* IMAGE CONTAINER — CORRECT NON-ZOOM MATH */
   .r2-image-container {
     width: 100%;
     height: auto;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #000;
     position: relative;
   }
 
@@ -21,6 +24,7 @@
     width: 100%;
     height: auto;
     display: block;
+    object-fit: contain;
   }
 
   /* BRASS PLATES */
@@ -49,7 +53,6 @@
     transform: translateY(-2px);
   }
 
-  /* BREATHING ANIMATION */
   @keyframes brass-breath {
     0%   { filter: brightness(1.0); }
     50%  { filter: brightness(1.25); }
@@ -88,17 +91,14 @@
 
 <body>
 
-<!-- YOUR R2 IMAGE — HARD LOCKED, NEVER CHANGED -->
 <div class="r2-image-container">
   <img src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png">
 </div>
 
-<!-- BRASS BUTTONS -->
 <div class="brass-plate register-btn" onclick="openNAV()">Register</div>
 <div class="brass-plate about-btn" onclick="goAbout()">About</div>
 <div class="brass-plate contents-btn" onclick="goContents()">Contents</div>
 
-<!-- TEASER HITBOX -->
 <div class="glass-hitbox" onclick="playRandomTeaser()"></div>
 
 <script>
@@ -106,7 +106,6 @@
     window.location.href = "nav.html"; 
   }
 
-  /* ABOUT → README.md (context page) */
   function goAbout() {
     window.location.href = "README.md";
   }
@@ -115,16 +114,23 @@
     window.location.href = "contents.html";
   }
 
-  /* CYBERCROWD TEASERS — FIXED PATH */
-  const teaserFiles = [
-    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser1.mp3",
-    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser2.mp3",
-    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser3.mp3",
-    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser4.mp3"
-  ];
+  /* GLOBAL CYBERCROWD TEASERS — AUTO-GENERATED 500 TRACKS */
+  const globalTeasers = Array.from({ length: 500 }, (_, i) =>
+    `https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/track${String(i+1).padStart(3,'0')}.60s.teaser.mp3`
+  );
 
+  /* USER TEASERS — UP TO 3 (POPULATED LATER IN PROFILE CREATION) */
+  let userTeasers = [];
+
+  /* MERGED PLAYLIST */
+  function getFullPlaylist() {
+    return [...globalTeasers, ...userTeasers];
+  }
+
+  /* RANDOM PLAYER */
   function playRandomTeaser() {
-    const pick = teaserFiles[Math.floor(Math.random() * teaserFiles.length)];
+    const playlist = getFullPlaylist();
+    const pick = playlist[Math.floor(Math.random() * playlist.length)];
     new Audio(pick).play();
   }
 </script>
