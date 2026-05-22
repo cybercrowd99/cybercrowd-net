@@ -23,10 +23,22 @@
       overflow: visible;
     }
 
+    /* FULL IMAGE — RESPONSIVE SCALING */
     .vault-frame img {
       width: 100%;
       height: auto;
+      max-height: 100vh;     /* fits desktop */
+      object-fit: contain;   /* preserves full image */
       display: block;
+    }
+
+    /* ANDROID / MOBILE OVERRIDE */
+    @media (max-width: 768px) {
+      .vault-frame img {
+        max-height: 100vh;   /* fits phone screen */
+        width: 100%;
+        height: auto;
+      }
     }
 
     .plaque {
