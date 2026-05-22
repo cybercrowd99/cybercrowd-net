@@ -6,184 +6,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
-    body {
+    html, body {
       margin: 0;
-      background: #000;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: #e8e8e8;
-    }
-
-    .frame {
-      width: 900px;
-      max-width: 95%;
-      background: #0a0c10;
-      border: 1px solid #1c1f26;
-      border-radius: 14px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(0, 255, 255, 0.12);
-    }
-
-    .left {
-      background: #000;
-      position: relative;
-    }
-
-    .left img {
+      padding: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      opacity: 1;
+      background: #000;
+      overflow: hidden;
     }
 
-    .right {
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      background: #0d1117;
+    /* FULL WINDOW VAULT IMAGE */
+    .vault-bg {
+      position: fixed;
+      inset: 0;
+      background-image: url('https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 1;
     }
 
-    h2 {
-      margin: 0;
-      font-size: 20px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #4fd1c5;
-    }
-
-    label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #9aa0ac;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: 8px;
-      border: 1px solid #222831;
-      background: #0b0f14;
-      color: #e8e8e8;
-      font-size: 14px;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #4fd1c5;
-      box-shadow: 0 0 6px rgba(79, 209, 197, 0.4);
-    }
-
-    .btn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 999px;
-      border: none;
+    /* INVISIBLE OVERLAY GRID */
+    .hit-register,
+    .hit-about,
+    .hit-contents,
+    .hit-center {
+      position: absolute;
       cursor: pointer;
-      font-size: 13px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      z-index: 3;
     }
 
-    .primary {
-      background: linear-gradient(135deg, #4fd1c5, #2b6cb0);
-      color: #000;
+    /* REGISTER — breathing brass */
+    .hit-register {
+      top: 10%;
+      left: 50%;
+      width: 200px;
+      height: 60px;
+      transform: translateX(-50%);
+      animation: registerPulse 6s ease-in-out infinite;
     }
 
-    .secondary {
-      background: #11151c;
-      color: #e8e8e8;
-      border: 1px solid #2a303c;
+    @keyframes registerPulse {
+      0%   { transform: translateX(-50%) scale(1); }
+      5%   { transform: translateX(-50%) scale(1.025); }
+      10%  { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1); }
     }
 
-    .link {
-      margin-top: 6px;
-      font-size: 12px;
-      color: #4fd1c5;
-      cursor: pointer;
-      text-decoration: none;
+    /* ABOUT US — static */
+    .hit-about {
+      bottom: 10%;
+      left: 10%;
+      width: 180px;
+      height: 60px;
     }
 
-    .error {
-      color: #ff6b6b;
-      font-size: 12px;
-      min-height: 14px;
-      margin-top: 4px;
+    /* CONTENTS — static */
+    .hit-contents {
+      bottom: 10%;
+      right: 10%;
+      width: 180px;
+      height: 60px;
     }
 
-    @media (max-width: 800px) {
-      .frame {
-        grid-template-columns: 1fr;
-      }
-      .left {
-        display: none;
-      }
+    /* CENTER TOUCH ZONE */
+    .hit-center {
+      top: 32%;
+      left: 50%;
+      width: 260px;
+      height: 260px;
+      transform: translateX(-50%);
     }
   </style>
 </head>
 
 <body>
-  <div class="frame">
 
-    <!-- LEFT SIDE: YOUR EXACT IMAGE ONLY -->
-    <div class="left">
-      <img src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png" />
-    </div>
+  <!-- FULL WINDOW VAULT IMAGE -->
+  <div class="vault-bg"></div>
 
-    <!-- RIGHT SIDE: LOGIN PANEL -->
-    <div class="right">
-      <h2>CyberCrowd Access</h2>
+  <!-- INVISIBLE TOUCH GRID -->
+  <div class="hit-register" onclick="window.location.href='register.html'"></div>
+  <div class="hit-about" onclick="window.location.href='about.html'"></div>
+  <div class="hit-contents" onclick="window.location.href='contents.html'"></div>
+  <div class="hit-center" onclick="window.location.href='teaser.html'"></div>
 
-      <label>Email</label>
-      <input id="email" type="email" autocomplete="email" />
-
-      <label>Password</label>
-      <input id="password" type="password" autocomplete="current-password" />
-
-      <div class="error" id="error"></div>
-
-      <button class="btn primary" id="loginBtn">Login</button>
-      <button class="btn secondary" id="signupBtn">Sign Up</button>
-
-      <a class="link" id="roomsLink">Enter Reading Rooms</a>
-      <a class="link" id="homeLink">Return to Landing</a>
-    </div>
-  </div>
-
-  <script>
-    const errorBox = document.getElementById("error");
-
-    document.getElementById("loginBtn").onclick = () => {
-      const email = document.getElementById("email").value.trim();
-      const pass = document.getElementById("password").value.trim();
-
-      if (!email || !pass) {
-        errorBox.textContent = "Email and password required.";
-        return;
-      }
-
-      errorBox.textContent = "Local login simulated. Wire backend when ready.";
-    };
-
-    document.getElementById("signupBtn").onclick = () => {
-      errorBox.textContent = "Signup window not wired yet.";
-    };
-
-    document.getElementById("roomsLink").onclick = () => {
-      errorBox.textContent = "Point this link to your reading rooms.";
-    };
-
-    document.getElementById("homeLink").onclick = () => {
-      window.location.href = "index.html";
-    };
-  </script>
 </body>
 </html>
