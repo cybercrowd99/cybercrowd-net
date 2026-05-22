@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CyberCrowd Vault</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .vault-frame {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .vault-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .plaque {
+      position: absolute;
+      padding: 12px 28px;
+      background: linear-gradient(145deg, #b08d3a, #7a5f24);
+      border: 2px solid #d4af37;
+      color: #f8f3e7;
+      font-family: "Segoe UI", sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(0,0,0,0.6);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.15s ease;
+    }
+
+    .plaque:hover {
+      transform: scale(1.04);
+    }
+
+    @keyframes breathe {
+      0%   { box-shadow: 0 0 8px rgba(212,175,55,0.35); }
+      50%  { box-shadow: 0 0 22px rgba(212,175,55,0.75); }
+      100% { box-shadow: 0 0 8px rgba(212,175,55,0.35); }
+    }
+
+    /* Positions – adjust only if YOU decide to */
+    .register {
+      top: 6%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: breathe 2.3s ease-in-out infinite;
+    }
+
+    .about {
+      bottom: 6%;
+      left: 8%;
+    }
+
+    .contents {
+      bottom: 6%;
+      right: 8%;
+    }
+
+    /* Invisible Easter egg – CENTER of the white/glass area */
+    .teaser-hitbox {
+      position: absolute;
+      /* These percentages assume the white square is roughly central.
+         You can tweak these numbers ONLY if you want to refine alignment. */
+      top: 32%;
+      left: 38%;
+      width: 24%;
+      height: 20%;
+      cursor: pointer;
+      background: transparent;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="vault-frame">
+    <img src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png" alt="CyberCrowd Vault Background" />
+
+    <!-- Visible brass plaques with forced errors -->
+    <div class="plaque register" onclick="forcedError('register')">Register</div>
+    <div class="plaque about" onclick="forcedError('about')">About</div>
+    <div class="plaque contents" onclick="forcedError('contents')">Contents</div>
+
+    <!-- Invisible Easter egg: center of white square / glass case -->
+    <div class="teaser-hitbox" onclick="playRandomTeaser()"></div>
+  </div>
+
+  <script>
+    // Forced error on purpose, per your instruction
+    function forcedError(source) {
+      throw new Error('Forced CyberCrowd vault error from: ' + source);
+    }
+
+    // Random teaser from R2 folder: cybercrowd-teasers/
+    // You control actual filenames; this is a simple pattern example.
+    const teaserFiles = [
+      'cybercrowd-teasers/teaser1.mp3',
+      'cybercrowd-teasers/teaser2.mp3',
+      'cybercrowd-teasers/teaser3.mp3'
+    ];
+
+    function playRandomTeaser() {
+      const index = Math.floor(Math.random() * teaserFiles.length);
+      const audio = new Audio(teaserFiles[index]);
+      audio.play().catch(() => {
+        // Silent fail if browser blocks autoplay
+      });
+    }
+  </script>
+</body>
+</html>
