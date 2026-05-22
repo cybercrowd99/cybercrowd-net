@@ -5,6 +5,25 @@
 <title>CyberCrowd Login</title>
 
 <style>
+  body {
+    margin: 0;
+    background: #000;
+  }
+
+  /* IMAGE CONTAINER — REQUIRED BASE LAYER */
+  .r2-image-container {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .r2-image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* BRASS PLATES */
   .brass-plate {
     position: absolute;
     padding: 14px 28px;
@@ -22,6 +41,7 @@
     cursor: pointer;
     user-select: none;
     transition: 0.2s ease;
+    animation: brass-breath 4s ease-in-out infinite;
   }
 
   .brass-plate:hover {
@@ -29,6 +49,14 @@
     transform: translateY(-2px);
   }
 
+  /* BREATHING ANIMATION */
+  @keyframes brass-breath {
+    0%   { filter: brightness(1.0); }
+    50%  { filter: brightness(1.25); }
+    100% { filter: brightness(1.0); }
+  }
+
+  /* BUTTON POSITIONS */
   .register-btn {
     bottom: 8%;
     left: 50%;
@@ -45,6 +73,7 @@
     right: 20%;
   }
 
+  /* TEASER HITBOX */
   .glass-hitbox {
     position: absolute;
     left: 32%;
@@ -59,10 +88,17 @@
 
 <body>
 
+<!-- YOUR R2 IMAGE — HARD LOCKED, NEVER CHANGED -->
+<div class="r2-image-container">
+  <img src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png">
+</div>
+
+<!-- BRASS BUTTONS -->
 <div class="brass-plate register-btn" onclick="openNAV()">Register</div>
 <div class="brass-plate about-btn" onclick="goAbout()">About</div>
 <div class="brass-plate contents-btn" onclick="goContents()">Contents</div>
 
+<!-- TEASER HITBOX -->
 <div class="glass-hitbox" onclick="playRandomTeaser()"></div>
 
 <script>
@@ -70,25 +106,26 @@
     window.location.href = "nav.html"; 
   }
 
+  /* ABOUT → README.md (context page) */
   function goAbout() {
-    window.location.href = "about.html";
+    window.location.href = "README.md";
   }
 
   function goContents() {
     window.location.href = "contents.html";
   }
 
+  /* CYBERCROWD TEASERS — FIXED PATH */
   const teaserFiles = [
-    "https://pub-XXXX.r2.dev/teasers/teaser1.mp3",
-    "https://pub-XXXX.r2.dev/teasers/teaser2.mp3",
-    "https://pub-XXXX.r2.dev/teasers/teaser3.mp3",
-    "https://pub-XXXX.r2.dev/teasers/teaser4.mp3"
+    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser1.mp3",
+    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser2.mp3",
+    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser3.mp3",
+    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser4.mp3"
   ];
 
   function playRandomTeaser() {
     const pick = teaserFiles[Math.floor(Math.random() * teaserFiles.length)];
-    const audio = new Audio(pick);
-    audio.play();
+    new Audio(pick).play();
   }
 </script>
 
