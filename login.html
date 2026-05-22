@@ -2,87 +2,112 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CyberCrowd Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CyberCrowd Vault Entry</title>
 
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
       background: #000;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .vault-frame {
+      position: relative;
+      width: 100%;
+      max-width: 1600px;
+      aspect-ratio: 16 / 9;
       overflow: hidden;
     }
 
-    .vault-bg {
-      position: fixed;
-      inset: 0;
-      background-image: url('https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: 1;
+    .vault-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    .hit-register,
-    .hit-about,
-    .hit-contents,
-    .hit-center {
+    /* Brass plaque base */
+    .plaque {
+      position: absolute;
+      padding: 12px 28px;
+      background: linear-gradient(145deg, #b08d3a, #7a5f24);
+      border: 2px solid #d4af37;
+      color: #f8f3e7;
+      font-family: "Segoe UI", sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(0,0,0,0.6);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Register plaque breathing animation */
+    @keyframes breathe {
+      0%   { box-shadow: 0 0 8px rgba(212,175,55,0.35); }
+      50%  { box-shadow: 0 0 22px rgba(212,175,55,0.75); }
+      100% { box-shadow: 0 0 8px rgba(212,175,55,0.35); }
+    }
+
+    .register {
+      top: 6%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: breathe 2.3s ease-in-out infinite;
+    }
+
+    .about {
+      bottom: 6%;
+      left: 8%;
+    }
+
+    .contents {
+      bottom: 6%;
+      right: 8%;
+    }
+
+    /* Invisible teaser hitbox — positioned over the display case */
+    .teaser-hitbox {
       position: absolute;
       cursor: pointer;
-      background: transparent;
-      z-index: 9999;
-    }
 
-    .hit-register {
-      top: 10%;
-      left: 50%;
-      width: 200px;
-      height: 60px;
-      transform: translateX(-50%);
-      animation: registerPulse 6s ease-in-out infinite;
-    }
+      /* These coordinates match the gallery reference layout */
+      top: 26%;
+      left: 36%;
+      width: 28%;
+      height: 42%;
 
-    @keyframes registerPulse {
-      0%   { transform: translateX(-50%) scale(1); }
-      5%   { transform: translateX(-50%) scale(1.025); }
-      10%  { transform: translateX(-50%) scale(1); }
-      100% { transform: translateX(-50%) scale(1); }
-    }
-
-    .hit-about {
-      bottom: 10%;
-      left: 10%;
-      width: 180px;
-      height: 60px;
-    }
-
-    .hit-contents {
-      bottom: 10%;
-      right: 10%;
-      width: 180px;
-      height: 60px;
-    }
-
-    .hit-center {
-      top: 32%;
-      left: 50%;
-      width: 260px;
-      height: 260px;
-      transform: translateX(-50%);
+      background: rgba(255,0,0,0); /* fully invisible */
     }
   </style>
 </head>
 
 <body>
+  <div class="vault-frame">
+    <img src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png" alt="CyberCrowd Vault" />
 
-  <div class="vault-bg"></div>
+    <!-- Visible brass plaques -->
+    <div class="plaque register">Register</div>
+    <div class="plaque about">About Us</div>
+    <div class="plaque contents">Contents</div>
 
-  <div class="hit-register" onclick="window.location.href='register.html'"></div>
-  <div class="hit-about" onclick="window.location.href='about.html'"></div>
-  <div class="hit-contents" onclick="window.location.href='contents.html'"></div>
-  <div class="hit-center" onclick="window.location.href='teaser.html'"></div>
+    <!-- Invisible teaser zone -->
+    <div class="teaser-hitbox" onclick="playRandomTeaser()"></div>
+  </div>
 
+  <script>
+    function playRandomTeaser() {
+      const total = 500; // adjust to your actual count
+      const index = Math.floor(Math.random() * total) + 1;
+      const padded = String(index).padStart(3, '0');
+      const url = `https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Teasers/track${padded}.60s.teaser.mp3`;
+
+      const audio = new Audio(url);
+      audio.play();
+    }
+  </script>
 </body>
 </html>
