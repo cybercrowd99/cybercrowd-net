@@ -10,7 +10,7 @@ export async function onRequestOptions() {
 }
 
 export async function onRequestGet(context) {
-  const PUBLIC_R2_BASE = "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/";
+  const PUBLIC_R2_BASE = "https://pub-660d879738134ba990d1708d015ec763.r2.dev/";
   const AUDIO_FILE_PATTERN = /\.(mp3|m4a|wav|ogg|aac)$/i;
 
   function encodeR2Key(key) {
@@ -68,6 +68,7 @@ export async function onRequestGet(context) {
       source: "R2",
       binding: "TEASERS",
       bucket_layout: "root",
+      public_base: PUBLIC_R2_BASE,
       count: tracks.length,
       tracks: tracks
     }, 200);
