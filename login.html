@@ -43,7 +43,7 @@
       cursor: pointer;
       user-select: none;
       transition: transform 0.15s ease;
-      z-index: 20;
+      z-index: 30;
     }
 
     .plaque:hover {
@@ -85,90 +85,26 @@
       right: 8%;
     }
 
-    .glass-display {
+    .glass-case-click-zone {
       position: absolute;
-      top: 32%;
-      left: 38%;
-      width: 24%;
-      height: 20%;
+      top: 17%;
+      left: 22%;
+      width: 56%;
+      height: 68%;
       z-index: 10;
       display: block;
       padding: 0;
       margin: 0;
-      border: 1px solid rgba(255,255,255,0.42);
-      border-radius: 14px;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.04) 45%, rgba(255,255,255,0.12)),
-        rgba(255,255,255,0.025);
-      box-shadow:
-        inset 0 0 18px rgba(255,255,255,0.18),
-        0 0 18px rgba(255,255,255,0.08);
+      border: 0;
+      outline: 0;
+      background: transparent;
       cursor: pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      overflow: hidden;
-      backdrop-filter: blur(1.5px);
-      -webkit-backdrop-filter: blur(1.5px);
     }
 
-    .glass-display::before {
-      content: "";
-      position: absolute;
-      top: -40%;
-      left: -45%;
-      width: 45%;
-      height: 180%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.26), transparent);
-      transform: rotate(18deg);
-      animation: glassSweep 4.8s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    .glass-display::after {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.12);
-      pointer-events: none;
-    }
-
-    .glass-display:hover {
-      box-shadow:
-        inset 0 0 22px rgba(255,255,255,0.22),
-        0 0 22px rgba(255,255,255,0.16);
-    }
-
-    .glass-display:active,
-    .glass-display.is-playing {
-      box-shadow:
-        inset 0 0 24px rgba(255,255,255,0.30),
-        0 0 28px rgba(212,175,55,0.22);
-    }
-
-    .glass-display:focus {
+    .glass-case-click-zone:focus {
       outline: none;
-    }
-
-    @keyframes glassSweep {
-      0% {
-        left: -55%;
-        opacity: 0;
-      }
-
-      20% {
-        opacity: 1;
-      }
-
-      50% {
-        left: 110%;
-        opacity: 0.85;
-      }
-
-      100% {
-        left: 110%;
-        opacity: 0;
-      }
     }
 
     #teaserAudio {
@@ -195,12 +131,11 @@
     <a class="plaque contents" href="rules_regulations.html">Contents</a>
 
     <button
-      class="glass-display"
+      class="glass-case-click-zone"
       type="button"
-      aria-label="Play next random CyberCrowd teaser"
-      onpointerdown="glassPointerDown(event)"
-      onclick="glassClickFallback(event)"
-      onkeydown="glassKeyDown(event)"
+      aria-label="Play next CyberCrowd teaser"
+      onclick="glassCaseClick(event)"
+      onkeydown="glassCaseKey(event)"
     ></button>
 
     <audio id="teaserAudio" preload="auto" playsinline></audio>
@@ -213,8 +148,7 @@
     let deck = [];
     let playlistPromise = null;
     let currentTrack = "";
-    let playRequestId = 0;
-    let lastPointerDownTime = 0;
+    let requestNumber = 0;
 
     function loadPlaylist() {
       if (playlist.length > 0) {
@@ -241,9 +175,9 @@
             }
 
             playlist = tracks.slice();
-            deck = shuffleTracks(playlist);
+            deck = shuffleDeck(playlist);
 
-            console.log("CyberCrowd R2 teaser playlist ready:", playlist.length);
+            console.log("CyberCrowd R2 playlist connected:", playlist.length, "tracks");
 
             return playlist;
           })
@@ -257,7 +191,7 @@
       return playlistPromise;
     }
 
-    function shuffleTracks(source) {
+    function shuffleDeck(source) {
       const shuffled = source.slice();
 
       for (let i = shuffled.length - 1; i > 0; i--) {
@@ -272,7 +206,7 @@
 
     function getNextTrack() {
       if (deck.length === 0) {
-        deck = shuffleTracks(playlist);
+        deck = shuffleDeck(playlist);
       }
 
       let next = deck.shift();
@@ -288,13 +222,12 @@
 
     async function playNextTeaser() {
       const audio = document.getElementById("teaserAudio");
-      const glass = document.querySelector(".glass-display");
-      const thisRequest = ++playRequestId;
+      const thisRequest = ++requestNumber;
 
       try {
         await loadPlaylist();
 
-        if (thisRequest !== playRequestId) {
+        if (thisRequest !== requestNumber) {
           return;
         }
 
@@ -309,40 +242,20 @@
 
         await audio.play();
 
-        glass.classList.add("is-playing");
-
-        window.setTimeout(function () {
-          glass.classList.remove("is-playing");
-        }, 700);
-
         console.log("CyberCrowd teaser playing:", track);
       } catch (error) {
-        console.error("CyberCrowd teaser failed:", error);
+        console.error("CyberCrowd teaser did not play:", error);
       }
     }
 
-    function glassPointerDown(event) {
-      lastPointerDownTime = Date.now();
+    function glassCaseClick(event) {
       event.preventDefault();
       event.stopPropagation();
 
       playNextTeaser();
     }
 
-    function glassClickFallback(event) {
-      const now = Date.now();
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (now - lastPointerDownTime < 700) {
-        return;
-      }
-
-      playNextTeaser();
-    }
-
-    function glassKeyDown(event) {
+    function glassCaseKey(event) {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         event.stopPropagation();
