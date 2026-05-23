@@ -1,0 +1,2 @@
+drop
+IF To: dmarc@cybercrowd.net THEN Forward To: <YOUR_REAL_INBOX>
