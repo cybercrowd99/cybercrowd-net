@@ -1,0 +1,5 @@
+Verify no duplicate filenames exist in repo
+Verify no stale files remain in Cloudflare Pages cache
+Verify build output matches repo file list
+Verify login.html is the active file served
+Verify no ghost files appear in Cloudflare Pages dashboard
