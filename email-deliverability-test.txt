@@ -1,0 +1,6 @@
+Send test email to Gmail: confirm SPF, DKIM, DMARC pass
+Send test email to Outlook: confirm SPF, DKIM, DMARC pass
+Send test email to Yahoo: confirm SPF, DKIM, DMARC pass
+Send test email to iCloud: confirm SPF, DKIM, DMARC pass
+Send test email to Proton: confirm SPF, DKIM, DMARC pass
+Send test email to Fastmail: confirm SPF, DKIM, DMARC pass
