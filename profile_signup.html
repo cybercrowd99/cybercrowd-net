@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CyberCrowd Profile Signup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-dark: #7a5f24;
+      --cyan: #00ffff;
+      --bg: #02050a;
+      --panel: rgba(0, 0, 0, 0.72);
+      --text: #f8f3e7;
+      --muted: rgba(248, 243, 231, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(0,255,255,0.16), transparent 34%),
+        radial-gradient(circle at bottom, rgba(212,175,55,0.14), transparent 38%),
+        #000;
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .signup-shell {
+      width: min(920px, 100%);
+      border: 1px solid rgba(212,175,55,0.42);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow:
+        0 0 34px rgba(0,255,255,0.10),
+        0 0 42px rgba(212,175,55,0.12);
+      overflow: hidden;
+    }
+
+    .signup-header {
+      padding: 28px;
+      border-bottom: 1px solid rgba(212,175,55,0.25);
+      background:
+        linear-gradient(135deg, rgba(212,175,55,0.18), rgba(0,255,255,0.06)),
+        rgba(0,0,0,0.35);
+      text-align: center;
+    }
+
+    .signup-kicker {
+      color: var(--cyan);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .signup-subtitle {
+      margin: 14px auto 0;
+      max-width: 680px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .signup-body {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 0;
+    }
+
+    .form-panel,
+    .info-panel {
+      padding: 28px;
+    }
+
+    .info-panel {
+      border-left: 1px solid rgba(212,175,55,0.22);
+      background: rgba(255,255,255,0.03);
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      color: var(--gold);
+      font-size: 0.86rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(212,175,55,0.34);
+      border-radius: 14px;
+      background: rgba(0,0,0,0.48);
+      color: var(--text);
+      padding: 14px 15px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0,255,255,0.12);
+    }
+
+    .submit-row {
+      margin-top: 22px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button,
+    .back-link {
+      border: 2px solid var(--gold);
+      border-radius: 999px;
+      background: linear-gradient(145deg, #b08d3a, var(--gold-dark));
+      color: var(--text);
+      padding: 12px 22px;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(212,175,55,0.26);
+    }
+
+    button:hover,
+    .back-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 22px rgba(212,175,55,0.38);
+    }
+
+    .status {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,255,255,0.24);
+      background: rgba(0,255,255,0.06);
+      color: var(--muted);
+      line-height: 1.5;
+      display: none;
+    }
+
+    .info-title {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .info-copy {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 18px;
+    }
+
+    .future-card {
+      border: 1px solid rgba(212,175,55,0.28);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(0,0,0,0.32);
+      margin-top: 16px;
+    }
+
+    .future-card strong {
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .future-card span {
+      color: var(--muted);
+      line-height: 1.5;
+      display: block;
+    }
+
+    .stripe-locked {
+      opacity: 0.55;
+      cursor: not-allowed;
+      margin-top: 14px;
+      display: inline-block;
+    }
+
+    @media (max-width: 760px) {
+      .signup-body {
+        grid-template-columns: 1fr;
+      }
+
+      .info-panel {
+        border-left: 0;
+        border-top: 1px solid rgba(212,175,55,0.22);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="signup-shell">
+    <header class="signup-header">
+      <div class="signup-kicker">CyberCrowd Early Access</div>
+      <h1>Profile Signup</h1>
+      <p class="signup-subtitle">
+        Reserve your CyberCrowd profile lane. This page is ready for email signup now and structured for a later Stripe upgrade path.
+      </p>
+    </header>
+
+    <section class="signup-body">
+      <div class="form-panel">
+        <form id="profileSignupForm">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" />
+
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+
+          <label for="interest">Profile Type</label>
+          <select id="interest" name="interest">
+            <option value="early-access">Early Access</option>
+            <option value="observer">Observer</option>
+            <option value="creator">Creator / Performer</option>
+            <option value="business">Business / Sponsor</option>
+            <option value="accessibility">Accessibility / Companion Support</option>
+          </select>
+
+          <label for="message">Notes</label>
+          <textarea id="message" name="message" placeholder="Tell us what you want CyberCrowd to help you do."></textarea>
+
+          <div class="submit-row">
+            <button type="submit">Reserve Profile</button>
+            <a class="back-link" href="login.html">Back</a>
+          </div>
+
+          <div class="status" id="statusBox"></div>
+        </form>
+      </div>
+
+      <aside class="info-panel">
+        <h2 class="info-title">What this page does now</h2>
+        <p class="info-copy">
+          This creates the front-facing signup doorway. It validates the email field and confirms the profile request on the page.
+        </p>
+
+        <div class="future-card">
+          <strong>Later Upgrade Lane</strong>
+          <span>
+            Stripe can be added later for paid memberships, subscriptions, creator upgrades, sponsor access, or CyberCrowd trial-to-paid conversion.
+          </span>
+          <button class="stripe-locked" type="button" disabled>Stripe Upgrade Locked</button>
+        </div>
+
+        <div class="future-card">
+          <strong>Future API Hook</strong>
+          <span>
+            When ready, this form can post to a Cloudflare Pages Function such as /api/profile-signup and store records in D1, KV, R2, email provider, or CRM.
+          </span>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("profileSignupForm");
+    const statusBox = document.getElementById("statusBox");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const name = String(formData.get("name") || "").trim();
+      const email = String(formData.get("email") || "").trim();
+      const interest = String(formData.get("interest") || "").trim();
+      const message = String(formData.get("message") || "").trim();
+
+      if (!email || !email.includes("@")) {
+        showStatus("Enter a valid email address before reserving your profile.");
+        return;
+      }
+
+      const signupRecord = {
+        name: name,
+        email: email,
+        interest: interest,
+        message: message,
+        created_at: new Date().toISOString(),
+        status: "local-preview-only"
+      };
+
+      localStorage.setItem("cybercrowd_profile_signup_preview", JSON.stringify(signupRecord));
+
+      showStatus(
+        "Profile request staged for " + email + ". This page is live as a front-door signup screen. Server storage and Stripe upgrade are the next build steps."
+      );
+
+      form.reset();
+    });
+
+    function showStatus(message) {
+      statusBox.textContent = message;
+      statusBox.style.display = "block";
+    }
+  </script>
+</body>
+</html>
