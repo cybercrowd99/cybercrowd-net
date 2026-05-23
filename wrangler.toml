@@ -19,3 +19,7 @@ not_found_handling = "404-page"
 
 [observability.logs]
 enabled = true
+
+[[r2_buckets]]
+binding = "TEASER_BUCKET"
+bucket_name = "cybercrowd-teasers"
