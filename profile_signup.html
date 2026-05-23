@@ -10,10 +10,10 @@
       --gold: #d4af37;
       --gold-dark: #7a5f24;
       --cyan: #00ffff;
-      --bg: #02050a;
-      --panel: rgba(0, 0, 0, 0.72);
-      --text: #f8f3e7;
+      --cream: #f8f3e7;
       --muted: rgba(248, 243, 231, 0.72);
+      --panel: rgba(0, 0, 0, 0.72);
+      --line: rgba(212, 175, 55, 0.34);
     }
 
     * {
@@ -27,7 +27,7 @@
         radial-gradient(circle at top, rgba(0,255,255,0.16), transparent 34%),
         radial-gradient(circle at bottom, rgba(212,175,55,0.14), transparent 38%),
         #000;
-      color: var(--text);
+      color: var(--cream);
       font-family: "Segoe UI", Arial, sans-serif;
       display: flex;
       align-items: center;
@@ -36,8 +36,8 @@
     }
 
     .signup-shell {
-      width: min(920px, 100%);
-      border: 1px solid rgba(212,175,55,0.42);
+      width: min(940px, 100%);
+      border: 1px solid var(--line);
       border-radius: 24px;
       background: var(--panel);
       box-shadow:
@@ -73,7 +73,7 @@
 
     .signup-subtitle {
       margin: 14px auto 0;
-      max-width: 680px;
+      max-width: 720px;
       color: var(--muted);
       line-height: 1.6;
       font-size: 1rem;
@@ -82,7 +82,6 @@
     .signup-body {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
-      gap: 0;
     }
 
     .form-panel,
@@ -111,7 +110,7 @@
       border: 1px solid rgba(212,175,55,0.34);
       border-radius: 14px;
       background: rgba(0,0,0,0.48);
-      color: var(--text);
+      color: var(--cream);
       padding: 14px 15px;
       font-size: 1rem;
       outline: none;
@@ -129,6 +128,15 @@
       box-shadow: 0 0 0 3px rgba(0,255,255,0.12);
     }
 
+    .honeypot {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .submit-row {
       margin-top: 22px;
       display: flex;
@@ -142,7 +150,7 @@
       border: 2px solid var(--gold);
       border-radius: 999px;
       background: linear-gradient(145deg, #b08d3a, var(--gold-dark));
-      color: var(--text);
+      color: var(--cream);
       padding: 12px 22px;
       font-size: 0.95rem;
       letter-spacing: 0.08em;
@@ -158,6 +166,12 @@
       box-shadow: 0 0 22px rgba(212,175,55,0.38);
     }
 
+    button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+      transform: none;
+    }
+
     .status {
       margin-top: 18px;
       padding: 14px 16px;
@@ -167,6 +181,17 @@
       color: var(--muted);
       line-height: 1.5;
       display: none;
+    }
+
+    .status.success {
+      border-color: rgba(0,255,255,0.38);
+      color: var(--cream);
+    }
+
+    .status.error {
+      border-color: rgba(255,90,90,0.5);
+      background: rgba(255,90,90,0.08);
+      color: #ffd6d6;
     }
 
     .info-title {
@@ -205,13 +230,6 @@
       display: block;
     }
 
-    .stripe-locked {
-      opacity: 0.55;
-      cursor: not-allowed;
-      margin-top: 14px;
-      display: inline-block;
-    }
-
     @media (max-width: 760px) {
       .signup-body {
         grid-template-columns: 1fr;
@@ -231,7 +249,7 @@
       <div class="signup-kicker">CyberCrowd Early Access</div>
       <h1>Profile Signup</h1>
       <p class="signup-subtitle">
-        Reserve your CyberCrowd profile lane. This page is ready for email signup now and structured for a later Stripe upgrade path.
+        Reserve your CyberCrowd profile lane. Submit your email, then check your inbox for the verification link.
       </p>
     </header>
 
@@ -256,8 +274,10 @@
           <label for="message">Notes</label>
           <textarea id="message" name="message" placeholder="Tell us what you want CyberCrowd to help you do."></textarea>
 
+          <input class="honeypot" id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+
           <div class="submit-row">
-            <button type="submit">Reserve Profile</button>
+            <button id="submitButton" type="submit">Send Verification</button>
             <a class="back-link" href="login.html">Back</a>
           </div>
 
@@ -266,23 +286,29 @@
       </div>
 
       <aside class="info-panel">
-        <h2 class="info-title">What this page does now</h2>
+        <h2 class="info-title">What happens next</h2>
         <p class="info-copy">
-          This creates the front-facing signup doorway. It validates the email field and confirms the profile request on the page.
+          Your signup request is sent to CyberCrowd’s verification system. The server records the request, sends a verification email, and waits for the email link to be clicked.
         </p>
 
         <div class="future-card">
-          <strong>Later Upgrade Lane</strong>
+          <strong>Email Verification</strong>
           <span>
-            Stripe can be added later for paid memberships, subscriptions, creator upgrades, sponsor access, or CyberCrowd trial-to-paid conversion.
+            The active lane is: form submit → /api/auth/signup → D1 enrollment record → Postmark email → verification link.
           </span>
-          <button class="stripe-locked" type="button" disabled>Stripe Upgrade Locked</button>
         </div>
 
         <div class="future-card">
-          <strong>Future API Hook</strong>
+          <strong>Stripe Upgrade Later</strong>
           <span>
-            When ready, this form can post to a Cloudflare Pages Function such as /api/profile-signup and store records in D1, KV, R2, email provider, or CRM.
+            Stripe will be added later for paid memberships, creator upgrades, sponsor access, and controlled platform products. This page does not collect payment information.
+          </span>
+        </div>
+
+        <div class="future-card">
+          <strong>Security Gate Rule</strong>
+          <span>
+            Button click does not open the room. Email received does not open the room. The verified server session is what opens future access.
           </span>
         </div>
       </aside>
@@ -290,43 +316,80 @@
   </main>
 
   <script>
+    const SIGNUP_ENDPOINT = "/api/auth/signup";
+
     const form = document.getElementById("profileSignupForm");
     const statusBox = document.getElementById("statusBox");
+    const submitButton = document.getElementById("submitButton");
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
       event.preventDefault();
 
       const formData = new FormData(form);
-      const name = String(formData.get("name") || "").trim();
-      const email = String(formData.get("email") || "").trim();
-      const interest = String(formData.get("interest") || "").trim();
-      const message = String(formData.get("message") || "").trim();
 
-      if (!email || !email.includes("@")) {
-        showStatus("Enter a valid email address before reserving your profile.");
+      const payload = {
+        name: String(formData.get("name") || "").trim(),
+        email: String(formData.get("email") || "").trim(),
+        interest: String(formData.get("interest") || "").trim(),
+        message: String(formData.get("message") || "").trim(),
+        website: String(formData.get("website") || "").trim()
+      };
+
+      if (!payload.email || !payload.email.includes("@")) {
+        showStatus("Enter a valid email address before sending verification.", "error");
         return;
       }
 
-      const signupRecord = {
-        name: name,
-        email: email,
-        interest: interest,
-        message: message,
-        created_at: new Date().toISOString(),
-        status: "local-preview-only"
-      };
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+      showStatus("Sending verification email...", "success");
 
-      localStorage.setItem("cybercrowd_profile_signup_preview", JSON.stringify(signupRecord));
+      try {
+        const response = await fetch(SIGNUP_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
 
-      showStatus(
-        "Profile request staged for " + email + ". This page is live as a front-door signup screen. Server storage and Stripe upgrade are the next build steps."
-      );
+        let result = null;
 
-      form.reset();
+        try {
+          result = await response.json();
+        } catch (jsonError) {
+          result = null;
+        }
+
+        if (!response.ok) {
+          const message =
+            result && result.error
+              ? result.error
+              : "Signup request failed. Check the API, D1 binding, and Postmark configuration.";
+
+          throw new Error(message);
+        }
+
+        showStatus(
+          "Verification sent. Check your email and click the CyberCrowd verification link to continue.",
+          "success"
+        );
+
+        form.reset();
+      } catch (error) {
+        showStatus(
+          "Verification did not send: " + String(error && error.message ? error.message : error),
+          "error"
+        );
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Send Verification";
+      }
     });
 
-    function showStatus(message) {
+    function showStatus(message, type) {
       statusBox.textContent = message;
+      statusBox.className = "status " + (type || "");
       statusBox.style.display = "block";
     }
   </script>
