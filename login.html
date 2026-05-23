@@ -85,19 +85,23 @@
 
     .teaser-hitbox {
       position: absolute;
-      top: 27%;
-      left: 50%;
-      width: 34%;
-      height: 36%;
-      transform: translateX(-50%);
+      top: 32%;
+      left: 38%;
+      width: 24%;
+      height: 20%;
       cursor: pointer;
       background: transparent;
       z-index: 4;
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .teaser-hitbox:focus {
       outline: none;
+    }
+
+    #teaserAudio {
+      display: none;
     }
   </style>
 </head>
@@ -117,39 +121,142 @@
       class="teaser-hitbox"
       role="button"
       tabindex="0"
-      aria-label="Play CyberCrowd teaser"
-      onclick="playRandomTeaser()"
-      onkeydown="handleTeaserKey(event)"
+      aria-label="Play next random CyberCrowd teaser"
+      onpointerdown="glassTeaserClick(event)"
+      onkeydown="glassTeaserKey(event)"
     ></div>
+
+    <audio id="teaserAudio" preload="auto" playsinline></audio>
   </div>
 
   <script>
-    const teaserFiles = [
-      'https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser1.mp3',
-      'https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser2.mp3',
-      'https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/cybercrowd-teasers/teaser3.mp3'
-    ];
+    const PLAYLIST_ENDPOINT = "/api/r2-teaser-playlist";
 
-    let activeTeaser = null;
+    let playlist = [];
+    let deck = [];
+    let playlistPromise = null;
+    let currentTrack = "";
+    let playRequestNumber = 0;
 
-    function playRandomTeaser() {
-      const index = Math.floor(Math.random() * teaserFiles.length);
-
-      if (activeTeaser) {
-        activeTeaser.pause();
-        activeTeaser.currentTime = 0;
+    function fetchPlaylist() {
+      if (playlist.length > 0) {
+        return Promise.resolve(playlist);
       }
 
-      activeTeaser = new Audio(teaserFiles[index]);
-      activeTeaser.play().catch(function () {});
+      if (!playlistPromise) {
+        playlistPromise = fetch(PLAYLIST_ENDPOINT, {
+          method: "GET",
+          cache: "no-store"
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Playlist endpoint failed: HTTP " + response.status);
+            }
+
+            return response.json();
+          })
+          .then(function (data) {
+            const tracks = Array.isArray(data) ? data : data.tracks;
+
+            if (!Array.isArray(tracks) || tracks.length === 0) {
+              throw new Error("Playlist endpoint returned zero tracks.");
+            }
+
+            playlist = tracks.slice();
+            deck = shuffleDeck(playlist);
+
+            console.log("CyberCrowd playlist connected:", playlist.length, "tracks");
+
+            return playlist;
+          })
+          .catch(function (error) {
+            playlistPromise = null;
+            console.error("CyberCrowd playlist failed:", error);
+            throw error;
+          });
+      }
+
+      return playlistPromise;
     }
 
-    function handleTeaserKey(event) {
-      if (event.key === 'Enter' || event.key === ' ') {
+    function shuffleDeck(sourceTracks) {
+      const shuffled = sourceTracks.slice();
+
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = shuffled[i];
+        shuffled[i] = shuffled[j];
+        shuffled[j] = temp;
+      }
+
+      return shuffled;
+    }
+
+    function getNextTrack() {
+      if (deck.length === 0) {
+        deck = shuffleDeck(playlist);
+      }
+
+      let nextTrack = deck.shift();
+
+      if (playlist.length > 1 && nextTrack === currentTrack) {
+        deck.push(nextTrack);
+        nextTrack = deck.shift();
+      }
+
+      currentTrack = nextTrack;
+      return nextTrack;
+    }
+
+    async function playNextTeaserFromGlass() {
+      const audio = document.getElementById("teaserAudio");
+      const thisRequest = ++playRequestNumber;
+
+      try {
+        await fetchPlaylist();
+
+        if (thisRequest !== playRequestNumber) {
+          return;
+        }
+
+        const selectedTrack = getNextTrack();
+
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = selectedTrack;
+        audio.volume = 1;
+        audio.muted = false;
+        audio.load();
+
+        await audio.play();
+
+        console.log("CyberCrowd teaser playing:", selectedTrack);
+      } catch (error) {
+        console.error("CyberCrowd glass teaser play failed:", error);
+      }
+    }
+
+    function glassTeaserClick(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      playNextTeaserFromGlass();
+    }
+
+    function glassTeaserKey(event) {
+      if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        playRandomTeaser();
+        event.stopPropagation();
+
+        playNextTeaserFromGlass();
       }
     }
+
+    window.addEventListener("DOMContentLoaded", function () {
+      fetchPlaylist().catch(function (error) {
+        console.error("CyberCrowd playlist warmup failed:", error);
+      });
+    });
   </script>
 </body>
 </html>
