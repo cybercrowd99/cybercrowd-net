@@ -1,0 +1,5 @@
+Verify SPF: TXT @ contains "v=spf1"
+Verify DKIM: CNAME pm._domainkey resolves correctly
+Verify Return-Path: CNAME pm-bounces resolves correctly
+Verify DMARC: TXT _dmarc contains "v=DMARC1"
+Verify Routing: Rule for dmarc@cybercrowd.net is active
