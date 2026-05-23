@@ -1,0 +1,5 @@
+List all files in repo root
+Identify near-duplicate filenames
+Verify only one login file exists
+Verify no ghost or abandoned files remain
+Confirm filenames match Cloudflare Pages output
