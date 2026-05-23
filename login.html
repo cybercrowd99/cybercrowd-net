@@ -24,6 +24,8 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      pointer-events: none;
+      user-select: none;
     }
 
     .plaque {
@@ -41,7 +43,7 @@
       cursor: pointer;
       user-select: none;
       transition: transform 0.15s ease;
-      z-index: 5;
+      z-index: 20;
     }
 
     .plaque:hover {
@@ -83,25 +85,100 @@
       right: 8%;
     }
 
-    .teaser-hitbox {
+    .glass-display {
       position: absolute;
       top: 32%;
       left: 38%;
       width: 24%;
       height: 20%;
+      z-index: 10;
+      display: block;
+      padding: 0;
+      margin: 0;
+      border: 1px solid rgba(255,255,255,0.42);
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.04) 45%, rgba(255,255,255,0.12)),
+        rgba(255,255,255,0.025);
+      box-shadow:
+        inset 0 0 18px rgba(255,255,255,0.18),
+        0 0 18px rgba(255,255,255,0.08);
       cursor: pointer;
-      background: transparent;
-      z-index: 4;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
+      backdrop-filter: blur(1.5px);
+      -webkit-backdrop-filter: blur(1.5px);
     }
 
-    .teaser-hitbox:focus {
+    .glass-display::before {
+      content: "";
+      position: absolute;
+      top: -40%;
+      left: -45%;
+      width: 45%;
+      height: 180%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.26), transparent);
+      transform: rotate(18deg);
+      animation: glassSweep 4.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .glass-display::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      pointer-events: none;
+    }
+
+    .glass-display:hover {
+      box-shadow:
+        inset 0 0 22px rgba(255,255,255,0.22),
+        0 0 22px rgba(255,255,255,0.16);
+    }
+
+    .glass-display:active,
+    .glass-display.is-playing {
+      box-shadow:
+        inset 0 0 24px rgba(255,255,255,0.30),
+        0 0 28px rgba(212,175,55,0.22);
+    }
+
+    .glass-display:focus {
       outline: none;
     }
 
+    @keyframes glassSweep {
+      0% {
+        left: -55%;
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      50% {
+        left: 110%;
+        opacity: 0.85;
+      }
+
+      100% {
+        left: 110%;
+        opacity: 0;
+      }
+    }
+
     #teaserAudio {
-      display: none;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      left: -9999px;
+      top: -9999px;
     }
   </style>
 </head>
@@ -117,14 +194,14 @@
     <a class="plaque about" href="readme.md">About</a>
     <a class="plaque contents" href="rules_regulations.html">Contents</a>
 
-    <div
-      class="teaser-hitbox"
-      role="button"
-      tabindex="0"
+    <button
+      class="glass-display"
+      type="button"
       aria-label="Play next random CyberCrowd teaser"
-      onpointerdown="glassTeaserClick(event)"
-      onkeydown="glassTeaserKey(event)"
-    ></div>
+      onpointerdown="glassPointerDown(event)"
+      onclick="glassClickFallback(event)"
+      onkeydown="glassKeyDown(event)"
+    ></button>
 
     <audio id="teaserAudio" preload="auto" playsinline></audio>
   </div>
@@ -136,9 +213,10 @@
     let deck = [];
     let playlistPromise = null;
     let currentTrack = "";
-    let playRequestNumber = 0;
+    let playRequestId = 0;
+    let lastPointerDownTime = 0;
 
-    function fetchPlaylist() {
+    function loadPlaylist() {
       if (playlist.length > 0) {
         return Promise.resolve(playlist);
       }
@@ -163,15 +241,15 @@
             }
 
             playlist = tracks.slice();
-            deck = shuffleDeck(playlist);
+            deck = shuffleTracks(playlist);
 
-            console.log("CyberCrowd playlist connected:", playlist.length, "tracks");
+            console.log("CyberCrowd R2 teaser playlist ready:", playlist.length);
 
             return playlist;
           })
           .catch(function (error) {
             playlistPromise = null;
-            console.error("CyberCrowd playlist failed:", error);
+            console.error("CyberCrowd playlist load failed:", error);
             throw error;
           });
       }
@@ -179,8 +257,8 @@
       return playlistPromise;
     }
 
-    function shuffleDeck(sourceTracks) {
-      const shuffled = sourceTracks.slice();
+    function shuffleTracks(source) {
+      const shuffled = source.slice();
 
       for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -194,66 +272,87 @@
 
     function getNextTrack() {
       if (deck.length === 0) {
-        deck = shuffleDeck(playlist);
+        deck = shuffleTracks(playlist);
       }
 
-      let nextTrack = deck.shift();
+      let next = deck.shift();
 
-      if (playlist.length > 1 && nextTrack === currentTrack) {
-        deck.push(nextTrack);
-        nextTrack = deck.shift();
+      if (playlist.length > 1 && next === currentTrack) {
+        deck.push(next);
+        next = deck.shift();
       }
 
-      currentTrack = nextTrack;
-      return nextTrack;
+      currentTrack = next;
+      return next;
     }
 
-    async function playNextTeaserFromGlass() {
+    async function playNextTeaser() {
       const audio = document.getElementById("teaserAudio");
-      const thisRequest = ++playRequestNumber;
+      const glass = document.querySelector(".glass-display");
+      const thisRequest = ++playRequestId;
 
       try {
-        await fetchPlaylist();
+        await loadPlaylist();
 
-        if (thisRequest !== playRequestNumber) {
+        if (thisRequest !== playRequestId) {
           return;
         }
 
-        const selectedTrack = getNextTrack();
+        const track = getNextTrack();
 
         audio.pause();
         audio.currentTime = 0;
-        audio.src = selectedTrack;
+        audio.src = track;
         audio.volume = 1;
         audio.muted = false;
         audio.load();
 
         await audio.play();
 
-        console.log("CyberCrowd teaser playing:", selectedTrack);
+        glass.classList.add("is-playing");
+
+        window.setTimeout(function () {
+          glass.classList.remove("is-playing");
+        }, 700);
+
+        console.log("CyberCrowd teaser playing:", track);
       } catch (error) {
-        console.error("CyberCrowd glass teaser play failed:", error);
+        console.error("CyberCrowd teaser failed:", error);
       }
     }
 
-    function glassTeaserClick(event) {
+    function glassPointerDown(event) {
+      lastPointerDownTime = Date.now();
       event.preventDefault();
       event.stopPropagation();
 
-      playNextTeaserFromGlass();
+      playNextTeaser();
     }
 
-    function glassTeaserKey(event) {
+    function glassClickFallback(event) {
+      const now = Date.now();
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (now - lastPointerDownTime < 700) {
+        return;
+      }
+
+      playNextTeaser();
+    }
+
+    function glassKeyDown(event) {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         event.stopPropagation();
 
-        playNextTeaserFromGlass();
+        playNextTeaser();
       }
     }
 
     window.addEventListener("DOMContentLoaded", function () {
-      fetchPlaylist().catch(function (error) {
+      loadPlaylist().catch(function (error) {
         console.error("CyberCrowd playlist warmup failed:", error);
       });
     });
