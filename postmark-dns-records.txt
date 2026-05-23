@@ -1,0 +1,7 @@
+TXT  @  v=spf1 include:spf.mtasv.net ~all
+
+CNAME  pm-bounces  pm.mtasv.net
+
+CNAME  pm._domainkey  pm.dkim.mtasv.net
+CNAME  pm2._domainkey  pm2.dkim.mtasv.net
+CNAME  pm3._domainkey  pm3.dkim.mtasv.net
