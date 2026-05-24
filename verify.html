@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verifying...</title>
+  <style>
+    body {
+      background:#000;
+      color:#fff;
+      font-family:Arial, sans-serif;
+      margin:0;
+      padding:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+    #verify-box {
+      width:350px;
+      padding:20px;
+      background:#111;
+      border:2px solid #b8860b;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="verify-box">
+    <h2>Verification Complete</h2>
+    <p>Your email has been verified.</p>
+    <p>Continue to create your profile.</p>
+  </div>
+
+  <script>
+    const email = localStorage.getItem('cc_pending_email');
+
+    if (!email) {
+      window.location.href = '/register.html';
+    }
+
+    localStorage.setItem('cc_verified_email', email);
+
+    setTimeout(() => {
+      window.location.href = '/profile.html';
+    }, 1500);
+  </script>
+</body>
+</html>
