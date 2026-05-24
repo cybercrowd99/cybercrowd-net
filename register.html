@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+  <style>
+    body {
+      background:#000;
+      color:#fff;
+      font-family:Arial, sans-serif;
+      margin:0;
+      padding:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+    #register-box {
+      width:350px;
+      padding:20px;
+      background:#111;
+      border:2px solid #b8860b;
+    }
+    input, button {
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+      background:#222;
+      color:#fff;
+      border:1px solid #b8860b;
+    }
+    button {
+      background:#b8860b;
+      cursor:pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="register-box">
+    <h2>Create Your Account</h2>
+
+    <label>Email Address</label>
+    <input type="email" id="emailInput" placeholder="Enter your email">
+
+    <button id="sendEmail">Send Verification Email</button>
+  </div>
+
+  <script>
+    document.getElementById('sendEmail').addEventListener('click', () => {
+      const email = document.getElementById('emailInput').value;
+
+      if (!email) {
+        alert("Email required");
+        return;
+      }
+
+      localStorage.setItem('cc_pending_email', email);
+
+      window.location.href = '/email-sent.html';
+    });
+  </script>
+</body>
+</html>
