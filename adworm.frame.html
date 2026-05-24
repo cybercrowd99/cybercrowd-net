@@ -1,0 +1,54 @@
+<!-- ============================================================
+     adWorm — PERIMETER FRAME
+     CyberCrowd Layer 1 Broadcast Subsystem
+     Provides: 8 perimeter slots for adWorm instances
+     No styling. No animation. No theme.
+     ============================================================ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>adWorm Frame</title>
+
+  <!-- Base style only -->
+  <link rel="stylesheet" href="adworm.style.css">
+</head>
+
+<body>
+
+  <!-- Root perimeter container -->
+  <div id="adworm-frame" style="position: relative; width: 800px; height: 600px;">
+
+    <!-- 8 perimeter slots (auto-filled by Layer 1 binding) -->
+    <div data-adworm-slot="BL-01"></div>
+    <div data-adworm-slot="L-02"></div>
+    <div data-adworm-slot="TL-03"></div>
+    <div data-adworm-slot="T-04"></div>
+    <div data-adworm-slot="TR-05"></div>
+    <div data-adworm-slot="R-06"></div>
+    <div data-adworm-slot="BR-07"></div>
+    <div data-adworm-slot="B-08"></div>
+
+  </div>
+
+  <!-- System scripts -->
+  <script src="adworm.foundation.js"></script>
+  <script src="adworm.engine.js"></script>
+  <script src="adworm.component.js"></script>
+  <script src="adworm.ui.js"></script>
+  <script src="adworm.integration.js"></script>
+  <script src="adworm.layer1.js"></script>
+  <script src="adworm.animation.js"></script>
+
+  <!-- Initialize Layer 1 -->
+  <script>
+    const frame = document.getElementById("adworm-frame");
+
+    initializeAdWormLayer1(frame, [
+      { id: "worm-1", config: {} }
+    ]);
+  </script>
+
+</body>
+</html>
