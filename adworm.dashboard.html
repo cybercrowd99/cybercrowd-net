@@ -1,0 +1,115 @@
+<!-- ============================================================
+     adWorm — CLIENT DASHBOARD
+     CyberCrowd Layer 1 Broadcast Subsystem
+     Audience: sponsors, buyers, PSA donors
+     No logic. No styling. Structure only.
+     ============================================================ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>adWorm Client Dashboard</title>
+</head>
+
+<body>
+
+  <!-- DASHBOARD ROOT -->
+  <div id="adworm-dashboard-root">
+
+    <!-- HEADER -->
+    <header id="adworm-dashboard-header">
+      <h1>adWorm Client Dashboard</h1>
+      <p>Schoolhouse Rock with a supercomputer behind it.</p>
+    </header>
+
+    <!-- MAIN LAYOUT -->
+    <main id="adworm-dashboard-main">
+
+      <!-- LEFT: SUBMISSION PANEL -->
+      <section id="adworm-submission-panel">
+        <h2>Submit New adWorm Campaign</h2>
+
+        <form id="adworm-submission-form">
+
+          <!-- Campaign Type -->
+          <div>
+            <label for="campaign-type">Campaign Type</label>
+            <select id="campaign-type" name="campaignType">
+              <option value="sponsor">Sponsor</option>
+              <option value="purchase">Purchase</option>
+              <option value="psa">PSA Donation</option>
+            </select>
+          </div>
+
+          <!-- Theme Choice (A/B/C) -->
+          <div>
+            <label for="theme-choice">Theme</label>
+            <select id="theme-choice" name="themeChoice">
+              <option value="cybercrowd">A — CyberCrowd</option>
+              <option value="dark">B — Dark</option>
+              <option value="light">C — Light</option>
+            </select>
+          </div>
+
+          <!-- Asset Upload -->
+          <div>
+            <label for="asset-upload">Creative Asset (image/video)</label>
+            <input id="asset-upload" type="file" name="asset" accept="image/*,video/*">
+          </div>
+
+          <!-- Copy / Message -->
+          <div>
+            <label for="campaign-copy">Message / Copy</label>
+            <textarea id="campaign-copy" name="campaignCopy" rows="4"></textarea>
+          </div>
+
+          <!-- Submit -->
+          <div>
+            <button type="submit">Submit for Review</button>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- RIGHT: STATUS + QUEUES -->
+      <section id="adworm-status-panel">
+
+        <!-- AUTO FILTER RESULT -->
+        <div id="adworm-autofilter-status">
+          <h2>Auto-Filter Status</h2>
+          <p id="autofilter-result">No submission yet.</p>
+        </div>
+
+        <!-- ROOM CONTENT QUEUE (APPROVED) -->
+        <div id="adworm-roomcontent-queue">
+          <h2>Room Content (Approved)</h2>
+          <ul id="roomcontent-list">
+            <!-- Populated by dashboard JS -->
+          </ul>
+        </div>
+
+        <!-- COURT QUEUE (FLAGGED) -->
+        <div id="adworm-court-queue">
+          <h2>Court (Flagged for Review)</h2>
+          <ul id="court-list">
+            <!-- Populated by dashboard JS -->
+          </ul>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- DASHBOARD LOGIC (to be implemented in JS modules) -->
+  <script src="adworm.dashboard.js"></script>
+  <script src="adworm.dashboard.filters.js"></script>
+  <script src="adworm.dashboard.review.js"></script>
+  <script src="adworm.dashboard.api.js"></script>
+  <script src="adworm.dashboard.themes.js"></script>
+  <script src="adworm.dashboard.security.js"></script>
+
+</body>
+</html>
