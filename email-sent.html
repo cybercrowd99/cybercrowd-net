@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Sent</title>
+  <style>
+    body {
+      background:#000;
+      color:#fff;
+      font-family:Arial, sans-serif;
+      margin:0;
+      padding:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+    #sent-box {
+      width:350px;
+      padding:20px;
+      background:#111;
+      border:2px solid #b8860b;
+      text-align:center;
+    }
+    button {
+      width:100%;
+      padding:10px;
+      margin-top:20px;
+      background:#b8860b;
+      color:#fff;
+      border:1px solid #fff;
+      cursor:pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="sent-box">
+    <h2>Check Your Email</h2>
+    <p>A verification link has been sent to your inbox.</p>
+    <p>Click the link to continue creating your profile.</p>
+
+    <button onclick="window.location.href='/register.html'">Back</button>
+  </div>
+</body>
+</html>
