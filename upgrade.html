@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upgrade Membership</title>
+  <style>
+    body {
+      background:#000;
+      color:#fff;
+      font-family:Arial, sans-serif;
+      margin:0;
+      padding:0;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+    #upgrade-box {
+      width:400px;
+      padding:20px;
+      background:#111;
+      border:2px solid #b8860b;
+    }
+    .tier {
+      border:1px solid #b8860b;
+      padding:15px;
+      margin-top:15px;
+      cursor:pointer;
+    }
+    .tier:hover {
+      background:#222;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="upgrade-box">
+    <h2>Choose Your Membership</h2>
+
+    <div class="tier" data-tier="free">
+      <h3>Free Tier</h3>
+      <p>Basic vault access. No posting. No treasury.</p>
+    </div>
+
+    <div class="tier" data-tier="member">
+      <h3>Member Tier</h3>
+      <p>Unlock poster slots and treasury access.</p>
+    </div>
+
+    <div class="tier" data-tier="creator">
+      <h3>Creator Tier</h3>
+      <p>Unlock posting, treasury, PSA, and creator tools.</p>
+    </div>
+  </div>
+
+  <script>
+    const tiers = document.querySelectorAll('.tier');
+
+    tiers.forEach(tier => {
+      tier.addEventListener('click', () => {
+        const chosen = tier.getAttribute('data-tier');
+        localStorage.setItem('cc_user_tier', chosen);
+        window.location.href = '/vault-room.html';
+      });
+    });
+  </script>
+</body>
+</html>
