@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>adWorm™ v1 — Perimeter Circuit Demo</title>
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --accent: #0a0a8a;
+    --worm-bg: #0b1724;
+    --worm-accent: #00c864;
+    --worm-blink: #00ff80;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #eee;
+  }
+
+  .frame {
+    position: relative;
+    width: 960px;
+    max-width: 96vw;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border: 2px solid #222;
+    overflow: hidden;
+  }
+
+  /* CONTENT FIELD (UNINTERRUPTED) */
+  .content-field {
+    position: absolute;
+    inset: 10%;
+    background: radial-gradient(circle at 20% 20%, #333, #000);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    text-align: center;
+    font-size: 1.1rem;
+    border-radius: 4px;
+  }
+
+  .content-field span {
+    opacity: 0.8;
+  }
+
+  /* WORM UNIT */
+  .adworm-unit {
+    position: absolute;
+    background: var(--worm-bg);
+    border: 1px solid var(--worm-accent);
+    color: var(--worm-accent);
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 200, 100, 0.4);
+    transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+    z-index: 10;
+  }
+
+  .adworm-unit-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .adworm-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--worm-accent);
+  }
+
+  .adworm-unit:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 16px rgba(0, 255, 128, 0.7);
+  }
+
+  /* BLINK PULSE (CORNERS) */
+  .blink {
+    animation: blink 1.2s ease-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 70% {
+      box-shadow: 0 0 10px rgba(0, 255, 128, 0.0);
+      border-color: var(--worm-accent);
+    }
+    80% {
+      box-shadow: 0 0 18px rgba(0, 255, 128, 0.9);
+      border-color: var(--worm-blink);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(0, 255, 128, 0.0);
+      border-color: var(--worm-accent);
+    }
+  }
+
+  /* PATH POSITIONS (PERIMETER) */
+  /* We define 8 “slots” around the frame; JS moves the unit between them. */
+
+  .pos-bl { /* BL-01 Bottom Left Corner */
+    left: 2%;
+    bottom: 2%;
+  }
+
+  .pos-l {  /* L-02 Left Rail mid */
+    left: 2%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .pos-tl { /* TL-03 Top Left Corner */
+    left: 2%;
+    top: 2%;
+  }
+
+  .pos-t {  /* T-04 Top Rail mid */
+    left: 50%;
+    top: 2%;
+    transform: translateX(-50%);
+  }
+
+  .pos-tr { /* TR-05 Top Right Corner */
+    right: 2%;
+    top: 2%;
+  }
+
+  .pos-r {  /* R-06 Right Rail mid */
+    right: 2%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .pos-br { /* BR-07 Bottom Right Corner */
+    right: 2%;
+    bottom: 2%;
+  }
+
+  .pos-b {  /* B-08 Bottom Rail mid */
+    left: 50%;
+    bottom: 2%;
+    transform: translateX(-50%);
+  }
+
+  /* Simple debug labels (optional) */
+  .debug-label {
+    position: absolute;
+    font-size: 0.55rem;
+    color: #666;
+    pointer-events: none;
+  }
+
+  .debug-label.bl { left: 2%; bottom: 0.5%; }
+  .debug-label.l  { left: 2%; top: 50%; transform: translateY(-50%); }
+  .debug-label.tl { left: 2%; top: 0.5%; }
+  .debug-label.t  { left: 50%; top: 0.5%; transform: translateX(-50%); }
+  .debug-label.tr { right: 2%; top: 0.5%; }
+  .debug-label.r  { right: 2%; top: 50%; transform: translateY(-50%); }
+  .debug-label.br { right: 2%; bottom: 0.5%; }
+  .debug-label.b  { left: 50%; bottom: 0.5%; transform: translateX(-50%); }
+
+</style>
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- CONTENT FIELD — UNINTERRUPTED -->
+  <div class="content-field">
+    <span>CONTENT FIELD · UNINTERRUPTED<br />Live / VOD / VR / Multi‑cam placeholder</span>
+  </div>
+
+  <!-- OPTIONAL DEBUG POSITION LABELS -->
+  <div class="debug-label bl">BL‑01</div>
+  <div class="debug-label l">L‑02</div>
+  <div class="debug-label tl">TL‑03</div>
+  <div class="debug-label t">T‑04</div>
+  <div class="debug-label tr">TR‑05</div>
+  <div class="debug-label r">R‑06</div>
+  <div class="debug-label br">BR‑07</div>
+  <div class="debug-label b">B‑08</div>
+
+  <!-- ADWORM UNIT -->
+  <div id="adworm" class="adworm-unit pos-bl">
+    <div class="adworm-dot"></div>
+    <div class="adworm-unit-label">Sponsor · Demo</div>
+  </div>
+
+</div>
+
+<script>
+  // adWorm™ v1 — perimeter circuit logic
+  // PATH: BL-01 → L-02 → TL-03 → T-04 → TR-05 → R-06 → BR-07 → B-08 → BL-01
+
+  const worm = document.getElementById('adworm');
+
+  const path = [
+    { cls: 'pos-bl', id: 'BL-01', type: 'corner' },
+    { cls: 'pos-l',  id: 'L-02',  type: 'rail'   },
+    { cls: 'pos-tl', id: 'TL-03', type: 'corner' },
+    { cls: 'pos-t',  id: 'T-04',  type: 'rail'   },
+    { cls: 'pos-tr', id: 'TR-05', type: 'corner' },
+    { cls: 'pos-r',  id: 'R-06',  type: 'rail'   },
+    { cls: 'pos-br', id: 'BR-07', type: 'corner' },
+    { cls: 'pos-b',  id: 'B-08',  type: 'rail'   }
+  ];
+
+  let index = 0;
+
+  // Timing config (ms)
+  const RAIL_TRAVEL_TIME = 2200;   // time between rail positions
+  const CORNER_DWELL_TIME = 1400;  // pause at corners (blink pulse)
+
+  function setPosition(step) {
+    // Remove all position classes + blink
+    worm.className = 'adworm-unit';
+    path.forEach(p => worm.classList.remove(p.cls));
+    worm.classList.remove('blink');
+
+    // Apply new position
+    worm.classList.add(step.cls);
+
+    // Corners blink, rails do not
+    if (step.type === 'corner') {
+      worm.classList.add('blink');
+    }
+
+    // Update label (for demo)
+    worm.querySelector('.adworm-unit-label').textContent =
+      `Sponsor · ${step.id}`;
+  }
+
+  function advance() {
+    const step = path[index];
+    setPosition(step);
+
+    const delay = (step.type === 'corner') ? CORNER_DWELL_TIME : RAIL_TRAVEL_TIME;
+
+    index = (index + 1) % path.length;
+    setTimeout(advance, delay);
+  }
+
+  // Voluntary engagement — click handler
+  worm.addEventListener('click', () => {
+    // In production: open sponsor URL, show overlay, etc.
+    // Here we just log to console to keep the content field untouched.
+    console.log('adWorm click — voluntary engagement from', path[(index - 1 + path.length) % path.length].id);
+    alert('adWorm™ demo click — this would open sponsor experience without interrupting the stream.');
+  });
+
+  // Start circuit
+  advance();
+</script>
+
+</body>
+</html>
