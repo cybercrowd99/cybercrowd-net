@@ -1,13 +1,28 @@
-<div id="upgrade-modal" class="modal hidden">
-  <div class="modal-content">
-    <h2>Member privilege</h2>
-    <p>
-      This feature is for Members only.
-      Upgrade to unlock posting and treasury access.
-    </p>
-    <div class="modal-actions">
-      <button id="upgradeButton">Upgrade</button>
-      <button id="closeUpgradeModal">Close</button>
-    </div>
-  </div>
-</div>
+<script>
+  window.USER_TIER = window.USER_TIER || 'free';
+
+  const posterSlots = document.querySelectorAll('.poster-slot');
+  const upgradeModal = document.getElementById('upgrade-modal');
+  const closeUpgradeModal = document.getElementById('closeUpgradeModal');
+  const upgradeButton = document.getElementById('upgradeButton');
+
+  posterSlots.forEach(slot => {
+    slot.addEventListener('click', () => {
+      const slotId = slot.getAttribute('data-slot');
+
+      if (window.USER_TIER === 'member' || window.USER_TIER === 'creator') {
+        window.location.href = '/profile/poster?slot=' + slotId;
+      } else {
+        upgradeModal.classList.remove('hidden');
+      }
+    });
+  });
+
+  closeUpgradeModal.addEventListener('click', () => {
+    upgradeModal.classList.add('hidden');
+  });
+
+  upgradeButton.addEventListener('click', () => {
+    window.location.href = '/upgrade/member';
+  });
+</script>
