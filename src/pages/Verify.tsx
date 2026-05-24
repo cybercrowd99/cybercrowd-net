@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
+import { createClient } from "@supabase/supabase-js";
 
 type GateStatus =
   | "checking"
@@ -9,6 +10,9 @@ type GateStatus =
   | "verified"
   | "blocked"
   | "error";
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
 function Verify() {
   const [, navigate] = useLocation();
@@ -25,6 +29,20 @@ function Verify() {
     room: "waiting",
   });
 
+  const supabase = useMemo(() => {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      return null;
+    }
+
+    return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        detectSessionInUrl: true,
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+    });
+  }, []);
+
   function setPlug(name: keyof typeof plugTrace, value: string) {
     setPlugTrace((current) => ({
       ...current,
@@ -37,25 +55,46 @@ function Verify() {
   }
 
   function getReturnUrl() {
-    return `${window.location.origin}/verify-success.html`;
+    return `${window.location.origin}/verify?verified=1`;
   }
 
   async function checkSession() {
+    if (!supabase) {
+      setStatus("error");
+      setMessage("Security gate config is missing.");
+      setPlug("config", "FAILED - VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY missing");
+      return;
+    }
+
     setPlug("config", "connected");
+    setPlug("redirect", `return URL = ${getReturnUrl()}`);
     setPlug("session", "checking");
 
-    const cookie = document.cookie.includes("cc_access=");
+    const result = await supabase.auth.getSession();
 
-    if (!cookie) {
+    if (result.error) {
+      setStatus("error");
+      setMessage(result.error.message);
+      setPlug("session", `FAILED - ${result.error.message}`);
+      return;
+    }
+
+    const session = result.data.session;
+
+    if (!session || !session.user) {
       setStatus("ready");
       setMessage("Enter your email to receive your CyberCrowd entry link.");
       setPlug("session", "no verified session yet");
       return;
     }
 
+    localStorage.setItem("cc_verified_session", "supabase");
+    localStorage.setItem("cc_verified_email", session.user.email || "");
+    localStorage.setItem("cc_verified_user_id", session.user.id || "");
+
     setStatus("verified");
     setMessage("Verified. Opening CyberCrowd dashboard.");
-    setPlug("session", "verified session found");
+    setPlug("session", `verified session found: ${session.user.email || "user"}`);
     setPlug("room", "opening /dashboard");
 
     window.setTimeout(() => {
@@ -64,6 +103,13 @@ function Verify() {
   }
 
   async function sendEntryLink() {
+    if (!supabase) {
+      setStatus("error");
+      setMessage("Security gate config is missing.");
+      setPlug("email", "blocked - config not connected");
+      return;
+    }
+
     const cleanEmail = email.trim().toLowerCase();
 
     if (website.trim()) {
@@ -82,29 +128,33 @@ function Verify() {
 
     setStatus("sending");
     setMessage("Sending live CyberCrowd entry link.");
-    setPlug("email", "sending request to /api/auth/send");
+    setPlug("email", "sending magic link request");
     setPlug("redirect", `return URL = ${getReturnUrl()}`);
 
-    const response = await fetch("/api/auth/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: cleanEmail,
-        redirect: getReturnUrl(),
-      }),
+    localStorage.setItem("cc_pending_email", cleanEmail);
+    localStorage.setItem("cc_requested_tier", "visitor");
+
+    const result = await supabase.auth.signInWithOtp({
+      email: cleanEmail,
+      options: {
+        emailRedirectTo: getReturnUrl(),
+        data: {
+          cybercrowd_entry: "verify",
+          requested_tier: "visitor",
+        },
+      },
     });
 
-    if (!response.ok) {
-      const text = await response.text();
+    if (result.error) {
       setStatus("error");
-      setMessage(text || "Failed to send entry link.");
-      setPlug("email", `FAILED - ${text}`);
+      setMessage(result.error.message);
+      setPlug("email", `FAILED - ${result.error.message}`);
       return;
     }
 
     setStatus("sent");
     setMessage("Check your inbox. One click opens CyberCrowd.");
-    setPlug("email", "entry link sent");
+    setPlug("email", "magic link requested from Supabase");
     setPlug("session", "pending email click");
   }
 
