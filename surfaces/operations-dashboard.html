@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations Dashboard</title>
+<link rel="stylesheet" href="/surfaces/surface.css">
+</head>
+
+<body>
+
+<div class="surface">
+
+    <header class="surface-header">
+        <h1>Operations Dashboard</h1>
+        <button onclick="window.location.href='/dashboard.html'">← Back</button>
+    </header>
+
+    <section class="surface-content">
+
+        <div class="card">
+            <h2>System Health</h2>
+            <p><strong>Status:</strong> <span id="ops-status">Loading…</span></p>
+            <p><strong>Uptime:</strong> <span id="ops-uptime">Loading…</span></p>
+            <p><strong>Load:</strong> <span id="ops-load">Loading…</span></p>
+        </div>
+
+        <div class="card">
+            <h2>Service Map</h2>
+            <ul id="ops-services">
+                <li>Loading services…</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Environment</h2>
+            <p><strong>Region:</strong> <span id="ops-region">Loading…</span></p>
+            <p><strong>Version:</strong> <span id="ops-version">Loading…</span></p>
+            <p><strong>Build:</strong> <span id="ops-build">Loading…</span></p>
+        </div>
+
+        <div class="card">
+            <h2>Actions</h2>
+            <button id="ops-sync">Sync System</button>
+            <button id="ops-diagnostics">Run Diagnostics</button>
+        </div>
+
+    </section>
+
+</div>
+
+<script type="module">
+
+    // Load system health
+    fetch("/api/ops/health")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("ops-status").innerText = data.status;
+            document.getElementById("ops-uptime").innerText = data.uptime;
+            document.getElementById("ops-load").innerText = data.load;
+        });
+
+    // Load service map
+    fetch("/api/ops/services")
+        .then(r => r.json())
+        .then(data => {
+            const list = document.getElementById("ops-services");
+            list.innerHTML = "";
+            data.services.forEach(svc => {
+                const li = document.createElement("li");
+                li.innerText = svc.name + " — " + svc.status;
+                list.appendChild(li);
+            });
+        });
+
+    // Load environment info
+    fetch("/api/ops/env")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("ops-region").innerText = data.region;
+            document.getElementById("ops-version").innerText = data.version;
+            document.getElementById("ops-build").innerText = data.build;
+        });
+
+    // Actions
+    document.getElementById("ops-sync").addEventListener("click", () => {
+        fetch("/api/ops/sync", { method: "POST" })
+            .then(() => alert("System synced"));
+    });
+
+    document.getElementById("ops-diagnostics").addEventListener("click", () => {
+        fetch("/api/ops/diagnostics")
+            .then(r => r.json())
+            .then(data => alert("Diagnostics complete: " + JSON.stringify(data)));
+    });
+
+</script>
+
+</body>
+</html>
