@@ -37,14 +37,32 @@
             margin-bottom: 20px;
         }
 
-        a {
-            display: inline-block;
-            padding: 12px 20px;
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #111;
+            color: #e8e8e8;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
             background: #00c6ff;
             color: black;
             font-weight: bold;
             border-radius: 6px;
-            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -54,8 +72,49 @@
     <div class="box">
         <h1>Verification Successful</h1>
         <p>Your access token has been validated.</p>
-        <a href="dashboard.html">Enter Dashboard</a>
+
+        <!-- PASSWORD CREATION BLOCK -->
+        <div style="text-align:left;">
+            <label>Create Password</label>
+            <input type="password" id="password" autocomplete="new-password">
+
+            <label>Confirm Password</label>
+            <input type="password" id="confirmPassword" autocomplete="new-password">
+
+            <button id="createPasswordBtn">Create Password & Continue</button>
+        </div>
+        <!-- END PASSWORD BLOCK -->
+
     </div>
+
+    <script>
+        document.getElementById("createPasswordBtn").onclick = async () => {
+            const password = document.getElementById("password").value.trim();
+            const confirm = document.getElementById("confirmPassword").value.trim();
+
+            if (!password || !confirm) {
+                alert("Please enter a password in both fields.");
+                return;
+            }
+
+            if (password !== confirm) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            const res = await fetch("/api/auth/set_password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ password })
+            });
+
+            if (res.ok) {
+                window.location.href = "dashboard-surface.html";
+            } else {
+                alert("Password setup failed.");
+            }
+        };
+    </script>
 
 </body>
 </html>
