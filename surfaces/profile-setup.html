@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Surface</title>
+<link rel="stylesheet" href="/surfaces/surface.css">
+</head>
+
+<body>
+
+<div class="surface">
+
+    <header class="surface-header">
+        <h1>Profile</h1>
+        <button onclick="window.location.href='/dashboard.html'">← Back</button>
+    </header>
+
+    <section class="surface-content">
+
+        <div class="card">
+            <h2>Identity</h2>
+            <p id="profile-name">Loading…</p>
+            <img id="profile-avatar" src="" alt="Avatar" style="width:80px;height:80px;border-radius:50%;margin-top:10px;">
+        </div>
+
+        <div class="card">
+            <h2>Session Tier</h2>
+            <p id="profile-tier">Loading…</p>
+        </div>
+
+        <div class="card">
+            <h2>System Status</h2>
+            <p id="profile-status">Awaiting heartbeat…</p>
+        </div>
+
+    </section>
+
+</div>
+
+<script type="module">
+    // Load stored profile
+    const name = localStorage.getItem('cc_profile_name') || "Unknown User";
+    const avatar = localStorage.getItem('cc_profile_avatar') || "/assets/default-avatar.png";
+
+    document.getElementById("profile-name").innerText = name;
+    document.getElementById("profile-avatar").src = avatar;
+
+    // Load session tier
+    fetch("/api/session")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("profile-tier").innerText = data.tier || "Unknown";
+        });
+
+    // Load heartbeat
+    fetch("/api/heartbeat")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("profile-status").innerText = data.status || "ONLINE";
+        });
+</script>
+
+</body>
+</html>
