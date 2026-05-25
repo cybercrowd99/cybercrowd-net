@@ -85,3 +85,82 @@ padding: 4px 6px;
 border-top: 1px solid var(--border);
 min-height: 26px;
 }
+
+/* ITEM BLOCKS */
+#dashboard .item {
+  padding: 6px 8px;
+  border: 1px solid #222;
+  border-radius: 6px;
+  background: #0a0c10;
+  flex: 1 1 calc(50% - 6px);
+  min-width: 100px;
+}
+
+#dashboard .item strong {
+  color: #0ff;
+  font-size: 11px;
+}
+
+#dashboard .item span.good {
+  color: #0f0;
+}
+
+#dashboard .item span.warning {
+  color: #ff0;
+}
+
+#dashboard .item span.bad {
+  color: #f00;
+}
+
+/* COLLAPSED STATE */
+#dashboard[data-state="collapsed"] .core,
+#dashboard[data-state="collapsed"] .member,
+#dashboard[data-state="collapsed"] .creator {
+  display: none;
+}
+
+/* DOCKED STATE */
+#dashboard.docked {
+  right: 16px !important;
+  bottom: 16px !important;
+  left: auto !important;
+  top: auto !important;
+}
+
+/* BUTTONS */
+#dashboard button {
+  background: #0d1117;
+  color: #0ff;
+  border: 1px solid #222;
+  padding: 4px 6px;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#dashboard button:hover {
+  background: #1a1f27;
+}
+
+/* OPERATOR BUTTONS */
+#dashboard [data-operator] {
+  background: #332200;
+  border-color: #664400;
+  color: #ffcc00;
+}
+
+#dashboard [data-operator]:hover {
+  background: #554400;
+}
+
+/* ADMIN BUTTONS */
+#dashboard [data-admin] {
+  background: #330000;
+  border-color: #660000;
+  color: #ff0000;
+}
+
+#dashboard [data-admin]:hover {
+  background: #550000;
+}
