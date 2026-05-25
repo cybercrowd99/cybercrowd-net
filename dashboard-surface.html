@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CyberCrowd Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="dashboard-surface.css">
+</head>
+
+<body>
+
+    <div id="dashboard-surface" class="surface-root">
+
+        <div class="panel panel-main">
+            <header class="dash-header">
+                <div class="dash-identity">
+                    <div id="dash-display-name" class="dash-name">Loading…</div>
+                    <div id="dash-tier" class="dash-tier">Tier: —</div>
+                </div>
+                <div class="dash-status">
+                    <span id="dash-system-status" class="status-pill">System: CHECKING</span>
+                </div>
+            </header>
+
+            <section class="dash-grid">
+
+                <article class="dash-card">
+                    <h2>Creator Control</h2>
+                    <p>Open the creator control surface to manage identity, assets, and operations.</p>
+                    <button data-nav="creator-control-surface.html">Open Creator Control</button>
+                </article>
+
+                <article class="dash-card">
+                    <h2>Broadcast</h2>
+                    <p>Access broadcast controls for live rooms, camera angles, and viewer access logic.</p>
+                    <button data-nav="broadcast-surface.html">Open Broadcast</button>
+                </article>
+
+                <article class="dash-card">
+                    <h2>Profile</h2>
+                    <p>Review or adjust your profile setup, avatar, and display name.</p>
+                    <button data-nav="profile-setup.html">Open Profile Setup</button>
+                </article>
+
+                <article class="dash-card">
+                    <h2>System Map</h2>
+                    <p>View the CyberCrowd system map and understand how surfaces connect.</p>
+                    <button data-nav="/system-map.html">Open System Map</button>
+                </article>
+
+            </section>
+
+            <section class="dash-log">
+                <h2>Recent Activity</h2>
+                <ul id="dash-activity-log" class="activity-log">
+                    <!-- dashboard-surface.js may populate recent events here -->
+                </ul>
+            </section>
+        </div>
+
+    </div>
+
+    <script src="dashboard-surface.js"></script>
+</body>
+</html>
