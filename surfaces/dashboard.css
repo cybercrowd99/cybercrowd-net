@@ -1,0 +1,86 @@
+/* Dashboard Root */
+body {
+    margin: 0;
+    padding: 0;
+    background: #0d0d0d;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+/* Dashboard Container */
+.dashboard {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 10px;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+/* Tier Badge */
+.tier-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #222;
+    font-size: 14px;
+}
+
+/* Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* Dashboard Card */
+.dashboard-card {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+.dashboard-card h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+/* Dock Zone */
+.dashboard-dock {
+    margin-top: 30px;
+    padding: 15px;
+    background: #111;
+    border-radius: 10px;
+}
+
+.dashboard-dock button {
+    padding: 10px 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    background: #333;
+    border: none;
+    color: white;
+    border-radius: 6px;
+}
+
+/* Status Blocks */
+.status-block {
+    padding: 10px;
+    background: #222;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.status-block span {
+    font-weight: bold;
+}
