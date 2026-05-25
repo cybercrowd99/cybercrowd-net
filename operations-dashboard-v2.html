@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cybercrowd Operations Dashboard</title>
+
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#stage {
+    min-height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background:
+    radial-gradient(
+        circle at center,
+        rgba(0,255,255,0.10),
+        transparent 42%
+    ),
+    #050505;
+}
+
+#title {
+    color: #00ffff;
+    font-size: 38px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+#subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-top: 8px;
+    margin-bottom: 32px;
+}
+
+.dashboardGrid {
+    max-width: 1400px;
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+    repeat(auto-fit, minmax(320px, 1fr));
+
+    gap: 18px;
+}
+
+.panel {
+
+    border-radius: 22px;
+
+    border:
+    1px solid rgba(0,255,255,0.30);
+
+    background:
+    rgba(10,10,10,0.92);
+
+    padding: 22px;
+
+    box-sizing: border-box;
+
+    min-height: 240px;
+}
+
+.panelTitle {
+    color: #00ffff;
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+.item {
+
+    margin-top: 10px;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    background:
+    rgba(0,255,255,0.05);
+
+    border:
+    1px solid rgba(0,255,255,0.15);
+
+    line-height: 1.5;
+}
+
+.good {
+    color: #00ffaa;
+}
+
+.warning {
+    color: #ffaa00;
+}
+
+.critical {
+    color: #ff3355;
+}
+
+.meta {
+    opacity: 0.76;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.linkGrid {
+    display: grid;
+    gap: 12px;
+}
+
+.linkCard {
+
+    border-radius: 16px;
+
+    border:
+    1px solid rgba(0,255,255,0.22);
+
+    background:
+    rgba(0,255,255,0.05);
+
+    padding: 16px;
+
+    cursor: pointer;
+
+    transition:
+    transform .2s ease,
+    border .2s ease,
+    box-shadow .2s ease;
+}
+
+.linkCard:hover {
+
+    transform: scale(1.02);
+
+    border:
+    1px solid rgba(0,255,255,0.75);
+
+    box-shadow:
+    0 0 18px rgba(0,255,255,0.22);
+}
+
+.linkTitle {
+    color: #00ffff;
+    margin-bottom: 8px;
+}
+
+.linkText {
+    opacity: 0.82;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 36px;
+    opacity: 0.55;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="stage">
+
+<div id="title">
+OPERATIONS DASHBOARD
+</div>
+
+<div id="subtitle">
+Cybercrowd operational coordination and visibility surface.
+</div>
+
+<div class="dashboardGrid">
+
+<div class="panel">
+
+<div class="panelTitle">
+Tabletop Status
+</div>
+
+<div id="tabletopPanel">
+Loading...
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelTitle">
+Retention Event Stream
+</div>
+
+<div id="retentionPanel">
+Loading...
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelTitle">
+Continuity Broadcast Feed
+</div>
+
+<div id="broadcastPanel">
+Loading...
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panelTitle">
+Operational Access
+</div>
+
+<div class="linkGrid">
+
+<div class="linkCard"
+onclick="go('continuity-dashboard.html')">
+
+<div class="linkTitle">
+Continuity Dashboard
+</div>
+
+<div class="linkText">
+Resilience coordination, heartbeat monitoring,
+and continuity operations center.
+</div>
+
+</div>
+
+<div class="linkCard"
+onclick="go('continuity-broadcasts.html')">
+
+<div class="linkTitle">
+Continuity Broadcasts
+</div>
+
+<div class="linkText">
+Operational messaging and continuity visibility surface.
+</div>
+
+</div>
+
+<div class="linkCard"
+onclick="go('environment-stack.html')">
+
+<div class="linkTitle">
+Environment Stack
+</div>
+
+<div class="linkText">
+Full operational environment launcher and modular system access.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="footer">
+CYBERCROWD OPERATIONS DASHBOARD V1
+</div>
+
+</div>
+
+<script>
+
+const tabletopPanel =
+document.getElementById(
+    "tabletopPanel"
+);
+
+const retentionPanel =
+document.getElementById(
+    "retentionPanel"
+);
+
+const broadcastPanel =
+document.getElementById(
+    "broadcastPanel"
+);
+
+async function loadDashboard() {
+
+    loadTabletop();
+
+    loadRetentionEvents();
+
+    loadBroadcasts();
+}
+
+async function loadTabletop() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/tabletop-status"
+        );
+
+        const data =
+        await response.json();
+
+        renderTabletop(data);
+
+    } catch (err) {
+
+        tabletopPanel.innerHTML =
+        "Tabletop API unavailable.";
+    }
+}
+
+async function loadRetentionEvents() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/retention-events"
+        );
+
+        const data =
+        await response.json();
+
+        renderRetentionEvents(
+            data.events || []
+        );
+
+    } catch (err) {
+
+        retentionPanel.innerHTML =
+        "Retention event API unavailable.";
+    }
+}
+
+async function loadBroadcasts() {
+
+    try {
+
+        const response =
+        await fetch(
+            "/api/continuity-broadcasts"
+        );
+
+        const data =
+        await response.json();
+
+        renderBroadcasts(
+            data.broadcasts || []
+        );
+
+    } catch (err) {
+
+        broadcastPanel.innerHTML =
+        "Broadcast API unavailable.";
+    }
+}
+
+function renderTabletop(data) {
+
+    tabletopPanel.innerHTML = "";
+
+    const item =
+    document.createElement("div");
+
+    item.className =
+    "item";
+
+    item.innerHTML =
+
+        "<strong>Current Owner</strong><br>" +
+
+        "<span class='good'>" +
+        data.current_owner +
+        "</span>" +
+
+        "<div class='meta'>" +
+        "Tabletop Enabled: " +
+        data.tabletop_enabled +
+        "</div>";
+
+    tabletopPanel.appendChild(item);
+
+    Object.entries(
+        data.heartbeat || {}
+    )
+    .forEach(([surface, state]) => {
+
+        const row =
+        document.createElement("div");
+
+        row.className =
+        "item";
+
+        row.innerHTML =
+
+            "<strong>" +
+            surface +
+            "</strong><br>" +
+
+            "<span class='" +
+
+            (state.status === "online"
+                ? "good"
+                : "warning") +
+
+            "'>" +
+
+            state.status.toUpperCase() +
+
+            "</span>" +
+
+            "<div class='meta'>" +
+            "Last Seen: " +
+            (state.last_seen || "never") +
+            "</div>";
+
+        tabletopPanel.appendChild(row);
+    });
+}
+
+function renderRetentionEvents(events) {
+
+    if (!events.length) {
+
+        retentionPanel.innerHTML =
+        "No retention events.";
+
+        return;
+    }
+
+    retentionPanel.innerHTML = "";
+
+    events
+    .slice()
+    .reverse()
+    .slice(0, 8)
+    .forEach((event) => {
+
+        const row =
+        document.createElement("div");
+
+        row.className =
+        "item";
+
+        row.innerHTML =
+
+            "<strong>" +
+            event.type +
+            "</strong><br>" +
+
+            "<div class='meta'>" +
+            event.description +
+            "</div>" +
+
+            "<div class='meta'>" +
+            event.timestamp +
+            "</div>";
+
+        retentionPanel.appendChild(row);
+    });
+}
+
+function renderBroadcasts(broadcasts) {
+
+    if (!broadcasts.length) {
+
+        broadcastPanel.innerHTML =
+        "No broadcasts issued.";
+
+        return;
+    }
+
+    broadcastPanel.innerHTML = "";
+
+    broadcasts
+    .slice(0, 8)
+    .forEach((broadcast) => {
+
+        const row =
+        document.createElement("div");
+
+        row.className =
+        "item";
+
+        const severityClass =
+
+            broadcast.severity === "CRITICAL"
+            ? "critical"
+
+            : broadcast.severity === "WARNING"
+            ? "warning"
+
+            : "good";
+
+        row.innerHTML =
+
+            "<strong>Broadcast</strong><br>" +
+
+            "<span class='" +
+            severityClass +
+            "'>" +
+
+            broadcast.severity +
+
+            "</span>" +
+
+            "<div class='meta'>" +
+            broadcast.message +
+            "</div>" +
+
+            "<div class='meta'>" +
+            broadcast.timestamp +
+            "</div>";
+
+        broadcastPanel.appendChild(row);
+    });
+}
+
+function go(path) {
+
+    window.location.href = path;
+}
+
+loadDashboard();
+
+setInterval(
+    loadDashboard,
+    5000
+);
+
+</script>
+
+</body>
+</html>
