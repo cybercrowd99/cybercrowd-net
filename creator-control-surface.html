@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creator Control Surface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="creator-control.css">
+</head>
+
+<body>
+
+    <div id="creator-control-surface" class="surface-root">
+
+        <div class="panel">
+            <h1>Creator Control</h1>
+
+            <div class="module-grid">
+
+                <div class="module-card" id="module-identity">
+                    <h2>Identity</h2>
+                    <p>Manage your CyberCrowd identity and profile metadata.</p>
+                    <button data-action="open-identity">Open</button>
+                </div>
+
+                <div class="module-card" id="module-assets">
+                    <h2>Assets</h2>
+                    <p>Upload, manage, and organize your creative assets.</p>
+                    <button data-action="open-assets">Open</button>
+                </div>
+
+                <div class="module-card" id="module-broadcast">
+                    <h2>Broadcast</h2>
+                    <p>Access your broadcast tools and communication channels.</p>
+                    <button data-action="open-broadcast">Open</button>
+                </div>
+
+                <div class="module-card" id="module-operations">
+                    <h2>Operations</h2>
+                    <p>Monitor system status and operational metrics.</p>
+                    <button data-action="open-operations">Open</button>
+                </div>
+
+            </div>
+
+            <div id="creator-status" class="status"></div>
+        </div>
+
+    </div>
+
+    <script src="creator-control.js"></script>
+</body>
+</html>
