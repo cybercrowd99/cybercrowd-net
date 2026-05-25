@@ -1,0 +1,87 @@
+:root {
+--bg: #050608;
+--fg: #f5f5f5;
+--border: #444;
+}
+
+#dashboard {
+position: fixed;
+bottom: 16px;
+right: 16px;
+background: var(--bg);
+color: var(--fg);
+border: 1px solid var(--border);
+border-radius: 10px;
+display: flex;
+flex-direction: column;
+overflow: hidden;
+transition: width .2s ease-out height .2s ease-out;
+}
+
+#dashboard[data-tier="free"] {
+width: 260px;
+height: 180px;
+}
+
+#dashboard[data-tier="member"] {
+width: 320px;
+height: 230px;
+}
+
+#dashboard[data-tier="creator"] {
+width: 420px;
+height: 320px;
+}
+
+#dashboard[data-state="collapsed"] {
+height: 48px;
+}
+
+.header {
+padding: 6px 10px;
+background: #101218;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.label {
+font-size: 12px;
+letter-spacing: .06em;
+}
+
+.core,
+.member,
+.creator {
+padding: 6px 8px;
+display: flex;
+flex-wrap: wrap;
+gap: 6px;
+}
+
+.member {
+display: none;
+}
+
+.creator {
+display: none;
+}
+
+#dashboard[data-tier="member"] .member {
+display: flex;
+}
+
+#dashboard[data-tier="creator"] .member {
+display: flex;
+}
+
+#dashboard[data-tier="creator"] .creator {
+display: flex;
+}
+
+.dock {
+margin-top: auto;
+padding: 4px 6px;
+border-top: 1px solid var(--border);
+min-height: 26px;
+}
