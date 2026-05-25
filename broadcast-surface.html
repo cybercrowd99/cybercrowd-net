@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Broadcast Surface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="broadcast.css">
+</head>
+
+<body>
+
+    <div id="broadcast-surface" class="surface-root">
+
+        <div class="panel">
+            <h1>Broadcast Control</h1>
+
+            <div class="module-grid">
+
+                <div class="module-card" id="module-live-room">
+                    <h2>Live Room</h2>
+                    <p>Manage room state, readiness, and broadcast activation.</p>
+                    <button data-action="open-live-room">Open</button>
+                </div>
+
+                <div class="module-card" id="module-camera">
+                    <h2>Camera Angles</h2>
+                    <p>Assign, switch, and manage camera views.</p>
+                    <button data-action="open-camera">Open</button>
+                </div>
+
+                <div class="module-card" id="module-viewer-access">
+                    <h2>Viewer Access</h2>
+                    <p>Control public, trial, subscriber, and premium access levels.</p>
+                    <button data-action="open-access">Open</button>
+                </div>
+
+                <div class="module-card" id="module-routing">
+                    <h2>Routing</h2>
+                    <p>Route media through WDIG and event surfaces.</p>
+                    <button data-action="open-routing">Open</button>
+                </div>
+
+            </div>
+
+            <div id="broadcast-status" class="status"></div>
+        </div>
+
+    </div>
+
+    <script src="broadcast.js"></script>
+</body>
+</html>
