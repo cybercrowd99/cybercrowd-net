@@ -11,26 +11,66 @@
 
 <div id="dashboard" data-tier="free" data-state="expanded">
 
-    <div class="header">
+    <div class="header" id="dashboard-drag-handle">
         <div class="label">DASHBOARD</div>
-        <button data-action="dock-toggle" style="background:none;border:none;color:#0ff;cursor:pointer;font-size:12px;">DOCK</button>
+        <div class="header-buttons">
+            <button data-action="collapse">–</button>
+            <button data-action="dock-toggle">⧉</button>
+        </div>
     </div>
 
+    <!-- FREE TIER -->
     <div class="core">
-        <!-- free tier items -->
+        <!-- populated by dashboard-core-items.js -->
     </div>
 
+    <!-- MEMBER TIER -->
     <div class="member">
-        <!-- member tier items -->
+        <!-- populated by dashboard-member-items.js -->
     </div>
 
+    <!-- CREATOR TIER -->
     <div class="creator">
-        <!-- creator tier items -->
+        <!-- populated by dashboard-creator-items.js -->
     </div>
 
-    <div class="dock">
-        <!-- dock zone -->
+    <!-- OPERATOR CONTROLS -->
+    <div class="operator-controls">
+        <button data-operator="diagnostics">Diagnostics</button>
+        <button data-operator="flush-cache">Flush Cache</button>
+        <button data-operator="reload-surfaces">Reload Surfaces</button>
+        <button data-operator="reset-session">Reset Session</button>
+        <button data-operator="runtime-dump">Runtime Dump</button>
     </div>
+
+    <!-- ADMIN CONTROLS -->
+    <div class="admin-controls">
+        <button data-admin="maintenance-on">Maintenance On</button>
+        <button data-admin="maintenance-off">Maintenance Off</button>
+        <button data-admin="security-lockdown">Lockdown</button>
+        <button data-admin="security-release">Release</button>
+        <button data-admin="global-reset">Global Reset</button>
+        <button data-admin="system-restart">System Restart</button>
+    </div>
+
+    <!-- TIER SWITCHERS -->
+    <div class="tier-switch">
+        <button data-tier="free">Free</button>
+        <button data-tier="member">Member</button>
+        <button data-tier="creator">Creator</button>
+    </div>
+
+    <!-- ACTION TRIGGERS -->
+    <div class="actions">
+        <button data-action-trigger="open-profile">Profile</button>
+        <button data-action-trigger="open-creator-tools">Creator Tools</button>
+        <button data-action-trigger="open-adworm">adWorm</button>
+        <button data-action-trigger="open-broadcast">Broadcast</button>
+        <button data-action-trigger="open-operations">Operations</button>
+    </div>
+
+    <!-- DOCK ZONE -->
+    <div class="dock"></div>
 
 </div>
 
