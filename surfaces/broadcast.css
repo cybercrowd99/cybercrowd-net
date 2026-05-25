@@ -1,0 +1,69 @@
+/* Broadcast Dashboard Root */
+.broadcast-surface {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Status Block */
+#broadcast-status {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 14px;
+    background: #222;
+    color: white;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+/* Card Layout */
+.broadcast-card {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.broadcast-card h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+/* History List */
+#broadcast-history {
+    padding-left: 20px;
+}
+
+#broadcast-history li {
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+/* Message Input */
+#broadcast-message {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+/* Action Buttons */
+.broadcast-actions {
+    margin-top: 10px;
+}
+
+.broadcast-actions button {
+    padding: 10px 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    background: #333;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+}
