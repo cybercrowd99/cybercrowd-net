@@ -1,0 +1,75 @@
+/* Profile Setup Root */
+.profile-setup {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Identity Block */
+.identity-block {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Avatar */
+#profile-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+}
+
+/* Name + Tier */
+.identity-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#profile-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#profile-tier {
+    font-size: 16px;
+    padding: 4px 10px;
+    background: #222;
+    color: white;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Heartbeat Status */
+.status-card {
+    margin-top: 25px;
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.status-card h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+#profile-status {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Good / Bad Status Colors */
+#profile-status.online {
+    color: #2ecc71;
+}
+
+#profile-status.offline {
+    color: #e74c3c;
+}
