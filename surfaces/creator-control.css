@@ -1,0 +1,67 @@
+/* Creator Control Root */
+.creator-control {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* Creator Tier Badge */
+#creator-tier {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #222;
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Card Layout */
+.creator-card {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.creator-card h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+/* Tool List */
+#creator-tools {
+    padding-left: 20px;
+}
+
+#creator-tools li {
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+/* Draft List */
+#creator-drafts {
+    padding-left: 20px;
+}
+
+#creator-drafts li {
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+/* Action Buttons */
+.creator-actions {
+    margin-top: 20px;
+}
+
+.creator-actions button {
+    padding: 10px 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    background: #333;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+}
