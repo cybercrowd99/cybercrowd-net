@@ -1,0 +1,92 @@
+/* Operations Dashboard Root */
+.operations-dashboard {
+    max-width: 950px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* System Health Block */
+.ops-health {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.ops-health h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+#ops-status {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#ops-uptime,
+#ops-load {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+/* Service Map */
+.ops-services {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.ops-services h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+#ops-services {
+    padding-left: 20px;
+}
+
+#ops-services li {
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+/* Environment Info */
+.ops-env {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.ops-env h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+#ops-region,
+#ops-version,
+#ops-build {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+/* Action Buttons */
+.ops-actions {
+    margin-top: 20px;
+}
+
+.ops-actions button {
+    padding: 10px 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    background: #333;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+}
