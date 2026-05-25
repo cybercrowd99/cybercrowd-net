@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Broadcast Control</title>
+<link rel="stylesheet" href="/surfaces/surface.css">
+</head>
+
+<body>
+
+<div class="surface">
+
+    <header class="surface-header">
+        <h1>Broadcast Control</h1>
+        <button onclick="window.location.href='/dashboard.html'">← Back</button>
+    </header>
+
+    <section class="surface-content">
+
+        <div class="card">
+            <h2>Broadcast Status</h2>
+            <p id="broadcast-status">Loading…</p>
+        </div>
+
+        <div class="card">
+            <h2>Send Broadcast</h2>
+            <textarea id="broadcast-message" placeholder="Enter message…" style="width:100%;height:80px;"></textarea>
+            <button id="send-broadcast">Send</button>
+        </div>
+
+        <div class="card">
+            <h2>Recent Broadcasts</h2>
+            <ul id="broadcast-history">
+                <li>Loading history…</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Actions</h2>
+            <button id="sync-broadcast">Sync Broadcast Engine</button>
+        </div>
+
+    </section>
+
+</div>
+
+<script type="module">
+
+    // Load broadcast status
+    fetch("/api/broadcast/status")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("broadcast-status").innerText =
+                data.status || "UNKNOWN";
+        });
+
+    // Load broadcast history
+    fetch("/api/broadcast/history")
+        .then(r => r.json())
+        .then(data => {
+            const list = document.getElementById("broadcast-history");
+            list.innerHTML = "";
+            data.history.forEach(item => {
+                const li = document.createElement("li");
+                li.innerText = item.timestamp + ": " + item.message;
+                list.appendChild(li);
+            });
+        });
+
+    // Send broadcast
+    document.getElementById("send-broadcast").addEventListener("click", () => {
+        const msg = document.getElementById("broadcast-message").value.trim();
+        if (!msg) {
+            alert("Message cannot be empty");
+            return;
+        }
+
+        fetch("/api/broadcast/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: msg })
+        })
+        .then(() => {
+            alert("Broadcast sent");
+            location.reload();
+        });
+    });
+
+    // Sync broadcast engine
+    document.getElementById("sync-broadcast").addEventListener("click", () => {
+        fetch("/api/broadcast/sync", { method: "POST" })
+            .then(() => alert("Broadcast engine synced"));
+    });
+
+</script>
+
+</body>
+</html>
