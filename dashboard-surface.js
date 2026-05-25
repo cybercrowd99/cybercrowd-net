@@ -1,94 +1,131 @@
-/**
- * CyberCrowd Dashboard Surface Module
- * Handles identity loading, system status, quick actions, and activity log.
- */
+/* ============================================================
+   CyberCrowd Dashboard Surface Runtime
+   Reconstructed clean from missing file state
+   ============================================================ */
 
-console.log("Dashboard Surface Loaded");
+console.log("[dashboard-surface] runtime starting…");
 
-/**
- * Load identity (display name + tier)
- */
+const dashRoot = document.getElementById("dashboard-surface");
+if (!dashRoot) {
+    console.error("[dashboard-surface] root element missing");
+}
+
+/* ---------- IDENTITY + TIER LOADING ---------- */
+
 async function loadIdentity() {
     try {
-        const res = await fetch("/api/identity");
+        const res = await fetch("/api/identity", { credentials: "include" });
+        if (!res.ok) throw new Error("identity fetch failed");
+
         const data = await res.json();
 
-        const nameEl = document.getElementById("dash-display-name");
-        const tierEl = document.getElementById("dash-tier");
+        document.getElementById("dash-display-name").textContent = data.displayName || "Unknown";
+        document.getElementById("dash-tier").textContent = "Tier: " + (data.tier || "—");
 
-        if (nameEl) nameEl.textContent = data.displayName || "Unknown User";
-        if (tierEl) tierEl.textContent = "Tier: " + (data.tier || "—");
-
+        console.log("[dashboard-surface] identity loaded:", data);
     } catch (err) {
-        console.error("Identity load failed:", err);
+        console.error("[dashboard-surface] identity error:", err);
+        document.getElementById("dash-display-name").textContent = "Error";
+        document.getElementById("dash-tier").textContent = "Tier: —";
     }
 }
 
-/**
- * Load system status
- */
+/* ---------- SYSTEM STATUS ---------- */
+
 async function loadSystemStatus() {
+    const pill = document.getElementById("dash-system-status");
+
     try {
-        const res = await fetch("/api/system/status");
+        const res = await fetch("/api/system-status");
+        if (!res.ok) throw new Error("system status failed");
+
         const data = await res.json();
+        pill.textContent = "System: " + (data.status || "UNKNOWN");
+        pill.classList.add("status-ok");
 
-        const el = document.getElementById("dash-system-status");
-        if (el) el.textContent = "System: " + (data.status || "UNKNOWN");
-
+        console.log("[dashboard-surface] system status:", data);
     } catch (err) {
-        const el = document.getElementById("dash-system-status");
-        if (el) el.textContent = "System: UNAVAILABLE";
+        console.error("[dashboard-surface] system status error:", err);
+        pill.textContent = "System: ERROR";
+        pill.classList.add("status-error");
     }
 }
 
-/**
- * Load recent activity
- */
-async function loadActivity() {
+/* ---------- ACTIVITY LOG ---------- */
+
+async function loadActivityLog() {
+    const list = document.getElementById("dash-activity-log");
+    list.innerHTML = "";
+
     try {
         const res = await fetch("/api/activity");
+        if (!res.ok) throw new Error("activity fetch failed");
+
         const data = await res.json();
 
-        const list = document.getElementById("dash-activity-log");
-        if (!list) return;
-
-        list.innerHTML = "";
-
-        data.items.forEach(item => {
+        data.events.forEach(ev => {
             const li = document.createElement("li");
-            li.textContent = `${item.timestamp}: ${item.event}`;
+            li.textContent = ev;
             list.appendChild(li);
         });
 
+        console.log("[dashboard-surface] activity log loaded");
     } catch (err) {
-        console.error("Activity load failed:", err);
+        console.error("[dashboard-surface] activity log error:", err);
+        const li = document.createElement("li");
+        li.textContent = "Unable to load activity.";
+        list.appendChild(li);
     }
 }
 
-/**
- * Wire quick action navigation
- */
-function wireNavigation() {
+/* ---------- NAVIGATION HANDLERS ---------- */
+
+function bindNavigation() {
     document.querySelectorAll("[data-nav]").forEach(btn => {
         btn.addEventListener("click", () => {
             const target = btn.getAttribute("data-nav");
-            if (target) window.location.href = target;
+            console.log("[dashboard-surface] navigating to:", target);
+            window.location.href = target;
         });
     });
 }
 
-/**
- * Initialize dashboard
- */
-function initDashboard() {
-    loadIdentity();
-    loadSystemStatus();
-    loadActivity();
-    wireNavigation();
+/* ---------- DRAGGING (FALLBACK ENGINE) ---------- */
+
+function enableDrag() {
+    let isDown = false;
+    let offset = { x: 0, y: 0 };
+
+    dashRoot.addEventListener("mousedown", e => {
+        isDown = true;
+        offset.x = dashRoot.offsetLeft - e.clientX;
+        offset.y = dashRoot.offsetTop - e.clientY;
+    });
+
+    document.addEventListener("mouseup", () => isDown = false);
+
+    document.addEventListener("mousemove", e => {
+        if (!isDown) return;
+        dashRoot.style.left = (e.clientX + offset.x) + "px";
+        dashRoot.style.top = (e.clientY + offset.y) + "px";
+    });
+
+    console.log("[dashboard-surface] drag enabled (fallback)");
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initDashboard);
-} else {
-    initDashboard();
+/* ---------- INITIALIZE EVERYTHING ---------- */
+
+async function initDashboardSurface() {
+    console.log("[dashboard-surface] initializing…");
+
+    bindNavigation();
+    enableDrag();
+
+    await loadIdentity();
+    await loadSystemStatus();
+    await loadActivityLog();
+
+    console.log("[dashboard-surface] ready.");
 }
+
+initDashboardSurface();
