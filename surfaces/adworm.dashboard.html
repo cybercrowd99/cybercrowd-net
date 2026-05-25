@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AdWorm Dashboard</title>
+<link rel="stylesheet" href="/surfaces/surface.css">
+</head>
+
+<body>
+
+<div class="surface">
+
+    <header class="surface-header">
+        <h1>AdWorm Dashboard</h1>
+        <button onclick="window.location.href='/dashboard.html'">← Back</button>
+    </header>
+
+    <section class="surface-content">
+
+        <div class="card">
+            <h2>AdWorm Status</h2>
+            <p id="adworm-status">Loading…</p>
+        </div>
+
+        <div class="card">
+            <h2>Active Ad Slots</h2>
+            <ul id="adworm-slots">
+                <li>Loading slots…</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Metrics</h2>
+            <p><strong>Impressions:</strong> <span id="adworm-impressions">0</span></p>
+            <p><strong>Clicks:</strong> <span id="adworm-clicks">0</span></p>
+            <p><strong>CTR:</strong> <span id="adworm-ctr">0%</span></p>
+        </div>
+
+        <div class="card">
+            <h2>Actions</h2>
+            <button id="refresh-adworm">Refresh</button>
+            <button id="sync-adworm">Sync</button>
+            <button id="diagnose-adworm">Run Diagnostics</button>
+        </div>
+
+    </section>
+
+</div>
+
+<script type="module">
+
+    // Load AdWorm status
+    fetch("/api/adworm/status")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("adworm-status").innerText =
+                data.status || "UNKNOWN";
+        });
+
+    // Load Ad Slots
+    fetch("/api/adworm/slots")
+        .then(r => r.json())
+        .then(data => {
+            const list = document.getElementById("adworm-slots");
+            list.innerHTML = "";
+            data.slots.forEach(slot => {
+                const li = document.createElement("li");
+                li.innerText = slot;
+                list.appendChild(li);
+            });
+        });
+
+    // Load Metrics
+    fetch("/api/adworm/metrics")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("adworm-impressions").innerText = data.impressions;
+            document.getElementById("adworm-clicks").innerText = data.clicks;
+            document.getElementById("adworm-ctr").innerText = data.ctr + "%";
+        });
+
+    // Actions
+    document.getElementById("refresh-adworm").addEventListener("click", () => {
+        fetch("/api/adworm/refresh", { method: "POST" })
+            .then(() => alert("AdWorm refreshed"));
+    });
+
+    document.getElementById("sync-adworm").addEventListener("click", () => {
+        fetch("/api/adworm/sync", { method: "POST" })
+            .then(() => alert("AdWorm synced"));
+    });
+
+    document.getElementById("diagnose-adworm").addEventListener("click", () => {
+        fetch("/api/adworm/diagnostics")
+            .then(r => r.json())
+            .then(data => alert("Diagnostics complete: " + JSON.stringify(data)));
+    });
+
+</script>
+
+</body>
+</html>
