@@ -88,6 +88,13 @@
     </div>
 
     <script>
+        function getCookie(name) {
+            return document.cookie
+                .split("; ")
+                .find(row => row.startsWith(name + "="))
+                ?.split("=")[1];
+        }
+
         document.getElementById("createPasswordBtn").onclick = async () => {
             const password = document.getElementById("password").value.trim();
             const confirm = document.getElementById("confirmPassword").value.trim();
@@ -102,9 +109,14 @@
                 return;
             }
 
+            const sessionToken = getCookie("cc_session");
+
             const res = await fetch("/api/auth/set_password", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": sessionToken
+                },
                 body: JSON.stringify({ password })
             });
 
