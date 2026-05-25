@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creator Control Deck</title>
+<link rel="stylesheet" href="/surfaces/surface.css">
+</head>
+
+<body>
+
+<div class="surface">
+
+    <header class="surface-header">
+        <h1>Creator Control</h1>
+        <button onclick="window.location.href='/dashboard.html'">← Back</button>
+    </header>
+
+    <section class="surface-content">
+
+        <div class="card">
+            <h2>Creator Status</h2>
+            <p id="creator-tier">Loading…</p>
+        </div>
+
+        <div class="card">
+            <h2>Tools</h2>
+            <ul id="creator-tools">
+                <li>Loading tools…</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Drafts</h2>
+            <ul id="creator-drafts">
+                <li>No drafts loaded</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Actions</h2>
+            <button id="new-draft">New Draft</button>
+            <button id="sync-tools">Sync Tools</button>
+        </div>
+
+    </section>
+
+</div>
+
+<script type="module">
+    // Load creator tier
+    fetch("/api/session")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("creator-tier").innerText =
+                data.tier || "Unknown";
+        });
+
+    // Load creator tools
+    fetch("/api/creator/tools")
+        .then(r => r.json())
+        .then(data => {
+            const list = document.getElementById("creator-tools");
+            list.innerHTML = "";
+            data.tools.forEach(t => {
+                const li = document.createElement("li");
+                li.innerText = t;
+                list.appendChild(li);
+            });
+        });
+
+    // Load drafts
+    fetch("/api/creator/drafts")
+        .then(r => r.json())
+        .then(data => {
+            const list = document.getElementById("creator-drafts");
+            list.innerHTML = "";
+            data.drafts.forEach(d => {
+                const li = document.createElement("li");
+                li.innerText = d.title;
+                list.appendChild(li);
+            });
+        });
+
+    // Actions
+    document.getElementById("new-draft").addEventListener("click", () => {
+        window.location.href = "/surfaces/draft-editor.html";
+    });
+
+    document.getElementById("sync-tools").addEventListener("click", () => {
+        fetch("/api/creator/sync", { method: "POST" })
+            .then(() => alert("Tools synced"));
+    });
+</script>
+
+</body>
+</html>
