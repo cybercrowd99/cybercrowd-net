@@ -281,6 +281,12 @@
             <a class="back-link" href="login.html">Back</a>
           </div>
 
+          <!-- ⭐ INSERTED LOGIN BUTTON ⭐ -->
+          <div class="alt-login" style="margin-top:18px;">
+            <p style="margin:0 0 6px; color:var(--muted);">Already have an account?</p>
+            <button id="go-login" type="button">Login Here</button>
+          </div>
+
           <div class="status" id="statusBox"></div>
         </form>
       </div>
@@ -315,6 +321,14 @@
     </section>
   </main>
 
+  <!-- ⭐ LOGIN BUTTON SCRIPT ⭐ -->
+  <script>
+    document.getElementById("go-login").addEventListener("click", function () {
+      window.location.href = "/login.html";
+    });
+  </script>
+
+  <!-- ⭐ ORIGINAL SIGNUP SCRIPT ⭐ -->
   <script>
     const SIGNUP_ENDPOINT = "/api/auth/signup";
 
