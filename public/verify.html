@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Verify Email</title>
+</head>
+<body>
+  <h1>Verify Your Email</h1>
+
+  <div id="status">Verifying…</div>
+
+  <script>
+    async function runVerify() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+
+      if (!code) {
+        document.getElementById("status").innerText = "Missing verification code.";
+        return;
+      }
+
+      const res = await fetch("/api/auth/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code })
+      });
+
+      const data = await res.json();
+
+      if (data.ok) {
+        document.getElementById("status").innerText = "Email verified!";
+      } else {
+        document.getElementById("status").innerText = "Verification failed.";
+      }
+    }
+
+    runVerify();
+  </script>
+</body>
+</html>
