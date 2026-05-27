@@ -8,8 +8,34 @@ export async function onRequestPost({ request, env }) {
     });
   }
 
+  // CHECK IF USER ALREADY EXISTS
+  const existingUserId = await env.USERS.get(`email:${email}`);
+  if (existingUserId) {
+    return new Response(JSON.stringify({ error: "user_exists" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  // GENERATE 6-DIGIT CODE
   const code = Math.floor(100000 + Math.random() * 900000).toString();
 
+  // STORE CODE WITH 10-MIN EXPIRATION
+  await env.USERS.put(`signup:code:${email}`, code, {
+    expirationTtl: 60 * 10
+  });
+
+  // STORE PENDING SIGNUP RECORD
+  await env.USERS.put(
+    `signup:pending:${email}`,
+    JSON.stringify({
+      email,
+      created: Date.now()
+    }),
+    { expirationTtl: 60 * 10 }
+  );
+
+  // EMAIL PAYLOAD
   const payload = {
     From: env.CC_EMAIL_FROM,
     To: email,
@@ -18,6 +44,7 @@ export async function onRequestPost({ request, env }) {
     TextBody: `Your CyberCrowd verification code is: ${code}`
   };
 
+  // SEND EMAIL
   const res = await fetch("https://api.postmarkapp.com/email", {
     method: "POST",
     headers: {
