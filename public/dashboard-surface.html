@@ -1,6 +1,20 @@
-<button onclick="logout()" id="logout-btn">Logout</button>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+<button id="logout-btn" onclick="logout()">Logout</button>
 
 <script type="module">
-import { ensureSession } from "./session-inspector.js";
-ensureSession();
+    import { ensureSession } from "./session-inspector.js";
+    import { logout } from "./js/dashboard-logic.js";
+
+    ensureSession();
 </script>
+
+</body>
+</html>
