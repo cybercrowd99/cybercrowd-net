@@ -219,3 +219,67 @@ button {
 
 <label>ROOM THEME</label>
 <select id="themeInput">
+    <option value="default">Default</option>
+    <option value="warm">Warm</option>
+    <option value="church">Church</option>
+    <option value="comedy">Comedy</option>
+    <option value="travel">Travel</option>
+</select>
+
+<button id="applyButton">APPLY CHANGES</button>
+
+<div id="message"></div>
+
+</div>
+
+<div id="previewRoom" class="theme-default">
+    <div id="roomName">My Cybercrowd Room</div>
+    <div id="roomBio">Welcome to my room. This is where my cards, routes, and creative identity start stacking.</div>
+    <div id="videoTag">Welcome to my Cybercrowd room. Come see what I build next.</div>
+
+    <div id="cards">
+        <div class="card">Card Slot 1</div>
+        <div class="card">Card Slot 2</div>
+        <div class="card">Card Slot 3</div>
+        <div class="card">Card Slot 4</div>
+    </div>
+</div>
+
+</div> <!-- end #room -->
+
+</div> <!-- end #stage -->
+
+<!-- SESSION GATE -->
+<script type="module">
+import { ensureSession } from "./session-inspector.js";
+ensureSession();
+</script>
+
+<script>
+const nameInput = document.getElementById('nameInput');
+const bioInput = document.getElementById('bioInput');
+const videoInput = document.getElementById('videoInput');
+const themeInput = document.getElementById('themeInput');
+const applyButton = document.getElementById('applyButton');
+
+const roomName = document.getElementById('roomName');
+const roomBio = document.getElementById('roomBio');
+const videoTag = document.getElementById('videoTag');
+const previewRoom = document.getElementById('previewRoom');
+const message = document.getElementById('message');
+
+applyButton.addEventListener('click', () => {
+    roomName.textContent = nameInput.value;
+    roomBio.textContent = bioInput.value;
+    videoTag.textContent = videoInput.value;
+
+    previewRoom.className = '';
+    previewRoom.classList.add('theme-' + themeInput.value);
+
+    message.textContent = "Room updated.";
+    message.style.display = "block";
+});
+</script>
+
+</body>
+</html>
