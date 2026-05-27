@@ -1,0 +1,14 @@
+{
+  "layer": "arena-core",
+  "purpose": "stable interaction surface",
+  "depends_on": "threshing-floor",
+  "properties": {
+    "load_distribution": "uniform",
+    "ritual_ready": true,
+    "creator_safe_zone": true,
+    "crowd_safe_zone": true,
+    "bloom_enabled": true,
+    "g6_vector_ready": true
+  },
+  "description": "The Arena Core is the stabilized digital surface built directly on top of the Threshing Floor. It is where creators stand, crowds gather, Bloom flows, and G6 vector logic operates. It is the active ritual surface of CyberCrowd."
+}
