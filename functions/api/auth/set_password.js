@@ -3,13 +3,25 @@ export async function onRequestPost({ request, env }) {
     const body = await request.json();
     const password = body.password;
 
-    if (!password || password.length < 6) {
-      return new Response(JSON.stringify({ error: "invalid password" }), {
+    // PASSWORD POLICY ENFORCEMENT
+    // ---------------------------
+    // • Minimum length: 6
+    // • Maximum length: 64
+    // • Allowed: A–Z, a–z, 0–9, and ! # $ % & ? @ _ + =
+    // • Disallowed: spaces, emoji, and high‑risk symbols used in trojans/injections
+    const allowedPattern = /^[A-Za-z0-9!#$%&?@_+=]{6,64}$/;
+
+    if (!password || !allowedPattern.test(password)) {
+      return new Response(JSON.stringify({
+        error: "invalid password",
+        rules: "6–64 chars; letters, numbers, and ! # $ % & ? @ _ + = only"
+      }), {
         status: 400,
         headers: { "Content-Type": "application/json" }
       });
     }
 
+    // SESSION TOKEN CHECK
     const sessionToken = request.headers.get("Authorization");
     if (!sessionToken) {
       return new Response(JSON.stringify({ error: "no session" }), {
@@ -18,6 +30,7 @@ export async function onRequestPost({ request, env }) {
       });
     }
 
+    // SESSION VALIDATION
     const userId = await env.SESSION.get(sessionToken);
     if (!userId) {
       return new Response(JSON.stringify({ error: "invalid session" }), {
@@ -26,6 +39,7 @@ export async function onRequestPost({ request, env }) {
       });
     }
 
+    // HASH PASSWORD
     const hashBuffer = await crypto.subtle.digest(
       "SHA-256",
       new TextEncoder().encode(password)
@@ -36,6 +50,7 @@ export async function onRequestPost({ request, env }) {
       .map(b => b.toString(16).padStart(2, "0"))
       .join("");
 
+    // STORE PASSWORD + MARK VERIFIED
     await env.USERS.put(`user:${userId}:password`, hashedPassword);
     await env.USERS.put(`user:${userId}:verified`, "true");
 
