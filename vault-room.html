@@ -125,6 +125,12 @@
 
   </div>
 
+  <!-- SESSION GATE -->
+  <script type="module">
+  import { ensureSession } from "./session-inspector.js";
+  ensureSession();
+  </script>
+
   <!-- MEMBER GATE LOGIC -->
   <script>
     window.USER_TIER = window.USER_TIER || 'free';
