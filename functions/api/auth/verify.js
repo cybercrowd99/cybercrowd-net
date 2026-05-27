@@ -60,16 +60,13 @@ function makeAccessCookie(sessionToken) {
 }
 
 function plainText(message, status) {
-  return new Response(
-    message,
-    {
-      status,
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "Cache-Control": "no-store"
-      }
+  return new Response(message, {
+    status,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store"
     }
-  );
+  });
 }
 
 function sanitizeEmail(value) {
@@ -78,31 +75,23 @@ function sanitizeEmail(value) {
     .toLowerCase();
 }
 
+// Preserve your 3-tier economy exactly
 function sanitizeTier(value) {
-  const tier = String(value || "visitor")
-    .trim()
-    .toLowerCase();
+  const tier = String(value || "").trim();
 
-  if (tier === "visitor" || tier === "member" || tier === "creator") {
+  if (tier === "free" || tier === "member" || tier === "creator") {
     return tier;
   }
 
-  return "visitor";
+  return "free";
 }
 
+// No more nav.html or legacy blocking
 function sanitizeNext(value) {
-  const raw = String(value || "/nav.html").trim();
+  const raw = String(value || "/dashboard-surface.html").trim();
 
   if (!raw.startsWith("/") || raw.startsWith("//")) {
-    return "/nav.html";
-  }
-
-  if (raw.startsWith("/page2.html")) {
-    return "/nav.html";
-  }
-
-  if (raw.startsWith("/verify-success.html")) {
-    return "/nav.html";
+    return "/dashboard-surface.html";
   }
 
   return raw;
@@ -133,29 +122,21 @@ export async function onRequestGet(context) {
       "";
 
     const email = sanitizeEmail(
-      url.searchParams.get("email") ||
-      ""
+      url.searchParams.get("email") || ""
     );
 
     let tier = sanitizeTier(
-      url.searchParams.get("tier") ||
-      "visitor"
+      url.searchParams.get("tier") || ""
     );
 
     if (!email) {
-      return plainText(
-        "Missing verification email.",
-        400
-      );
+      return plainText("Missing verification email.", 400);
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailPattern.test(email)) {
-      return plainText(
-        "Invalid verification email.",
-        400
-      );
+      return plainText("Invalid verification email.", 400);
     }
 
     if (!enrollmentId && !legacyToken) {
@@ -185,27 +166,23 @@ export async function onRequestGet(context) {
         .first();
 
       if (!record) {
-        return plainText(
-          "Enrollment record not found.",
-          404
-        );
+        return plainText("Enrollment record not found.", 404);
       }
 
       if (sanitizeEmail(record.email) !== email) {
-        return plainText(
-          "Enrollment email mismatch.",
-          400
-        );
+        return plainText("Enrollment email mismatch.", 400);
       }
 
-      tier = sanitizeTier(record.tier || tier);
+      if (record.tier) {
+        tier = sanitizeTier(record.tier);
+      }
 
       await enrollmentDb
         .prepare(
           `UPDATE enrollments
            SET
-           status = ?,
-           updated_at = CURRENT_TIMESTAMP
+             status = ?,
+             updated_at = CURRENT_TIMESTAMP
            WHERE enrollment_id = ?`
         )
         .bind(
@@ -236,40 +213,27 @@ export async function onRequestGet(context) {
       url.origin
     );
 
-    successUrl.searchParams.set(
-      "verified",
-      "1"
-    );
-
-    successUrl.searchParams.set(
-      "email",
-      email
-    );
-
-    successUrl.searchParams.set(
-      "tier",
-      tier
-    );
+    successUrl.searchParams.set("verified", "1");
+    successUrl.searchParams.set("email", email);
+    successUrl.searchParams.set("tier", tier);
 
     successUrl.searchParams.set(
       "next",
-      sanitizeNext("/nav.html")
+      sanitizeNext("/dashboard-surface.html")
     );
 
-    return new Response(
-      null,
-      {
-        status: 302,
-        headers: {
-          "Location": successUrl.toString(),
-          "Set-Cookie": makeAccessCookie(sessionToken),
-          "Cache-Control": "no-store"
-        }
+    return new Response(null, {
+      status: 302,
+      headers: {
+        "Location": successUrl.toString(),
+        "Set-Cookie": makeAccessCookie(sessionToken),
+        "Cache-Control": "no-store"
       }
-    );
+    });
   } catch (error) {
     return plainText(
-      "Verification failure: " + String(error && error.message ? error.message : error),
+      "Verification failure: " +
+        String(error && error.message ? error.message : error),
       500
     );
   }
