@@ -1,1 +1,6 @@
 <button onclick="logout()" id="logout-btn">Logout</button>
+
+<script type="module">
+import { ensureSession } from "./session-inspector.js";
+ensureSession();
+</script>
