@@ -1,0 +1,21 @@
+{
+  "layer": "g6-neural-routing",
+  "purpose": "central nervous system",
+  "vectors": [
+    "motion",
+    "attention",
+    "energy",
+    "emotion",
+    "ritual",
+    "identity"
+  ],
+  "properties": {
+    "reflex_arcs": true,
+    "long_path_signals": true,
+    "crowd_flow_routing": true,
+    "creator_state_routing": true,
+    "bloom_surge_detection": true,
+    "emotional_load_balancing": true
+  },
+  "description": "The G6 Neural Routing Engine is the nervous system of CyberCrowd. It routes signals, energy, crowds, creators, Bloom, and emotional states across six primary vectors. This is the first organ that brings the CyberOctopus to life."
+}
