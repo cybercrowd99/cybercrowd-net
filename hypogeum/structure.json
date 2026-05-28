@@ -1,0 +1,39 @@
+{
+  "layer": "hypogeum",
+  "purpose": "negative-architecture backend",
+  "inspired_by": "Hal Saflieni Hypogeum",
+  "levels": {
+    "upper": {
+      "functions": [
+        "session_engine",
+        "identity_state",
+        "creator_state",
+        "crowd_state"
+      ]
+    },
+    "middle": {
+      "functions": [
+        "bloom_logic",
+        "g6_vector_routing",
+        "capture_net_processing",
+        "parlour_state_machine"
+      ]
+    },
+    "lower": {
+      "functions": [
+        "sponge_layer",
+        "emotional_resonance",
+        "decompression_chambers",
+        "deep_state_buffers"
+      ]
+    }
+  },
+  "properties": {
+    "negative_architecture": true,
+    "resonance_optimized": true,
+    "labyrinth_flow": true,
+    "ritual_alignment": true,
+    "energy_control": true
+  },
+  "description": "The CyberCrowd Hypogeum is a three-level negative-architecture backend inspired by the Hal Saflieni Hypogeum. It contains session logic, Bloom systems, G6 routing, Capture Nets, and the emotional Sponge Layer. It is carved downward, not built upward, forming the resonant machinery beneath the Arena."
+}
