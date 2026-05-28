@@ -1,0 +1,14 @@
+{
+  "layer": "flash-bloom",
+  "purpose": "energy and momentum system",
+  "depends_on": "arena-core",
+  "properties": {
+    "bloom_flow": "bidirectional",
+    "momentum_gain": "crowd_to_creator",
+    "momentum_decay": "time_based",
+    "burst_events": true,
+    "cooldown_cycles": true,
+    "g6_vector_integration": true
+  },
+  "description": "The Flash Bloom System is the energy layer that activates the Arena Core. It controls how crowd energy flows to creators, how momentum builds and decays, and how Bloom bursts trigger ritual moments. It is the living pulse of CyberCrowd."
+}
