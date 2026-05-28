@@ -1,0 +1,48 @@
+{
+  "layer": "chance-channel",
+  "purpose": "dignity-first challenge lane",
+  "roles": {
+    "producer": {
+      "description": "Designs and hosts the challenge with safety and structure.",
+      "earns_for": ["structure", "safety", "framing"]
+    },
+    "observer_broadcaster": {
+      "description": "Watches or rebroadcasts the challenge and brings attention.",
+      "earns_for": ["attention", "signal_amplification"]
+    },
+    "target": {
+      "description": "Opt-in participant with a verified need who completes the challenge.",
+      "earns_for": ["effort", "skill", "completion"]
+    }
+  },
+  "principles": {
+    "no_pity_economy": true,
+    "no_tragedy_performance": true,
+    "no_competitive_suffering": true,
+    "dignity_first": true,
+    "opt_in_only": true
+  },
+  "verification": {
+    "private_need_verification": true,
+    "public_humiliation_forbidden": true,
+    "anti_scam_checks": true
+  },
+  "flows": {
+    "challenge_creation": [
+      "producer_defines_safe_challenge",
+      "system_checks_safety_and_rules",
+      "chance_channel_publishes_lane"
+    ],
+    "participation": [
+      "target_opt_in",
+      "system_confirms_consent_and_need",
+      "challenge_runs_under_safety_constraints"
+    ],
+    "revenue_distribution": [
+      "observer_broadcaster_attention_share",
+      "producer_structure_share",
+      "target_reward_share"
+    ]
+  },
+  "description": "The Chance Channel is a dignity-first challenge lane where a producer, observer/broadcaster, and target participate in a non-exploitative challenge. No pity-bait, no tragedy performance, only effort-based value and verified need."
+}
