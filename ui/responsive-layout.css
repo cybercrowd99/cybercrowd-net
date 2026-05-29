@@ -1,0 +1,130 @@
+/* MOBILE -------------------------------------------------- */
+body.cc-mobile {
+  --cc-font-scale: 0.92;
+  --cc-padding: 10px;
+  --cc-gap: 8px;
+  --cc-max-width: 100%;
+}
+
+body.cc-mobile .cc-container {
+  padding: var(--cc-padding);
+  gap: var(--cc-gap);
+  max-width: var(--cc-max-width);
+}
+
+body.cc-mobile .cc-header,
+body.cc-mobile .cc-footer {
+  padding: 8px 10px;
+  font-size: calc(14px * var(--cc-font-scale));
+}
+
+body.cc-mobile .cc-button {
+  padding: 10px 14px;
+  font-size: calc(14px * var(--cc-font-scale));
+}
+
+
+/* TABLET --------------------------------------------------- */
+body.cc-tablet {
+  --cc-font-scale: 1.05;
+  --cc-padding: 16px;
+  --cc-gap: 12px;
+  --cc-max-width: 720px;
+}
+
+body.cc-tablet .cc-container {
+  padding: var(--cc-padding);
+  gap: var(--cc-gap);
+  max-width: var(--cc-max-width);
+  margin: 0 auto;
+}
+
+body.cc-tablet .cc-header,
+body.cc-tablet .cc-footer {
+  padding: 12px 16px;
+  font-size: calc(16px * var(--cc-font-scale));
+}
+
+body.cc-tablet .cc-button {
+  padding: 12px 18px;
+  font-size: calc(15px * var(--cc-font-scale));
+}
+
+
+/* DESKTOP -------------------------------------------------- */
+body.cc-desktop {
+  --cc-font-scale: 1.12;
+  --cc-padding: 24px;
+  --cc-gap: 16px;
+  --cc-max-width: 1080px;
+}
+
+body.cc-desktop .cc-container {
+  padding: var(--cc-padding);
+  gap: var(--cc-gap);
+  max-width: var(--cc-max-width);
+  margin: 0 auto;
+}
+
+body.cc-desktop .cc-header,
+body.cc-desktop .cc-footer {
+  padding: 16px 24px;
+  font-size: calc(18px * var(--cc-font-scale));
+}
+
+body.cc-desktop .cc-button {
+  padding: 14px 22px;
+  font-size: calc(16px * var(--cc-font-scale));
+}
+/* TABLET --------------------------------------------------- */
+body.cc-tablet {
+  --cc-font-scale: 1.05;
+  --cc-padding: 16px;
+  --cc-gap: 12px;
+  --cc-max-width: 720px;
+}
+
+body.cc-tablet .cc-container {
+  padding: var(--cc-padding);
+  gap: var(--cc-gap);
+  max-width: var(--cc-max-width);
+  margin: 0 auto;
+}
+
+body.cc-tablet .cc-header,
+body.cc-tablet .cc-footer {
+  padding: 12px 16px;
+  font-size: calc(16px * var(--cc-font-scale));
+}
+
+body.cc-tablet .cc-button {
+  padding: 12px 18px;
+  font-size: calc(15px * var(--cc-font-scale));
+}
+
+
+/* DESKTOP -------------------------------------------------- */
+body.cc-desktop {
+  --cc-font-scale: 1.12;
+  --cc-padding: 24px;
+  --cc-gap: 16px;
+  --cc-max-width: 1080px;
+}
+
+body.cc-desktop .cc-container {
+  padding: var(--cc-padding);
+  gap: var(--cc-gap);
+  max-width: var(--cc-max-width);
+  margin: 0 auto;
+}
+
+body.cc-desktop .cc-header,
+body.cc-desktop .cc-footer {
+  padding: 16px 24px;
+  font-size: calc(18px * var(--cc-font-scale));
+}
+
+body.cc-desktop .cc-button {
+  padding: 14px 22px;
+  font-size: calc(16px * var(--cc-font-scale));
+}
