@@ -1,0 +1,23 @@
+name = "cybercrowd-auth"
+main = "src/router.ts"
+compatibility_date = "2024-05-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+POSTMARK_TOKEN = ""
+
+[[kv_namespaces]]
+binding = "VERIFY_KV"
+id = ""
+
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = ""
+
+[[routes]]
+pattern = "https://cybercrowd.net/verify"
+script = "cybercrowd-auth"
+
+[[routes]]
+pattern = "https://cybercrowd.net/verify-get"
+script = "cybercrowd-auth"
