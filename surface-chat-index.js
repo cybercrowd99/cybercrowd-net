@@ -1,8 +1,8 @@
-export const SurfaceChatIndexEntry = {
-  id: "surface.chat",
-  label: "Chat Window",
-  category: "communication",
-  route: "/surface-chat-window.html",
-  icon: "💬",
-  discoverable: true
-};
+import { SurfaceChatIndexEntry } from "./surface-chat-index.js";
+
+export const SurfaceIndex = [
+  // existing surfaces...
+  // authentication, dashboard, broadcast, profile, system map, etc.
+
+  SurfaceChatIndexEntry
+];
