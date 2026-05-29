@@ -1,0 +1,113 @@
+/* VAULT ---------------------------------------------------- */
+body.cc-mobile .vault-hero {
+  padding: 20px 10px;
+  text-align: center;
+}
+
+body.cc-tablet .vault-hero {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+body.cc-desktop .vault-hero {
+  padding: 60px 40px;
+  text-align: left;
+}
+
+body.cc-mobile .vault-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+body.cc-tablet .vault-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
+}
+
+body.cc-desktop .vault-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+
+/* DASHBOARD ------------------------------------------------ */
+body.cc-mobile .dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+body.cc-tablet .dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+body.cc-desktop .dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+
+/* PANELS --------------------------------------------------- */
+body.cc-mobile .panel {
+  padding: 12px;
+  border-radius: 8px;
+}
+
+body.cc-tablet .panel {
+  padding: 18px;
+  border-radius: 10px;
+}
+
+body.cc-desktop .panel {
+  padding: 24px;
+  border-radius: 12px;
+}
+
+body.cc-mobile .panel-title {
+  font-size: 16px;
+}
+
+body.cc-tablet .panel-title {
+  font-size: 18px;
+}
+
+body.cc-desktop .panel-title {
+  font-size: 20px;
+}
+
+
+/* FEED ----------------------------------------------------- */
+body.cc-mobile .feed-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+body.cc-tablet .feed-item {
+  padding: 14px;
+  border-bottom: 1px solid #bbb;
+}
+
+body.cc-desktop .feed-item {
+  padding: 18px;
+  border-bottom: 1px solid #aaa;
+}
+
+body.cc-mobile .feed-item-title {
+  font-size: 15px;
+}
+
+body.cc-tablet .feed-item-title {
+  font-size: 17px;
+}
+
+body.cc-desktop .feed-item-title {
+  font-size: 19px;
+}
