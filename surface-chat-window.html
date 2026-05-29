@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat Window</title>
+  <style>
+    body { margin: 0; background: #111; color: #eee; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
+    #messages { flex: 1; overflow-y: auto; padding: 20px; }
+    .msg { margin-bottom: 12px; max-width: 70%; padding: 10px 14px; border-radius: 8px; }
+    .user { background: #2a2a2a; margin-left: auto; }
+    .assistant { background: #1e1e1e; margin-right: auto; }
+    .time { font-size: 10px; opacity: 0.6; margin-top: 4px; }
+    #inputBar { padding: 10px; background: #000; display: flex; }
+    #input { flex: 1; padding: 10px; border: none; border-radius: 6px; background: #222; color: #eee; }
+  </style>
+</head>
+<body>
+
+  <div id="messages"></div>
+
+  <div id="inputBar">
+    <textarea id="input" rows="2" placeholder="Type a message..."></textarea>
+  </div>
+
+  <script type="module">
+    import { SurfaceChatKernel } from "./surface-chat-kernel.js";
+    import { SurfaceChatMessageBus } from "./surface-chat-message-bus.js";
+    import { SurfaceChatRenderEngine } from "./surface-chat-render-engine.js";
+    import { SurfaceChatInputRail } from "./surface-chat-input-rail.js";
+    import { SurfaceChatContinuityEngine } from "./surface-chat-continuity-engine.js";
+    import { SurfaceChatLifecycleHooks } from "./surface-chat-lifecycle-hooks.js";
+
+    // DOM roots
+    const root = document.getElementById("messages");
+    const input = document.getElementById("input");
+
+    // Core organs
+    const kernel = new SurfaceChatKernel();
+    const bus = new SurfaceChatMessageBus({ kernel });
+    const renderEngine = new SurfaceChatRenderEngine({ kernel, root });
+    const continuity = new SurfaceChatContinuityEngine({ kernel });
+
+    // Heartbeat is provided by the global surface engine
+    const heartbeat = window.surfaceHeartbeat;
+
+    // Input rail
+    const inputRail = new SurfaceChatInputRail({ bus, inputElement: input });
+
+    // Lifecycle hooks
+    new SurfaceChatLifecycleHooks({
+      kernel,
+      renderEngine,
+      continuity,
+      bus,
+      heartbeat
+    });
+
+    // Initial render
+    renderEngine.render();
+  </script>
+
+</body>
+</html>
