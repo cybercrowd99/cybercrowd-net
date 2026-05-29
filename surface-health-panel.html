@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Surface Health Panel</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #111; color: #eee; }
+    h1 { margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid #333; }
+    th { background: #222; }
+    .degraded { color: #ff5555; }
+    .healthy { color: #55ff55; }
+  </style>
+</head>
+<body>
+  <h1>Surface Health Panel</h1>
+  <div id="timestamp"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>Surface</th>
+        <th>Status</th>
+        <th>Health</th>
+        <th>Lag Class</th>
+        <th>Drift</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <script>
+    async function loadHealth() {
+      const res = await fetch("/surface-health-dashboard-feed");
+      const data = await res.json();
+
+      document.getElementById("timestamp").textContent =
+        "Updated: " + new Date(data.generatedAt).toLocaleTimeString();
+
+      const rows = data.surfaces.map(s => {
+        const status = s.alive ? "Alive" : "Dead";
+        const cls = s.degraded ? "degraded" : "healthy";
+        return `
+          <tr>
+            <td>${s.id}</td>
+            <td class="${cls}">${status}</td>
+            <td>${(s.healthScore * 100).toFixed(0)}%</td>
+            <td>${s.lagClass}</td>
+            <td>${s.driftSeverity}</td>
+          </tr>
+        `;
+      }).join("");
+
+      document.getElementById("rows").innerHTML = rows;
+    }
+
+    setInterval(loadHealth, 1000);
+    loadHealth();
+  </script>
+</body>
+</html>
