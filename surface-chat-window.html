@@ -1,63 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Chat Window</title>
+  <meta charset="UTF-8">
+  <title>CyberCrowd Chat Surface</title>
+  <link rel="stylesheet" href="/surfaces/css/surface-chat.css">
   <style>
-    body { margin: 0; background: #111; color: #eee; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
-    #messages { flex: 1; overflow-y: auto; padding: 20px; }
-    .msg { margin-bottom: 12px; max-width: 70%; padding: 10px 14px; border-radius: 8px; }
-    .user { background: #2a2a2a; margin-left: auto; }
-    .assistant { background: #1e1e1e; margin-right: auto; }
-    .time { font-size: 10px; opacity: 0.6; margin-top: 4px; }
-    #inputBar { padding: 10px; background: #000; display: flex; }
-    #input { flex: 1; padding: 10px; border: none; border-radius: 6px; background: #222; color: #eee; }
+    .chat-surface-root {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      z-index: 9999;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-lock-toggle {
+      background: transparent;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .chat-lock-toggle:hover {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-
-  <div id="messages"></div>
-
-  <div id="inputBar">
-    <textarea id="input" rows="2" placeholder="Type a message..."></textarea>
+  <div id="chat-surface-root" class="chat-surface-root">
+    <div id="chat-window" class="chat-window">
+      <div id="chat-header" class="chat-header">
+        <span>CyberCrowd Chat</span>
+        <button id="chat-lock-toggle" class="chat-lock-toggle" type="button">
+          🔒 Locked
+        </button>
+      </div>
+      <div id="chat-messages" class="chat-messages"></div>
+      <div id="chat-input" class="chat-input"></div>
+    </div>
   </div>
 
   <script type="module">
     import { SurfaceChatKernel } from "./surface-chat-kernel.js";
-    import { SurfaceChatMessageBus } from "./surface-chat-message-bus.js";
-    import { SurfaceChatRenderEngine } from "./surface-chat-render-engine.js";
-    import { SurfaceChatInputRail } from "./surface-chat-input-rail.js";
-    import { SurfaceChatContinuityEngine } from "./surface-chat-continuity-engine.js";
-    import { SurfaceChatLifecycleHooks } from "./surface-chat-lifecycle-hooks.js";
+    import { SurfaceChatLoader } from "./surface-chat-loader.js";
+    import { SurfaceChatActivation } from "./surface-chat-activation.js";
+    import { SurfaceChatController } from "./surface-chat-controller.js";
+    import { SurfaceDragSystem } from "./surface-drag-system.js";
 
-    // DOM roots
-    const root = document.getElementById("messages");
-    const input = document.getElementById("input");
+    const registry = window.CyberCrowdRegistry || {};
+    const heartbeat = window.CyberCrowdHeartbeat || {};
 
-    // Core organs
-    const kernel = new SurfaceChatKernel();
-    const bus = new SurfaceChatMessageBus({ kernel });
-    const renderEngine = new SurfaceChatRenderEngine({ kernel, root });
-    const continuity = new SurfaceChatContinuityEngine({ kernel });
+    const loader = new SurfaceChatLoader({ registry, heartbeat });
+    const activation = new SurfaceChatActivation({ registry, heartbeat });
+    const controller = new SurfaceChatController({ registry, heartbeat });
 
-    // Heartbeat is provided by the global surface engine
-    const heartbeat = window.surfaceHeartbeat;
+    const rootEl = document.getElementById("chat-surface-root");
+    const windowEl = document.getElementById("chat-window");
+    const headerEl = document.getElementById("chat-header");
+    const lockToggleEl = document.getElementById("chat-lock-toggle");
 
-    // Input rail
-    const inputRail = new SurfaceChatInputRail({ bus, inputElement: input });
-
-    // Lifecycle hooks
-    new SurfaceChatLifecycleHooks({
-      kernel,
-      renderEngine,
-      continuity,
-      bus,
-      heartbeat
+    const drag = new SurfaceDragSystem({
+      surfaceId: "surface.chat",
+      handleElement: headerEl,
+      targetElement: rootEl,
+      locked: true
     });
 
-    // Initial render
-    renderEngine.render();
-  </script>
+    function updateLockLabel() {
+      if (drag.locked) {
+        lockToggleEl.textContent = "🔒 Locked";
+      } else {
+        lockToggleEl.textContent = "🔓 Unlocked";
+      }
+    }
 
+    lockToggleEl.addEventListener("click", () => {
+      drag.toggleLock();
+      updateLockLabel();
+    });
+
+    updateLockLabel();
+
+    (async () => {
+      await loader.load();
+      await activation.activate();
+
+      const kernel = new SurfaceChatKernel({
+        registry,
+        controller,
+        messagesElement: document.getElementById("chat-messages"),
+        inputElement: document.getElementById("chat-input")
+      });
+
+      kernel.boot();
+    })();
+  </script>
 </body>
 </html>
