@@ -1,11 +1,12 @@
 export async function sendVerificationEmail(env, email, token) {
-  const verifyUrl = `https://cybercrowd.net/verify-get?token=${encodeURIComponent(token)}`;
+  const verifyUrl = `https://cybercrowd.net/api/auth/verify?token=${encodeURIComponent(token)}`;
 
   const body = {
-    From: "no-reply@cybercrowd.net",
+    From: "CyberCrowd <welcome@cybercrowd.net>",
     To: email,
     Subject: "Verify your CyberCrowd email",
-    TextBody: `Click to verify your email: ${verifyUrl}`
+    HtmlBody: `<a href="${verifyUrl}" style="display:inline-block;padding:14px 18px;background:#111;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;">Verify Email</a>`,
+    TextBody: `Verify your email: ${verifyUrl}`
   };
 
   const res = await fetch("https://api.postmarkapp.com/email", {
@@ -18,7 +19,8 @@ export async function sendVerificationEmail(env, email, token) {
   });
 
   if (!res.ok) {
-    throw new Error(`Postmark error: ${res.status}`);
+    const error = await res.text();
+    throw new Error(`Postmark error: ${res.status} — ${error}`);
   }
 
   return true;
