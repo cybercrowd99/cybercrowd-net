@@ -1,15 +1,16 @@
 export async function createVerificationToken(env, email) {
-  const token = crypto.randomUUID();
+  const token = Array.from(crypto.getRandomValues(new Uint8Array(32)))
+    .map((b) => b.toString(16).padStart(2, "0")).join("");
   const key = `verify:${token}`;
 
-  await env.VERIFY_KV.put(key, email, { expirationTtl: 3600 });
+  await env.VERIFY_KV.put(key, email, { expirationTtl: 900 });
 
   return token;
 }
 
 export async function consumeVerificationToken(env, token) {
   const key = `verify:${token}`;
-  const email = await env.VERIFY_KV.get(key);
+  const email = await env.VERIFY_KV.get(key, { cacheTtl: 30 });
 
   if (!email) {
     return { ok: false, reason: "invalid_or_expired" };
