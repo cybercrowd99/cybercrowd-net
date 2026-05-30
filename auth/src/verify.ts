@@ -16,12 +16,7 @@ export async function consumeVerificationToken(env, token) {
     return { ok: false, reason: "invalid_or_expired" };
   }
 
-  const conn = env.HYPERDRIVE_DB.connect();
-  await conn.execute(
-    "UPDATE users SET verified = 1 WHERE email = ?",
-    [email]
-  );
-  await conn.close();
+  await env.DB.prepare("UPDATE users SET verified = 1 WHERE email = ?").bind(email).run();
 
   await env.VERIFY_KV.delete(key);
 
