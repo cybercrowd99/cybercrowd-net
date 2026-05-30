@@ -1,23 +1,24 @@
-name = "cybercrowd-auth"
-main = "src/router.ts"
-compatibility_date = "2024-05-01"
-compatibility_flags = ["nodejs_compat"]
+export async function createVerificationToken(env, email) {
+  const token = Array.from(crypto.getRandomValues(new Uint8Array(32)))
+    .map((b) => b.toString(16).padStart(2, "0")).join("");
+  const key = `verify:${token}`;
 
-[vars]
-POSTMARK_TOKEN = ""
+  await env.VERIFY_KV.put(key, email, { expirationTtl: 900 });
 
-[[kv_namespaces]]
-binding = "VERIFY_KV"
-id = ""
+  return token;
+}
 
-[[hyperdrive]]
-binding = "HYPERDRIVE"
-id = ""
+export async function consumeVerificationToken(env, token) {
+  const key = `verify:${token}`;
+  const email = await env.VERIFY_KV.get(key, { cacheTtl: 30 });
 
-[[routes]]
-pattern = "https://cybercrowd.net/verify"
-script = "cybercrowd-auth"
+  if (!email) {
+    return { ok: false, reason: "invalid_or_expired" };
+  }
 
-[[routes]]
-pattern = "https://cybercrowd.net/verify-get"
-script = "cybercrowd-auth"
+  await env.DB.prepare("UPDATE users SET verified = 1 WHERE email = ?").bind(email).run();
+
+  await env.VERIFY_KV.delete(key);
+
+  return { ok: true, email };
+}
