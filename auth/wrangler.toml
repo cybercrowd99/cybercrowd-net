@@ -1,24 +1,20 @@
-export async function createVerificationToken(env, email) {
-  const token = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-    .map((b) => b.toString(16).padStart(2, "0")).join("");
-  const key = `verify:${token}`;
+name = "cybercrowd-auth"
+main = "src/router.ts"
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
 
-  await env.VERIFY_KV.put(key, email, { expirationTtl: 900 });
+[[kv_namespaces]]
+binding = "VERIFY_KV"
+id = "62a6c667bfc94d43aaf6936bc2502750"
 
-  return token;
-}
+[[d1_databases]]
+binding = "DB"
+database_id = "ff39e37c-391a-4898-9db5-d2118a141c07"
 
-export async function consumeVerificationToken(env, token) {
-  const key = `verify:${token}`;
-  const email = await env.VERIFY_KV.get(key, { cacheTtl: 30 });
+[[routes]]
+pattern = "https://cybercrowd.net/api/auth/verify*"
+script = "cybercrowd-auth"
 
-  if (!email) {
-    return { ok: false, reason: "invalid_or_expired" };
-  }
-
-  await env.DB.prepare("UPDATE users SET verified = 1 WHERE email = ?").bind(email).run();
-
-  await env.VERIFY_KV.delete(key);
-
-  return { ok: true, email };
-}
+[[routes]]
+pattern = "https://cybercrowd.net/api/auth/send-verification"
+script = "cybercrowd-auth"
