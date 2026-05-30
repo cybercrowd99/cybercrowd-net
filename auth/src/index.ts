@@ -1,36 +1,44 @@
-import { createVerificationToken, consumeVerificationToken } from "./verify";
+import { handleVerify } from "./verify";
+import { handleSendVerification } from "./email";
+
+interface Env {
+  VERIFY_KV: KVNamespace;
+  DB: D1Database;
+  POSTMARK_TOKEN: string;
+  CC_SESSION_SECRET: string;
+}
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+    const headers = { "Cache-Control": "no-store" };
 
-    if (url.pathname === "/verify" && request.method === "POST") {
-      const { email } = await request.json();
-      if (!email) {
-        return new Response("Invalid email", { status: 400 });
-      }
-
-      const token = await createVerificationToken(env, email);
-      return new Response(JSON.stringify({ token }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" }
-      });
+    // POST /api/auth/send-verification
+    if (url.pathname === "/api/auth/send-verification" && request.method === "POST") {
+      return handleSendVerification(request, env);
     }
 
-    if (url.pathname === "/verify-get" && request.method === "GET") {
+    // GET /api/auth/verify — render confirmation page
+    if (url.pathname === "/api/auth/verify" && request.method === "GET") {
       const token = url.searchParams.get("token");
-      if (!token) {
-        return new Response("Missing token", { status: 400 });
-      }
+      if (!token) return new Response("Missing token", { status: 400, headers });
 
-      const result = await consumeVerificationToken(env, token);
-      if (!result.ok) {
-        return new Response("Invalid or expired token", { status: 400 });
-      }
-
-      return new Response("Email verified", { status: 200 });
+      return new Response(
+        `<!DOCTYPE html><html><body>
+          <form method="POST" action="/api/auth/verify">
+            <input type="hidden" name="token" value="${token}">
+            <button type="submit">Verify Email</button>
+          </form>
+        </body></html>`,
+        { headers: { ...headers, "Content-Type": "text/html" } }
+      );
     }
 
-    return new Response("Not Found", { status: 404 });
-  }
+    // POST /api/auth/verify — validate & consume token
+    if (url.pathname === "/api/auth/verify" && request.method === "POST") {
+      return handleVerify(request, env);
+    }
+
+    return new Response("Not found", { status: 404 });
+  },
 };
