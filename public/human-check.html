@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Human Check</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      text-align: center;
+    }
+    .box {
+      margin: 0 auto;
+      padding: 30px;
+      max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h1>Are You Human?</h1>
+
+    <p>Complete this quick check to enter your vessel.</p>
+
+    <button onclick="verify()">I Am Human</button>
+  </div>
+
+  <script>
+    function verify() {
+      const params = new URLSearchParams(window.location.search);
+      const email = params.get("email");
+      window.location.href = "/vessel?email=" + encodeURIComponent(email);
+    }
+  </script>
+
+</body>
+</html>
