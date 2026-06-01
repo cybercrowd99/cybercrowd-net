@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CyberCrowd Merch Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Official CyberCrowd merch store — support the build and the income independence mission." />
+  <link rel="stylesheet" href="/dashboard.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+    }
+    .cc-merch-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: radial-gradient(circle at top left, #0f172a 0, #020617 55%);
+    }
+    .cc-logo {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      color: #38bdf8;
+    }
+    .cc-tagline {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+    main {
+      flex: 1;
+      padding: 2rem 2rem 3rem;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    .cc-hero {
+      margin-bottom: 2.5rem;
+    }
+    .cc-hero-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .cc-hero-subtitle {
+      max-width: 640px;
+      font-size: 0.95rem;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+    .cc-hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #7dd3fc;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+    .cc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .cc-card {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+    }
+    .cc-card-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6b7280;
+    }
+    .cc-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+    .cc-card-desc {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      line-height: 1.5;
+      flex: 1;
+    }
+    .cc-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+    }
+    .cc-price {
+      font-weight: 600;
+      color: #f97316;
+    }
+    .cc-price-note {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+    .cc-cta-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .cc-btn {
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      background: #0f172a;
+      color: #e5e7eb;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    }
+    .cc-btn-primary {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      border-color: rgba(8, 47, 73, 0.9);
+      color: #0b1120;
+      font-weight: 600;
+    }
+    .cc-btn-outline {
+      border-color: rgba(148, 163, 184, 0.6);
+      color: #e5e7eb;
+    }
+    .cc-btn:hover {
+      transform: translateY(-1px);
+      background: #020617;
+    }
+    .cc-btn-primary:hover {
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    }
+    .cc-footer-note {
+      margin-top: 2.5rem;
+      font-size: 0.8rem;
+      color: #6b7280;
+      max-width: 720px;
+      line-height: 1.5;
+    }
+    @media (max-width: 640px) {
+      header {
+        padding: 1rem 1.25rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+      }
+      main {
+        padding: 1.5rem 1.25rem 2.5rem;
+      }
+      .cc-hero-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cc-merch-shell">
+    <header>
+      <div>
+        <div class="cc-logo">CyberCrowd</div>
+        <div class="cc-tagline">Income independence. Sovereign rails. Support the build.</div>
+      </div>
+      <div class="cc-tagline">Merch Store · Early Support Lane</div>
+    </header>
+
+    <main>
+      <section class="cc-hero">
+        <div class="cc-hero-pill">
+          <span>CyberCrowd Merch</span>
+          <span>Support the platform build</span>
+        </div>
+        <h1 class="cc-hero-title">Support the CyberCrowd Build</h1>
+        <p class="cc-hero-subtitle">
+          This merch lane is a simple, staged support window for the CyberCrowd platform. No complex money rails,
+          no hidden systems — just clear, direct ways to back the build while we continue constructing the sovereign stack,
+          WDIG, adWorm, CyberShop, and the income independence mission.
+        </p>
+      </section>
+
+      <section class="cc-grid">
+        <article class="cc-card">
+          <div class="cc-card-label">Tier 01</div>
+          <h2 class="cc-card-title">CyberCrowd Signal Tee</h2>
+          <p class="cc-card-desc">
+            Minimal black tee with the CyberCrowd wordmark and a small sovereign stack glyph. Built for everyday wear,
+            camera days, and late-night architecture sessions. This is the baseline “I was here when the rails were still drying” shirt.
+          </p>
+          <div class="cc-price-row">
+            <span class="cc-price">$28</span>
+            <span class="cc-price-note">placeholder — final pricing via Stripe</span>
+          </div>
+          <div class="cc-cta-row">
+            <button class="cc-btn cc-btn-primary" type="button">
+              Add to future cart
+            </button>
+            <button class="cc-btn cc-btn-outline" type="button">
+              Notify me when live
+            </button>
+          </div>
+        </article>
+
+        <article class="cc-card">
+          <div class="cc-card-label">Tier 02</div>
+          <h2 class="cc-card-title">Sovereign Stack Hoodie</h2>
+          <p class="cc-card-desc">
+            Heavyweight hoodie featuring a back print of the CyberCrowd stack: CyberCrowd.net, WDIG, CyberShop,
+            Monetary System, MultiCam, adWorm, and CyberCourt. For builders, operators, and anyone who lives in the control room.
+          </p>
+          <div class="cc-price-row">
+            <span class="cc-price">$58</span>
+            <span class="cc-price-note">placeholder — Stripe checkout planned</span>
+          </div>
+          <div class="cc-cta-row">
+            <button class="cc-btn cc-btn-primary" type="button">
+              Reserve interest
+            </button>
+            <button class="cc-btn cc-btn-outline" type="button">
+              View sizing details (coming soon)
+            </button>
+          </div>
+        </article>
+
+        <article class="cc-card">
+          <div class="cc-card-label">Tier 03</div>
+          <h2 class="cc-card-title">adWorm Perimeter Cap</h2>
+          <p class="cc-card-desc">
+            Low-profile cap with a subtle adWorm perimeter path stitched along the brim and a small green “worm head” mark.
+            A nod to the original 1996 perimeter advertising concept that helped define CyberCrowd’s rails.
+          </p>
+          <div class="cc-price-row">
+            <span class="cc-price">$32</span>
+            <span class="cc-price-note">placeholder — subject to final production</span>
+          </div>
+          <div class="cc-cta-row">
+            <button class="cc-btn cc-btn-primary" type="button">
+              Mark as interested
+            </button>
+            <button class="cc-btn cc-btn-outline" type="button">
+              Join merch updates list
+            </button>
+          </div>
+        </article>
+
+        <article class="cc-card">
+          <div class="cc-card-label">Tier 04</div>
+          <h2 class="cc-card-title">Operator Desk Pack</h2>
+          <p class="cc-card-desc">
+            Sticker and desk pack with CyberCrowd, WDIG, adWorm, CyberCourt, and “Income Independence Mission” marks.
+            Built for laptops, control surfaces, and physical dashboards that run live culture and platform experiments.
+          </p>
+          <div class="cc-price-row">
+            <span class="cc-price">$18</span>
+            <span class="cc-price-note">placeholder — bundled shipping TBD</span>
+          </div>
+          <div class="cc-cta-row">
+            <button class="cc-btn cc-btn-primary" type="button">
+              Flag for first run
+            </button>
+            <button class="cc-btn cc-btn-outline" type="button">
+              See full contents (coming soon)
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <section class="cc-footer-note">
+        <p>
+          This merch window is an early, staged support lane. Payments, fulfillment, and creator payouts will be handled
+          through trusted providers such as Stripe once the CyberCrowd monetary layer, CyberShop flows, and creator payout
+          systems are fully wired and tested. Nothing on this page processes payments directly.
+        </p>
+        <p>
+          CyberCrowd’s monetary direction remains: clear, staged, auditable, and tied to real access, real participation,
+          real sponsorship, or real platform value. This page is a visible placeholder for that future lane — and a signal
+          that the rails are being built in the open.
+        </p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
