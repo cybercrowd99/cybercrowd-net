@@ -1,132 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Verification Successful</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Verification Successful</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-        body {
-            margin: 0;
-            background: #0d0d0d;
-            color: #e8e8e8;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
+  <style>
+    body {
+      margin: 0;
+      background: #0d0d0d;
+      color: #e8e8e8;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
 
-        .box {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 0 14px rgba(0,0,0,0.5);
-            width: 360px;
-        }
+    .box {
+      background: #1a1a1a;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.5);
+      width: 360px;
+    }
 
-        h1 {
-            margin-top: 0;
-            font-size: 26px;
-            color: #2ecc71;
-        }
+    h1 {
+      margin-top: 0;
+      font-size: 26px;
+      color: #2ecc71;
+    }
 
-        p {
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
+    p {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #d8d8d8;
+    }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 6px;
-            margin-bottom: 16px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            background: #111;
-            color: #e8e8e8;
-            font-size: 15px;
-        }
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      text-align: left;
+      font-size: 14px;
+      color: #d8d8d8;
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #00c6ff;
-            color: black;
-            font-weight: bold;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #111;
+      color: #e8e8e8;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
 
-        button:hover {
-            opacity: 0.9;
-        }
-    </style>
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00c6ff;
+      color: black;
+      font-weight: bold;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    #statusMessage {
+      min-height: 20px;
+      margin-top: 14px;
+      font-size: 14px;
+      color: #d8c38a;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="box">
+    <h1>Verification Successful</h1>
 
-    <div class="box">
-        <h1>Verification Successful</h1>
-        <p>Your access token has been validated.</p>
+    <p>
+      Your email is verified. Create your password now to open your profile.
+    </p>
 
-        <!-- PASSWORD CREATION BLOCK -->
-        <div style="text-align:left;">
-            <label>Create Password</label>
-            <input type="password" id="password" autocomplete="new-password">
+    <div style="text-align:left;">
+      <label for="password">Create Password</label>
+      <input type="password" id="password" autocomplete="new-password">
 
-            <label>Confirm Password</label>
-            <input type="password" id="confirmPassword" autocomplete="new-password">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" autocomplete="new-password">
 
-            <button id="createPasswordBtn">Create Password & Continue</button>
-        </div>
-        <!-- END PASSWORD BLOCK -->
+      <button id="createPasswordBtn" type="button">Create Password & Continue</button>
 
+      <div id="statusMessage" aria-live="polite"></div>
     </div>
+  </div>
 
-    <script>
-        function getCookie(name) {
-            return document.cookie
-                .split("; ")
-                .find(row => row.startsWith(name + "="))
-                ?.split("=")[1];
+  <script>
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const createPasswordBtn = document.getElementById("createPasswordBtn");
+    const statusMessage = document.getElementById("statusMessage");
+
+    function setStatus(message) {
+      statusMessage.textContent = message;
+    }
+
+    function getCookie(name) {
+      return document.cookie
+        .split("; ")
+        .find(row => row.startsWith(name + "="))
+        ?.split("=")[1] || "";
+    }
+
+    function getVerificationToken() {
+      const params = new URLSearchParams(window.location.search);
+
+      return (
+        params.get("token") ||
+        params.get("verify_token") ||
+        params.get("session") ||
+        getCookie("cc_session") ||
+        localStorage.getItem("cc_verify_token") ||
+        ""
+      );
+    }
+
+    function passwordLooksUsable(password) {
+      return password.length >= 8;
+    }
+
+    createPasswordBtn.addEventListener("click", async () => {
+      const password = passwordInput.value.trim();
+      const confirmPassword = confirmPasswordInput.value.trim();
+      const verificationToken = getVerificationToken();
+
+      if (!password || !confirmPassword) {
+        setStatus("Please enter a password in both fields.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setStatus("Passwords do not match.");
+        return;
+      }
+
+      if (!passwordLooksUsable(password)) {
+        setStatus("Password must be at least 8 characters.");
+        return;
+      }
+
+      if (!verificationToken) {
+        setStatus("Verification token missing. Reopen the email verification link.");
+        return;
+      }
+
+      createPasswordBtn.disabled = true;
+      setStatus("Creating password...");
+
+      try {
+        const response = await fetch("/api/auth/set_password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": verificationToken
+          },
+          body: JSON.stringify({
+            password,
+            token: verificationToken
+          })
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(result.error || result.message || "Password setup failed.");
         }
 
-        document.getElementById("createPasswordBtn").onclick = async () => {
-            const password = document.getElementById("password").value.trim();
-            const confirm = document.getElementById("confirmPassword").value.trim();
-
-            if (!password || !confirm) {
-                alert("Please enter a password in both fields.");
-                return;
-            }
-
-            if (password !== confirm) {
-                alert("Passwords do not match.");
-                return;
-            }
-
-            const sessionToken = getCookie("cc_session");
-
-            const res = await fetch("/api/auth/set_password", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": sessionToken
-                },
-                body: JSON.stringify({ password })
-            });
-
-            if (res.ok) {
-                window.location.href = "dashboard-surface.html";
-            } else {
-                alert("Password setup failed.");
-            }
-        };
-    </script>
-
+        localStorage.removeItem("cc_verify_token");
+        window.location.href = "profile-setup.html";
+      } catch (error) {
+        console.error("CyberCrowd password setup error:", error);
+        setStatus(error.message || "Password setup failed.");
+        createPasswordBtn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
