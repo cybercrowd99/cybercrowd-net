@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd Human Gate Passed</title>
+
+  <meta
+    name="description"
+    content="CyberCrowd Human Gate safe pass page for testing the human/session checkpoint before connecting it to sensitive routes."
+  />
+
+  <style>
+    :root {
+      --bg: #050607;
+      --panel: #0d1117;
+      --text: #f4f7fb;
+      --muted: #a9b4c4;
+      --line: rgba(255, 255, 255, 0.14);
+      --green: #46f0a4;
+      --blue: #4fb3ff;
+      --gold: #ffd166;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(70, 240, 164, 0.16), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(79, 179, 255, 0.12), transparent 36%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      line-height: 1.6;
+    }
+
+    .card {
+      width: min(720px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: linear-gradient(135deg, rgba(13, 17, 23, 0.96), rgba(18, 24, 33, 0.92));
+      box-shadow: 0 24px 70px var(--shadow);
+      padding: 34px;
+      text-align: center;
+    }
+
+    .pill {
+      display: inline-block;
+      border: 1px solid rgba(70, 240, 164, 0.42);
+      color: var(--green);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(70, 240, 164, 0.08);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      line-height: 1;
+    }
+
+    p {
+      margin: 0 auto 18px;
+      max-width: 560px;
+      color: var(--muted);
+    }
+
+    .rule {
+      margin-top: 24px;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      border-radius: 14px;
+      background: rgba(255, 209, 102, 0.08);
+      text-align: left;
+      color: var(--muted);
+    }
+
+    .actions {
+      margin-top: 26px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    a {
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .primary {
+      color: #03110a;
+      background: var(--green);
+    }
+
+    .secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--line);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="pill">Safe Test Route</div>
+
+    <h1>Gate Passed</h1>
+
+    <p>
+      The CyberCrowd Human/Session Gate reached a harmless local success page.
+    </p>
+
+    <p>
+      This confirms the gate can pass to one safe route before it is connected
+      to sensitive flows.
+    </p>
+
+    <div class="rule">
+      Step 5 does not protect login, register, verify, vault, profile,
+      CyberCrowdJobs, or paid access yet. It only proves the gate has a safe
+      local pass destination.
+    </div>
+
+    <div class="actions">
+      <a class="primary" href="human-gate.html">Test Gate Again</a>
+      <a class="secondary" href="index.html">Return to CyberCrowd.net</a>
+    </div>
+  </main>
+</body>
+</html>
