@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowdJobs | Workforce Leg of CyberCrowd.net</title>
+
+  <meta
+    name="description"
+    content="CyberCrowdJobs is the workforce leg of CyberCrowd.net for live worker résumés, clock-in visibility, client pings, service clearance, CyberCrowd Services routing, Salvage support, HDF evidence, and trust records."
+  />
+
+  <style>
+    :root {
+      --bg: #050607;
+      --panel: #0d1117;
+      --panel2: #121821;
+      --text: #f4f7fb;
+      --muted: #a9b4c4;
+      --line: rgba(255, 255, 255, 0.14);
+      --green: #46f0a4;
+      --blue: #4fb3ff;
+      --gold: #ffd166;
+      --red: #ff6b6b;
+      --shadow: rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(70, 240, 164, 0.14), transparent 34%),
+        radial-gradient(circle at top right, rgba(79, 179, 255, 0.12), transparent 34%),
+        var(--bg);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: rgba(5, 6, 7, 0.88);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 18px 70px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 38px;
+      background: linear-gradient(135deg, rgba(13, 17, 23, 0.96), rgba(18, 24, 33, 0.92));
+      box-shadow: 0 24px 60px var(--shadow);
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      line-height: 0.95;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      color: var(--blue);
+    }
+
+    p {
+      margin: 0 0 16px;
+      color: var(--muted);
+    }
+
+    .hero p {
+      max-width: 920px;
+      font-size: 1.08rem;
+    }
+
+    .core-line {
+      color: var(--text);
+      font-size: 1.28rem;
+      font-weight: 800;
+      margin-top: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+      background: rgba(13, 17, 23, 0.88);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.26);
+    }
+
+    .card strong {
+      color: var(--text);
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .status {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: var(--panel2);
+    }
+
+    .status span {
+      display: block;
+      color: var(--green);
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+    }
+
+    .flow {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+      counter-reset: flow;
+    }
+
+    .flow-step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel2);
+      padding: 18px 18px 18px 58px;
+    }
+
+    .flow-step::before {
+      counter-increment: flow;
+      content: counter(flow);
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--green);
+      color: #03110a;
+      font-weight: 900;
+    }
+
+    .panel-links {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .panel-link {
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(18, 24, 33, 0.88);
+    }
+
+    .panel-link b {
+      display: block;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .panel-link em {
+      color: var(--muted);
+      font-style: normal;
+      font-size: 0.92rem;
+    }
+
+    .warning {
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 209, 102, 0.08);
+    }
+
+    .locked {
+      border-left: 4px solid var(--red);
+      background: rgba(255, 107, 107, 0.07);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      text-align: center;
+      padding: 28px 18px;
+      color: var(--muted);
+      background: rgba(5, 6, 7, 0.9);
+    }
+
+    @media (max-width: 900px) {
+      .grid,
+      .status-row,
+      .panel-links {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="nav" aria-label="CyberCrowdJobs navigation">
+      <div class="brand">CyberCrowdJobs</div>
+
+      <div class="nav-links">
+        <a href="index.html">CyberCrowd.net</a>
+        <a href="cybercrowdjobs.html">Jobs</a>
+        <a href="profile.html">Profile</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="access-passes.html">Access</a>
+        <a href="cybercourt.html">CyberCourt</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">CyberCrowd.net Workforce Leg</div>
+
+      <h1>CyberCrowdJobs</h1>
+
+      <p>
+        CyberCrowdJobs is the workforce leg attached to CyberCrowd.net. This is
+        not a generic job board. This page is the operating lobby for live worker
+        résumés, clock-in visibility, client pings, service clearance, trust
+        records, CyberCrowd Services routing, Salvage support, and HDF route
+        evidence.
+      </p>
+
+      <p class="core-line">
+        The résumé is not uploaded. The résumé is earned.
+      </p>
+
+      <div class="status-row" aria-label="CyberCrowdJobs operating status">
+        <div class="status">
+          <span>Leg</span>
+          CyberCrowdJobs
+        </div>
+
+        <div class="status">
+          <span>Parent</span>
+          CyberCrowd.net
+        </div>
+
+        <div class="status">
+          <span>Method</span>
+          Résumé → Ping → Job
+        </div>
+
+        <div class="status">
+          <span>Status</span>
+          Foundation Lobby
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="CyberCrowdJobs operating compartments">
+      <article class="card">
+        <h3>Worker Clock-In</h3>
+        <p>
+          A worker becomes visible when they clock in for an approved lane,
+          route, service type, or availability window.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Live Résumé</h3>
+        <p>
+          The live résumé is generated by deeds: completed jobs, camera proof,
+          rates, boundaries, guarantees, repair windows, refund rules,
+          availability, and trust pings.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Client Ping</h3>
+        <p>
+          The client reviews the record first. If the client wants the worker,
+          the client sends a ping. No bidding. No begging. No sales theater.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Service Clearance</h3>
+        <p>
+          The system may check skill match, route match, known-connection risk,
+          privacy limits, customer approval, and trust status before work starts.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>CyberCrowd Services</h3>
+        <p>
+          CyberCrowd Services attaches to CyberCrowdJobs for real-world service
+          execution. The service mission is simple: <strong>We Deliver Time.</strong>
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Salvage Lane</h3>
+        <p>
+          CyberCrowd Services / Salvage can use QR custody, HDF events,
+          separation pings, route evidence, and Market Connect logic for
+          recovery and asset movement.
+        </p>
+      </article>
+
+      <article class="card wide">
+        <h2>Operating Flow</h2>
+
+        <div class="flow">
+          <div class="flow-step">
+            <strong>Worker clocks in.</strong>
+            <p>
+              The worker’s live résumé becomes visible only inside the approved
+              lane, route, service category, and permission boundary.
+            </p>
+          </div>
+
+          <div class="flow-step">
+            <strong>CyberCrowdJobs opens the live résumé.</strong>
+            <p>
+              The system shows verified job history, camera proof, rates,
+              boundaries, guarantees, availability, trust pings, and service
+              restrictions.
+            </p>
+          </div>
+
+          <div class="flow-step">
+            <strong>Client reviews and sends a ping.</strong>
+            <p>
+              The client does not receive a sales pitch. The client reviews the
+              deed record and sends a ping if the worker fits the need.
+            </p>
+          </div>
+
+          <div class="flow-step">
+            <strong>Clearance checks run.</strong>
+            <p>
+              CyberCrowdJobs may check identity, session trust, service fit,
+              route fit, known-connection rules, privacy firewalls, and customer
+              approval before the job is accepted.
+            </p>
+          </div>
+
+          <div class="flow-step">
+            <strong>Job moves into service routing.</strong>
+            <p>
+              Approved work can route toward CyberCrowd Services, future Salvage
+              lanes, HDF evidence, dashboard visibility, and ledger records.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card wide">
+        <h2>Operating Panels</h2>
+
+        <div class="panel-links">
+          <a class="panel-link" href="profile.html">
+            <b>Worker Profile</b>
+            <em>Profile identity, worker record, and live résumé direction.</em>
+          </a>
+
+          <a class="panel-link" href="profile-setup.html">
+            <b>Profile Setup</b>
+            <em>Future worker setup, boundaries, rates, and service tags.</em>
+          </a>
+
+          <a class="panel-link" href="dashboard.html">
+            <b>Operations Dashboard</b>
+            <em>Dashboard lane for future pings, service states, and route control.</em>
+          </a>
+
+          <a class="panel-link" href="permissions-map.html">
+            <b>Permissions Map</b>
+            <em>Clearance, access, privacy, and role boundary reference.</em>
+          </a>
+
+          <a class="panel-link" href="device-trust.html">
+            <b>Device Trust</b>
+            <em>Device and session trust path for controlled access.</em>
+          </a>
+
+          <a class="panel-link" href="cybercourt.html">
+            <b>CyberCourt</b>
+            <em>Review, recourse, public clarity, and no invisible punishment path.</em>
+          </a>
+        </div>
+      </article>
+
+      <article class="card warning wide">
+        <h2>Foundation Status</h2>
+        <p>
+          This page creates the CyberCrowdJobs operating lobby. It does not
+          claim the full job engine, payout engine, worker onboarding engine,
+          HDF routing engine, or service dispatch system is complete.
+        </p>
+        <p>
+          The purpose is to attach the Jobs leg to CyberCrowd.net so routing,
+          profiles, dashboards, pings, services, and future Salvage lanes have a
+          visible foundation to connect to.
+        </p>
+      </article>
+
+      <article class="card locked wide">
+        <h2>Boundary Rule</h2>
+        <p>
+          CyberCrowdJobs is not a detached job board. It is a workforce leg of
+          CyberCrowd.net. It must connect cleanly, disconnect cleanly, and route
+          through the filing-cabinet system without scattering the platform.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    CyberCrowdJobs — workforce leg attached to CyberCrowd.net.
+  </footer>
+</body>
+</html>
