@@ -28,35 +28,6 @@
       user-select: none;
     }
 
-    .login-form {
-      position: absolute;
-      top: 38%;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 35;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: min(320px, 82vw);
-    }
-
-    .login-form input,
-    .login-form button {
-      padding: 12px 14px;
-      border-radius: 6px;
-      border: 2px solid #d4af37;
-      font-size: 1rem;
-      font-family: "Segoe UI", sans-serif;
-    }
-
-    .login-form button {
-      background: linear-gradient(145deg, #b08d3a, #7a5f24);
-      color: #f8f3e7;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-    }
-
     .plaque {
       position: absolute;
       padding: 12px 28px;
@@ -155,12 +126,6 @@
       alt="CyberCrowd Vault Background"
     />
 
-    <form class="login-form" onsubmit="onLogin(event)">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Email Token" required>
-      <button type="submit">Execute Access</button>
-    </form>
-
     <a class="plaque register" href="profile_signup.html">Register</a>
     <a class="plaque about" href="about.html">About</a>
     <a class="plaque contents" href="rules_regulations.html">Contents</a>
@@ -184,45 +149,6 @@
     let playlistPromise = null;
     let currentTrack = "";
     let requestNumber = 0;
-
-    async function onLogin(event) {
-      event.preventDefault();
-
-      const email = document.getElementById("email").value.trim();
-      const identityToken = document.getElementById("password").value.trim();
-
-      if (!email || !identityToken) {
-        alert("Email and email token are required.");
-        return;
-      }
-
-      try {
-        const response = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer " + identityToken,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ email: email })
-        });
-
-        const result = await response.json();
-
-        if (!response.ok || !result.ok || !result.sessionToken) {
-          console.error("CyberCrowd login failed:", result);
-          alert("Access failed. Check email token.");
-          return;
-        }
-
-        localStorage.setItem("cybercrowd_session_token", result.sessionToken);
-        localStorage.setItem("cybercrowd_user_email", email);
-
-        window.location.href = "dashboard-surface.html";
-      } catch (error) {
-        console.error("CyberCrowd login request failed:", error);
-        alert("Access failed. Login service did not respond.");
-      }
-    }
 
     function loadPlaylist() {
       if (playlist.length > 0) {
