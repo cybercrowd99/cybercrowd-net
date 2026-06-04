@@ -157,7 +157,7 @@
 
     <form class="login-form" onsubmit="onLogin(event)">
       <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="password" id="password" placeholder="Email Token" required>
       <button type="submit">Execute Access</button>
     </form>
 
@@ -185,9 +185,43 @@
     let currentTrack = "";
     let requestNumber = 0;
 
-    function onLogin(event) {
+    async function onLogin(event) {
       event.preventDefault();
-      console.log("Email login:", document.getElementById("email").value);
+
+      const email = document.getElementById("email").value.trim();
+      const identityToken = document.getElementById("password").value.trim();
+
+      if (!email || !identityToken) {
+        alert("Email and email token are required.");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + identityToken,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email: email })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.ok || !result.sessionToken) {
+          console.error("CyberCrowd login failed:", result);
+          alert("Access failed. Check email token.");
+          return;
+        }
+
+        localStorage.setItem("cybercrowd_session_token", result.sessionToken);
+        localStorage.setItem("cybercrowd_user_email", email);
+
+        window.location.href = "dashboard-surface.html";
+      } catch (error) {
+        console.error("CyberCrowd login request failed:", error);
+        alert("Access failed. Login service did not respond.");
+      }
     }
 
     function loadPlaylist() {
