@@ -2,6 +2,8 @@ export async function onRequestPost(context) {
   try {
     const body = await context.request.json();
 
+    const SIGNUP_IP_WINDOW_SECONDS = 86400;
+
     const email = (body.email || "")
       .trim()
       .toLowerCase();
@@ -105,6 +107,47 @@ export async function onRequestPost(context) {
       hostname: turnstileData.hostname || "",
       action: turnstileData.action || "",
     });
+
+    const signupRateLimit = context.env.SIGNUP_RATE_LIMIT;
+
+    if (!signupRateLimit) {
+      return Response.json(
+        {
+          success: false,
+          message: "Signup protection is not active.",
+          status: "signup_rate_limit_missing",
+        },
+        { status: 500 }
+      );
+    }
+
+    const signupIp = remoteIp || "unknown-ip";
+    const ipLimitKey = "signup-ip:" + signupIp;
+
+    const existingSignup = await signupRateLimit.get(ipLimitKey);
+
+    if (existingSignup) {
+      return Response.json(
+        {
+          success: false,
+          message: "A verification email was already requested from this connection. Check your inbox before trying again.",
+          status: "signup_ip_limited",
+        },
+        { status: 429 }
+      );
+    }
+
+    await signupRateLimit.put(
+      ipLimitKey,
+      JSON.stringify({
+        email,
+        tokenPurpose,
+        createdAt: new Date().toISOString(),
+      }),
+      {
+        expirationTtl: SIGNUP_IP_WINDOW_SECONDS,
+      }
+    );
 
     // POSTMARK KEY
     const postmarkKey = context.env.POSTMARK_API_KEY || "";
@@ -290,6 +333,7 @@ CyberCrowd Services: ${serviceContactEmail}
         serviceContactEmail,
         humanVerified: true,
         tokenPurpose,
+        ipLimited: true,
       },
       { status: 200 }
     );
