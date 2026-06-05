@@ -6,28 +6,81 @@ export async function onRequestPost({ request, env }) {
     const identityToken = cleanToken(authHeader || body.token);
 
     if (!identityToken) {
-      return json({ error: "no identity token" }, 401);
+      return json(
+        {
+          success: false,
+          error: "no identity token",
+          status: "missing_identity_token",
+        },
+        401
+      );
     }
 
-    if (!body.password || typeof body.password !== "string") {
-      return json({ error: "password required" }, 400);
+    const password = typeof body.password === "string" ? body.password : "";
+
+    if (!password) {
+      return json(
+        {
+          success: false,
+          error: "password required",
+          status: "password_required",
+        },
+        400
+      );
     }
 
-    if (body.password.length < 8) {
-      return json({ error: "password must be at least 8 characters" }, 400);
+    if (password.length < 8) {
+      return json(
+        {
+          success: false,
+          error: "password must be at least 8 characters",
+          status: "password_too_short",
+        },
+        400
+      );
     }
 
     if (!env.IDENTITY || !env.USERS) {
-      return json({ error: "auth storage not configured" }, 500);
+      return json(
+        {
+          success: false,
+          error: "auth storage not configured",
+          status: "auth_storage_missing",
+        },
+        500
+      );
     }
 
-    const userId = await env.IDENTITY.get(identityToken);
+    const identityRecord = await env.IDENTITY.get(identityToken);
+
+    if (!identityRecord) {
+      return json(
+        {
+          success: false,
+          error: "invalid identity token",
+          status: "invalid_identity_token",
+        },
+        401
+      );
+    }
+
+    const identityData = parseIdentityRecord(identityRecord);
+    const userId = identityData.userId || "";
+    const email = identityData.email || "";
 
     if (!userId) {
-      return json({ error: "invalid identity token" }, 401);
+      return json(
+        {
+          success: false,
+          error: "identity token is incomplete",
+          status: "incomplete_identity_token",
+        },
+        401
+      );
     }
 
-    const passwordRecord = await hashPassword(body.password);
+    const passwordRecord = await hashPassword(password);
+    const verifiedAt = new Date().toISOString();
 
     await env.USERS.put(
       `user:${userId}:password`,
@@ -35,7 +88,12 @@ export async function onRequestPost({ request, env }) {
     );
 
     await env.USERS.put(`user:${userId}:verified`, "true");
-    await env.USERS.put(`user:${userId}:password_created`, new Date().toISOString());
+    await env.USERS.put(`user:${userId}:password_created`, verifiedAt);
+
+    if (email) {
+      await env.USERS.put(`user:${userId}:email`, email);
+      await env.USERS.put(`email:${email}:userId`, userId);
+    }
 
     if (typeof env.IDENTITY.delete === "function") {
       await env.IDENTITY.delete(identityToken);
@@ -43,16 +101,31 @@ export async function onRequestPost({ request, env }) {
       await env.IDENTITY.put(identityToken, "", { expirationTtl: 60 });
     }
 
+    console.log("CYBERCROWD PASSWORD LANE COMPLETED:", {
+      userId,
+      email,
+      verifiedAt,
+    });
+
     return json({
+      success: true,
       ok: true,
       verified: true,
       passwordCreated: true,
-      next: "profile-setup.html"
+      status: "password_created",
+      next: "profile-setup.html",
     });
+  } catch (error) {
+    console.error("CYBERCROWD SET PASSWORD ERROR:", error);
 
-  } catch (err) {
-    console.error("set_password error:", err);
-    return json({ error: "server error" }, 500);
+    return json(
+      {
+        success: false,
+        error: "server error",
+        status: "set_password_exception",
+      },
+      500
+    );
   }
 }
 
@@ -61,8 +134,8 @@ function json(payload, status = 200) {
     status,
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "no-store"
-    }
+      "Cache-Control": "no-store",
+    },
   });
 }
 
@@ -72,6 +145,22 @@ function cleanToken(value) {
   }
 
   return value.replace(/^Bearer\s+/i, "").trim();
+}
+
+function parseIdentityRecord(identityRecord) {
+  try {
+    const parsed = JSON.parse(identityRecord);
+
+    return {
+      userId: parsed.userId || "",
+      email: parsed.email || "",
+    };
+  } catch (error) {
+    return {
+      userId: identityRecord,
+      email: "",
+    };
+  }
 }
 
 async function hashPassword(password) {
@@ -91,7 +180,7 @@ async function hashPassword(password) {
       name: "PBKDF2",
       salt,
       iterations,
-      hash: "SHA-256"
+      hash: "SHA-256",
     },
     keyMaterial,
     256
@@ -102,7 +191,7 @@ async function hashPassword(password) {
     iterations,
     salt: toBase64(salt),
     hash: toBase64(new Uint8Array(derivedBits)),
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
   };
 }
 
