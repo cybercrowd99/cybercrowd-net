@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CyberCrowd Profile Signup</title>
+  <title>CyberCrowd Sign In</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <style>
     :root {
@@ -11,9 +13,9 @@
       --gold-dark: #7a5f24;
       --cyan: #00ffff;
       --cream: #f8f3e7;
-      --muted: rgba(248, 243, 231, 0.72);
-      --panel: rgba(0, 0, 0, 0.72);
-      --line: rgba(212, 175, 55, 0.34);
+      --muted: rgba(248, 243, 231, 0.68);
+      --panel: rgba(0, 0, 0, 0.76);
+      --line: rgba(212, 175, 55, 0.28);
     }
 
     * {
@@ -24,108 +26,161 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at top, rgba(0,255,255,0.16), transparent 34%),
-        radial-gradient(circle at bottom, rgba(212,175,55,0.14), transparent 38%),
+        radial-gradient(circle at top, rgba(0,255,255,0.12), transparent 32%),
+        radial-gradient(circle at bottom, rgba(212,175,55,0.12), transparent 36%),
         #000;
       color: var(--cream);
       font-family: "Segoe UI", Arial, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 22px;
     }
 
-    .signup-shell {
-      width: min(940px, 100%);
+    .signin-card {
+      width: min(430px, 100%);
       border: 1px solid var(--line);
-      border-radius: 24px;
+      border-radius: 22px;
       background: var(--panel);
       box-shadow:
-        0 0 34px rgba(0,255,255,0.10),
-        0 0 42px rgba(212,175,55,0.12);
-      overflow: hidden;
+        0 0 28px rgba(0,255,255,0.08),
+        0 0 34px rgba(212,175,55,0.10);
+      padding: 30px;
     }
 
-    .signup-header {
-      padding: 28px;
-      border-bottom: 1px solid rgba(212,175,55,0.25);
-      background:
-        linear-gradient(135deg, rgba(212,175,55,0.18), rgba(0,255,255,0.06)),
-        rgba(0,0,0,0.35);
+    .brand {
       text-align: center;
+      margin-bottom: 28px;
     }
 
-    .signup-kicker {
+    .brand-mark {
       color: var(--cyan);
+      font-size: 0.76rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      font-size: 0.78rem;
       margin-bottom: 10px;
     }
 
     h1 {
       margin: 0;
       color: var(--gold);
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: 2.35rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .signup-subtitle {
-      margin: 14px auto 0;
-      max-width: 720px;
+    .subtext {
+      margin: 12px 0 0;
       color: var(--muted);
-      line-height: 1.6;
-      font-size: 1rem;
-    }
-
-    .signup-body {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-    }
-
-    .form-panel,
-    .info-panel {
-      padding: 28px;
-    }
-
-    .info-panel {
-      border-left: 1px solid rgba(212,175,55,0.22);
-      background: rgba(255,255,255,0.03);
+      line-height: 1.45;
+      font-size: 0.95rem;
     }
 
     label {
-      display: block;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
       margin: 18px 0 8px;
-      color: var(--gold);
-      font-size: 0.86rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      color: var(--cream);
+      font-size: 0.92rem;
+      font-weight: 700;
     }
 
-    input,
-    select,
-    textarea {
+    label a {
+      color: var(--muted);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    label a:hover {
+      color: var(--cyan);
+    }
+
+    input {
       width: 100%;
-      border: 1px solid rgba(212,175,55,0.34);
-      border-radius: 14px;
-      background: rgba(0,0,0,0.48);
+      border: 1px solid rgba(212,175,55,0.30);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
       color: var(--cream);
       padding: 14px 15px;
       font-size: 1rem;
       outline: none;
     }
 
-    textarea {
-      min-height: 100px;
-      resize: vertical;
+    input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0,255,255,0.10);
     }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--cyan);
-      box-shadow: 0 0 0 3px rgba(0,255,255,0.12);
+    .human-title {
+      margin: 22px 0 10px;
+      color: var(--cream);
+      font-weight: 700;
+    }
+
+    .human-box {
+      border: 1px solid rgba(212,175,55,0.26);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      padding: 14px;
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      border: 2px solid var(--gold);
+      border-radius: 999px;
+      background: linear-gradient(145deg, #b08d3a, var(--gold-dark));
+      color: var(--cream);
+      padding: 14px 22px;
+      font-size: 0.96rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+    }
+
+    .signup-line {
+      margin-top: 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .signup-line a {
+      color: var(--cream);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .signup-line a:hover {
+      color: var(--cyan);
+    }
+
+    .status {
+      display: none;
+      margin-top: 18px;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,255,0.22);
+      background: rgba(0,255,255,0.06);
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
+    .status.error {
+      border-color: rgba(255,90,90,0.45);
+      background: rgba(255,90,90,0.08);
+      color: #ffd6d6;
     }
 
     .honeypot {
@@ -136,205 +191,77 @@
       opacity: 0;
       pointer-events: none;
     }
-
-    .submit-row {
-      margin-top: 22px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    button,
-    .back-link {
-      border: 2px solid var(--gold);
-      border-radius: 999px;
-      background: linear-gradient(145deg, #b08d3a, var(--gold-dark));
-      color: var(--cream);
-      padding: 12px 22px;
-      font-size: 0.95rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      box-shadow: 0 0 16px rgba(212,175,55,0.26);
-    }
-
-    button:hover,
-    .back-link:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 22px rgba(212,175,55,0.38);
-    }
-
-    button:disabled {
-      opacity: 0.55;
-      cursor: wait;
-      transform: none;
-    }
-
-    .status {
-      margin-top: 18px;
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(0,255,255,0.24);
-      background: rgba(0,255,255,0.06);
-      color: var(--muted);
-      line-height: 1.5;
-      display: none;
-    }
-
-    .status.success {
-      border-color: rgba(0,255,255,0.38);
-      color: var(--cream);
-    }
-
-    .status.error {
-      border-color: rgba(255,90,90,0.5);
-      background: rgba(255,90,90,0.08);
-      color: #ffd6d6;
-    }
-
-    .info-title {
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin: 0 0 12px;
-      font-size: 1rem;
-    }
-
-    .info-copy {
-      color: var(--muted);
-      line-height: 1.6;
-      margin: 0 0 18px;
-    }
-
-    .future-card {
-      border: 1px solid rgba(212,175,55,0.28);
-      border-radius: 18px;
-      padding: 18px;
-      background: rgba(0,0,0,0.32);
-      margin-top: 16px;
-    }
-
-    .future-card strong {
-      color: var(--cyan);
-      display: block;
-      margin-bottom: 8px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .future-card span {
-      color: var(--muted);
-      line-height: 1.5;
-      display: block;
-    }
-
-    @media (max-width: 760px) {
-      .signup-body {
-        grid-template-columns: 1fr;
-      }
-
-      .info-panel {
-        border-left: 0;
-        border-top: 1px solid rgba(212,175,55,0.22);
-      }
-    }
   </style>
 </head>
 
 <body>
-  <main class="signup-shell">
-    <header class="signup-header">
-      <div class="signup-kicker">CyberCrowd Early Access</div>
-      <h1>Profile Signup</h1>
-      <p class="signup-subtitle">
-        Reserve your CyberCrowd profile lane. Submit your email, then check your inbox for the verification link.
+  <main class="signin-card">
+    <div class="brand">
+      <div class="brand-mark">cybercrowd.net</div>
+      <h1>Sign In</h1>
+      <p class="subtext">
+        Complete the human check, then request your secured CyberCrowd token lane.
       </p>
-    </header>
+    </div>
 
-    <section class="signup-body">
-      <div class="form-panel">
-        <form id="profileSignupForm">
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" />
+    <form id="cybercrowdSigninForm">
+      <label for="email">
+        <span>Email</span>
+        <a href="mailto:support@cybercrowd.net">Forgot email?</a>
+      </label>
+      <input id="email" name="email" type="email" autocomplete="email" required />
 
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+      <label for="password">
+        <span>Password</span>
+        <a href="/profile-signup.html">Forgot password?</a>
+      </label>
+      <input id="password" name="password" type="password" autocomplete="current-password" />
 
-          <label for="interest">Profile Type</label>
-          <select id="interest" name="interest">
-            <option value="early-access">Early Access</option>
-            <option value="observer">Observer</option>
-            <option value="creator">Creator / Performer</option>
-            <option value="business">Business / Sponsor</option>
-            <option value="accessibility">Accessibility / Companion Support</option>
-          </select>
+      <input class="honeypot" id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
 
-          <label for="message">Notes</label>
-          <textarea id="message" name="message" placeholder="Tell us what you want CyberCrowd to help you do."></textarea>
+      <div class="human-title">Let us know you are human</div>
 
-          <input class="honeypot" id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-
-          <div class="submit-row">
-            <button id="submitButton" type="submit">Send Verification</button>
-            <a class="back-link" href="login.html">Back</a>
-          </div>
-
-          <!-- ⭐ INSERTED LOGIN BUTTON ⭐ -->
-          <div class="alt-login" style="margin-top:18px;">
-            <p style="margin:0 0 6px; color:var(--muted);">Already have an account?</p>
-            <button id="go-login" type="button">Login Here</button>
-          </div>
-
-          <div class="status" id="statusBox"></div>
-        </form>
+      <div class="human-box">
+        <div
+          class="cf-turnstile"
+          data-sitekey="YOUR_TURNSTILE_SITE_KEY_HERE"
+          data-callback="onHumanVerified"
+          data-expired-callback="onHumanExpired"
+          data-error-callback="onHumanExpired">
+        </div>
       </div>
 
-      <aside class="info-panel">
-        <h2 class="info-title">What happens next</h2>
-        <p class="info-copy">
-          Your signup request is sent to CyberCrowd’s verification system. The server records the request, sends a verification email, and waits for the email link to be clicked.
-        </p>
+      <button id="signinButton" type="submit" disabled>Sign In</button>
 
-        <div class="future-card">
-          <strong>Email Verification</strong>
-          <span>
-            The active lane is: form submit → /api/auth/signup → D1 enrollment record → Postmark email → verification link.
-          </span>
-        </div>
+      <div class="signup-line">
+        Don’t have an account?
+        <a href="/profile-signup.html">Sign up</a>
+      </div>
 
-        <div class="future-card">
-          <strong>Stripe Upgrade Later</strong>
-          <span>
-            Stripe will be added later for paid memberships, creator upgrades, sponsor access, and controlled platform products. This page does not collect payment information.
-          </span>
-        </div>
-
-        <div class="future-card">
-          <strong>Security Gate Rule</strong>
-          <span>
-            Button click does not open the room. Email received does not open the room. The verified server session is what opens future access.
-          </span>
-        </div>
-      </aside>
-    </section>
+      <div class="status" id="statusBox"></div>
+    </form>
   </main>
 
-  <!-- ⭐ LOGIN BUTTON SCRIPT ⭐ -->
   <script>
-    document.getElementById("go-login").addEventListener("click", function () {
-      window.location.href = "/login.html";
-    });
-  </script>
+    const SIGNIN_ENDPOINT = "/api/auth/signup";
 
-  <!-- ⭐ ORIGINAL SIGNUP SCRIPT ⭐ -->
-  <script>
-    const SIGNUP_ENDPOINT = "/api/auth/signup";
-
-    const form = document.getElementById("profileSignupForm");
+    const form = document.getElementById("cybercrowdSigninForm");
     const statusBox = document.getElementById("statusBox");
-    const submitButton = document.getElementById("submitButton");
+    const signinButton = document.getElementById("signinButton");
+
+    let humanToken = "";
+
+    window.onHumanVerified = function (token) {
+      humanToken = token || "";
+      signinButton.disabled = !humanToken;
+      showStatus("Human check complete. You may now sign in.", "");
+    };
+
+    window.onHumanExpired = function () {
+      humanToken = "";
+      signinButton.disabled = true;
+      showStatus("Human check expired. Complete it again before signing in.", "error");
+    };
 
     form.addEventListener("submit", async function (event) {
       event.preventDefault();
@@ -342,24 +269,30 @@
       const formData = new FormData(form);
 
       const payload = {
-        name: String(formData.get("name") || "").trim(),
         email: String(formData.get("email") || "").trim(),
-        interest: String(formData.get("interest") || "").trim(),
-        message: String(formData.get("message") || "").trim(),
-        website: String(formData.get("website") || "").trim()
+        password: String(formData.get("password") || ""),
+        website: String(formData.get("website") || "").trim(),
+        humanToken: humanToken,
+        tokenPurpose: "cybercrowd-signin",
+        domain: "cybercrowd.net"
       };
 
       if (!payload.email || !payload.email.includes("@")) {
-        showStatus("Enter a valid email address before sending verification.", "error");
+        showStatus("Enter a valid email address before signing in.", "error");
         return;
       }
 
-      submitButton.disabled = true;
-      submitButton.textContent = "Sending...";
-      showStatus("Sending verification email...", "success");
+      if (!payload.humanToken) {
+        showStatus("Complete the human check before signing in.", "error");
+        return;
+      }
+
+      signinButton.disabled = true;
+      signinButton.textContent = "Checking...";
+      showStatus("Checking human token and requesting CyberCrowd access lane.", "");
 
       try {
-        const response = await fetch(SIGNUP_ENDPOINT, {
+        const response = await fetch(SIGNIN_ENDPOINT, {
           method: "POST",
           headers: {
             "content-type": "application/json"
@@ -379,25 +312,27 @@
           const message =
             result && result.error
               ? result.error
-              : "Signup request failed. Check the API, D1 binding, and Postmark configuration.";
+              : "Sign in request failed. Check the API, token verifier, D1 binding, and email sender.";
 
           throw new Error(message);
         }
 
-        showStatus(
-          "Verification sent. Check your email and click the CyberCrowd verification link to continue.",
-          "success"
-        );
+        showStatus("CyberCrowd token lane requested. Check your email to continue.", "");
 
         form.reset();
+        humanToken = "";
+
+        if (window.turnstile) {
+          window.turnstile.reset();
+        }
       } catch (error) {
         showStatus(
-          "Verification did not send: " + String(error && error.message ? error.message : error),
+          "Sign in did not complete: " + String(error && error.message ? error.message : error),
           "error"
         );
       } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "Send Verification";
+        signinButton.disabled = !humanToken;
+        signinButton.textContent = "Sign In";
       }
     });
 
