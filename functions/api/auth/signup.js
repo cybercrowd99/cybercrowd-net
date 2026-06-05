@@ -149,7 +149,6 @@ export async function onRequestPost(context) {
       }
     );
 
-    // POSTMARK KEY
     const postmarkKey = context.env.POSTMARK_API_KEY || "";
 
     if (!postmarkKey) {
@@ -164,21 +163,43 @@ export async function onRequestPost(context) {
       );
     }
 
-    /*
-    CYBERCROWD LIVE PUBLIC EMAIL ENVELOPE
-    ------------------------------------
-    Sender:
-    CyberCrowd <welcome@cybercrowd.net>
-
-    Support/contact in body only:
-    cybercrowd_services@yahoo.com
-    ------------------------------------
-    */
-
     const fromEmail = "CyberCrowd <welcome@cybercrowd.net>";
     const serviceContactEmail = "cybercrowd_services@yahoo.com";
 
     const verifyToken = crypto.randomUUID();
+
+    if (!context.env.IDENTITY) {
+      return Response.json(
+        {
+          success: false,
+          message: "CyberCrowd identity token storage is not active.",
+          status: "identity_store_missing",
+        },
+        { status: 500 }
+      );
+    }
+
+    const userId = crypto.randomUUID();
+
+    await context.env.IDENTITY.put(
+      verifyToken,
+      JSON.stringify({
+        userId,
+        email,
+        tokenPurpose,
+        tokenType: "cybercrowd-crypto-identity",
+        deliverySurface: "email",
+        deliveryTrust: "untrusted-carrier",
+        humanGate: "turnstile_verified",
+        confidenceState: "pending",
+        continuityState: "not_established",
+        status: "pending_password",
+        createdAt: new Date().toISOString(),
+      }),
+      {
+        expirationTtl: 3600,
+      }
+    );
 
     const requestUrl = new URL(context.request.url);
     const origin = requestUrl.origin;
@@ -262,7 +283,6 @@ CyberCrowd Services: ${serviceContactEmail}
     console.log("CYBERCROWD VERIFY TOKEN:", verifyToken);
     console.log("CYBERCROWD VERIFY URL:", verifyUrl);
 
-    // POSTMARK SEND
     const sendResponse = await fetch("https://api.postmarkapp.com/email", {
       method: "POST",
       headers: {
@@ -334,6 +354,7 @@ CyberCrowd Services: ${serviceContactEmail}
         humanVerified: true,
         tokenPurpose,
         ipLimited: true,
+        cryptoIdentityTokenStored: true,
       },
       { status: 200 }
     );
