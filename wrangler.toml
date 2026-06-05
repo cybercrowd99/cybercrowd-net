@@ -23,3 +23,15 @@ enabled = true
 [[r2_buckets]]
 binding = "TEASER_BUCKET"
 bucket_name = "cybercrowd-teasers"
+
+[[kv_namespaces]]
+binding = "IDENTITY"
+id = "fe654980fc014402acd73c87ea04aa61"
+
+[[kv_namespaces]]
+binding = "SIGNUP_RATE_LIMIT"
+id = "c11f2d19270443728b757b602a71c7e4"
+
+[[kv_namespaces]]
+binding = "USERS"
+id = "211ec37065aa46269485c90c2eb8936e"
