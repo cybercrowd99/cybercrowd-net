@@ -1,11 +1,17 @@
 export async function onRequestPost(context) {
-
   try {
     const body = await context.request.json();
 
     const email = (body.email || "")
       .trim()
       .toLowerCase();
+
+    const humanToken =
+      body.humanToken ||
+      body["cf-turnstile-response"] ||
+      "";
+
+    const tokenPurpose = String(body.tokenPurpose || "cybercrowd-signin").trim();
 
     if (!email) {
       return Response.json(
@@ -30,6 +36,75 @@ export async function onRequestPost(context) {
         { status: 400 }
       );
     }
+
+    if (!humanToken) {
+      return Response.json(
+        {
+          success: false,
+          message: "Complete the human check before continuing.",
+          status: "missing_human_token",
+        },
+        { status: 400 }
+      );
+    }
+
+    const turnstileSecret = context.env.TURNSTILE_SECRET_KEY || "";
+
+    if (!turnstileSecret) {
+      return Response.json(
+        {
+          success: false,
+          message: "Human verification service is not active.",
+          status: "human_service_inactive",
+        },
+        { status: 500 }
+      );
+    }
+
+    const remoteIp =
+      context.request.headers.get("CF-Connecting-IP") || "";
+
+    const turnstileForm = new FormData();
+    turnstileForm.append("secret", turnstileSecret);
+    turnstileForm.append("response", humanToken);
+
+    if (remoteIp) {
+      turnstileForm.append("remoteip", remoteIp);
+    }
+
+    const turnstileResponse = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        body: turnstileForm,
+      }
+    );
+
+    const turnstileData = await turnstileResponse.json();
+
+    if (!turnstileData.success) {
+      console.error("CYBERCROWD HUMAN TOKEN FAILURE:", {
+        email,
+        tokenPurpose,
+        errors: turnstileData["error-codes"] || [],
+      });
+
+      return Response.json(
+        {
+          success: false,
+          message: "Human verification failed.",
+          status: "human_token_failed",
+        },
+        { status: 403 }
+      );
+    }
+
+    console.log("CYBERCROWD HUMAN TOKEN VERIFIED:", {
+      email,
+      tokenPurpose,
+      hostname: turnstileData.hostname || "",
+      action: turnstileData.action || "",
+    });
 
     // POSTMARK KEY
     const postmarkKey = context.env.POSTMARK_API_KEY || "";
@@ -172,8 +247,6 @@ CyberCrowd Services: ${serviceContactEmail}
           message: sendData.Message || "Access denied.",
           email,
           status: "email_delivery_failed",
-          verifyToken,
-          verifyUrl,
           emailDelivery: "failed",
           postmarkStatus: sendResponse.status,
           senderUsed: fromEmail,
@@ -194,8 +267,6 @@ CyberCrowd Services: ${serviceContactEmail}
           message: "Verification email was not confirmed sent.",
           email,
           status: "email_delivery_unconfirmed",
-          verifyToken,
-          verifyUrl,
           emailDelivery: "unconfirmed",
           senderUsed: fromEmail,
           details: sendData,
@@ -213,12 +284,12 @@ CyberCrowd Services: ${serviceContactEmail}
         status: "pending_verification",
         message: "Verification email sent. Check your inbox.",
         email,
-        verifyToken,
-        verifyUrl,
         emailDelivery: "sent",
         postmarkMessageId,
         senderUsed: fromEmail,
         serviceContactEmail,
+        humanVerified: true,
+        tokenPurpose,
       },
       { status: 200 }
     );
