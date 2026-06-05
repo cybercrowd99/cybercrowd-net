@@ -1,0 +1,251 @@
+/* =========================================================
+   CyberCrowd Surface Core
+   Shared base layer for device-aware visual surfaces.
+   This file does not replace page-specific design.
+   It gives every surface the same layering language.
+   ========================================================= */
+
+/* ---------- Root surface variables ---------- */
+
+:root {
+  --surface-bg-z: 0;
+  --surface-crest-back-z: 1;
+  --surface-panel-z: 2;
+  --surface-content-z: 3;
+  --surface-overlay-z: 4;
+
+  --surface-panel-width: min(92vw, 520px);
+  --surface-panel-padding: clamp(1.25rem, 4vw, 2.5rem);
+  --surface-panel-radius: 28px;
+
+  --surface-glass-bg: rgba(4, 12, 18, 0.46);
+  --surface-glass-border: rgba(255, 255, 255, 0.22);
+  --surface-glass-shadow: 0 28px 90px rgba(0, 0, 0, 0.45);
+
+  --surface-glass-blur: blur(14px) saturate(145%);
+  --surface-text: rgba(255, 255, 255, 0.94);
+  --surface-muted-text: rgba(255, 255, 255, 0.72);
+
+  --surface-cyan-glow: rgba(0, 255, 255, 0.28);
+  --surface-gold-glow: rgba(212, 175, 55, 0.28);
+}
+
+/* ---------- Universal surface shell ---------- */
+
+.surface-shell {
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  color: var(--surface-text);
+  isolation: isolate;
+}
+
+/* ---------- Backdrop image/video layer ---------- */
+
+.surface-backdrop,
+.background-image {
+  position: absolute;
+  inset: 0;
+  z-index: var(--surface-bg-z);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+/* ---------- Soft darkening layer over backdrop ---------- */
+
+.surface-backdrop::after,
+.surface-dim {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: var(--surface-crest-back-z);
+  background:
+    radial-gradient(circle at center, rgba(0, 255, 255, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0.66));
+  pointer-events: none;
+}
+
+/* ---------- Crest / emblem layers ---------- */
+
+.crest-back,
+.crest-front,
+.surface-crest-back,
+.surface-crest-front {
+  position: absolute;
+  inset: auto;
+  z-index: var(--surface-crest-back-z);
+  pointer-events: none;
+  user-select: none;
+}
+
+.crest-back,
+.surface-crest-back {
+  opacity: 0.32;
+  filter: drop-shadow(0 0 18px var(--surface-gold-glow));
+}
+
+.crest-front,
+.surface-crest-front {
+  opacity: 0.22;
+  filter: drop-shadow(0 0 14px var(--surface-cyan-glow));
+}
+
+/* ---------- Main glass panel ---------- */
+
+.panel,
+.surface-panel {
+  position: relative;
+  z-index: var(--surface-panel-z);
+  width: var(--surface-panel-width);
+  max-width: calc(100vw - 2rem);
+  margin-inline: auto;
+  padding: var(--surface-panel-padding);
+  border-radius: var(--surface-panel-radius);
+  border: 1px solid var(--surface-glass-border);
+  background: var(--surface-glass-bg);
+  box-shadow: var(--surface-glass-shadow);
+  backdrop-filter: var(--surface-glass-blur);
+  -webkit-backdrop-filter: var(--surface-glass-blur);
+}
+
+/* ---------- Content always above glass ---------- */
+
+.create-account-content,
+.surface-content {
+  position: relative;
+  z-index: var(--surface-content-z);
+}
+
+/* ---------- Shared form basics ---------- */
+
+.surface-panel input,
+.surface-panel select,
+.surface-panel textarea,
+.panel input,
+.panel select,
+.panel textarea {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--surface-text);
+  padding: 0.85rem 1rem;
+  outline: none;
+}
+
+.surface-panel input::placeholder,
+.surface-panel textarea::placeholder,
+.panel input::placeholder,
+.panel textarea::placeholder {
+  color: var(--surface-muted-text);
+}
+
+.surface-panel button,
+.panel button {
+  min-height: 46px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 255, 0.34);
+  background: rgba(0, 255, 255, 0.12);
+  color: var(--surface-text);
+  cursor: pointer;
+}
+
+/* ---------- Device-aware classes from JS ---------- */
+
+.surface-phone {
+  --surface-panel-width: 88vw;
+  --surface-glass-blur: blur(18px) saturate(160%);
+}
+
+.surface-phone .crest-front,
+.surface-phone .surface-crest-front {
+  opacity: 0.18;
+}
+
+.surface-phone .crest-back,
+.surface-phone .surface-crest-back {
+  opacity: 0.28;
+}
+
+.surface-tablet {
+  --surface-panel-width: min(82vw, 620px);
+  --surface-glass-blur: blur(16px) saturate(150%);
+}
+
+.surface-desktop {
+  --surface-panel-width: min(70vw, 620px);
+  --surface-glass-blur: blur(12px) saturate(140%);
+}
+
+.surface-desktop .crest-front,
+.surface-desktop .surface-crest-front {
+  opacity: 0.26;
+}
+
+.surface-desktop .crest-back,
+.surface-desktop .surface-crest-back {
+  opacity: 0.38;
+}
+
+.surface-portrait .panel,
+.surface-portrait .surface-panel {
+  width: min(88vw, 520px);
+}
+
+.surface-landscape .panel,
+.surface-landscape .surface-panel {
+  width: min(70vw, 680px);
+}
+
+.surface-highdpi .crest-front,
+.surface-highdpi .surface-crest-front {
+  filter: drop-shadow(0 0 18px var(--surface-cyan-glow));
+}
+
+.surface-highdpi .crest-back,
+.surface-highdpi .surface-crest-back {
+  filter: drop-shadow(0 0 22px var(--surface-gold-glow));
+}
+
+.surface-lowpower {
+  --surface-glass-blur: blur(6px);
+}
+
+.surface-lowpower .crest-front,
+.surface-lowpower .surface-crest-front {
+  opacity: 0.14;
+  filter: none;
+}
+
+.surface-lowpower .crest-back,
+.surface-lowpower .surface-crest-back {
+  opacity: 0.22;
+  filter: none;
+}
+
+/* ---------- Motion safety ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- Small fallback when backdrop-filter is unsupported ---------- */
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .panel,
+  .surface-panel {
+    background: rgba(4, 12, 18, 0.82);
+  }
+}
