@@ -2,169 +2,289 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Create An Account | CyberCrowd</title>
+  <title>Create Your Account | CyberCrowd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root {
+      --glass-card: rgba(238, 248, 242, 0.34);
+      --glass-edge: rgba(214, 242, 232, 0.78);
+      --glass-shine: rgba(255, 255, 255, 0.42);
+      --ink: #2a2118;
+      --soft-ink: rgba(42, 33, 24, 0.76);
+      --gold-top: #e9c979;
+      --gold-bottom: #9b7131;
+      --gold-border: rgba(82, 53, 20, 0.76);
     }
 
-    :root {
-      --wall-x: 0px;
-      --wall-y: 0px;
+    * {
+      box-sizing: border-box;
     }
 
     html,
     body {
       width: 100%;
       min-height: 100%;
-      overflow: hidden;
-      background: #000;
-    }
-
-    body {
+      margin: 0;
+      background: #050505;
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    .create-account-stage {
-      position: relative;
-      width: 100%;
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    body {
+      min-height: 100vh;
       overflow: hidden;
-      isolation: isolate;
-      background: #000;
+      display: grid;
+      place-items: center;
+      position: relative;
     }
 
-    .account-back-wall {
-      position: absolute;
-      inset: -12%;
+    .background-photo {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       z-index: 0;
-      background-image: url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/image-4.png");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      transform: translate3d(var(--wall-x), var(--wall-y), 0) scale(1.14);
-      transition: transform 120ms ease-out;
-      will-change: transform;
+      user-select: none;
       pointer-events: none;
     }
 
-    .account-glass-window {
+    .page {
       position: relative;
       z-index: 2;
-      width: min(74vw, 360px);
-      aspect-ratio: 1 / 1.18;
-      border-radius: 14px;
+      width: min(92vw, 520px);
+      display: grid;
+      justify-items: center;
+      gap: 24px;
+    }
 
+    .glass-card {
+      position: relative;
+      width: 100%;
+      min-height: 570px;
+      padding: 44px 34px 42px;
+      display: grid;
+      justify-items: center;
+      align-content: start;
+      border: 2px solid var(--glass-edge);
+      border-radius: 24px;
       background:
-        linear-gradient(
-          145deg,
-          rgba(12, 22, 22, 0.34),
-          rgba(4, 8, 8, 0.18)
-        );
-
-      border: 1px solid rgba(180, 245, 232, 0.42);
-
-      backdrop-filter: blur(4px) saturate(120%);
-      -webkit-backdrop-filter: blur(4px) saturate(120%);
-
+        linear-gradient(145deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.12)),
+        var(--glass-card);
+      backdrop-filter: blur(7px) saturate(1.08);
+      -webkit-backdrop-filter: blur(7px) saturate(1.08);
       box-shadow:
-        0 24px 70px rgba(0, 0, 0, 0.68),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.52),
-        0 0 18px rgba(160, 255, 235, 0.13);
-
+        0 26px 70px rgba(0, 0, 0, 0.34),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.52),
+        inset 0 0 30px rgba(255, 255, 255, 0.18);
       overflow: hidden;
     }
 
-    .account-glass-window::before {
+    .glass-card::before {
       content: "";
       position: absolute;
-      inset: 1px;
-      border-radius: 13px;
-      border: 1px solid rgba(220, 255, 248, 0.12);
+      inset: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.48);
+      border-radius: 18px;
       pointer-events: none;
+      z-index: 8;
     }
 
-    .account-glass-window::after {
+    .glass-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 55%;
+      height: 38%;
+      background: linear-gradient(135deg, var(--glass-shine), transparent 64%);
+      pointer-events: none;
+      z-index: 9;
+    }
+
+    .emblem-circle {
+      position: relative;
+      width: min(74vw, 255px);
+      aspect-ratio: 1 / 1;
+      margin-bottom: 28px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow:
+        inset 0 0 24px rgba(255, 255, 255, 0.24),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.42),
+        0 14px 28px rgba(0, 0, 0, 0.28);
+      z-index: 2;
+    }
+
+    .emblem-circle img {
+      width: 112%;
+      height: 112%;
+      object-fit: cover;
+      object-position: center;
+      user-select: none;
+      pointer-events: none;
+      display: block;
+    }
+
+    .emblem-circle::after {
       content: "";
       position: absolute;
       inset: 0;
+      border-radius: 50%;
       background:
-        radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.08), transparent 32%),
-        linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.045) 46%, transparent 58%);
+        radial-gradient(circle at 34% 22%, rgba(255, 255, 255, 0.38), transparent 30%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 58%);
       pointer-events: none;
     }
 
-    @media (max-width: 640px) {
-      .account-glass-window {
-        width: min(78vw, 330px);
-      }
+    .title {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(2rem, 6vw, 3.05rem);
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-align: center;
+      text-transform: uppercase;
+      z-index: 2;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .account-back-wall {
-        transition: none;
-        transform: scale(1.14);
-      }
+    .welcome {
+      margin: 23px 0 34px;
+      color: var(--soft-ink);
+      font-size: clamp(1rem, 3vw, 1.45rem);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-align: center;
+      text-transform: uppercase;
+      z-index: 2;
     }
 
-    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .account-glass-window {
-        background: rgba(18, 24, 24, 0.66);
+    .email-field {
+      width: min(100%, 390px);
+      height: 58px;
+      padding: 0 24px;
+      border: 2px solid rgba(54, 39, 24, 0.78);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+      color: var(--ink);
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      text-align: center;
+      outline: none;
+      box-shadow:
+        inset 0 0 10px rgba(0, 0, 0, 0.12),
+        0 0 14px rgba(255, 255, 255, 0.18);
+      z-index: 2;
+    }
+
+    .email-field::placeholder {
+      color: rgba(43, 33, 24, 0.72);
+      opacity: 1;
+    }
+
+    .send-button {
+      width: min(100%, 320px);
+      height: 66px;
+      margin-top: 36px;
+      border: 2px solid var(--gold-border);
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--gold-top), var(--gold-bottom));
+      color: #2a1b0b;
+      font-size: clamp(1.6rem, 5vw, 2.3rem);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.45),
+        inset 0 -5px 10px rgba(92, 55, 16, 0.28),
+        0 10px 18px rgba(0, 0, 0, 0.18);
+      cursor: default;
+      z-index: 2;
+    }
+
+    .member-strap {
+      min-width: min(88vw, 360px);
+      min-height: 68px;
+      padding: 16px 34px;
+      border: 2px solid rgba(54, 39, 24, 0.74);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      font-size: clamp(1rem, 3vw, 1.35rem);
+      letter-spacing: 0.10em;
+      text-align: center;
+      text-transform: uppercase;
+      box-shadow:
+        0 14px 38px rgba(0, 0, 0, 0.18),
+        inset 0 0 16px rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      user-select: none;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    @media (max-width: 560px) {
+      body {
+        overflow-y: auto;
+        padding: 24px 0;
+      }
+
+      .glass-card {
+        min-height: 520px;
+        padding: 38px 22px 36px;
+      }
+
+      .emblem-circle {
+        width: min(72vw, 210px);
+        margin-bottom: 22px;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="create-account-stage" aria-label="Create An Account">
-    <div class="account-back-wall" aria-hidden="true"></div>
+  <img
+    class="background-photo"
+    src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/image-4.png"
+    alt=""
+  />
 
-    <section class="account-glass-window" aria-label="Create An Account glass window"></section>
+  <main class="page" aria-label="CyberCrowd create account visual door">
+    <section class="glass-card" aria-label="Create your account">
+      <div class="emblem-circle" aria-hidden="true">
+        <img
+          src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png"
+          alt=""
+        />
+      </div>
+
+      <h1 class="title">Create Your Account</h1>
+
+      <div class="welcome">Welcome to CyberCrowd</div>
+
+      <input
+        class="email-field"
+        type="email"
+        placeholder="Enter your email here"
+        aria-label="Enter your email here"
+        autocomplete="email"
+      />
+
+      <button class="send-button" type="button" aria-label="Send">
+        Send
+      </button>
+    </section>
+
+    <div class="member-strap" aria-label="Already a member">
+      Already a Member
+    </div>
   </main>
-
-  <script>
-    (function () {
-      const root = document.documentElement;
-      const maxShift = 18;
-
-      function clamp(value, min, max) {
-        return Math.max(min, Math.min(max, value));
-      }
-
-      function setWallShift(x, y) {
-        root.style.setProperty("--wall-x", x + "px");
-        root.style.setProperty("--wall-y", y + "px");
-      }
-
-      window.addEventListener("mousemove", function (event) {
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-
-        const x = ((event.clientX - centerX) / centerX) * maxShift;
-        const y = ((event.clientY - centerY) / centerY) * maxShift;
-
-        setWallShift(x, y);
-      });
-
-      window.addEventListener("deviceorientation", function (event) {
-        const gamma = event.gamma || 0;
-        const beta = event.beta || 0;
-
-        const x = clamp(gamma * 0.7, -maxShift, maxShift);
-        const y = clamp(beta * 0.25, -maxShift, maxShift);
-
-        setWallShift(x, y);
-      });
-    })();
-  </script>
 </body>
 </html>
