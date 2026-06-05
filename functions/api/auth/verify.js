@@ -3,43 +3,114 @@ export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const identityToken = url.searchParams.get("token");
 
-    // 1 — Token must exist
     if (!identityToken) {
-      return new Response(JSON.stringify({ error: "no identity token" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" }
-      });
+      return Response.json(
+        {
+          success: false,
+          error: "no identity token",
+          status: "missing_identity_token",
+        },
+        {
+          status: 401,
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        }
+      );
     }
 
-    // 2 — Look up the userId from IDENTITY KV
-    const userId = await env.IDENTITY.get(identityToken);
+    if (!env.IDENTITY) {
+      return Response.json(
+        {
+          success: false,
+          error: "identity store is not active",
+          status: "identity_store_missing",
+        },
+        {
+          status: 500,
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        }
+      );
+    }
+
+    const identityRecord = await env.IDENTITY.get(identityToken);
+
+    if (!identityRecord) {
+      return Response.json(
+        {
+          success: false,
+          error: "invalid identity token",
+          status: "invalid_identity_token",
+        },
+        {
+          status: 401,
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        }
+      );
+    }
+
+    let identityData = null;
+
+    try {
+      identityData = JSON.parse(identityRecord);
+    } catch (parseError) {
+      identityData = {
+        userId: identityRecord,
+      };
+    }
+
+    const userId = identityData.userId || "";
+    const email = identityData.email || "";
 
     if (!userId) {
-      return new Response(JSON.stringify({ error: "invalid identity token" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" }
-      });
+      return Response.json(
+        {
+          success: false,
+          error: "identity token is incomplete",
+          status: "incomplete_identity_token",
+        },
+        {
+          status: 401,
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        }
+      );
     }
 
-    // 3 — Do NOT mark verified here.
-    // Verification is completed only after password creation.
+    const redirectUrl = new URL("/verify-success.html", url.origin);
+    redirectUrl.searchParams.set("token", identityToken);
 
-    // 4 — Do NOT delete the token.
-    // set_password.js will consume it after password creation.
+    if (email) {
+      redirectUrl.searchParams.set("email", email);
+    }
 
-    // 5 — Redirect to verify-success.html with token intact
     return new Response(null, {
       status: 302,
       headers: {
-        "Location": `/verify-success.html?token=${encodeURIComponent(identityToken)}`,
-        "Cache-Control": "no-store"
-      }
+        Location: redirectUrl.toString(),
+        "Cache-Control": "no-store",
+      },
     });
+  } catch (error) {
+    console.error("CYBERCROWD VERIFY ERROR:", error);
 
-  } catch (err) {
-    return new Response(JSON.stringify({ error: "server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    return Response.json(
+      {
+        success: false,
+        error: "server error",
+        status: "verify_exception",
+      },
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      }
+    );
   }
 }
