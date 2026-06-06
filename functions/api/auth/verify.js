@@ -82,12 +82,8 @@ export async function onRequestGet({ request, env }) {
       );
     }
 
-    const redirectUrl = new URL("/verify-success.html", url.origin);
-    redirectUrl.searchParams.set("token", identityToken);
-
-    if (email) {
-      redirectUrl.searchParams.set("email", email);
-    }
+    const redirectUrl = new URL("/.event/quarter-check", url.origin);
+    redirectUrl.searchParams.set("redirect", "/verify-success.html");
 
     return new Response(null, {
       status: 302,
