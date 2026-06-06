@@ -15,7 +15,7 @@ export async function onRequestPost(context) {
   body.append("line_items[0][price]", priceId);
   body.append("line_items[0][quantity]", "1");
   body.append("success_url", `${domain}/success.html?session_id={CHECKOUT_SESSION_ID}`);
-  body.append("cancel_url", `${domain}/page2.html`);
+  body.append("cancel_url", `${domain}/create-account.html`);
 
   const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

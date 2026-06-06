@@ -719,7 +719,7 @@ button:disabled {
 
 <script>
 (function() {
-  var PAGE2_GATE_URL = '/page2.html';
+  var PAGE2_GATE_URL = '/create-account.html';
 
   var verifiedUser = null;
 
@@ -824,7 +824,7 @@ button:disabled {
       data = await response.json();
 
     } catch(error) {
-      authCover.innerText = 'Session check failed. Returning to Page2 gate.';
+      authCover.innerText = 'Session check failed. Returning to gate.';
       window.setTimeout(redirectToGate, 900);
       return;
     }
@@ -834,7 +834,7 @@ button:disabled {
       localStorage.removeItem('cc_verified_email');
       localStorage.removeItem('cc_verified_user_id');
 
-      authCover.innerText = 'No verified CyberCrowd session. Returning to Page2 gate.';
+      authCover.innerText = 'No verified CyberCrowd session. Returning to gate.';
       window.setTimeout(redirectToGate, 900);
       return;
     }
