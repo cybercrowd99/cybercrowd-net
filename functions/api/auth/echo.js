@@ -1,0 +1,28 @@
+xport async function onRequest(context) {
+  const request = context.request;
+
+  const method = request.method;
+  const url = request.url;
+
+  const headers = {};
+  for (const [k, v] of request.headers.entries()) {
+    headers[k] = v;
+  }
+
+  let body = null;
+  try {
+    body = await request.text();
+  } catch {
+    body = null;
+  }
+
+  return new Response(JSON.stringify({
+    method,
+    url,
+    headers,
+    body
+  }, null, 2), {
+    headers: { "Content-Type": "application/json" }
+  });
+}
+
