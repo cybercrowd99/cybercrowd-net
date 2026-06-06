@@ -10,6 +10,9 @@ export async function onRequest(context: { request: Request; env: Env; next: () 
   const { request, env, next } = context;
   const url = new URL(request.url);
 
+  // Debug: uncomment to confirm middleware is running
+  // console.log('Middleware hit:', url.pathname);
+
   if (url.pathname === '/.event/quarter-check' && request.method === 'POST') {
     return handleQuarterCheck(request, env, url);
   }
