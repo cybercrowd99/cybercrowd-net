@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Member Login | CyberCrowd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --background-image: url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/image-4.png");
+      --emblem-image: url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png");
+
+      --gold: #c79a43;
+      --gold-light: #e7c879;
+      --gold-dark: #8a6429;
+      --ink: #2b2118;
+      --glass-fill: rgba(238, 248, 242, 0.28);
+      --glass-line: rgba(220, 248, 236, 0.72);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #050505;
+      overflow: hidden;
+    }
+
+    .background {
+      position: fixed;
+      inset: 0;
+      background-image: var(--background-image);
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 2;
+      width: min(80vw, 360px);
+      display: grid;
+      justify-items: center;
+    }
+
+    .glass-box {
+      width: 100%;
+      min-height: 360px;
+      padding: 28px 24px 30px;
+      border: 2px solid var(--glass-line);
+      border-radius: 22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.40), rgba(255,255,255,0.08)),
+        var(--glass-fill);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow:
+        0 22px 60px rgba(0,0,0,0.38),
+        inset 0 0 0 1px rgba(255,255,255,0.52),
+        inset 0 0 22px rgba(255,255,255,0.18);
+      display: grid;
+      justify-items: center;
+      align-content: start;
+      animation: floatToken 7s ease-in-out infinite;
+    }
+
+    @keyframes floatToken {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-16px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .emblem {
+      width: min(68%, 220px);
+      height: 130px;
+      background-image: var(--emblem-image);
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,0.28));
+    }
+
+    .title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .email-field {
+      width: min(100%, 280px);
+      height: 48px;
+      margin-top: 24px;
+      padding: 0 20px;
+      border-radius: 999px;
+      border: 2px solid rgba(54,39,24,0.78);
+      background: rgba(255,255,255,0.28);
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .send-button {
+      width: min(100%, 240px);
+      height: 54px;
+      margin-top: 26px;
+      border-radius: 999px;
+      border: 2px solid rgba(95,61,18,0.76);
+      background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
+      font-size: 1.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="background"></div>
+
+  <main class="stage">
+    <section class="glass-box">
+      <div class="emblem"></div>
+      <h1 class="title">Member Login</h1>
+
+      <input class="email-field" type="email" placeholder="Enter your email" />
+
+      <button class="send-button">Send</button>
+    </section>
+  </main>
+
+  <script>
+    const emailInput = document.querySelector(".email-field");
+    const sendButton = document.querySelector(".send-button");
+
+    // This page ONLY does login-token request
+    // No password, no profile, no surfaces, no legacy
+    const socket = new WebSocket("wss://your-domain.com/ws/login");
+
+    socket.addEventListener("open", () => {
+      console.log("login socket: connected");
+    });
+
+    socket.addEventListener("message", (event) => {
+      const msg = JSON.parse(event.data);
+      console.log("login socket:", msg);
+
+      if (msg.type === "login_token_sent") {
+        alert("Check your email to continue.");
+      }
+
+      if (msg.type === "error") {
+        alert("Error: " + msg.reason);
+      }
+    });
+
+    sendButton.addEventListener("click", () => {
+      const email = emailInput.value.trim();
+      if (!email) {
+        alert("Enter your email first.");
+        return;
+      }
+
+      socket.send(JSON.stringify({
+        type: "login_request",
+        email
+      }));
+    });
+  </script>
+</body>
+</html>
