@@ -1,4 +1,4 @@
-xport async function onRequest(context) {
+export async function onRequest(context) {
   const request = context.request;
 
   const method = request.method;
