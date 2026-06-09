@@ -59,10 +59,10 @@
       gap: 24px;
     }
 
-    .glass-card {
+    /* NEW PLAQUE */
+    .glass-plaque {
       position: relative;
       width: 100%;
-      min-height: 570px;
       padding: 44px 34px 42px;
       display: grid;
       justify-items: center;
@@ -81,7 +81,7 @@
       overflow: hidden;
     }
 
-    .glass-card::before {
+    .glass-plaque::before {
       content: "";
       position: absolute;
       inset: 12px;
@@ -91,7 +91,7 @@
       z-index: 8;
     }
 
-    .glass-card::after {
+    .glass-plaque::after {
       content: "";
       position: absolute;
       top: 0;
@@ -103,42 +103,16 @@
       z-index: 9;
     }
 
-    .emblem-circle {
-      position: relative;
-      width: min(74vw, 255px);
-      aspect-ratio: 1 / 1;
-      margin-bottom: 28px;
+    .seal {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      margin-bottom: 24px;
       border-radius: 50%;
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-      background: rgba(255, 255, 255, 0.12);
       box-shadow:
         inset 0 0 24px rgba(255, 255, 255, 0.24),
         inset 0 0 0 1px rgba(255, 255, 255, 0.42),
         0 14px 28px rgba(0, 0, 0, 0.28);
-      z-index: 2;
-    }
-
-    .emblem-circle img {
-      width: 112%;
-      height: 112%;
-      object-fit: cover;
-      object-position: center;
-      user-select: none;
-      pointer-events: none;
-      display: block;
-    }
-
-    .emblem-circle::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 34% 22%, rgba(255, 255, 255, 0.38), transparent 30%),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 58%);
-      pointer-events: none;
     }
 
     .title {
@@ -179,11 +153,6 @@
         inset 0 0 10px rgba(0, 0, 0, 0.12),
         0 0 14px rgba(255, 255, 255, 0.18);
       z-index: 2;
-    }
-
-    .email-field::placeholder {
-      color: rgba(43, 33, 24, 0.72);
-      opacity: 1;
     }
 
     .send-button {
@@ -257,29 +226,14 @@
   />
 
   <main class="page" aria-label="CyberCrowd create account visual door">
-    <section class="glass-card" aria-label="Create your account">
-      <div class="emblem-circle" aria-hidden="true">
-        <img
-          src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png"
-          alt=""
-        />
-      </div>
 
+    <!-- NEW PLAQUE -->
+    <section class="glass-plaque">
+      <img class="seal" src="YOUR-SEAL.png" alt="">
       <h1 class="title">Create Your Account</h1>
-
       <div class="welcome">Welcome to CyberCrowd</div>
-
-      <input
-        class="email-field"
-        type="email"
-        placeholder="Enter your email here"
-        aria-label="Enter your email here"
-        autocomplete="email"
-      />
-
-      <button class="send-button" type="button" aria-label="Send">
-        Send
-      </button>
+      <input class="email-field" type="email" placeholder="Enter your email here" />
+      <button class="send-button" type="button">Send</button>
     </section>
 
     <div class="member-strap" aria-label="Already a member">
