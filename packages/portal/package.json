@@ -1,0 +1,28 @@
+{
+  "name": "@cybercrowd/portal",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CyberCrowd portal engine shared logic for anchors, passthrough, and movement mapping.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./portal-anchor": "./src/portal-anchor.js",
+    "./passthrough-stream": "./src/passthrough-stream.js",
+    "./movement-mapper": "./src/movement-mapper.js"
+  },
+  "scripts": {
+    "build": "node -e \"console.log('portal build complete')\"",
+    "test": "vitest run",
+    "lint": "node -e \"console.log('portal lint placeholder')\"",
+    "clean": "rm -rf dist coverage .turbo"
+  },
+  "dependencies": {
+    "@cybercrowd/core": "workspace:*",
+    "@cybercrowd/identity": "workspace:*",
+    "@cybercrowd/config": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}
