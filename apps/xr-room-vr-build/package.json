@@ -1,28 +1,28 @@
 {
-  "name": "cybercrowd",
+  "name": "@cybercrowd/xr-room-vr-build",
   "version": "0.1.0",
   "private": true,
-  "description": "CyberCrowd monorepo for public site, console, XR room, Workers, identity, telemetry, and shared packages.",
+  "description": "CyberCrowd XR Room VR browser app.",
   "type": "module",
-  "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "test": "turbo test",
-    "lint": "turbo lint",
-    "clean": "turbo clean",
-    "dev:public": "pnpm --filter @cybercrowd/public dev",
-    "dev:console": "pnpm --filter @cybercrowd/console dev",
-    "dev:xr": "pnpm --filter @cybercrowd/xr-room-vr-build dev",
-    "dev:worker": "pnpm --filter @cybercrowd/worker-api dev",
-    "dev:auth": "pnpm --filter @cybercrowd/auth-gateway dev",
-    "dev:telemetry": "pnpm --filter @cybercrowd/telemetry-service dev",
-    "build:xr": "pnpm --filter @cybercrowd/xr-room-vr-build build"
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run",
+    "lint": "node ./scripts/lint-placeholder.js",
+    "clean": "rm -rf dist coverage .turbo"
+  },
+  "dependencies": {
+    "@cybercrowd/xr-core": "workspace:*",
+    "@cybercrowd/xr-identity": "workspace:*",
+    "@cybercrowd/xr-portal": "workspace:*",
+    "@cybercrowd/xr-slam": "workspace:*",
+    "@cybercrowd/xr-mapping": "workspace:*",
+    "@cybercrowd/xr-swarm": "workspace:*",
+    "@cybercrowd/xr-config": "workspace:*"
   },
   "devDependencies": {
-    "turbo": "^2.3.3",
     "vite": "^6.0.7",
-    "vitest": "^2.1.8",
-    "wrangler": "^3.99.0"
+    "vitest": "^2.1.8"
   }
 }
