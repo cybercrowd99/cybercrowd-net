@@ -1,0 +1,29 @@
+{
+  "name": "@cybercrowd/xr-identity",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CyberCrowd XR identity, liveness, dimming, and nullification layer.",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./turnstile": "./turnstile.js",
+    "./liveness-vector": "./liveness-vector.js",
+    "./identity-socket": "./identity-socket.js",
+    "./scalar-dimmer": "./scalar-dimmer.js",
+    "./nullification-signal": "./nullification-signal.js"
+  },
+  "scripts": {
+    "build": "node -e \"console.log('xr-identity build complete')\"",
+    "test": "vitest run",
+    "lint": "node -e \"console.log('xr-identity lint placeholder')\"",
+    "clean": "rm -rf dist coverage .turbo"
+  },
+  "dependencies": {
+    "@cybercrowd/xr-core": "workspace:*",
+    "@cybercrowd/xr-config": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}
