@@ -2,7 +2,7 @@ export async function ensureSession() {
     const token = localStorage.getItem("sessionToken");
 
     if (!token) {
-        window.location.href = "/login.html";
+        window.location.href = "https://cybercrowd99.pages.dev/login.html";
         return;
     }
 
@@ -15,7 +15,7 @@ export async function ensureSession() {
     if (!res.ok) {
         localStorage.removeItem("sessionToken");
         localStorage.removeItem("userId");
-        window.location.href = "/login.html";
+        window.location.href = "https://cybercrowd99.pages.dev/login.html";
         return;
     }
 
@@ -24,6 +24,6 @@ export async function ensureSession() {
     if (!data.valid) {
         localStorage.removeItem("sessionToken");
         localStorage.removeItem("userId");
-        window.location.href = "/login.html";
+        window.location.href = "https://cybercrowd99.pages.dev/login.html";
     }
 }
