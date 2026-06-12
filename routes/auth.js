@@ -1,44 +1,62 @@
 /**
- * CyberCrowd Auth Routing Module
+ * CyberCrowd Auth Routing Module (Stabilized)
  * Handles session validation, login redirect, and logout.
  */
 
-/**
- * Check if a valid session token exists.
- */
+/* ------------------------------
+   SESSION CHECK
+------------------------------ */
 export function hasSession() {
     const token = localStorage.getItem("cc_access");
-    return token && token.length > 10;
+
+    // Token must exist and follow expected pattern
+    return typeof token === "string" && token.startsWith("cc_");
 }
 
-/**
- * Redirect to login if no session exists.
- */
+/* ------------------------------
+   SAFE REDIRECT HANDLER
+------------------------------ */
 export function requireSession() {
+    const current = window.location.pathname.split("/").pop();
+
+    // Pages that must NEVER redirect
+    const publicPages = [
+        "login.html",
+        "create-account.html",
+        "set-password.html",
+        "index.html",
+        ""
+    ];
+
+    if (publicPages.includes(current)) {
+        return; // Do nothing — these pages are allowed without session
+    }
+
+    // If no session, redirect to login
     if (!hasSession()) {
         window.location.href = "/login.html";
     }
 }
 
-/**
- * Log the user out and clear session.
- */
+/* ------------------------------
+   LOGOUT
+------------------------------ */
 export function logout() {
     localStorage.removeItem("cc_access");
     window.location.href = "/login.html";
 }
 
-/**
- * Auto‑check session on protected pages.
- */
+/* ------------------------------
+   PROTECTED PAGES
+------------------------------ */
 export function protectPage() {
     const protectedPaths = [
         "dashboard.html",
-        "profile-setup.html",
         "creator-control.html",
         "adworm.dashboard.html",
         "broadcast.html",
         "operations-dashboard.html"
+        // NOTE: profile-setup.html REMOVED — it caused loops
     ];
 
     const current = window.location.pathname.split("/").pop();
@@ -48,9 +66,9 @@ export function protectPage() {
     }
 }
 
-/**
- * Auto‑init on page load.
- */
+/* ------------------------------
+   AUTO-INIT
+------------------------------ */
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", protectPage);
 } else {
