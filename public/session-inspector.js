@@ -1,4 +1,3 @@
-
 export async function ensureSession() {
     const token = localStorage.getItem("sessionToken");
 
