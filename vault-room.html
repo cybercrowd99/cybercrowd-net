@@ -22,7 +22,6 @@
       background-position: center;
     }
 
-    /* Poster Wall */
     #poster-wall {
       position: absolute;
       top: 20%;
@@ -45,7 +44,6 @@
       background: rgba(255,215,0,0.2);
     }
 
-    /* Treasury Frame */
     #treasury-frame {
       position: absolute;
       bottom: 5%;
@@ -61,7 +59,6 @@
       display: none;
     }
 
-    /* Upgrade Modal */
     .modal {
       position: fixed;
       top: 0;
@@ -95,7 +92,6 @@
 <body>
   <div id="vault-container">
 
-    <!-- POSTER SLOTS -->
     <div id="poster-wall">
       <div class="poster-slot" data-slot="1"></div>
       <div class="poster-slot" data-slot="2"></div>
@@ -103,14 +99,12 @@
       <div class="poster-slot" data-slot="4"></div>
     </div>
     
-    <!-- PLAQUES -->
     <div id="plaque-row" style="position:absolute; bottom:10%; left:10%; display:flex; gap:20px;">
       <a class="plaque about" href="about.html" style="color:#fff; text-decoration:none;">About</a>
       <a class="plaque contents" href="rules_regulations.html" style="color:#fff; text-decoration:none;">Contents</a>
       <a class="plaque register pass-through" href="create-account.html" style="color:#fff; text-decoration:none;">JOIN</a>
     </div>
 
-    <!-- TREASURY FRAME -->
     <div id="treasury-frame" class="treasury hidden">
       <h2>Treasury</h2>
       <div class="treasury-content">
@@ -118,7 +112,6 @@
       </div>
     </div>
 
-    <!-- UPGRADE MODAL -->
     <div id="upgrade-modal" class="modal hidden">
       <div class="modal-content">
         <h2>Member privilege</h2>
@@ -132,7 +125,6 @@
 
   </div>
 
-  <!-- MEMBER GATE LOGIC -->
   <script>
     window.USER_TIER = window.USER_TIER || 'free';
 
