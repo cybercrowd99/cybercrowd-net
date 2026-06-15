@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
+    :root {
+      --vh: 1vh; /* will be updated by JS to match actual viewport height */
+    }
+
     body {
       margin: 0;
       background: #000;
@@ -15,7 +19,8 @@
     .vault-frame {
       position: relative;
       width: 100vw;
-      height: 100vh;
+      /* use the real viewport height variable instead of 100vh */
+      height: calc(var(--vh) * 100);
       overflow: hidden;
     }
 
@@ -142,6 +147,28 @@
 
     <audio id="teaserAudio" preload="auto" playsinline></audio>
   </div>
+
+  <script>
+    /* Minimal viewport fix: set --vh to the actual visible viewport height */
+    (function () {
+      function setVh() {
+        var vh = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+        document.documentElement.style.setProperty('--vh', (vh * 0.01) + 'px');
+      }
+
+      // Initial set
+      setVh();
+
+      // Update on resize/orientation and visualViewport changes
+      window.addEventListener('resize', setVh, { passive: true });
+      window.addEventListener('orientationchange', setVh, { passive: true });
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', setVh, { passive: true });
+        window.visualViewport.addEventListener('scroll', setVh, { passive: true });
+      }
+    })();
+  </script>
 
   <script>
     const PLAYLIST_ENDPOINT = "/api/r2-teaser-playlist";
