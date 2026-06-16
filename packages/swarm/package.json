@@ -2,7 +2,7 @@
   "name": "@cybercrowd/swarm",
   "version": "0.1.0",
   "private": true,
-  "description": "CyberCrowd swarm engine for coordination, routing, identity mesh, localization, safety, telemetry, and failover.",
+  "description": "CyberCrowd swarm engine for coordination, routing, identity mesh, localization, safety, telemetry, failover, vault gateway, and WASP loading.",
   "type": "module",
   "main": "./src/index.js",
   "exports": {
@@ -17,7 +17,9 @@
     "./swarm-failover-manager": "./src/swarm-failover-manager.js",
     "./swarm-sim-validator": "./src/swarm-sim-validator.js",
     "./swarm-telemetry-bus": "./src/swarm-telemetry-bus.js",
-    "./swarm-constraints": "./src/swarm-constraints.js"
+    "./swarm-constraints": "./src/swarm-constraints.js",
+    "./swarm-vault-gateway": "./src/swarm-vault-gateway.js",
+    "./swarm-wasp-loader": "./src/swarm-wasp-loader.js"
   },
   "scripts": {
     "build": "node -e \"console.log('swarm build complete')\"",
