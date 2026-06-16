@@ -1,35 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- CyberCrowd crawler/indexing signals - DO NOT REMOVE -->
   <title>CyberCrowd Official Site | WDIG, MultiCam Trials, and CyberShop</title>
   <meta name="description" content="CyberCrowd is a live camera-access, discovery, CyberShop, WDIG, and creator platform foundation." />
-  <meta name="robots" content="index, follow">
-  <meta name="google-site-verification" content="S0HXH0ZA_tZem9bn8vKbDrgr71zm-F3TyfIfvvSEljA">
-  <link rel="canonical" href="https://cybercrowd.net/">
+  <meta name="robots" content="index, follow" />
+  <meta name="google-site-verification" content="S0HXH0ZA_tZem9bn8vKbDrgr71zm-F3TyfIfvvSEljA" />
+  <link rel="canonical" href="https://cybercrowd.net/" />
   <!-- End CyberCrowd crawler/indexing signals -->
 
-  <!-- leave the rest of your CSS, scripts, fonts, and existing stuff below -->
-</head>
+  <meta property="og:title" content="CyberCrowd - Where We Belong" />
+  <meta property="og:url" content="https://cybercrowd.net/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CyberCrowd" />
 
-  <meta property="og:title" content="CyberCrowd - Where We Belong">
-  <meta property="og:url" content="https://cybercrowd.net/">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="CyberCrowd">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="CyberCrowd - Where We Belong" />
 
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="CyberCrowd - Where We Belong">
-
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet" />
 
   <style>
-    :root {
-      --tile-size: clamp(22px, 7vw, 28px);
-    }
-
+    :root { --tile-size: clamp(22px, 7vw, 28px); }
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html {
@@ -56,8 +50,7 @@
 
     canvas#bgrain {
       position: fixed;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100vw;
       height: 100vh;
       z-index: 0;
@@ -68,9 +61,8 @@
       font-family: "Playfair Display", serif;
       font-style: italic;
       font-weight: 900;
-      color: #FFFFFF;
+      color: #fff;
       font-size: clamp(40px, 12vw, 90px);
-      margin-bottom: 0;
       margin-left: 20px;
       letter-spacing: 2px;
       position: relative;
@@ -128,11 +120,11 @@
     }
 
     @keyframes tron {
-      0%   { transform: translate(0,0) rotate(0deg); opacity: 1; }
-      35%  { transform: translate(var(--ex), var(--ey)) rotate(360deg); opacity: 0.9; }
-      55%  { transform: translate(var(--bx), var(--by)) rotate(450deg); opacity: 0.9; }
-      80%  { transform: translate(0,0) rotate(720deg); opacity: 1; }
-      82%  { transform: translate(0,0) rotate(0deg); opacity: 1; }
+      0% { transform: translate(0,0) rotate(0deg); opacity: 1; }
+      35% { transform: translate(var(--ex), var(--ey)) rotate(360deg); opacity: 0.9; }
+      55% { transform: translate(var(--bx), var(--by)) rotate(450deg); opacity: 0.9; }
+      80% { transform: translate(0,0) rotate(720deg); opacity: 1; }
+      82% { transform: translate(0,0) rotate(0deg); opacity: 1; }
       100% { transform: translate(0,0) rotate(0deg); opacity: 1; }
     }
 
@@ -141,7 +133,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.4) 100%);
+      background: linear-gradient(90deg, rgba(0,0,0,0.92), rgba(0,0,0,0.4));
       padding: 5px 10px;
       font-family: "Playfair Display", serif;
       font-style: italic;
@@ -155,7 +147,7 @@
       z-index: 10;
       pointer-events: none;
     }
-    
+
     .footer {
       position: fixed;
       bottom: 0;
@@ -168,7 +160,7 @@
       font-weight: 900;
       font-size: 13px;
       letter-spacing: 5px;
-      color: #FF0000;
+      color: #f00;
       background: rgba(0,0,0,0.75);
       border-top: 1px solid rgba(255,0,0,0.25);
       text-shadow: 0 0 10px rgba(255,0,0,0.5);
@@ -184,10 +176,6 @@
       width: 100%;
       z-index: 100;
       color: #7CFF7C;
-      background: transparent;
-      border: none;
-      padding: 0;
-      max-width: none;
       font-family: Arial, sans-serif;
       font-size: 12px;
       line-height: 1;
@@ -203,25 +191,14 @@
       color: #7CFF7C;
     }
 
-    .seo-identity p {
-      display: none;
-    }
-
     @media (max-height: 520px) {
-      :root {
-        --tile-size: 20px;
-      }
-
-      h1 {
-        font-size: 34px;
-      }
-
+      :root { --tile-size: 20px; }
+      h1 { font-size: 34px; }
       .enter-graphic {
         font-size: 0.75rem;
         padding: 4px 18px;
         margin-top: -8px;
       }
-
       .footer {
         padding: 5px;
         font-size: 11px;
@@ -232,7 +209,7 @@
 
 <body>
   <audio id="bg-audio" preload="auto" loop playsinline>
-    <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Cybercrowd_60s.teaser.mp3" type="audio/mpeg">
+    <source src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/Cybercrowd_60s.teaser.mp3" type="audio/mpeg" />
   </audio>
 
   <canvas id="bgrain"></canvas>
@@ -240,7 +217,7 @@
   <h1>CYBERCROWD</h1>
 
   <div class="enter-graphic" id="enter-graphic">ENTER</div>
-  
+
   <div class="scene">
     <div id="grid"></div>
     <div class="banner">WHERE WE BELONG</div>
@@ -274,13 +251,11 @@
     function drawBgRain() {
       bgctx.fillStyle = "rgba(0,0,0,0.05)";
       bgctx.fillRect(0, 0, bgrain.width, bgrain.height);
-
       bgctx.fillStyle = "#7CFF7C";
       bgctx.font = "14px monospace";
 
       bgdrops.forEach((d, i) => {
         bgctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 14, d * 14);
-
         if (d * 14 > bgrain.height && Math.random() > 0.975) {
           bgdrops[i] = 0;
         } else {
@@ -290,17 +265,10 @@
     }
 
     setInterval(drawBgRain, 40);
-    
-    window.addEventListener("resize", () => {
-      sizeRainCanvas();
-      resetRainDrops();
-      positionTiles();
-    });
 
     const grid = document.getElementById("grid");
     const cols = 10;
     const rows = 10;
-    const tileSize = 28;
     const cx = (cols - 1) / 2;
     const cy = (rows - 1) / 2;
     const maxDist = Math.sqrt(cx * cx + cy * cy);
@@ -308,6 +276,7 @@
 
     function positionTiles() {
       if (!grid) return;
+
       const currentTileSize = grid.getBoundingClientRect().width / cols;
       const backgroundSize = (currentTileSize * cols) + "px " + (currentTileSize * rows) + "px";
 
@@ -342,6 +311,12 @@
 
     positionTiles();
 
+    window.addEventListener("resize", () => {
+      sizeRainCanvas();
+      resetRainDrops();
+      positionTiles();
+    });
+
     const bgAudio = document.getElementById("bg-audio");
     const enterGraphic = document.getElementById("enter-graphic");
 
@@ -353,37 +328,25 @@
     let lastAudioAttemptAt = 0;
 
     function setEnterText(text) {
-      if (!enterGraphic) return;
       enterGraphic.textContent = text;
     }
 
     function lightEnter() {
-      if (!enterGraphic) return;
       enterGraphic.classList.add("lit");
     }
 
     function dimEnter() {
-      if (!enterGraphic) return;
       enterGraphic.classList.remove("lit");
     }
 
     async function startCybercrowdTeaser() {
-      if (!bgAudio) {
-        console.error("CyberCrowd audio error: #bg-audio was not found.");
-        setEnterText("NO AUDIO");
-        gateState = "WAITING_FOR_AUDIO";
-        return false;
-      }
-
       try {
         bgAudio.muted = false;
         bgAudio.volume = 1;
         bgAudio.setAttribute("playsinline", "");
         bgAudio.setAttribute("webkit-playsinline", "");
 
-        if (bgAudio.readyState === 0) {
-          bgAudio.load();
-        }
+        if (bgAudio.readyState === 0) bgAudio.load();
 
         try {
           bgAudio.currentTime = 0;
@@ -399,40 +362,31 @@
         lightEnter();
         setEnterText("ENTER");
 
-        console.log("CyberCrowd teaser audio started. Staying on Window 1.");
         return true;
       } catch (err) {
         gateState = "WAITING_FOR_AUDIO";
         dimEnter();
         setEnterText("TAP AGAIN");
-
         console.error("CyberCrowd teaser audio failed to start:", err);
         return false;
       }
     }
-    
-    async function cybercrowdGateTouch(e) {
-      if (e && typeof e.preventDefault === "function") {
-        e.preventDefault();
-      }
 
+    async function cybercrowdGateTouch(e) {
+      if (e && typeof e.preventDefault === "function") e.preventDefault();
       if (navigating) return;
 
       const now = Date.now();
 
       if (gateState === "WAITING_FOR_AUDIO") {
         if (now - lastAudioAttemptAt < 250) return;
-
         lastAudioAttemptAt = now;
         setEnterText("ARMING");
-
         await startCybercrowdTeaser();
         return;
       }
 
-      if (gateState === "AUDIO_PLAYING" && now - audioStartedAt < 900) {
-        return;
-      }
+      if (gateState === "AUDIO_PLAYING" && now - audioStartedAt < 900) return;
 
       if (gateState === "AUDIO_PLAYING") {
         navigating = true;
@@ -442,9 +396,7 @@
     }
 
     document.addEventListener("click", cybercrowdGateTouch, false);
-
     document.addEventListener("pointerup", cybercrowdGateTouch, false);
-
     document.addEventListener("touchend", cybercrowdGateTouch, { passive: false });
 
     document.addEventListener("keydown", async (e) => {
@@ -455,6 +407,3 @@
   </script>
 </body>
 </html>
-
-
-
