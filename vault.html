@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CyberCrowd Vault</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .vault-frame {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .vault-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .plaque {
+      position: absolute;
+      padding: 12px 28px;
+      background: linear-gradient(145deg, #b08d3a, #7a5f24);
+      border: 2px solid #d4af37;
+      color: #f8f3e7;
+      font-family: "Segoe UI", sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 0 12px rgba(0,0,0,0.6);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.15s ease;
+      z-index: 30;
+    }
+
+    .plaque:hover {
+      transform: scale(1.04);
+    }
+
+    @keyframes breathe {
+      0% { box-shadow: 0 0 8px rgba(212,175,55,0.35); }
+      50% { box-shadow: 0 0 22px rgba(212,175,55,0.75); }
+      100% { box-shadow: 0 0 8px rgba(212,175,55,0.35); }
+    }
+
+    .register {
+      top: 6%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: breathe 2.3s ease-in-out infinite;
+    }
+
+    .register:hover {
+      transform: translateX(-50%) scale(1.04);
+    }
+
+    .about {
+      bottom: 6%;
+      left: 8%;
+      z-index: 9999;
+    }
+
+    .rules {
+      bottom: 6%;
+      right: 8%;
+      z-index: 9999;
+    }
+
+    .glass-case-click-zone {
+      position: absolute;
+      top: 17%;
+      left: 22%;
+      width: 56%;
+      height: 68%;
+      z-index: 10;
+      display: block;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .glass-case-click-zone:focus {
+      outline: none;
+    }
+
+    #teaserAudio {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      left: -9999px;
+      top: -9999px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="vault-frame">
+    <img
+      src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/Register_login_image.png"
+      alt="CyberCrowd Vault Background"
+    />
+
+    <a class="plaque register" href="create-account.html">REGISTER</a>
+    <a class="plaque about" href="about.html">ABOUT</a>
+    <a class="plaque rules" href="rules_regulations.html">RULES</a>
+
+    <button
+      class="glass-case-click-zone"
+      type="button"
+      aria-label="Play next CyberCrowd teaser"
+      onclick="glassCaseClick(event)"
+      onkeydown="glassCaseKey(event)"
+    ></button>
+
+    <audio id="teaserAudio" preload="auto" playsinline></audio>
+  </div>
+
+  <script>
+    const PLAYLIST_ENDPOINT = "/api/r2-teaser-playlist";
+    const VAULT_SOCKET_PATH = "/api/vault-socket";
+
+    let playlist = [];
+    let deck = [];
+    let playlistPromise = null;
+    let currentTrack = "";
+    let requestNumber = 0;
+    let vaultSocket = null;
+
+    function openVaultSocket() {
+      try {
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const socketUrl = protocol + "//" + window.location.host + VAULT_SOCKET_PATH;
+
+        vaultSocket = new WebSocket(socketUrl);
+
+        vaultSocket.addEventListener("open", function () {
+          sendVaultSignal("vault_open", {
+            room: "museum-vault",
+            page: "vault.html"
+          });
+        });
+
+        vaultSocket.addEventListener("message", function (event) {
+          console.log("CyberCrowd vault socket message:", event.data);
+        });
+
+        vaultSocket.addEventListener("close", function () {
+          vaultSocket = null;
+        });
+
+        vaultSocket.addEventListener("error", function (error) {
+          console.warn("CyberCrowd vault socket unavailable:", error);
+        });
+      } catch (error) {
+        console.warn("CyberCrowd vault socket failed:", error);
+      }
+    }
+
+    function sendVaultSignal(type, payload) {
+      if (!vaultSocket || vaultSocket.readyState !== WebSocket.OPEN) {
+        return;
+      }
+
+      vaultSocket.send(JSON.stringify({
+        type: type,
+        payload: payload || {},
+        at: Date.now()
+      }));
+    }
+
+    function loadPlaylist() {
+      if (playlist.length > 0) {
+        return Promise.resolve(playlist);
+      }
+
+      if (!playlistPromise) {
+        playlistPromise = fetch(PLAYLIST_ENDPOINT, {
+          method: "GET",
+          cache: "no-store"
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Playlist endpoint failed: HTTP " + response.status);
+            }
+
+            return response.json();
+          })
+          .then(function (data) {
+            const tracks = Array.isArray(data) ? data : data.tracks;
+
+            if (!Array.isArray(tracks) || tracks.length === 0) {
+              throw new Error("Playlist endpoint returned zero tracks.");
+            }
+
+            playlist = tracks.slice();
+            deck = shuffleDeck(playlist);
+
+            sendVaultSignal("playlist_loaded", {
+              tracks: playlist.length
+            });
+
+            return playlist;
+          })
+          .catch(function (error) {
+            playlistPromise = null;
+            console.error("CyberCrowd playlist load failed:", error);
+            throw error;
+          });
+      }
+
+      return playlistPromise;
+    }
+
+    function shuffleDeck(source) {
+      const shuffled = source.slice();
+
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = shuffled[i];
+        shuffled[i] = shuffled[j];
+        shuffled[j] = temp;
+      }
+
+      return shuffled;
+    }
+
+    function getNextTrack() {
+      if (deck.length === 0) {
+        deck = shuffleDeck(playlist);
+      }
+
+      let next = deck.shift();
+
+      if (playlist.length > 1 && next === currentTrack) {
+        deck.push(next);
+        next = deck.shift();
+      }
+
+      currentTrack = next;
+      return next;
+    }
+
+    async function playNextTeaser() {
+      const audio = document.getElementById("teaserAudio");
+      const thisRequest = ++requestNumber;
+
+      try {
+        await loadPlaylist();
+
+        if (thisRequest !== requestNumber) {
+          return;
+        }
+
+        const track = getNextTrack();
+
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = track;
+        audio.volume = 1;
+        audio.muted = false;
+        audio.load();
+
+        await audio.play();
+
+        sendVaultSignal("teaser_play", {
+          track: track
+        });
+
+        console.log("CyberCrowd teaser playing:", track);
+      } catch (error) {
+        console.error("CyberCrowd teaser did not play:", error);
+        sendVaultSignal("teaser_error", {
+          message: String(error && error.message ? error.message : error)
+        });
+      }
+    }
+
+    function glassCaseClick(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      playNextTeaser();
+    }
+
+    function glassCaseKey(event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        event.stopPropagation();
+        playNextTeaser();
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", function () {
+      openVaultSocket();
+
+      loadPlaylist().catch(function (error) {
+        console.error("CyberCrowd playlist warmup failed:", error);
+      });
+    });
+  </script>
+</body>
+</html>
