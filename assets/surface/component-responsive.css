@@ -1,0 +1,160 @@
+/* CyberCrowd Component Responsive Filter
+   Purpose: preserve 2.5D rooms across phone, tablet, desktop, and headset.
+   This file should not flatten rooms into cards.
+*/
+
+/* GLOBAL SURFACE BASE -------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 2.5D LAYER RULES ----------------------------------------- */
+.cc-world {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.cc-depth-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cc-depth-background img,
+.cc-depth-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.cc-depth-controls {
+  position: relative;
+  z-index: 30;
+}
+
+.cc-doorman {
+  position: absolute;
+  z-index: 9999;
+  user-select: none;
+}
+
+.cc-click-zone {
+  position: absolute;
+  z-index: 10;
+  background: transparent;
+  border: 0;
+  outline: 0;
+}
+
+/* VAULT 2.5D ROOM ------------------------------------------ */
+.vault-frame {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+.vault-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.plaque {
+  z-index: 9999;
+}
+
+.register {
+  top: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.register:hover {
+  transform: translateX(-50%) scale(1.04);
+}
+
+.about {
+  bottom: 6%;
+  left: 8%;
+}
+
+.rules {
+  bottom: 6%;
+  right: 8%;
+}
+
+.glass-case-click-zone {
+  z-index: 10;
+}
+
+/* MOBILE SAFE AREA ----------------------------------------- */
+@media (max-width: 700px) {
+  .plaque {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+  }
+
+  .register {
+    top: max(18px, calc(env(safe-area-inset-top) + 14px));
+  }
+
+  .about {
+    left: 18px;
+    bottom: max(18px, calc(env(safe-area-inset-bottom) + 14px));
+  }
+
+  .rules {
+    right: 18px;
+    bottom: max(18px, calc(env(safe-area-inset-bottom) + 14px));
+  }
+}
+
+/* SMALL HEIGHT PROTECTION ---------------------------------- */
+@media (max-height: 520px) {
+  .plaque {
+    padding: 8px 16px;
+    font-size: 0.78rem;
+  }
+
+  .register {
+    top: 12px;
+  }
+
+  .about,
+  .rules {
+    bottom: 12px;
+  }
+}
+
+/* REDUCED MOTION ------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
