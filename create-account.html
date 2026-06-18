@@ -57,6 +57,22 @@
       display: grid;
       justify-items: center;
       gap: 24px;
+      transform-origin: center center;
+      transition:
+        transform 720ms cubic-bezier(0.2, 0.85, 0.22, 1),
+        opacity 720ms ease,
+        filter 720ms ease;
+      will-change: transform, opacity, filter;
+    }
+
+    body.check-email-open .page {
+      transform:
+        perspective(900px)
+        translateY(24px)
+        scale(0.90)
+        rotateX(8deg);
+      opacity: 0.56;
+      filter: blur(1.2px) saturate(0.88);
     }
 
     .glass-plaque {
@@ -259,6 +275,302 @@
       letter-spacing: 0.04em;
     }
 
+    .check-email-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      pointer-events: none;
+      opacity: 0;
+      perspective: 950px;
+      transition: opacity 180ms ease;
+    }
+
+    .check-email-overlay.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .check-email-stage {
+      position: relative;
+      width: min(90vw, 470px);
+      min-height: 300px;
+      transform-style: preserve-3d;
+      opacity: 0;
+      --start-x: 0vw;
+      --start-y: -120vh;
+      --start-rotate: -8deg;
+    }
+
+    .check-email-overlay.is-visible .check-email-stage {
+      animation: emailStageFlyIn 760ms cubic-bezier(0.17, 0.88, 0.25, 1.15) forwards;
+    }
+
+    .check-email-overlay.from-top .check-email-stage {
+      --start-x: 0vw;
+      --start-y: -120vh;
+      --start-rotate: -6deg;
+    }
+
+    .check-email-overlay.from-bottom .check-email-stage {
+      --start-x: 0vw;
+      --start-y: 120vh;
+      --start-rotate: 6deg;
+    }
+
+    .check-email-overlay.from-left .check-email-stage {
+      --start-x: -120vw;
+      --start-y: 0vh;
+      --start-rotate: -8deg;
+    }
+
+    .check-email-overlay.from-right .check-email-stage {
+      --start-x: 120vw;
+      --start-y: 0vh;
+      --start-rotate: 8deg;
+    }
+
+    .check-email-overlay.from-top-left .check-email-stage {
+      --start-x: -100vw;
+      --start-y: -100vh;
+      --start-rotate: -10deg;
+    }
+
+    .check-email-overlay.from-top-right .check-email-stage {
+      --start-x: 100vw;
+      --start-y: -100vh;
+      --start-rotate: 10deg;
+    }
+
+    .check-email-overlay.from-bottom-left .check-email-stage {
+      --start-x: -100vw;
+      --start-y: 100vh;
+      --start-rotate: 10deg;
+    }
+
+    .check-email-overlay.from-bottom-right .check-email-stage {
+      --start-x: 100vw;
+      --start-y: 100vh;
+      --start-rotate: -10deg;
+    }
+
+    .check-email-slab {
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(214, 242, 232, 0.94);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(210, 255, 255, 0.44), transparent 28%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.16)),
+        rgba(238, 248, 242, 0.54);
+      backdrop-filter: blur(8px) saturate(1.12);
+      -webkit-backdrop-filter: blur(8px) saturate(1.12);
+      box-shadow:
+        0 34px 90px rgba(0, 0, 0, 0.48),
+        0 0 34px rgba(210, 255, 255, 0.20),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.58),
+        inset 0 0 34px rgba(255, 255, 255, 0.24);
+      transform:
+        translateZ(0)
+        rotateX(5deg);
+      transform-origin: center center;
+    }
+
+    .check-email-slab::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.52);
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .check-email-slab::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 58%;
+      height: 42%;
+      border-radius: 0 26px 0 60px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.58), transparent 68%);
+      pointer-events: none;
+    }
+
+    .floating-email-words {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      padding: 36px 30px;
+      text-align: center;
+      color: var(--ink);
+      transform: translateZ(115px);
+      transform-style: preserve-3d;
+      opacity: 0;
+      animation: floatingWordsArrive 520ms ease forwards;
+      animation-delay: 520ms;
+    }
+
+    .floating-email-inner {
+      transform: translateY(-2px);
+    }
+
+    .floating-email-words h2 {
+      margin: 0 0 18px;
+      font-size: clamp(2rem, 7vw, 3.25rem);
+      line-height: 0.95;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      text-shadow:
+        0 2px 8px rgba(255, 255, 255, 0.78),
+        0 10px 24px rgba(0, 0, 0, 0.28),
+        0 0 18px rgba(210, 255, 255, 0.30);
+    }
+
+    .floating-email-words p {
+      margin: 0;
+      color: rgba(42, 33, 24, 0.84);
+      font-size: clamp(1rem, 3vw, 1.22rem);
+      line-height: 1.45;
+      font-weight: 500;
+      text-shadow:
+        0 1px 5px rgba(255, 255, 255, 0.70),
+        0 8px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    .floating-email-words p + p {
+      margin-top: 10px;
+    }
+
+    .check-email-close {
+      min-width: 150px;
+      height: 48px;
+      margin-top: 26px;
+      border: 2px solid var(--gold-border);
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--gold-top), var(--gold-bottom));
+      color: #2a1b0b;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.45),
+        inset 0 -4px 8px rgba(92, 55, 16, 0.26),
+        0 12px 22px rgba(0, 0, 0, 0.22);
+      cursor: pointer;
+    }
+
+    .sparkle-glint {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      width: 16px;
+      height: 16px;
+      z-index: 4;
+      transform: translateZ(135px);
+      opacity: 0;
+      pointer-events: none;
+      animation: sparklePop 840ms ease forwards;
+      animation-delay: 420ms;
+    }
+
+    .sparkle-glint::before,
+    .sparkle-glint::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      background: rgba(210, 255, 255, 0.90);
+      box-shadow: 0 0 18px rgba(210, 255, 255, 0.72);
+    }
+
+    .sparkle-glint::before {
+      width: 3px;
+      height: 16px;
+      border-radius: 999px;
+    }
+
+    .sparkle-glint::after {
+      width: 16px;
+      height: 3px;
+      border-radius: 999px;
+    }
+
+    @keyframes emailStageFlyIn {
+      0% {
+        opacity: 0;
+        transform:
+          translate3d(var(--start-x), var(--start-y), -80px)
+          scale(0.82)
+          rotateX(14deg)
+          rotateZ(var(--start-rotate));
+        filter: blur(4px);
+      }
+
+      70% {
+        opacity: 1;
+        transform:
+          translate3d(0, 0, 20px)
+          scale(1.035)
+          rotateX(-2deg)
+          rotateZ(1deg);
+        filter: blur(0);
+      }
+
+      100% {
+        opacity: 1;
+        transform:
+          translate3d(0, 0, 0)
+          scale(1)
+          rotateX(0)
+          rotateZ(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes floatingWordsArrive {
+      0% {
+        opacity: 0;
+        transform:
+          translateZ(60px)
+          translateY(18px)
+          scale(0.96);
+        filter: blur(2px);
+      }
+
+      100% {
+        opacity: 1;
+        transform:
+          translateZ(115px)
+          translateY(0)
+          scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes sparklePop {
+      0% {
+        opacity: 0;
+        transform: translateZ(135px) scale(0.4) rotate(0deg);
+      }
+
+      35% {
+        opacity: 1;
+        transform: translateZ(135px) scale(1.15) rotate(45deg);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateZ(135px) scale(0.7) rotate(90deg);
+      }
+    }
+
     @media (max-width: 560px) {
       body {
         overflow-y: auto;
@@ -278,6 +590,37 @@
         width: 120px;
         height: 120px;
       }
+
+      .check-email-stage {
+        min-height: 286px;
+      }
+
+      .floating-email-words {
+        padding: 34px 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .page,
+      .check-email-stage,
+      .floating-email-words,
+      .sparkle-glint {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      body.check-email-open .page {
+        transform: none;
+        opacity: 0.52;
+        filter: none;
+      }
+
+      .check-email-overlay.is-visible .check-email-stage,
+      .floating-email-words {
+        opacity: 1;
+        transform: none;
+        filter: none;
+      }
     }
   </style>
 </head>
@@ -289,7 +632,7 @@
     alt=""
   />
 
-  <main class="page" aria-label="CyberCrowd entry window">
+  <main class="page" id="entryPage" aria-label="CyberCrowd entry window">
     <section class="glass-plaque" aria-labelledby="entry-title">
       <div class="seal-wrapper" aria-hidden="false">
         <div class="seal-ring" aria-hidden="true"></div>
@@ -326,16 +669,60 @@
     </a>
   </main>
 
+  <div
+    class="check-email-overlay"
+    id="checkEmailOverlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="checkEmailTitle"
+    aria-hidden="true"
+  >
+    <div class="check-email-stage" id="checkEmailStage">
+      <div class="check-email-slab" aria-hidden="true"></div>
+      <div class="sparkle-glint" aria-hidden="true"></div>
+
+      <div class="floating-email-words">
+        <div class="floating-email-inner">
+          <h2 id="checkEmailTitle">Check Your Email</h2>
+          <p>CyberCrowd sent your entry link.</p>
+          <p>Open your email and press the link to continue.</p>
+          <button class="check-email-close" id="checkEmailClose" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="checkEmailWhoosh" preload="auto">
+    <source
+      src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/whooshing-email-sent_1.1s%20teaser.mp3"
+      type="audio/mpeg"
+    />
+  </audio>
+
   <script>
     const form = document.getElementById("entryForm");
     const emailInput = document.getElementById("email");
     const sendButton = document.getElementById("sendButton");
     const statusText = document.getElementById("status");
     const turnstileSlot = document.getElementById("turnstileSlot");
+    const checkEmailOverlay = document.getElementById("checkEmailOverlay");
+    const checkEmailClose = document.getElementById("checkEmailClose");
+    const checkEmailWhoosh = document.getElementById("checkEmailWhoosh");
 
     let humanToken = "";
     let widgetId = null;
     let gateVisible = false;
+
+    const flyInClasses = [
+      "from-top",
+      "from-bottom",
+      "from-left",
+      "from-right",
+      "from-top-left",
+      "from-top-right",
+      "from-bottom-left",
+      "from-bottom-right"
+    ];
 
     function isValidEmail(value) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -353,6 +740,49 @@
     function unlockButton() {
       sendButton.disabled = false;
       sendButton.textContent = "Send";
+    }
+
+    function playCheckEmailWhoosh() {
+      if (!checkEmailWhoosh) return;
+
+      checkEmailWhoosh.volume = 0.28;
+      checkEmailWhoosh.currentTime = 0;
+
+      checkEmailWhoosh.play().catch(function () {
+        /* Browser blocked audio. Continue silently. */
+      });
+    }
+
+    function showCheckEmailOverlay() {
+      const chosenFlyIn = flyInClasses[Math.floor(Math.random() * flyInClasses.length)];
+
+      checkEmailOverlay.classList.remove(
+        "from-top",
+        "from-bottom",
+        "from-left",
+        "from-right",
+        "from-top-left",
+        "from-top-right",
+        "from-bottom-left",
+        "from-bottom-right",
+        "is-visible"
+      );
+
+      void checkEmailOverlay.offsetWidth;
+
+      checkEmailOverlay.classList.add(chosenFlyIn);
+      checkEmailOverlay.classList.add("is-visible");
+      checkEmailOverlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("check-email-open");
+
+      playCheckEmailWhoosh();
+    }
+
+    function hideCheckEmailOverlay() {
+      checkEmailOverlay.classList.remove("is-visible");
+      checkEmailOverlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("check-email-open");
+      emailInput.focus();
     }
 
     function renderHumanGate() {
@@ -436,7 +866,20 @@
         }
 
         sessionStorage.setItem("cybercrowd_entry_email", email);
-        window.location.href = "email-sent.html";
+        showCheckEmailOverlay();
+
+        form.reset();
+        humanToken = "";
+        gateVisible = false;
+        turnstileSlot.style.display = "none";
+        setStatus("");
+
+        if (window.turnstile && widgetId !== null) {
+          window.turnstile.remove(widgetId);
+          widgetId = null;
+        }
+
+        unlockButton();
       } catch (error) {
         humanToken = "";
 
@@ -452,6 +895,16 @@
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       sendEntry();
+    });
+
+    checkEmailClose.addEventListener("click", function () {
+      hideCheckEmailOverlay();
+    });
+
+    checkEmailOverlay.addEventListener("click", function (event) {
+      if (event.target === checkEmailOverlay) {
+        hideCheckEmailOverlay();
+      }
     });
   </script>
 </body>
