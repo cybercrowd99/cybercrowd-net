@@ -158,7 +158,7 @@ export async function onRequest() {
 async function verifyTurnstile({ token, secret, ip }) {
   const formData = new FormData();
 
-  formData.append("secret", secret); // TURNSTILE_SECRET_KEY=*********************** <here
+  formData.append("secret", secret); // TURNSTILE_SECRET_KEY=0x4AAAAAADfQnyf79DXgLgqe71l1-FWDMVg
   formData.append("response", token);
 
   if (ip) {
