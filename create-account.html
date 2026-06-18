@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Create Your Account | CyberCrowd</title>
+  <title>CyberCrowd Entry</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <style>
     :root {
@@ -17,9 +18,7 @@
       --gold-border: rgba(82, 53, 20, 0.76);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html,
     body {
@@ -195,10 +194,18 @@
       color: rgba(42, 33, 24, 0.68);
     }
 
+    .turnstile-slot {
+      width: min(100%, 390px);
+      min-height: 70px;
+      margin-top: 22px;
+      display: none;
+      place-items: center;
+    }
+
     .send-button {
       width: min(100%, 320px);
       height: 66px;
-      margin-top: 36px;
+      margin-top: 28px;
       border: 2px solid var(--gold-border);
       border-radius: 999px;
       background: linear-gradient(180deg, var(--gold-top), var(--gold-bottom));
@@ -282,8 +289,8 @@
     alt=""
   />
 
-  <main class="page" aria-label="CyberCrowd create account window">
-    <section class="glass-plaque" aria-labelledby="create-title">
+  <main class="page" aria-label="CyberCrowd entry window">
+    <section class="glass-plaque" aria-labelledby="entry-title">
       <div class="seal-wrapper" aria-hidden="false">
         <div class="seal-ring" aria-hidden="true"></div>
         <img
@@ -293,10 +300,10 @@
         />
       </div>
 
-      <h1 id="create-title" class="title">Create Your Account</h1>
+      <h1 id="entry-title" class="title">CyberCrowd Entry</h1>
       <div class="welcome">Welcome to CyberCrowd</div>
 
-      <form class="entry-form" id="createAccountForm">
+      <form class="entry-form" id="entryForm">
         <input
           class="email-field"
           id="email"
@@ -306,6 +313,8 @@
           autocomplete="email"
           required
         />
+
+        <div class="turnstile-slot" id="turnstileSlot"></div>
 
         <button class="send-button" id="sendButton" type="submit">Send</button>
         <div class="status" id="status" aria-live="polite"></div>
@@ -318,47 +327,131 @@
   </main>
 
   <script>
-    const form = document.getElementById("createAccountForm");
+    const form = document.getElementById("entryForm");
     const emailInput = document.getElementById("email");
     const sendButton = document.getElementById("sendButton");
     const statusText = document.getElementById("status");
+    const turnstileSlot = document.getElementById("turnstileSlot");
+
+    let humanToken = "";
+    let widgetId = null;
+    let gateVisible = false;
 
     function isValidEmail(value) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 
-    form.addEventListener("submit", async function (event) {
-      event.preventDefault();
+    function setStatus(text) {
+      statusText.textContent = text;
+    }
 
-      const email = emailInput.value.trim();
+    function lockButton(text) {
+      sendButton.disabled = true;
+      sendButton.textContent = text;
+    }
 
-      if (!isValidEmail(email)) {
-        statusText.textContent = "Please enter a valid email.";
-        emailInput.focus();
+    function unlockButton() {
+      sendButton.disabled = false;
+      sendButton.textContent = "Send";
+    }
+
+    function renderHumanGate() {
+      if (!window.turnstile) {
+        setStatus("Human gate loading. Press Send again in a moment.");
+        unlockButton();
         return;
       }
 
-      sendButton.disabled = true;
-      sendButton.textContent = "Sending";
-      statusText.textContent = "Preparing your CyberCrowd entry.";
+      turnstileSlot.style.display = "grid";
+      gateVisible = true;
+
+      if (widgetId !== null) {
+        window.turnstile.remove(widgetId);
+        widgetId = null;
+      }
+
+      widgetId = window.turnstile.render("#turnstileSlot", {
+        sitekey: "71674985-37da-4da4-997d-aca0fb499793",
+        callback: function (token) {
+          humanToken = token;
+          sendEntry();
+        },
+        "expired-callback": function () {
+          humanToken = "";
+          setStatus("Human gate expired. Press Send again.");
+          unlockButton();
+        },
+        "error-callback": function () {
+          humanToken = "";
+          setStatus("Human gate failed. Press Send again.");
+          unlockButton();
+        }
+      });
+    }
+
+    async function sendEntry() {
+      const email = emailInput.value.trim();
+
+      if (!isValidEmail(email)) {
+        setStatus("Please enter a valid email.");
+        emailInput.focus();
+        unlockButton();
+        return;
+      }
+
+      if (!humanToken) {
+        lockButton("Check");
+        setStatus("Complete the human gate.");
+
+        if (!gateVisible) {
+          renderHumanGate();
+        } else {
+          unlockButton();
+        }
+
+        return;
+      }
+
+      lockButton("Sending");
+      setStatus("Preparing your CyberCrowd entry.");
 
       try {
-        await fetch("/api/auth/send-verification", {
+        const response = await fetch("/api/auth/send-verification", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ email })
-        }).catch(function () {
-          return null;
+          body: JSON.stringify({
+            email: email,
+            turnstileToken: humanToken
+          })
         });
+
+        const data = await response.json().catch(function () {
+          return {};
+        });
+
+        if (!response.ok || data.success !== true) {
+          throw new Error(data.error || "Entry request failed.");
+        }
 
         sessionStorage.setItem("cybercrowd_entry_email", email);
         window.location.href = "email-sent.html";
       } catch (error) {
-        sessionStorage.setItem("cybercrowd_entry_email", email);
-        window.location.href = "email-sent.html";
+        humanToken = "";
+
+        if (window.turnstile && widgetId !== null) {
+          window.turnstile.reset(widgetId);
+        }
+
+        setStatus(error.message || "Entry request failed.");
+        unlockButton();
       }
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      sendEntry();
     });
   </script>
 </body>
