@@ -1,46 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Email Sent</title>
-  <style>
-    body {
-      background:#000;
-      color:#fff;
-      font-family:Arial, sans-serif;
-      margin:0;
-      padding:0;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-    }
-    #sent-box {
-      width:350px;
-      padding:20px;
-      background:#111;
-      border:2px solid #b8860b;
-      text-align:center;
-    }
-    button {
-      width:100%;
-      padding:10px;
-      margin-top:20px;
-      background:#b8860b;
-      color:#fff;
-      border:1px solid #fff;
-      cursor:pointer;
-    }
-  </style>
-</head>
+<script>
+/* CyberCrowd Email Sent Overlay – Visual Surface Only
+   Owns: show/hide overlay + optional whoosh.
+   Owns NOT: tokens, KV, sessions, cookies, Turnstile, verification, email sending.
+*/
 
-<body>
-  <div id="sent-box">
-    <h2>Check Your Email</h2>
-    <p>A verification link has been sent to your inbox.</p>
-    <p>Click the link to continue creating your profile.</p>
+window.showEmailSentOverlay = function () {
+  const overlay = document.getElementById("email-sent-overlay");
+  const whoosh = document.getElementById("email-sent-whoosh");
 
-    <button onclick="window.location.href='/register.html'">Back</button>
-  </div>
-</body>
-</html>
+  if (overlay) {
+    overlay.style.display = "flex";
+  }
+
+  if (whoosh) {
+    try {
+      whoosh.currentTime = 0;
+      whoosh.play();
+    } catch (_) {
+      // Audio failure is non-critical; ignore silently
+    }
+  }
+};
+
+document.getElementById("email-sent-close")?.addEventListener("click", () => {
+  const overlay = document.getElementById("email-sent-overlay");
+  if (overlay) {
+    overlay.style.display = "none";
+  }
+});
+</script>
