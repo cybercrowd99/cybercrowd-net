@@ -1,189 +1,121 @@
+// CyberCrowd Send Verification – Setup Token Creation Lane
+// Owns: setup token creation, KV write, email dispatch.
+// Does NOT own: password hashing, session minting, cookie setting, login, HTML, Turnstile, human policy.
+
+import { createSetupToken } from "./setup-token.js";
+import { storeSetupToken } from "./setup-token-store.js";
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
+  let body;
   try {
-    const body = await request.json();
-
-    const email = String(body.email || "").trim().toLowerCase();
-    const turnstileToken = String(
-      body.turnstileToken || body["cf-turnstile-response"] || ""
-    );
-
-    if (!email || !email.includes("@")) {
-      return json({ ok: false, success: false, error: "valid_email_required" }, 400);
-    }
-
-    if (!turnstileToken) {
-      return json({ ok: false, success: false, error: "human_check_required" }, 403);
-    }
-
-    if (!env.TURNSTILE_SECRET_KEY) {
-      return json(
-        { ok: false, success: false, error: "turnstile_secret_missing" },
-        500
-      );
-    }
-
-    if (!env.IDENTITY) {
-      return json(
-        { ok: false, success: false, error: "identity_kv_missing" },
-        500
-      );
-    }
-
-    if (!env.POSTMARK_TOKEN) {
-      return json(
-        { ok: false, success: false, error: "postmark_token_missing" },
-        500
-      );
-    }
-
-    const humanOk = await verifyTurnstile({
-      token: turnstileToken,
-      secret: env.TURNSTILE_SECRET_KEY,
-      ip: request.headers.get("CF-Connecting-IP"),
-    });
-
-    if (humanOk.success !== true) {
-      return json(
-        {
-          ok: false,
-          success: false,
-          error: "turnstile_failed",
-          reason: humanOk["error-codes"] || [],
-        },
-        403
-      );
-    }
-
-    /*
-      HUMAN VERIFIED.
-      Nothing below this line runs unless Turnstile passed.
-
-      CyberCrowd flow:
-      1. Create setup token.
-      2. Store setup:<token> -> email in KV.
-      3. Send setup email.
-      4. Return success response for the entry window.
-    */
-
-    const setupToken = crypto.randomUUID();
-    const createdAt = Date.now();
-    const expiresAt = createdAt + 1000 * 60 * 30;
-
-    await env.IDENTITY.put(
-      `setup:${setupToken}`,
-      JSON.stringify({
-        email,
-        createdAt,
-        expiresAt,
-        purpose: "password_setup",
-        humanVerified: true,
-        used: false,
-        band: "email-setup",
-      }),
-      { expirationTtl: 60 * 30 }
-    );
-
-    const setupUrl = `https://cybercrowd.net/set_password.html?token=${encodeURIComponent(
-      setupToken
-    )}`;
-
-    const emailResponse = await fetch("https://api.postmarkapp.com/email", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "X-Postmark-Server-Token": env.POSTMARK_TOKEN,
-      },
-      body: JSON.stringify({
-        From: "verify@cybercrowd.net",
-        To: email,
-        Subject: "CyberCrowd entry link",
-        TextBody:
-          `CyberCrowd entry link:\n\n${setupUrl}\n\n` +
-          "This link expires in 30 minutes.",
-        HtmlBody:
-          `<p>CyberCrowd entry link:</p>` +
-          `<p><a href="${setupUrl}">Continue</a></p>` +
-          `<p>This link expires in 30 minutes.</p>`,
-      }),
-    });
-
-    if (!emailResponse.ok) {
-      const detail = await emailResponse.text();
-
-      await env.IDENTITY.delete(`setup:${setupToken}`);
-
-      return json(
-        {
-          ok: false,
-          success: false,
-          error: "email_send_failed",
-          detail,
-        },
-        500
-      );
-    }
-
-    return json({
-      ok: true,
-      success: true,
-      status: "human_verified_email_sent",
-      message: "Check your email.",
-    });
-  } catch (err) {
-    return json(
-      {
-        ok: false,
-        success: false,
-        error: "server_error",
-      },
-      500
-    );
+    body = await request.json();
+  } catch (_) {
+    return json({ success: false, error: "invalid_json" }, 400);
   }
+
+  const email = String(body.email || "").trim().toLowerCase();
+
+  if (!email || !email.includes("@")) {
+    return json({ success: false, error: "valid_email_required" }, 400);
+  }
+
+  const tokenRecord = createSetupToken(email);
+  const kvKey = `setup:${tokenRecord.token}`;
+
+  try {
+    await storeSetupToken(env, kvKey, tokenRecord);
+  } catch (_) {
+    return json({ success: false, error: "kv_write_failed" }, 500);
+  }
+
+  const origin = new URL(request.url).origin;
+  const verifyUrl = `${origin}/verify.html?token=${encodeURIComponent(tokenRecord.token)}`;
+
+  const emailPayload = {
+    from: env.CC_EMAIL_FROM,
+    to: email,
+    subject: "Verify your CyberCrowd entry",
+    html: buildEmailHtml(verifyUrl),
+    text: buildEmailText(verifyUrl)
+  };
+
+  try {
+    await sendEmail(env, emailPayload);
+  } catch (_) {
+    return json({ success: false, error: "email_delivery_failed" }, 502);
+  }
+
+  return json({
+    success: true,
+    message: "Check your email."
+  });
 }
 
-export async function onRequest() {
-  return json(
-    {
-      ok: false,
-      success: false,
-      error: "method_not_allowed",
+function buildEmailHtml(verifyUrl) {
+  return `
+    <div style="font-family:Arial,sans-serif;background:#050505;color:white;padding:28px;">
+      <div style="max-width:620px;margin:0 auto;border:1px solid rgba(0,255,255,.35);
+      border-radius:22px;padding:26px;background:rgba(5,10,18,.96);">
+        <h1 style="color:#00ffff;letter-spacing:2px;">CyberCrowd Entry Verification</h1>
+        <p style="line-height:1.7;opacity:.88;">
+          Click the button below to continue your CyberCrowd entry.
+        </p>
+        <p>
+          <a href="${verifyUrl}" style="display:inline-block;padding:16px 22px;border-radius:16px;
+          background:linear-gradient(90deg,#00ffff,#00ffaa);color:black;font-weight:bold;
+          text-decoration:none;letter-spacing:1px;">
+            VERIFY CYBERCROWD ENTRY
+          </a>
+        </p>
+        <p style="line-height:1.7;opacity:.72;font-size:13px;">
+          If the button does not work, copy and paste the verification link from this email into your browser.
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+function buildEmailText(verifyUrl) {
+  return [
+    "CyberCrowd Entry Verification",
+    "",
+    "Click the link below to continue:",
+    verifyUrl,
+    "",
+    "This link is for your CyberCrowd entry only.",
+    "If you did not request this, ignore this email."
+  ].join("\n");
+}
+
+async function sendEmail(env, payload) {
+  const apiKey = env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("missing_resend_key");
+  }
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
     },
-    405
-  );
-}
+    body: JSON.stringify(payload)
+  });
 
-async function verifyTurnstile({ token, secret, ip }) {
-  const formData = new FormData();
-
-  
-
-  formData.append("secret", secret); // TURNSTILE_SECRET_KEY=*********************** <here
-  formData.append("response", token);
-
-  if (ip) {
-    formData.append("remoteip", ip);
+  if (!res.ok) {
+    throw new Error("email_send_failed");
   }
-
-  const response = await fetch(
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
-
-  return response.json();
 }
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
+function json(payload, status = 200) {
+  return new Response(JSON.stringify(payload), {
     status,
     headers: {
-      "content-type": "application/json; charset=utf-8",
-      "cache-control": "no-store",
-    },
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store"
+    }
   });
 }
