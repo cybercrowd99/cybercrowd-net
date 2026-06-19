@@ -1,112 +1,50 @@
-export async function onRequestGet({ request, env }) {
+// CyberCrowd Verify – Setup Token Validation Lane
+// Owns: reading setup token, validating expiry, deleting expired tokens.
+// Owns NOT: token creation, email sending, password logic, session, cookie, Turnstile, human policy.
+
+import { readSetupToken, deleteSetupToken } from "./setup-token-store.js";
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
+
+  let body;
   try {
-    const url = new URL(request.url);
-    const identityToken = url.searchParams.get("token");
-
-    if (!identityToken) {
-      return Response.json(
-        {
-          success: false,
-          error: "no identity token",
-          status: "missing_identity_token",
-        },
-        {
-          status: 401,
-          headers: {
-            "Cache-Control": "no-store",
-          },
-        }
-      );
-    }
-
-    if (!env.IDENTITY) {
-      return Response.json(
-        {
-          success: false,
-          error: "identity store is not active",
-          status: "identity_store_missing",
-        },
-        {
-          status: 500,
-          headers: {
-            "Cache-Control": "no-store",
-          },
-        }
-      );
-    }
-
-    const identityRecord = await env.IDENTITY.get(identityToken);
-
-    if (!identityRecord) {
-      return Response.json(
-        {
-          success: false,
-          error: "invalid identity token",
-          status: "invalid_identity_token",
-        },
-        {
-          status: 401,
-          headers: {
-            "Cache-Control": "no-store",
-          },
-        }
-      );
-    }
-
-    let identityData = null;
-
-    try {
-      identityData = JSON.parse(identityRecord);
-    } catch (parseError) {
-      identityData = {
-        userId: identityRecord,
-      };
-    }
-
-    const userId = identityData.userId || "";
-    const email = identityData.email || "";
-
-    if (!userId) {
-      return Response.json(
-        {
-          success: false,
-          error: "identity token is incomplete",
-          status: "incomplete_identity_token",
-        },
-        {
-          status: 401,
-          headers: {
-            "Cache-Control": "no-store",
-          },
-        }
-      );
-    }
-
-    const redirectUrl = new URL("/.event/quarter-check", url.origin);
-    redirectUrl.searchParams.set("redirect", "/verify-success.html");
-
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: redirectUrl.toString(),
-        "Cache-Control": "no-store",
-      },
-    });
-  } catch (error) {
-    console.error("CYBERCROWD VERIFY ERROR:", error);
-
-    return Response.json(
-      {
-        success: false,
-        error: "server error",
-        status: "verify_exception",
-      },
-      {
-        status: 500,
-        headers: {
-          "Cache-Control": "no-store",
-        },
-      }
-    );
+    body = await request.json();
+  } catch (_) {
+    return json({ success: false, error: "invalid_json" }, 400);
   }
+
+  const token = String(body.token || "").trim();
+
+  if (!token) {
+    return json({ success: false, error: "missing_token" }, 400);
+  }
+
+  const kvKey = `setup:${token}`;
+  const record = await readSetupToken(env, kvKey);
+
+  if (!record) {
+    return json({ success: false, error: "invalid_or_expired" }, 401);
+  }
+
+  const now = Date.now();
+
+  if (now > record.expiresAt) {
+    await deleteSetupToken(env, kvKey);
+    return json({ success: false, error: "expired" }, 401);
+  }
+
+  return json({
+    success: true
+  });
+}
+
+function json(payload, status = 200) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store"
+    }
+  });
 }
