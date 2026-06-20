@@ -18,7 +18,9 @@
       --gold-border: rgba(82, 53, 20, 0.76);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     html,
     body {
@@ -94,6 +96,8 @@
         inset 0 0 0 1px rgba(255, 255, 255, 0.52),
         inset 0 0 30px rgba(255, 255, 255, 0.18);
       overflow: hidden;
+      perspective: 900px;
+      transform: translateY(-2px) rotateX(2deg);
     }
 
     .glass-plaque::before {
@@ -213,7 +217,7 @@
     .turnstile-slot {
       width: min(100%, 390px);
       min-height: 70px;
-      margin-top: 22px;
+      margin-top: 18px;
       display: none;
       place-items: center;
     }
@@ -221,7 +225,7 @@
     .send-button {
       width: min(100%, 320px);
       height: 66px;
-      margin-top: 28px;
+      margin-top: 18px;
       border: 2px solid var(--gold-border);
       border-radius: 999px;
       background: linear-gradient(180deg, var(--gold-top), var(--gold-bottom));
@@ -748,9 +752,7 @@
       checkEmailWhoosh.volume = 0.28;
       checkEmailWhoosh.currentTime = 0;
 
-      checkEmailWhoosh.play().catch(function () {
-        /* Browser blocked audio. Continue silently. */
-      });
+      checkEmailWhoosh.play().catch(function () {});
     }
 
     function showCheckEmailOverlay() {
