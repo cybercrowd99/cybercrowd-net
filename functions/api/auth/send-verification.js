@@ -1,7 +1,3 @@
-// CyberCrowd Send Verification – Setup Token Creation Lane
-// Owns: setup token creation, KV write, email dispatch.
-// Does NOT own: password hashing, session minting, cookie setting, login, HTML, Turnstile, human policy.
-
 import { createSetupToken } from "./setup-token.js";
 import { storeSetupToken } from "./setup-token-store.js";
 
@@ -31,20 +27,29 @@ export async function onRequestPost(context) {
   }
 
   const origin = new URL(request.url).origin;
-  const verifyUrl = `${origin}/verify.html?token=${encodeURIComponent(tokenRecord.token)}`;
+  const verifyUrl = `${origin}/setup.html?setup=${encodeURIComponent(tokenRecord.token)}`;
 
   const emailPayload = {
-    from: env.CC_EMAIL_FROM,
-    to: email,
-    subject: "Verify your CyberCrowd entry",
-    html: buildEmailHtml(verifyUrl),
-    text: buildEmailText(verifyUrl)
+    From: env.CC_EMAIL_FROM,
+    To: email,
+    ReplyTo: env.CC_REPLY_TO || env.CC_EMAIL_FROM,
+    Subject: "Verify your CyberCrowd entry",
+    HtmlBody: buildEmailHtml(verifyUrl),
+    TextBody: buildEmailText(verifyUrl),
+    MessageStream: "outbound"
   };
 
   try {
     await sendEmail(env, emailPayload);
-  } catch (_) {
-    return json({ success: false, error: "email_delivery_failed" }, 502);
+  } catch (error) {
+    return json(
+      {
+        success: false,
+        error: "email_delivery_failed",
+        detail: error.message
+      },
+      502
+    );
   }
 
   return json({
@@ -90,23 +95,25 @@ function buildEmailText(verifyUrl) {
 }
 
 async function sendEmail(env, payload) {
-  const apiKey = env.RESEND_API_KEY;
+  const apiKey = env.POSTMARK_API_KEY;
 
   if (!apiKey) {
-    throw new Error("missing_resend_key");
+    throw new Error("missing_postmark_api_key");
   }
 
-  const res = await fetch("https://api.resend.com/emails", {
+  const response = await fetch("https://api.postmarkapp.com/email", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json"
+      "X-Postmark-Server-Token": apiKey,
+      "Content-Type": "application/json",
+      Accept: "application/json"
     },
     body: JSON.stringify(payload)
   });
 
-  if (!res.ok) {
-    throw new Error("email_send_failed");
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`postmark_rejected:${response.status}:${text}`);
   }
 }
 
