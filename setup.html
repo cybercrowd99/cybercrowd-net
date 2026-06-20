@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd | Activate Identity</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+    }
+
+    .setup-room {
+      position: relative;
+      width: min(100vw, calc(100vh * 1.7777778));
+      aspect-ratio: 16 / 9;
+      background: #000;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .setup-art {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center center;
+      z-index: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .setup-form {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+    }
+
+    .air-input {
+      position: absolute;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      box-shadow: none;
+      color: transparent;
+      caret-color: rgba(115, 250, 255, 0.86);
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .air-input::selection {
+      color: transparent;
+      background: transparent;
+    }
+
+    .air-input:-webkit-autofill,
+    .air-input:-webkit-autofill:hover,
+    .air-input:-webkit-autofill:focus {
+      -webkit-text-fill-color: transparent;
+      transition: background-color 9999s ease-in-out 0s;
+      box-shadow: 0 0 0 1000px transparent inset;
+    }
+
+    #pepperState {
+      position: absolute;
+      left: 50%;
+      top: 38.9%;
+      width: 44%;
+      height: 7.4%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    #passwordInput,
+    #passwordFloat {
+      left: 50.5%;
+      top: 54.2%;
+      width: 34%;
+      height: 7.4%;
+      transform: translate(-50%, -50%);
+    }
+
+    #verifyInput,
+    #verifyFloat {
+      left: 49.8%;
+      top: 69.3%;
+      width: 34%;
+      height: 7.4%;
+      transform: translate(-50%, -50%);
+    }
+
+    #activateButton {
+      position: absolute;
+      left: 69.8%;
+      top: 85.3%;
+      width: 24%;
+      height: 8.8%;
+      transform: translate(-50%, -50%);
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: transparent;
+      box-shadow: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    #activateButton:disabled {
+      cursor: default;
+    }
+
+    .float-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .float-text {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(220, 255, 255, 0.94);
+      font-size: clamp(14px, 1.55vw, 24px);
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-shadow:
+        0 0 8px rgba(100, 245, 255, 0.9),
+        0 0 18px rgba(100, 245, 255, 0.55),
+        0 0 34px rgba(160, 95, 255, 0.22);
+      opacity: 0;
+      transform-origin: center center;
+      transition:
+        opacity 160ms ease,
+        color 160ms ease,
+        text-shadow 160ms ease;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .float-text.on {
+      opacity: 1;
+    }
+
+    .float-text.masked {
+      letter-spacing: 0.18em;
+    }
+
+    .float-text.good {
+      color: rgba(118, 255, 168, 0.96);
+      text-shadow:
+        0 0 8px rgba(118, 255, 168, 0.95),
+        0 0 22px rgba(118, 255, 168, 0.5);
+    }
+
+    .float-text.bad {
+      color: rgba(255, 92, 132, 0.96);
+      text-shadow:
+        0 0 8px rgba(255, 92, 132, 0.85),
+        0 0 22px rgba(255, 92, 132, 0.45);
+    }
+
+    .adworm-growth {
+      position: absolute;
+      inset: 0;
+      z-index: 16;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .setup-room.growing .adworm-growth {
+      opacity: 1;
+    }
+
+    .growth-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .growth-path {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0;
+    }
+
+    .growth-path.active {
+      opacity: 1;
+      animation: draw-growth 1.2s ease-out forwards;
+    }
+
+    .growth-path.glow {
+      filter: drop-shadow(0 0 7px currentColor);
+      animation:
+        draw-growth 1.2s ease-out forwards,
+        path-glow 900ms ease-in-out infinite alternate;
+    }
+
+    @keyframes draw-growth {
+      from { stroke-dashoffset: 1000; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes path-glow {
+      from {
+        filter: drop-shadow(0 0 4px currentColor);
+      }
+
+      to {
+        filter:
+          drop-shadow(0 0 12px currentColor)
+          drop-shadow(0 0 24px currentColor);
+      }
+    }
+
+    .birth-spark {
+      position: absolute;
+      left: 69.8%;
+      top: 85.3%;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(105, 245, 255, 0.95);
+      box-shadow:
+        0 0 12px rgba(105, 245, 255, 1),
+        0 0 30px rgba(105, 245, 255, 0.72),
+        0 0 54px rgba(181, 94, 255, 0.45);
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+    }
+
+    .setup-room.growing .birth-spark {
+      animation: birth-spark 900ms ease-out forwards;
+    }
+
+    @keyframes birth-spark {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.3);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2.6);
+      }
+    }
+
+    .growth-head {
+      position: absolute;
+      left: 69.8%;
+      top: 85.3%;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: rgba(105, 245, 255, 1);
+      box-shadow:
+        0 0 10px rgba(105, 245, 255, 1),
+        0 0 22px rgba(105, 245, 255, 0.8),
+        0 0 40px rgba(255, 0, 102, 0.42);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+    }
+
+    .setup-room.growing .growth-head {
+      animation: growth-run 3.2s ease-in-out forwards;
+    }
+
+    @keyframes growth-run {
+      0% {
+        left: 69.8%;
+        top: 85.3%;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.15);
+      }
+
+      8% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.15);
+      }
+
+      24% {
+        left: 49.8%;
+        top: 69.3%;
+        transform: translate(-50%, -50%) scale(0.85);
+      }
+
+      46% {
+        left: 50.5%;
+        top: 54.2%;
+        transform: translate(-50%, -50%) scale(0.85);
+      }
+
+      68% {
+        left: 50%;
+        top: 38.9%;
+        transform: translate(-50%, -50%) scale(0.9);
+      }
+
+      100% {
+        left: 50%;
+        top: 38.9%;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2.1);
+      }
+    }
+
+    .growth-node {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .growth-node.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .growth-node.green {
+      background: radial-gradient(circle at 35% 35%, #00ff88, #008844);
+      box-shadow:
+        0 0 10px rgba(0, 255, 136, 0.7),
+        0 0 22px rgba(0, 255, 136, 0.32);
+    }
+
+    .growth-node.orange {
+      background: radial-gradient(circle at 35% 35%, #ffaa00, #aa6600);
+      box-shadow:
+        0 0 10px rgba(255, 170, 0, 0.7),
+        0 0 22px rgba(255, 170, 0, 0.32);
+    }
+
+    .growth-node.pink {
+      background: radial-gradient(circle at 35% 35%, #ff0066, #880033);
+      box-shadow:
+        0 0 10px rgba(255, 0, 102, 0.72),
+        0 0 22px rgba(255, 0, 102, 0.34);
+    }
+
+    .node-password { left: 50.5%; top: 54.2%; }
+    .node-verify { left: 49.8%; top: 69.3%; }
+    .node-activate { left: 69.8%; top: 85.3%; }
+    .node-pepper { left: 50%; top: 38.9%; }
+
+    .growth-converge {
+      position: absolute;
+      top: 38.9%;
+      left: 50%;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ff1a66, #660022);
+      box-shadow:
+        0 0 20px rgba(255, 26, 102, 0.82),
+        0 0 44px rgba(255, 26, 102, 0.42);
+      border: 1px solid rgba(255, 120, 168, 0.82);
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      transition: all 440ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .growth-converge.active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      animation: converge-pulse 850ms ease-in-out infinite alternate;
+    }
+
+    @keyframes converge-pulse {
+      from {
+        box-shadow:
+          0 0 18px rgba(255, 26, 102, 0.8),
+          0 0 42px rgba(255, 26, 102, 0.38);
+      }
+
+      to {
+        box-shadow:
+          0 0 34px rgba(255, 26, 102, 1),
+          0 0 76px rgba(255, 26, 102, 0.58);
+      }
+    }
+
+    .setup-room.locked::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 38.9%, rgba(105, 255, 164, 0.24), transparent 20%),
+        radial-gradient(circle at 69.8% 85.3%, rgba(105, 245, 255, 0.14), transparent 24%);
+      animation: lock-pulse 950ms ease-out forwards;
+    }
+
+    @keyframes lock-pulse {
+      0% { opacity: 0; }
+      30% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .setup-room.growing .birth-spark,
+      .setup-room.growing .growth-head,
+      .growth-path.active,
+      .growth-path.glow,
+      .setup-room.locked::after,
+      .growth-converge.active {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main id="setupRoom" class="setup-room" aria-label="CyberCrowd activate identity room">
+    <img
+      class="setup-art"
+      src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Setup-html-image.png"
+      alt=""
+      aria-hidden="true"
+    />
+
+    <div id="pepperState" aria-hidden="true"></div>
+
+    <div class="float-layer" aria-hidden="true">
+      <div id="passwordFloat" class="float-text"></div>
+      <div id="verifyFloat" class="float-text"></div>
+    </div>
+
+    <div id="adwormGrowth" class="adworm-growth" aria-hidden="true">
+      <div class="birth-spark"></div>
+      <div class="growth-head"></div>
+
+      <svg class="growth-svg" viewBox="0 0 800 600" preserveAspectRatio="none">
+        <path
+          class="growth-path"
+          id="growth-main"
+          d="M 558 512 L 398 416 L 404 325 L 400 233"
+          stroke="#8ffcff"
+          stroke-width="2.7"
+          stroke-dasharray="1000"
+          stroke-dashoffset="1000"
+        />
+
+        <path
+          class="growth-path"
+          id="growth-password"
+          d="M 404 325 L 300 325 M 404 325 L 520 325"
+          stroke="#ffaa00"
+          stroke-width="2"
+          stroke-dasharray="1000"
+          stroke-dashoffset="1000"
+        />
+
+        <path
+          class="growth-path"
+          id="growth-verify"
+          d="M 398 416 L 300 416 M 398 416 L 520 416"
+          stroke="#ff0066"
+          stroke-width="2"
+          stroke-dasharray="1000"
+          stroke-dashoffset="1000"
+        />
+
+        <path
+          class="growth-path"
+          id="growth-pepper"
+          d="M 400 233 L 280 233 M 400 233 L 620 233"
+          stroke="#00ff88"
+          stroke-width="2"
+          stroke-dasharray="1000"
+          stroke-dashoffset="1000"
+        />
+      </svg>
+
+      <div class="growth-node node-password orange" id="nodePassword"></div>
+      <div class="growth-node node-verify pink" id="nodeVerify"></div>
+      <div class="growth-node node-activate green" id="nodeActivate"></div>
+      <div class="growth-node node-pepper green" id="nodePepper"></div>
+
+      <div class="growth-converge" id="growthConverge"></div>
+    </div>
+
+    <form id="setupForm" class="setup-form" autocomplete="off">
+      <input
+        id="passwordInput"
+        class="air-input"
+        type="password"
+        name="password"
+        minlength="8"
+        maxlength="19"
+        required
+        autocomplete="new-password"
+        aria-label="New password"
+      />
+
+      <input
+        id="verifyInput"
+        class="air-input"
+        type="password"
+        name="confirmPassword"
+        minlength="8"
+        maxlength="19"
+        required
+        autocomplete="new-password"
+        aria-label="Verify password"
+      />
+
+      <button
+        id="activateButton"
+        type="submit"
+        aria-label="Activate Identity"
+      ></button>
+    </form>
+  </main>
+
+  <script>
+    const setupRoom = document.getElementById("setupRoom");
+    const setupForm = document.getElementById("setupForm");
+    const passwordInput = document.getElementById("passwordInput");
+    const verifyInput = document.getElementById("verifyInput");
+    const activateButton = document.getElementById("activateButton");
+
+    const passwordFloat = document.getElementById("passwordFloat");
+    const verifyFloat = document.getElementById("verifyFloat");
+
+    const params = new URLSearchParams(window.location.search);
+    const setupToken = params.get("token") || params.get("setup") || "";
+    const pepperMode = params.get("mode") || "";
+
+    let passwordMaskTimer = null;
+    let verifyMaskTimer = null;
+    let passwordRevealed = false;
+    let verifyRevealed = false;
+
+    if (pepperMode === "profile") {
+      setupRoom.dataset.pepper = "profile";
+    } else if (pepperMode === "email") {
+      setupRoom.dataset.pepper = "email";
+    }
+
+    function maskedValue(value) {
+      return "•".repeat(Math.min(value.length, 19));
+    }
+
+    function renderValue(input, target, revealed, stateClass) {
+      const value = input.value.slice(0, 19);
+
+      if (!value) {
+        target.textContent = "";
+        target.className = "float-text";
+        return;
+      }
+
+      target.textContent = revealed ? value : maskedValue(value);
+      target.className = revealed
+        ? `float-text on ${stateClass || ""}`.trim()
+        : `float-text on masked ${stateClass || ""}`.trim();
+    }
+
+    function revealThenMask(input, target, lane) {
+      if (lane === "password") {
+        passwordRevealed = true;
+        window.clearTimeout(passwordMaskTimer);
+        renderValue(input, target, true, "");
+        passwordMaskTimer = window.setTimeout(() => {
+          passwordRevealed = false;
+          renderValue(input, target, false, "");
+        }, 1200);
+        return;
+      }
+
+      verifyRevealed = true;
+      window.clearTimeout(verifyMaskTimer);
+      renderValue(input, target, true, verifyStateClass());
+      verifyMaskTimer = window.setTimeout(() => {
+        verifyRevealed = false;
+        renderValue(input, target, false, verifyStateClass());
+      }, 1200);
+    }
+
+    function verifyStateClass() {
+      if (!verifyInput.value) {
+        return "";
+      }
+
+      return passwordInput.value === verifyInput.value ? "good" : "bad";
+    }
+
+    function renderPassword() {
+      renderValue(passwordInput, passwordFloat, passwordRevealed, "");
+    }
+
+    function renderVerify() {
+      renderValue(verifyInput, verifyFloat, verifyRevealed, verifyStateClass());
+    }
+
+    function resetGrowth() {
+      setupRoom.classList.remove("growing", "locked");
+
+      document.querySelectorAll(".growth-path").forEach((path) => {
+        path.classList.remove("active", "glow");
+      });
+
+      document.querySelectorAll(".growth-node").forEach((node) => {
+        node.classList.remove("active");
+      });
+
+      document.getElementById("growthConverge").classList.remove("active");
+    }
+
+    function startAdWormGrowth() {
+      resetGrowth();
+
+      void setupRoom.offsetWidth;
+      setupRoom.classList.add("growing");
+
+      const sequence = [
+        { ids: ["nodeActivate", "growth-main"], delay: 0 },
+        { ids: ["nodeVerify", "growth-verify"], delay: 650 },
+        { ids: ["nodePassword", "growth-password"], delay: 1200 },
+        { ids: ["nodePepper", "growth-pepper"], delay: 1750 },
+        { ids: ["growthConverge"], delay: 2400 }
+      ];
+
+      sequence.forEach((step) => {
+        setTimeout(() => {
+          step.ids.forEach((id) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            el.classList.add("active");
+
+            if (el.classList.contains("growth-path")) {
+              setTimeout(() => el.classList.add("glow"), 900);
+            }
+          });
+        }, step.delay);
+      });
+    }
+
+    function lockIdentityCircuit() {
+      setupRoom.classList.add("locked");
+    }
+
+    function failIdentityCircuit() {
+      resetGrowth();
+      verifyFloat.className = "float-text on masked bad";
+    }
+
+    function holdReveal(input, target, lane) {
+      if (lane === "password") {
+        window.clearTimeout(passwordMaskTimer);
+        passwordRevealed = true;
+        renderValue(input, target, true, "");
+        return;
+      }
+
+      window.clearTimeout(verifyMaskTimer);
+      verifyRevealed = true;
+      renderValue(input, target, true, verifyStateClass());
+    }
+
+    function releaseReveal(input, target, lane) {
+      if (lane === "password") {
+        passwordRevealed = false;
+        renderValue(input, target, false, "");
+        return;
+      }
+
+      verifyRevealed = false;
+      renderValue(input, target, false, verifyStateClass());
+    }
+
+    passwordInput.addEventListener("input", () => {
+      revealThenMask(passwordInput, passwordFloat, "password");
+      renderVerify();
+    });
+
+    verifyInput.addEventListener("input", () => {
+      revealThenMask(verifyInput, verifyFloat, "verify");
+    });
+
+    passwordInput.addEventListener("pointerdown", () => {
+      holdReveal(passwordInput, passwordFloat, "password");
+    });
+
+    passwordInput.addEventListener("pointerup", () => {
+      releaseReveal(passwordInput, passwordFloat, "password");
+    });
+
+    passwordInput.addEventListener("pointercancel", () => {
+      releaseReveal(passwordInput, passwordFloat, "password");
+    });
+
+    verifyInput.addEventListener("pointerdown", () => {
+      holdReveal(verifyInput, verifyFloat, "verify");
+    });
+
+    verifyInput.addEventListener("pointerup", () => {
+      releaseReveal(verifyInput, verifyFloat, "verify");
+    });
+
+    verifyInput.addEventListener("pointercancel", () => {
+      releaseReveal(verifyInput, verifyFloat, "verify");
+    });
+
+    setupForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const password = passwordInput.value;
+      const confirmPassword = verifyInput.value;
+
+      if (!setupToken) {
+        return;
+      }
+
+      if (password.length < 8) {
+        passwordFloat.className = "float-text on masked bad";
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        verifyFloat.className = "float-text on masked bad";
+        return;
+      }
+
+      activateButton.disabled = true;
+      startAdWormGrowth();
+
+      try {
+        const response = await fetch("/api/auth/set-password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            token: setupToken,
+            password
+          })
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || result.ok === false || result.success === false) {
+          throw new Error(result.error || "password_setup_failed");
+        }
+
+        setTimeout(() => {
+          lockIdentityCircuit();
+        }, 2800);
+
+        setTimeout(() => {
+          window.location.href = result.redirect || "/dashboard-surface.html";
+        }, 3900);
+      } catch (error) {
+        activateButton.disabled = false;
+
+        setTimeout(() => {
+          failIdentityCircuit();
+        }, 900);
+      }
+    });
+  </script>
+</body>
+</html>
