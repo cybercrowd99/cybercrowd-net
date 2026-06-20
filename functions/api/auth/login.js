@@ -1,93 +1,117 @@
-export async function onRequestPost({ request, env }) {
-  try {
-    const authHeader = request.headers.get("Authorization") || "";
-    const identityToken = extractToken(authHeader);
+import { getUserRecord, normalizeEmail } from "./user-store.js";
+import { createSession } from "./session-create.js";
 
-    if (!identityToken) {
-      return jsonResponse({ ok: false, error: "no_identity_token" }, 401);
-    }
-
-    if (!env.IDENTITY) {
-      return jsonResponse({ ok: false, error: "identity_store_missing" }, 500);
-    }
-
-    if (!env.USERS) {
-      return jsonResponse({ ok: false, error: "users_store_missing" }, 500);
-    }
-
-    if (!env.SESSION) {
-      return jsonResponse({ ok: false, error: "session_store_missing" }, 500);
-    }
-
-    const userId = await env.IDENTITY.get(identityToken);
-
-    if (!userId) {
-      return jsonResponse({ ok: false, error: "invalid_identity_token" }, 401);
-    }
-
-    const verified = await env.USERS.get(`user:${userId}:verified`);
-    const email = await env.USERS.get(`user:${userId}:email`);
-    const role = await env.USERS.get(`user:${userId}:role`);
-
-    const now = Math.floor(Date.now() / 1000);
-    const ttlSeconds = 60 * 60 * 24;
-    const expiresAt = now + ttlSeconds;
-
-    const sessionToken = crypto.randomUUID();
-
-    const session = {
-      userId,
-      email: email || null,
-      role: role || "free",
-      verified: verified === "true",
-      iat: now,
-      exp: expiresAt
-    };
-
-    await env.SESSION.put(
-      `SESSION:${sessionToken}`,
-      JSON.stringify(session),
-      { expirationTtl: ttlSeconds }
-    );
-
-    return jsonResponse(
-      {
-        ok: true,
-        status: "login_session_created",
-        userId,
-        email: email || null,
-        role: role || "free",
-        verified: verified === "true",
-        sessionToken,
-        issuedAt: now,
-        expiresAt
-      },
-      200
-    );
-
-  } catch (err) {
-    return jsonResponse({ ok: false, error: "server_error" }, 500);
-  }
-}
-
-function extractToken(authHeader) {
-  if (!authHeader) return "";
-
-  const parts = authHeader.split(" ");
-
-  if (parts.length === 2 && /^Bearer$/i.test(parts[0])) {
-    return parts[1].trim();
-  }
-
-  return authHeader.trim();
-}
-
-function jsonResponse(payload, status) {
-  return new Response(JSON.stringify(payload, null, 2), {
+function json(data, status = 200, headers = {}) {
+  return new Response(JSON.stringify(data), {
     status,
     headers: {
-      "Cache-Control": "no-store",
-      "Content-Type": "application/json; charset=utf-8"
+      "Content-Type": "application/json",
+      ...headers
     }
   });
+}
+
+async function hashPassword(email, password) {
+  const encoder = new TextEncoder();
+
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"]
+  );
+
+  const bits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      salt: encoder.encode(email),
+      iterations: 150000,
+      hash: "SHA-256"
+    },
+    keyMaterial,
+    256
+  );
+
+  return [...new Uint8Array(bits)]
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
+
+  try {
+    const body = await request.json().catch(() => null);
+
+    const email = normalizeEmail(body?.email);
+    const password = String(body?.password || "");
+
+    if (!email || !password) {
+      return json(
+        {
+          success: false,
+          error: "missing_credentials"
+        },
+        400
+      );
+    }
+
+    const user = await getUserRecord(env, email);
+
+    if (!user) {
+      return json(
+        {
+          success: false,
+          error: "account_not_found"
+        },
+        404
+      );
+    }
+
+    if (!user.passwordHash) {
+      return json(
+        {
+          success: false,
+          error: "password_not_set"
+        },
+        403
+      );
+    }
+
+    const suppliedHash = await hashPassword(email, password);
+
+    if (suppliedHash !== user.passwordHash) {
+      return json(
+        {
+          success: false,
+          error: "invalid_credentials"
+        },
+        401
+      );
+    }
+
+    const session = await createSession(env, email, {
+      band: "user"
+    });
+
+    return json(
+      {
+        success: true,
+        redirect: "/dashboard-surface.html"
+      },
+      200,
+      {
+        "Set-Cookie": session.cookie
+      }
+    );
+  } catch (error) {
+    return json(
+      {
+        success: false,
+        error: "login_failed"
+      },
+      500
+    );
+  }
 }
