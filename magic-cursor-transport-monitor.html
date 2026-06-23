@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd Magic Cursor Transport Monitor</title>
+
+  <style>
+    :root {
+      --bg: #05070b;
+      --panel: rgba(0, 255, 255, 0.045);
+      --line: rgba(0, 255, 255, 0.22);
+      --cyan: #00ffff;
+      --green: #00ffaa;
+      --red: #ff7676;
+      --gold: #ffd166;
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.72);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 28px;
+      background:
+        radial-gradient(circle at top, rgba(0, 255, 255, 0.10), transparent 36rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: var(--cyan);
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      letter-spacing: 3px;
+    }
+
+    .sub {
+      margin-bottom: 22px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      grid-column: span 6;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+    }
+
+    .card.full { grid-column: 1 / -1; }
+
+    h2 {
+      margin: 0 0 12px;
+      color: var(--green);
+      font-size: 1.25rem;
+    }
+
+    .value,
+    .log {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.34);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--cyan);
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .log {
+      max-height: 280px;
+      overflow: auto;
+      color: #e9ffff;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--cyan);
+      color: #001014;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #1f2937;
+      color: white;
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    button.warn { background: var(--gold); }
+
+    button.danger {
+      background: var(--red);
+      color: #160000;
+    }
+
+    .notice {
+      margin-top: 14px;
+      padding: 14px;
+      border-left: 5px solid var(--green);
+      border-radius: 14px;
+      background: rgba(0,255,170,.08);
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 820px) {
+      body { padding: 20px; }
+      .card { grid-column: 1 / -1; }
+      .controls { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>MAGIC CURSOR TRANSPORT MONITOR</h1>
+
+    <div class="sub">
+      Layer monitor for Magic Cursor. This page watches access, session, surfaces,
+      heartbeat, cursor events, transport messages, and replay state together.
+      It does not move an OS cursor.
+    </div>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Access Gate</h2>
+        <div id="accessState" class="value">Loading…</div>
+        <div class="controls">
+          <button id="activateMembershipBtn">Activate Membership</button>
+          <button id="lockMembershipBtn" class="secondary">Lock</button>
+          <button id="updateAvailableBtn" class="warn">Update Available</button>
+          <button id="requireUpdateBtn" class="danger">Require Update</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Session</h2>
+        <div id="sessionState" class="value">No session</div>
+        <div class="controls">
+          <button id="createSessionBtn">Create Session</button>
+          <button id="joinPhoneBtn" class="secondary">Join Phone</button>
+          <button id="transferPhoneBtn">Transfer To Phone</button>
+          <button id="transferLaptopBtn">Return To Laptop</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Surface Registry</h2>
+        <div id="surfaceState" class="log">No surfaces</div>
+        <div class="controls">
+          <button id="createHostSurfaceBtn">Create Host Surface</button>
+          <button id="createClientSurfaceBtn" class="secondary">Create Client Surface</button>
+          <button id="undockClientBtn" class="secondary">Undock Client</button>
+          <button id="pinClientBtn" class="secondary">Pin Client</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Heartbeat</h2>
+        <div id="heartbeatState" class="log">No heartbeat</div>
+        <div class="controls">
+          <button id="pulseHostBtn">Pulse Host</button>
+          <button id="pulseClientBtn" class="secondary">Pulse Client</button>
+          <button id="evalClientBtn" class="secondary">Evaluate Client</button>
+          <button id="disconnectClientBtn" class="danger">Disconnect Client</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Event Rail</h2>
+        <div id="eventState" class="log">No cursor events</div>
+        <div class="controls">
+          <button id="moveBtn">Simulate Move</button>
+          <button id="clickBtn" class="secondary">Simulate Click</button>
+          <button id="edgeBtn" class="secondary">Edge Cross</button>
+          <button id="denyEventBtn" class="danger">Deny Event</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Transport</h2>
+        <div id="transportState" class="log">No transport messages</div>
+        <div class="controls">
+          <button id="helloBtn">Host Hello</button>
+          <button id="readyBtn" class="secondary">Client Ready</button>
+          <button id="denyTransportBtn" class="danger">Deny Transport</button>
+          <button id="refreshBtn" class="secondary">Refresh</button>
+        </div>
+      </article>
+
+      <article class="card full">
+        <h2>Replay Log</h2>
+        <div id="replayState" class="log">No replay events</div>
+        <div class="notice">
+          Monitor proof: one window can see membership access, authority, assigned surfaces,
+          presence, movement intent, transport messages, and replay memory without granting OS control.
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script type="module">
+    import MagicCursorExtensionGate from "./magic-cursor-extension-gate.js";
+    import MagicCursorSession from "./magic-cursor-session.js";
+    import MagicCursorSurfaceRegistry from "./magic-cursor-surface-registry.js";
+    import MagicCursorHeartbeat from "./magic-cursor-heartbeat.js";
+    import MagicCursorEventRail from "./magic-cursor-event-rail.js";
+    import MagicCursorTransport from "./magic-cursor-transport.js";
+    import MagicCursorReplayLog from "./magic-cursor-replay-log.js";
+
+    const HOST_ID = "laptop-host";
+    const PHONE_ID = "phone-client";
+    const HOST_SURFACE = "surface.host";
+    const CLIENT_SURFACE = "surface.client";
+
+    const els = {
+      accessState: document.getElementById("accessState"),
+      sessionState: document.getElementById("sessionState"),
+      surfaceState: document.getElementById("surfaceState"),
+      heartbeatState: document.getElementById("heartbeatState"),
+      eventState: document.getElementById("eventState"),
+      transportState: document.getElementById("transportState"),
+      replayState: document.getElementById("replayState")
+    };
+
+    function pretty(value) {
+      return JSON.stringify(value, null, 2);
+    }
+
+    function activeSessionId() {
+      const session = MagicCursorSession.getSession();
+      return session ? session.session_id : "monitor.placeholder.session";
+    }
+
+    function recordReplay(type, detail = {}) {
+      const session = MagicCursorSession.getSession();
+
+      MagicCursorReplayLog.record({
+        session_id: activeSessionId(),
+        type,
+        owner: session ? session.owner : "none",
+        status: session ? session.status : "monitor",
+        detail
+      });
+    }
+
+    function safeRun(fn) {
+      try {
+        fn();
+        render();
+      } catch (error) {
+        alert(error.message || "Magic Cursor monitor error.");
+        render();
+      }
+    }
+
+    function render() {
+      const session = MagicCursorSession.getSession();
+
+      els.accessState.textContent = pretty(MagicCursorExtensionGate.getAccess());
+      els.sessionState.textContent = session ? pretty(session) : "No session";
+      els.surfaceState.textContent = MagicCursorSurfaceRegistry.getAllSurfaces().length
+        ? pretty(MagicCursorSurfaceRegistry.getAllSurfaces())
+        : "No surfaces";
+      els.heartbeatState.textContent = MagicCursorHeartbeat.getAll().length
+        ? pretty(MagicCursorHeartbeat.getAll())
+        : "No heartbeat";
+      els.eventState.textContent = MagicCursorEventRail.getAll().length
+        ? pretty(MagicCursorEventRail.getAll())
+        : "No cursor events";
+      els.transportState.textContent = MagicCursorTransport.getAll().length
+        ? pretty(MagicCursorTransport.getAll())
+        : "No transport messages";
+      els.replayState.textContent = MagicCursorReplayLog.getAll().length
+        ? pretty(MagicCursorReplayLog.getAll())
+        : "No replay events";
+    }
+
+    document.getElementById("activateMembershipBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorExtensionGate.activateMembership({
+          membershipId: "membership.demo",
+          memberId: "member.demo"
+        });
+        recordReplay("membership_activated", MagicCursorExtensionGate.getAccess());
+      });
+    });
+
+    document.getElementById("lockMembershipBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorExtensionGate.lock("monitor_lock");
+        recordReplay("membership_locked", MagicCursorExtensionGate.getAccess());
+      });
+    });
+
+    document.getElementById("updateAvailableBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorExtensionGate.setUpdateAvailable({ requiredVersion: "0.1.1" });
+        recordReplay("update_available", MagicCursorExtensionGate.getAccess());
+      });
+    });
+
+    document.getElementById("requireUpdateBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorExtensionGate.requireUpdate({ requiredVersion: "0.1.1" });
+        recordReplay("update_required", MagicCursorExtensionGate.getAccess());
+      });
+    });
+
+    document.getElementById("createSessionBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.createSession({
+          hostDeviceId: HOST_ID,
+          hostLabel: "Laptop Host"
+        });
+        recordReplay("monitor_session_created", MagicCursorSession.getSession());
+      });
+    });
+
+    document.getElementById("joinPhoneBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.joinDevice({
+          deviceId: PHONE_ID,
+          label: "Phone Client",
+          role: "client"
+        });
+        recordReplay("monitor_phone_joined", MagicCursorSession.getSession());
+      });
+    });
+
+    document.getElementById("transferPhoneBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.transferOwnership({
+          fromDeviceId: HOST_ID,
+          toDeviceId: PHONE_ID
+        });
+        recordReplay("monitor_transfer_to_phone", MagicCursorSession.getSession());
+      });
+    });
+
+    document.getElementById("transferLaptopBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.transferOwnership({
+          fromDeviceId: PHONE_ID,
+          toDeviceId: HOST_ID
+        });
+        recordReplay("monitor_transfer_to_laptop", MagicCursorSession.getSession());
+      });
+    });
+
+    document.getElementById("createHostSurfaceBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSurfaceRegistry.createSurface({
+          surfaceId: HOST_SURFACE,
+          name: "Laptop Host Surface",
+          type: "laptop",
+          role: "operator",
+          ownerId: HOST_ID,
+          sessionId: activeSessionId(),
+          visibility: "session"
+        });
+        recordReplay("host_surface_created", MagicCursorSurfaceRegistry.getSurface(HOST_SURFACE));
+      });
+    });
+
+    document.getElementById("createClientSurfaceBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSurfaceRegistry.createSurface({
+          surfaceId: CLIENT_SURFACE,
+          name: "Phone Client Surface",
+          type: "phone",
+          role: "assigned_surface",
+          ownerId: PHONE_ID,
+          sessionId: activeSessionId(),
+          visibility: "session"
+        });
+        recordReplay("client_surface_created", MagicCursorSurfaceRegistry.getSurface(CLIENT_SURFACE));
+      });
+    });
+
+    document.getElementById("undockClientBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSurfaceRegistry.setDockState(CLIENT_SURFACE, "undocked");
+        recordReplay("client_surface_undocked", MagicCursorSurfaceRegistry.getSurface(CLIENT_SURFACE));
+      });
+    });
+
+    document.getElementById("pinClientBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSurfaceRegistry.setDockState(CLIENT_SURFACE, "pinned");
+        recordReplay("client_surface_pinned", MagicCursorSurfaceRegistry.getSurface(CLIENT_SURFACE));
+      });
+    });
+
+    document.getElementById("pulseHostBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorHeartbeat.pulse({
+          surfaceId: HOST_SURFACE,
+          sessionId: activeSessionId(),
+          owner: HOST_ID,
+          operatorId: HOST_ID,
+          role: "host"
+        });
+        recordReplay("host_heartbeat", MagicCursorHeartbeat.get(HOST_SURFACE));
+      });
+    });
+
+    document.getElementById("pulseClientBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorHeartbeat.pulse({
+          surfaceId: CLIENT_SURFACE,
+          sessionId: activeSessionId(),
+          owner: PHONE_ID,
+          operatorId: PHONE_ID,
+          role: "client"
+        });
+        recordReplay("client_heartbeat", MagicCursorHeartbeat.get(CLIENT_SURFACE));
+      });
+    });
+
+    document.getElementById("evalClientBtn").addEventListener("click", () => {
+      safeRun(() => {
+        recordReplay("client_heartbeat_evaluated", MagicCursorHeartbeat.evaluate(CLIENT_SURFACE));
+      });
+    });
+
+    document.getElementById("disconnectClientBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorHeartbeat.markDisconnected(CLIENT_SURFACE, "monitor_disconnect");
+        recordReplay("client_disconnected", MagicCursorHeartbeat.get(CLIENT_SURFACE));
+      });
+    });
+
+    document.getElementById("moveBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorHeartbeat.requireAlive(HOST_SURFACE);
+        const event = MagicCursorEventRail.move({
+          session_id: activeSessionId(),
+          surface_id: HOST_SURFACE,
+          owner: HOST_ID,
+          x: 144,
+          y: 88,
+          authority_state: "simulated_authorized"
+        });
+        recordReplay("cursor_move_simulated", event);
+      });
+    });
+
+    document.getElementById("clickBtn").addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorHeartbeat.requireAlive(HOST_SURFACE);
+        const event = MagicCursorEventRail.click({
+          session_id: activeSessionId(),
+          surface_id: HOST_SURFACE,
+          owner: HOST_ID,
+          x: 144,
+          y: 88,
+          authority_state: "simulated_authorized"
+        });
+        recordReplay("cursor_click_simulated", event);
+      });
+    });
+
+    document.getElementById("edgeBtn").addEventListener("click", () => {
+      safeRun(() => {
+        const event = MagicCursorEventRail.edgeCross({
+          session_id: activeSessionId(),
+          surface_id: HOST_SURFACE,
+          owner: HOST_ID,
+          x: 999,
+          y: 88,
+          authority_state: "simulated_authorized",
+          detail: { edge: "right", target: CLIENT_SURFACE }
+        });
+        recordReplay("cursor_edge_cross_simulated", event);
+      });
+    });
+
+    document.getElementById("denyEventBtn").addEventListener("click", () => {
+      safeRun(() => {
+        const event = MagicCursorEventRail.deny({
+          session_id: activeSessionId(),
+          surface_id: CLIENT_SURFACE,
+          owner: PHONE_ID,
+          authority_state: "denied_by_monitor",
+          detail: { reason: "operator_presence_not_verified" }
+        });
+        recordReplay("cursor_event_denied", event);
+      });
+    });
+
+    document.getElementById("helloBtn").addEventListener("click", () => {
+      safeRun(() => {
+        const msg = MagicCursorTransport.hello({
+          sessionId: activeSessionId(),
+          sourceSurfaceId: HOST_SURFACE,
+          targetSurfaceId: CLIENT_SURFACE
+        });
+        recordReplay("transport_hello", msg);
+      });
+    });
+
+    document.getElementById("readyBtn").addEventListener("click", () => {
+      safeRun(() => {
+        const msg = MagicCursorTransport.ready({
+          sessionId: activeSessionId(),
+          sourceSurfaceId: CLIENT_SURFACE,
+          targetSurfaceId: HOST_SURFACE
+        });
+        recordReplay("transport_ready", msg);
+      });
+    });
+
+    document.getElementById("denyTransportBtn").addEventListener("click", () => {
+      safeRun(() => {
+        const msg = MagicCursorTransport.deny({
+          sessionId: activeSessionId(),
+          sourceSurfaceId: HOST_SURFACE,
+          targetSurfaceId: CLIENT_SURFACE,
+          reason: "monitor_denied"
+        });
+        recordReplay("transport_denied", msg);
+      });
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", render);
+
+    render();
+  </script>
+</body>
+</html>
