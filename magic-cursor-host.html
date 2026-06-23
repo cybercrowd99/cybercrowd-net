@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd Magic Cursor Host</title>
+
+  <style>
+    :root {
+      --bg: #05070b;
+      --panel: rgba(0, 255, 255, 0.045);
+      --line: rgba(0, 255, 255, 0.22);
+      --cyan: #00ffff;
+      --green: #00ffaa;
+      --red: #ff7676;
+      --gold: #ffd166;
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 34px;
+      background:
+        radial-gradient(circle at top, rgba(0, 255, 255, 0.10), transparent 36rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: var(--cyan);
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      letter-spacing: 3px;
+    }
+
+    .sub {
+      margin-bottom: 24px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      grid-column: span 6;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+    }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      color: var(--green);
+      font-size: 1.35rem;
+    }
+
+    .value {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      color: var(--cyan);
+      font-family: Consolas, monospace;
+      word-break: break-word;
+    }
+
+    .row {
+      margin: 12px 0;
+    }
+
+    .label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px 14px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--cyan);
+      color: #001014;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    button.warn {
+      background: var(--gold);
+    }
+
+    button.danger {
+      background: var(--red);
+      color: #160000;
+    }
+
+    button.secondary {
+      background: #1f2937;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .log {
+      max-height: 360px;
+      overflow: auto;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.38);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    .device {
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: rgba(0, 255, 255, 0.055);
+      border: 1px solid rgba(0, 255, 255, 0.16);
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 16px;
+      border-left: 5px solid var(--green);
+      border-radius: 14px;
+      background: rgba(0, 255, 170, 0.08);
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 820px) {
+      body {
+        padding: 22px;
+      }
+
+      .card {
+        grid-column: 1 / -1;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>MAGIC CURSOR HOST</h1>
+
+    <div class="sub">
+      Host surface for Magic Cursor Layer 0. This page does not move a real cursor yet.
+      It proves session creation, device joining, ownership transfer, replay logging,
+      freeze, resume, and close behavior.
+    </div>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Session State</h2>
+
+        <div class="row">
+          <div class="label">Session ID</div>
+          <div id="sessionId" class="value">No session</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Status</div>
+          <div id="status" class="value">none</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Current Owner</div>
+          <div id="owner" class="value">none</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Transfer State</div>
+          <div id="transferState" class="value">none</div>
+        </div>
+
+        <div class="controls">
+          <button id="createSessionBtn">Create Session</button>
+          <button id="joinPhoneBtn" class="secondary">Simulate Phone Join</button>
+          <button id="transferPhoneBtn">Transfer To Phone</button>
+          <button id="transferLaptopBtn">Return To Laptop</button>
+          <button id="freezeBtn" class="warn">Freeze</button>
+          <button id="resumeBtn" class="secondary">Resume</button>
+          <button id="closeBtn" class="danger">Close</button>
+          <button id="clearViewBtn" class="secondary">Refresh View</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Connected Devices</h2>
+        <div id="devices"></div>
+
+        <div class="notice">
+          Host proof target: laptop owner → phone owner → laptop owner.
+          No clipboard, no drag, no WDIG, no OS control.
+        </div>
+      </article>
+
+      <article class="card full">
+        <h2>Replay Log</h2>
+        <div id="replayLog" class="log">No replay events yet.</div>
+      </article>
+    </section>
+  </main>
+
+  <script type="module">
+    import MagicCursorSession from "./magic-cursor-session.js";
+
+    const HOST_ID = "laptop-host";
+    const PHONE_ID = "phone-client";
+
+    const els = {
+      sessionId: document.getElementById("sessionId"),
+      status: document.getElementById("status"),
+      owner: document.getElementById("owner"),
+      transferState: document.getElementById("transferState"),
+      devices: document.getElementById("devices"),
+      replayLog: document.getElementById("replayLog"),
+
+      createSessionBtn: document.getElementById("createSessionBtn"),
+      joinPhoneBtn: document.getElementById("joinPhoneBtn"),
+      transferPhoneBtn: document.getElementById("transferPhoneBtn"),
+      transferLaptopBtn: document.getElementById("transferLaptopBtn"),
+      freezeBtn: document.getElementById("freezeBtn"),
+      resumeBtn: document.getElementById("resumeBtn"),
+      closeBtn: document.getElementById("closeBtn"),
+      clearViewBtn: document.getElementById("clearViewBtn")
+    };
+
+    function safeRun(fn) {
+      try {
+        fn();
+        render();
+      } catch (error) {
+        alert(error.message || "Magic Cursor host error.");
+        render();
+      }
+    }
+
+    function render() {
+      const session = MagicCursorSession.getSession();
+      const replay = MagicCursorSession.getReplayLog();
+
+      if (!session) {
+        els.sessionId.textContent = "No session";
+        els.status.textContent = "none";
+        els.owner.textContent = "none";
+        els.transferState.textContent = "none";
+        els.devices.innerHTML = "<div class='device'>No devices joined.</div>";
+        els.replayLog.textContent = "No replay events yet.";
+        setButtons(false, null);
+        return;
+      }
+
+      els.sessionId.textContent = session.session_id;
+      els.status.textContent = session.status;
+      els.owner.textContent = session.owner;
+      els.transferState.textContent = session.transfer_state;
+
+      const devices = Object.values(session.devices || {});
+      els.devices.innerHTML = devices.map((device) => {
+        return `
+          <div class="device">
+            device_id: ${escapeHtml(device.device_id)}<br>
+            label: ${escapeHtml(device.label)}<br>
+            role: ${escapeHtml(device.role)}<br>
+            trusted: ${String(device.trusted)}<br>
+            last_seen: ${escapeHtml(device.last_seen)}
+          </div>
+        `;
+      }).join("");
+
+      els.replayLog.textContent = replay.length
+        ? replay.map((event) => JSON.stringify(event, null, 2)).join("\n\n")
+        : "No replay events yet.";
+
+      setButtons(true, session);
+    }
+
+    function setButtons(hasSession, session) {
+      const closed = session && session.status === "closed";
+      const frozen = session && session.status === "frozen";
+      const active = session && session.status === "active";
+      const hasPhone = session && session.devices && session.devices[PHONE_ID];
+
+      els.createSessionBtn.disabled = hasSession && !closed;
+      els.joinPhoneBtn.disabled = !active || hasPhone;
+      els.transferPhoneBtn.disabled = !active || !hasPhone || session.owner !== HOST_ID;
+      els.transferLaptopBtn.disabled = !active || !hasPhone || session.owner !== PHONE_ID;
+      els.freezeBtn.disabled = !active;
+      els.resumeBtn.disabled = !frozen;
+      els.closeBtn.disabled = !hasSession || closed;
+      els.clearViewBtn.disabled = false;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    els.createSessionBtn.addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.createSession({
+          hostDeviceId: HOST_ID,
+          hostLabel: "Laptop Host"
+        });
+      });
+    });
+
+    els.joinPhoneBtn.addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.joinDevice({
+          deviceId: PHONE_ID,
+          label: "Phone Client",
+          role: "client"
+        });
+      });
+    });
+
+    els.transferPhoneBtn.addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.transferOwnership({
+          fromDeviceId: HOST_ID,
+          toDeviceId: PHONE_ID
+        });
+      });
+    });
+
+    els.transferLaptopBtn.addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.transferOwnership({
+          fromDeviceId: PHONE_ID,
+          toDeviceId: HOST_ID
+        });
+      });
+    });
+
+    els.freezeBtn.addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.freeze("host_freeze_button");
+      });
+    });
+
+    els.resumeBtn.addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.resume("host_resume_button");
+      });
+    });
+
+    els.closeBtn.addEventListener("click", () => {
+      safeRun(() => {
+        MagicCursorSession.close("host_close_button");
+      });
+    });
+
+    els.clearViewBtn.addEventListener("click", render);
+
+    render();
+  </script>
+</body>
+</html>
