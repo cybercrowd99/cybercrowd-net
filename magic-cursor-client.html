@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd Magic Cursor Client</title>
+
+  <style>
+    :root {
+      --bg: #05070b;
+      --panel: rgba(0, 255, 255, 0.045);
+      --line: rgba(0, 255, 255, 0.22);
+      --cyan: #00ffff;
+      --green: #00ffaa;
+      --red: #ff7676;
+      --gold: #ffd166;
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.72);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 28px;
+      background:
+        radial-gradient(circle at top, rgba(0, 255, 255, 0.10), transparent 34rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: var(--cyan);
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      letter-spacing: 3px;
+    }
+
+    .sub {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      color: var(--green);
+      font-size: 1.3rem;
+    }
+
+    .row { margin: 12px 0; }
+
+    .label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: .85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .value {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, .34);
+      border: 1px solid rgba(255, 255, 255, .10);
+      color: var(--cyan);
+      font-family: Consolas, monospace;
+      word-break: break-word;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--cyan);
+      color: #001014;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #1f2937;
+      color: white;
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    button.danger {
+      background: var(--red);
+      color: #160000;
+    }
+
+    .notice {
+      margin-top: 14px;
+      padding: 16px;
+      border-left: 5px solid var(--gold);
+      border-radius: 14px;
+      background: rgba(255, 209, 102, .08);
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    .log {
+      max-height: 320px;
+      overflow: auto;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, .38);
+      border: 1px solid rgba(255,255,255,.10);
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>MAGIC CURSOR CLIENT</h1>
+
+    <div class="sub">
+      Client surface for Magic Cursor Layer 0. This page does not control the host yet.
+      It defines the phone/client role and prepares the second assigned surface before live transport.
+    </div>
+
+    <section class="card">
+      <h2>Client Identity</h2>
+
+      <div class="row">
+        <div class="label">Device ID</div>
+        <div id="deviceId" class="value">phone-client</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Role</div>
+        <div class="value">client surface</div>
+      </div>
+
+      <div class="row">
+        <div class="label">Authority State</div>
+        <div id="authorityState" class="value">waiting for host transport</div>
+      </div>
+
+      <div class="notice">
+        Layer 0 client is a surface placeholder. Real shared ownership requires the next transport bridge.
+      </div>
+
+      <div class="controls">
+        <button id="markReadyBtn">Mark Client Ready</button>
+        <button id="simulateAcceptBtn" class="secondary">Simulate Accept Ownership</button>
+        <button id="simulateReturnBtn" class="secondary">Simulate Return Ownership</button>
+        <button id="freezeBtn" class="danger">Client Freeze Notice</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Client Event Log</h2>
+      <div id="clientLog" class="log">No client events yet.</div>
+    </section>
+  </main>
+
+  <script type="module">
+    import MagicCursorReplayLog from "./magic-cursor-replay-log.js";
+
+    const DEVICE_ID = "phone-client";
+    const LOCAL_SESSION_ID = "client.placeholder.session";
+
+    const els = {
+      authorityState: document.getElementById("authorityState"),
+      clientLog: document.getElementById("clientLog"),
+      markReadyBtn: document.getElementById("markReadyBtn"),
+      simulateAcceptBtn: document.getElementById("simulateAcceptBtn"),
+      simulateReturnBtn: document.getElementById("simulateReturnBtn"),
+      freezeBtn: document.getElementById("freezeBtn")
+    };
+
+    function record(type, detail = {}) {
+      MagicCursorReplayLog.record({
+        session_id: LOCAL_SESSION_ID,
+        type,
+        owner: DEVICE_ID,
+        status: "client_placeholder",
+        detail
+      });
+
+      renderLog();
+    }
+
+    function renderLog() {
+      const events = MagicCursorReplayLog.getAll();
+      els.clientLog.textContent = events.length
+        ? events.map((event) => JSON.stringify(event, null, 2)).join("\n\n")
+        : "No client events yet.";
+    }
+
+    els.markReadyBtn.addEventListener("click", () => {
+      els.authorityState.textContent = "ready for pairing / transport";
+      record("client_ready", {
+        deviceId: DEVICE_ID,
+        role: "client_surface"
+      });
+    });
+
+    els.simulateAcceptBtn.addEventListener("click", () => {
+      els.authorityState.textContent = "simulated owner";
+      record("client_simulated_ownership_accept", {
+        deviceId: DEVICE_ID
+      });
+    });
+
+    els.simulateReturnBtn.addEventListener("click", () => {
+      els.authorityState.textContent = "simulated returned ownership";
+      record("client_simulated_ownership_return", {
+        deviceId: DEVICE_ID,
+        target: "laptop-host"
+      });
+    });
+
+    els.freezeBtn.addEventListener("click", () => {
+      els.authorityState.textContent = "client freeze notice";
+      record("client_freeze_notice", {
+        deviceId: DEVICE_ID,
+        reason: "manual_client_freeze_notice"
+      });
+    });
+
+    renderLog();
+  </script>
+</body>
+</html>
