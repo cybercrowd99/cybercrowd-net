@@ -52,20 +52,21 @@ export async function onRequestGet(context) {
       );
     }
 
+    const identityActiveId = String(session["identity-active-id"] || "").trim();
     const email = String(session.email || "").trim().toLowerCase();
 
-    if (!email) {
+    if (!identityActiveId && !email) {
       return json(
         {
           success: false,
-          error: "session_missing_email",
+          error: "session_missing_identity",
           redirect: "/login.html"
         },
         401
       );
     }
 
-    const user = await getUserRecord(env, email);
+    const user = await getUserRecord(env, identityActiveId || email);
 
     if (!user) {
       return json(
@@ -82,7 +83,8 @@ export async function onRequestGet(context) {
       success: true,
       status: "dashboard_authorized",
       user: {
-        email,
+        "identity-active-id": user["identity-active-id"] || identityActiveId || null,
+        email: user.email || email,
         verified: user.verified === true,
         band: session.band || "user"
       },
