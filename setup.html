@@ -860,46 +860,5 @@
 
     loadSetupState();
   </script>
-
-  <script src="/js/setup-power-overlay.js"></script>
-  <script>
-    (() => {
-      const power = window.SetupPowerOverlay;
-      if (!power) return;
-
-      const passwordInput = document.getElementById("passwordInput");
-      const verifyInput = document.getElementById("verifyInput");
-      const setupForm = document.getElementById("setupForm");
-
-      power.wake();
-
-      function updatePowerOverlay() {
-        const password = passwordInput.value;
-        const verify = verifyInput.value;
-
-        if (password.length || verify.length) power.charge();
-
-        if (password.length >= 8 && verify.length && password === verify) {
-          power.matched();
-        }
-
-        if (verify.length && password !== verify) {
-          power.short();
-        }
-      }
-
-      passwordInput.addEventListener("input", updatePowerOverlay);
-      verifyInput.addEventListener("input", updatePowerOverlay);
-
-      setupForm.addEventListener("submit", () => {
-        const password = passwordInput.value;
-        const verify = verifyInput.value;
-
-        if (password.length >= 8 && password === verify) {
-          power.fire();
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
