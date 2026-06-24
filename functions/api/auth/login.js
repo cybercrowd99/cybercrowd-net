@@ -91,7 +91,20 @@ export async function onRequestPost(context) {
       );
     }
 
-    const session = await createSession(env, email, {
+    const identityActiveId = String(user["identity-active-id"] || "").trim();
+
+    if (!identityActiveId) {
+      return json(
+        {
+          success: false,
+          error: "identity_active_id_missing"
+        },
+        500
+      );
+    }
+
+    const session = await createSession(env, identityActiveId, {
+      email: user.email || email,
       band: "user"
     });
 
