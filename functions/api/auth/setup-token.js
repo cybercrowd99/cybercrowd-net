@@ -10,7 +10,10 @@ export function createSetupToken(email) {
 
   return {
     token,
+    "identity-active-id": crypto.randomUUID(),
     email,
+    status: "pending_setup",
+    used: false,
     createdAt: now,
     expiresAt
   };
