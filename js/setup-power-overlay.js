@@ -46,7 +46,6 @@
     room.appendChild(root);
 
     injectStyle();
-
     return root;
   }
 
@@ -72,6 +71,10 @@
         opacity: 1;
       }
 
+      .setup-power-overlay.tap .setup-power-rail {
+        animation: setup-power-tap 180ms ease-out;
+      }
+
       .setup-power-rail {
         position: absolute;
         left: 50%;
@@ -79,46 +82,18 @@
         width: 0%;
         height: 2px;
         transform: translateX(-50%);
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(105,245,255,.95),
-          rgba(118,255,168,.95),
-          transparent
-        );
-        box-shadow:
-          0 0 8px rgba(105,245,255,.9),
-          0 0 22px rgba(118,255,168,.45);
+        background: linear-gradient(90deg, transparent, rgba(105,245,255,.95), rgba(118,255,168,.95), transparent);
+        box-shadow: 0 0 8px rgba(105,245,255,.9), 0 0 22px rgba(118,255,168,.45);
         opacity: 0;
       }
 
-      .setup-power-overlay.awake .setup-power-rail {
-        width: 18%;
-        opacity: .7;
-        transition: width 420ms ease, opacity 260ms ease;
-      }
-
-      .setup-power-overlay.charging .setup-power-rail {
-        width: 44%;
-        opacity: 1;
-        transition: width 520ms ease, opacity 260ms ease;
-      }
-
-      .setup-power-overlay.matched .setup-power-rail {
-        width: 63%;
-        opacity: 1;
-        animation: setup-power-hum 760ms ease-in-out infinite;
-      }
+      .setup-power-overlay.awake .setup-power-rail { width: 18%; opacity: .7; }
+      .setup-power-overlay.charging .setup-power-rail { width: 44%; opacity: 1; }
+      .setup-power-overlay.matched .setup-power-rail { width: 63%; opacity: 1; animation: setup-power-hum 760ms ease-in-out infinite; }
 
       .setup-power-overlay.shorted .setup-power-rail {
         width: 52%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255,92,132,.98),
-          rgba(255,180,60,.9),
-          transparent
-        );
+        background: linear-gradient(90deg, transparent, rgba(255,92,132,.98), rgba(255,180,60,.9), transparent);
         animation: setup-power-short 120ms linear infinite;
       }
 
@@ -138,9 +113,7 @@
         transform: translate(-50%, -50%) scale(.2);
         opacity: 0;
         background: radial-gradient(circle, rgba(118,255,168,.98), rgba(0,80,52,.18));
-        box-shadow:
-          0 0 12px rgba(118,255,168,.92),
-          0 0 34px rgba(118,255,168,.48);
+        box-shadow: 0 0 12px rgba(118,255,168,.92), 0 0 34px rgba(118,255,168,.48);
       }
 
       .setup-power-overlay.matched .setup-power-pulse {
@@ -162,24 +135,24 @@
         color: rgba(220,255,255,.94);
         font-size: clamp(10px, 1vw, 16px);
         letter-spacing: .28em;
-        text-shadow:
-          0 0 8px rgba(105,245,255,.9),
-          0 0 20px rgba(118,255,168,.4);
+        text-shadow: 0 0 8px rgba(105,245,255,.9), 0 0 20px rgba(118,255,168,.4);
         opacity: 0;
       }
 
       .setup-power-overlay.awake .setup-power-text,
-      .setup-power-overlay.charging .setup-power-text {
-        opacity: .38;
-      }
+      .setup-power-overlay.charging .setup-power-text { opacity: .38; }
 
-      .setup-power-overlay.matched .setup-power-text {
-        opacity: .82;
-      }
+      .setup-power-overlay.matched .setup-power-text { opacity: .82; }
 
       .setup-power-overlay.fired .setup-power-text {
         opacity: 1;
         animation: setup-power-text-fire 1.15s ease-out forwards;
+      }
+
+      @keyframes setup-power-tap {
+        0% { filter: brightness(1); transform: translateX(-50%) scaleX(1); }
+        50% { filter: brightness(2.4); transform: translateX(-50%) scaleX(1.08); }
+        100% { filter: brightness(1); transform: translateX(-50%) scaleX(1); }
       }
 
       @keyframes setup-power-hum {
@@ -222,13 +195,9 @@
 
   function setState(nextState, label) {
     ensureOverlay();
-
     state = nextState;
     root.className = `setup-power-overlay ${nextState}`;
-
-    if (label) {
-      text.textContent = label;
-    }
+    if (label) text.textContent = label;
   }
 
   function wake() {
@@ -239,6 +208,14 @@
     setState(STATE.charging, "POWERING IDENTITY");
   }
 
+  function tap() {
+    ensureOverlay();
+    charge();
+    root.classList.remove("tap");
+    void root.offsetWidth;
+    root.classList.add("tap");
+  }
+
   function matched() {
     setState(STATE.matched, "READY");
   }
@@ -246,7 +223,6 @@
   function short() {
     window.clearTimeout(shortTimer);
     setState(STATE.shorted, "MISMATCH");
-
     shortTimer = window.setTimeout(() => {
       if (state === STATE.shorted) charge();
     }, 650);
@@ -259,6 +235,7 @@
   window.SetupPowerOverlay = {
     wake,
     charge,
+    tap,
     matched,
     short,
     fire
