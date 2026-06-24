@@ -78,9 +78,14 @@ export async function onRequestPost(context) {
     }
 
     const email = String(setupRecord.email || "").toLowerCase().trim();
+    const identityActiveId = String(setupRecord["identity-active-id"] || "").trim();
 
     if (!email || !email.includes("@")) {
       return json({ success: false, error: "setup_email_invalid" }, 500);
+    }
+
+    if (!identityActiveId) {
+      return json({ success: false, error: "identity_active_id_missing" }, 500);
     }
 
     const passwordHash = await hashPassword(email, password);
@@ -88,6 +93,7 @@ export async function onRequestPost(context) {
     const eat = makeToken(32);
 
     const userRecord = {
+      "identity-active-id": identityActiveId,
       email,
       verified: true,
       passwordHash,
@@ -98,12 +104,15 @@ export async function onRequestPost(context) {
 
     const sessionRecord = {
       eat,
+      "identity-active-id": identityActiveId,
       email,
       epoch: now,
       band: "user"
     };
 
-    await env.IDENTITY.put(`user:${email}`, JSON.stringify(userRecord));
+    await env.IDENTITY.put(`user:${identityActiveId}`, JSON.stringify(userRecord));
+    await env.IDENTITY.put(`user-email:${email}`, identityActiveId);
+
     await env.IDENTITY.put(`session:${eat}`, JSON.stringify(sessionRecord), {
       expirationTtl: 86400 * 7
     });
