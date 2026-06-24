@@ -79,6 +79,92 @@
       box-shadow: 0 0 0 1000px transparent inset;
     }
 
+    .welcome-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 18;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 500ms ease;
+    }
+
+    .welcome-layer.on {
+      opacity: 1;
+    }
+
+    .welcome-email {
+      position: absolute;
+      left: 50%;
+      top: 38.9%;
+      width: 44%;
+      height: 7.4%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translate(-50%, -50%) translateX(-8%);
+      color: rgba(220, 255, 255, 0.96);
+      font-size: clamp(14px, 1.45vw, 23px);
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-shadow:
+        0 0 8px rgba(100, 245, 255, 0.9),
+        0 0 20px rgba(100, 245, 255, 0.55);
+      opacity: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: email-settle 1.45s ease-out forwards;
+      animation-delay: 0.35s;
+    }
+
+    .welcome-status {
+      position: absolute;
+      left: 50%;
+      top: 45.8%;
+      transform: translate(-50%, -50%);
+      color: rgba(116, 255, 174, 0.88);
+      font-size: clamp(9px, 0.86vw, 14px);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 7px rgba(116, 255, 174, 0.84),
+        0 0 18px rgba(116, 255, 174, 0.34);
+      opacity: 0;
+      animation: status-breathe 1.2s ease-out forwards;
+      animation-delay: 1.1s;
+    }
+
+    @keyframes email-settle {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateX(-8%);
+        filter: blur(5px);
+      }
+
+      55% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateX(1.4%);
+        filter: blur(0);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateX(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes status-breathe {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+      }
+    }
+
     #pepperState {
       position: absolute;
       left: 50%;
@@ -181,7 +267,7 @@
         0 0 22px rgba(255, 92, 132, 0.45);
     }
 
-    .adworm-growth {
+    .circuit-layer {
       position: absolute;
       inset: 0;
       z-index: 16;
@@ -189,225 +275,115 @@
       opacity: 0;
     }
 
-    .setup-room.growing .adworm-growth {
+    .setup-room.circuit-live .circuit-layer {
       opacity: 1;
     }
 
-    .growth-svg {
+    .circuit-svg {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
     }
 
-    .growth-path {
+    .circuit-trace {
       fill: none;
       stroke-linecap: round;
       stroke-linejoin: round;
       opacity: 0;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
     }
 
-    .growth-path.active {
+    .circuit-trace.active {
       opacity: 1;
-      animation: draw-growth 1.2s ease-out forwards;
+      animation: trace-on 1.15s ease-out forwards;
     }
 
-    .growth-path.glow {
-      filter: drop-shadow(0 0 7px currentColor);
-      animation:
-        draw-growth 1.2s ease-out forwards,
-        path-glow 900ms ease-in-out infinite alternate;
+    .circuit-trace.hot {
+      filter:
+        drop-shadow(0 0 5px currentColor)
+        drop-shadow(0 0 11px currentColor);
     }
 
-    @keyframes draw-growth {
+    @keyframes trace-on {
       from { stroke-dashoffset: 1000; }
       to { stroke-dashoffset: 0; }
     }
 
-    @keyframes path-glow {
-      from {
-        filter: drop-shadow(0 0 4px currentColor);
-      }
-
-      to {
-        filter:
-          drop-shadow(0 0 12px currentColor)
-          drop-shadow(0 0 24px currentColor);
-      }
+    .circuit-node {
+      position: absolute;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.4);
+      transition:
+        opacity 240ms ease,
+        transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .birth-spark {
-      position: absolute;
-      left: 69.8%;
-      top: 85.3%;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
+    .circuit-node.active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .circuit-node.email {
+      left: 50%;
+      top: 38.9%;
       background: rgba(105, 245, 255, 0.95);
       box-shadow:
-        0 0 12px rgba(105, 245, 255, 1),
-        0 0 30px rgba(105, 245, 255, 0.72),
-        0 0 54px rgba(181, 94, 255, 0.45);
-      transform: translate(-50%, -50%) scale(0);
-      opacity: 0;
+        0 0 10px rgba(105, 245, 255, 0.85),
+        0 0 22px rgba(105, 245, 255, 0.36);
     }
 
-    .setup-room.growing .birth-spark {
-      animation: birth-spark 900ms ease-out forwards;
-    }
-
-    @keyframes birth-spark {
-      0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0);
-      }
-
-      20% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.3);
-      }
-
-      100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(2.6);
-      }
-    }
-
-    .growth-head {
-      position: absolute;
-      left: 69.8%;
-      top: 85.3%;
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: rgba(105, 245, 255, 1);
+    .circuit-node.password {
+      left: 50.5%;
+      top: 54.2%;
+      background: rgba(255, 170, 0, 0.95);
       box-shadow:
-        0 0 10px rgba(105, 245, 255, 1),
-        0 0 22px rgba(105, 245, 255, 0.8),
-        0 0 40px rgba(255, 0, 102, 0.42);
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0);
-    }
-
-    .setup-room.growing .growth-head {
-      animation: growth-run 3.2s ease-in-out forwards;
-    }
-
-    @keyframes growth-run {
-      0% {
-        left: 69.8%;
-        top: 85.3%;
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.15);
-      }
-
-      8% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.15);
-      }
-
-      24% {
-        left: 49.8%;
-        top: 69.3%;
-        transform: translate(-50%, -50%) scale(0.85);
-      }
-
-      46% {
-        left: 50.5%;
-        top: 54.2%;
-        transform: translate(-50%, -50%) scale(0.85);
-      }
-
-      68% {
-        left: 50%;
-        top: 38.9%;
-        transform: translate(-50%, -50%) scale(0.9);
-      }
-
-      100% {
-        left: 50%;
-        top: 38.9%;
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(2.1);
-      }
-    }
-
-    .growth-node {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      opacity: 0;
-      transform: scale(0);
-      transition: all 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .growth-node.active {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .growth-node.green {
-      background: radial-gradient(circle at 35% 35%, #00ff88, #008844);
-      box-shadow:
-        0 0 10px rgba(0, 255, 136, 0.7),
-        0 0 22px rgba(0, 255, 136, 0.32);
-    }
-
-    .growth-node.orange {
-      background: radial-gradient(circle at 35% 35%, #ffaa00, #aa6600);
-      box-shadow:
-        0 0 10px rgba(255, 170, 0, 0.7),
+        0 0 10px rgba(255, 170, 0, 0.78),
         0 0 22px rgba(255, 170, 0, 0.32);
     }
 
-    .growth-node.pink {
-      background: radial-gradient(circle at 35% 35%, #ff0066, #880033);
+    .circuit-node.verify {
+      left: 49.8%;
+      top: 69.3%;
+      background: rgba(255, 0, 102, 0.95);
       box-shadow:
-        0 0 10px rgba(255, 0, 102, 0.72),
+        0 0 10px rgba(255, 0, 102, 0.75),
         0 0 22px rgba(255, 0, 102, 0.34);
     }
 
-    .node-password { left: 50.5%; top: 54.2%; }
-    .node-verify { left: 49.8%; top: 69.3%; }
-    .node-activate { left: 69.8%; top: 85.3%; }
-    .node-pepper { left: 50%; top: 38.9%; }
-
-    .growth-converge {
-      position: absolute;
-      top: 38.9%;
-      left: 50%;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #ff1a66, #660022);
+    .circuit-node.activate {
+      left: 69.8%;
+      top: 85.3%;
+      background: rgba(118, 255, 168, 0.96);
       box-shadow:
-        0 0 20px rgba(255, 26, 102, 0.82),
-        0 0 44px rgba(255, 26, 102, 0.42);
-      border: 1px solid rgba(255, 120, 168, 0.82);
+        0 0 10px rgba(118, 255, 168, 0.82),
+        0 0 22px rgba(118, 255, 168, 0.36);
+    }
+
+    .activation-lock {
+      position: absolute;
+      left: 69.8%;
+      top: 85.3%;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(118, 255, 168, 0.86);
+      background: radial-gradient(circle at 35% 35%, rgba(118, 255, 168, 0.94), rgba(0, 90, 52, 0.68));
+      box-shadow:
+        0 0 18px rgba(118, 255, 168, 0.85),
+        0 0 42px rgba(118, 255, 168, 0.34);
       transform: translate(-50%, -50%) scale(0);
       opacity: 0;
-      transition: all 440ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .growth-converge.active {
+    .activation-lock.active {
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
-      animation: converge-pulse 850ms ease-in-out infinite alternate;
-    }
-
-    @keyframes converge-pulse {
-      from {
-        box-shadow:
-          0 0 18px rgba(255, 26, 102, 0.8),
-          0 0 42px rgba(255, 26, 102, 0.38);
-      }
-
-      to {
-        box-shadow:
-          0 0 34px rgba(255, 26, 102, 1),
-          0 0 76px rgba(255, 26, 102, 0.58);
-      }
     }
 
     .setup-room.locked::after {
@@ -417,7 +393,7 @@
       z-index: 60;
       pointer-events: none;
       background:
-        radial-gradient(circle at 50% 38.9%, rgba(105, 255, 164, 0.24), transparent 20%),
+        radial-gradient(circle at 50% 38.9%, rgba(105, 255, 164, 0.2), transparent 20%),
         radial-gradient(circle at 69.8% 85.3%, rgba(105, 245, 255, 0.14), transparent 24%);
       animation: lock-pulse 950ms ease-out forwards;
     }
@@ -429,13 +405,19 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .setup-room.growing .birth-spark,
-      .setup-room.growing .growth-head,
-      .growth-path.active,
-      .growth-path.glow,
-      .setup-room.locked::after,
-      .growth-converge.active {
+      .welcome-email,
+      .welcome-status,
+      .circuit-trace.active,
+      .setup-room.locked::after {
         animation: none;
+      }
+
+      .welcome-layer,
+      .welcome-layer.on,
+      .welcome-email,
+      .welcome-status {
+        opacity: 1;
+        transform: none;
       }
     }
   </style>
@@ -450,6 +432,11 @@
       aria-hidden="true"
     />
 
+    <div id="welcomeLayer" class="welcome-layer" aria-hidden="true">
+      <div id="welcomeEmail" class="welcome-email"></div>
+      <div id="welcomeStatus" class="welcome-status">EMAIL ARRIVAL CONFIRMED</div>
+    </div>
+
     <div id="pepperState" aria-hidden="true"></div>
 
     <div class="float-layer" aria-hidden="true">
@@ -457,58 +444,46 @@
       <div id="verifyFloat" class="float-text"></div>
     </div>
 
-    <div id="adwormGrowth" class="adworm-growth" aria-hidden="true">
-      <div class="birth-spark"></div>
-      <div class="growth-head"></div>
-
-      <svg class="growth-svg" viewBox="0 0 800 600" preserveAspectRatio="none">
+    <div id="circuitLayer" class="circuit-layer" aria-hidden="true">
+      <svg class="circuit-svg" viewBox="0 0 800 600" preserveAspectRatio="none">
         <path
-          class="growth-path"
-          id="growth-main"
-          d="M 558 512 L 398 416 L 404 325 L 400 233"
+          class="circuit-trace"
+          id="trace-email-password"
+          d="M 400 233 L 404 325"
           stroke="#8ffcff"
-          stroke-width="2.7"
-          stroke-dasharray="1000"
-          stroke-dashoffset="1000"
+          stroke-width="2.5"
         />
 
         <path
-          class="growth-path"
-          id="growth-password"
-          d="M 404 325 L 300 325 M 404 325 L 520 325"
+          class="circuit-trace"
+          id="trace-password-verify"
+          d="M 404 325 L 398 416"
           stroke="#ffaa00"
-          stroke-width="2"
-          stroke-dasharray="1000"
-          stroke-dashoffset="1000"
+          stroke-width="2.3"
         />
 
         <path
-          class="growth-path"
-          id="growth-verify"
-          d="M 398 416 L 300 416 M 398 416 L 520 416"
+          class="circuit-trace"
+          id="trace-verify-activate"
+          d="M 398 416 L 558 512"
           stroke="#ff0066"
-          stroke-width="2"
-          stroke-dasharray="1000"
-          stroke-dashoffset="1000"
+          stroke-width="2.3"
         />
 
         <path
-          class="growth-path"
-          id="growth-pepper"
-          d="M 400 233 L 280 233 M 400 233 L 620 233"
-          stroke="#00ff88"
+          class="circuit-trace"
+          id="trace-activate-return"
+          d="M 558 512 L 610 512 L 610 233 L 400 233"
+          stroke="#76ffa8"
           stroke-width="2"
-          stroke-dasharray="1000"
-          stroke-dashoffset="1000"
         />
       </svg>
 
-      <div class="growth-node node-password orange" id="nodePassword"></div>
-      <div class="growth-node node-verify pink" id="nodeVerify"></div>
-      <div class="growth-node node-activate green" id="nodeActivate"></div>
-      <div class="growth-node node-pepper green" id="nodePepper"></div>
-
-      <div class="growth-converge" id="growthConverge"></div>
+      <div id="nodeEmail" class="circuit-node email"></div>
+      <div id="nodePassword" class="circuit-node password"></div>
+      <div id="nodeVerify" class="circuit-node verify"></div>
+      <div id="nodeActivate" class="circuit-node activate"></div>
+      <div id="activationLock" class="activation-lock"></div>
     </div>
 
     <form id="setupForm" class="setup-form" autocomplete="off">
@@ -554,19 +529,75 @@
     const passwordFloat = document.getElementById("passwordFloat");
     const verifyFloat = document.getElementById("verifyFloat");
 
+    const welcomeLayer = document.getElementById("welcomeLayer");
+    const welcomeEmail = document.getElementById("welcomeEmail");
+    const welcomeStatus = document.getElementById("welcomeStatus");
+
     const params = new URLSearchParams(window.location.search);
     const setupToken = params.get("token") || params.get("setup") || "";
-    const pepperMode = params.get("mode") || "";
 
     let passwordMaskTimer = null;
     let verifyMaskTimer = null;
     let passwordRevealed = false;
     let verifyRevealed = false;
+    let verifiedEmail = "";
 
-    if (pepperMode === "profile") {
-      setupRoom.dataset.pepper = "profile";
-    } else if (pepperMode === "email") {
-      setupRoom.dataset.pepper = "email";
+    function safeEmail(value) {
+      return String(value || "")
+        .replace(/[<>"'`]/g, "")
+        .trim()
+        .slice(0, 120);
+    }
+
+    function showWelcome(email) {
+      verifiedEmail = safeEmail(email);
+
+      if (!verifiedEmail) {
+        welcomeEmail.textContent = "EMAIL ARRIVAL CONFIRMED";
+        welcomeStatus.textContent = "SETUP TOKEN ACCEPTED";
+      } else {
+        welcomeEmail.textContent = verifiedEmail;
+        welcomeStatus.textContent = "EMAIL ARRIVAL CONFIRMED";
+      }
+
+      welcomeLayer.classList.add("on");
+
+      setTimeout(() => {
+        document.getElementById("nodeEmail").classList.add("active");
+      }, 1200);
+    }
+
+    async function loadSetupState() {
+      if (!setupToken) {
+        welcomeEmail.textContent = "SETUP TOKEN MISSING";
+        welcomeStatus.textContent = "RETURN TO EMAIL LINK";
+        welcomeLayer.classList.add("on");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/auth/setup-state", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            token: setupToken
+          })
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok || result.ok === false || result.success === false) {
+          throw new Error(result.error || "setup_state_failed");
+        }
+
+        showWelcome(result.email || result.ownerEmail || "");
+      } catch (error) {
+        welcomeEmail.textContent = "EMAIL ARRIVAL PENDING";
+        welcomeStatus.textContent = "SETUP TOKEN NOT CONFIRMED";
+        welcomeLayer.classList.add("on");
+      }
     }
 
     function maskedValue(value) {
@@ -617,40 +648,36 @@
       return passwordInput.value === verifyInput.value ? "good" : "bad";
     }
 
-    function renderPassword() {
-      renderValue(passwordInput, passwordFloat, passwordRevealed, "");
-    }
-
     function renderVerify() {
       renderValue(verifyInput, verifyFloat, verifyRevealed, verifyStateClass());
     }
 
-    function resetGrowth() {
-      setupRoom.classList.remove("growing", "locked");
+    function resetCircuit() {
+      setupRoom.classList.remove("circuit-live", "locked");
 
-      document.querySelectorAll(".growth-path").forEach((path) => {
-        path.classList.remove("active", "glow");
+      document.querySelectorAll(".circuit-trace").forEach((trace) => {
+        trace.classList.remove("active", "hot");
       });
 
-      document.querySelectorAll(".growth-node").forEach((node) => {
+      document.querySelectorAll(".circuit-node").forEach((node) => {
         node.classList.remove("active");
       });
 
-      document.getElementById("growthConverge").classList.remove("active");
+      document.getElementById("activationLock").classList.remove("active");
     }
 
-    function startAdWormGrowth() {
-      resetGrowth();
+    function startIdentityCircuit() {
+      resetCircuit();
 
       void setupRoom.offsetWidth;
-      setupRoom.classList.add("growing");
+      setupRoom.classList.add("circuit-live");
 
       const sequence = [
-        { ids: ["nodeActivate", "growth-main"], delay: 0 },
-        { ids: ["nodeVerify", "growth-verify"], delay: 650 },
-        { ids: ["nodePassword", "growth-password"], delay: 1200 },
-        { ids: ["nodePepper", "growth-pepper"], delay: 1750 },
-        { ids: ["growthConverge"], delay: 2400 }
+        { ids: ["nodeEmail", "trace-email-password"], delay: 0 },
+        { ids: ["nodePassword", "trace-password-verify"], delay: 650 },
+        { ids: ["nodeVerify", "trace-verify-activate"], delay: 1250 },
+        { ids: ["nodeActivate", "trace-activate-return"], delay: 1850 },
+        { ids: ["activationLock"], delay: 2550 }
       ];
 
       sequence.forEach((step) => {
@@ -661,8 +688,8 @@
 
             el.classList.add("active");
 
-            if (el.classList.contains("growth-path")) {
-              setTimeout(() => el.classList.add("glow"), 900);
+            if (el.classList.contains("circuit-trace")) {
+              setTimeout(() => el.classList.add("hot"), 850);
             }
           });
         }, step.delay);
@@ -674,7 +701,7 @@
     }
 
     function failIdentityCircuit() {
-      resetGrowth();
+      resetCircuit();
       verifyFloat.className = "float-text on masked bad";
     }
 
@@ -742,6 +769,7 @@
       const confirmPassword = verifyInput.value;
 
       if (!setupToken) {
+        welcomeStatus.textContent = "RETURN TO EMAIL LINK";
         return;
       }
 
@@ -756,7 +784,7 @@
       }
 
       activateButton.disabled = true;
-      startAdWormGrowth();
+      startIdentityCircuit();
 
       try {
         const response = await fetch("/api/auth/set-password", {
@@ -791,6 +819,8 @@
         }, 900);
       }
     });
+
+    loadSetupState();
   </script>
 </body>
 </html>
