@@ -1,4 +1,5 @@
 import { saveSessionRecord } from "./user-store.js";
+import { makeEatCookie } from "./cookie.js";
 
 export function makeToken(bytes = 32) {
   const array = new Uint8Array(bytes);
@@ -9,18 +10,22 @@ export function makeToken(bytes = 32) {
     .join("");
 }
 
-export function makeEatCookie(eat, ttlSeconds = 86400 * 7) {
-  return `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${ttlSeconds}`;
-}
-
-export async function createSession(env, email, options = {}) {
+export async function createSession(env, identityActiveId, options = {}) {
   const ttlSeconds = options.ttlSeconds || 86400 * 7;
   const now = Date.now();
   const eat = makeToken(32);
 
+  const cleanIdentityActiveId = String(identityActiveId || "").trim();
+  const email = String(options.email || "").trim().toLowerCase();
+
+  if (!cleanIdentityActiveId) {
+    throw new Error("identity_active_id_missing");
+  }
+
   const sessionRecord = {
     eat,
-    email: String(email || "").trim().toLowerCase(),
+    "identity-active-id": cleanIdentityActiveId,
+    email,
     epoch: now,
     band: options.band || "user",
     createdAt: now,
