@@ -2,89 +2,534 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>About CyberCrowd</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CyberCrowd | How to Play</title>
 
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      color: #f0e6d2;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+    :root {
+      --ink: #171717;
+      --paper: #f2f0e8;
+      --gold: #e7bc62;
+      --red: #a82d2d;
     }
 
-    #about-box {
-      width: 80%;
-      max-width: 900px;
-      background: #111;
-      border: 2px solid #b8860b;
-      padding: 40px;
+    * {
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100svh;
+      margin: 0;
+      color: var(--ink);
+      background: #080808;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      min-height: 78svh;
+      padding: 28px;
+      overflow: hidden;
+      color: white;
+      place-items: center;
       text-align: center;
+      isolation: isolate;
+    }
+
+    .hero video {
+      position: absolute;
+      z-index: -3;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      inset: 0;
+    }
+
+    .hero::before {
+      position: absolute;
+      z-index: -2;
+      background: radial-gradient(circle, rgba(0,0,0,.12), rgba(0,0,0,.78));
+      content: "";
+      inset: 0;
+    }
+
+    .hero-copy {
+      width: min(980px, 100%);
+      text-shadow: 0 4px 24px #000;
+    }
+
+    .top-line {
+      margin: 0 0 12px;
+      color: var(--gold);
+      font-size: clamp(.75rem, 2vw, 1rem);
+      font-weight: 900;
+      letter-spacing: .2em;
+      text-transform: uppercase;
     }
 
     h1 {
-      margin-top: 0;
-      font-size: 2.2rem;
-      color: #d4af37;
-      letter-spacing: 0.05em;
-    }
-
-    p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-top: 20px;
-    }
-
-    .back-button {
-      margin-top: 40px;
-      padding: 12px 24px;
-      background: #b8860b;
-      color: #000;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
+      margin: 0;
+      font-size: clamp(3.5rem, 14vw, 9rem);
+      font-weight: 1000;
+      line-height: .8;
+      letter-spacing: -.065em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
-    .back-button:hover {
-      background: #d4af37;
+    .how-to {
+      display: block;
+      margin-top: 22px;
+      font-size: clamp(1.25rem, 4vw, 2.5rem);
+      font-weight: 1000;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .hero p:last-of-type {
+      max-width: 690px;
+      margin: 22px auto 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.05rem, 2.7vw, 1.45rem);
+      font-style: italic;
+      line-height: 1.45;
+    }
+
+    .start {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 18px;
+      color: #111;
+      background: var(--gold);
+      font-size: .75rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .manual {
+      width: min(820px, calc(100% - 24px));
+      margin: -24px auto 34px;
+      padding: clamp(28px, 7vw, 68px);
+      background:
+        repeating-linear-gradient(0deg, rgba(0,0,0,.018) 0 1px, transparent 1px 4px),
+        var(--paper);
+      box-shadow: 0 24px 70px rgba(0,0,0,.72);
+    }
+
+    .objective {
+      margin: 0;
+      padding: 0 0 clamp(28px, 5vw, 44px);
+      border-bottom: 5px solid var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.35rem, 4vw, 2rem);
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .objective strong {
+      color: var(--red);
+    }
+
+    section {
+      padding-top: clamp(38px, 7vw, 64px);
+    }
+
+    .label {
+      margin: 0 0 7px;
+      color: var(--red);
+      font-size: .7rem;
+      font-weight: 900;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 22px;
+      font-size: clamp(2.1rem, 7vw, 4.4rem);
+      font-weight: 1000;
+      line-height: .88;
+      letter-spacing: -.05em;
+      text-transform: uppercase;
+    }
+
+    .pieces {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-top: 2px solid var(--ink);
+      border-left: 2px solid var(--ink);
+    }
+
+    .piece {
+      min-height: 166px;
+      padding: 20px;
+      border-right: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .piece-mark {
+      display: block;
+      margin-bottom: 13px;
+      color: var(--red);
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    h3 {
+      margin: 0 0 7px;
+      font-size: 1rem;
+      font-weight: 1000;
+      text-transform: uppercase;
+    }
+
+    .piece p,
+    .move p,
+    .wild p,
+    .spoilers li {
+      margin: 0;
+      font-size: .96rem;
+      line-height: 1.45;
+    }
+
+    .setup {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: setup;
+    }
+
+    .setup li {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 0;
+      border-top: 1px solid rgba(23,23,23,.45);
+      counter-increment: setup;
+      font-size: clamp(1rem, 2.6vw, 1.17rem);
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .setup li::before {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      content: counter(setup);
+      font-weight: 1000;
+      place-items: center;
+    }
+
+    .moves {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: moves;
+    }
+
+    .move {
+      display: grid;
+      grid-template-columns: clamp(46px, 8vw, 62px) 1fr;
+      gap: 15px;
+      padding: 22px 0;
+      border-top: 2px solid var(--ink);
+      counter-increment: moves;
+    }
+
+    .move::before {
+      color: var(--red);
+      content: "0" counter(moves);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.7rem, 5vw, 2.5rem);
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .move h3 {
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+    }
+
+    .wilds {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .wild {
+      padding: 23px;
+      color: var(--paper);
+      background: var(--ink);
+    }
+
+    .wild-mark {
+      display: block;
+      margin-bottom: 13px;
+      color: var(--gold);
+      font-size: 2rem;
+    }
+
+    .spoilers {
+      margin: 0;
+      padding: 19px 19px 19px 42px;
+      border: 3px solid var(--ink);
+      background: #e6dfcf;
+    }
+
+    .spoilers li {
+      margin: 10px 0;
+    }
+
+    .winning {
+      margin-top: clamp(42px, 8vw, 76px);
+      padding: clamp(28px, 6vw, 50px);
+      color: white;
+      background: var(--red);
+      text-align: center;
+    }
+
+    .winning .label {
+      color: #f8d99a;
+    }
+
+    .winning h2 {
+      margin-bottom: 18px;
+    }
+
+    .winning p {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.15rem, 3.4vw, 1.65rem);
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .last-line {
+      margin: 34px 0 0;
+      font-size: clamp(1rem, 2.7vw, 1.25rem);
+      font-weight: 1000;
+      line-height: 1.4;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .back {
+      display: block;
+      width: fit-content;
+      margin: 28px auto 0;
+      padding: 12px 18px;
+      color: var(--paper);
+      background: var(--ink);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 600px) {
+      .pieces,
+      .wilds {
+        grid-template-columns: 1fr;
+      }
+
+      .piece {
+        min-height: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .hero video {
+        display: none;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div id="about-box">
-    <h1>About CyberCrowd</h1>
+  <header class="hero">
+    <video autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+      <source src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/about-index-rules-jester.mp4" type="video/mp4">
+    </video>
 
-    <p>
-      CyberCrowd is a digital vault, a museum, and a living archive built to preserve
-      creativity, identity, and contribution. Every user enters through the same door,
-      but each path branches into unique rooms — profiles, posters, treasury, PSA,
-      and creator tools.
+    <div class="hero-copy">
+      <p class="top-line">One Identity to a Crowd</p>
+      <h1>CyberCrowd</h1>
+      <span class="how-to">How to Play</span>
+      <p>Bring what you know. Find what connects. Invent what comes next.</p>
+      <a class="start" href="#game">Open the box</a>
+    </div>
+  </header>
+
+  <main class="manual" id="game">
+    <p class="objective">
+      <strong>Object of the game:</strong> Make the connection better. Invent another world from the people, skills, cameras, places, problems, and possibilities already in play.
     </p>
 
-    <p>
-      The system is designed as a spatial world, not a flat website. Each file is a room.
-      Each window is a chamber. Each plaque is a doorway. You don’t scroll — you navigate.
-    </p>
+    <section aria-labelledby="pieces">
+      <p class="label">Inside the box</p>
+      <h2 id="pieces">Playing Pieces</h2>
 
-    <p>
-      CyberCrowd is built to grow with its members, forming a collective vault of
-      contributions, creations, and curated artifacts. This is the foundation layer,
-      the first floor of a much larger structure.
-    </p>
+      <div class="pieces">
+        <article class="piece">
+          <span class="piece-mark">●</span>
+          <h3>Identity</h3>
+          <p>That is you. Your work, your mess, your skill, your music, your need, your strange idea, and the things only you have seen.</p>
+        </article>
 
-    <button class="back-button" onclick="window.location.href='index.html'">
-      Back to Vault Entrance
-    </button>
-  </div>
+        <article class="piece">
+          <span class="piece-mark">▰</span>
+          <h3>Lane</h3>
+          <p>Your place to do the thing. A kitchen, job, show, repair, invention, camera view, stage, shop, or anything else you can actually move.</p>
+        </article>
+
+        <article class="piece">
+          <span class="piece-mark">⌁</span>
+          <h3>The Crowd</h3>
+          <p>Not spectators trapped behind glass. They can watch, answer, help, question, hire, critique, contribute, or bring the missing piece.</p>
+        </article>
+
+        <article class="piece">
+          <span class="piece-mark">!</span>
+          <h3>PING</h3>
+          <p>The call that says, “Look here.” Send one when you find a need, a person, a moment, or a connection worth moving.</p>
+        </article>
+
+        <article class="piece">
+          <span class="piece-mark">◉</span>
+          <h3>WDIG</h3>
+          <p>The live wire. Plug in phones, drones, VR rigs, strange cameras, and different views of the same moment.</p>
+        </article>
+
+        <article class="piece">
+          <span class="piece-mark">↻</span>
+          <h3>Value Cycle</h3>
+          <p>What people add keeps moving near the people who added it. Credit, attention, help, and money do not vanish down a hidden drain.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="setup">
+      <p class="label">No tiny screwdriver required</p>
+      <h2 id="setup">Set Up</h2>
+
+      <ol class="setup">
+        <li>Enter as yourself. You are already the playing piece.</li>
+        <li>Open the lane where your thing can happen.</li>
+        <li>Show the Crowd what you can see from where you stand.</li>
+        <li>Leave enough room for another Identity to change the picture.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="turn">
+      <p class="label">Every turn begins with a view</p>
+      <h2 id="turn">Take Your Turn</h2>
+
+      <ol class="moves">
+        <li class="move">
+          <div>
+            <h3>Look around</h3>
+            <p>What is happening? What is missing? What does everybody keep walking past?</p>
+          </div>
+        </li>
+
+        <li class="move">
+          <div>
+            <h3>Find the connection</h3>
+            <p>A plumber may also build impossible hot tubs. A viewer may have the perfect camera angle. A grandmother may need work. A garage may become a stage.</p>
+          </div>
+        </li>
+
+        <li class="move">
+          <div>
+            <h3>Make it better</h3>
+            <p>Connect the people, tools, views, and needs in a way that did not exist five minutes ago.</p>
+          </div>
+        </li>
+
+        <li class="move">
+          <div>
+            <h3>Send a PING</h3>
+            <p>Call the Crowd when the connection needs eyes, hands, questions, courage, noise, silence, or one very particular weirdo.</p>
+          </div>
+        </li>
+
+        <li class="move">
+          <div>
+            <h3>Let somebody change it</h3>
+            <p>The next Identity does not have to repeat your move. They can answer, improve it, reroute it, soften it, sharpen it, or turn it into something nobody planned.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="wild-cards">
+      <p class="label">Use when ordinary quits working</p>
+      <h2 id="wild-cards">Wild Cards</h2>
+
+      <div class="wilds">
+        <article class="wild">
+          <span class="wild-mark">✦</span>
+          <h3>Magic Cursor</h3>
+          <p>Change the view. Reveal the door, person, object, or possibility everybody else missed.</p>
+        </article>
+
+        <article class="wild">
+          <span class="wild-mark">★</span>
+          <h3>Apogee Wild Card</h3>
+          <p>Play when the ordinary route is dead and the ridiculous route is starting to look intelligent.</p>
+        </article>
+
+        <article class="wild">
+          <span class="wild-mark">♜</span>
+          <h3>Operator Move</h3>
+          <p>Run the lane. Choose the views. Invite the Crowd. Keep the moment moving without owning the people inside it.</p>
+        </article>
+
+        <article class="wild">
+          <span class="wild-mark">➶</span>
+          <h3>adWorm</h3>
+          <p>Let a brand enter only when it adds value to the lane. The worm follows the moment—not the human home.</p>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="spoils-game">
+      <p class="label">Everybody knows this player</p>
+      <h2 id="spoils-game">What Spoils the Game</h2>
+
+      <ul class="spoilers">
+        <li>Stealing another Identity, lane, work, credit, or private life.</li>
+        <li>Forcing people into a hallway just to charge them for the exit.</li>
+        <li>Hiding the real move, the real price, the real punishment, or where the value went.</li>
+        <li>Turning the Crowd into inventory, targets, wallets, or behavioral livestock.</li>
+        <li>Destroying a person and calling it entertainment.</li>
+        <li>Using safety as a costume for control—or freedom as a costume for harm.</li>
+      </ul>
+    </section>
+
+    <aside class="winning">
+      <p class="label">How to win</p>
+      <h2>There Is No Final Square</h2>
+      <p>You win whenever a connection creates more life, more time, more possibility, or more room than either side had before.</p>
+    </aside>
+
+    <p class="last-line">Find the point. Make the connection better. Let in the Crowd. Keep playing.</p>
+
+    <a class="back" href="../index.html">Back to Vault Entrance</a>
+  </main>
 </body>
 </html>
-
