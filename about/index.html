@@ -184,6 +184,16 @@
       line-height: 1;
     }
 
+    #teaserAudio {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      left: -9999px;
+      top: -9999px;
+    }
+
     .manual {
       width: min(820px, calc(100% - 24px));
       margin: -24px auto 34px;
@@ -465,6 +475,8 @@
     </div>
   </div>
 
+  <audio id="teaserAudio" preload="auto" playsinline></audio>
+
   <main class="manual" id="game">
     <p class="objective">
       <strong>Object of the game:</strong> Make the connection better. Invent another world from the people, skills, cameras, places, problems, and possibilities already in play.
@@ -632,37 +644,122 @@
 
   <script>
     (() => {
+      const PLAYLIST_ENDPOINT = "/api/r2-teaser-playlist";
       const openButton = document.getElementById("open-teasers");
-      const teaserBox = document.getElementById("teaser-box");
-      const closeButton = document.getElementById("close-teasers");
-      const teaserVideo = document.getElementById("teaser-video");
+      const audio = document.getElementById("teaserAudio");
 
-      if (!openButton || !teaserBox || !closeButton || !teaserVideo) return;
+      if (!openButton || !audio) return;
 
-      function openTeasers() {
-        teaserBox.classList.add("is-open");
-        teaserBox.setAttribute("aria-hidden", "false");
-        teaserVideo.currentTime = 0;
-        teaserVideo.play().catch(() => {});
+      let playlist = [];
+      let deck = [];
+      let playlistPromise = null;
+      let currentTrack = "";
+      let requestNumber = 0;
+
+      function loadPlaylist() {
+        if (playlist.length > 0) {
+          return Promise.resolve(playlist);
+        }
+
+        if (!playlistPromise) {
+          playlistPromise = fetch(PLAYLIST_ENDPOINT, {
+            method: "GET",
+            cache: "no-store"
+          })
+            .then(function (response) {
+              if (!response.ok) {
+                throw new Error("Playlist endpoint failed: HTTP " + response.status);
+              }
+
+              return response.json();
+            })
+            .then(function (data) {
+              const tracks = Array.isArray(data) ? data : data.tracks;
+
+              if (!Array.isArray(tracks) || tracks.length === 0) {
+                throw new Error("Playlist endpoint returned zero tracks.");
+              }
+
+              playlist = tracks.slice();
+              deck = shuffleDeck(playlist);
+              return playlist;
+            })
+            .catch(function (error) {
+              playlistPromise = null;
+              console.error("CyberCrowd playlist load failed:", error);
+              throw error;
+            });
+        }
+
+        return playlistPromise;
       }
 
-      function closeTeasers() {
-        teaserVideo.pause();
-        teaserBox.classList.remove("is-open");
-        teaserBox.setAttribute("aria-hidden", "true");
+      function shuffleDeck(source) {
+        const shuffled = source.slice();
+
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const temp = shuffled[i];
+          shuffled[i] = shuffled[j];
+          shuffled[j] = temp;
+        }
+
+        return shuffled;
       }
 
-      openButton.addEventListener("click", openTeasers);
-      closeButton.addEventListener("click", closeTeasers);
+      function getNextTrack() {
+        if (deck.length === 0) {
+          deck = shuffleDeck(playlist);
+        }
 
-      teaserBox.addEventListener("click", event => {
-        if (event.target === teaserBox) closeTeasers();
+        let next = deck.shift();
+
+        if (playlist.length > 1 && next === currentTrack) {
+          deck.push(next);
+          next = deck.shift();
+        }
+
+        currentTrack = next;
+        return next;
+      }
+
+      async function playNextTeaser() {
+        const thisRequest = ++requestNumber;
+
+        try {
+          await loadPlaylist();
+
+          if (thisRequest !== requestNumber) {
+            return;
+          }
+
+          const track = getNextTrack();
+
+          audio.pause();
+          audio.currentTime = 0;
+          audio.src = track;
+          audio.volume = 1;
+          audio.muted = false;
+          audio.load();
+
+          await audio.play();
+
+          console.log("CyberCrowd teaser playing:", track);
+        } catch (error) {
+          console.error("CyberCrowd teaser did not play:", error);
+        }
+      }
+
+      openButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        playNextTeaser();
       });
 
-      document.addEventListener("keydown", event => {
-        if (event.key === "Escape" && teaserBox.classList.contains("is-open")) {
-          closeTeasers();
-        }
+      window.addEventListener("DOMContentLoaded", function () {
+        loadPlaylist().catch(function (error) {
+          console.error("CyberCrowd playlist warmup failed:", error);
+        });
       });
     })();
 
