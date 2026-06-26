@@ -74,12 +74,33 @@
     }
 
     h1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
       margin: 0;
-      font-size: clamp(3.5rem, 14vw, 9rem);
+      font-size: clamp(2.35rem, 9.5vw, 6.5rem);
       font-weight: 1000;
-      line-height: .8;
-      letter-spacing: -.065em;
+      line-height: 1;
+      letter-spacing: 0;
       text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .hero-letter {
+      display: inline-grid;
+      min-width: .58em;
+      transform-origin: 50% 65%;
+      place-items: center;
+      transition: color .25s ease, font-weight .25s ease;
+      will-change: transform, font-family;
+    }
+
+    #crowd-w {
+      min-width: .82em;
+      color: var(--gold);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: .88em;
     }
 
     .how-to {
@@ -104,13 +125,63 @@
       display: inline-block;
       margin-top: 28px;
       padding: 12px 18px;
+      border: 0;
       color: #111;
       background: var(--gold);
+      cursor: pointer;
+      font: inherit;
       font-size: .75rem;
       font-weight: 900;
       letter-spacing: .12em;
       text-decoration: none;
       text-transform: uppercase;
+    }
+
+    .teaser-box {
+      position: fixed;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, .82);
+      inset: 0;
+    }
+
+    .teaser-box.is-open {
+      display: flex;
+    }
+
+    .teaser-panel {
+      position: relative;
+      width: min(980px, 100%);
+      padding: 12px;
+      border: 2px solid var(--gold);
+      background: #080808;
+      box-shadow: 0 24px 70px rgba(0,0,0,.72);
+    }
+
+    .teaser-video {
+      display: block;
+      width: 100%;
+      max-height: 78svh;
+      background: #000;
+    }
+
+    .teaser-close {
+      position: absolute;
+      right: 10px;
+      bottom: calc(100% + 10px);
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      color: var(--paper);
+      background: #080808;
+      cursor: pointer;
+      font-size: 1.6rem;
+      font-weight: 900;
+      line-height: 1;
     }
 
     .manual {
@@ -367,12 +438,32 @@
 
     <div class="hero-copy">
       <p class="top-line">One Identity to a Crowd</p>
-      <h1>CYBERCRO<span id="crowd-w">W</span>D</h1>
+      <h1 aria-label="CyberCrowd">
+        <span class="hero-letter" data-base="C" aria-hidden="true">C</span>
+        <span class="hero-letter" data-base="Y" aria-hidden="true">Y</span>
+        <span class="hero-letter" data-base="B" aria-hidden="true">B</span>
+        <span class="hero-letter" data-base="E" aria-hidden="true">E</span>
+        <span class="hero-letter" data-base="R" aria-hidden="true">R</span>
+        <span class="hero-letter" data-base="C" aria-hidden="true">C</span>
+        <span class="hero-letter" data-base="R" aria-hidden="true">R</span>
+        <span class="hero-letter" data-base="O" aria-hidden="true">O</span>
+        <span class="hero-letter" id="crowd-w" data-base="W" aria-hidden="true">W</span>
+        <span class="hero-letter" data-base="D" aria-hidden="true">D</span>
+      </h1>
       <span class="how-to">How to Play</span>
       <p>Bring what you know. Find what connects. Invent what comes next.</p>
-      <a class="start" href="#game">Open the box</a>
+      <button class="start" id="open-teasers" type="button">Open the box</button>
     </div>
   </header>
+
+  <div class="teaser-box" id="teaser-box" aria-hidden="true">
+    <div class="teaser-panel" role="dialog" aria-label="CyberCrowd teaser">
+      <button class="teaser-close" id="close-teasers" type="button" aria-label="Close teaser">×</button>
+      <video class="teaser-video" id="teaser-video" controls playsinline preload="metadata">
+        <source src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/about-index-rules-jester.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
 
   <main class="manual" id="game">
     <p class="objective">
@@ -405,19 +496,19 @@
         <article class="piece">
           <span class="piece-mark">!</span>
           <h3>PING</h3>
-          <p>The call that says, “Look here.” Send one when you find a need, a person, a moment, or a connection worth moving.</p>
+          <p>The call that says, “Look here.” A person can PING a broken pump, a repair, a job need, a ride, a buyer, a camera angle, a lawn, an auto problem, a home task, or a skill that needs to be found. The PING does not command anyone. It shows the need, the place, and the opening so the right people can answer with the tool, contact, truck, fix, service, or help that moves the moment.</p>
         </article>
 
         <article class="piece">
           <span class="piece-mark">◉</span>
           <h3>WDIG</h3>
-          <p>The live wire. Plug in phones, drones, VR rigs, strange cameras, and different views of the same moment.</p>
+          <p>A one-time-purchase digital tool—a piece of gear—that gives you sovereign, real-time control across all your devices through a P2P mesh, with no subscriptions, no cloud dependency, and a full-power 7-day trial.</p>
         </article>
 
         <article class="piece">
           <span class="piece-mark">↻</span>
           <h3>Value Cycle</h3>
-          <p>What people add keeps moving near the people who added it. Credit, attention, help, and money do not vanish down a hidden drain.</p>
+          <p>In CyberCrowd, value never leaves the hands of the people who create it. Every action—credit, attention, help, or money—stays in motion inside the crowd that produced it. Nothing is siphoned upward, nothing disappears into a hidden system, and nothing is lost to an algorithmic drain. Value circulates where it was earned, and the crowd that builds it is the crowd that keeps it.</p>
         </article>
       </div>
     </section>
@@ -429,8 +520,8 @@
       <ol class="setup">
         <li>Enter as yourself. You are already the playing piece.</li>
         <li>Open the lane where your thing can happen.</li>
-        <li>Show the Crowd what you can see from where you stand.</li>
-        <li>Leave enough room for another Identity to change the picture.</li>
+        <li><span><strong>CyberCrowd Positional Visibility Statement</strong><br>Show the Crowd the view from your position. What you can see is part of the shared map, and the map only exists when everyone contributes their line of sight.</span></li>
+        <li><span><strong>CyberCrowd Space-Making Statement</strong><br>Leave enough room in your lane for others to enter. Clearing space is how the Crowd expands, and expansion is how play continues.</span></li>
       </ol>
     </section>
 
@@ -442,14 +533,14 @@
         <li class="move">
           <div>
             <h3>Look around</h3>
-            <p>What is happening? What is missing? What does everybody keep walking past?</p>
+            <p>What is happening?<br>What is missing?<br>What does everybody keep walking past?<br>Show the world what you like!</p>
           </div>
         </li>
 
         <li class="move">
           <div>
-            <h3>Find the connection</h3>
-            <p>A plumber may also build impossible hot tubs. A viewer may have the perfect camera angle. A grandmother may need work. A garage may become a stage.</p>
+            <h3>Open the Lane</h3>
+            <p>Open the lane where your thing can happen. Clear the clutter, widen the angle, give the moment a place to land—then ping your invites.</p>
           </div>
         </li>
 
@@ -463,7 +554,7 @@
         <li class="move">
           <div>
             <h3>Send a PING</h3>
-            <p>Call the Crowd when the connection needs eyes, hands, questions, courage, noise, silence, or one very particular weirdo.</p>
+            <p>Call the Crowd when the connection needs eyes, hands, questions, courage, noise, silence, job needs, repairs, services, lawn care, auto work, or domestic home services.</p>
           </div>
         </li>
 
@@ -471,6 +562,13 @@
           <div>
             <h3>Let somebody change it</h3>
             <p>The next Identity does not have to repeat your move. They can answer, improve it, reroute it, soften it, sharpen it, or turn it into something nobody planned.</p>
+          </div>
+        </li>
+
+        <li class="move">
+          <div>
+            <h3>The Crowd</h3>
+            <p>Not spectators trapped behind glass. Anyone who arrives can watch, answer, help, question, hire, critique, contribute, or bring the missing piece. The Crowd is the moment the room wakes up.</p>
           </div>
         </li>
       </ol>
@@ -534,14 +632,187 @@
 
   <script>
     (() => {
-      const w = document.getElementById("crowd-w");
-      if (!w) return;
+      const openButton = document.getElementById("open-teasers");
+      const teaserBox = document.getElementById("teaser-box");
+      const closeButton = document.getElementById("close-teasers");
+      const teaserVideo = document.getElementById("teaser-video");
 
-      const forms = ["W", "🛡", "🔰", "W", "W", "🛡"];
+      if (!openButton || !teaserBox || !closeButton || !teaserVideo) return;
 
-      setInterval(() => {
-        w.textContent = forms[Math.floor(Math.random() * forms.length)];
-      }, 700);
+      function openTeasers() {
+        teaserBox.classList.add("is-open");
+        teaserBox.setAttribute("aria-hidden", "false");
+        teaserVideo.currentTime = 0;
+        teaserVideo.play().catch(() => {});
+      }
+
+      function closeTeasers() {
+        teaserVideo.pause();
+        teaserBox.classList.remove("is-open");
+        teaserBox.setAttribute("aria-hidden", "true");
+      }
+
+      openButton.addEventListener("click", openTeasers);
+      closeButton.addEventListener("click", closeTeasers);
+
+      teaserBox.addEventListener("click", event => {
+        if (event.target === teaserBox) closeTeasers();
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && teaserBox.classList.contains("is-open")) {
+          closeTeasers();
+        }
+      });
+    })();
+
+    (() => {
+      const letters = [...document.querySelectorAll(".hero-letter")];
+      if (!letters.length) return;
+
+      const originalFont = "Arial, Helvetica, sans-serif";
+      const fonts = [
+        "system-ui, sans-serif",
+        "ui-serif, Georgia, serif",
+        "ui-monospace, monospace",
+        "Arial Black, Arial, sans-serif",
+        "Georgia, 'Times New Roman', serif",
+        "Impact, Haettenschweiler, sans-serif",
+        "'Courier New', Courier, monospace",
+        "'Times New Roman', Times, serif",
+        "Verdana, Geneva, sans-serif",
+        "'Trebuchet MS', sans-serif",
+        "Palatino, 'Palatino Linotype', serif",
+        "Garamond, Georgia, serif",
+        "Bookman, 'URW Bookman L', serif",
+        "'Century Gothic', Futura, sans-serif",
+        "Copperplate, fantasy",
+        "cursive",
+        "fantasy"
+      ];
+
+      const glyphs = {
+        C: ["C", "c", "Ｃ", "ｃ", "𝐂", "𝐜", "𝐶", "𝑐", "𝑪", "𝒄", "𝒞", "𝒸", "ℂ", "𝔠", "ℭ", "𝕔", "𝕮", "𝖢", "𝖼", "𝗖", "𝗰", "𝘈", "𝘢", "𝘾", "𝙘", "𝙲", "𝚌"],
+        Y: ["Y", "y", "Ｙ", "ｙ", "𝐘", "𝐲", "𝑌", "𝑦", "𝒀", "𝒚", "𝒴", "𝓎", "𝔐", "𝔪", "𝕌", "𝕦", "𝖆", "𝖠", "𝖸", "𝗒", "𝗬", "𝘆", "𝘞", "𝘸", "𝙔", "𝙮", "𝚈", "𝚢"],
+        B: ["B", "b", "Ｂ", "ｂ", "𝐁", "𝐛", "𝐵", "𝑏", "𝑩", "𝒃", "ℬ", "𝒷", "𝔅", "𝔟", "𝔹", "𝕓", "𝕭", "𝖡", "𝖻", "𝗕", "𝗯", "𝘇", "𝘡", "𝘽", "𝙗", "𝙱", "𝚋"],
+        E: ["E", "e", "Ｅ", "ｅ", "𝐄", "𝐞", "𝐸", "𝑒", "𝑬", "𝒆", "ℰ", "ℯ", "𝔈", "𝔢", "𝔼", "𝕖", "𝕰", "𝖤", "𝖾", "𝗘", "𝗲", "𝘊", "𝘤", "𝙀", "𝙚", "𝙴", "𝚎"],
+        R: ["R", "r", "Ｒ", "ｒ", "𝐑", "𝐫", "𝑅", "𝑟", "𝑹", "𝒓", "ℛ", "𝓇", "ℜ", "𝔯", "ℝ", "𝕣", "ℜ", "𝖥", "𝖱", "𝗫", "𝘅", "𝘝", "𝘷", "𝙓", "𝙭", "𝚇", "𝚡"],
+        O: ["O", "o", "Ｏ", "ｏ", "𝐎", "𝐨", "𝑂", "𝑜", "𝑶", "𝒐", "𝒪", "ℴ", "𝔌", "𝔬", "𝕆", "𝕠", "𝕺", "𝖮", "𝗈", "𝗢", "𝗼", "𝘔", "𝘮", "𝙊", "𝙤", "𝙾", "𝚘"],
+        D: ["D", "d", "Ｄ", "ｄ", "𝐃", "𝐝", "𝐷", "𝑑", "𝑫", "𝒅", "𝒟", "𝒹", "ⅅ", "𝔡", "𝔻", "𝕕", "𝕯", "𝖣", "𝖽", "𝗗", "𝗱", "𝘉", "𝘣", "𝘿", "𝙙", "𝙳", "𝚍"]
+      };
+
+      const moves = [
+        { turn: 180, chance: 1 },
+        { turn: 360, chance: 1 },
+        { turn: 140, chance: .48 },
+        { turn: 300, chance: 1 },
+        { turn: 210, chance: .74 },
+        { turn: 320, chance: .86 },
+        { turn: 160, chance: .68 },
+        { turn: 360, chance: .82 },
+        { turn: 360, chance: 1 },
+        { turn: 240, chance: .62 }
+      ];
+
+      const wForms = ["W", "W", "🛡️", "W", "🛡️"];
+      let wheelResetActive = false;
+      let cycle = 0;
+
+      const pick = list => list[Math.floor(Math.random() * list.length)];
+      const between = (minimum, maximum) =>
+        Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+
+      function morph(letter, index) {
+        const thisCycle = cycle;
+        const move = moves[index];
+        const duration = between(430, 900);
+        const direction = Math.random() < .5 ? -1 : 1;
+        const turn = move.turn * direction;
+        const middle = `rotateY(${turn}deg) scale(.82)`;
+
+        letter.animate(
+          [
+            { transform: "rotateY(0deg) scale(1)" },
+            { transform: middle, offset: .5 },
+            { transform: "rotateY(0deg) scale(1)" }
+          ],
+          { duration, easing: "cubic-bezier(.22,.8,.3,1)", fill: "none" }
+        );
+
+        setTimeout(() => {
+          if (thisCycle !== cycle || wheelResetActive) return;
+
+          if (Math.random() < .28) {
+            if (index === 0) {
+              wheelReset();
+              return;
+            }
+
+            letter.textContent = letter.dataset.base;
+            letter.style.fontFamily = originalFont;
+            letter.style.fontWeight = "1000";
+            letter.style.fontStyle = "normal";
+            return;
+          }
+
+          if (index === 8) {
+            letter.textContent = pick(wForms);
+            letter.style.fontFamily = originalFont;
+            return;
+          }
+
+          if (Math.random() <= move.chance) {
+            letter.style.fontFamily = pick(fonts);
+            letter.style.fontWeight = pick(["400", "500", "600", "700", "800", "900", "1000"]);
+            letter.style.fontStyle = Math.random() < .32 ? "italic" : "normal";
+            letter.textContent = pick(glyphs[letter.dataset.base]);
+          }
+        }, duration * .46);
+      }
+
+      function wheelReset() {
+        if (wheelResetActive) return;
+
+        wheelResetActive = true;
+        cycle += 1;
+        const step = 125;
+        const spinTime = 430;
+
+        letters.forEach((letter, index) => {
+          setTimeout(() => {
+            const direction = index % 2 === 0 ? 1 : -1;
+
+            letter.animate(
+              [
+                { transform: "rotateY(0deg) scale(1)" },
+                { transform: `rotateY(${180 * direction}deg) scale(.8)`, offset: .5 },
+                { transform: `rotateY(${360 * direction}deg) scale(1)` }
+              ],
+              { duration: spinTime, easing: "cubic-bezier(.22,.8,.3,1)" }
+            );
+
+            setTimeout(() => {
+              letter.textContent = letter.dataset.base;
+              letter.style.fontFamily = originalFont;
+              letter.style.fontWeight = "1000";
+              letter.style.fontStyle = "normal";
+            }, spinTime * .46);
+          }, index * step);
+        });
+
+        setTimeout(() => {
+          wheelResetActive = false;
+        }, (letters.length - 1) * step + spinTime + 100);
+      }
+
+      function scheduleLetter(letter, index) {
+        setTimeout(() => {
+          if (!wheelResetActive) morph(letter, index);
+          scheduleLetter(letter, index);
+        }, between(700, 2400) + index * 37);
+      }
+
+      letters.forEach(scheduleLetter);
     })();
   </script>
 </body>
