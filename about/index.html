@@ -367,7 +367,7 @@
 
     <div class="hero-copy">
       <p class="top-line">One Identity to a Crowd</p>
-      <h1>CyberCrowd</h1>
+      <h1>CYBERCRO<span id="crowd-w">W</span>D</h1>
       <span class="how-to">How to Play</span>
       <p>Bring what you know. Find what connects. Invent what comes next.</p>
       <a class="start" href="#game">Open the box</a>
@@ -531,5 +531,18 @@
 
     <a class="back" href="../index.html">Back to Vault Entrance</a>
   </main>
+
+  <script>
+    (() => {
+      const w = document.getElementById("crowd-w");
+      if (!w) return;
+
+      const forms = ["W", "🛡", "🔰", "W", "W", "🛡"];
+
+      setInterval(() => {
+        w.textContent = forms[Math.floor(Math.random() * forms.length)];
+      }, 700);
+    })();
+  </script>
 </body>
 </html>
