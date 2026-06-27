@@ -1,0 +1,365 @@
+font-weight: 500;
+    }
+
+    .identity-foot-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text-muted);
+    }
+
+    .pill-strong {
+      border-color: rgba(74, 222, 128, 0.9);
+      background: rgba(22, 163, 74, 0.12);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Right column: service tiles */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .services-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .service-card {
+      position: relative;
+      border-radius: 20px;
+      padding: 14px 14px 12px;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      border: var(--border-subtle);
+      backdrop-filter: var(--blur);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.16s ease-out, box-shadow 0.16s ease-out, border-color 0.16s ease-out;
+    }
+
+    .service-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
+      border-color: rgba(148, 163, 184, 0.7);
+    }
+
+    .service-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.7;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .service-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .service-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .service-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .service-pill {
+      font-size: 10px;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .service-body {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .service-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .service-value {
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .service-value span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .service-cta {
+      font-size: 11px;
+      padding: 6px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .service-cta-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .service-cta-danger {
+      border-color: rgba(248, 113, 113, 0.9);
+      color: #fecaca;
+    }
+
+    .service-cta-danger .service-cta-dot {
+      background: var(--danger);
+    }
+
+    .service-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #f9fafb;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(15, 23, 42, 0.8);
+    }
+
+    .hulu {
+      background: radial-gradient(circle at 30% 20%, #22c55e, #16a34a 55%, #052e16 100%);
+    }
+
+    .youtube {
+      background: radial-gradient(circle at 30% 20%, #ef4444, #b91c1c 55%, #450a0a 100%);
+    }
+
+    .facebook {
+      background: radial-gradient(circle at 30% 20%, #3b82f6, #1d4ed8 55%, #0b1120 100%);
+    }
+
+    .banking {
+      background: radial-gradient(circle at 30% 20%, #facc15, #eab308 55%, #422006 100%);
+      color: #111827;
+    }
+
+    .service-link {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+    }
+
+    .service-link a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-indent: -9999px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .top-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.25);
+    }
+
+    .top-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+    <div class="top-bar">
+      <div class="top-title">Identity.html</div>
+      <div class="top-right">
+        <div class="top-dot"></div>
+        <div class="top-label">Unified session surface</div>
+      </div>
+    </div>
+
+    <section class="shell-inner">
+
+      <!-- LEFT -->
+      <section class="identity-card">
+        <div class="identity-header">
+          <div class="avatar">J</div>
+          <div class="identity-meta">
+            <div class="identity-name">James</div>
+            <div class="identity-handle">@primary-identity</div>
+          </div>
+        </div>
+
+        <p class="identity-tagline">
+          Single pane for <span>streaming, social, and finance</span>.
+        </p>
+
+        <div class="identity-badges">
+          <div class="badge"><span class="badge-dot"></span>Session: Stable</div>
+          <div class="badge"><span class="badge-dot"></span>MFA: Enabled</div>
+          <div class="badge badge-danger"><span class="badge-dot"></span>Banking isolation: Strict</div>
+        </div>
+
+        <div class="identity-footer">
+          <div class="identity-foot-left">
+            <div class="identity-label">Profile state</div>
+            <div class="identity-status">Active context: <span>Home / Personal</span></div>
+          </div>
+          <div class="identity-foot-right">
+            <div class="pill">Device: Android</div>
+            <div class="pill pill-strong">Identity lock: On</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT -->
+      <section class="services-grid">
+
+        <article class="service-card">
+          <div class="service-link"><a href="https://www.hulu.com" target="_blank">Hulu</a></div>
+          <div class="service-header">
+            <div class="service-title">
+              <div class="service-name">Hulu</div>
+              <div class="service-sub">Streaming · Long-form</div>
+            </div>
+            <div class="service-icon hulu">H</div>
+          </div>
+          <div class="service-body">
+            <div class="service-meta">
+              <div class="service-label">Last activity</div>
+              <div class="service-value">Series queue: <span>In progress</span></div>
+            </div>
+            <div class="service-cta"><span class="service-cta-dot"></span>Resume watching</div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="service-link"><a href="https://www.youtube.com" target="_blank">YouTube</a></div>
+          <div class="service-header">
+            <div class="service-title">
+              <div class="service-name">YouTube</div>
+              <div class="service-sub">Streaming · Short / Long</div>
+            </div>
+            <div class="service-icon youtube">▶</div>
+          </div>
+          <div class="service-body">
+            <div class="service-meta">
+              <div class="service-label">Mode</div>
+              <div class="service-value">Feed bias: <span>Subscribed</span></div>
+            </div>
+            <div class="service-cta"><span class="service-cta-dot"></span>Open feed</div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="service-link"><a href="https://www.facebook.com" target="_blank">Facebook</a></div>
+          <div class="service-header">
+            <div class="service-title">
+              <div class="service-name">Facebook</div>
+              <div class="service-sub">Social · Legacy graph</div>
+            </div>
+            <div class="service-icon facebook">f</div>
+          </div>
+          <div class="service-body">
+            <div class="service-meta">
+              <div class="service-label">Notifications</div>
+              <div class="service-value">Unread: <span>Muted</span></div>
+            </div>
+            <div class="service-cta"><span class="service-cta-dot"></span>Check social</div>
+          </div>
+        </article>
+
+        <article class="service-card">
+          <div class="service-link"><a href="https://your-bank.example.com" target="_blank">Banking</a></div>
+          <div class="service-header">
+            <div class="service-title">
+              <div class="service-name">Banking</div>
+              <div class="service-sub">Finance · High security</div>
+            </div>
+            <div class="service-icon banking">$</div>
+          </div>
+          <div class="service-body">
+            <div class="service-meta">
+              <div class="service-label">Security posture</div>
+              <div class="service-value">Context: <span>Isolated</span></div>
+            </div>
+            <div class="service-cta service-cta-danger"><span class="service-cta-dot"></span>Enter vault</div>
+          </div>
+        </article>
+
+      </section>
+    </section>
+  </main>
+</body>
+</html>
