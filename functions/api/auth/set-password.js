@@ -3,6 +3,7 @@ function json(data, status = 200, headers = {}) {
     status,
     headers: {
       "Content-Type": "application/json",
+      "Cache-Control": "no-store",
       ...headers
     }
   });
@@ -47,26 +48,32 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json().catch(() => null);
 
-    const setupToken = body?.setupToken || "";
-    const password = body?.password || "";
+    const setupToken = String(
+      body?.token ||
+      body?.setupToken ||
+      body?.setup ||
+      ""
+    ).trim();
+
+    const password = String(body?.password || "");
 
     if (!setupToken) {
-      return json({ success: false, error: "missing_setup_token" }, 400);
+      return json({ success: false, ok: false, error: "missing_setup_token" }, 400);
     }
 
     if (!password || password.length < 8) {
-      return json({ success: false, error: "password_too_short" }, 400);
+      return json({ success: false, ok: false, error: "password_too_short" }, 400);
     }
 
-    if (!env.IDENTITY) {
-      return json({ success: false, error: "identity_kv_missing" }, 500);
+    if (!env || !env.IDENTITY) {
+      return json({ success: false, ok: false, error: "identity_kv_missing" }, 500);
     }
 
     const setupKey = `setup:${setupToken}`;
     const setupRecordRaw = await env.IDENTITY.get(setupKey);
 
     if (!setupRecordRaw) {
-      return json({ success: false, error: "invalid_or_expired_setup_token" }, 403);
+      return json({ success: false, ok: false, error: "invalid_or_expired_setup_token" }, 403);
     }
 
     let setupRecord;
@@ -74,18 +81,23 @@ export async function onRequestPost(context) {
     try {
       setupRecord = JSON.parse(setupRecordRaw);
     } catch {
-      return json({ success: false, error: "setup_record_corrupt" }, 500);
+      return json({ success: false, ok: false, error: "setup_record_corrupt" }, 500);
     }
 
     const email = String(setupRecord.email || "").toLowerCase().trim();
-    const identityActiveId = String(setupRecord["identity-active-id"] || "").trim();
+    const identityActiveId = String(
+      setupRecord["identity-active-id"] ||
+      setupRecord.identity_active_id ||
+      setupRecord.identityActiveId ||
+      ""
+    ).trim();
 
     if (!email || !email.includes("@")) {
-      return json({ success: false, error: "setup_email_invalid" }, 500);
+      return json({ success: false, ok: false, error: "setup_email_invalid" }, 500);
     }
 
     if (!identityActiveId) {
-      return json({ success: false, error: "identity_active_id_missing" }, 500);
+      return json({ success: false, ok: false, error: "identity_active_id_missing" }, 500);
     }
 
     const passwordHash = await hashPassword(email, password);
@@ -94,9 +106,12 @@ export async function onRequestPost(context) {
 
     const userRecord = {
       "identity-active-id": identityActiveId,
+      identity_active_id: identityActiveId,
+      identity_id: identityActiveId,
       email,
       verified: true,
       passwordHash,
+      password_hash: passwordHash,
       createdAt: setupRecord.createdAt || now,
       passwordSetAt: now,
       updatedAt: now
@@ -104,10 +119,15 @@ export async function onRequestPost(context) {
 
     const sessionRecord = {
       eat,
+      token: eat,
       "identity-active-id": identityActiveId,
+      identity_active_id: identityActiveId,
+      identity_id: identityActiveId,
+      identityId: identityActiveId,
       email,
       epoch: now,
-      band: "user"
+      band: "user",
+      created_at: new Date(now).toISOString()
     };
 
     await env.IDENTITY.put(`user:${identityActiveId}`, JSON.stringify(userRecord));
@@ -122,17 +142,23 @@ export async function onRequestPost(context) {
     return json(
       {
         success: true,
+        ok: true,
         redirect: "/dashboard-surface.html"
       },
       200,
       {
-        "Set-Cookie": `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`
+        "Set-Cookie": [
+          `session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`,
+          `cc_session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`,
+          `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`
+        ].join(", ")
       }
     );
-  } catch (error) {
+  } catch {
     return json(
       {
         success: false,
+        ok: false,
         error: "set_password_failed"
       },
       500
