@@ -4,7 +4,8 @@
  * CyberCrowd Carrier Route
  *
  * ONE JOB:
- * Choose the best surface or carrier for an existing PING.
+ * Choose the best surface or carrier for an existing PING
+ * only after ping-throttle.js allowed it to move.
  *
  * This is NOT chat.
  * This is NOT email.
@@ -12,16 +13,12 @@
  * This does NOT create a PING.
  * This does NOT record final delivery.
  *
- * Carrier Route means:
- * the PING already exists, and CyberCrowd decides where
- * the relevant movement should be placed next.
- *
- * Flow:
- * ping.js creates queued PING
+ * Required flow:
+ * ping-from-relevance.js creates PING
  *   ↓
- * magic-cursor-presence.js knows active surface
+ * ping-throttle.js decides silent / hold / blocked / ready_to_fire / fire_now
  *   ↓
- * carrier-route.js chooses a carrier / surface
+ * carrier-route.js routes only ready_to_fire or fire_now
  *   ↓
  * ping-delivery.js records delivery
  *   ↓
@@ -57,52 +54,48 @@ const ALLOWED_STATUS = new Set([
   "failed"
 ]);
 
+const THROTTLE_ALLOWED = new Set([
+  "ready_to_fire",
+  "fire_now"
+]);
+
+const THROTTLE_BLOCKED = new Set([
+  "silent",
+  "hold",
+  "held",
+  "blocked",
+  "resolved",
+  "ignored",
+  "deleted"
+]);
+
 export async function onRequestOptions() {
-  return json({
-    ok: true
-  });
+  return json({ ok: true });
 }
 
 export async function onRequestPost(context) {
   const { request, env } = context;
 
   if (!env || !env.IDENTITY) {
-    return json({
-      ok: false,
-      error: "IDENTITY_KV_MISSING"
-    }, 500);
+    return json({ ok: false, error: "IDENTITY_KV_MISSING" }, 500);
   }
 
   const session = await readVerifiedSession(request, env);
 
   if (!session) {
-    return json({
-      ok: false,
-      error: "SESSION_REQUIRED"
-    }, 401);
+    return json({ ok: false, error: "SESSION_REQUIRED" }, 401);
   }
 
-  const actorIdentityId = cleanText(
-    session.identity_id ||
-    session.identityId ||
-    session.idl ||
-    session.email
-  );
+  const actorIdentityId = getIdentityIdFromSession(session);
 
   if (!actorIdentityId) {
-    return json({
-      ok: false,
-      error: "SESSION_IDENTITY_MISSING"
-    }, 401);
+    return json({ ok: false, error: "SESSION_IDENTITY_MISSING" }, 401);
   }
 
-  const body = await readJson(request);
+  const body = await readRequestJson(request);
 
   if (!body) {
-    return json({
-      ok: false,
-      error: "JSON_REQUIRED"
-    }, 400);
+    return json({ ok: false, error: "JSON_REQUIRED" }, 400);
   }
 
   const pingId = cleanText(
@@ -112,78 +105,71 @@ export async function onRequestPost(context) {
   );
 
   if (!pingId) {
-    return json({
-      ok: false,
-      error: "PING_ID_REQUIRED"
-    }, 400);
+    return json({ ok: false, error: "PING_ID_REQUIRED" }, 400);
   }
 
   const ping = await readPing(env, pingId);
 
   if (!ping) {
-    return json({
-      ok: false,
-      error: "PING_NOT_FOUND"
-    }, 404);
+    return json({ ok: false, error: "PING_NOT_FOUND" }, 404);
   }
 
-  const isSender = ping.from_identity_id === actorIdentityId;
-  const isReceiver = ping.to_identity_id === actorIdentityId;
+  const normalizedPing = normalizePing(ping, pingId);
+
+  const isSender = normalizedPing.from_identity_id === actorIdentityId;
+  const isReceiver = normalizedPing.to_identity_id === actorIdentityId;
 
   if (!isSender && !isReceiver) {
-    return json({
-      ok: false,
-      error: "PING_ACCESS_DENIED"
-    }, 403);
+    return json({ ok: false, error: "PING_ACCESS_DENIED" }, 403);
   }
 
-  const toIdentityId = cleanText(ping.to_identity_id);
+  if (!normalizedPing.to_identity_id) {
+    return json({ ok: false, error: "PING_TARGET_IDENTITY_MISSING" }, 500);
+  }
 
-  if (!toIdentityId) {
+  const throttleCheck = await checkThrottleAllowed(env, normalizedPing);
+
+  if (!throttleCheck.ok) {
     return json({
       ok: false,
-      error: "PING_TARGET_IDENTITY_MISSING"
-    }, 500);
+      error: throttleCheck.error,
+      ping_id: normalizedPing.id,
+      throttle_decision: throttleCheck.decision,
+      ping_status: normalizedPing.status,
+      reason: throttleCheck.reason
+    }, throttleCheck.status);
   }
 
   const preferredSurface = normalizeSurface(
     body.surface ||
     body.preferred_surface ||
     body.preferredSurface ||
-    ping.surface ||
+    normalizedPing.surface ||
     ""
   );
 
-  const presence = await readPresence(env, toIdentityId);
+  const presence = await readPresence(env, normalizedPing.to_identity_id);
 
   const routeDecision = decideRoute({
-    ping,
+    ping: normalizedPing,
     presence,
     preferredSurface,
     body
   });
 
-  const status = routeDecision.status;
-
-  if (!ALLOWED_STATUS.has(status)) {
-    return json({
-      ok: false,
-      error: "ROUTE_STATUS_NOT_ALLOWED"
-    }, 500);
+  if (!ALLOWED_STATUS.has(routeDecision.status)) {
+    return json({ ok: false, error: "ROUTE_STATUS_NOT_ALLOWED" }, 500);
   }
 
   const now = new Date().toISOString();
-  const routeId = cleanText(
-    body.route_id ||
-    body.routeId
-  ) || makeId("CARRIER_ROUTE");
+  const routeId = cleanText(body.route_id || body.routeId) || makeId("CARRIER_ROUTE");
 
   const route = {
     id: routeId,
-    ping_id: ping.id,
+    ping_id: normalizedPing.id,
 
-    from_identity_id: ping.from_identity_id,
-    to_identity_id: ping.to_identity_id,
+    from_identity_id: normalizedPing.from_identity_id,
+    to_identity_id: normalizedPing.to_identity_id,
     actor_identity_id: actorIdentityId,
 
     surface: routeDecision.surface,
@@ -191,11 +177,15 @@ export async function onRequestPost(context) {
     status: routeDecision.status,
     reason: routeDecision.reason,
 
-    presence_id: presence?.id || null,
+    throttle_id: normalizedPing.throttle_id || null,
+    throttle_decision: throttleCheck.decision,
 
-    object_id: ping.object_id || null,
-    intent_id: ping.intent_id || null,
-    proximity_id: ping.proximity_id || null,
+    presence_id: presence?.id || presence?.presence_id || null,
+
+    object_id: normalizedPing.object_id || null,
+    intent_id: normalizedPing.intent_id || null,
+    proximity_id: normalizedPing.proximity_id || null,
+    relevance_id: normalizedPing.relevance_id || null,
 
     created_at: now,
     updated_at: now,
@@ -206,79 +196,95 @@ export async function onRequestPost(context) {
   await env.IDENTITY.put(
     "carrier-route:" + route.id,
     JSON.stringify(route),
-    {
-      expirationTtl: ROUTE_TTL_SECONDS
-    }
+    { expirationTtl: ROUTE_TTL_SECONDS }
   );
 
-  await appendIndex(env, "carrier-route:index:ping:" + ping.id, route.id);
-  await appendIndex(env, "carrier-route:index:to:" + toIdentityId, route.id);
+  await appendIndex(env, "carrier-route:index:ping:" + normalizedPing.id, route.id);
+  await appendIndex(env, "carrier-route:index:to:" + normalizedPing.to_identity_id, route.id);
   await appendIndex(env, "carrier-route:index:surface:" + route.surface, route.id);
 
-  ping.route_id = route.id;
-  ping.surface = route.surface;
-  ping.carrier = route.carrier;
-  ping.route_status = route.status;
-  ping.route_reason = route.reason;
-  ping.routed_at = now;
-  ping.updated_at = now;
+  const nextPing = {
+    ...ping,
 
-  if (ping.status === "queued" || ping.status === "created") {
-    ping.status = "routed";
-  }
+    id: normalizedPing.id,
+    ping_id: normalizedPing.id,
+
+    from_identity_id: normalizedPing.from_identity_id,
+    to_identity_id: normalizedPing.to_identity_id,
+
+    object_id: normalizedPing.object_id || null,
+    intent_id: normalizedPing.intent_id || null,
+    proximity_id: normalizedPing.proximity_id || null,
+    relevance_id: normalizedPing.relevance_id || null,
+
+    route_id: route.id,
+    surface: route.surface,
+    carrier: route.carrier,
+    route_status: route.status,
+    route_reason: route.reason,
+    routed_at: now,
+    updated_at: now,
+    status: "routed"
+  };
 
   await env.IDENTITY.put(
-    "ping:" + ping.id,
-    JSON.stringify(ping),
-    {
-      expirationTtl: ROUTE_TTL_SECONDS
-    }
+    "ping:" + normalizedPing.id,
+    JSON.stringify(nextPing),
+    { expirationTtl: ROUTE_TTL_SECONDS }
   );
 
-  await appendSync(env, ping.id, {
+  await appendSync(env, normalizedPing.id, {
     type: "ping_carrier_route_selected",
-    ping_id: ping.id,
+    ping_id: normalizedPing.id,
     carrier_route_id: route.id,
+    throttle_id: route.throttle_id,
+    throttle_decision: route.throttle_decision,
     surface: route.surface,
     carrier: route.carrier,
     status: route.status,
     reason: route.reason,
-    to_identity_id: toIdentityId,
-    from_identity_id: ping.from_identity_id,
+    to_identity_id: normalizedPing.to_identity_id,
+    from_identity_id: normalizedPing.from_identity_id,
     at: now
   });
 
-  await appendSync(env, toIdentityId, {
+  await appendSync(env, normalizedPing.to_identity_id, {
     type: "identity_ping_route_selected",
-    ping_id: ping.id,
+    ping_id: normalizedPing.id,
     carrier_route_id: route.id,
+    throttle_id: route.throttle_id,
+    throttle_decision: route.throttle_decision,
     surface: route.surface,
     carrier: route.carrier,
     status: route.status,
     reason: route.reason,
-    from_identity_id: ping.from_identity_id,
-    object_id: ping.object_id || null,
+    from_identity_id: normalizedPing.from_identity_id,
+    object_id: normalizedPing.object_id || null,
     at: now
   });
 
-  await appendSync(env, ping.from_identity_id, {
+  await appendSync(env, normalizedPing.from_identity_id, {
     type: "sent_ping_route_selected",
-    ping_id: ping.id,
+    ping_id: normalizedPing.id,
     carrier_route_id: route.id,
+    throttle_id: route.throttle_id,
+    throttle_decision: route.throttle_decision,
     surface: route.surface,
     carrier: route.carrier,
     status: route.status,
     reason: route.reason,
-    to_identity_id: toIdentityId,
-    object_id: ping.object_id || null,
+    to_identity_id: normalizedPing.to_identity_id,
+    object_id: normalizedPing.object_id || null,
     at: now
   });
 
-  if (ping.object_id) {
-    await appendSync(env, ping.object_id, {
+  if (normalizedPing.object_id) {
+    await appendSync(env, normalizedPing.object_id, {
       type: "object_ping_route_selected",
-      ping_id: ping.id,
+      ping_id: normalizedPing.id,
       carrier_route_id: route.id,
+      throttle_id: route.throttle_id,
+      throttle_decision: route.throttle_decision,
       surface: route.surface,
       carrier: route.carrier,
       status: route.status,
@@ -291,16 +297,19 @@ export async function onRequestPost(context) {
     ok: true,
     created: true,
     carrier_route_id: route.id,
-    ping_id: ping.id,
+    ping_id: normalizedPing.id,
     surface: route.surface,
     carrier: route.carrier,
     status: route.status,
     reason: route.reason,
+    throttle_id: route.throttle_id,
+    throttle_decision: route.throttle_decision,
     from_identity_id: route.from_identity_id,
     to_identity_id: route.to_identity_id,
     object_id: route.object_id,
     intent_id: route.intent_id,
     proximity_id: route.proximity_id,
+    relevance_id: route.relevance_id,
     ping_created: false,
     delivered: false,
     next: {
@@ -315,33 +324,19 @@ export async function onRequestGet(context) {
   const { request, env } = context;
 
   if (!env || !env.IDENTITY) {
-    return json({
-      ok: false,
-      error: "IDENTITY_KV_MISSING"
-    }, 500);
+    return json({ ok: false, error: "IDENTITY_KV_MISSING" }, 500);
   }
 
   const session = await readVerifiedSession(request, env);
 
   if (!session) {
-    return json({
-      ok: false,
-      error: "SESSION_REQUIRED"
-    }, 401);
+    return json({ ok: false, error: "SESSION_REQUIRED" }, 401);
   }
 
-  const identityId = cleanText(
-    session.identity_id ||
-    session.identityId ||
-    session.idl ||
-    session.email
-  );
+  const identityId = getIdentityIdFromSession(session);
 
   if (!identityId) {
-    return json({
-      ok: false,
-      error: "SESSION_IDENTITY_MISSING"
-    }, 401);
+    return json({ ok: false, error: "SESSION_IDENTITY_MISSING" }, 401);
   }
 
   const url = new URL(request.url);
@@ -352,29 +347,25 @@ export async function onRequestGet(context) {
   );
 
   if (!pingId) {
-    return json({
-      ok: false,
-      error: "PING_ID_REQUIRED"
-    }, 400);
+    return json({ ok: false, error: "PING_ID_REQUIRED" }, 400);
   }
 
   const ping = await readPing(env, pingId);
 
   if (!ping) {
-    return json({
-      ok: false,
-      error: "PING_NOT_FOUND"
-    }, 404);
+    return json({ ok: false, error: "PING_NOT_FOUND" }, 404);
   }
 
-  if (ping.to_identity_id !== identityId && ping.from_identity_id !== identityId) {
-    return json({
-      ok: false,
-      error: "PING_ACCESS_DENIED"
-    }, 403);
+  const normalizedPing = normalizePing(ping, pingId);
+
+  if (
+    normalizedPing.to_identity_id !== identityId &&
+    normalizedPing.from_identity_id !== identityId
+  ) {
+    return json({ ok: false, error: "PING_ACCESS_DENIED" }, 403);
   }
 
-  const ids = await readIndex(env, "carrier-route:index:ping:" + ping.id);
+  const ids = await readIndex(env, "carrier-route:index:ping:" + normalizedPing.id);
   const routes = [];
 
   for (const id of ids) {
@@ -387,10 +378,88 @@ export async function onRequestGet(context) {
 
   return json({
     ok: true,
-    ping_id: ping.id,
+    ping_id: normalizedPing.id,
     count: routes.length,
     routes
   });
+}
+
+async function checkThrottleAllowed(env, ping) {
+  const decision = cleanText(
+    ping.throttle_decision ||
+    ping.throttleDecision ||
+    ""
+  ).toLowerCase();
+
+  const status = cleanText(ping.status || "").toLowerCase();
+
+  if (THROTTLE_ALLOWED.has(decision) || THROTTLE_ALLOWED.has(status)) {
+    return {
+      ok: true,
+      decision: decision || status,
+      reason: "throttle_allowed"
+    };
+  }
+
+  if (THROTTLE_BLOCKED.has(decision) || THROTTLE_BLOCKED.has(status)) {
+    return {
+      ok: false,
+      status: 409,
+      error: "PING_THROTTLE_DENIED",
+      decision: decision || status,
+      reason: "ping_not_allowed_to_move"
+    };
+  }
+
+  const throttleId = cleanText(
+    ping.throttle_id ||
+    ping.throttleId ||
+    ""
+  );
+
+  if (!throttleId) {
+    return {
+      ok: false,
+      status: 409,
+      error: "PING_NOT_THROTTLED",
+      decision: "",
+      reason: "ping_must_pass_ping_throttle_first"
+    };
+  }
+
+  const throttle = await readJsonKey(env, "ping-throttle:" + throttleId);
+
+  if (!throttle) {
+    return {
+      ok: false,
+      status: 409,
+      error: "PING_THROTTLE_RECORD_MISSING",
+      decision: "",
+      reason: "throttle_record_missing"
+    };
+  }
+
+  const throttleDecision = cleanText(
+    throttle.decision ||
+    throttle.throttle_decision ||
+    ""
+  ).toLowerCase();
+
+  if (THROTTLE_ALLOWED.has(throttleDecision)) {
+    return {
+      ok: true,
+      decision: throttleDecision,
+      reason: "throttle_record_allowed"
+    };
+  }
+
+  return {
+    ok: false,
+    status: 409,
+    error: "PING_THROTTLE_DENIED",
+    decision: throttleDecision,
+    reason: "throttle_record_not_allowed_to_move"
+  };
 }
 
 function decideRoute(input) {
@@ -415,7 +484,11 @@ function decideRoute(input) {
     ""
   );
 
-  if (presence && presence.status === "active" && ALLOWED_SURFACES.has(presenceSurface)) {
+  if (
+    presence &&
+    normalizePresenceStatus(presence.status) === "active" &&
+    ALLOWED_SURFACES.has(presenceSurface)
+  ) {
     return {
       surface: presenceSurface,
       carrier: cleanText(body.carrier) || presenceSurface,
@@ -447,17 +520,14 @@ async function readVerifiedSession(request, env) {
   const token =
     getCookie(request, "session") ||
     getCookie(request, "cc_session") ||
+    getCookie(request, "EAT") ||
     getBearerToken(request);
 
-  if (!token) {
-    return null;
-  }
+  if (!token) return null;
 
   const raw = await env.IDENTITY.get("session:" + token);
 
-  if (!raw) {
-    return null;
-  }
+  if (!raw) return null;
 
   try {
     return JSON.parse(raw);
@@ -466,9 +536,33 @@ async function readVerifiedSession(request, env) {
   }
 }
 
-async function readJson(request) {
+function getIdentityIdFromSession(session) {
+  return cleanText(
+    session.identity_id ||
+    session.identityId ||
+    session.identity_active_id ||
+    session["identity-active-id"] ||
+    session.idl ||
+    session.email ||
+    ""
+  );
+}
+
+async function readRequestJson(request) {
   try {
     return await request.json();
+  } catch {
+    return null;
+  }
+}
+
+async function readJsonKey(env, key) {
+  const raw = await env.IDENTITY.get(key);
+
+  if (!raw) return null;
+
+  try {
+    return JSON.parse(raw);
   } catch {
     return null;
   }
@@ -477,69 +571,31 @@ async function readJson(request) {
 async function readPing(env, pingId) {
   const id = cleanText(pingId);
 
-  if (!id) {
-    return null;
-  }
+  if (!id) return null;
 
-  const raw = await env.IDENTITY.get("ping:" + id);
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
+  return readJsonKey(env, "ping:" + id);
 }
 
 async function readPresence(env, identityId) {
   const id = cleanText(identityId);
 
-  if (!id) {
-    return null;
-  }
+  if (!id) return null;
 
-  const raw = await env.IDENTITY.get("presence:" + id);
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
+  return readJsonKey(env, "presence:" + id);
 }
 
 async function readCarrierRoute(env, routeId) {
   const id = cleanText(routeId);
 
-  if (!id) {
-    return null;
-  }
+  if (!id) return null;
 
-  const raw = await env.IDENTITY.get("carrier-route:" + id);
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
+  return readJsonKey(env, "carrier-route:" + id);
 }
 
 async function readIndex(env, key) {
   const raw = await env.IDENTITY.get(key);
 
-  if (!raw) {
-    return [];
-  }
+  if (!raw) return [];
 
   try {
     const parsed = JSON.parse(raw);
@@ -580,9 +636,7 @@ async function appendIndex(env, key, value) {
   await env.IDENTITY.put(
     key,
     JSON.stringify(list),
-    {
-      expirationTtl: INDEX_TTL_SECONDS
-    }
+    { expirationTtl: INDEX_TTL_SECONDS }
   );
 }
 
@@ -616,10 +670,51 @@ async function appendSync(env, targetId, event) {
   await env.IDENTITY.put(
     key,
     JSON.stringify(trail),
-    {
-      expirationTtl: INDEX_TTL_SECONDS
-    }
+    { expirationTtl: INDEX_TTL_SECONDS }
   );
+}
+
+function normalizePing(ping, fallbackId) {
+  return {
+    ...ping,
+
+    id: cleanText(
+      ping.id ||
+      ping.ping_id ||
+      ping.pingId ||
+      fallbackId
+    ),
+
+    from_identity_id: cleanText(
+      ping.from_identity_id ||
+      ping.fromIdentityId ||
+      ping.sender_identity_id ||
+      ping.senderIdentityId ||
+      ""
+    ),
+
+    to_identity_id: cleanText(
+      ping.to_identity_id ||
+      ping.toIdentityId ||
+      ping.receiver_identity_id ||
+      ping.receiverIdentityId ||
+      ""
+    ),
+
+    object_id: cleanText(ping.object_id || ping.objectId || ""),
+    intent_id: cleanText(ping.intent_id || ping.intentId || ""),
+    proximity_id: cleanText(ping.proximity_id || ping.proximityId || ""),
+    relevance_id: cleanText(ping.relevance_id || ping.relevanceId || ""),
+    surface: normalizeSurface(ping.surface || ""),
+    status: cleanText(ping.status || "").toLowerCase(),
+
+    throttle_id: cleanText(ping.throttle_id || ping.throttleId || ""),
+    throttle_decision: cleanText(
+      ping.throttle_decision ||
+      ping.throttleDecision ||
+      ""
+    ).toLowerCase()
+  };
 }
 
 function cleanRouteForReturn(route) {
@@ -633,10 +728,13 @@ function cleanRouteForReturn(route) {
     carrier: route.carrier,
     status: route.status,
     reason: route.reason,
+    throttle_id: route.throttle_id || null,
+    throttle_decision: route.throttle_decision || null,
     presence_id: route.presence_id || null,
     object_id: route.object_id || null,
     intent_id: route.intent_id || null,
     proximity_id: route.proximity_id || null,
+    relevance_id: route.relevance_id || null,
     created_at: route.created_at || null,
     updated_at: route.updated_at || null
   };
@@ -657,6 +755,16 @@ function normalizeSurface(value) {
   if (clean === "tile") return "shop_tile";
   if (clean === "object") return "object_link";
   if (clean === "link") return "object_link";
+
+  return clean;
+}
+
+function normalizePresenceStatus(value) {
+  const clean = cleanText(value).toLowerCase();
+
+  if (clean === "present") return "active";
+  if (clean === "awake") return "active";
+  if (clean === "online") return "active";
 
   return clean;
 }
@@ -685,19 +793,17 @@ function getBearerToken(request) {
   const header = request.headers.get("Authorization") || "";
   const match = header.match(/^Bearer\s+(.+)$/i);
 
-  if (!match) {
-    return "";
-  }
+  if (!match) return "";
 
   return match[1].trim();
 }
 
 function cleanText(value) {
-  if (typeof value !== "string") {
+  if (typeof value !== "string" && typeof value !== "number") {
     return "";
   }
 
-  return value.trim();
+  return String(value).trim();
 }
 
 function cleanMetadata(value) {
