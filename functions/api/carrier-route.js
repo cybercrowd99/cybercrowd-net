@@ -4,8 +4,7 @@
  * CyberCrowd Carrier Route
  *
  * ONE JOB:
- * Choose the best surface or carrier for an existing PING
- * only after ping-throttle.js allowed it to move.
+ * Route only PINGs that ping-throttle.js allowed to move.
  *
  * This is NOT chat.
  * This is NOT email.
@@ -47,7 +46,7 @@ const ALLOWED_SURFACES = new Set([
   "unknown"
 ]);
 
-const ALLOWED_STATUS = new Set([
+const ALLOWED_ROUTE_STATUS = new Set([
   "selected",
   "deferred",
   "blocked",
@@ -98,66 +97,66 @@ export async function onRequestPost(context) {
     return json({ ok: false, error: "JSON_REQUIRED" }, 400);
   }
 
-  const pingId = cleanText(
-    body.ping_id ||
-    body.pingId ||
-    body.id
-  );
+  const pingId = cleanText(body.ping_id || body.pingId || body.id);
 
   if (!pingId) {
     return json({ ok: false, error: "PING_ID_REQUIRED" }, 400);
   }
 
-  const ping = await readPing(env, pingId);
+  const rawPing = await readPing(env, pingId);
 
-  if (!ping) {
+  if (!rawPing) {
     return json({ ok: false, error: "PING_NOT_FOUND" }, 404);
   }
 
-  const normalizedPing = normalizePing(ping, pingId);
+  const ping = normalizePing(rawPing, pingId);
 
-  const isSender = normalizedPing.from_identity_id === actorIdentityId;
-  const isReceiver = normalizedPing.to_identity_id === actorIdentityId;
+  const isSender = ping.from_identity_id === actorIdentityId;
+  const isReceiver = ping.to_identity_id === actorIdentityId;
 
   if (!isSender && !isReceiver) {
     return json({ ok: false, error: "PING_ACCESS_DENIED" }, 403);
   }
 
-  if (!normalizedPing.to_identity_id) {
+  if (!ping.to_identity_id) {
     return json({ ok: false, error: "PING_TARGET_IDENTITY_MISSING" }, 500);
   }
 
-  const throttleCheck = await checkThrottleAllowed(env, normalizedPing);
+  const throttleGate = await checkThrottleAllowed(env, ping);
 
-  if (!throttleCheck.ok) {
-    return json({
-      ok: false,
-      error: throttleCheck.error,
-      ping_id: normalizedPing.id,
-      throttle_decision: throttleCheck.decision,
-      ping_status: normalizedPing.status,
-      reason: throttleCheck.reason
-    }, throttleCheck.status);
+  if (!throttleGate.ok) {
+    return json(
+      {
+        ok: false,
+        error: throttleGate.error,
+        ping_id: ping.id,
+        ping_status: ping.status,
+        throttle_id: ping.throttle_id || null,
+        throttle_decision: throttleGate.decision,
+        reason: throttleGate.reason
+      },
+      throttleGate.status
+    );
   }
 
   const preferredSurface = normalizeSurface(
     body.surface ||
-    body.preferred_surface ||
-    body.preferredSurface ||
-    normalizedPing.surface ||
-    ""
+      body.preferred_surface ||
+      body.preferredSurface ||
+      ping.surface ||
+      ""
   );
 
-  const presence = await readPresence(env, normalizedPing.to_identity_id);
+  const presence = await readPresence(env, ping.to_identity_id);
 
   const routeDecision = decideRoute({
-    ping: normalizedPing,
+    ping,
     presence,
     preferredSurface,
     body
   });
 
-  if (!ALLOWED_STATUS.has(routeDecision.status)) {
+  if (!ALLOWED_ROUTE_STATUS.has(routeDecision.status)) {
     return json({ ok: false, error: "ROUTE_STATUS_NOT_ALLOWED" }, 500);
   }
 
@@ -166,10 +165,10 @@ export async function onRequestPost(context) {
 
   const route = {
     id: routeId,
-    ping_id: normalizedPing.id,
+    ping_id: ping.id,
 
-    from_identity_id: normalizedPing.from_identity_id,
-    to_identity_id: normalizedPing.to_identity_id,
+    from_identity_id: ping.from_identity_id,
+    to_identity_id: ping.to_identity_id,
     actor_identity_id: actorIdentityId,
 
     surface: routeDecision.surface,
@@ -177,15 +176,15 @@ export async function onRequestPost(context) {
     status: routeDecision.status,
     reason: routeDecision.reason,
 
-    throttle_id: normalizedPing.throttle_id || null,
-    throttle_decision: throttleCheck.decision,
+    throttle_id: ping.throttle_id || null,
+    throttle_decision: throttleGate.decision,
 
     presence_id: presence?.id || presence?.presence_id || null,
 
-    object_id: normalizedPing.object_id || null,
-    intent_id: normalizedPing.intent_id || null,
-    proximity_id: normalizedPing.proximity_id || null,
-    relevance_id: normalizedPing.relevance_id || null,
+    object_id: ping.object_id || null,
+    intent_id: ping.intent_id || null,
+    proximity_id: ping.proximity_id || null,
+    relevance_id: ping.relevance_id || null,
 
     created_at: now,
     updated_at: now,
@@ -193,29 +192,27 @@ export async function onRequestPost(context) {
     metadata: cleanMetadata(body.metadata)
   };
 
-  await env.IDENTITY.put(
-    "carrier-route:" + route.id,
-    JSON.stringify(route),
-    { expirationTtl: ROUTE_TTL_SECONDS }
-  );
+  await env.IDENTITY.put("carrier-route:" + route.id, JSON.stringify(route), {
+    expirationTtl: ROUTE_TTL_SECONDS
+  });
 
-  await appendIndex(env, "carrier-route:index:ping:" + normalizedPing.id, route.id);
-  await appendIndex(env, "carrier-route:index:to:" + normalizedPing.to_identity_id, route.id);
+  await appendIndex(env, "carrier-route:index:ping:" + ping.id, route.id);
+  await appendIndex(env, "carrier-route:index:to:" + ping.to_identity_id, route.id);
   await appendIndex(env, "carrier-route:index:surface:" + route.surface, route.id);
 
   const nextPing = {
-    ...ping,
+    ...rawPing,
 
-    id: normalizedPing.id,
-    ping_id: normalizedPing.id,
+    id: ping.id,
+    ping_id: ping.id,
 
-    from_identity_id: normalizedPing.from_identity_id,
-    to_identity_id: normalizedPing.to_identity_id,
+    from_identity_id: ping.from_identity_id,
+    to_identity_id: ping.to_identity_id,
 
-    object_id: normalizedPing.object_id || null,
-    intent_id: normalizedPing.intent_id || null,
-    proximity_id: normalizedPing.proximity_id || null,
-    relevance_id: normalizedPing.relevance_id || null,
+    object_id: ping.object_id || null,
+    intent_id: ping.intent_id || null,
+    proximity_id: ping.proximity_id || null,
+    relevance_id: ping.relevance_id || null,
 
     route_id: route.id,
     surface: route.surface,
@@ -227,15 +224,13 @@ export async function onRequestPost(context) {
     status: "routed"
   };
 
-  await env.IDENTITY.put(
-    "ping:" + normalizedPing.id,
-    JSON.stringify(nextPing),
-    { expirationTtl: ROUTE_TTL_SECONDS }
-  );
+  await env.IDENTITY.put("ping:" + ping.id, JSON.stringify(nextPing), {
+    expirationTtl: ROUTE_TTL_SECONDS
+  });
 
-  await appendSync(env, normalizedPing.id, {
+  await appendSync(env, ping.id, {
     type: "ping_carrier_route_selected",
-    ping_id: normalizedPing.id,
+    ping_id: ping.id,
     carrier_route_id: route.id,
     throttle_id: route.throttle_id,
     throttle_decision: route.throttle_decision,
@@ -243,14 +238,14 @@ export async function onRequestPost(context) {
     carrier: route.carrier,
     status: route.status,
     reason: route.reason,
-    to_identity_id: normalizedPing.to_identity_id,
-    from_identity_id: normalizedPing.from_identity_id,
+    to_identity_id: ping.to_identity_id,
+    from_identity_id: ping.from_identity_id,
     at: now
   });
 
-  await appendSync(env, normalizedPing.to_identity_id, {
+  await appendSync(env, ping.to_identity_id, {
     type: "identity_ping_route_selected",
-    ping_id: normalizedPing.id,
+    ping_id: ping.id,
     carrier_route_id: route.id,
     throttle_id: route.throttle_id,
     throttle_decision: route.throttle_decision,
@@ -258,14 +253,14 @@ export async function onRequestPost(context) {
     carrier: route.carrier,
     status: route.status,
     reason: route.reason,
-    from_identity_id: normalizedPing.from_identity_id,
-    object_id: normalizedPing.object_id || null,
+    from_identity_id: ping.from_identity_id,
+    object_id: ping.object_id || null,
     at: now
   });
 
-  await appendSync(env, normalizedPing.from_identity_id, {
+  await appendSync(env, ping.from_identity_id, {
     type: "sent_ping_route_selected",
-    ping_id: normalizedPing.id,
+    ping_id: ping.id,
     carrier_route_id: route.id,
     throttle_id: route.throttle_id,
     throttle_decision: route.throttle_decision,
@@ -273,15 +268,15 @@ export async function onRequestPost(context) {
     carrier: route.carrier,
     status: route.status,
     reason: route.reason,
-    to_identity_id: normalizedPing.to_identity_id,
-    object_id: normalizedPing.object_id || null,
+    to_identity_id: ping.to_identity_id,
+    object_id: ping.object_id || null,
     at: now
   });
 
-  if (normalizedPing.object_id) {
-    await appendSync(env, normalizedPing.object_id, {
+  if (ping.object_id) {
+    await appendSync(env, ping.object_id, {
       type: "object_ping_route_selected",
-      ping_id: normalizedPing.id,
+      ping_id: ping.id,
       carrier_route_id: route.id,
       throttle_id: route.throttle_id,
       throttle_decision: route.throttle_decision,
@@ -297,7 +292,7 @@ export async function onRequestPost(context) {
     ok: true,
     created: true,
     carrier_route_id: route.id,
-    ping_id: normalizedPing.id,
+    ping_id: ping.id,
     surface: route.surface,
     carrier: route.carrier,
     status: route.status,
@@ -340,32 +335,25 @@ export async function onRequestGet(context) {
   }
 
   const url = new URL(request.url);
-
-  const pingId = cleanText(
-    url.searchParams.get("ping_id") ||
-    url.searchParams.get("pingId")
-  );
+  const pingId = cleanText(url.searchParams.get("ping_id") || url.searchParams.get("pingId"));
 
   if (!pingId) {
     return json({ ok: false, error: "PING_ID_REQUIRED" }, 400);
   }
 
-  const ping = await readPing(env, pingId);
+  const rawPing = await readPing(env, pingId);
 
-  if (!ping) {
+  if (!rawPing) {
     return json({ ok: false, error: "PING_NOT_FOUND" }, 404);
   }
 
-  const normalizedPing = normalizePing(ping, pingId);
+  const ping = normalizePing(rawPing, pingId);
 
-  if (
-    normalizedPing.to_identity_id !== identityId &&
-    normalizedPing.from_identity_id !== identityId
-  ) {
+  if (ping.to_identity_id !== identityId && ping.from_identity_id !== identityId) {
     return json({ ok: false, error: "PING_ACCESS_DENIED" }, 403);
   }
 
-  const ids = await readIndex(env, "carrier-route:index:ping:" + normalizedPing.id);
+  const ids = await readIndex(env, "carrier-route:index:ping:" + ping.id);
   const routes = [];
 
   for (const id of ids) {
@@ -378,26 +366,29 @@ export async function onRequestGet(context) {
 
   return json({
     ok: true,
-    ping_id: normalizedPing.id,
+    ping_id: ping.id,
     count: routes.length,
     routes
   });
 }
 
 async function checkThrottleAllowed(env, ping) {
-  const decision = cleanText(
-    ping.throttle_decision ||
-    ping.throttleDecision ||
-    ""
-  ).toLowerCase();
-
+  const decision = cleanText(ping.throttle_decision || ping.throttleDecision || "").toLowerCase();
   const status = cleanText(ping.status || "").toLowerCase();
 
-  if (THROTTLE_ALLOWED.has(decision) || THROTTLE_ALLOWED.has(status)) {
+  if (THROTTLE_ALLOWED.has(decision)) {
     return {
       ok: true,
-      decision: decision || status,
-      reason: "throttle_allowed"
+      decision,
+      reason: "throttle_decision_allowed"
+    };
+  }
+
+  if (THROTTLE_ALLOWED.has(status)) {
+    return {
+      ok: true,
+      decision: status,
+      reason: "ping_status_allowed"
     };
   }
 
@@ -411,11 +402,7 @@ async function checkThrottleAllowed(env, ping) {
     };
   }
 
-  const throttleId = cleanText(
-    ping.throttle_id ||
-    ping.throttleId ||
-    ""
-  );
+  const throttleId = cleanText(ping.throttle_id || ping.throttleId || "");
 
   if (!throttleId) {
     return {
@@ -441,8 +428,9 @@ async function checkThrottleAllowed(env, ping) {
 
   const throttleDecision = cleanText(
     throttle.decision ||
-    throttle.throttle_decision ||
-    ""
+      throttle.throttle_decision ||
+      throttle.status ||
+      ""
   ).toLowerCase();
 
   if (THROTTLE_ALLOWED.has(throttleDecision)) {
@@ -479,9 +467,9 @@ function decideRoute(input) {
 
   const presenceSurface = normalizeSurface(
     presence?.surface ||
-    presence?.active_surface ||
-    presence?.activeSurface ||
-    ""
+      presence?.active_surface ||
+      presence?.activeSurface ||
+      ""
   );
 
   if (
@@ -525,26 +513,18 @@ async function readVerifiedSession(request, env) {
 
   if (!token) return null;
 
-  const raw = await env.IDENTITY.get("session:" + token);
-
-  if (!raw) return null;
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
+  return readJsonKey(env, "session:" + token);
 }
 
 function getIdentityIdFromSession(session) {
   return cleanText(
     session.identity_id ||
-    session.identityId ||
-    session.identity_active_id ||
-    session["identity-active-id"] ||
-    session.idl ||
-    session.email ||
-    ""
+      session.identityId ||
+      session.identity_active_id ||
+      session["identity-active-id"] ||
+      session.idl ||
+      session.email ||
+      ""
   );
 }
 
@@ -614,7 +594,6 @@ async function appendIndex(env, key, value) {
   if (!key || !value) return;
 
   const raw = await env.IDENTITY.get(key);
-
   let list = [];
 
   if (raw) {
@@ -633,11 +612,9 @@ async function appendIndex(env, key, value) {
   list.unshift(value);
   list = list.slice(0, MAX_INDEX_ITEMS);
 
-  await env.IDENTITY.put(
-    key,
-    JSON.stringify(list),
-    { expirationTtl: INDEX_TTL_SECONDS }
-  );
+  await env.IDENTITY.put(key, JSON.stringify(list), {
+    expirationTtl: INDEX_TTL_SECONDS
+  });
 }
 
 async function appendSync(env, targetId, event) {
@@ -645,7 +622,6 @@ async function appendSync(env, targetId, event) {
 
   const key = "sync:" + targetId;
   const raw = await env.IDENTITY.get(key);
-
   let trail = [];
 
   if (raw) {
@@ -667,38 +643,31 @@ async function appendSync(env, targetId, event) {
 
   trail = trail.slice(0, MAX_INDEX_ITEMS);
 
-  await env.IDENTITY.put(
-    key,
-    JSON.stringify(trail),
-    { expirationTtl: INDEX_TTL_SECONDS }
-  );
+  await env.IDENTITY.put(key, JSON.stringify(trail), {
+    expirationTtl: INDEX_TTL_SECONDS
+  });
 }
 
 function normalizePing(ping, fallbackId) {
   return {
     ...ping,
 
-    id: cleanText(
-      ping.id ||
-      ping.ping_id ||
-      ping.pingId ||
-      fallbackId
-    ),
+    id: cleanText(ping.id || ping.ping_id || ping.pingId || fallbackId),
 
     from_identity_id: cleanText(
       ping.from_identity_id ||
-      ping.fromIdentityId ||
-      ping.sender_identity_id ||
-      ping.senderIdentityId ||
-      ""
+        ping.fromIdentityId ||
+        ping.sender_identity_id ||
+        ping.senderIdentityId ||
+        ""
     ),
 
     to_identity_id: cleanText(
       ping.to_identity_id ||
-      ping.toIdentityId ||
-      ping.receiver_identity_id ||
-      ping.receiverIdentityId ||
-      ""
+        ping.toIdentityId ||
+        ping.receiver_identity_id ||
+        ping.receiverIdentityId ||
+        ""
     ),
 
     object_id: cleanText(ping.object_id || ping.objectId || ""),
@@ -711,8 +680,8 @@ function normalizePing(ping, fallbackId) {
     throttle_id: cleanText(ping.throttle_id || ping.throttleId || ""),
     throttle_decision: cleanText(
       ping.throttle_decision ||
-      ping.throttleDecision ||
-      ""
+        ping.throttleDecision ||
+        ""
     ).toLowerCase()
   };
 }
@@ -856,4 +825,4 @@ function json(data, status = 200) {
       "Cache-Control": "no-store"
     }
   });
-}
+      }
