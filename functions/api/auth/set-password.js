@@ -1,11 +1,21 @@
-function json(data, status = 200, headers = {}) {
+function json(data, status = 200, extraHeaders = {}) {
+  const headers = new Headers();
+
+  headers.set("Content-Type", "application/json");
+  headers.set("Cache-Control", "no-store");
+
+  Object.entries(extraHeaders || {}).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((item) => headers.append(key, item));
+      return;
+    }
+
+    headers.set(key, value);
+  });
+
   return new Response(JSON.stringify(data), {
     status,
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-store",
-      ...headers
-    }
+    headers
   });
 }
 
@@ -13,6 +23,36 @@ function makeToken(bytes = 32) {
   const array = new Uint8Array(bytes);
   crypto.getRandomValues(array);
   return [...array].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function checkPasswordRule(password) {
+  const value = String(password || "");
+
+  if (value.length < 8) {
+    return "password_too_short";
+  }
+
+  if (value.length > 19) {
+    return "password_too_long";
+  }
+
+  if (!/[A-Z]/.test(value)) {
+    return "password_needs_uppercase";
+  }
+
+  if (!/[a-z]/.test(value)) {
+    return "password_needs_lowercase";
+  }
+
+  if (!/[0-9]/.test(value)) {
+    return "password_needs_number";
+  }
+
+  if (!/[^A-Za-z0-9]/.test(value)) {
+    return "password_needs_symbol";
+  }
+
+  return "";
 }
 
 async function hashPassword(email, password) {
@@ -56,13 +96,22 @@ export async function onRequestPost(context) {
     ).trim();
 
     const password = String(body?.password || "");
+    const confirmPassword = body?.confirmPassword === undefined
+      ? ""
+      : String(body.confirmPassword || "");
 
     if (!setupToken) {
       return json({ success: false, ok: false, error: "missing_setup_token" }, 400);
     }
 
-    if (!password || password.length < 8) {
-      return json({ success: false, ok: false, error: "password_too_short" }, 400);
+    const passwordError = checkPasswordRule(password);
+
+    if (passwordError) {
+      return json({ success: false, ok: false, error: passwordError }, 400);
+    }
+
+    if (confirmPassword && password !== confirmPassword) {
+      return json({ success: false, ok: false, error: "passwords_do_not_match" }, 400);
     }
 
     if (!env || !env.IDENTITY) {
@@ -112,6 +161,7 @@ export async function onRequestPost(context) {
       verified: true,
       passwordHash,
       password_hash: passwordHash,
+      password_rule: "8-19_upper_lower_number_symbol",
       createdAt: setupRecord.createdAt || now,
       passwordSetAt: now,
       updatedAt: now
@@ -151,7 +201,7 @@ export async function onRequestPost(context) {
           `session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`,
           `cc_session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`,
           `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`
-        ].join(", ")
+        ]
       }
     );
   } catch {
