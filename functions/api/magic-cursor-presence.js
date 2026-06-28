@@ -6,24 +6,35 @@
  * ONE JOB:
  * Record where a verified identity is active right now.
  *
+ * This is NOT surface heartbeat.
+ * This is NOT synthetic presence.
  * This is NOT chat.
  * This is NOT surveillance.
- * This is NOT a notification system.
+ * This is NOT notification spam.
  * This does NOT create a PING.
+ * This does NOT deliver a PING.
+ * This does NOT claim a reachable surface means the human is active.
  *
  * Magic Cursor means:
  * the active linkage cable between identity and surface.
  *
- * Surface means:
- * phone, dashboard, XR, POS, camera, vehicle, wall, shop tile,
- * headset, browser, scanner, or future CyberCrowd display.
+ * Surface Heartbeat says:
+ * the surface is reachable.
+ *
+ * Magic Cursor Presence says:
+ * the identity is active there right now.
+ *
+ * Synthetic Presence says:
+ * whether a paused moment should be held, buffered, or collapsed.
  *
  * Flow:
- * identity becomes active on a surface
+ * surface-heartbeat.js says surface is reachable
  *   ↓
- * magic-cursor-presence.js records the current surface
+ * magic-cursor-presence.js attaches active identity context
  *   ↓
- * ping.js / carrier can place relevant movement correctly
+ * carrier-route.js can choose the active surface
+ *   ↓
+ * ping-delivery.js records delivery
  */
 
 const PRESENCE_TTL_SECONDS = 60 * 60 * 24 * 7;
@@ -43,6 +54,7 @@ const ALLOWED_SURFACES = new Set([
   "shop_tile",
   "headset",
   "object_link",
+  "internal",
   "unknown"
 ]);
 
@@ -54,95 +66,124 @@ const ALLOWED_STATUS = new Set([
 ]);
 
 export async function onRequestOptions() {
-  return json({
-    ok: true
-  });
+  return json({ ok: true });
 }
 
 export async function onRequestPost(context) {
   const { request, env } = context;
 
   if (!env || !env.IDENTITY) {
-    return json({
-      ok: false,
-      error: "IDENTITY_KV_MISSING"
-    }, 500);
+    return json({ ok: false, error: "IDENTITY_KV_MISSING" }, 500);
   }
 
   const session = await readVerifiedSession(request, env);
 
   if (!session) {
-    return json({
-      ok: false,
-      error: "SESSION_REQUIRED"
-    }, 401);
+    return json({ ok: false, error: "SESSION_REQUIRED" }, 401);
   }
 
-  const identityId = cleanText(
-    session.identity_id ||
-    session.identityId ||
-    session.idl ||
-    session.email
-  );
+  const identityId = getIdentityIdFromSession(session);
 
   if (!identityId) {
-    return json({
-      ok: false,
-      error: "SESSION_IDENTITY_MISSING"
-    }, 401);
+    return json({ ok: false, error: "SESSION_IDENTITY_MISSING" }, 401);
   }
 
-  const body = await readJson(request);
+  const body = await readRequestJson(request);
 
   if (!body) {
-    return json({
-      ok: false,
-      error: "JSON_REQUIRED"
-    }, 400);
+    return json({ ok: false, error: "JSON_REQUIRED" }, 400);
   }
 
   const surface = normalizeSurface(
     body.surface ||
-    body.active_surface ||
-    body.activeSurface ||
-    body.device ||
-    "unknown"
+      body.active_surface ||
+      body.activeSurface ||
+      body.device ||
+      "unknown"
   );
 
   if (!ALLOWED_SURFACES.has(surface)) {
-    return json({
-      ok: false,
-      error: "SURFACE_NOT_ALLOWED",
-      allowed: Array.from(ALLOWED_SURFACES)
-    }, 400);
+    return json(
+      {
+        ok: false,
+        error: "SURFACE_NOT_ALLOWED",
+        allowed: Array.from(ALLOWED_SURFACES)
+      },
+      400
+    );
   }
 
   const status = cleanText(body.status || "active").toLowerCase();
 
   if (!ALLOWED_STATUS.has(status)) {
-    return json({
-      ok: false,
-      error: "PRESENCE_STATUS_NOT_ALLOWED",
-      allowed: Array.from(ALLOWED_STATUS)
-    }, 400);
+    return json(
+      {
+        ok: false,
+        error: "PRESENCE_STATUS_NOT_ALLOWED",
+        allowed: Array.from(ALLOWED_STATUS)
+      },
+      400
+    );
   }
+
+  const surfaceId = cleanText(
+    body.surface_id ||
+      body.surfaceId ||
+      body.device_id ||
+      body.deviceId ||
+      ""
+  );
+
+  const heartbeat = surfaceId
+    ? await readLiveHeartbeat(env, surfaceId)
+    : null;
+
+  if (
+    status === "active" &&
+    heartbeat &&
+    heartbeat.status &&
+    heartbeat.status !== "alive" &&
+    heartbeat.status !== "idle"
+  ) {
+    return json(
+      {
+        ok: false,
+        error: "SURFACE_NOT_LIVE",
+        surface_id: surfaceId,
+        heartbeat_status: heartbeat.status,
+        reason: "magic_cursor_presence_requires_live_surface"
+      },
+      409
+    );
+  }
+
+  const previous = await readPresence(env, identityId);
+  const now = new Date().toISOString();
 
   const presenceId = cleanText(
     body.presence_id ||
-    body.presenceId ||
-    body.id
+      body.presenceId ||
+      previous?.id ||
+      previous?.presence_id ||
+      body.id
   ) || makeId("PRESENCE");
-
-  const now = new Date().toISOString();
 
   const presence = {
     id: presenceId,
+    presence_id: presenceId,
+
     identity_id: identityId,
+    actor_identity_id: identityId,
 
     surface,
+    surface_id: surfaceId || null,
+
     status,
+    active: status === "active",
+    reachable_surface: !!heartbeat && (heartbeat.status === "alive" || heartbeat.status === "idle"),
 
     looking_at: cleanText(body.looking_at || body.lookingAt) || null,
+
     object_id: cleanText(body.object_id || body.objectId) || null,
     object_handle: cleanHandle(body.object_handle || body.objectHandle || body.handle) || null,
 
@@ -152,44 +193,64 @@ export async function onRequestPost(context) {
 
     area: normalizeArea(body.area),
 
-    created_at: now,
+    fake_activity: false,
+    human_imitation: false,
+    ping_created: false,
+    delivered: false,
+    notification_sent: false,
+
+    created_at: cleanText(previous?.created_at) || now,
     updated_at: now,
 
     metadata: cleanMetadata(body.metadata)
   };
 
-  await env.IDENTITY.put(
-    "presence:" + identityId,
-    JSON.stringify(presence),
-    {
-      expirationTtl: PRESENCE_TTL_SECONDS
-    }
-  );
+  await env.IDENTITY.put("presence:" + identityId, JSON.stringify(presence), {
+    expirationTtl: PRESENCE_TTL_SECONDS
+  });
 
-  await env.IDENTITY.put(
-    "presence:id:" + presence.id,
-    JSON.stringify(presence),
-    {
-      expirationTtl: PRESENCE_TTL_SECONDS
-    }
-  );
+  await env.IDENTITY.put("presence:id:" + presence.id, JSON.stringify(presence), {
+    expirationTtl: PRESENCE_TTL_SECONDS
+  });
 
   await appendIndex(env, "presence:index:identity:" + identityId, presence.id);
   await appendIndex(env, "presence:index:surface:" + surface, presence.id);
+
+  if (surfaceId) {
+    await appendIndex(env, "presence:index:surface-id:" + surfaceId, presence.id);
+  }
 
   await appendSync(env, identityId, {
     type: "magic_cursor_presence_updated",
     presence_id: presence.id,
     surface: presence.surface,
+    surface_id: presence.surface_id,
     status: presence.status,
+    active: presence.active,
     looking_at: presence.looking_at,
     object_id: presence.object_id,
     object_handle: presence.object_handle,
     shot_id: presence.shot_id,
     event_id: presence.event_id,
     ping_id: presence.ping_id,
+    fake_activity: false,
+    human_imitation: false,
+    ping_created: false,
     at: now
   });
+
+  if (presence.surface_id) {
+    await appendSync(env, presence.surface_id, {
+      type: "surface_magic_cursor_presence_updated",
+      presence_id: presence.id,
+      identity_id: identityId,
+      surface: presence.surface,
+      surface_id: presence.surface_id,
+      status: presence.status,
+      active: presence.active,
+      at: now
+    });
+  }
 
   if (presence.object_id) {
     await appendSync(env, presence.object_id, {
@@ -197,6 +258,7 @@ export async function onRequestPost(context) {
       presence_id: presence.id,
       identity_id: identityId,
       surface: presence.surface,
+      surface_id: presence.surface_id,
       status: presence.status,
       at: now
     });
@@ -208,6 +270,19 @@ export async function onRequestPost(context) {
       presence_id: presence.id,
       identity_id: identityId,
       surface: presence.surface,
+      surface_id: presence.surface_id,
+      status: presence.status,
+      at: now
+    });
+  }
+
+  if (presence.event_id) {
+    await appendSync(env, presence.event_id, {
+      type: "event_entered_magic_cursor_surface",
+      presence_id: presence.id,
+      identity_id: identityId,
+      surface: presence.surface,
+      surface_id: presence.surface_id,
       status: presence.status,
       at: now
     });
@@ -219,7 +294,10 @@ export async function onRequestPost(context) {
       presence_id: presence.id,
       identity_id: identityId,
       surface: presence.surface,
+      surface_id: presence.surface_id,
       status: presence.status,
+      delivered: false,
+      ping_created: false,
       at: now
     });
   }
@@ -230,14 +308,20 @@ export async function onRequestPost(context) {
     presence_id: presence.id,
     identity_id: identityId,
     surface: presence.surface,
+    surface_id: presence.surface_id,
     status: presence.status,
+    active: presence.active,
     looking_at: presence.looking_at,
     object_id: presence.object_id,
     object_handle: presence.object_handle,
     shot_id: presence.shot_id,
     event_id: presence.event_id,
     ping_id: presence.ping_id,
-    ping_created: false
+    ping_created: false,
+    delivered: false,
+    notification_sent: false,
+    fake_activity: false,
+    human_imitation: false
   });
 }
 
@@ -245,33 +329,19 @@ export async function onRequestGet(context) {
   const { request, env } = context;
 
   if (!env || !env.IDENTITY) {
-    return json({
-      ok: false,
-      error: "IDENTITY_KV_MISSING"
-    }, 500);
+    return json({ ok: false, error: "IDENTITY_KV_MISSING" }, 500);
   }
 
   const session = await readVerifiedSession(request, env);
 
   if (!session) {
-    return json({
-      ok: false,
-      error: "SESSION_REQUIRED"
-    }, 401);
+    return json({ ok: false, error: "SESSION_REQUIRED" }, 401);
   }
 
-  const identityId = cleanText(
-    session.identity_id ||
-    session.identityId ||
-    session.idl ||
-    session.email
-  );
+  const identityId = getIdentityIdFromSession(session);
 
   if (!identityId) {
-    return json({
-      ok: false,
-      error: "SESSION_IDENTITY_MISSING"
-    }, 401);
+    return json({ ok: false, error: "SESSION_IDENTITY_MISSING" }, 401);
   }
 
   const presence = await readPresence(env, identityId);
@@ -281,7 +351,10 @@ export async function onRequestGet(context) {
       ok: true,
       identity_id: identityId,
       active: false,
-      presence: null
+      presence: null,
+      ping_created: false,
+      fake_activity: false,
+      human_imitation: false
     });
   }
 
@@ -289,7 +362,10 @@ export async function onRequestGet(context) {
     ok: true,
     identity_id: identityId,
     active: presence.status === "active",
-    presence: cleanPresenceForReturn(presence)
+    presence: cleanPresenceForReturn(presence),
+    ping_created: false,
+    fake_activity: false,
+    human_imitation: false
   });
 }
 
@@ -297,26 +373,27 @@ async function readVerifiedSession(request, env) {
   const token =
     getCookie(request, "session") ||
     getCookie(request, "cc_session") ||
+    getCookie(request, "EAT") ||
     getBearerToken(request);
 
-  if (!token) {
-    return null;
-  }
+  if (!token) return null;
 
-  const raw = await env.IDENTITY.get("session:" + token);
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
+  return readJsonKey(env, "session:" + token);
 }
 
-async function readJson(request) {
+function getIdentityIdFromSession(session) {
+  return cleanText(
+    session.identity_id ||
+      session.identityId ||
+      session.identity_active_id ||
+      session["identity-active-id"] ||
+      session.idl ||
+      session.email ||
+      ""
+  );
+}
+
+async function readRequestJson(request) {
   try {
     return await request.json();
   } catch {
@@ -324,12 +401,10 @@ async function readJson(request) {
   }
 }
 
-async function readPresence(env, identityId) {
-  const raw = await env.IDENTITY.get("presence:" + identityId);
+async function readJsonKey(env, key) {
+  const raw = await env.IDENTITY.get(key);
 
-  if (!raw) {
-    return null;
-  }
+  if (!raw) return null;
 
   try {
     return JSON.parse(raw);
@@ -338,11 +413,26 @@ async function readPresence(env, identityId) {
   }
 }
 
+async function readPresence(env, identityId) {
+  const id = cleanText(identityId);
+
+  if (!id) return null;
+
+  return readJsonKey(env, "presence:" + id);
+}
+
+async function readLiveHeartbeat(env, surfaceId) {
+  const id = cleanText(surfaceId);
+
+  if (!id) return null;
+
+  return readJsonKey(env, "surface-live:" + id);
+}
+
 async function appendIndex(env, key, value) {
   if (!key || !value) return;
 
   const raw = await env.IDENTITY.get(key);
-
   let list = [];
 
   if (raw) {
@@ -361,13 +451,9 @@ async function appendIndex(env, key, value) {
   list.unshift(value);
   list = list.slice(0, MAX_SYNC_ITEMS);
 
-  await env.IDENTITY.put(
-    key,
-    JSON.stringify(list),
-    {
-      expirationTtl: INDEX_TTL_SECONDS
-    }
-  );
+  await env.IDENTITY.put(key, JSON.stringify(list), {
+    expirationTtl: INDEX_TTL_SECONDS
+  });
 }
 
 async function appendSync(env, targetId, event) {
@@ -375,7 +461,6 @@ async function appendSync(env, targetId, event) {
 
   const key = "sync:" + targetId;
   const raw = await env.IDENTITY.get(key);
-
   let trail = [];
 
   if (raw) {
@@ -397,21 +482,21 @@ async function appendSync(env, targetId, event) {
 
   trail = trail.slice(0, MAX_SYNC_ITEMS);
 
-  await env.IDENTITY.put(
-    key,
-    JSON.stringify(trail),
-    {
-      expirationTtl: INDEX_TTL_SECONDS
-    }
-  );
+  await env.IDENTITY.put(key, JSON.stringify(trail), {
+    expirationTtl: INDEX_TTL_SECONDS
+  });
 }
 
 function cleanPresenceForReturn(presence) {
   return {
     id: presence.id,
+    presence_id: presence.presence_id || presence.id,
     identity_id: presence.identity_id,
     surface: presence.surface,
+    surface_id: presence.surface_id || null,
     status: presence.status,
+    active: presence.status === "active",
+    reachable_surface: !!presence.reachable_surface,
     looking_at: presence.looking_at || null,
     object_id: presence.object_id || null,
     object_handle: presence.object_handle || null,
@@ -419,6 +504,11 @@ function cleanPresenceForReturn(presence) {
     event_id: presence.event_id || null,
     ping_id: presence.ping_id || null,
     area: presence.area || null,
+    fake_activity: false,
+    human_imitation: false,
+    ping_created: false,
+    delivered: false,
+    notification_sent: false,
     created_at: presence.created_at || null,
     updated_at: presence.updated_at || null
   };
@@ -445,9 +535,7 @@ function normalizeSurface(value) {
 }
 
 function cleanHandle(value) {
-  if (typeof value !== "string") {
-    return "";
-  }
+  if (typeof value !== "string") return "";
 
   return value
     .trim()
@@ -459,7 +547,7 @@ function cleanHandle(value) {
 }
 
 function normalizeArea(area) {
-  if (!area || typeof area !== "object") return null;
+  if (!area || typeof area !== "object" || Array.isArray(area)) return null;
 
   const lat = Number(area.lat || area.latitude);
   const lng = Number(area.lng || area.longitude);
@@ -495,19 +583,14 @@ function getBearerToken(request) {
   const header = request.headers.get("Authorization") || "";
   const match = header.match(/^Bearer\s+(.+)$/i);
 
-  if (!match) {
-    return "";
-  }
+  if (!match) return "";
 
   return match[1].trim();
 }
 
 function cleanText(value) {
-  if (typeof value !== "string") {
-    return "";
-  }
-
-  return value.trim();
+  if (typeof value !== "string" && typeof value !== "number") return "";
+  return String(value).trim();
 }
 
 function cleanMetadata(value) {
@@ -560,4 +643,4 @@ function json(data, status = 200) {
       "Cache-Control": "no-store"
     }
   });
-    }
+}
