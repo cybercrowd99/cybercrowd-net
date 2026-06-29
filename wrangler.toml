@@ -36,15 +36,9 @@ id = "c11f2d19270443728b757b602a71c7e4"
 binding = "USERS"
 id = "211ec37065aa46269485c90c2eb8936e"
 
-# Presence Turnstile storage.
-# Uses the existing IDENTITY namespace with presence:* keys.
-[[kv_namespaces]]
-binding = "IDENTITY_TURNSTILE"
-id = "fe654980fc014402acd73c87ea04aa61"
-
 # Allocator DB/debug storage.
-# Uses the existing IDENTITY namespace with allocator:* keys.
-# The Durable Object remains the collision-safe authority.
+# Uses allocator:* keys.
+# Durable Object remains the collision-safe authority.
 [[kv_namespaces]]
 binding = "ALLOCATOR_DB"
 id = "fe654980fc014402acd73c87ea04aa61"
@@ -55,8 +49,6 @@ PORT_MAX = "65535"
 LEASE_TTL_MS = "30000"
 HEARTBEAT_GRACE_MS = "10000"
 MAX_RETRIES_PER_REQUEST = "8"
-
-SESSION_TTL_MS = "30000"
 ALLOCATOR_OBJECT_NAME = "global-ephemeral-port-allocator"
 
 [[durable_objects.bindings]]
