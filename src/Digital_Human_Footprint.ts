@@ -7,6 +7,7 @@
 // - Record participation.
 // - Preserve proof of movement.
 // - Preserve surface/moment/activity trace.
+// - Preserve public/private identity rails.
 // - Keep visibility bounded.
 // - No elevation.
 // - No extraction.
@@ -15,6 +16,11 @@
 // - No presence ownership.
 // - No collapse ownership.
 // - Pure proof-of-participation organ.
+//
+// Identity rail rule:
+// - public_id is the visible/shareable/profile lane.
+// - private_id is the protected continuity lane.
+// - Do not collapse them into one human_id.
 
 export type FootprintVisibility =
   | "private"
@@ -31,7 +37,8 @@ export type FootprintActivityType =
 
 export interface FootprintRecord {
   footprint_id: string;
-  human_id: string;
+  public_id: string;
+  private_id: string;
   moment_id: string;
   surface_id: string;
   activity_type: FootprintActivityType;
@@ -41,7 +48,8 @@ export interface FootprintRecord {
 }
 
 export interface FootprintQuery {
-  human_id?: string;
+  public_id?: string;
+  private_id?: string;
   surface_id?: string;
   activity_type?: FootprintActivityType;
   since_ms?: number;
@@ -50,7 +58,8 @@ export interface FootprintQuery {
 }
 
 export interface FootprintWriteRequest {
-  human_id: string;
+  public_id: string;
+  private_id: string;
   moment_id: string;
   surface_id: string;
   activity_type: FootprintActivityType;
@@ -82,17 +91,25 @@ export class InMemoryDigitalHumanFootprintOrgan implements FootprintOrgan {
   private readonly recordsById = new Map<string, FootprintRecord>();
 
   async write(req: FootprintWriteRequest): Promise<FootprintWriteResponse> {
-    const human_id = cleanId(req.human_id);
+    const public_id = cleanId(req.public_id);
+    const private_id = cleanId(req.private_id);
     const moment_id = cleanId(req.moment_id);
     const surface_id = cleanId(req.surface_id);
     const activity_type = cleanActivityType(req.activity_type);
     const visibility = cleanVisibility(req.visibility ?? "private");
     const value_link_id = cleanNullableId(req.value_link_id ?? null);
 
-    if (!human_id) {
+    if (!public_id) {
       return {
         ok: false,
-        error: "HUMAN_ID_REQUIRED"
+        error: "PUBLIC_ID_REQUIRED"
+      };
+    }
+
+    if (!private_id) {
+      return {
+        ok: false,
+        error: "PRIVATE_ID_REQUIRED"
       };
     }
 
@@ -126,7 +143,8 @@ export class InMemoryDigitalHumanFootprintOrgan implements FootprintOrgan {
 
     const footprint: FootprintRecord = {
       footprint_id: makeFootprintId(),
-      human_id,
+      public_id,
+      private_id,
       moment_id,
       surface_id,
       activity_type,
@@ -144,7 +162,8 @@ export class InMemoryDigitalHumanFootprintOrgan implements FootprintOrgan {
   }
 
   async list(query: FootprintQuery): Promise<FootprintListResponse> {
-    const human_id = cleanOptionalId(query.human_id);
+    const public_id = cleanOptionalId(query.public_id);
+    const private_id = cleanOptionalId(query.private_id);
     const surface_id = cleanOptionalId(query.surface_id);
     const activity_type = cleanOptionalActivityType(query.activity_type);
 
@@ -168,7 +187,8 @@ export class InMemoryDigitalHumanFootprintOrgan implements FootprintOrgan {
     const records: FootprintRecord[] = [];
 
     for (const record of this.recordsById.values()) {
-      if (human_id && record.human_id !== human_id) continue;
+      if (public_id && record.public_id !== public_id) continue;
+      if (private_id && record.private_id !== private_id) continue;
       if (surface_id && record.surface_id !== surface_id) continue;
       if (activity_type && record.activity_type !== activity_type) continue;
       if (since_ms !== null && record.created_at_ms < since_ms) continue;
@@ -247,7 +267,8 @@ export function isFootprintActivityType(
 function cloneFootprint(record: FootprintRecord): FootprintRecord {
   return {
     footprint_id: record.footprint_id,
-    human_id: record.human_id,
+    public_id: record.public_id,
+    private_id: record.private_id,
     moment_id: record.moment_id,
     surface_id: record.surface_id,
     activity_type: record.activity_type,
