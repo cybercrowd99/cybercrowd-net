@@ -6,12 +6,16 @@ export default {
 
     /*
       CyberCrowd main site Worker
-      Purpose:
-      - Restores the missing worker.js entry point.
-      - Lets wrangler deploy succeed again.
-      - Serves the existing site/assets through the ASSETS binding.
-      - Keeps auth/email routes separate from cybercrowd-auth.
-      - Does not expose or store any secrets.
+
+      Root lane only:
+      - cybercrowd-net
+      - assets
+      - R2 teaser playlist
+      - allocator Durable Object export
+      - no auth ownership
+      - no collapse ownership
+      - no presence turnstile ownership
+      - no secrets exposed
     */
 
     if (request.method === "OPTIONS") {
@@ -34,16 +38,6 @@ export default {
       return handleTeaserPlaylist(env);
     }
 
-    /*
-      Important:
-      Auth routes are intentionally not handled here.
-
-      These should remain owned by cybercrowd-auth if Cloudflare routes
-      are pointed there:
-
-      /api/auth/send-verification
-      /api/auth/verify*
-    */
     if (url.pathname.startsWith("/api/auth/")) {
       return jsonResponse(
         {
@@ -55,11 +49,6 @@ export default {
       );
     }
 
-    /*
-      Serve all static site files from Cloudflare Assets.
-      This preserves the landing page, vault, create-account page,
-      governance pages, shop, and other static files.
-    */
     if (env.ASSETS && typeof env.ASSETS.fetch === "function") {
       return env.ASSETS.fetch(request);
     }
@@ -90,6 +79,7 @@ async function handleTeaserPlaylist(env) {
     .filter((item) => item && item.key)
     .filter((item) => {
       const key = item.key.toLowerCase();
+
       return (
         key.endsWith(".mp3") ||
         key.endsWith(".wav") ||
