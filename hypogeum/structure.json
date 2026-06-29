@@ -2,6 +2,7 @@
   "layer": "hypogeum",
   "purpose": "negative-architecture backend",
   "inspired_by": "Hal Saflieni Hypogeum",
+
   "levels": {
     "upper": {
       "functions": [
@@ -9,7 +10,8 @@
         "identity_state",
         "creator_state",
         "crowd_state"
-      ]
+      ],
+      "turnstile_entry": true
     },
     "middle": {
       "functions": [
@@ -17,7 +19,8 @@
         "g6_vector_routing",
         "capture_net_processing",
         "parlour_state_machine"
-      ]
+      ],
+      "turnstile_entry": true
     },
     "lower": {
       "functions": [
@@ -25,9 +28,44 @@
         "emotional_resonance",
         "decompression_chambers",
         "deep_state_buffers"
-      ]
+      ],
+      "turnstile_entry": false
     }
   },
+
+  "qr4th_binding": true,
+  "identity_spine_ref": "QR4TH_SPINE",
+  "continuity_hooks": [
+    "identity_state_sync",
+    "moment_continuity",
+    "lane_transition_lock"
+  ],
+
+  "lane_authority": [
+    "session",
+    "bloom",
+    "capture_net",
+    "deep_state"
+  ],
+
+  "energy_flow": {
+    "direction": "downward",
+    "compression": true,
+    "resonance_nodes": 9
+  },
+
+  "sponge_protocols": [
+    "absorb",
+    "buffer",
+    "release"
+  ],
+
+  "ritual_alignment_logic": [
+    "state_sync",
+    "moment_lock",
+    "presence_resonance"
+  ],
+
   "properties": {
     "negative_architecture": true,
     "resonance_optimized": true,
@@ -35,5 +73,6 @@
     "ritual_alignment": true,
     "energy_control": true
   },
-  "description": "The CyberCrowd Hypogeum is a three-level negative-architecture backend inspired by the Hal Saflieni Hypogeum. It contains session logic, Bloom systems, G6 routing, Capture Nets, and the emotional Sponge Layer. It is carved downward, not built upward, forming the resonant machinery beneath the Arena."
+
+  "description": "The CyberCrowd Hypogeum is a three-level negative-architecture backend inspired by the Hal Saflieni Hypogeum. It binds directly to QR4th, TurnstileStorage, and the Continuity Engine. It contains session logic, Bloom systems, G6 routing, Capture Nets, and the emotional Sponge Layer. It is carved downward, not built upward, forming the resonant machinery beneath the Arena."
 }
