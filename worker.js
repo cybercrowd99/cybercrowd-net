@@ -1,3 +1,5 @@
+export { EphemeralPortAllocatorDurableObject } from "./src/ephemeral-port-allocator-durable-object";
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
