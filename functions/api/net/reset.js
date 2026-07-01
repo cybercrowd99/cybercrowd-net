@@ -3,12 +3,16 @@
 // CyberCrowd Net Reset Route
 //
 // ONE JOB:
-// Reserve the deliberate CyberCrowd-net reset endpoint without breaking deploy.
+// Make CyberCrowd-net reset deliberate.
 //
 // POST only.
 // GET forbidden.
-// Does not import the net spine yet.
-// Does not reset anything yet.
+// Allowed to mutate because POST is deliberate.
+// Does not reset the chain manually.
+// Does not swallow core.
+// Delegates reset to CyberCrowdNet.
+
+import { CyberCrowdNet } from "../../../src/cybercrowd-net";
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body, null, 2), {
@@ -21,16 +25,28 @@ function json(body, status = 200) {
 }
 
 export async function onRequestPost() {
-  return json({
-    ok: true,
-    action: "cybercrowd_net_reset_route",
-    route: "functions/api/net/reset.js",
-    status: "reserved",
-    reset_performed: false,
-    imports_net_spine: false,
-    mutates_chain: false,
-    message: "CyberCrowd-net reset route is reserved. Net spine import is locked until core files resolve."
-  });
+  try {
+    const result = CyberCrowdNet.reset();
+
+    return json({
+      ok: result.ok,
+      action: "cybercrowd_net_reset_route",
+      route: "functions/api/net/reset.js",
+      real: true,
+      result
+    });
+  } catch (error) {
+    return json(
+      {
+        ok: false,
+        action: "cybercrowd_net_reset_route",
+        route: "functions/api/net/reset.js",
+        error: "NET_RESET_ROUTE_FAILED",
+        message: error instanceof Error ? error.message : "Unknown net reset error."
+      },
+      500
+    );
+  }
 }
 
 export async function onRequestGet() {
@@ -39,7 +55,7 @@ export async function onRequestGet() {
       ok: false,
       action: "cybercrowd_net_reset_route",
       error: "METHOD_NOT_ALLOWED",
-      message: "Use POST for the reserved CyberCrowd-net reset route."
+      message: "Use POST to reset CyberCrowd-net."
     },
     405
   );
