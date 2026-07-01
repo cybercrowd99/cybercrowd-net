@@ -3,13 +3,17 @@
 // CyberCrowd Net Snapshot Route
 //
 // ONE JOB:
-// Expose a safe CyberCrowd-net snapshot endpoint without breaking deploy.
+// Expose CyberCrowdNet.snapshot() deliberately.
 //
 // Read-only.
 // Does not init.
 // Does not reset.
-// Does not bind adapters.
-// Does not import the net spine yet.
+// Does not bind adapters manually.
+// Does not mutate the net spine.
+//
+// This route is the explicit real snapshot surface.
+
+import { CyberCrowdNet } from "../../../src/cybercrowd-net";
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body, null, 2), {
@@ -22,24 +26,28 @@ function json(body, status = 200) {
 }
 
 export async function onRequestGet() {
-  return json({
-    ok: true,
-    action: "cybercrowd_net_snapshot",
-    route: "functions/api/net/snapshot.js",
-    status: "reserved",
-    reads_only: true,
-    mutates_chain: false,
-    initializes_net: false,
-    resets_net: false,
-    binds_adapters: false,
-    imports_net_spine: false,
-    routes: {
-      status: "/api/net/status",
-      init: "/api/net/init",
-      snapshot: "/api/net/snapshot"
-    },
-    message: "CyberCrowd-net snapshot route is reserved. Net spine import is locked until core files resolve."
-  });
+  try {
+    const snapshot = CyberCrowdNet.snapshot();
+
+    return json({
+      ok: true,
+      action: "cybercrowd_net_snapshot",
+      route: "functions/api/net/snapshot.js",
+      real: true,
+      snapshot
+    });
+  } catch (error) {
+    return json(
+      {
+        ok: false,
+        action: "cybercrowd_net_snapshot",
+        route: "functions/api/net/snapshot.js",
+        error: "NET_SNAPSHOT_FAILED",
+        message: error instanceof Error ? error.message : "Unknown net snapshot error."
+      },
+      500
+    );
+  }
 }
 
 export async function onRequestPost() {
@@ -48,7 +56,7 @@ export async function onRequestPost() {
       ok: false,
       action: "cybercrowd_net_snapshot",
       error: "METHOD_NOT_ALLOWED",
-      message: "Use GET to retrieve the reserved CyberCrowd-net snapshot route."
+      message: "Use GET to retrieve CyberCrowd-net snapshot."
     },
     405
   );
