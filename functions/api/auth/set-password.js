@@ -1,3 +1,14 @@
+// functions/api/auth/set-password.js
+//
+// CyberCrowd Auth — Set Password
+//
+// ONE JOB:
+// Save password, create session, set cookie, and report the exact failure stage.
+//
+// No NET.
+// No route guessing.
+// No silent failure.
+
 function json(data, status = 200, extraHeaders = {}) {
   const headers = new Headers();
 
@@ -13,7 +24,7 @@ function json(data, status = 200, extraHeaders = {}) {
     headers.set(key, value);
   });
 
-  return new Response(JSON.stringify(data), {
+  return new Response(JSON.stringify(data, null, 2), {
     status,
     headers
   });
@@ -28,29 +39,12 @@ function makeToken(bytes = 32) {
 function checkPasswordRule(password) {
   const value = String(password || "");
 
-  if (value.length < 8) {
-    return "password_too_short";
-  }
-
-  if (value.length > 19) {
-    return "password_too_long";
-  }
-
-  if (!/[A-Z]/.test(value)) {
-    return "password_needs_uppercase";
-  }
-
-  if (!/[a-z]/.test(value)) {
-    return "password_needs_lowercase";
-  }
-
-  if (!/[0-9]/.test(value)) {
-    return "password_needs_number";
-  }
-
-  if (!/[^A-Za-z0-9]/.test(value)) {
-    return "password_needs_symbol";
-  }
+  if (value.length < 8) return "password_too_short";
+  if (value.length > 19) return "password_too_long";
+  if (!/[A-Z]/.test(value)) return "password_needs_uppercase";
+  if (!/[a-z]/.test(value)) return "password_needs_lowercase";
+  if (!/[0-9]/.test(value)) return "password_needs_number";
+  if (!/[^A-Za-z0-9]/.test(value)) return "password_needs_symbol";
 
   return "";
 }
@@ -69,7 +63,7 @@ async function hashPassword(email, password) {
   const bits = await crypto.subtle.deriveBits(
     {
       name: "PBKDF2",
-      salt: encoder.encode(email.toLowerCase()),
+      salt: encoder.encode(email.toLowerCase().trim()),
       iterations: 150000,
       hash: "SHA-256"
     },
@@ -82,10 +76,35 @@ async function hashPassword(email, password) {
     .join("");
 }
 
+async function readSetupRecord(env, setupToken) {
+  const keys = [
+    `setup:${setupToken}`,
+    `setup-token:${setupToken}`,
+    `setup_token:${setupToken}`,
+    `verify:${setupToken}`,
+    `verification:${setupToken}`
+  ];
+
+  for (const key of keys) {
+    const raw = await env.IDENTITY.get(key);
+
+    if (!raw) continue;
+
+    return {
+      key,
+      raw
+    };
+  }
+
+  return null;
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context;
+  let stage = "start";
 
   try {
+    stage = "read_body";
     const body = await request.json().catch(() => null);
 
     const setupToken = String(
@@ -96,60 +115,103 @@ export async function onRequestPost(context) {
     ).trim();
 
     const password = String(body?.password || "");
-    const confirmPassword = body?.confirmPassword === undefined
-      ? ""
-      : String(body.confirmPassword || "");
+    const confirmPassword =
+      body?.confirmPassword === undefined
+        ? ""
+        : String(body.confirmPassword || "");
+
+    stage = "validate_input";
 
     if (!setupToken) {
-      return json({ success: false, ok: false, error: "missing_setup_token" }, 400);
+      return json(
+        { success: false, ok: false, stage, error: "missing_setup_token" },
+        400
+      );
     }
 
     const passwordError = checkPasswordRule(password);
 
     if (passwordError) {
-      return json({ success: false, ok: false, error: passwordError }, 400);
+      return json(
+        { success: false, ok: false, stage, error: passwordError },
+        400
+      );
     }
 
     if (confirmPassword && password !== confirmPassword) {
-      return json({ success: false, ok: false, error: "passwords_do_not_match" }, 400);
+      return json(
+        { success: false, ok: false, stage, error: "passwords_do_not_match" },
+        400
+      );
     }
 
-    if (!env || !env.IDENTITY) {
-      return json({ success: false, ok: false, error: "identity_kv_missing" }, 500);
+    stage = "check_kv";
+
+    if (!env?.IDENTITY) {
+      return json(
+        { success: false, ok: false, stage, error: "identity_kv_missing" },
+        500
+      );
     }
 
-    const setupKey = `setup:${setupToken}`;
-    const setupRecordRaw = await env.IDENTITY.get(setupKey);
+    stage = "read_setup_token";
+    const setupFound = await readSetupRecord(env, setupToken);
 
-    if (!setupRecordRaw) {
-      return json({ success: false, ok: false, error: "invalid_or_expired_setup_token" }, 403);
+    if (!setupFound) {
+      return json(
+        {
+          success: false,
+          ok: false,
+          stage,
+          error: "invalid_or_expired_setup_token"
+        },
+        403
+      );
     }
+
+    stage = "parse_setup_record";
 
     let setupRecord;
 
     try {
-      setupRecord = JSON.parse(setupRecordRaw);
+      setupRecord = JSON.parse(setupFound.raw);
     } catch {
-      return json({ success: false, ok: false, error: "setup_record_corrupt" }, 500);
+      return json(
+        { success: false, ok: false, stage, error: "setup_record_corrupt" },
+        500
+      );
     }
 
+    stage = "validate_setup_record";
+
     const email = String(setupRecord.email || "").toLowerCase().trim();
+
     const identityActiveId = String(
       setupRecord["identity-active-id"] ||
       setupRecord.identity_active_id ||
       setupRecord.identityActiveId ||
+      setupRecord.identity_id ||
+      setupRecord.identityId ||
       ""
     ).trim();
 
     if (!email || !email.includes("@")) {
-      return json({ success: false, ok: false, error: "setup_email_invalid" }, 500);
+      return json(
+        { success: false, ok: false, stage, error: "setup_email_invalid" },
+        500
+      );
     }
 
     if (!identityActiveId) {
-      return json({ success: false, ok: false, error: "identity_active_id_missing" }, 500);
+      return json(
+        { success: false, ok: false, stage, error: "identity_active_id_missing" },
+        500
+      );
     }
 
+    stage = "hash_password";
     const passwordHash = await hashPassword(email, password);
+
     const now = Date.now();
     const eat = makeToken(32);
 
@@ -157,14 +219,17 @@ export async function onRequestPost(context) {
       "identity-active-id": identityActiveId,
       identity_active_id: identityActiveId,
       identity_id: identityActiveId,
+      identityId: identityActiveId,
       email,
       verified: true,
       passwordHash,
       password_hash: passwordHash,
       password_rule: "8-19_upper_lower_number_symbol",
-      createdAt: setupRecord.createdAt || now,
+      createdAt: setupRecord.createdAt || setupRecord.created_at || now,
       passwordSetAt: now,
-      updatedAt: now
+      password_set_at: now,
+      updatedAt: now,
+      updated_at: now
     };
 
     const sessionRecord = {
@@ -177,41 +242,69 @@ export async function onRequestPost(context) {
       email,
       epoch: now,
       band: "user",
-      created_at: new Date(now).toISOString()
+      created_at: new Date(now).toISOString(),
+      expires_at: new Date(now + 86400 * 7 * 1000).toISOString()
     };
 
+    stage = "write_user_identity";
     await env.IDENTITY.put(`user:${identityActiveId}`, JSON.stringify(userRecord));
     await env.IDENTITY.put(`user-email:${email}`, identityActiveId);
+
+    if (env.USERS) {
+      stage = "write_user_users_kv";
+      await env.USERS.put(`user:${identityActiveId}`, JSON.stringify(userRecord));
+      await env.USERS.put(`user-email:${email}`, identityActiveId);
+    }
+
+    stage = "write_session";
+    if (env.SESSION) {
+      await env.SESSION.put(`session:${eat}`, JSON.stringify(sessionRecord), {
+        expirationTtl: 86400 * 7
+      });
+    }
 
     await env.IDENTITY.put(`session:${eat}`, JSON.stringify(sessionRecord), {
       expirationTtl: 86400 * 7
     });
 
-    await env.IDENTITY.delete(setupKey);
+    stage = "delete_setup_token";
+    await env.IDENTITY.delete(setupFound.key);
+
+    stage = "return_success";
 
     return json(
       {
         success: true,
         ok: true,
+        stage,
+        identity_active_id: identityActiveId,
         redirect: "/dashboard-surface.html"
       },
       200,
       {
         "Set-Cookie": [
-          `session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`,
-          `cc_session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`,
-          `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${86400 * 7}`
+          `session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${864oneWeek()}`,
+          `cc_session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${864oneWeek()}`,
+          `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${864oneWeek()}`
         ]
       }
     );
-  } catch {
+  } catch (error) {
     return json(
       {
         success: false,
         ok: false,
-        error: "set_password_failed"
+        stage,
+        error: "set_password_failed",
+        message: error instanceof Error ? error.message : "Unknown set password error."
       },
       500
     );
   }
+}
+
+function864oneWeekPlaceholder();
+
+function 864oneWeek() {
+  return 86400 * 7;
 }
