@@ -1,105 +1,16 @@
 // src/cybercrowd-net.ts
 //
-// CyberCrowd Net
+// CyberCrowd Net Entry Point
 //
 // ONE JOB:
-// Provide the top CyberCrowd-net entry point without swallowing core logic.
+// Provide the top-level CyberCrowd-net surface for the entire application.
 //
-// Net exposes.
-// Core owns logic.
-// Worker runs routes.
-// Auth owns entry.
+// No hidden logic.
+// No adapter loading.
+// No binding chain calls.
+// No swallowing core.
+// No magic loaders.
 
-export type CyberCrowdNetStatus =
-  | "idle"
-  | "ready"
-  | "bootstrapped"
-  | "initialized"
-  | "active"
-  | "error";
+import { createCyberCrowdNetSurface } from "./net-surface";
 
-export interface CyberCrowdNetState {
-  name: "cybercrowd-net";
-  status: CyberCrowdNetStatus;
-  created_at_ms: number;
-  updated_at_ms: number;
-}
-
-export interface CyberCrowdNetResult {
-  ok: boolean;
-  state: CyberCrowdNetState;
-  message: string;
-}
-
-export class CyberCrowdNet {
-  private state: CyberCrowdNetState = {
-    name: "cybercrowd-net",
-    status: "idle",
-    created_at_ms: Date.now(),
-    updated_at_ms: Date.now()
-  };
-
-  ready(): CyberCrowdNetResult {
-    this.state = {
-      ...this.state,
-      status: "ready",
-      updated_at_ms: Date.now()
-    };
-
-    return this.result("CyberCrowd-net ready.");
-  }
-
-  bootstrap(): CyberCrowdNetResult {
-    this.state = {
-      ...this.state,
-      status: "bootstrapped",
-      updated_at_ms: Date.now()
-    };
-
-    return this.result("CyberCrowd-net bootstrapped.");
-  }
-
-  init(): CyberCrowdNetResult {
-    this.state = {
-      ...this.state,
-      status: "initialized",
-      updated_at_ms: Date.now()
-    };
-
-    return this.result("CyberCrowd-net initialized.");
-  }
-
-  activate(): CyberCrowdNetResult {
-    this.state = {
-      ...this.state,
-      status: "active",
-      updated_at_ms: Date.now()
-    };
-
-    return this.result("CyberCrowd-net active.");
-  }
-
-  fail(message = "CyberCrowd-net error."): CyberCrowdNetResult {
-    this.state = {
-      ...this.state,
-      status: "error",
-      updated_at_ms: Date.now()
-    };
-
-    return this.result(message, false);
-  }
-
-  getState(): CyberCrowdNetState {
-    return { ...this.state };
-  }
-
-  private result(message: string, ok = true): CyberCrowdNetResult {
-    return {
-      ok,
-      state: this.getState(),
-      message
-    };
-  }
-}
-
-export const CyberCrowdNetSurface = new CyberCrowdNet();
+export const CyberCrowdNet = createCyberCrowdNetSurface();
