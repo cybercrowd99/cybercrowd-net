@@ -3,15 +3,13 @@
 // CyberCrowd Net Status Route
 //
 // ONE JOB:
-// Expose a safe Worker route that reads CyberCrowdNet.snapshot()
-// without mutating the chain.
+// Expose a safe Worker route that reports CyberCrowd-net route status.
 //
 // Reads only.
 // Does not init.
 // Does not reset.
 // Does not bind adapters.
-
-import { CyberCrowdNet } from "../../../src/cybercrowd-net";
+// Does not import the net spine.
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body, null, 2), {
@@ -24,23 +22,17 @@ function json(body, status = 200) {
 }
 
 export async function onRequestGet() {
-  try {
-    const snapshot = CyberCrowdNet.snapshot();
-
-    return json({
-      ok: true,
-      action: "cybercrowd_net_status",
-      snapshot
-    });
-  } catch (error) {
-    return json(
-      {
-        ok: false,
-        action: "cybercrowd_net_status",
-        error: "NET_STATUS_FAILED",
-        message: error instanceof Error ? error.message : "Unknown net status error."
-      },
-      500
-    );
-  }
+  return json({
+    ok: true,
+    action: "cybercrowd_net_status",
+    net: "cybercrowd-net",
+    route: "functions/api/net/status.js",
+    status: "online",
+    reads_only: true,
+    mutates_chain: false,
+    initializes_net: false,
+    resets_net: false,
+    binds_adapters: false,
+    message: "CyberCrowd-net status route is online."
+  });
 }
