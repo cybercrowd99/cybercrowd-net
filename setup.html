@@ -133,6 +133,26 @@
       animation-delay: 1.1s;
     }
 
+    .debug-status {
+      position: absolute;
+      left: 50%;
+      top: 78.4%;
+      width: 72%;
+      transform: translate(-50%, -50%);
+      z-index: 80;
+      color: rgba(255, 92, 132, 0.96);
+      font-size: clamp(9px, 0.9vw, 14px);
+      line-height: 1.35;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 8px rgba(255, 92, 132, 0.85),
+        0 0 22px rgba(255, 92, 132, 0.45);
+      pointer-events: none;
+      white-space: normal;
+    }
+
     @keyframes email-settle {
       0% {
         opacity: 0;
@@ -437,6 +457,8 @@
       <div id="welcomeStatus" class="welcome-status">EMAIL ARRIVAL CONFIRMED</div>
     </div>
 
+    <div id="debugStatus" class="debug-status" aria-live="polite"></div>
+
     <div id="pepperState" aria-hidden="true"></div>
 
     <div class="float-layer" aria-hidden="true">
@@ -446,37 +468,10 @@
 
     <div id="circuitLayer" class="circuit-layer" aria-hidden="true">
       <svg class="circuit-svg" viewBox="0 0 800 600" preserveAspectRatio="none">
-        <path
-          class="circuit-trace"
-          id="trace-email-password"
-          d="M 400 233 L 404 325"
-          stroke="#8ffcff"
-          stroke-width="2.5"
-        />
-
-        <path
-          class="circuit-trace"
-          id="trace-password-verify"
-          d="M 404 325 L 398 416"
-          stroke="#ffaa00"
-          stroke-width="2.3"
-        />
-
-        <path
-          class="circuit-trace"
-          id="trace-verify-activate"
-          d="M 398 416 L 558 512"
-          stroke="#ff0066"
-          stroke-width="2.3"
-        />
-
-        <path
-          class="circuit-trace"
-          id="trace-activate-return"
-          d="M 558 512 L 610 512 L 610 233 L 400 233"
-          stroke="#76ffa8"
-          stroke-width="2"
-        />
+        <path class="circuit-trace" id="trace-email-password" d="M 400 233 L 404 325" stroke="#8ffcff" stroke-width="2.5" />
+        <path class="circuit-trace" id="trace-password-verify" d="M 404 325 L 398 416" stroke="#ffaa00" stroke-width="2.3" />
+        <path class="circuit-trace" id="trace-verify-activate" d="M 398 416 L 558 512" stroke="#ff0066" stroke-width="2.3" />
+        <path class="circuit-trace" id="trace-activate-return" d="M 558 512 L 610 512 L 610 233 L 400 233" stroke="#76ffa8" stroke-width="2" />
       </svg>
 
       <div id="nodeEmail" class="circuit-node email"></div>
@@ -511,11 +506,7 @@
         aria-label="Verify password"
       />
 
-      <button
-        id="activateButton"
-        type="submit"
-        aria-label="Activate Identity"
-      ></button>
+      <button id="activateButton" type="submit" aria-label="Activate Identity"></button>
     </form>
   </main>
 
@@ -532,6 +523,7 @@
     const welcomeLayer = document.getElementById("welcomeLayer");
     const welcomeEmail = document.getElementById("welcomeEmail");
     const welcomeStatus = document.getElementById("welcomeStatus");
+    const debugStatus = document.getElementById("debugStatus");
 
     const params = new URLSearchParams(window.location.search);
     const setupToken = params.get("token") || params.get("setup") || "";
@@ -541,6 +533,15 @@
     let passwordRevealed = false;
     let verifyRevealed = false;
     let verifiedEmail = "";
+
+    function setDebugStatus(result, fallback) {
+      const stage = result && result.stage ? result.stage : "no_stage";
+      const error = result && result.error ? result.error : fallback;
+      const message = result && result.message ? result.message : "";
+
+      debugStatus.textContent = `stage: ${stage} | error: ${error}${message ? " | " + message : ""}`;
+      welcomeStatus.textContent = String(error || fallback || "FAILED").toUpperCase();
+    }
 
     function safeEmail(value) {
       return String(value || "")
@@ -589,6 +590,7 @@
         const result = await response.json().catch(() => ({}));
 
         if (!response.ok || result.ok === false || result.success === false) {
+          setDebugStatus(result, result.error || "setup_state_failed");
           throw new Error(result.error || "setup_state_failed");
         }
 
@@ -641,10 +643,7 @@
     }
 
     function verifyStateClass() {
-      if (!verifyInput.value) {
-        return "";
-      }
-
+      if (!verifyInput.value) return "";
       return passwordInput.value === verifyInput.value ? "good" : "bad";
     }
 
@@ -730,11 +729,13 @@
     }
 
     passwordInput.addEventListener("input", () => {
+      debugStatus.textContent = "";
       revealThenMask(passwordInput, passwordFloat, "password");
       renderVerify();
     });
 
     verifyInput.addEventListener("input", () => {
+      debugStatus.textContent = "";
       revealThenMask(verifyInput, verifyFloat, "verify");
     });
 
@@ -770,20 +771,24 @@
 
       if (!setupToken) {
         welcomeStatus.textContent = "RETURN TO EMAIL LINK";
+        debugStatus.textContent = "stage: client | error: missing_setup_token";
         return;
       }
 
       if (password.length < 8) {
         passwordFloat.className = "float-text on masked bad";
+        debugStatus.textContent = "stage: client | error: password_too_short";
         return;
       }
 
       if (password !== confirmPassword) {
         verifyFloat.className = "float-text on masked bad";
+        debugStatus.textContent = "stage: client | error: passwords_do_not_match";
         return;
       }
 
       activateButton.disabled = true;
+      debugStatus.textContent = "";
       startIdentityCircuit();
 
       try {
@@ -794,13 +799,17 @@
           },
           body: JSON.stringify({
             token: setupToken,
-            password
+            password,
+            confirmPassword
           })
         });
 
-        const result = await response.json().catch(() => ({}));
+        const result = await response.json().catch(() => ({
+          error: "response_not_json"
+        }));
 
         if (!response.ok || result.ok === false || result.success === false) {
+          setDebugStatus(result, result.error || "password_setup_failed");
           throw new Error(result.error || "password_setup_failed");
         }
 
