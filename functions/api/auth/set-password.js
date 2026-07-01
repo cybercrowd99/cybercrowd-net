@@ -214,6 +214,7 @@ export async function onRequestPost(context) {
 
     const now = Date.now();
     const eat = makeToken(32);
+    const maxAge = 86400 * 7;
 
     const userRecord = {
       "identity-active-id": identityActiveId,
@@ -243,7 +244,7 @@ export async function onRequestPost(context) {
       epoch: now,
       band: "user",
       created_at: new Date(now).toISOString(),
-      expires_at: new Date(now + 86400 * 7 * 1000).toISOString()
+      expires_at: new Date(now + maxAge * 1000).toISOString()
     };
 
     stage = "write_user_identity";
@@ -257,14 +258,15 @@ export async function onRequestPost(context) {
     }
 
     stage = "write_session";
+
     if (env.SESSION) {
       await env.SESSION.put(`session:${eat}`, JSON.stringify(sessionRecord), {
-        expirationTtl: 86400 * 7
+        expirationTtl: maxAge
       });
     }
 
     await env.IDENTITY.put(`session:${eat}`, JSON.stringify(sessionRecord), {
-      expirationTtl: 86400 * 7
+      expirationTtl: maxAge
     });
 
     stage = "delete_setup_token";
@@ -283,9 +285,9 @@ export async function onRequestPost(context) {
       200,
       {
         "Set-Cookie": [
-          `session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${864oneWeek()}`,
-          `cc_session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${864oneWeek()}`,
-          `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${864oneWeek()}`
+          `session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`,
+          `cc_session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`,
+          `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`
         ]
       }
     );
@@ -301,10 +303,4 @@ export async function onRequestPost(context) {
       500
     );
   }
-}
-
-function864oneWeekPlaceholder();
-
-function 864oneWeek() {
-  return 86400 * 7;
 }
