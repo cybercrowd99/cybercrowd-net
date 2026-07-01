@@ -3,12 +3,10 @@
 // CyberCrowd Net Init Route
 //
 // ONE JOB:
-// Expose a deliberate Worker route that initializes CyberCrowd-net on purpose.
+// Expose the deliberate CyberCrowd-net init endpoint without breaking deploy.
 //
-// This route is allowed to touch the net spine.
-// Status route is not.
-
-import { CyberCrowdNet } from "../../../src/cybercrowd-net";
+// This route is reserved for net init.
+// For now it does not import the net spine until all src files resolve.
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body, null, 2), {
@@ -21,25 +19,15 @@ function json(body, status = 200) {
 }
 
 export async function onRequestPost() {
-  try {
-    const result = CyberCrowdNet.init();
-
-    return json({
-      ok: result.ok,
-      action: "cybercrowd_net_init_route",
-      result
-    });
-  } catch (error) {
-    return json(
-      {
-        ok: false,
-        action: "cybercrowd_net_init_route",
-        error: "NET_INIT_ROUTE_FAILED",
-        message: error instanceof Error ? error.message : "Unknown net init error."
-      },
-      500
-    );
-  }
+  return json({
+    ok: true,
+    action: "cybercrowd_net_init_route",
+    route: "functions/api/net/init.js",
+    status: "reserved",
+    initialized: false,
+    imports_net_spine: false,
+    message: "CyberCrowd-net init route is reserved. Net spine import is locked until core files resolve."
+  });
 }
 
 export async function onRequestGet() {
@@ -48,7 +36,7 @@ export async function onRequestGet() {
       ok: false,
       action: "cybercrowd_net_init_route",
       error: "METHOD_NOT_ALLOWED",
-      message: "Use POST to initialize CyberCrowd-net."
+      message: "Use POST for the reserved CyberCrowd-net init route."
     },
     405
   );
