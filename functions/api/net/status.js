@@ -3,13 +3,16 @@
 // CyberCrowd Net Status Route
 //
 // ONE JOB:
-// Expose a safe Worker route that reports CyberCrowd-net route status.
+// Expose CyberCrowdNet.snapshot() as live status.
 //
-// Reads only.
+// Read-only.
+// GET only.
 // Does not init.
 // Does not reset.
-// Does not bind adapters.
-// Does not import the net spine.
+// Does not bind adapters manually.
+// Does not mutate the net spine.
+
+import { CyberCrowdNet } from "../../../src/cybercrowd-net";
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body, null, 2), {
@@ -22,17 +25,39 @@ function json(body, status = 200) {
 }
 
 export async function onRequestGet() {
-  return json({
-    ok: true,
-    action: "cybercrowd_net_status",
-    net: "cybercrowd-net",
-    route: "functions/api/net/status.js",
-    status: "online",
-    reads_only: true,
-    mutates_chain: false,
-    initializes_net: false,
-    resets_net: false,
-    binds_adapters: false,
-    message: "CyberCrowd-net status route is online."
-  });
+  try {
+    const snapshot = CyberCrowdNet.snapshot();
+
+    return json({
+      ok: true,
+      action: "cybercrowd_net_status",
+      route: "functions/api/net/status.js",
+      real: true,
+      status: snapshot?.snapshot?.stable ? "stable" : "online",
+      snapshot
+    });
+  } catch (error) {
+    return json(
+      {
+        ok: false,
+        action: "cybercrowd_net_status",
+        route: "functions/api/net/status.js",
+        error: "NET_STATUS_FAILED",
+        message: error instanceof Error ? error.message : "Unknown net status error."
+      },
+      500
+    );
+  }
+}
+
+export async function onRequestPost() {
+  return json(
+    {
+      ok: false,
+      action: "cybercrowd_net_status",
+      error: "METHOD_NOT_ALLOWED",
+      message: "Use GET to retrieve CyberCrowd-net status."
+    },
+    405
+  );
 }
