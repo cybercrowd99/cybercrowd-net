@@ -9,6 +9,9 @@
 // No route guessing.
 // No silent failure.
 
+const PBKDF2_ITERATIONS = 100000;
+const SESSION_TTL_SECONDS = 86400 * 7;
+
 function json(data, status = 200, extraHeaders = {}) {
   const headers = new Headers();
 
@@ -64,7 +67,7 @@ async function hashPassword(email, password) {
     {
       name: "PBKDF2",
       salt: encoder.encode(email.toLowerCase().trim()),
-      iterations: 150000,
+      iterations: PBKDF2_ITERATIONS,
       hash: "SHA-256"
     },
     keyMaterial,
@@ -214,7 +217,6 @@ export async function onRequestPost(context) {
 
     const now = Date.now();
     const eat = makeToken(32);
-    const maxAge = 86400 * 7;
 
     const userRecord = {
       "identity-active-id": identityActiveId,
@@ -226,6 +228,8 @@ export async function onRequestPost(context) {
       passwordHash,
       password_hash: passwordHash,
       password_rule: "8-19_upper_lower_number_symbol",
+      password_hash_algorithm: "PBKDF2-SHA256",
+      password_hash_iterations: PBKDF2_ITERATIONS,
       createdAt: setupRecord.createdAt || setupRecord.created_at || now,
       passwordSetAt: now,
       password_set_at: now,
@@ -244,7 +248,7 @@ export async function onRequestPost(context) {
       epoch: now,
       band: "user",
       created_at: new Date(now).toISOString(),
-      expires_at: new Date(now + maxAge * 1000).toISOString()
+      expires_at: new Date(now + SESSION_TTL_SECONDS * 1000).toISOString()
     };
 
     stage = "write_user_identity";
@@ -261,12 +265,12 @@ export async function onRequestPost(context) {
 
     if (env.SESSION) {
       await env.SESSION.put(`session:${eat}`, JSON.stringify(sessionRecord), {
-        expirationTtl: maxAge
+        expirationTtl: SESSION_TTL_SECONDS
       });
     }
 
     await env.IDENTITY.put(`session:${eat}`, JSON.stringify(sessionRecord), {
-      expirationTtl: maxAge
+      expirationTtl: SESSION_TTL_SECONDS
     });
 
     stage = "delete_setup_token";
@@ -280,14 +284,15 @@ export async function onRequestPost(context) {
         ok: true,
         stage,
         identity_active_id: identityActiveId,
+        password_hash_iterations: PBKDF2_ITERATIONS,
         redirect: "/dashboard-surface.html"
       },
       200,
       {
         "Set-Cookie": [
-          `session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`,
-          `cc_session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`,
-          `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`
+          `session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_TTL_SECONDS}`,
+          `cc_session=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_TTL_SECONDS}`,
+          `EAT=${eat}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${SESSION_TTL_SECONDS}`
         ]
       }
     );
