@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd.net | Opening Terms of Agreement</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #111;
+      --panel-soft: #181818;
+      --text: #f4efe4;
+      --muted: #c8bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.18);
+      --border: rgba(214, 168, 79, 0.45);
+      --ok: #7ee787;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: radial-gradient(circle at top, #17120a 0%, var(--bg) 48%, #000 100%);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    .terms-shell {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      background: rgba(17, 17, 17, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65);
+      overflow: hidden;
+    }
+
+    .terms-header {
+      padding: 34px 28px;
+      text-align: center;
+      background:
+        linear-gradient(135deg, rgba(214, 168, 79, 0.18), transparent 45%),
+        var(--panel-soft);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terms-header h1 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(1.7rem, 4vw, 2.7rem);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .terms-header h2 {
+      margin: 12px 0 0;
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .meta {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .terms-body {
+      padding: 28px;
+    }
+
+    .notice {
+      padding: 16px 18px;
+      margin-bottom: 26px;
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      background: var(--gold-soft);
+      color: var(--text);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    section {
+      margin: 0 0 26px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(214, 168, 79, 0.18);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0 0 12px;
+      color: var(--text);
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .accept-box {
+      margin-top: 28px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    .accept-label {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .accept-label input {
+      width: 22px;
+      height: 22px;
+      margin-top: 3px;
+      accent-color: var(--gold);
+      flex: 0 0 auto;
+    }
+
+    .accept-label a {
+      color: var(--gold);
+      text-decoration: underline;
+    }
+
+    .accept-actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 22px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: #090909;
+      background: var(--gold);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .accept-status {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .accept-status.ready {
+      color: var(--ok);
+    }
+
+    .footer-note {
+      padding: 18px 28px 26px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(214, 168, 79, 0.18);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="terms-shell">
+    <header class="terms-header">
+      <h1>CyberCrowd.net</h1>
+      <h2>Opening Terms of Agreement</h2>
+      <div class="meta">
+        Beginning Identity Stage Policy<br />
+        Effective Date: <span id="cybercrowd_effective_date"></span><br />
+        Version: 1.0
+      </div>
+    </header>
+
+    <div class="terms-body">
+      <div class="notice">
+        Please read carefully. By checking the box below and clicking “Accept,” you confirm that you have read, understood, and agree to be legally bound by these Opening Terms of Agreement.
+      </div>
+
+      <section>
+        <h3>1. Introduction</h3>
+        <p>Welcome to CyberCrowd.net.</p>
+        <p>CyberCrowd is designed to provide a protected digital identity framework through which a person may create, preserve, organize, and carry identity-related records, creative works, community participation, and related account features.</p>
+        <p>These Opening Terms govern your access to and use of the Beginning Identity Stage of CyberCrowd. If you do not agree, do not proceed.</p>
+      </section>
+
+      <section>
+        <h3>2. Beginning Stage Only</h3>
+        <p>The identity created at this stage is a preliminary account record and not a grant of ownership, financial control, employment status, legal identity replacement, platform authority, or any rights not expressly stated in a separate written agreement.</p>
+        <p>This stage begins your identity setup path and protected identity lane only.</p>
+      </section>
+
+      <section>
+        <h3>3. Eligibility and Human Use</h3>
+        <p>CyberCrowd is intended for real human users acting on their own behalf or with proper legal authority.</p>
+        <p>You represent and warrant that you are not using automated systems, fake personas, impersonation, stolen credentials, or fraudulent means to create or operate an identity on CyberCrowd.</p>
+        <p>We may use verification methods including email confirmation, device signals, human checks, challenge-response steps, and related security measures.</p>
+      </section>
+
+      <section>
+        <h3>4. Your Identity Rights</h3>
+        <p>CyberCrowd does not claim ownership of your legal name, likeness, biography, personal history, creativity, or original content, except for the limited rights necessary to operate, display, secure, and provide the service in accordance with these Terms and any separate policies you accept.</p>
+        <p>You remain responsible for the accuracy, legality, and appropriateness of the information you provide.</p>
+      </section>
+
+      <section>
+        <h3>5. Public ID and Private ID</h3>
+        <p>CyberCrowd may separate identity into public and private parts.</p>
+        <p>Public identity may be visible for profile, work, creative, community, or connection purposes.</p>
+        <p>Private identity may be used for account recovery, continuity, security, verification, access control, and authority checks.</p>
+        <p>CyberCrowd will treat public and private identity as separate layers and may apply different visibility and access rules to each.</p>
+      </section>
+
+      <section>
+        <h3>6. Consent to Start</h3>
+        <p>By submitting a form, confirming your email, checking a box, clicking “Accept,” or taking a similar action, you are requesting that CyberCrowd begin identity setup and related account processing.</p>
+        <p>This may include verification messages, temporary tokens, human verification, and preparation of your identity record.</p>
+      </section>
+
+      <section>
+        <h3>7. No Invisible Punishment</h3>
+        <p>CyberCrowd does not use hidden punishment as a normal operating rule.</p>
+        <p>If access is limited, denied, reviewed, suspended, paused, or interrupted, we will make reasonable efforts to provide a visible reason and a path to review or correction when reasonably possible.</p>
+        <p>We may withhold disclosure where necessary to protect users, security, fraud prevention, or legal compliance.</p>
+      </section>
+
+      <section>
+        <h3>8. Safe Use</h3>
+        <p>You agree not to use CyberCrowd to:</p>
+        <ul>
+          <li>impersonate another person;</li>
+          <li>steal identity, credentials, or access;</li>
+          <li>attack, overload, disrupt, or exploit the system;</li>
+          <li>upload malicious code or harmful content;</li>
+          <li>abuse, harass, threaten, or defraud others;</li>
+          <li>bypass security, verification, or human checks;</li>
+          <li>use another person’s account without permission;</li>
+          <li>violate any applicable law or third-party rights.</li>
+        </ul>
+        <p>We may restrict, suspend, or terminate access for unsafe, abusive, fraudulent, unlawful, or unauthorized activity.</p>
+      </section>
+
+      <section>
+        <h3>9. Identity Is Not a Wallet</h3>
+        <p>CyberCrowd identity is not intended to make a person into a financial instrument or a mere transaction object.</p>
+        <p>Payments, commerce, jobs, credits, tips, or services may be available on CyberCrowd, but identity remains primary and does not become property of the transaction.</p>
+      </section>
+
+      <section>
+        <h3>10. Support and Participation</h3>
+        <p>CyberCrowd may allow people, creators, workers, businesses, and communities to receive support, opportunity, and participation based on consent and platform rules.</p>
+        <p>Any support or exchange must follow applicable law, platform policies, and any separate commercial terms.</p>
+      </section>
+
+      <section>
+        <h3>11. Data and Records</h3>
+        <p>CyberCrowd may store information needed to create, secure, verify, and preserve your account, including email address, setup status, session records, authentication events, security logs, and identity lane information.</p>
+        <p>We will collect and retain only the data reasonably needed for the stage and features being used, subject to security, legal, and operational requirements.</p>
+      </section>
+
+      <section>
+        <h3>12. Email and Verification</h3>
+        <p>You authorize CyberCrowd to send verification emails, setup links, codes, notices, and related messages to the contact information you provide.</p>
+        <p>You represent that the email address or other contact method you provide is yours or that you are authorized to use it.</p>
+        <p>Temporary links or tokens may expire, may be single-use, and may be disabled for security reasons.</p>
+      </section>
+
+      <section>
+        <h3>13. No Guarantee of Full Activation</h3>
+        <p>Beginning Identity Stage access does not guarantee immediate access to all CyberCrowd features.</p>
+        <p>Some features may be limited, under review, in testing, under construction, or released only to certain users or jurisdictions.</p>
+      </section>
+
+      <section>
+        <h3>14. Your Responsibility</h3>
+        <p>You are responsible for safeguarding your email, password, device, recovery methods, and account access.</p>
+        <p>You agree to provide accurate information and not intentionally interfere with, corrupt, or misuse the identity setup process.</p>
+      </section>
+
+      <section>
+        <h3>15. CyberCrowd Responsibility</h3>
+        <p>CyberCrowd will make reasonable efforts to protect identity setup, reduce hidden control, preserve clear records, and provide a meaningful path through the system.</p>
+        <p>We do not guarantee uninterrupted service, error-free operation, or that all account states will always remain available.</p>
+      </section>
+
+      <section>
+        <h3>16. Changes to These Terms</h3>
+        <p>CyberCrowd may update these Opening Terms from time to time.</p>
+        <p>When material changes are made, we will post an updated version or provide notice where reasonably possible.</p>
+        <p>Your continued use after the effective date of the updated terms means you accept the revised version.</p>
+      </section>
+
+      <section>
+        <h3>17. Termination</h3>
+        <p>We may suspend or terminate access to the Beginning Identity Stage or related features at any time if we believe there is fraud, abuse, legal risk, security risk, or violation of these Terms.</p>
+        <p>You may stop using CyberCrowd at any time, subject to any surviving obligations or data retention requirements.</p>
+      </section>
+
+      <section>
+        <h3>18. Disclaimer</h3>
+        <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, CYBERCROWD IS PROVIDED ON AN “AS IS” AND “AS AVAILABLE” BASIS. WE DISCLAIM WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, AND ANY WARRANTY THAT THE SERVICE WILL ALWAYS BE AVAILABLE, SECURE, OR ERROR-FREE.</p>
+      </section>
+
+      <section>
+        <h3>19. Limitation of Liability</h3>
+        <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, CYBERCROWD AND ITS OWNERS, OPERATORS, AFFILIATES, EMPLOYEES, AND CONTRACTORS WILL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, EXEMPLARY, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE.</p>
+      </section>
+
+      <section>
+        <h3>20. Indemnity</h3>
+        <p>You agree to defend, indemnify, and hold harmless CyberCrowd from claims, losses, liabilities, damages, and expenses arising out of your use of the service, your content, your breach of these Terms, or your violation of law or third-party rights.</p>
+      </section>
+
+      <section>
+        <h3>21. Governing Law and Disputes</h3>
+        <p>These Terms are governed by the laws of the State of Missouri, without regard to its conflict of law principles. Any dispute arising out of or relating to these Terms or the service will be resolved in the state or federal courts located in Missouri, unless CyberCrowd and you agree in writing to another dispute resolution process.</p>
+      </section>
+
+      <section>
+        <h3>22. Entire Agreement</h3>
+        <p>These Opening Terms, together with any linked policies or separate written agreements you accept, form the entire agreement for the Beginning Identity Stage and supersede prior statements on the same subject.</p>
+      </section>
+
+      <section>
+        <h3>23. Acceptance</h3>
+        <p>BY CHECKING THE BOX BELOW AND CLICKING “ACCEPT,” YOU ACKNOWLEDGE THAT YOU HAVE READ THESE OPENING TERMS, UNDERSTAND THEM, AND AGREE TO BE BOUND BY THEM.</p>
+      </section>
+
+      <div class="accept-box">
+        <label class="accept-label">
+          <input type="checkbox" id="cybercrowd_accept" />
+          <span>
+            📦 I have read and agree to the
+            <a href="/terms.html" target="_blank" rel="noopener noreferrer">CyberCrowd Opening Terms of Agreement</a>.
+          </span>
+        </label>
+
+        <div class="accept-actions">
+          <button id="cybercrowd_accept_button" type="button" disabled>
+            Accept
+          </button>
+          <span id="cybercrowd_accept_status" class="accept-status">
+            Check the box to continue.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      CyberCrowd.net begins with identity, not control.
+    </div>
+  </main>
+
+  <script>
+    const d = new Date();
+
+    document.getElementById("cybercrowd_effective_date").textContent =
+      d.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+
+    const acceptBox = document.getElementById("cybercrowd_accept");
+    const acceptButton = document.getElementById("cybercrowd_accept_button");
+    const acceptStatus = document.getElementById("cybercrowd_accept_status");
+
+    acceptBox.addEventListener("change", function () {
+      acceptButton.disabled = !acceptBox.checked;
+
+      if (acceptBox.checked) {
+        acceptStatus.textContent = "Ready to accept.";
+        acceptStatus.classList.add("ready");
+      } else {
+        acceptStatus.textContent = "Check the box to continue.";
+        acceptStatus.classList.remove("ready");
+      }
+    });
+
+    acceptButton.addEventListener("click", function () {
+      if (!acceptBox.checked) return;
+
+      localStorage.setItem("cybercrowd_terms_accepted_v1", "true");
+      localStorage.setItem("cybercrowd_terms_accepted_date", new Date().toISOString());
+
+      window.location.href = "/create-account.html";
+    });
+  </script>
+</body>
+</html>
