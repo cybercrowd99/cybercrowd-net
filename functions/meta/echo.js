@@ -17,11 +17,19 @@ export async function onRequest(context) {
   }
 
   return new Response(JSON.stringify({
+    ok: true,
+    receiver: "functions/meta/echo.js",
+    lane: "meta",
+    echo: "meta-echo-ok",
+
     method,
     url,
     headers,
     body
   }, null, 2), {
-    headers: { "Content-Type": "application/json" }
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store"
+    }
   });
 }
