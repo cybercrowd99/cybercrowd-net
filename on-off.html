@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd | On / Off</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #111111;
+      --panel-soft: #171717;
+      --text: #f4efe4;
+      --muted: #c8bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.16);
+      --line: rgba(214, 168, 79, 0.35);
+      --shadow: rgba(0, 0, 0, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(214, 168, 79, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.08), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    /* CYBERCROWD SLIDE OUT */
+    #cybercrowd-slideout {
+      position: fixed;
+      top: 110px;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      transform: translateX(-205px);
+      transition: transform 0.25s ease;
+    }
+
+    #cybercrowd-slideout.open {
+      transform: translateX(0);
+    }
+
+    #slideout-panel {
+      width: 205px;
+      padding: 14px;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 18px 55px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #slideout-panel a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(214, 168, 79, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+
+    #slideout-panel a:hover,
+    #slideout-panel a.active {
+      color: #050505;
+      background: var(--gold);
+    }
+
+    #slideout-tab {
+      width: 46px;
+      height: 78px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      background: var(--gold);
+      color: #050505;
+      font-size: 25px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    main {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 34px;
+      background: rgba(17, 17, 17, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 34px 0 10px;
+      color: var(--gold);
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    strong {
+      color: var(--gold);
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--gold-soft);
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .card {
+      padding: 16px;
+      min-height: 145px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .phrase-box {
+      margin: 22px 0;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #111;
+      color: var(--gold);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      background: var(--gold);
+      color: #050505;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.82;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      main {
+        padding: 26px 20px;
+      }
+
+      .three-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #cybercrowd-slideout {
+        top: 88px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CYBERCROWD SLIDE OUT -->
+  <aside id="cybercrowd-slideout">
+    <nav id="slideout-panel">
+      <a href="ping.html">Ping</a>
+      <a href="social.html">Social</a>
+      <a href="public.html">Public</a>
+      <a href="private.html">Private</a>
+      <a href="shop.html">Shop</a>
+      <a href="needs.html">Needs</a>
+      <a href="ican.html">ICAN</a>
+      <a href="on-off.html" class="active">On / Off</a>
+      <a href="upload.html">Upload</a>
+    </nav>
+
+    <button id="slideout-tab" type="button" aria-label="Open Slide Out">☰</button>
+  </aside>
+
+  <main>
+    <p class="eyebrow">CyberCrowd Free Room</p>
+
+    <h1>On / Off</h1>
+
+    <p>
+      On / Off inside CyberCrowd is not a power button. It is the human flow
+      lane. It helps a person control whether a lane, offer, service, job,
+      signal, public surface, private setup, or ability is open, paused, quiet,
+      visible, hidden, accepting, or not accepting right now.
+    </p>
+
+    <p>
+      I CAN says what a person can move toward. On / Off says whether that path
+      is open right now, quiet right now, paused right now, or held until the
+      person is ready.
+    </p>
+
+    <div class="callout">
+      <p>
+        On / Off is the lane that says:
+        <strong>"I control the flow. Open does not mean owned. Quiet does not mean gone."</strong>
+      </p>
+    </div>
+
+    <h2>The Real Meaning Of On / Off</h2>
+
+    <p>
+      On / Off is about availability, visibility, readiness, and flow. It is not
+      about shutting down the person. It is not about turning a human into a
+      machine. It is not about a platform deciding when the person exists.
+    </p>
+
+    <p>
+      A person may be able to do something, but not be available today. A service
+      may exist, but not be accepting customers. A public lane may be visible, but
+      a private draft may still be held. A shop offer may be paused. A Ping may
+      be quiet. A Need may wait for the right answer.
+    </p>
+
+    <p>
+      On / Off gives those states a place without confusing them with identity.
+      The person stays the person whether a lane is open or quiet.
+    </p>
+
+    <h2>The Three Main Parts Of On / Off</h2>
+
+    <div class="three-grid">
+      <div class="card">
+        <h3>1. Visibility</h3>
+        <p>
+          A person can decide what is visible, what is hidden, what is public,
+          what stays private, and what should not be shown yet.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. Availability</h3>
+        <p>
+          A job, service, offer, Ping, or lane can be open, paused, accepting,
+          not accepting, ready, waiting, or closed for now.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Control</h3>
+        <p>
+          The human controls the flow. The system should not force a person to be
+          public, available, searchable, or bookable all the time.
+        </p>
+      </div>
+    </div>
+
+    <h2>On Is Not Ownership</h2>
+
+    <p>
+      Turning something on does not mean the platform owns it. On means the
+      person has opened a lane, signal, offer, service, job, or surface for a
+      purpose.
+    </p>
+
+    <p>
+      On may mean visible. On may mean accepting. On may mean ready. On may mean
+      searchable. On may mean available in a chosen area. On may mean a shop
+      offer is open, a service can be requested, a public lane can be seen, or a
+      Ping can point.
+    </p>
+
+    <p>
+      The human still controls the release.
+    </p>
+
+    <h2>Off Is Not Death</h2>
+
+    <p>
+      Turning something off does not mean the person is gone. Off can mean quiet.
+      Off can mean paused. Off can mean not accepting. Off can mean private for
+      now. Off can mean hidden until ready. Off can mean the human needs time.
+    </p>
+
+    <p>
+      A person can be off for a lane and still exist. A service can be off today
+      and return tomorrow. A shop item can be paused. A job can be unavailable. A
+      draft can stay private. A public surface can be quiet without erasing the
+      human.
+    </p>
+
+    <div class="phrase-box">
+      <p><strong>"On means open by choice."</strong></p>
+      <p><strong>"Off means quiet by choice."</strong></p>
+      <p><strong>"Paused does not mean erased."</strong></p>
+      <p><strong>"Visible does not mean owned."</strong></p>
+    </div>
+
+    <h2>On / Off Connects To I CAN</h2>
+
+    <p>
+      I CAN names ability. On / Off controls whether that ability is open right
+      now.
+    </p>
+
+    <p>
+      A person may say:
+      <strong>"I can cut grass."</strong>
+      On / Off can say:
+      <strong>"Accepting this weekend,"</strong>
+      or
+      <strong>"Not accepting right now."</strong>
+    </p>
+
+    <p>
+      A person may say:
+      <strong>"I can help with repairs."</strong>
+      On / Off can say:
+      <strong>"Visible to local Needs,"</strong>
+      or
+      <strong>"Keep private until ready."</strong>
+    </p>
+
+    <h2>On / Off Connects To Private</h2>
+
+    <p>
+      Private is the office where the living resume, drafts, proof, services,
+      records, job setup, and future offers are built first. On / Off helps decide
+      when something leaves that office and when it stays there.
+    </p>
+
+    <p>
+      A private service draft can stay off until the price is ready. A job lane
+      can stay off until tools are ready. A proof record can stay off unless the
+      person chooses to release it.
+    </p>
+
+    <p>
+      Private prepares. On / Off controls the release state.
+    </p>
+
+    <h2>On / Off Connects To Public</h2>
+
+    <p>
+      Public is what the person chooses to show. On / Off helps control whether a
+      public lane is visible, quiet, featured, paused, or not showing right now.
+    </p>
+
+    <p>
+      A public profile can be visible while a service is off. A public post can
+      stay visible while a shop offer is paused. A public lane can be quiet
+      without deleting the person.
+    </p>
+
+    <h2>On / Off Connects To Shop</h2>
+
+    <p>
+      Shop holds offers that may be opened, paused, sold out, not accepting,
+      hidden, or ready later. On / Off helps Shop stop forcing every offer to act
+      like it is always available.
+    </p>
+
+    <p>
+      A service can be open today and paused tomorrow. A custom request can be
+      closed while the person catches up. A product can be visible but not
+      available. A support option can be open without exposing the whole private
+      setup.
+    </p>
+
+    <h2>On / Off Connects To Needs</h2>
+
+    <p>
+      Needs is where people search for help, services, items, workers, or
+      answers. On / Off helps protect the person answering the Need.
+    </p>
+
+    <p>
+      A Need may exist, but the person who can answer it may not be available
+      right now. On / Off lets the system respect that difference.
+    </p>
+
+    <p>
+      Needs can ask. ICAN can say ability exists. On / Off says whether that
+      ability is open for response right now.
+    </p>
+
+    <h2>On / Off Connects To Ping</h2>
+
+    <p>
+      Ping points toward what is nearby, available, changed, ready, or useful.
+      On / Off helps Ping know what should be pointed at and what should stay
+      quiet.
+    </p>
+
+    <p>
+      A Ping should not point people toward a service that is paused. It should
+      not light up a worker who is not accepting. It should not expose a private
+      draft. On / Off gives Ping a flow signal.
+    </p>
+
+    <h2>Human States</h2>
+
+    <p>
+      On / Off is not only yes or no. Human life has more states than a switch.
+      A person may be ready, busy, resting, building, hidden, public, accepting,
+      not accepting, learning, limited, local, online, offline, quiet, or open.
+    </p>
+
+    <p>
+      CyberCrowd should not flatten that into a fake power button. The point is
+      to respect human flow.
+    </p>
+
+    <ul>
+      <li>Open</li>
+      <li>Quiet</li>
+      <li>Visible</li>
+      <li>Hidden</li>
+      <li>Accepting</li>
+      <li>Not accepting</li>
+      <li>Ready</li>
+      <li>Paused</li>
+      <li>Private for now</li>
+      <li>Public by choice</li>
+    </ul>
+
+    <h2>What Can Use On / Off</h2>
+
+    <p>
+      On / Off can apply to many CyberCrowd lanes without replacing them.
+    </p>
+
+    <ul>
+      <li>A CyberJob can be accepting or not accepting.</li>
+      <li>A CyberService can be open, paused, or private.</li>
+      <li>A Shop offer can be available, sold out, hidden, or ready later.</li>
+      <li>A Public lane can be visible, quiet, or featured.</li>
+      <li>A Private draft can stay held until release.</li>
+      <li>A Ping can be active or quiet.</li>
+      <li>A Need response can be open or waiting.</li>
+      <li>An ICAN ability can be named without being available yet.</li>
+      <li>A person can control the flow without being erased.</li>
+    </ul>
+
+    <h2>How On / Off Is Supposed To Be Used</h2>
+
+    <p>
+      Use On / Off when the question is not “Can this person do it?” but
+      “Is this lane open right now?”
+    </p>
+
+    <p>
+      That difference matters. Ability belongs to I CAN. Resume proof belongs to
+      Private. Search belongs to Needs. Offers belong to Shop. Public shows what
+      is released. Ping points. On / Off controls the flow state.
+    </p>
+
+    <ul>
+      <li>Use On / Off to pause a service without deleting it.</li>
+      <li>Use On / Off to make a job not accepting right now.</li>
+      <li>Use On / Off to keep a draft private until ready.</li>
+      <li>Use On / Off to make a public lane quiet without erasing it.</li>
+      <li>Use On / Off to stop Ping from pointing at something unavailable.</li>
+      <li>Use On / Off to let Shop show what is open and what is paused.</li>
+      <li>Use On / Off to protect the human from always being available.</li>
+      <li>Use On / Off without treating the human like a machine.</li>
+    </ul>
+
+    <h2>What On / Off Is Doing</h2>
+
+    <p>
+      On / Off creates a bridge between ability and availability.
+    </p>
+
+    <p>
+      A person can do something, but may not be available. A service can exist,
+      but may not be open. A shop offer can be real, but may be paused. A public
+      lane can exist, but may be quiet. A private draft can be ready later.
+    </p>
+
+    <p>
+      On / Off lights the flow state and says:
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>"This is the current state of the lane."</strong>
+      </p>
+    </div>
+
+    <h2>What On / Off Is Not</h2>
+
+    <p>
+      On / Off is not a power button. It is not the owner of the person. It is not
+      a deletion switch. It is not punishment. It is not proof. It is not the
+      resume. It is not the same as ability. It is not permission for a platform
+      to decide when a human exists.
+    </p>
+
+    <ul>
+      <li>On / Off is not power over the person.</li>
+      <li>On / Off is not identity death.</li>
+      <li>On / Off is not a forced work signal.</li>
+      <li>On / Off is not a hidden punishment.</li>
+      <li>On / Off is not proof of ability.</li>
+      <li>On / Off is not resume intake.</li>
+      <li>On / Off is not public exposure without choice.</li>
+    </ul>
+
+    <h2>Why CyberCrowd Needs On / Off</h2>
+
+    <p>
+      CyberCrowd connects identity, work, services, shops, needs, public lanes,
+      private preparation, and human ability. Those lanes need a way to respect
+      timing.
+    </p>
+
+    <p>
+      Without On / Off, everything acts like it is always public, always
+      available, always accepting, always searchable, and always open. That is
+      not human.
+    </p>
+
+    <p>
+      On / Off gives the person control over the rhythm.
+    </p>
+
+    <h2>On / Off In One Sentence</h2>
+
+    <div class="callout">
+      <p>
+        CyberCrowd On / Off is the human flow lane where a person controls
+        whether a job, service, offer, Ping, public surface, private draft, Need
+        response, or ability is open, quiet, visible, hidden, accepting, paused,
+        or held for later.
+      </p>
+    </div>
+
+    <h2>The Human Rule Of On / Off</h2>
+
+    <p>
+      On / Off should protect human control over timing, visibility, and
+      availability.
+    </p>
+
+    <p>
+      The person says:
+      <strong>"This is open right now,"</strong>
+      or
+      <strong>"This is quiet right now."</strong>
+    </p>
+
+    <p>
+      CyberCrowd answers:
+      <strong>"The flow belongs to you."</strong>
+    </p>
+
+    <p>
+      The human is not a power button.
+    </p>
+
+    <div class="nav-buttons">
+      <button type="button" onclick="history.back()">BACK</button>
+      <button type="button" onclick="location.href='upload.html'">NEXT</button>
+    </div>
+
+    <p class="footer-note">
+      On / Off is a free CyberCrowd room explaining human flow, availability,
+      visibility, pause states, and controlled release. The terms ledger stays
+      separate.
+    </p>
+  </main>
+
+  <script>
+    const slideout = document.getElementById("cybercrowd-slideout");
+    const tab = document.getElementById("slideout-tab");
+
+    tab.addEventListener("click", function () {
+      slideout.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
