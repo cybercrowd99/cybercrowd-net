@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd | Ping</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --card: #111111;
+      --card-soft: #171717;
+      --text: #f4efe4;
+      --muted: #c9bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.16);
+      --line: rgba(214, 168, 79, 0.35);
+      --shadow: rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(214, 168, 79, 0.18), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.08), transparent 36%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 26px;
+    }
+
+    /* CYBERCROWD SLIDE OUT */
+    #cybercrowd-slideout {
+      position: fixed;
+      top: 115px;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      transform: translateX(-205px);
+      transition: transform 0.25s ease;
+    }
+
+    #cybercrowd-slideout.open {
+      transform: translateX(0);
+    }
+
+    #slideout-panel {
+      width: 205px;
+      padding: 14px;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 18px 55px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #slideout-panel a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(214, 168, 79, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+
+    #slideout-panel a:hover,
+    #slideout-panel a.active {
+      color: #050505;
+      background: var(--gold);
+    }
+
+    #slideout-tab {
+      width: 46px;
+      height: 78px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      background: var(--gold);
+      color: #050505;
+      font-size: 25px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    main {
+      width: 100%;
+      max-width: 930px;
+      margin: 0 auto;
+      padding: 34px;
+      background: rgba(17, 17, 17, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: clamp(2.1rem, 6vw, 4rem);
+      line-height: 1;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 34px 0 10px;
+      color: var(--gold);
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    p {
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--gold-soft);
+    }
+
+    .callout strong {
+      color: var(--gold);
+    }
+
+    .ping-lines {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .ping-card {
+      padding: 16px;
+      min-height: 130px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: var(--card-soft);
+    }
+
+    .ping-card h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .ping-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .phrase-box {
+      margin: 22px 0;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #111;
+      color: var(--gold);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      background: var(--gold);
+      color: #050505;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.82;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      main {
+        padding: 26px 20px;
+      }
+
+      .ping-lines {
+        grid-template-columns: 1fr;
+      }
+
+      #cybercrowd-slideout {
+        top: 88px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CYBERCROWD SLIDE OUT -->
+  <aside id="cybercrowd-slideout">
+    <nav id="slideout-panel">
+      <a href="ping.html" class="active">Ping</a>
+      <a href="social.html">Social</a>
+      <a href="public.html">Public</a>
+      <a href="private.html">Private</a>
+      <a href="shop.html">Shop</a>
+      <a href="needs.html">Needs</a>
+      <a href="ican.html">ICAN</a>
+      <a href="on-off.html">On / Off</a>
+      <a href="upload.html">Upload</a>
+    </nav>
+
+    <button id="slideout-tab" type="button" aria-label="Open Slide Out">☰</button>
+  </aside>
+
+  <main>
+    <p class="eyebrow">CyberCrowd Identity Room</p>
+
+    <h1>Ping</h1>
+
+    <p>
+      A Ping inside CyberCrowd is a small signal with a clear human purpose.
+      It is not a speech. It is not a lecture. It is not a whole meeting.
+      It is the quick knock on the door that says,
+      <strong>"Look here."</strong>
+    </p>
+
+    <p>
+      A real ping helps a person know where attention should go next. It can
+      point to a room, a message, a job, a person, a file, a moment, a request,
+      or a live situation that needs eyes on it.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>Simple version:</strong>
+        a Ping is CyberCrowd saying,
+        <strong>"Open here. Something is waiting."</strong>
+      </p>
+    </div>
+
+    <h2>What A Real Ping Means</h2>
+
+    <p>
+      In normal life, a ping is that little tap that says someone is trying to
+      reach you. Your phone lights up. A message lands. A doorbell rings. A
+      friend waves from across the room. It is not the whole story. It is the
+      signal that tells you there is a story to check.
+    </p>
+
+    <p>
+      CyberCrowd uses that same idea. A Ping is a direction marker. It helps
+      people move through the system without getting lost in noise. Instead of
+      shouting everything at everyone, a Ping points to the right place at the
+      right time.
+    </p>
+
+    <h2>What A Ping Is Doing</h2>
+
+    <p>
+      A Ping is doing one basic job:
+      <strong>it is creating attention with direction.</strong>
+    </p>
+
+    <p>
+      It does not need to explain the whole world. It just needs to make the
+      next step obvious.
+    </p>
+
+    <div class="ping-lines">
+      <div class="ping-card">
+        <h3>Open Here</h3>
+        <p>
+          The Ping points to the place where something is waiting.
+        </p>
+      </div>
+
+      <div class="ping-card">
+        <h3>Check This</h3>
+        <p>
+          The Ping marks a message, request, update, or moment that needs review.
+        </p>
+      </div>
+
+      <div class="ping-card">
+        <h3>Someone Needs You</h3>
+        <p>
+          The Ping can carry human attention without turning it into pressure.
+        </p>
+      </div>
+    </div>
+
+    <h2>How A Ping Is Supposed To Be Used</h2>
+
+    <p>
+      Use a Ping when something needs attention, but does not need a full
+      explanation before the person arrives. The Ping is the pointer. The room,
+      file, post, job, or message carries the details.
+    </p>
+
+    <ul>
+      <li>Ping a person when they should look at a specific place.</li>
+      <li>Ping a room when activity has started there.</li>
+      <li>Ping a job when the next action is ready.</li>
+      <li>Ping a file when something has changed.</li>
+      <li>Ping a creator when someone is engaging with their work.</li>
+      <li>Ping a lane when attention needs to move there.</li>
+      <li>Ping yourself as a reminder to return to a thought or task.</li>
+    </ul>
+
+    <h2>The Human Side Of Ping</h2>
+
+    <p>
+      A good Ping respects the person receiving it. It should not feel like
+      getting dragged by the collar. It should feel like a useful tap on the
+      shoulder.
+    </p>
+
+    <p>
+      The best Ping says:
+    </p>
+
+    <div class="phrase-box">
+      <p><strong>"You are not in trouble."</strong></p>
+      <p><strong>"You are not being trapped."</strong></p>
+      <p><strong>"There is something here worth your attention."</strong></p>
+      <p><strong>"Open here when you are ready."</strong></p>
+    </div>
+
+    <h2>What A Ping Is Not</h2>
+
+    <p>
+      A Ping is not authority. It does not own the person. It does not make the
+      decision. It does not punish. It does not secretly judge. It does not turn
+      a person into a task machine.
+    </p>
+
+    <p>
+      A Ping should not become spam, pressure, panic, or noise. If everything is
+      pinging all the time, then nothing is really being heard.
+    </p>
+
+    <ul>
+      <li>A Ping is not a command.</li>
+      <li>A Ping is not a permanent label.</li>
+      <li>A Ping is not proof by itself.</li>
+      <li>A Ping is not punishment.</li>
+      <li>A Ping is not a whole conversation.</li>
+    </ul>
+
+    <h2>Why CyberCrowd Needs Ping</h2>
+
+    <p>
+      CyberCrowd has rooms, lanes, identity layers, work signals, creative
+      spaces, private areas, public moments, shops, needs, uploads, and human
+      movement. Without a clean signal, people would have to hunt through
+      everything just to find the next open door.
+    </p>
+
+    <p>
+      Ping keeps the system human. It gives direction without burying people in
+      instructions. It keeps movement light. It says,
+      <strong>"This way."</strong>
+    </p>
+
+    <h2>Ping In One Sentence</h2>
+
+    <div class="callout">
+      <p>
+        A CyberCrowd Ping is a human attention signal that points to where
+        something is alive, waiting, changed, requested, or ready to open.
+      </p>
+    </div>
+
+    <h2>The Rule Of A Good Ping</h2>
+
+    <p>
+      A good Ping should be short, useful, honest, and pointed at a real place.
+      It should help someone move, not make them guess.
+    </p>
+
+    <p>
+      The Ping says:
+      <strong>"Open here."</strong>
+    </p>
+
+    <p>
+      The person answers:
+      <strong>"I see it."</strong>
+    </p>
+
+    <p>
+      CyberCrowd keeps the door lit.
+    </p>
+
+    <div class="nav-buttons">
+      <button type="button" onclick="history.back()">BACK</button>
+      <button type="button" onclick="location.href='social.html'">NEXT</button>
+    </div>
+
+    <p class="footer-note">
+      Ping is a free CyberCrowd profile room. The Terms page remains the separate ledger and contract.
+    </p>
+  </main>
+
+  <script>
+    const slideout = document.getElementById("cybercrowd-slideout");
+    const tab = document.getElementById("slideout-tab");
+
+    tab.addEventListener("click", function () {
+      slideout.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
