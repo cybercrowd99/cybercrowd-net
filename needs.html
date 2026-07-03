@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd | Needs</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #111111;
+      --panel-soft: #171717;
+      --text: #f4efe4;
+      --muted: #c8bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.16);
+      --line: rgba(214, 168, 79, 0.35);
+      --shadow: rgba(0, 0, 0, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(214, 168, 79, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.08), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    /* CYBERCROWD SLIDE OUT */
+    #cybercrowd-slideout {
+      position: fixed;
+      top: 110px;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      transform: translateX(-205px);
+      transition: transform 0.25s ease;
+    }
+
+    #cybercrowd-slideout.open {
+      transform: translateX(0);
+    }
+
+    #slideout-panel {
+      width: 205px;
+      padding: 14px;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 18px 55px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #slideout-panel a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(214, 168, 79, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+
+    #slideout-panel a:hover,
+    #slideout-panel a.active {
+      color: #050505;
+      background: var(--gold);
+    }
+
+    #slideout-tab {
+      width: 46px;
+      height: 78px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      background: var(--gold);
+      color: #050505;
+      font-size: 25px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    main {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 34px;
+      background: rgba(17, 17, 17, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 34px 0 10px;
+      color: var(--gold);
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    strong {
+      color: var(--gold);
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--gold-soft);
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .card {
+      padding: 16px;
+      min-height: 145px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .phrase-box {
+      margin: 22px 0;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .search-box {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .search-row input {
+      flex: 1 1 240px;
+      min-width: 0;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #090909;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .search-row button {
+      padding: 12px 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--gold);
+      color: #050505;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #111;
+      color: var(--gold);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      background: var(--gold);
+      color: #050505;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.82;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      main {
+        padding: 26px 20px;
+      }
+
+      .three-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #cybercrowd-slideout {
+        top: 88px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CYBERCROWD SLIDE OUT -->
+  <aside id="cybercrowd-slideout">
+    <nav id="slideout-panel">
+      <a href="ping.html">Ping</a>
+      <a href="social.html">Social</a>
+      <a href="public.html">Public</a>
+      <a href="private.html">Private</a>
+      <a href="shop.html">Shop</a>
+      <a href="needs.html" class="active">Needs</a>
+      <a href="ican.html">ICAN</a>
+      <a href="on-off.html">On / Off</a>
+      <a href="upload.html">Upload</a>
+    </nav>
+
+    <button id="slideout-tab" type="button" aria-label="Open Slide Out">☰</button>
+  </aside>
+
+  <main>
+    <p class="eyebrow">CyberCrowd Free Room</p>
+
+    <h1>Needs</h1>
+
+    <p>
+      Needs inside CyberCrowd is the search lane for what people are looking for,
+      missing, requesting, trying to solve, or hoping someone can help with.
+    </p>
+
+    <p>
+      Needs are not a resume intake. A Need is not where the person proves their
+      whole work history. A Need is where the problem, request, wish, search, or
+      missing piece becomes visible enough for the right person, service, shop,
+      ping, or lane to answer it.
+    </p>
+
+    <div class="callout">
+      <p>
+        Needs is the lane that says:
+        <strong>"I am looking for this. Who or what can answer it?"</strong>
+      </p>
+    </div>
+
+    <h2>The Real Meaning Of Needs</h2>
+
+    <p>
+      In real life, people need things before they know who can help. A person
+      may need a ride, a repair, food, cleaning help, a worker, a tool, a local
+      service, a creative answer, a shop item, a friend, a helper, a ride home,
+      a digital task, or just a clear direction.
+    </p>
+
+    <p>
+      CyberCrowd Needs gives that missing piece a place to be searched, named,
+      linked, and answered. It turns “I need something” into a lane that can
+      connect to Ping, Shop, Public, Private, and ICAN.
+    </p>
+
+    <p>
+      Needs are about demand, request, search, and response. They are not the
+      same as building your resume.
+    </p>
+
+    <h2>The Three Main Parts Of Needs</h2>
+
+    <div class="three-grid">
+      <div class="card">
+        <h3>1. Search</h3>
+        <p>
+          Needs begins with search. A person is looking for help, a service, an
+          item, a worker, a shop, a skill, a place, a route, or an answer.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. Linkage</h3>
+        <p>
+          Needs links to Ping, Shop, Public, Private, and ICAN so the request can
+          find the right direction instead of floating alone.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Response</h3>
+        <p>
+          Needs should lead to a possible answer: a service, offer, helper,
+          worker, creator, shop item, local option, or clear next step.
+        </p>
+      </div>
+    </div>
+
+    <h2>Need Search</h2>
+
+    <p>
+      Need Search is the human question box. It is where someone starts with what
+      they are looking for instead of starting with a company, ad, or profile.
+    </p>
+
+    <p>
+      A Need Search can be simple:
+      <strong>"I need a plumber,"</strong>
+      <strong>"I need food help,"</strong>
+      <strong>"I need a ride,"</strong>
+      <strong>"I need someone who can fix this,"</strong>
+      or
+      <strong>"I need a local offer near me."</strong>
+    </p>
+
+    <div class="search-box">
+      <h3>Need Search Example</h3>
+      <p>
+        This shows the idea of a Needs search lane. The real system can later
+        connect this search to Ping, Shop, Public, Private, and ICAN.
+      </p>
+
+      <div class="search-row">
+        <input type="text" placeholder="Search a need: repair, ride, food, service, item..." aria-label="Search a need" />
+        <button type="button">Search Needs</button>
+      </div>
+    </div>
+
+    <h2>Needs Link To Ping</h2>
+
+    <p>
+      Ping helps a Need move. If someone needs help, a Ping can point toward what
+      is near, available, changed, ready, or useful.
+    </p>
+
+    <p>
+      A Need may start as:
+      <strong>"I need this."</strong>
+      Ping can answer:
+      <strong>"Something nearby may help. Open here."</strong>
+    </p>
+
+    <p>
+      Ping does not become the Need. Ping gives the Need direction.
+    </p>
+
+    <div class="phrase-box">
+      <p><strong>"Need asks the question."</strong></p>
+      <p><strong>"Ping points toward movement."</strong></p>
+      <p><strong>"Shop may hold the answer."</strong></p>
+      <p><strong>"ICAN shows who can do it."</strong></p>
+    </div>
+
+    <h2>Needs Link To Shop</h2>
+
+    <p>
+      Shop is where prepared offers can open. A Need may be answered by a shop
+      item, service, booking, worker offer, creator release, support option, or
+      custom request.
+    </p>
+
+    <p>
+      If someone needs a lawn cut, a meal, a ride, a repair, a digital file, a
+      song, a local worker, or a service, Shop can show what is ready to open.
+    </p>
+
+    <p>
+      Need says:
+      <strong>"I am looking."</strong>
+      Shop says:
+      <strong>"This is available."</strong>
+    </p>
+
+    <h2>Needs Link To Public</h2>
+
+    <p>
+      Public is where visible identity and public offers can be seen. A Need can
+      connect to Public when the person answering wants to show a public face,
+      public proof, public service, public story, public post, or public lane.
+    </p>
+
+    <p>
+      Someone may want to see the person behind the answer before they trust the
+      offer. Public can show what the person chooses to release.
+    </p>
+
+    <p>
+      Public helps a Need understand the visible side of the response.
+    </p>
+
+    <h2>Needs Link To Private</h2>
+
+    <p>
+      Private prepares what is not ready yet. A Need can connect to Private when
+      the answer is still being built, priced, drafted, checked, or held before
+      public release.
+    </p>
+
+    <p>
+      Private does not mean the Need gets to see everything. Private means the
+      person answering the Need can prepare the service, offer, record, proof, or
+      job setup before opening it.
+    </p>
+
+    <p>
+      Need may ask. Private prepares. Public only sees what the person releases.
+    </p>
+
+    <h2>Needs Are Not Resume Intake</h2>
+
+    <p>
+      Needs are not where a worker has to dump their whole resume. The resume
+      belongs in Private. Needs are where the request lives.
+    </p>
+
+    <p>
+      A person searching a Need should not have to become a hiring manager before
+      they can ask for help. They should be able to say what they need and let
+      CyberCrowd connect that Need to the right lane.
+    </p>
+
+    <p>
+      The resume can support the answer later, but the Need itself is the search,
+      request, or missing piece.
+    </p>
+
+    <h2>Needs As Human Requests</h2>
+
+    <p>
+      A Need can be big or small. It can be urgent or casual. It can be local or
+      digital. It can be for work, home, creativity, care, movement, food, tools,
+      services, repairs, community, or opportunity.
+    </p>
+
+    <p>
+      The important part is that the Need is human. It starts with a person
+      saying:
+      <strong>"Something is missing. I am looking for an answer."</strong>
+    </p>
+
+    <h2>What Can Live In Needs</h2>
+
+    <p>
+      Needs can include many kinds of searches and requests.
+    </p>
+
+    <ul>
+      <li>A person needs help with a task.</li>
+      <li>A customer needs a service.</li>
+      <li>A neighbor needs a local worker.</li>
+      <li>A creator needs support or collaboration.</li>
+      <li>A household needs repair, cleaning, food, or delivery help.</li>
+      <li>A worker needs the right job request to find them.</li>
+      <li>A shop needs to answer what someone is searching for.</li>
+      <li>A community needs people, supplies, events, or support.</li>
+      <li>A person needs a direction, not a full resume intake.</li>
+    </ul>
+
+    <h2>How Needs Is Supposed To Be Used</h2>
+
+    <p>
+      Use Needs when the starting point is the request, not the resume. The
+      person is looking for something, and CyberCrowd should help connect that
+      search to the right lane.
+    </p>
+
+    <ul>
+      <li>Use Needs to search for help, services, items, workers, or answers.</li>
+      <li>Use Needs to connect a request to Ping when movement is needed.</li>
+      <li>Use Needs to connect a request to Shop when an offer is available.</li>
+      <li>Use Needs to connect a request to Public when visible identity helps.</li>
+      <li>Use Needs to connect a request to Private when preparation is needed.</li>
+      <li>Use Needs to connect a request to ICAN when ability matters.</li>
+      <li>Use Needs to make the missing piece clear before the answer appears.</li>
+      <li>Use Needs without turning it into a resume intake form.</li>
+    </ul>
+
+    <h2>What Needs Is Doing</h2>
+
+    <p>
+      Needs creates a bridge between search and answer.
+    </p>
+
+    <p>
+      Someone is looking. Someone is missing something. Someone needs help. A
+      service may answer. A shop may answer. A worker may answer. A public lane
+      may explain. A private lane may prepare. A Ping may point. ICAN may show
+      ability.
+    </p>
+
+    <p>
+      Needs lights the request and says:
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>"This is needed. What can answer it?"</strong>
+      </p>
+    </div>
+
+    <h2>What Needs Is Not</h2>
+
+    <p>
+      Needs is not a resume intake. It is not a forced job application. It is not
+      a place where the worker has to give away their whole private setup. It is
+      not a random complaint box. It is not a place for corporations to harvest
+      demand without serving the human.
+    </p>
+
+    <ul>
+      <li>Needs is not the resume.</li>
+      <li>Needs is not the worker profile.</li>
+      <li>Needs is not a forced application.</li>
+      <li>Needs is not a free data mine.</li>
+      <li>Needs is not a public exposure trap.</li>
+      <li>Needs is not bigger than the human asking.</li>
+      <li>Needs is not bigger than the human answering.</li>
+    </ul>
+
+    <h2>Why CyberCrowd Needs Needs</h2>
+
+    <p>
+      CyberCrowd connects identity, work, creativity, services, shops,
+      communities, and opportunity. But people often start with a need before
+      they know which lane can answer it.
+    </p>
+
+    <p>
+      Needs gives that starting point a room. It lets the request be named first,
+      then linked to Ping, Shop, Public, Private, ICAN, and whatever response
+      fits.
+    </p>
+
+    <h2>Needs In One Sentence</h2>
+
+    <div class="callout">
+      <p>
+        CyberCrowd Needs is the search and request lane that links human needs to
+        Ping, Shop, Public, Private, and ICAN without turning the request into a
+        resume intake.
+      </p>
+    </div>
+
+    <h2>The Human Rule Of Needs</h2>
+
+    <p>
+      Needs should help people find answers without forcing them through the
+      wrong door.
+    </p>
+
+    <p>
+      The person says:
+      <strong>"I need this."</strong>
+    </p>
+
+    <p>
+      CyberCrowd answers:
+      <strong>"Then let’s find the right lane."</strong>
+    </p>
+
+    <p>
+      The request stays clear. The resume stays where it belongs.
+    </p>
+
+    <div class="nav-buttons">
+      <button type="button" onclick="history.back()">BACK</button>
+      <button type="button" onclick="location.href='ican.html'">NEXT</button>
+    </div>
+
+    <p class="footer-note">
+      Needs is a free CyberCrowd room explaining search, requests, and linkages
+      to Ping, Shop, Public, Private, and ICAN. The terms ledger stays separate.
+    </p>
+  </main>
+
+  <script>
+    const slideout = document.getElementById("cybercrowd-slideout");
+    const tab = document.getElementById("slideout-tab");
+
+    tab.addEventListener("click", function () {
+      slideout.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
