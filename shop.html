@@ -3,87 +3,570 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cybercrowd Shop</title>
+
+  <title>CyberCrowd | Shop</title>
+
   <style>
+    :root {
+      --bg: #050505;
+      --panel: #111111;
+      --panel-soft: #171717;
+      --text: #f4efe4;
+      --muted: #c8bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.16);
+      --line: rgba(214, 168, 79, 0.35);
+      --shadow: rgba(0, 0, 0, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
       margin: 0;
-      background: #050914;
-      color: #e7fbff;
-      font-family: Arial, sans-serif;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(214, 168, 79, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.08), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
     }
-    .wrap {
-      max-width: 900px;
-      margin: auto;
-      padding: 40px 20px;
-    }
-    h1 {
-      color: #35e8ff;
-      font-size: 42px;
-    }
-    .card {
-      border: 1px solid #1e7c91;
-      border-radius: 18px;
+
+    body {
       padding: 24px;
-      margin: 20px 0;
-      background: #081526;
     }
-    .price {
-      font-size: 28px;
-      color: #73ffb4;
-      margin: 12px 0;
+
+    /* CYBERCROWD SLIDE OUT */
+    #cybercrowd-slideout {
+      position: fixed;
+      top: 110px;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      transform: translateX(-205px);
+      transition: transform 0.25s ease;
     }
-    .crwd {
-      color: #35e8ff;
-      font-weight: bold;
+
+    #cybercrowd-slideout.open {
+      transform: translateX(0);
     }
-    a.button {
-      display: inline-block;
-      margin-top: 16px;
-      padding: 14px 22px;
-      background: #35e8ff;
-      color: #001018;
+
+    #slideout-panel {
+      width: 205px;
+      padding: 14px;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 18px 55px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #slideout-panel a {
+      color: var(--text);
       text-decoration: none;
-      border-radius: 12px;
-      font-weight: bold;
+      padding: 10px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(214, 168, 79, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
     }
-    .note {
-      color: #9fb6c0;
-      font-size: 14px;
+
+    #slideout-panel a:hover,
+    #slideout-panel a.active {
+      color: #050505;
+      background: var(--gold);
+    }
+
+    #slideout-tab {
+      width: 46px;
+      height: 78px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      background: var(--gold);
+      color: #050505;
+      font-size: 25px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    main {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 34px;
+      background: rgba(17, 17, 17, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 34px 0 10px;
+      color: var(--gold);
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    strong {
+      color: var(--gold);
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--gold-soft);
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .card {
+      padding: 16px;
+      min-height: 145px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .phrase-box {
+      margin: 22px 0;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #111;
+      color: var(--gold);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      background: var(--gold);
+      color: #050505;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.82;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      main {
+        padding: 26px 20px;
+      }
+
+      .three-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #cybercrowd-slideout {
+        top: 88px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <main class="wrap">
-    <h1>Cybercrowd Shop</h1>
-    <p>Cybercrowd runs on CRWD. Stripe checkout is the entry ramp.</p>
+  <!-- CYBERCROWD SLIDE OUT -->
+  <aside id="cybercrowd-slideout">
+    <nav id="slideout-panel">
+      <a href="ping.html">Ping</a>
+      <a href="social.html">Social</a>
+      <a href="public.html">Public</a>
+      <a href="private.html">Private</a>
+      <a href="shop.html" class="active">Shop</a>
+      <a href="needs.html">Needs</a>
+      <a href="ican.html">ICAN</a>
+      <a href="on-off.html">On / Off</a>
+      <a href="upload.html">Upload</a>
+    </nav>
 
-    <section class="card">
-      <h2>Cybercrowd Tee</h2>
-      <p>Official Cybercrowd signal shirt.</p>
-      <div class="price">$20.00</div>
-      <div class="crwd">≈ 3,921,560 CRWD</div>
-      <a class="button" href="PASTE_STRIPE_PAYMENT_LINK_HERE">Buy / Load CRWD</a>
-    </section>
+    <button id="slideout-tab" type="button" aria-label="Open Slide Out">☰</button>
+  </aside>
 
-    <section class="card">
-      <h2>Cybercrowd Hat</h2>
-      <p>Cybercrowd headwear for field signal crews.</p>
-      <div class="price">$20.00</div>
-      <div class="crwd">≈ 3,921,560 CRWD</div>
-      <a class="button" href="PASTE_STRIPE_PAYMENT_LINK_HERE">Buy / Load CRWD</a>
-    </section>
+  <main>
+    <p class="eyebrow">CyberCrowd Free Room</p>
 
-    <section class="card">
-      <h2>Cybercrowd Sticker Pack</h2>
-      <p>QR, coin, and platform identity sticker set.</p>
-      <div class="price">$3.99</div>
-      <div class="crwd">≈ 782,353 CRWD</div>
-      <a class="button" href="PASTE_STRIPE_PAYMENT_LINK_HERE">Buy / Load CRWD</a>
-    </section>
+    <h1>Shop</h1>
 
-    <p class="note">
-      Teasers are free. Albums, merch, tips, and platform unlocks use CRWD.
+    <p>
+      Shop inside CyberCrowd is the place where a person can turn prepared work,
+      services, offers, items, ideas, and lanes into something people can open,
+      understand, support, request, buy, book, or follow.
+    </p>
+
+    <p>
+      Shop is not just a store shelf. It connects back to Ping, Public, Private,
+      Needs, and ICAN. A shop offer can be prepared in Private, shown in Public,
+      discovered by Ping, matched to a Need, and supported by what the person can
+      actually do.
+    </p>
+
+    <div class="callout">
+      <p>
+        Shop is the lane that says:
+        <strong>"This is ready to open. This is what I offer."</strong>
+      </p>
+    </div>
+
+    <h2>The Real Meaning Of Shop</h2>
+
+    <p>
+      A shop is more than products on a shelf. A real shop is where a person,
+      worker, creator, service provider, helper, artist, builder, seller, or
+      community can present something that is ready for someone else to act on.
+    </p>
+
+    <p>
+      In CyberCrowd, Shop can hold physical items, digital items, creative work,
+      services, local help, job offers, event offers, support options, custom
+      requests, and future lanes that grow from the person’s living resume.
+    </p>
+
+    <p>
+      Private prepares the offer. Public shows the face of it. Ping points people
+      toward it. Needs can request it. ICAN can prove the person can do it. Shop
+      is where the offer becomes open.
+    </p>
+
+    <h2>The Three Main Parts Of Shop</h2>
+
+    <div class="three-grid">
+      <div class="card">
+        <h3>1. Offers</h3>
+        <p>
+          Shop holds what is ready to be opened: items, services, bookings,
+          support options, digital work, physical goods, or custom requests.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. Trust</h3>
+        <p>
+          Shop should connect back to the person’s resume, proof, public lane,
+          private setup, and ICAN ability so the offer is not floating alone.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Flow</h3>
+        <p>
+          Shop helps move from interest to action. A person can see the offer,
+          understand it, request it, save it, support it, or buy it.
+        </p>
+      </div>
+    </div>
+
+    <h2>Shop Connects To Ping</h2>
+
+    <p>
+      Ping helps people find what is near, needed, available, changed, or ready
+      to open. Shop gives Ping a place to point when an offer is ready.
+    </p>
+
+    <p>
+      A Ping may say a service is nearby. A Ping may say an item is available. A
+      Ping may say a creator has opened a new offer. A Ping may say a worker is
+      ready in this area. Shop is where the person can see what the Ping is
+      pointing to.
+    </p>
+
+    <div class="phrase-box">
+      <p><strong>"Ping found it. Shop explains it."</strong></p>
+      <p><strong>"Ping points. Shop opens."</strong></p>
+      <p><strong>"Ping says available. Shop shows the offer."</strong></p>
+    </div>
+
+    <h2>Shop Connects To Public</h2>
+
+    <p>
+      Public is the visible side of identity. Shop can use that public surface to
+      show the face of the offer: the creator, worker, story, product, service,
+      art, message, or reason behind what is being offered.
+    </p>
+
+    <p>
+      A public lane may make someone interested. Shop lets that interest become a
+      clear next step. Someone can move from watching, reading, laughing, or
+      following into actually supporting, buying, booking, or requesting.
+    </p>
+
+    <h2>Shop Connects To Private</h2>
+
+    <p>
+      Private is where the living resume, proof, drafts, prices, records, and
+      service setup are built before release. Shop should not be forced open
+      before the person is ready.
+    </p>
+
+    <p>
+      A private draft can become a shop offer. A private CyberService can become
+      a public listing. A private job setup can become a bookable job. A private
+      record can help prove the offer if the person chooses to release it.
+    </p>
+
+    <p>
+      Public only sees what the person releases. Shop should respect that flow.
+    </p>
+
+    <h2>Shop Connects To Needs</h2>
+
+    <p>
+      Needs is where people say what they are looking for, missing, requesting,
+      or trying to solve. Shop can answer a Need when the right offer exists.
+    </p>
+
+    <p>
+      A person may need a ride, repair, meal, cleaning help, music, art, a local
+      worker, a digital task, or a custom service. Shop lets the answer become
+      clear instead of hidden in noise.
+    </p>
+
+    <h2>Shop Connects To ICAN</h2>
+
+    <p>
+      ICAN is the confidence lane. It is where a person says what they can do and
+      what they are willing to open. Shop should connect to that ability.
+    </p>
+
+    <p>
+      A shop offer should not be empty decoration. It should connect to the
+      person’s skill, proof, readiness, service rules, and living resume. ICAN
+      helps show the offer has a human ability behind it.
+    </p>
+
+    <h2>Shop As A Human Offer</h2>
+
+    <p>
+      Shop should not turn a person into a walking cash register. The offer is
+      not bigger than the human. The purchase is not bigger than the identity.
+      The service is not bigger than the worker.
+    </p>
+
+    <p>
+      CyberCrowd Shop should help people open value without letting the system
+      own the person behind that value.
+    </p>
+
+    <h2>What Can Live In Shop</h2>
+
+    <p>
+      Shop can hold many kinds of offers, as long as the person controls what is
+      released and the offer is clear.
+    </p>
+
+    <ul>
+      <li>Physical items a person wants to sell.</li>
+      <li>Digital downloads, music, videos, art, writing, or files.</li>
+      <li>CyberServices prepared from the private resume office.</li>
+      <li>CyberJobs that are ready to be opened or requested.</li>
+      <li>Custom offers, local help, repairs, pickup, delivery, or support.</li>
+      <li>Creator support, tips, access, subscriptions, or special releases.</li>
+      <li>Community offers, event offers, lessons, shows, or personal lanes.</li>
+      <li>Needs-based responses when someone is looking for help.</li>
+    </ul>
+
+    <h2>How Shop Is Supposed To Be Used</h2>
+
+    <p>
+      Use Shop when something is ready for someone else to act on. The offer
+      should be clear enough for a person to understand what it is, who it comes
+      from, what it does, and what the next step means.
+    </p>
+
+    <ul>
+      <li>Use Shop to open an offer after it is prepared in Private.</li>
+      <li>Use Shop to show what a person, worker, creator, or business provides.</li>
+      <li>Use Shop to connect public attention to a clear next step.</li>
+      <li>Use Shop to answer Needs with real services or items.</li>
+      <li>Use Shop to connect ICAN ability with a usable offer.</li>
+      <li>Use Shop to let Ping point people toward what is available.</li>
+      <li>Use Shop to sell, book, support, request, save, or open value.</li>
+      <li>Use Shop without letting the transaction own the person.</li>
+    </ul>
+
+    <h2>What Shop Is Doing</h2>
+
+    <p>
+      Shop creates a bridge between prepared value and public action.
+    </p>
+
+    <p>
+      A service is ready. A job lane is open. A product is available. A creator
+      has released something. A worker is ready. A Need has an answer. The Shop
+      lights the offer and says:
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>"This is available. Open here."</strong>
+      </p>
+    </div>
+
+    <h2>What Shop Is Not</h2>
+
+    <p>
+      Shop is not the whole identity. It is not a forced checkout lane. It is not
+      permission for corporations to freely profit from a person’s work, data,
+      resume, or service setup. It is not a random shelf disconnected from the
+      human.
+    </p>
+
+    <ul>
+      <li>Shop is not bigger than the person.</li>
+      <li>Shop is not the owner of the worker.</li>
+      <li>Shop is not a forced transaction.</li>
+      <li>Shop is not a free data mine.</li>
+      <li>Shop is not a replacement for the resume foundation.</li>
+      <li>Shop is not a promise before the person is ready.</li>
+      <li>Shop is not a public release without control.</li>
+    </ul>
+
+    <h2>Why CyberCrowd Needs Shop</h2>
+
+    <p>
+      CyberCrowd connects identity, work, creativity, community, commerce, and
+      opportunity. Shop is the lane where prepared value can be opened without
+      losing the human behind it.
+    </p>
+
+    <p>
+      Without Shop, offers stay scattered. With Shop, Ping can point, Public can
+      show, Private can prepare, Needs can request, ICAN can support, and the
+      person can control what becomes available.
+    </p>
+
+    <h2>Shop In One Sentence</h2>
+
+    <div class="callout">
+      <p>
+        CyberCrowd Shop is the offer lane where prepared jobs, services, items,
+        creative work, support options, and needs-based answers can open from a
+        person’s identity without letting the transaction own the human.
+      </p>
+    </div>
+
+    <h2>The Human Rule Of Shop</h2>
+
+    <p>
+      Shop should help a person open value without surrendering control of the
+      person.
+    </p>
+
+    <p>
+      The person says:
+      <strong>"This is ready to offer."</strong>
+    </p>
+
+    <p>
+      CyberCrowd answers:
+      <strong>"Then open it here."</strong>
+    </p>
+
+    <p>
+      The human stays bigger than the sale.
+    </p>
+
+    <div class="nav-buttons">
+      <button type="button" onclick="history.back()">BACK</button>
+      <button type="button" onclick="location.href='needs.html'">NEXT</button>
+    </div>
+
+    <p class="footer-note">
+      Shop is a free CyberCrowd room explaining offers, services, jobs, public
+      release, needs response, and ICAN ability. The terms ledger stays separate.
     </p>
   </main>
+
+  <script>
+    const slideout = document.getElementById("cybercrowd-slideout");
+    const tab = document.getElementById("slideout-tab");
+
+    tab.addEventListener("click", function () {
+      slideout.classList.toggle("open");
+    });
+  </script>
 </body>
 </html>
