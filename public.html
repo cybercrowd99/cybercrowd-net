@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd | Public</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #111111;
+      --panel-soft: #171717;
+      --text: #f4efe4;
+      --muted: #c8bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.16);
+      --line: rgba(214, 168, 79, 0.35);
+      --shadow: rgba(0, 0, 0, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(214, 168, 79, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.08), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    /* CYBERCROWD SLIDE OUT */
+    #cybercrowd-slideout {
+      position: fixed;
+      top: 110px;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      transform: translateX(-205px);
+      transition: transform 0.25s ease;
+    }
+
+    #cybercrowd-slideout.open {
+      transform: translateX(0);
+    }
+
+    #slideout-panel {
+      width: 205px;
+      padding: 14px;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 18px 55px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #slideout-panel a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(214, 168, 79, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+
+    #slideout-panel a:hover,
+    #slideout-panel a.active {
+      color: #050505;
+      background: var(--gold);
+    }
+
+    #slideout-tab {
+      width: 46px;
+      height: 78px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      background: var(--gold);
+      color: #050505;
+      font-size: 25px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    main {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 34px;
+      background: rgba(17, 17, 17, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 34px 0 10px;
+      color: var(--gold);
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    strong {
+      color: var(--gold);
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--gold-soft);
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .card {
+      padding: 16px;
+      min-height: 145px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .phrase-box {
+      margin: 22px 0;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #111;
+      color: var(--gold);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      background: var(--gold);
+      color: #050505;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.82;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      main {
+        padding: 26px 20px;
+      }
+
+      .three-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #cybercrowd-slideout {
+        top: 88px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CYBERCROWD SLIDE OUT -->
+  <aside id="cybercrowd-slideout">
+    <nav id="slideout-panel">
+      <a href="ping.html">Ping</a>
+      <a href="social.html">Social</a>
+      <a href="public.html" class="active">Public</a>
+      <a href="private.html">Private</a>
+      <a href="shop.html">Shop</a>
+      <a href="needs.html">Needs</a>
+      <a href="ican.html">ICAN</a>
+      <a href="on-off.html">On / Off</a>
+      <a href="upload.html">Upload</a>
+    </nav>
+
+    <button id="slideout-tab" type="button" aria-label="Open Slide Out">☰</button>
+  </aside>
+
+  <main>
+    <p class="eyebrow">CyberCrowd Free Room</p>
+
+    <h1>Public</h1>
+
+    <p>
+      Public Setting is your spark lane in CyberCrowd. It is the place where your
+      identity can stretch, bend, experiment, laugh, perform, teach, entertain,
+      react, and grow without changing the protected foundation of who you are.
+    </p>
+
+    <p>
+      Public is where personality becomes visible. It is where expression becomes
+      movement. It is where the world can see what you choose to show without
+      being handed your whole private core.
+    </p>
+
+    <div class="callout">
+      <p>
+        Public Setting is the lane that says:
+        <strong>"I can be this right now."</strong>
+      </p>
+    </div>
+
+    <h2>The Real Meaning Of Public</h2>
+
+    <p>
+      Public does not mean everything about you is exposed. Public means this is
+      the part of your identity you choose to let the world see, hear, watch,
+      follow, enjoy, question, support, or respond to.
+    </p>
+
+    <p>
+      In normal life, people already have public sides. A person may be funny at
+      work, serious at home, wild on stage, quiet in private, helpful in the
+      neighborhood, creative online, or professional in business.
+    </p>
+
+    <p>
+      CyberCrowd gives that public side a room. It lets your visible identity
+      breathe without forcing every public moment to become your permanent
+      definition.
+    </p>
+
+    <h2>The Three Main Parts Of Public Setting</h2>
+
+    <div class="three-grid">
+      <div class="card">
+        <h3>1. Expression</h3>
+        <p>
+          Public is where you speak, joke, perform, create, react, teach,
+          entertain, and show the world the part of yourself you want visible.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. Motion</h3>
+        <p>
+          Public lets identity move. One day you may be funny, another day
+          serious, another day creative, useful, loud, quiet, or building.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Boundary</h3>
+        <p>
+          Public is visible, but it is not everything. It works because your
+          private identity stays protected behind a separate boundary.
+        </p>
+      </div>
+    </div>
+
+    <h2>Public As Expression</h2>
+
+    <p>
+      Public Setting is your stage, spotlight, sandbox, open microphone, gallery
+      wall, classroom, comedy club, jam session, shop window, and creative flex
+      surface.
+    </p>
+
+    <p>
+      This is where you can share the part of yourself that wants to be seen.
+      That may be a joke, a song, a repair trick, a drawing, a story, a lesson, a
+      stream, a moment, a reaction, or an offer.
+    </p>
+
+    <p>
+      Public gives expression somewhere to land.
+    </p>
+
+    <h2>Public As Motion</h2>
+
+    <p>
+      Public identity should not be frozen like a mugshot. People change moods.
+      People test ideas. People grow into new skills. People try new voices,
+      styles, characters, jokes, services, and lanes.
+    </p>
+
+    <p>
+      Public Setting allows that movement. It lets you show up today without
+      being trapped forever by one post, one joke, one mood, one outfit, one
+      mistake, one performance, or one experiment.
+    </p>
+
+    <div class="phrase-box">
+      <p><strong>"Today I can be funny."</strong></p>
+      <p><strong>"Today I can be serious."</strong></p>
+      <p><strong>"Today I can be useful."</strong></p>
+      <p><strong>"Today I can try something new."</strong></p>
+    </div>
+
+    <h2>Public As Boundary</h2>
+
+    <p>
+      Public does not mean your whole life is on display. Public is what you
+      choose to show. Private is what stays protected. CyberCrowd separates those
+      layers so visible expression does not have to consume the whole person.
+    </p>
+
+    <p>
+      That boundary matters. A person should be able to perform without exposing
+      their private core. A worker should be able to show skill without giving
+      away everything personal. A creator should be able to share art without
+      surrendering the whole identity.
+    </p>
+
+    <p>
+      Public is a doorway. It is not the entire house.
+    </p>
+
+    <h2>How Public Is Supposed To Be Used</h2>
+
+    <p>
+      Use Public when you want to show, share, express, perform, explain, invite,
+      entertain, or connect. Use it when the world should see the surface you are
+      choosing to open.
+    </p>
+
+    <ul>
+      <li>Use Public to share jokes, stories, opinions, moods, and moments.</li>
+      <li>Use Public to show art, music, videos, writing, skills, or performances.</li>
+      <li>Use Public to test different personas, styles, voices, and ideas.</li>
+      <li>Use Public to point people toward your work, creativity, or community.</li>
+      <li>Use Public to let people see what you are building.</li>
+      <li>Use Public to invite response without exposing your private core.</li>
+      <li>Use Public to turn presence into art, not just a profile.</li>
+      <li>Use Public to show who you can be right now.</li>
+    </ul>
+
+    <h2>What Public Is Doing</h2>
+
+    <p>
+      Public creates a bridge between identity and audience.
+    </p>
+
+    <p>
+      A person has something to show. A creator has something to share. A worker
+      has something useful. A performer has something funny. A neighbor has
+      something helpful. A human has something to say.
+    </p>
+
+    <p>
+      Public lights that surface and says:
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>"This is the part I am opening to the world right now."</strong>
+      </p>
+    </div>
+
+    <h2>Public Does Not Mean Permanent</h2>
+
+    <p>
+      Public moments can change. A public joke does not have to define your whole
+      life. A public idea can grow. A public lane can be updated. A public style
+      can evolve. A public presence can mature.
+    </p>
+
+    <p>
+      CyberCrowd Public is built around movement, not permanent flattening. You
+      are allowed to grow without deleting the fact that you once tried something
+      different.
+    </p>
+
+    <h2>What Public Is Not</h2>
+
+    <p>
+      Public is not your whole private identity. It is not permission for others
+      to steal your content. It is not a permanent cage. It is not a forced feed.
+      It is not a command to perform every part of yourself for everyone.
+    </p>
+
+    <ul>
+      <li>Public is not your private core.</li>
+      <li>Public is not ownership of your whole story.</li>
+      <li>Public is not permission to expose protected information.</li>
+      <li>Public is not a permanent label for every mood.</li>
+      <li>Public is not a forced performance.</li>
+      <li>Public is not bigger than the human.</li>
+      <li>Public is not the same as private truth.</li>
+    </ul>
+
+    <h2>Why CyberCrowd Needs Public</h2>
+
+    <p>
+      CyberCrowd is built around identity, work, creativity, community, commerce,
+      and opportunity. Public is the lane where those things can be seen without
+      forcing the private foundation into the spotlight.
+    </p>
+
+    <p>
+      Without Public, everything would either be hidden or overexposed. Public
+      gives expression a place while still respecting the boundary of the person.
+    </p>
+
+    <h2>Public In One Sentence</h2>
+
+    <div class="callout">
+      <p>
+        CyberCrowd Public is the visible identity lane where a person can express,
+        perform, create, react, share, and connect while keeping the private core
+        protected.
+      </p>
+    </div>
+
+    <h2>The Human Rule Of Public</h2>
+
+    <p>
+      Public should let a person be seen without forcing them to be owned by what
+      is seen.
+    </p>
+
+    <p>
+      The person says:
+      <strong>"I can be this right now."</strong>
+    </p>
+
+    <p>
+      CyberCrowd answers:
+      <strong>"Then be it."</strong>
+    </p>
+
+    <p>
+      The private core stays protected.
+    </p>
+
+    <div class="nav-buttons">
+      <button type="button" onclick="history.back()">BACK</button>
+      <button type="button" onclick="location.href='private.html'">NEXT</button>
+    </div>
+
+    <p class="footer-note">
+      Public is a free CyberCrowd room explaining visible expression, identity
+      motion, and public boundaries. The terms ledger stays separate.
+    </p>
+  </main>
+
+  <script>
+    const slideout = document.getElementById("cybercrowd-slideout");
+    const tab = document.getElementById("slideout-tab");
+
+    tab.addEventListener("click", function () {
+      slideout.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
