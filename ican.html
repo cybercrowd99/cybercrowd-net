@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd | I CAN</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #111111;
+      --panel-soft: #171717;
+      --text: #f4efe4;
+      --muted: #c8bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.16);
+      --line: rgba(214, 168, 79, 0.35);
+      --shadow: rgba(0, 0, 0, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(214, 168, 79, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.08), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    /* CYBERCROWD SLIDE OUT */
+    #cybercrowd-slideout {
+      position: fixed;
+      top: 110px;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      transform: translateX(-205px);
+      transition: transform 0.25s ease;
+    }
+
+    #cybercrowd-slideout.open {
+      transform: translateX(0);
+    }
+
+    #slideout-panel {
+      width: 205px;
+      padding: 14px;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 18px 55px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #slideout-panel a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(214, 168, 79, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+
+    #slideout-panel a:hover,
+    #slideout-panel a.active {
+      color: #050505;
+      background: var(--gold);
+    }
+
+    #slideout-tab {
+      width: 46px;
+      height: 78px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      background: var(--gold);
+      color: #050505;
+      font-size: 25px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    main {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 34px;
+      background: rgba(17, 17, 17, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 34px 0 10px;
+      color: var(--gold);
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    strong {
+      color: var(--gold);
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--gold-soft);
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .card {
+      padding: 16px;
+      min-height: 145px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .phrase-box {
+      margin: 22px 0;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #111;
+      color: var(--gold);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      background: var(--gold);
+      color: #050505;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.82;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      main {
+        padding: 26px 20px;
+      }
+
+      .three-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #cybercrowd-slideout {
+        top: 88px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CYBERCROWD SLIDE OUT -->
+  <aside id="cybercrowd-slideout">
+    <nav id="slideout-panel">
+      <a href="ping.html">Ping</a>
+      <a href="social.html">Social</a>
+      <a href="public.html">Public</a>
+      <a href="private.html">Private</a>
+      <a href="shop.html">Shop</a>
+      <a href="needs.html">Needs</a>
+      <a href="ican.html" class="active">ICAN</a>
+      <a href="on-off.html">On / Off</a>
+      <a href="upload.html">Upload</a>
+    </nav>
+
+    <button id="slideout-tab" type="button" aria-label="Open Slide Out">☰</button>
+  </aside>
+
+  <main>
+    <p class="eyebrow">CyberCrowd Free Room</p>
+
+    <h1>I CAN</h1>
+
+    <p>
+      I CAN inside CyberCrowd is the ability lane. It is where a person connects
+      what they can do, what they are willing to try, what they can offer, what
+      they can help with, and what they can move toward next.
+    </p>
+
+    <p>
+      I CAN is the “get in the car” moment. It is the point where the person
+      stops standing outside the idea and says,
+      <strong>"I can move with this."</strong>
+      It does not mean everything is turned on yet. It means the ability,
+      direction, and next possible motion are being named.
+    </p>
+
+    <div class="callout">
+      <p>
+        I CAN is the lane that says:
+        <strong>"This is something I can do, help with, build, offer, learn, or open."</strong>
+      </p>
+    </div>
+
+    <h2>The Real Meaning Of I CAN</h2>
+
+    <p>
+      In real life, “I can” is powerful. It may mean a person can do a job, help
+      with a task, learn a skill, offer a service, join a project, answer a need,
+      support a shop, build a lane, or take the next step.
+    </p>
+
+    <p>
+      CyberCrowd gives that human answer a room. I CAN is where ability becomes
+      direction. It connects the resume, the job, the service, the need, the
+      offer, the public side, and the private setup without forcing everything to
+      be public before it is ready.
+    </p>
+
+    <p>
+      I CAN is not bragging. It is not pretending. It is not a fake badge. It is
+      a person naming what they can actually move toward.
+    </p>
+
+    <h2>The Three Main Parts Of I CAN</h2>
+
+    <div class="three-grid">
+      <div class="card">
+        <h3>1. Ability</h3>
+        <p>
+          I CAN holds what a person can do, try, learn, build, support, fix,
+          create, offer, help with, or prepare from their own path.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. Direction</h3>
+        <p>
+          I CAN points ability toward a lane. It can connect to Ping, Shop,
+          Needs, Public, Private, CyberJobs, or CyberServices.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Motion</h3>
+        <p>
+          I CAN is the hinge before action. It says the person can move, but the
+          next lane decides how that movement opens.
+        </p>
+      </div>
+    </div>
+
+    <h2>I CAN As Ability</h2>
+
+    <p>
+      Ability is more than a title. A person may be able to repair a sink, cut
+      grass, cook, drive, teach, record music, edit video, clean, build, write,
+      weld, draw, babysit, move furniture, troubleshoot a phone, organize a
+      room, help a neighbor, or create something nobody has named yet.
+    </p>
+
+    <p>
+      I CAN gives that ability a clear place to be named. The resume may hold the
+      deeper proof. Private may prepare the work. Shop may open the offer. Needs
+      may ask for the answer. I CAN says the human has a possible yes.
+    </p>
+
+    <div class="phrase-box">
+      <p><strong>"I can do this."</strong></p>
+      <p><strong>"I can help here."</strong></p>
+      <p><strong>"I can offer that."</strong></p>
+      <p><strong>"I can learn this next."</strong></p>
+    </div>
+
+    <h2>I CAN As Direction</h2>
+
+    <p>
+      I CAN is not just a feeling. It points somewhere. When a person says
+      “I can,” CyberCrowd needs to know what lane that answer belongs to.
+    </p>
+
+    <p>
+      If the answer is near someone, Ping may carry the direction. If the answer
+      is an offer, Shop may hold it. If the answer solves a request, Needs may
+      connect it. If the answer is still being prepared, Private may hold it. If
+      the answer should be visible, Public may show it.
+    </p>
+
+    <p>
+      I CAN helps ability stop floating and start connecting.
+    </p>
+
+    <h2>I CAN As Motion</h2>
+
+    <p>
+      I CAN is like the see-saw point between standing still and moving. On one
+      side is the idea. On the other side is action. I CAN is the middle where a
+      person says,
+      <strong>"Yes, I can move toward that."</strong>
+    </p>
+
+    <p>
+      It is also like getting in the car. The destination may not be fully open
+      yet, but the person has stepped into the path. They are not just watching
+      the road anymore. They are ready to connect ability with direction.
+    </p>
+
+    <p>
+      The next lane can handle whether that motion is opened, paused, visible, or
+      held. I CAN only names the ability and the possible direction.
+    </p>
+
+    <h2>I CAN Connects To Ping</h2>
+
+    <p>
+      Ping points people toward what is near, needed, available, changed, or ready
+      to open. I CAN tells CyberCrowd that someone may have the ability to answer
+      that Ping.
+    </p>
+
+    <p>
+      Ping may say:
+      <strong>"Help is needed here."</strong>
+      I CAN may answer:
+      <strong>"I can help with that."</strong>
+    </p>
+
+    <h2>I CAN Connects To Needs</h2>
+
+    <p>
+      Needs is where a person searches for help, service, items, workers, or
+      answers. I CAN is where another person can say their ability may match that
+      need.
+    </p>
+
+    <p>
+      Needs asks:
+      <strong>"Who can answer this?"</strong>
+      I CAN says:
+      <strong>"This person may be able to."</strong>
+    </p>
+
+    <h2>I CAN Connects To Shop</h2>
+
+    <p>
+      Shop holds offers that are ready to open. I CAN gives the offer a human
+      ability behind it. A shop item, service, booking, job, or support option
+      should connect to what someone can actually do or provide.
+    </p>
+
+    <p>
+      Shop says:
+      <strong>"This is available."</strong>
+      I CAN says:
+      <strong>"There is ability behind this offer."</strong>
+    </p>
+
+    <h2>I CAN Connects To Private</h2>
+
+    <p>
+      Private is the office where the living resume is built first. I CAN can
+      grow from that resume. Skills, proof, work history, tools, rates, records,
+      drafts, and service preparation can support what the person says they can
+      do.
+    </p>
+
+    <p>
+      If the ability is not ready for public release, Private can hold it while
+      it is prepared. I CAN does not force everything into public view.
+    </p>
+
+    <h2>I CAN Connects To Public</h2>
+
+    <p>
+      Public is where the person can show what they choose to release. I CAN can
+      become public when the person wants others to see an ability, service,
+      offer, skill, project, or lane.
+    </p>
+
+    <p>
+      Public shows the chosen surface. I CAN names the ability behind that
+      surface.
+    </p>
+
+    <h2>I CAN Is Not The Same As On / Off</h2>
+
+    <p>
+      I CAN names ability. It says what the person can do, help with, offer,
+      learn, or move toward.
+    </p>
+
+    <p>
+      The next lane can handle whether something is opened, paused, visible, or
+      held. I CAN should not spoil that. I CAN only sets the bridge:
+      <strong>"This ability exists, and it can connect somewhere."</strong>
+    </p>
+
+    <h2>What Can Live In I CAN</h2>
+
+    <p>
+      I CAN can hold many kinds of ability signals.
+    </p>
+
+    <ul>
+      <li>I can do this work.</li>
+      <li>I can help with this need.</li>
+      <li>I can offer this service.</li>
+      <li>I can prepare this job.</li>
+      <li>I can sell or support this shop lane.</li>
+      <li>I can show this public skill.</li>
+      <li>I can keep this private until it is ready.</li>
+      <li>I can learn this next.</li>
+      <li>I can move toward this path.</li>
+    </ul>
+
+    <h2>How I CAN Is Supposed To Be Used</h2>
+
+    <p>
+      Use I CAN when the question is ability, willingness, direction, or possible
+      motion. It is not the whole resume. It is not the full shop. It is not the
+      need itself. It is the answer that says a person can connect to the next
+      step.
+    </p>
+
+    <ul>
+      <li>Use I CAN to name what a person can do.</li>
+      <li>Use I CAN to connect ability to a Need.</li>
+      <li>Use I CAN to support a Shop offer.</li>
+      <li>Use I CAN to connect Ping to someone who can respond.</li>
+      <li>Use I CAN to grow from the Private resume office.</li>
+      <li>Use I CAN to choose what ability may become Public.</li>
+      <li>Use I CAN to prepare the next lane without spoiling On / Off.</li>
+      <li>Use I CAN to help a person step into motion.</li>
+    </ul>
+
+    <h2>What I CAN Is Doing</h2>
+
+    <p>
+      I CAN creates a bridge between ability and movement.
+    </p>
+
+    <p>
+      Someone can help. Someone can build. Someone can answer. Someone can offer.
+      Someone can learn. Someone can support. Someone can prepare. Someone can
+      open a path.
+    </p>
+
+    <p>
+      I CAN lights that bridge and says:
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>"This person can move toward this."</strong>
+      </p>
+    </div>
+
+    <h2>What I CAN Is Not</h2>
+
+    <p>
+      I CAN is not a fake promise. It is not proof by itself. It is not a forced
+      job acceptance. It is not a public release without control. It is not the
+      On / Off lane. It is not bigger than the human.
+    </p>
+
+    <ul>
+      <li>I CAN is not the full resume.</li>
+      <li>I CAN is not a forced yes.</li>
+      <li>I CAN is not a permanent label.</li>
+      <li>I CAN is not proof by itself.</li>
+      <li>I CAN is not a demand to work.</li>
+      <li>I CAN is not the same as availability.</li>
+      <li>I CAN is not permission to expose private information.</li>
+    </ul>
+
+    <h2>Why CyberCrowd Needs I CAN</h2>
+
+    <p>
+      CyberCrowd connects identity, needs, jobs, services, shops, public lanes,
+      private setup, and human movement. Those lanes need a way to say ability
+      exists without forcing the whole system to jump ahead.
+    </p>
+
+    <p>
+      I CAN is that middle bridge. It does not finish the whole action. It gets
+      the person into the car and points toward the next lane.
+    </p>
+
+    <h2>I CAN In One Sentence</h2>
+
+    <div class="callout">
+      <p>
+        CyberCrowd I CAN is the ability lane where a person names what they can
+        do, help with, offer, learn, or move toward while linking that ability to
+        Ping, Needs, Shop, Private, Public, and the next step.
+      </p>
+    </div>
+
+    <h2>The Human Rule Of I CAN</h2>
+
+    <p>
+      I CAN should help a person name ability without trapping them inside a
+      forced promise.
+    </p>
+
+    <p>
+      The person says:
+      <strong>"I can move toward this."</strong>
+    </p>
+
+    <p>
+      CyberCrowd answers:
+      <strong>"Then get in the car. The next lane is waiting."</strong>
+    </p>
+
+    <p>
+      The bridge is built without spoiling the next switch.
+    </p>
+
+    <div class="nav-buttons">
+      <button type="button" onclick="history.back()">BACK</button>
+      <button type="button" onclick="location.href='on-off.html'">NEXT</button>
+    </div>
+
+    <p class="footer-note">
+      I CAN is a free CyberCrowd room explaining ability, direction, and the
+      bridge toward the next lane. The terms ledger stays separate.
+    </p>
+  </main>
+
+  <script>
+    const slideout = document.getElementById("cybercrowd-slideout");
+    const tab = document.getElementById("slideout-tab");
+
+    tab.addEventListener("click", function () {
+      slideout.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
