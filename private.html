@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd | Private</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #111111;
+      --panel-soft: #171717;
+      --text: #f4efe4;
+      --muted: #c8bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.16);
+      --line: rgba(214, 168, 79, 0.35);
+      --shadow: rgba(0, 0, 0, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(214, 168, 79, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.08), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    /* CYBERCROWD SLIDE OUT */
+    #cybercrowd-slideout {
+      position: fixed;
+      top: 110px;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      transform: translateX(-205px);
+      transition: transform 0.25s ease;
+    }
+
+    #cybercrowd-slideout.open {
+      transform: translateX(0);
+    }
+
+    #slideout-panel {
+      width: 205px;
+      padding: 14px;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 18px 55px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #slideout-panel a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(214, 168, 79, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+
+    #slideout-panel a:hover,
+    #slideout-panel a.active {
+      color: #050505;
+      background: var(--gold);
+    }
+
+    #slideout-tab {
+      width: 46px;
+      height: 78px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      background: var(--gold);
+      color: #050505;
+      font-size: 25px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    main {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 34px;
+      background: rgba(17, 17, 17, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 34px 0 10px;
+      color: var(--gold);
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    strong {
+      color: var(--gold);
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--gold-soft);
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .card {
+      padding: 16px;
+      min-height: 145px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .phrase-box {
+      margin: 22px 0;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #111;
+      color: var(--gold);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      background: var(--gold);
+      color: #050505;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.82;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      main {
+        padding: 26px 20px;
+      }
+
+      .three-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #cybercrowd-slideout {
+        top: 88px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CYBERCROWD SLIDE OUT -->
+  <aside id="cybercrowd-slideout">
+    <nav id="slideout-panel">
+      <a href="ping.html">Ping</a>
+      <a href="social.html">Social</a>
+      <a href="public.html">Public</a>
+      <a href="private.html" class="active">Private</a>
+      <a href="shop.html">Shop</a>
+      <a href="needs.html">Needs</a>
+      <a href="ican.html">ICAN</a>
+      <a href="on-off.html">On / Off</a>
+      <a href="upload.html">Upload</a>
+    </nav>
+
+    <button id="slideout-tab" type="button" aria-label="Open Slide Out">☰</button>
+  </aside>
+
+  <main>
+    <p class="eyebrow">CyberCrowd Free Room</p>
+
+    <h1>Private</h1>
+
+    <p>
+      Private inside CyberCrowd is the office where your living resume is built
+      first. You are a walking business. CyberCrowd helps facilitate your path by
+      giving your work, services, proof, records, drafts, and future offers a
+      place to be prepared before the public sees them.
+    </p>
+
+    <p>
+      CyberJobs and CyberServices come from that resume. Public only sees what
+      you release.
+    </p>
+
+    <div class="callout">
+      <p>
+        Private is the lane that says:
+        <strong>"Build the resume first. Then choose what becomes public."</strong>
+      </p>
+    </div>
+
+    <h2>The Real Meaning Of Private</h2>
+
+    <p>
+      Private is not just hiding information. Private is the office behind the
+      public identity. It is where the living resume is built, checked, updated,
+      protected, and prepared before jobs, services, offers, or lanes are opened.
+    </p>
+
+    <p>
+      A paper resume usually tells people where you worked. A CyberCrowd living
+      resume is bigger. It can show what you can do, what you have done, what you
+      are building, what you are ready for, what proof exists, and what you may
+      offer next.
+    </p>
+
+    <p>
+      Private is also connected to public, but you control the flow. The public
+      side may show the offer, the service, the job, the profile, or the lane.
+      The private side is where you prepare it, price it, edit it, hold it, or
+      decide not to release it.
+    </p>
+
+    <h2>The Three Main Parts Of Private</h2>
+
+    <div class="three-grid">
+      <div class="card">
+        <h3>1. Resume Foundation</h3>
+        <p>
+          Private starts with the living resume: skills, work history, proof,
+          tools, examples, rates, readiness, records, and what the person can do.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. CyberJobs</h3>
+        <p>
+          CyberJobs grow from the resume. The job lane should come from real
+          skills, real proof, real readiness, and controlled work details.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. CyberServices</h3>
+        <p>
+          CyberServices grow from the resume too. Services can be drafted, priced,
+          prepared, limited, edited, and opened only when the person is ready.
+        </p>
+      </div>
+    </div>
+
+    <h2>Private As The Resume Office</h2>
+
+    <p>
+      Private is the office where the resume lives before the world touches it.
+      This is where a person can build the record of what they know, what they
+      can do, what they have done, what they are learning, and what they may
+      become ready to offer.
+    </p>
+
+    <p>
+      The resume is not just a job application. It is the work identity. It is
+      the foundation that helps CyberCrowd understand the person as more than a
+      profile, more than a post, and more than a transaction.
+    </p>
+
+    <p>
+      A person may be a plumber, driver, cleaner, caregiver, musician, mechanic,
+      artist, teacher, cook, mover, builder, coder, welder, babysitter, repair
+      person, performer, or local helper. Private is where that work identity can
+      be organized before it becomes public.
+    </p>
+
+    <h2>The Living Resume</h2>
+
+    <p>
+      A living resume can grow over time. It can hold more than one job title. It
+      can show skills, work examples, service ideas, job history, proof, records,
+      tools, rates, zones, availability, and future plans.
+    </p>
+
+    <p>
+      The living resume is not frozen. It changes as the person works, learns,
+      builds, proves, repairs, creates, helps, and earns trust.
+    </p>
+
+    <div class="phrase-box">
+      <p><strong>"This is what I can do."</strong></p>
+      <p><strong>"This is what I have done."</strong></p>
+      <p><strong>"This is what I am preparing."</strong></p>
+      <p><strong>"This is what I choose to release."</strong></p>
+    </div>
+
+    <h2>Proof Of Work</h2>
+
+    <p>
+      Private is where proof can be collected before it becomes public. Proof may
+      be photos, notes, receipts, completed jobs, customer records, work examples,
+      service history, repairs, deliveries, projects, lessons, videos, designs,
+      or other evidence that the person actually did the work.
+    </p>
+
+    <p>
+      Proof does not have to be exposed all at once. Some proof may be public.
+      Some proof may be private. Some proof may only be used when needed. The
+      person controls what becomes visible.
+    </p>
+
+    <h2>Skills And Tools</h2>
+
+    <p>
+      Private is where the person can list and prepare the skills they actually
+      have. A skill is not just a word. It may need examples, limits, tools,
+      safety rules, experience, and honest readiness.
+    </p>
+
+    <p>
+      A person may have tools ready now, tools missing, transportation limits,
+      time limits, service zones, supplies, equipment, or special knowledge. The
+      private office is where those details can be organized before the public
+      sees the offer.
+    </p>
+
+    <h2>Rates And Readiness</h2>
+
+    <p>
+      A person may be able to do work but not be ready to accept every job. They
+      may need to set a rate, decide a service area, choose available times, set
+      limits, write instructions, or prepare customer rules.
+    </p>
+
+    <p>
+      Private lets readiness be honest. A job or service should not go public
+      just because the idea exists. It should become public when the person is
+      ready to handle it.
+    </p>
+
+    <h2>CyberJobs Come From The Resume</h2>
+
+    <p>
+      CyberJobs should grow from the living resume. The resume shows the skills,
+      proof, history, tools, and readiness. The job lane is what can open from
+      that foundation.
+    </p>
+
+    <p>
+      This means a job is not just a random button. It is connected to what the
+      person can do and what the person is prepared to offer.
+    </p>
+
+    <p>
+      Private is where those job lanes can be drafted, checked, edited, paused,
+      priced, limited, or prepared before the public sees them.
+    </p>
+
+    <h2>CyberServices Come From The Resume</h2>
+
+    <p>
+      CyberServices also come from the living resume. A service may be lawn care,
+      laundry help, a ride, a repair, food help, music lessons, video editing,
+      cleaning, delivery, pickup, art, local work, digital help, or something new
+      the person can provide.
+    </p>
+
+    <p>
+      Private lets the person build the service before launch. The person can
+      decide what is included, what is not included, what it costs, where it is
+      available, what the customer must know, and what should stay private.
+    </p>
+
+    <h2>Private Work Setup</h2>
+
+    <p>
+      Private work setup is where the person prepares the work lane. This can
+      include job names, service names, prices, tools, examples, notes, limits,
+      records, availability, drafts, and customer instructions.
+    </p>
+
+    <p>
+      This is the difference between:
+      <strong>"I might do this,"</strong>
+      and
+      <strong>"This is ready for people to open."</strong>
+    </p>
+
+    <h2>Private Offers Before Public Launch</h2>
+
+    <p>
+      Some offers are not ready the moment they are created. A person may need to
+      rewrite the offer, change the price, add a limit, attach proof, test the
+      wording, or wait until they are available.
+    </p>
+
+    <p>
+      Private gives the offer a holding room. It can exist without being public.
+      It can be edited, saved, paused, deleted, or opened later.
+    </p>
+
+    <h2>Private Records And Drafts</h2>
+
+    <p>
+      Private records are the notes, drafts, decisions, receipts, work details,
+      service details, job history, saved ideas, proof, and setup information
+      that do not belong on the public stage.
+    </p>
+
+    <p>
+      Drafts are unfinished lanes. A draft may become a CyberJob, a CyberService,
+      a shop item, a public post, a needs lane, an ICAN offer, or a future
+      identity lane.
+    </p>
+
+    <p>
+      Private lets a draft be rough. It can grow before the world judges it.
+    </p>
+
+    <h2>Private Is Also Public, But You Control The Flow</h2>
+
+    <p>
+      Private is not cut off from public. Private feeds public when the person
+      chooses. A private resume item can become a public skill. A private service
+      draft can become a public offer. A private job setup can become a public
+      CyberJob. A private record can become proof if the person releases it.
+    </p>
+
+    <p>
+      The difference is control. The person controls the flow instead of the
+      platform forcing everything into public view.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>Private controls the valve.</strong>
+        Public receives only what the person chooses to release.
+      </p>
+    </div>
+
+    <h2>Corporations Do Not Get Free Control</h2>
+
+    <p>
+      Private also protects the value of personal information. Corporations
+      should not freely gain revenue from a person’s private data, resume,
+      service ideas, job setup, customer preparation, proof of work, or identity
+      records without the person controlling what is shared.
+    </p>
+
+    <p>
+      CyberCrowd Private is built around the idea that the person is not a free
+      data mine. The human should control the flow before outside systems profit
+      from the signal.
+    </p>
+
+    <h2>How Private Is Supposed To Be Used</h2>
+
+    <p>
+      Use Private when something needs to be built, prepared, checked, priced,
+      saved, proved, organized, or controlled before it goes public.
+    </p>
+
+    <ul>
+      <li>Use Private to build the living resume first.</li>
+      <li>Use Private to collect proof of work before public release.</li>
+      <li>Use Private to organize skills, tools, rates, and readiness.</li>
+      <li>Use Private to prepare CyberJobs before people can open them.</li>
+      <li>Use Private to prepare CyberServices before public launch.</li>
+      <li>Use Private to draft offers before they are visible.</li>
+      <li>Use Private to hold records that do not belong on the public stage.</li>
+      <li>Use Private to decide what becomes public and what stays protected.</li>
+      <li>Use Private to stop personal data from becoming free corporate revenue.</li>
+    </ul>
+
+    <h2>What Private Is Doing</h2>
+
+    <p>
+      Private creates a bridge between resume and release.
+    </p>
+
+    <p>
+      A skill is being proven. A job is being shaped. A service is being priced.
+      A record is being stored. A draft is being edited. A lane is being built.
+      The person is deciding what should open.
+    </p>
+
+    <p>
+      Private lights the office and says:
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>"Prepare the resume, then control what becomes public."</strong>
+      </p>
+    </div>
+
+    <h2>What Private Is Not</h2>
+
+    <p>
+      Private is not a diary-only room. It is not shame. It is not a punishment
+      room. It is not a hidden score. It is not a place where corporations freely
+      harvest the person. It is not a forced lock that blocks opportunity.
+    </p>
+
+    <ul>
+      <li>Private is not just hiding.</li>
+      <li>Private is not a punishment room.</li>
+      <li>Private is not a free data mine.</li>
+      <li>Private is not public exposure without consent.</li>
+      <li>Private is not the owner of the person.</li>
+      <li>Private is not the same as hiding from opportunity.</li>
+      <li>Private is not bigger than the human.</li>
+    </ul>
+
+    <h2>Private In One Sentence</h2>
+
+    <div class="callout">
+      <p>
+        CyberCrowd Private is the office where a person builds the living resume
+        first, then prepares CyberJobs, CyberServices, records, drafts, proof,
+        offers, and future public lanes while controlling what gets released.
+      </p>
+    </div>
+
+    <h2>The Human Rule Of Private</h2>
+
+    <p>
+      Private should help a person prepare opportunity without surrendering
+      control of the person.
+    </p>
+
+    <p>
+      The person says:
+      <strong>"This is my resume, my work, and my path."</strong>
+    </p>
+
+    <p>
+      CyberCrowd answers:
+      <strong>"Then build it here first, and release what you choose."</strong>
+    </p>
+
+    <p>
+      Public only sees what the human opens.
+    </p>
+
+    <div class="nav-buttons">
+      <button type="button" onclick="history.back()">BACK</button>
+      <button type="button" onclick="location.href='shop.html'">NEXT</button>
+    </div>
+
+    <p class="footer-note">
+      Private is a free CyberCrowd room explaining the living resume foundation,
+      CyberJobs, CyberServices, private records, drafts, and controlled public
+      release. The terms ledger stays separate.
+    </p>
+  </main>
+
+  <script>
+    const slideout = document.getElementById("cybercrowd-slideout");
+    const tab = document.getElementById("slideout-tab");
+
+    tab.addEventListener("click", function () {
+      slideout.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
