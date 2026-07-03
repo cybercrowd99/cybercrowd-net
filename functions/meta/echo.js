@@ -16,6 +16,14 @@ export async function onRequest(context) {
     body = null;
   }
 
+  console.log("CYBERCROWD_META_ECHO", {
+    receiver: "functions/meta/echo.js",
+    lane: "meta",
+    method,
+    url,
+    body
+  });
+
   return new Response(JSON.stringify({
     ok: true,
     receiver: "functions/meta/echo.js",
