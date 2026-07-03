@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CyberCrowd | Upload</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #111111;
+      --panel-soft: #171717;
+      --text: #f4efe4;
+      --muted: #c8bfae;
+      --gold: #d6a84f;
+      --gold-soft: rgba(214, 168, 79, 0.16);
+      --line: rgba(214, 168, 79, 0.35);
+      --shadow: rgba(0, 0, 0, 0.72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(214, 168, 79, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(214, 168, 79, 0.08), transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    /* CYBERCROWD SLIDE OUT */
+    #cybercrowd-slideout {
+      position: fixed;
+      top: 110px;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      transform: translateX(-205px);
+      transition: transform 0.25s ease;
+    }
+
+    #cybercrowd-slideout.open {
+      transform: translateX(0);
+    }
+
+    #slideout-panel {
+      width: 205px;
+      padding: 14px;
+      background: rgba(17, 17, 17, 0.98);
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 18px 55px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #slideout-panel a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 9px;
+      border-radius: 9px;
+      border: 1px solid rgba(214, 168, 79, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+
+    #slideout-panel a:hover,
+    #slideout-panel a.active {
+      color: #050505;
+      background: var(--gold);
+    }
+
+    #slideout-tab {
+      width: 46px;
+      height: 78px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-left: none;
+      border-radius: 0 14px 14px 0;
+      background: var(--gold);
+      color: #050505;
+      font-size: 25px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 12px 30px var(--shadow);
+    }
+
+    main {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 34px;
+      background: rgba(17, 17, 17, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 24px 80px var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      color: var(--gold);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 34px 0 10px;
+      color: var(--gold);
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    p {
+      margin: 0 0 15px;
+      font-size: 1.04rem;
+    }
+
+    ul {
+      margin: 12px 0 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    strong {
+      color: var(--gold);
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--gold-soft);
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 24px 0 8px;
+    }
+
+    .card {
+      padding: 16px;
+      min-height: 145px;
+      border: 1px solid rgba(214, 168, 79, 0.28);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .phrase-box {
+      margin: 22px 0;
+      padding: 18px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .nav-buttons button {
+      padding: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #111;
+      color: var(--gold);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-buttons button:hover {
+      background: var(--gold);
+      color: #050505;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      opacity: 0.82;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      main {
+        padding: 26px 20px;
+      }
+
+      .three-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #cybercrowd-slideout {
+        top: 88px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CYBERCROWD SLIDE OUT -->
+  <aside id="cybercrowd-slideout">
+    <nav id="slideout-panel">
+      <a href="ping.html">Ping</a>
+      <a href="social.html">Social</a>
+      <a href="public.html">Public</a>
+      <a href="private.html">Private</a>
+      <a href="shop.html">Shop</a>
+      <a href="needs.html">Needs</a>
+      <a href="ican.html">ICAN</a>
+      <a href="on-off.html">On / Off</a>
+      <a href="upload.html" class="active">Upload</a>
+    </nav>
+
+    <button id="slideout-tab" type="button" aria-label="Open Slide Out">☰</button>
+  </aside>
+
+  <main>
+    <p class="eyebrow">CyberCrowd Free Room</p>
+
+    <h1>Upload</h1>
+
+    <p>
+      Upload inside CyberCrowd is the material lane. It is where a person can
+      bring in archived video, downloads, files, proof, records, media, work
+      examples, live moments, and deeper expression so those pieces can connect
+      back to the living resume, public lanes, private setup, shop offers, needs,
+      pings, and ICAN ability.
+    </p>
+
+    <p>
+      Upload is not just a file drop. Upload / Download / Clear is the key tie-in
+      for CyberCrowd perspectives. It lets a person decide what material comes
+      in, what material can be used, what material can be saved, what material can
+      be released, what material can be downloaded, and what material should be
+      cleared.
+    </p>
+
+    <div class="callout">
+      <p>
+        Upload is the lane that says:
+        <strong>"This material matters. Connect it to the right perspective."</strong>
+      </p>
+    </div>
+
+    <h2>The Real Meaning Of Upload</h2>
+
+    <p>
+      Upload is where life evidence, creative evidence, work evidence, service
+      evidence, and identity evidence can enter CyberCrowd. A video may show a
+      repair. A live stream may show performance. A file may show proof. A clip
+      may explain a service. A picture may support a resume. A download may carry
+      a record. A cleared item may protect the person.
+    </p>
+
+    <p>
+      The point is not to throw everything online. The point is to let the person
+      control which material becomes resume proof, public expression, private
+      record, shop support, needs response, ping signal, or ICAN evidence.
+    </p>
+
+    <p>
+      This is where perspectives matter. The same material can mean different
+      things depending on the lane it supports.
+    </p>
+
+    <h2>The Three Main Parts Of Upload</h2>
+
+    <div class="three-grid">
+      <div class="card">
+        <h3>1. Upload</h3>
+        <p>
+          Upload brings material in: video, photos, files, records, proof, clips,
+          drafts, work examples, service evidence, and live moments.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. Download</h3>
+        <p>
+          Download lets the person keep, carry, reuse, preserve, export, or
+          protect material instead of leaving it trapped inside one platform.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Clear</h3>
+        <p>
+          Clear lets the person remove, reset, hide, unlink, or clean material
+          that should not stay attached to the wrong lane or wrong perspective.
+        </p>
+      </div>
+    </div>
+
+    <h2>Archived Video As Resume Material</h2>
+
+    <p>
+      Archived video can become resume material when it shows real ability, real
+      work, real service, real performance, real repair, real teaching, real
+      creation, real help, or real human effort.
+    </p>
+
+    <p>
+      A video of a plumber fixing a line can support a work lane. A video of a
+      musician performing can support a creative lane. A video of a mechanic
+      repairing something can support a service lane. A video of a person
+      teaching, cooking, building, cleaning, delivering, designing, moving, or
+      helping can support the living resume.
+    </p>
+
+    <p>
+      Private holds the resume office. Upload brings in the material that can
+      support that resume when the person chooses.
+    </p>
+
+    <div class="phrase-box">
+      <p><strong>"This clip proves what I can do."</strong></p>
+      <p><strong>"This archive supports my resume."</strong></p>
+      <p><strong>"This live moment shows deeper expression."</strong></p>
+      <p><strong>"This file belongs to this lane, not every lane."</strong></p>
+    </div>
+
+    <h2>Lives And Multiplex Expression</h2>
+
+    <p>
+      A live moment can carry more than one meaning. It can be work, art,
+      service, proof, story, humor, teaching, repair, performance, witness,
+      presence, or community at the same time.
+    </p>
+
+    <p>
+      That is why Upload connects to multiplex. One piece of material may carry
+      several perspectives. The person may want part of it to support a resume,
+      part of it to support a public expression, part of it to support a shop
+      offer, part of it to answer a Need, and part of it to stay private.
+    </p>
+
+    <p>
+      Upload helps CyberCrowd avoid flattening a person into one label. The same
+      human can be worker, creator, helper, witness, seller, teacher, performer,
+      and neighbor.
+    </p>
+
+    <h2>Upload Connects To Private</h2>
+
+    <p>
+      Private is the office where the living resume is built first. Upload gives
+      Private the material that can become proof, records, drafts, examples,
+      service evidence, job history, or future release.
+    </p>
+
+    <p>
+      The person can upload a file and decide it stays private until it is ready.
+      A video can be saved as proof without being public. A record can support a
+      job without exposing everything. A draft can be held until the lane is
+      ready.
+    </p>
+
+    <h2>Upload Connects To Public</h2>
+
+    <p>
+      Public is what the person chooses to release. Upload can provide the
+      photos, videos, clips, files, and expressions that become part of a public
+      lane.
+    </p>
+
+    <p>
+      A public lane may use uploaded material to show work, art, music, service,
+      story, identity, proof, or presence. The important part is that the person
+      controls what becomes public.
+    </p>
+
+    <h2>Upload Connects To Shop</h2>
+
+    <p>
+      Shop holds offers that people can open, support, request, buy, book, or
+      follow. Upload can give Shop the material that explains or proves the
+      offer.
+    </p>
+
+    <p>
+      A shop item may need photos. A service may need examples. A creator offer
+      may need clips. A job offer may need proof. A support lane may need a
+      release file. Upload ties that material to the offer without making the
+      material belong to the platform.
+    </p>
+
+    <h2>Upload Connects To Needs</h2>
+
+    <p>
+      Needs is where people search for help, items, services, workers, or
+      answers. Upload can help answer a Need with material that shows the work,
+      explains the service, proves the repair, or gives the person a better way
+      to understand the answer.
+    </p>
+
+    <p>
+      Needs asks:
+      <strong>"Who or what can answer this?"</strong>
+      Upload may provide:
+      <strong>"Here is the material that explains it."</strong>
+    </p>
+
+    <h2>Upload Connects To Ping</h2>
+
+    <p>
+      Ping points toward what is near, available, changed, ready, or useful.
+      Upload can give Ping something real to point at.
+    </p>
+
+    <p>
+      A Ping may point to a new clip, a completed service, a live moment, a local
+      offer, a work example, or a changed lane. Upload gives the signal substance.
+    </p>
+
+    <h2>Upload Connects To ICAN</h2>
+
+    <p>
+      ICAN names ability. Upload can support that ability with material. A person
+      can say,
+      <strong>"I can do this,"</strong>
+      and Upload can hold the clip, file, archive, or proof that helps show why.
+    </p>
+
+    <p>
+      Upload does not replace the human answer. It supports the answer with
+      material the person controls.
+    </p>
+
+    <h2>Upload Connects To On / Off</h2>
+
+    <p>
+      On / Off controls the flow state. Upload needs that control because not all
+      material should be open all the time.
+    </p>
+
+    <p>
+      A file can be uploaded but not public. A video can be saved but paused. A
+      clip can be visible today and hidden tomorrow. A record can be held in
+      Private. A shop asset can be open only while the offer is active.
+    </p>
+
+    <p>
+      Upload brings material in. On / Off controls whether that material is open,
+      quiet, visible, hidden, paused, held, or cleared.
+    </p>
+
+    <h2>Download Means Carry Your Material</h2>
+
+    <p>
+      Download matters because a person should not lose access to their own
+      material. A record, video, proof file, archive, or creative release should
+      not be trapped inside one platform forever.
+    </p>
+
+    <p>
+      Download lets the person carry, save, preserve, export, reuse, or protect
+      what belongs to their identity, resume, service, shop, or public lane.
+    </p>
+
+    <p>
+      CyberCrowd should help the person keep continuity. The material should be
+      able to move with the human path.
+    </p>
+
+    <h2>Clear Means Control The Attachment</h2>
+
+    <p>
+      Clear matters because not every upload should stay attached. A person may
+      need to remove a file, clear a draft, unlink a video, reset a lane, hide a
+      record, remove a wrong attachment, or stop a piece of material from being
+      used in the wrong perspective.
+    </p>
+
+    <p>
+      Clear is not punishment. Clear is control. It helps the person protect the
+      identity path from clutter, mistakes, stale records, wrong links, or
+      unwanted exposure.
+    </p>
+
+    <h2>Perspectives Are The Key</h2>
+
+    <p>
+      The same piece of material can carry different meanings. That is the reason
+      perspectives matter inside CyberCrowd.
+    </p>
+
+    <p>
+      A video can be resume proof in Private, public expression in Public, offer
+      support in Shop, ability proof in ICAN, an answer to a Need, and a signal
+      for Ping. It should not be forced into one meaning just because it was
+      uploaded once.
+    </p>
+
+    <p>
+      Upload ties material to perspective. The person decides the lane, the
+      meaning, the release, and the flow.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>
+          One upload can become many perspectives, but the human controls which
+          perspective opens.
+        </strong>
+      </p>
+    </div>
+
+    <h2>What Can Live In Upload</h2>
+
+    <p>
+      Upload can hold many kinds of material when the person controls where it
+      goes and what it means.
+    </p>
+
+    <ul>
+      <li>Archived video used as resume proof.</li>
+      <li>Live clips used for deeper public expression.</li>
+      <li>Photos for shop items, service examples, or public lanes.</li>
+      <li>Files, records, receipts, notes, drafts, and proof material.</li>
+      <li>Creative work, music, art, writing, videos, and releases.</li>
+      <li>Service evidence, job history, repair clips, or work examples.</li>
+      <li>Private material that stays held until the person releases it.</li>
+      <li>Downloadable material that the person can carry or preserve.</li>
+      <li>Clearable material that can be removed from the wrong lane.</li>
+    </ul>
+
+    <h2>How Upload Is Supposed To Be Used</h2>
+
+    <p>
+      Use Upload when material needs to enter CyberCrowd and connect to a lane,
+      proof, offer, resume, expression, request, signal, or perspective.
+    </p>
+
+    <ul>
+      <li>Use Upload to bring in archived video for resume support.</li>
+      <li>Use Upload to connect live moments to deeper expression.</li>
+      <li>Use Upload to attach proof to Private when the resume needs support.</li>
+      <li>Use Upload to support Public when the person chooses to release.</li>
+      <li>Use Upload to support Shop offers with real material.</li>
+      <li>Use Upload to help Needs understand an answer.</li>
+      <li>Use Upload to give Ping a real signal to point toward.</li>
+      <li>Use Upload to support ICAN ability without forcing exposure.</li>
+      <li>Use Download to carry and preserve material.</li>
+      <li>Use Clear to remove, unlink, reset, or protect material.</li>
+    </ul>
+
+    <h2>What Upload Is Doing</h2>
+
+    <p>
+      Upload creates a bridge between material and meaning.
+    </p>
+
+    <p>
+      A video becomes proof. A live moment becomes expression. A file becomes a
+      record. A clip becomes a shop support. A photo becomes a service example. A
+      download preserves the path. A clear action protects the person from the
+      wrong attachment.
+    </p>
+
+    <p>
+      Upload lights the material lane and says:
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>"Bring it in, connect it right, carry it out, or clear it when needed."</strong>
+      </p>
+    </div>
+
+    <h2>What Upload Is Not</h2>
+
+    <p>
+      Upload is not permission for every file to become public. It is not a free
+      data mine. It is not a place where corporations get to harvest personal
+      material without the person controlling the flow. It is not one meaning
+      forced onto every video, file, or archive.
+    </p>
+
+    <ul>
+      <li>Upload is not automatic public release.</li>
+      <li>Upload is not forced resume exposure.</li>
+      <li>Upload is not a free corporate archive.</li>
+      <li>Upload is not the owner of the material.</li>
+      <li>Upload is not one meaning for every lane.</li>
+      <li>Upload is not permanent attachment to the wrong perspective.</li>
+      <li>Upload is not bigger than the human who brought the material in.</li>
+    </ul>
+
+    <h2>Why CyberCrowd Needs Upload</h2>
+
+    <p>
+      CyberCrowd is about identity, work, creativity, community, commerce,
+      needs, services, offers, and opportunity. All of those lanes need material:
+      proof, video, records, files, archives, lives, photos, drafts, and
+      expression.
+    </p>
+
+    <p>
+      Upload is the key tie-in because it lets real material support the right
+      perspective. It lets a person show more than a flat profile. It lets a
+      resume have proof, a public lane have expression, a shop have support, a
+      need have an answer, a ping have substance, and ICAN have evidence.
+    </p>
+
+    <h2>Upload In One Sentence</h2>
+
+    <div class="callout">
+      <p>
+        CyberCrowd Upload is the material and perspective lane where a person can
+        upload, download, and clear archived video, live moments, files, proof,
+        records, and expression while linking that material to the right resume,
+        public, private, shop, needs, ping, ICAN, and flow state.
+      </p>
+    </div>
+
+    <h2>The Human Rule Of Upload</h2>
+
+    <p>
+      Upload should help a person use their material without surrendering control
+      of the person or the meaning of the material.
+    </p>
+
+    <p>
+      The person says:
+      <strong>"This material belongs to my path."</strong>
+    </p>
+
+    <p>
+      CyberCrowd answers:
+      <strong>"Then connect it to the right perspective."</strong>
+    </p>
+
+    <p>
+      The human controls what comes in, what goes out, what stays, and what gets
+      cleared.
+    </p>
+
+    <div class="nav-buttons">
+      <button type="button" onclick="history.back()">BACK</button>
+      <button type="button" onclick="location.href='ping.html'">NEXT</button>
+    </div>
+
+    <p class="footer-note">
+      Upload is a free CyberCrowd room explaining upload, download, clear,
+      archived video, live moments, resume material, deeper expression, and
+      perspective linkages. The terms ledger stays separate.
+    </p>
+  </main>
+
+  <script>
+    const slideout = document.getElementById("cybercrowd-slideout");
+    const tab = document.getElementById("slideout-tab");
+
+    tab.addEventListener("click", function () {
+      slideout.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
