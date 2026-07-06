@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>PixelPrix | Camera Game</title>
+
+  <style>
+    :root {
+      --ink: #fff7df;
+      --gold: #ffd34d;
+      --green: #6dff91;
+      --blue: #7bd4ff;
+      --purple: #c79cff;
+      --pink: #ff8bd1;
+      --dark: rgba(0, 0, 0, 0.72);
+      --shadow: rgba(0, 0, 0, 0.62);
+      --line: rgba(255, 255, 255, 0.24);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-width: 320px;
+      min-height: 100svh;
+      margin: 0;
+      color: var(--ink);
+      background: #05060a;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      position: relative;
+    }
+
+    .camera {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: #000;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .camera.live video {
+      display: block;
+    }
+
+    .still {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(123, 212, 255, 0.22), transparent 20rem),
+        radial-gradient(circle at 80% 80%, rgba(255, 211, 77, 0.18), transparent 22rem),
+        #05060a;
+      background-size: cover;
+      background-position: center;
+      opacity: 1;
+    }
+
+    .camera.live + .still {
+      opacity: 0;
+    }
+
+    .shade {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.52), transparent 28%, rgba(0, 0, 0, 0.86)),
+        radial-gradient(circle at center, transparent 22%, rgba(0, 0, 0, 0.35));
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      width: min(900px, 100%);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: max(12px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .top a {
+      display: grid;
+      place-items: center;
+      min-height: 44px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #050505;
+      background: var(--gold);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 900;
+      box-shadow: 0 5px 0 var(--shadow);
+    }
+
+    .top a.home {
+      background: var(--green);
+    }
+
+    .stage {
+      display: grid;
+      align-content: end;
+      gap: 10px;
+    }
+
+    .panel {
+      padding: 16px;
+      border-radius: 30px;
+      background: rgba(5, 6, 10, 0.72);
+      border: 2px solid var(--line);
+      box-shadow: 0 18px 45px var(--shadow);
+      backdrop-filter: blur(7px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: clamp(2.3rem, 10vw, 5.6rem);
+      line-height: 0.9;
+      letter-spacing: 0.04em;
+      text-shadow: 0 5px 0 #000;
+    }
+
+    p {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(1.05rem, 4.4vw, 1.55rem);
+      line-height: 1.24;
+      font-weight: 900;
+      text-shadow: 0 3px 0 #000;
+    }
+
+    .small {
+      margin-top: 8px;
+      color: rgba(255, 247, 223, 0.86);
+      font-size: clamp(0.95rem, 3.7vw, 1.08rem);
+    }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .dot {
+      min-height: 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.22);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+    }
+
+    .dot.done {
+      background: var(--green);
+    }
+
+    .dot.now {
+      background: var(--gold);
+    }
+
+    .thumbs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .thumb {
+      aspect-ratio: 1 / 1;
+      border-radius: 15px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: grid;
+      place-items: center;
+      color: rgba(255, 247, 223, 0.7);
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .compare {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .compare.show {
+      display: grid;
+    }
+
+    .compare-card {
+      min-height: 150px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 2px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      display: grid;
+      place-items: center;
+      color: rgba(255, 247, 223, 0.8);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .compare-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .button-row {
+      display: grid;
+      gap: 10px;
+    }
+
+    button,
+    .button-link {
+      width: 100%;
+      min-height: 84px;
+      border: 0;
+      border-radius: 28px;
+      padding: 16px 18px;
+      color: #050505;
+      background: linear-gradient(135deg, var(--green), #dbff73);
+      font: inherit;
+      font-size: clamp(1.35rem, 6vw, 3rem);
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 9px 0 var(--shadow);
+      touch-action: manipulation;
+    }
+
+    button:active,
+    .button-link:active,
+    .top a:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 var(--shadow);
+    }
+
+    .secondary {
+      min-height: 56px;
+      background: var(--gold);
+      font-size: clamp(1rem, 4vw, 1.3rem);
+    }
+
+    .blue {
+      background: var(--blue);
+    }
+
+    .purple {
+      background: var(--purple);
+    }
+
+    .pink {
+      background: var(--pink);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    canvas {
+      display: none;
+    }
+
+    @media (min-width: 760px) {
+      .button-row.two {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-height: 700px) {
+      h1 {
+        font-size: clamp(2rem, 8vw, 4.5rem);
+      }
+
+      button,
+      .button-link {
+        min-height: 70px;
+      }
+
+      .panel {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="camera" id="camera-shell">
+    <video id="camera-video" autoplay playsinline muted></video>
+  </div>
+
+  <div class="still" id="still"></div>
+  <div class="shade"></div>
+
+  <main class="page">
+    <header class="top">
+      <a href="pixelprix.html">← PixelPrix</a>
+      <a class="home" href="https://cybercrowd.net/">CyberCrowd 🏠</a>
+    </header>
+
+    <section class="stage">
+      <div class="panel">
+        <h1 id="title">PixelPrix</h1>
+
+        <p id="prompt">
+          Let’s make a Tiny Tidy adventure.
+        </p>
+
+        <p class="small" id="helper">
+          Camera opens here. Pictures stay on this device.
+        </p>
+
+        <div class="progress" id="progress">
+          <div class="dot now"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+
+        <div class="thumbs" id="thumbs">
+          <div class="thumb">1</div>
+          <div class="thumb">2</div>
+          <div class="thumb">3</div>
+          <div class="thumb">4</div>
+          <div class="thumb">5</div>
+        </div>
+
+        <div class="compare" id="compare">
+          <div class="compare-card" id="before-card">Before</div>
+          <div class="compare-card" id="after-card">After</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="button-row" id="button-row">
+      <button id="main-button" type="button">
+        OPEN CAMERA
+      </button>
+
+      <button class="secondary hidden" id="second-button" type="button">
+        CLEAR
+      </button>
+    </section>
+  </main>
+
+  <canvas id="capture-canvas"></canvas>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const state = {
+        phase: "intro",
+        guide: "star",
+        stream: null,
+        roomPic: "",
+        cleanPic: "",
+        items: [],
+        cleanupIndex: 0,
+        targetCount: 5
+      };
+
+      const el = {
+        cameraShell: document.getElementById("camera-shell"),
+        video: document.getElementById("camera-video"),
+        canvas: document.getElementById("capture-canvas"),
+        still: document.getElementById("still"),
+        title: document.getElementById("title"),
+        prompt: document.getElementById("prompt"),
+        helper: document.getElementById("helper"),
+        progress: document.getElementById("progress"),
+        thumbs: document.getElementById("thumbs"),
+        compare: document.getElementById("compare"),
+        beforeCard: document.getElementById("before-card"),
+        afterCard: document.getElementById("after-card"),
+        mainButton: document.getElementById("main-button"),
+        secondButton: document.getElementById("second-button"),
+        buttonRow: document.getElementById("button-row")
+      };
+
+      function loadGuide() {
+        try {
+          state.guide = localStorage.getItem("pixelprixGuide") || "star";
+        } catch (error) {
+          state.guide = "star";
+        }
+      }
+
+      function speak(text) {
+        try {
+          if (!("speechSynthesis" in window)) {
+            return;
+          }
+
+          if (state.guide === "voice") {
+            return;
+          }
+
+          window.speechSynthesis.cancel();
+
+          const voice = new SpeechSynthesisUtterance(text);
+          voice.rate = 0.9;
+          voice.pitch = state.guide === "robot" ? 0.85 : 1.12;
+
+          window.speechSynthesis.speak(voice);
+        } catch (error) {}
+      }
+
+      function beep() {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) {
+            return;
+          }
+
+          const ctx = new AudioContext();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = "square";
+          osc.frequency.value = 720;
+          gain.gain.value = 0.035;
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+
+          setTimeout(function () {
+            osc.stop();
+            ctx.close();
+          }, 90);
+        } catch (error) {}
+      }
+
+      async function openCamera() {
+        stopCamera();
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          el.helper.textContent = "Camera needs a browser with camera permission.";
+          speak("Camera permission is needed.");
+          return false;
+        }
+
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: {
+              facingMode: { ideal: "environment" },
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            }
+          });
+
+          state.stream = stream;
+          el.video.srcObject = stream;
+          el.cameraShell.classList.add("live");
+          return true;
+        } catch (error) {
+          el.helper.textContent = "Camera permission needed. Turn camera permission on, then try again.";
+          speak("Camera permission needed.");
+          return false;
+        }
+      }
+
+      function stopCamera() {
+        if (state.stream) {
+          state.stream.getTracks().forEach(function (track) {
+            track.stop();
+          });
+        }
+
+        state.stream = null;
+        el.video.srcObject = null;
+        el.cameraShell.classList.remove("live");
+      }
+
+      function capturePic() {
+        const width = el.video.videoWidth || 1280;
+        const height = el.video.videoHeight || 720;
+
+        el.canvas.width = width;
+        el.canvas.height = height;
+
+        const ctx = el.canvas.getContext("2d");
+        ctx.drawImage(el.video, 0, 0, width, height);
+
+        return el.canvas.toDataURL("image/jpeg", 0.86);
+      }
+
+      function setStill(pic) {
+        if (!pic) {
+          el.still.style.backgroundImage = "";
+          return;
+        }
+
+        el.still.style.backgroundImage = "url('" + pic + "')";
+      }
+
+      function imageHtml(pic, alt) {
+        return '<img src="' + pic + '" alt="' + alt + '" />';
+      }
+
+      function renderDots() {
+        const dots = el.progress.querySelectorAll(".dot");
+
+        dots.forEach(function (dot, index) {
+          dot.classList.remove("done", "now");
+
+          if (index < state.items.length) {
+            dot.classList.add("done");
+          } else if (index === state.items.length && state.phase === "items") {
+            dot.classList.add("now");
+          }
+        });
+
+        if (state.phase === "cleanup") {
+          dots.forEach(function (dot, index) {
+            dot.classList.remove("done", "now");
+
+            if (index < state.cleanupIndex) {
+              dot.classList.add("done");
+            } else if (index === state.cleanupIndex) {
+              dot.classList.add("now");
+            }
+          });
+        }
+
+        if (state.phase === "done" || state.phase === "difference") {
+          dots.forEach(function (dot) {
+            dot.classList.add("done");
+            dot.classList.remove("now");
+          });
+        }
+      }
+
+      function renderThumbs() {
+        el.thumbs.innerHTML = "";
+
+        for (let i = 0; i < state.targetCount; i += 1) {
+          const box = document.createElement("div");
+          box.className = "thumb";
+
+          if (state.items[i] && state.items[i].pic) {
+            box.innerHTML = imageHtml(state.items[i].pic, "Treasure " + (i + 1));
+          } else {
+            box.textContent = String(i + 1);
+          }
+
+          el.thumbs.appendChild(box);
+        }
+      }
+
+      function setButtons(mainText, secondText) {
+        el.mainButton.textContent = mainText;
+
+        if (secondText) {
+          el.secondButton.textContent = secondText;
+          el.secondButton.classList.remove("hidden");
+          el.buttonRow.classList.add("two");
+        } else {
+          el.secondButton.classList.add("hidden");
+          el.buttonRow.classList.remove("two");
+        }
+      }
+
+      function setPhase(phase) {
+        state.phase = phase;
+        el.compare.classList.remove("show");
+
+        if (phase === "intro") {
+          stopCamera();
+          setStill("");
+          el.title.textContent = "PixelPrix";
+          el.prompt.textContent = "Let’s make a Tiny Tidy adventure.";
+          el.helper.textContent = "Open the camera. Take one room picture. Then we find five treasures.";
+          setButtons("OPEN CAMERA", "");
+        }
+
+        if (phase === "room") {
+          el.title.textContent = "Game Board";
+          el.prompt.textContent = "Stand back. Take one big room picture.";
+          el.helper.textContent = "This is where the adventure begins.";
+          setButtons("TAKE ROOM PIC", "");
+        }
+
+        if (phase === "tiny") {
+          stopCamera();
+          setStill(state.roomPic);
+          el.title.textContent = "Tiny Tidy";
+          el.prompt.textContent = "Five treasures today.";
+          el.helper.textContent = "Now we take five close-up pictures. One treasure at a time.";
+          setButtons("START TINY TIDY", "");
+        }
+
+        if (phase === "items") {
+          el.title.textContent = "Treasure " + (state.items.length + 1);
+          el.prompt.textContent = "Point close. Take the treasure picture.";
+          el.helper.textContent = "Picture " + (state.items.length + 1) + " of " + state.targetCount + ".";
+          setButtons("TAKE TREASURE PIC", "");
+        }
+
+        if (phase === "ready") {
+          stopCamera();
+          setStill(state.roomPic);
+          el.title.textContent = "Game Ready";
+          el.prompt.textContent = "Your five treasures are ready.";
+          el.helper.textContent = "Now the clean-up hunt begins.";
+          setButtons("PLAY CLEAN UP", "");
+        }
+
+        if (phase === "cleanup") {
+          stopCamera();
+
+          const item = state.items[state.cleanupIndex];
+
+          if (item && item.pic) {
+            setStill(item.pic);
+          }
+
+          el.title.textContent = "Find It";
+          el.prompt.textContent = "Find treasure " + (state.cleanupIndex + 1) + ". Move it home.";
+          el.helper.textContent = "When it is picked up, tap FOUND IT.";
+          setButtons("FOUND IT", "");
+        }
+
+        if (phase === "after-ready") {
+          stopCamera();
+          setStill(state.roomPic);
+          el.title.textContent = "Find the Difference?";
+          el.prompt.textContent = "One last clean picture makes the before-and-after game.";
+          el.helper.textContent = "This picture is for Spot the Difference.";
+          setButtons("OPEN CAMERA", "");
+        }
+
+        if (phase === "after") {
+          el.title.textContent = "Clean Picture";
+          el.prompt.textContent = "Take the clean or treat-ready picture.";
+          el.helper.textContent = "Then we can spot what changed.";
+          setButtons("TAKE CLEAN PIC", "");
+        }
+
+        if (phase === "difference") {
+          stopCamera();
+          setStill(state.cleanPic);
+          el.title.textContent = "Spot the Difference";
+          el.prompt.textContent = "Look what changed.";
+          el.helper.textContent = "Before and after. Same room. New story.";
+          el.compare.classList.add("show");
+          el.beforeCard.innerHTML = imageHtml(state.roomPic, "Before room");
+          el.afterCard.innerHTML = imageHtml(state.cleanPic, "After room");
+          setButtons("I SEE IT", "");
+        }
+
+        if (phase === "done") {
+          stopCamera();
+          setStill(state.cleanPic || state.roomPic);
+          el.title.textContent = "Adventure Done";
+          el.prompt.textContent = "You made a clean-up story.";
+          el.helper.textContent = "Clear it, play again, or go home.";
+          setButtons("PLAY AGAIN", "CLEAR + CYBERCROWD HOME");
+        }
+
+        renderDots();
+        renderThumbs();
+      }
+
+      async function mainAction() {
+        if (state.phase === "intro") {
+          const ok = await openCamera();
+
+          if (ok) {
+            setPhase("room");
+            speak("Stand back. Take one big room picture.");
+          }
+
+          return;
+        }
+
+        if (state.phase === "room") {
+          state.roomPic = capturePic();
+          setStill(state.roomPic);
+          beep();
+          speak("Great. That is the game board.");
+          setPhase("tiny");
+          return;
+        }
+
+        if (state.phase === "tiny") {
+          const ok = await openCamera();
+
+          if (ok) {
+            state.items = [];
+            setPhase("items");
+            speak("Treasure one. Point close.");
+          }
+
+          return;
+        }
+
+        if (state.phase === "items") {
+          const pic = capturePic();
+
+          state.items.push({
+            pic: pic,
+            done: false
+          });
+
+          beep();
+
+          if (state.items.length >= state.targetCount) {
+            speak("Five treasures ready.");
+            setPhase("ready");
+            return;
+          }
+
+          speak("Got it. Next treasure.");
+          setPhase("items");
+          return;
+        }
+
+        if (state.phase === "ready") {
+          state.cleanupIndex = 0;
+          setPhase("cleanup");
+          speak("Find treasure one.");
+          return;
+        }
+
+        if (state.phase === "cleanup") {
+          state.cleanupIndex += 1;
+          beep();
+
+          if (state.cleanupIndex >= state.items.length) {
+            speak("Clean up done. Want to find the difference?");
+            setPhase("after-ready");
+            return;
+          }
+
+          speak("Next treasure.");
+          setPhase("cleanup");
+          return;
+        }
+
+        if (state.phase === "after-ready") {
+          const ok = await openCamera();
+
+          if (ok) {
+            setPhase("after");
+            speak("Take the clean picture.");
+          }
+
+          return;
+        }
+
+        if (state.phase === "after") {
+          state.cleanPic = capturePic();
+          beep();
+          speak("Clean picture ready.");
+          setPhase("difference");
+          return;
+        }
+
+        if (state.phase === "difference") {
+          speak("Great job. Adventure done.");
+          setPhase("done");
+          return;
+        }
+
+        if (state.phase === "done") {
+          resetGame();
+        }
+      }
+
+      function resetGame() {
+        stopCamera();
+
+        state.roomPic = "";
+        state.cleanPic = "";
+        state.items = [];
+        state.cleanupIndex = 0;
+
+        setPhase("intro");
+      }
+
+      function clearAndHome() {
+        resetGame();
+
+        try {
+          sessionStorage.clear();
+        } catch (error) {}
+
+        window.location.href = "https://cybercrowd.net/";
+      }
+
+      el.mainButton.addEventListener("click", mainAction);
+
+      el.secondButton.addEventListener("click", function () {
+        if (state.phase === "done") {
+          clearAndHome();
+        }
+      });
+
+      window.addEventListener("pagehide", stopCamera);
+
+      loadGuide();
+      setPhase("intro");
+    })();
+  </script>
+</body>
+</html>
