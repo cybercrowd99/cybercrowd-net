@@ -27,6 +27,7 @@
     body {
       width: 100%;
       min-width: 320px;
+      height: 100%;
       min-height: 100svh;
       margin: 0;
       color: var(--ink);
@@ -37,6 +38,7 @@
 
     body {
       position: relative;
+      min-height: 100dvh;
     }
 
     .camera {
@@ -88,12 +90,18 @@
       position: relative;
       z-index: 2;
       width: min(900px, 100%);
+      height: 100dvh;
       min-height: 100svh;
+      max-height: 100dvh;
       margin: 0 auto;
-      padding: max(12px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom));
+      padding:
+        max(8px, env(safe-area-inset-top))
+        10px
+        max(10px, env(safe-area-inset-bottom));
       display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: 10px;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 8px;
+      overflow: hidden;
     }
 
     .top {
@@ -101,18 +109,19 @@
       justify-content: space-between;
       gap: 8px;
       align-items: center;
+      min-height: 42px;
     }
 
     .top a {
       display: grid;
       place-items: center;
-      min-height: 44px;
-      padding: 8px 12px;
+      min-height: 40px;
+      padding: 7px 11px;
       border-radius: 999px;
       color: #050505;
       background: var(--gold);
       text-decoration: none;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       font-weight: 900;
       box-shadow: 0 5px 0 var(--shadow);
     }
@@ -122,24 +131,41 @@
     }
 
     .stage {
+      min-height: 0;
       display: grid;
       align-content: end;
-      gap: 10px;
+      gap: 8px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+
+    .stage::-webkit-scrollbar {
+      display: none;
     }
 
     .panel {
-      padding: 16px;
-      border-radius: 30px;
+      max-height: 100%;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 14px;
+      border-radius: 28px;
       background: rgba(5, 6, 10, 0.72);
       border: 2px solid var(--line);
       box-shadow: 0 18px 45px var(--shadow);
       backdrop-filter: blur(7px);
+      scrollbar-width: none;
+    }
+
+    .panel::-webkit-scrollbar {
+      display: none;
     }
 
     h1 {
-      margin: 0 0 8px;
+      margin: 0 0 7px;
       color: var(--gold);
-      font-size: clamp(2.3rem, 10vw, 5.6rem);
+      font-size: clamp(2rem, 9.5vw, 5.4rem);
       line-height: 0.9;
       letter-spacing: 0.04em;
       text-shadow: 0 5px 0 #000;
@@ -148,27 +174,27 @@
     p {
       margin: 0;
       color: var(--ink);
-      font-size: clamp(1.05rem, 4.4vw, 1.55rem);
-      line-height: 1.24;
+      font-size: clamp(1rem, 4vw, 1.45rem);
+      line-height: 1.2;
       font-weight: 900;
       text-shadow: 0 3px 0 #000;
     }
 
     .small {
-      margin-top: 8px;
+      margin-top: 7px;
       color: rgba(255, 247, 223, 0.86);
-      font-size: clamp(0.95rem, 3.7vw, 1.08rem);
+      font-size: clamp(0.9rem, 3.5vw, 1.02rem);
     }
 
     .progress {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-top: 12px;
+      gap: 7px;
+      margin-top: 10px;
     }
 
     .dot {
-      min-height: 14px;
+      min-height: 12px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.22);
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
@@ -185,20 +211,20 @@
     .thumbs {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 7px;
-      margin-top: 10px;
+      gap: 6px;
+      margin-top: 8px;
     }
 
     .thumb {
       aspect-ratio: 1 / 1;
-      border-radius: 15px;
+      border-radius: 13px;
       overflow: hidden;
       background: rgba(255, 255, 255, 0.13);
       border: 1px solid rgba(255, 255, 255, 0.2);
       display: grid;
       place-items: center;
       color: rgba(255, 247, 223, 0.7);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 900;
     }
 
@@ -213,7 +239,7 @@
       display: none;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     .compare.show {
@@ -221,8 +247,8 @@
     }
 
     .compare-card {
-      min-height: 150px;
-      border-radius: 22px;
+      min-height: 130px;
+      border-radius: 20px;
       overflow: hidden;
       border: 2px solid var(--line);
       background: rgba(255, 255, 255, 0.08);
@@ -242,27 +268,29 @@
 
     .button-row {
       display: grid;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
+      padding-bottom: 1px;
     }
 
     button,
     .button-link {
       width: 100%;
-      min-height: 84px;
+      min-height: clamp(60px, 10.5dvh, 84px);
       border: 0;
-      border-radius: 28px;
-      padding: 16px 18px;
+      border-radius: 26px;
+      padding: 12px 16px;
       color: #050505;
       background: linear-gradient(135deg, var(--green), #dbff73);
       font: inherit;
-      font-size: clamp(1.35rem, 6vw, 3rem);
+      font-size: clamp(1.2rem, 5.4vw, 2.8rem);
       font-weight: 900;
       cursor: pointer;
       text-decoration: none;
       text-align: center;
       display: grid;
       place-items: center;
-      box-shadow: 0 9px 0 var(--shadow);
+      box-shadow: 0 8px 0 var(--shadow);
       touch-action: manipulation;
     }
 
@@ -274,9 +302,9 @@
     }
 
     .secondary {
-      min-height: 56px;
+      min-height: clamp(48px, 8dvh, 56px);
       background: var(--gold);
-      font-size: clamp(1rem, 4vw, 1.3rem);
+      font-size: clamp(0.95rem, 3.8vw, 1.25rem);
     }
 
     .blue {
@@ -305,18 +333,107 @@
       }
     }
 
-    @media (max-height: 700px) {
+    @media (max-height: 740px) {
+      .page {
+        gap: 6px;
+        padding:
+          max(6px, env(safe-area-inset-top))
+          8px
+          max(8px, env(safe-area-inset-bottom));
+      }
+
+      .top {
+        min-height: 38px;
+      }
+
+      .top a {
+        min-height: 36px;
+        padding: 6px 10px;
+        font-size: 0.82rem;
+      }
+
+      .panel {
+        padding: 12px;
+        border-radius: 24px;
+      }
+
       h1 {
-        font-size: clamp(2rem, 8vw, 4.5rem);
+        font-size: clamp(1.8rem, 8vw, 4.5rem);
+        margin-bottom: 5px;
+      }
+
+      p {
+        font-size: clamp(0.92rem, 3.7vw, 1.22rem);
+        line-height: 1.15;
+      }
+
+      .small {
+        margin-top: 5px;
+      }
+
+      .progress {
+        margin-top: 7px;
+        gap: 5px;
+      }
+
+      .dot {
+        min-height: 10px;
+      }
+
+      .thumbs {
+        margin-top: 6px;
+        gap: 5px;
+      }
+
+      .thumb {
+        border-radius: 11px;
+      }
+
+      .compare-card {
+        min-height: 108px;
       }
 
       button,
       .button-link {
-        min-height: 70px;
+        min-height: 58px;
+        border-radius: 22px;
+        padding: 10px 14px;
+      }
+    }
+
+    @media (max-height: 620px) {
+      .page {
+        grid-template-rows: auto minmax(0, 1fr) auto;
       }
 
       .panel {
-        padding: 14px;
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: clamp(1.55rem, 7vw, 3.8rem);
+      }
+
+      p {
+        font-size: clamp(0.86rem, 3.35vw, 1.08rem);
+      }
+
+      .small {
+        font-size: clamp(0.78rem, 3.1vw, 0.95rem);
+      }
+
+      .compare-card {
+        min-height: 90px;
+      }
+
+      button,
+      .button-link {
+        min-height: 52px;
+        font-size: clamp(1.02rem, 4.5vw, 2.2rem);
+      }
+
+      .secondary {
+        min-height: 46px;
       }
     }
   </style>
@@ -845,6 +962,9 @@
     })();
   </script>
 
+  <script src="js/pixelprix-describe.js"></script>
   <script src="js/pixelprix-voice.js"></script>
+  <script src="js/pixelprix-lingo.js"></script>
+  <script src="js/pixelprix-songs.js"></script>
 </body>
 </html>
