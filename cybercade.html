@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>CyberCade | PixelPrix</title>
 
   <style>
     :root {
-      --bg: #06070c;
-      --card: #111522;
-      --card2: #181f32;
+      --bg: #05060a;
       --ink: #fff7df;
-      --muted: #c6bda8;
       --gold: #ffd34d;
       --green: #6dff91;
       --blue: #7bd4ff;
-      --purple: #c79cff;
-      --red: #ff6d6d;
-      --line: rgba(255, 255, 255, 0.18);
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.48);
+      --pink: #ff8bd1;
+      --shadow: rgba(0, 0, 0, 0.62);
+      --line: rgba(255, 255, 255, 0.22);
     }
 
     * {
@@ -27,1146 +24,371 @@
 
     html,
     body {
+      width: 100%;
       min-width: 320px;
       min-height: 100svh;
       margin: 0;
+      color: var(--ink);
       background:
-        radial-gradient(circle at top left, rgba(123, 212, 255, 0.22), transparent 28rem),
-        radial-gradient(circle at bottom right, rgba(255, 211, 77, 0.18), transparent 28rem),
+        radial-gradient(circle at 15% 12%, rgba(123, 212, 255, 0.34), transparent 22rem),
+        radial-gradient(circle at 85% 18%, rgba(255, 139, 209, 0.26), transparent 20rem),
+        radial-gradient(circle at 50% 92%, rgba(255, 211, 77, 0.22), transparent 24rem),
         var(--bg);
-      color: var(--ink);
       font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
     }
 
-    body {
-      padding: 14px;
-      overflow-y: auto;
+    .sparkle {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.65) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255, 211, 77, 0.75) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(109, 255, 145, 0.55) 0 2px, transparent 3px);
+      background-size: 88px 88px, 132px 132px, 156px 156px;
+      background-position: 12px 20px, 44px 72px, 90px 18px;
+      opacity: 0.34;
+      animation: twinkle 5s linear infinite;
     }
 
-    button {
-      width: 100%;
-      min-height: 76px;
-      border: 0;
-      border-radius: 24px;
-      padding: 18px 22px;
-      color: #050505;
-      background: var(--gold);
-      font: inherit;
-      font-size: clamp(1.35rem, 6vw, 2.4rem);
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.38);
-      touch-action: manipulation;
+    @keyframes twinkle {
+      0% { transform: translateY(0); opacity: 0.28; }
+      50% { opacity: 0.5; }
+      100% { transform: translateY(18px); opacity: 0.28; }
     }
 
-    button:active {
-      transform: translateY(4px);
-      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.38);
-    }
-
-    button.green { background: var(--green); }
-    button.blue { background: var(--blue); }
-    button.purple { background: var(--purple); }
-    button.red { background: var(--red); }
-
-    button.ghost {
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid var(--line);
-      box-shadow: none;
-    }
-
-    button:disabled {
-      color: #333;
-      background: #777;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .wrap {
+    .room {
+      position: relative;
+      z-index: 1;
       width: min(920px, 100%);
+      min-height: 100svh;
       margin: 0 auto;
+      padding: max(16px, env(safe-area-inset-top)) 14px max(16px, env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      transition: transform 700ms ease, filter 700ms ease;
     }
 
-    .card {
-      margin: 14px 0;
-      padding: 18px;
-      background: rgba(17, 21, 34, 0.94);
-      border: 2px solid var(--line);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-    }
-
-    .center {
+    .hero {
       text-align: center;
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
-      margin-top: 0;
+      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1), opacity 700ms ease;
     }
 
     h1 {
-      margin-bottom: 8px;
+      margin: 0;
       color: var(--gold);
-      font-size: clamp(2.8rem, 12vw, 6rem);
-      line-height: 0.92;
-      letter-spacing: 0.06em;
-      text-shadow: 0 5px 0 #000;
+      font-size: clamp(3.2rem, 15vw, 7.6rem);
+      line-height: 0.86;
+      letter-spacing: 0.07em;
+      text-shadow:
+        0 5px 0 #000,
+        0 0 28px rgba(255, 211, 77, 0.42);
     }
 
-    h2 {
-      color: var(--gold);
-      font-size: clamp(1.8rem, 7vw, 3.3rem);
-      line-height: 1;
-    }
-
-    h3 {
+    .games {
+      margin: 8px 0 0;
       color: var(--blue);
-      font-size: clamp(1.25rem, 5vw, 2rem);
+      font-size: clamp(1.8rem, 7vw, 3.4rem);
+      font-weight: 900;
+      text-shadow: 0 4px 0 #000;
     }
 
-    p {
-      color: var(--muted);
-      font-size: clamp(1rem, 4vw, 1.25rem);
-      line-height: 1.35;
-    }
-
-    .rules {
+    .game-stage {
+      align-self: center;
       display: grid;
-      gap: 8px;
-      margin-top: 14px;
+      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1);
     }
 
-    @media (min-width: 680px) {
-      .rules {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .poster-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      border: 4px solid rgba(255, 255, 255, 0.24);
+      background: #101522;
+      box-shadow:
+        0 20px 50px var(--shadow),
+        0 0 0 7px rgba(255, 211, 77, 0.12);
+      transform-origin: center;
+      transition:
+        transform 800ms cubic-bezier(.16, 1.15, .24, 1),
+        box-shadow 800ms ease,
+        border-color 800ms ease;
     }
 
-    .rule {
-      padding: 11px 14px;
-      border-radius: 999px;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--line);
-      font-weight: 900;
-      text-align: center;
+    .poster-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        conic-gradient(
+          from 0deg,
+          transparent,
+          rgba(255, 211, 77, 0.26),
+          transparent,
+          rgba(123, 212, 255, 0.24),
+          transparent,
+          rgba(109, 255, 145, 0.2),
+          transparent
+        );
+      animation: spinGlow 8s linear infinite;
+      opacity: 0.46;
+      pointer-events: none;
     }
 
-    .rule.gold { color: var(--gold); }
-    .rule.green { color: var(--green); }
-
-    .biff {
-      margin: 12px 0 0;
-      padding: 14px;
-      color: var(--purple);
-      background: rgba(199, 156, 255, 0.12);
-      border: 1px solid rgba(199, 156, 255, 0.35);
-      border-radius: 22px;
-      font-weight: 900;
-      text-align: center;
+    @keyframes spinGlow {
+      to { transform: rotate(360deg); }
     }
 
-    .screen {
-      display: none;
-    }
-
-    .screen.active {
+    .poster-inner {
+      position: relative;
+      z-index: 1;
       display: block;
-    }
-
-    .game-row {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-      background: var(--card2);
-      border: 2px solid var(--line);
-      border-radius: 24px;
-    }
-
-    .badge {
-      display: inline-block;
-      width: fit-content;
-      padding: 8px 12px;
-      border-radius: 999px;
-      color: #061108;
-      background: var(--green);
-      font-weight: 900;
-    }
-
-    .badge.locked {
-      color: #222;
-      background: #777;
-    }
-
-    .step-bar {
-      display: grid;
-      gap: 8px;
-      grid-template-columns: repeat(5, 1fr);
-      margin: 12px 0;
-    }
-
-    .dot {
-      min-height: 16px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.16);
-    }
-
-    .dot.on {
-      background: var(--gold);
-    }
-
-    .strip {
-      display: grid;
-      gap: 8px;
-      padding: 12px;
-      border-radius: 20px;
-      background: rgba(0, 0, 0, 0.22);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-weight: 900;
-    }
-
-    .strip span {
-      color: var(--gold);
-    }
-
-    .prompt {
-      margin: 12px 0;
-      padding: 18px;
-      color: var(--green);
-      background: rgba(109, 255, 145, 0.12);
-      border: 2px solid rgba(109, 255, 145, 0.3);
-      border-radius: 24px;
-      font-size: clamp(1.5rem, 6vw, 3rem);
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .actions {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    @media (min-width: 680px) {
-      .actions.two {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .actions.four {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    .camera-box {
-      display: none;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .camera-box.active {
-      display: grid;
-    }
-
-    video {
-      width: 100%;
-      max-height: 420px;
-      object-fit: cover;
       background: #000;
-      border: 3px solid var(--blue);
-      border-radius: 26px;
     }
 
-    canvas {
+    .poster {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .active-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 2;
+      padding: 8px 13px;
+      border-radius: 999px;
+      color: #061108;
+      background: var(--green);
+      font-weight: 900;
+      box-shadow: 0 5px 0 var(--shadow);
+      pointer-events: none;
+    }
+
+    .button-zone {
+      display: grid;
+      gap: 10px;
+      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1);
+    }
+
+    .portal-button {
+      width: 100%;
+      min-height: 92px;
+      border: 0;
+      border-radius: 30px;
+      padding: 18px;
+      color: #050505;
+      background: linear-gradient(135deg, var(--green), #dbff73);
+      font: inherit;
+      font-size: clamp(1.75rem, 8vw, 4.1rem);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow:
+        0 10px 0 var(--shadow),
+        0 0 28px rgba(109, 255, 145, 0.24);
+      touch-action: manipulation;
+    }
+
+    .portal-button:active {
+      transform: translateY(5px);
+      box-shadow:
+        0 5px 0 var(--shadow),
+        0 0 28px rgba(109, 255, 145, 0.24);
+    }
+
+    .song-line {
+      min-height: 24px;
+      color: rgba(255, 247, 223, 0.9);
+      text-align: center;
+      font-weight: 900;
+      text-shadow: 0 3px 0 #000;
+    }
+
+    .portal-message {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 24px;
+      color: var(--ink);
+      background: rgba(5, 6, 10, 0.74);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      font-weight: 900;
+      text-shadow: 0 3px 0 #000;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 500ms ease, transform 500ms ease;
+      pointer-events: none;
+    }
+
+    .open .hero {
+      transform: translateY(-40px) scale(0.94);
+      opacity: 0.62;
+    }
+
+    .open .game-stage {
+      transform: translateY(-18px);
+    }
+
+    .open .poster-card {
+      transform: scale(1.055);
+      border-color: rgba(109, 255, 145, 0.75);
+      box-shadow:
+        0 24px 70px var(--shadow),
+        0 0 0 9px rgba(109, 255, 145, 0.18),
+        0 0 45px rgba(255, 211, 77, 0.3);
+    }
+
+    .open .portal-message {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .entering .room {
+      transform: scale(1.08);
+      filter: brightness(1.15) saturate(1.2);
+    }
+
+    .entering .poster-card {
+      transform: scale(1.22);
+    }
+
+    audio {
       display: none;
     }
 
-    .preview {
-      min-height: 180px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.06);
-      border: 2px dashed rgba(255, 255, 255, 0.25);
-      border-radius: 24px;
-      text-align: center;
-      padding: 12px;
-    }
-
-    .preview img {
-      width: 100%;
-      max-height: 360px;
-      object-fit: cover;
-      border-radius: 18px;
-      display: block;
-    }
-
-    .counter {
-      margin: 12px 0;
-      padding: 14px;
-      border-radius: 22px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--line);
-      font-size: clamp(1.2rem, 5vw, 2rem);
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .counter span {
-      color: var(--gold);
-    }
-
-    .target {
-      display: grid;
-      gap: 12px;
-      align-items: center;
-    }
-
-    @media (min-width: 680px) {
-      .target {
-        grid-template-columns: 190px 1fr;
+    @media (max-height: 690px) {
+      .portal-button {
+        min-height: 76px;
       }
-    }
 
-    .thumb {
-      min-height: 170px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 2px solid var(--line);
-    }
+      .poster-card {
+        border-radius: 28px;
+      }
 
-    .thumb img {
-      width: 100%;
-      height: 100%;
-      max-height: 240px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .progress {
-      height: 30px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-    }
-
-    .bar {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--green), var(--gold));
-      transition: width 180ms ease;
-    }
-
-    .mini-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .mini-item {
-      padding: 10px 12px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-weight: 900;
-    }
-
-    .mini-item.done {
-      color: #061108;
-      background: var(--green);
-    }
-
-    .source {
-      color: var(--blue);
-      font-weight: 900;
-    }
-
-    .footer {
-      margin: 22px 0 8px;
-      color: var(--muted);
-      text-align: center;
-      font-weight: 900;
+      .hero {
+        transform: scale(0.94);
+      }
     }
   </style>
 </head>
 
 <body>
-  <main class="wrap">
-    <section class="card center">
+  <div class="sparkle"></div>
+
+  <main class="room">
+    <header class="hero">
       <h1>CYBERCADE</h1>
-      <p>game room.</p>
+      <div class="games">Games 🎮</div>
+    </header>
 
-      <div class="rules">
-        <div class="rule gold">Teach the difference.</div>
-        <div class="rule green">Playtime is learn time.</div>
-        <div class="rule">Do not shame the child.</div>
-        <div class="rule">Pictures stay source.</div>
-        <div class="rule">Only results move.</div>
-        <div class="rule">Chat OFF.</div>
-        <div class="rule">Child identity OFF.</div>
-        <div class="rule">Parent approval ON.</div>
-      </div>
+    <section class="game-stage" aria-label="PixelPrix game door">
+      <article class="poster-card">
+        <span class="active-badge">ACTIVE</span>
 
-      <div class="biff">Why say take a pic then show choose file? Kill it.</div>
+        <div class="poster-inner">
+          <img
+            class="poster"
+            src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png"
+            alt="PixelPrix Clean-Up Adventure"
+          />
+        </div>
+      </article>
     </section>
 
-    <section class="card" id="games-screen">
-      <h2>GAMES 🎮</h2>
-
-      <div class="game-row">
-        <span class="badge">ACTIVE</span>
-        <h3>PixelPrix</h3>
-        <p>Open app. Take room pic. Pick item count. Take close-ups. Play.</p>
-        <button id="open-pixelprix" type="button">PLAY PIXELPRIX</button>
+    <section class="button-zone">
+      <div class="portal-message" id="portal-message">
+        Song is on. World is awake.
       </div>
 
-      <div class="game-row">
-        <span class="badge locked">LOCKED</span>
-        <h3>Coming Soon</h3>
-        <button type="button" disabled>NOT YET</button>
+      <button class="portal-button" id="portal-button" type="button">
+        ENTER PIXELPRIX
+      </button>
+
+      <div class="song-line" id="song-line">
+        ♪ PixelPrix song ready
       </div>
     </section>
-
-    <section class="card screen" id="pixelprix-screen">
-      <div class="step-bar" aria-label="PixelPrix steps">
-        <div class="dot on" id="dot-room"></div>
-        <div class="dot" id="dot-count"></div>
-        <div class="dot" id="dot-closeups"></div>
-        <div class="dot" id="dot-play"></div>
-        <div class="dot" id="dot-spot"></div>
-      </div>
-
-      <div class="strip">
-        <div>Step: <span id="step-label">Room Picture</span></div>
-        <div>Items: <span id="item-count-label">5</span></div>
-        <div>Close-ups: <span id="closeup-progress-label">0 / 5</span></div>
-        <div>Status: <span id="status-label">waiting</span></div>
-      </div>
-
-      <section class="screen active" id="room-screen">
-        <h2>1. Take room pic</h2>
-        <div class="prompt">Take the dirty room picture.</div>
-        <p>This is the game board. <span class="source">It stays source.</span></p>
-
-        <button class="green" id="take-room-pic" type="button">TAKE ROOM PIC</button>
-
-        <div class="camera-box" id="room-camera-box">
-          <p>Camera permission needed. Tap allow, then snap.</p>
-          <video id="room-video" autoplay playsinline muted></video>
-          <button class="blue" id="snap-room-pic" type="button">SNAP ROOM PIC</button>
-        </div>
-
-        <canvas id="room-canvas"></canvas>
-        <div class="preview" id="room-preview">Room picture will show here.</div>
-
-        <div class="actions">
-          <button id="room-next" type="button">NEXT</button>
-        </div>
-      </section>
-
-      <section class="screen" id="count-screen">
-        <h2>2. Pick item count</h2>
-        <div class="prompt">How many things?</div>
-
-        <div class="actions four">
-          <button data-count="5" type="button">5</button>
-          <button class="blue" data-count="10" type="button">10</button>
-          <button class="purple" data-count="20" type="button">20</button>
-          <button class="green" data-count="34" type="button">34</button>
-        </div>
-      </section>
-
-      <section class="screen" id="closeup-screen">
-        <h2>3. Take close-ups</h2>
-        <div class="prompt" id="closeup-prompt">Take close-up 1.</div>
-
-        <div class="counter">
-          Close-up <span id="current-closeup-number">1</span> of <span id="required-closeup-number">5</span>
-        </div>
-
-        <button class="green" id="take-closeup-pic" type="button">TAKE CLOSE-UP PIC</button>
-
-        <div class="camera-box" id="closeup-camera-box">
-          <p>Camera ready. Snap the item close-up.</p>
-          <video id="closeup-video" autoplay playsinline muted></video>
-          <button class="blue" id="snap-closeup-pic" type="button">SNAP CLOSE-UP PIC</button>
-        </div>
-
-        <canvas id="closeup-canvas"></canvas>
-        <div class="preview" id="closeup-preview">Close-up picture will show here.</div>
-
-        <div class="actions two">
-          <button class="green" id="save-closeup" type="button">SAVE ITEM</button>
-          <button class="ghost" id="retake-closeup" type="button">RETAKE</button>
-        </div>
-
-        <div class="mini-list" id="closeup-list"></div>
-      </section>
-
-      <section class="screen" id="play-screen">
-        <h2>4. Clean Up</h2>
-        <div class="prompt" id="cleanup-prompt">Find it. Tap it. Put it away.</div>
-
-        <div class="progress"><div class="bar" id="cleanup-bar"></div></div>
-
-        <div class="counter">
-          Done <span id="cleanup-done-label">0</span> of <span id="cleanup-total-label">5</span>
-        </div>
-
-        <div class="target">
-          <div class="thumb" id="cleanup-thumb">Item picture</div>
-          <div>
-            <h3 id="cleanup-title">Item 1</h3>
-            <p>Look at the close-up. Find it in the room. Move it where it belongs.</p>
-            <button class="green" id="found-item" type="button">FOUND IT</button>
-          </div>
-        </div>
-
-        <div class="actions two">
-          <button class="ghost" id="parent-check-cleanup" type="button">PARENT CHECK</button>
-          <button class="blue" id="go-after-pic" type="button">NEXT</button>
-        </div>
-
-        <div class="mini-list" id="cleanup-list"></div>
-      </section>
-
-      <section class="screen" id="after-screen">
-        <h2>5. Clean / treat pic</h2>
-        <div class="prompt">Take the clean or treat-ready picture.</div>
-        <p>This becomes Spot the Difference. <span class="source">It stays source.</span></p>
-
-        <button class="green" id="take-after-pic" type="button">TAKE CLEAN / TREAT PIC</button>
-
-        <div class="camera-box" id="after-camera-box">
-          <p>Camera ready. Snap clean or treat-ready result.</p>
-          <video id="after-video" autoplay playsinline muted></video>
-          <button class="blue" id="snap-after-pic" type="button">SNAP CLEAN / TREAT PIC</button>
-        </div>
-
-        <canvas id="after-canvas"></canvas>
-        <div class="preview" id="after-preview">Clean / treat picture will show here.</div>
-
-        <div class="actions">
-          <button class="blue" id="start-spot" type="button">START SPOT THE DIFFERENCE</button>
-        </div>
-      </section>
-
-      <section class="screen" id="spot-screen">
-        <h2>Spot the Difference</h2>
-        <div class="prompt">Can you spot the difference?</div>
-
-        <div class="progress"><div class="bar" id="spot-bar"></div></div>
-
-        <div class="counter">
-          Spotted <span id="spot-done-label">0</span> of <span id="spot-total-label">5</span>
-        </div>
-
-        <div class="target">
-          <div class="thumb" id="spot-thumb">Difference picture</div>
-          <div>
-            <h3 id="spot-title">Difference 1</h3>
-            <p>Look what changed. Dirty and clean look different.</p>
-            <button class="purple" id="spot-it" type="button">I SEE IT</button>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="green" id="parent-confirm-reward" type="button">PARENT CONFIRM REWARD</button>
-        </div>
-
-        <div class="mini-list" id="spot-list"></div>
-      </section>
-
-      <section class="screen" id="reward-screen">
-        <h2>Reward Ready</h2>
-        <div class="prompt">Great job.</div>
-        <p>Parent approval ON. Playtime is learn time.</p>
-
-        <div class="actions two">
-          <button class="green" id="play-again" type="button">PLAY AGAIN</button>
-          <button class="ghost" id="back-games" type="button">GAMES MENU</button>
-        </div>
-      </section>
-    </section>
-
-    <p class="footer">Pictures stay source. Only results move.</p>
   </main>
+
+  <audio
+    id="cybercade-song"
+    preload="auto"
+    autoplay
+    loop
+    playsinline
+    src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/CyberCade_PixelPrix_60s.title-htlm.mp3">
+  </audio>
 
   <script>
     (function () {
       "use strict";
 
-      const state = {
-        step: "games",
-        count: 5,
-        roomPic: "",
-        afterPic: "",
-        closeups: [],
-        currentCloseupPic: "",
-        cleanupChecked: false,
-        activeStream: null
-      };
+      const body = document.body;
+      const song = document.getElementById("cybercade-song");
+      const line = document.getElementById("song-line");
+      const button = document.getElementById("portal-button");
 
-      const screens = {
-        games: document.getElementById("games-screen"),
-        pixelprix: document.getElementById("pixelprix-screen"),
-        room: document.getElementById("room-screen"),
-        count: document.getElementById("count-screen"),
-        closeup: document.getElementById("closeup-screen"),
-        play: document.getElementById("play-screen"),
-        after: document.getElementById("after-screen"),
-        spot: document.getElementById("spot-screen"),
-        reward: document.getElementById("reward-screen")
-      };
+      let portalOpen = false;
 
-      const el = {
-        openPixelPrix: document.getElementById("open-pixelprix"),
-        stepLabel: document.getElementById("step-label"),
-        itemCountLabel: document.getElementById("item-count-label"),
-        closeupProgressLabel: document.getElementById("closeup-progress-label"),
-        statusLabel: document.getElementById("status-label"),
+      function trySong() {
+        song.volume = 1;
 
-        dotRoom: document.getElementById("dot-room"),
-        dotCount: document.getElementById("dot-count"),
-        dotCloseups: document.getElementById("dot-closeups"),
-        dotPlay: document.getElementById("dot-play"),
-        dotSpot: document.getElementById("dot-spot"),
+        const attempt = song.play();
 
-        takeRoomPic: document.getElementById("take-room-pic"),
-        roomCameraBox: document.getElementById("room-camera-box"),
-        roomVideo: document.getElementById("room-video"),
-        roomCanvas: document.getElementById("room-canvas"),
-        snapRoomPic: document.getElementById("snap-room-pic"),
-        roomPreview: document.getElementById("room-preview"),
-        roomNext: document.getElementById("room-next"),
-
-        closeupPrompt: document.getElementById("closeup-prompt"),
-        currentCloseupNumber: document.getElementById("current-closeup-number"),
-        requiredCloseupNumber: document.getElementById("required-closeup-number"),
-        takeCloseupPic: document.getElementById("take-closeup-pic"),
-        closeupCameraBox: document.getElementById("closeup-camera-box"),
-        closeupVideo: document.getElementById("closeup-video"),
-        closeupCanvas: document.getElementById("closeup-canvas"),
-        snapCloseupPic: document.getElementById("snap-closeup-pic"),
-        closeupPreview: document.getElementById("closeup-preview"),
-        saveCloseup: document.getElementById("save-closeup"),
-        retakeCloseup: document.getElementById("retake-closeup"),
-        closeupList: document.getElementById("closeup-list"),
-
-        cleanupPrompt: document.getElementById("cleanup-prompt"),
-        cleanupBar: document.getElementById("cleanup-bar"),
-        cleanupDoneLabel: document.getElementById("cleanup-done-label"),
-        cleanupTotalLabel: document.getElementById("cleanup-total-label"),
-        cleanupThumb: document.getElementById("cleanup-thumb"),
-        cleanupTitle: document.getElementById("cleanup-title"),
-        foundItem: document.getElementById("found-item"),
-        parentCheckCleanup: document.getElementById("parent-check-cleanup"),
-        goAfterPic: document.getElementById("go-after-pic"),
-        cleanupList: document.getElementById("cleanup-list"),
-
-        takeAfterPic: document.getElementById("take-after-pic"),
-        afterCameraBox: document.getElementById("after-camera-box"),
-        afterVideo: document.getElementById("after-video"),
-        afterCanvas: document.getElementById("after-canvas"),
-        snapAfterPic: document.getElementById("snap-after-pic"),
-        afterPreview: document.getElementById("after-preview"),
-        startSpot: document.getElementById("start-spot"),
-
-        spotBar: document.getElementById("spot-bar"),
-        spotDoneLabel: document.getElementById("spot-done-label"),
-        spotTotalLabel: document.getElementById("spot-total-label"),
-        spotThumb: document.getElementById("spot-thumb"),
-        spotTitle: document.getElementById("spot-title"),
-        spotIt: document.getElementById("spot-it"),
-        parentConfirmReward: document.getElementById("parent-confirm-reward"),
-        spotList: document.getElementById("spot-list"),
-
-        playAgain: document.getElementById("play-again"),
-        backGames: document.getElementById("back-games")
-      };
-
-      function speak(text) {
-        try {
-          if (!("speechSynthesis" in window)) return;
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.rate = 0.9;
-          u.pitch = 1.05;
-          window.speechSynthesis.speak(u);
-        } catch (error) {}
-      }
-
-      function beep() {
-        try {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          if (!AudioContext) return;
-          const ctx = new AudioContext();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "square";
-          osc.frequency.value = 720;
-          gain.gain.value = 0.035;
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start();
-          setTimeout(function () {
-            osc.stop();
-            ctx.close();
-          }, 90);
-        } catch (error) {}
-      }
-
-      function stopCamera() {
-        if (state.activeStream) {
-          state.activeStream.getTracks().forEach(function (track) {
-            track.stop();
+        if (attempt && typeof attempt.then === "function") {
+          attempt.then(function () {
+            line.textContent = "♪ PixelPrix song playing";
+          }).catch(function () {
+            line.textContent = "tap to start the song";
+            unlockOnFirstTap();
           });
         }
-        state.activeStream = null;
-        el.roomCameraBox.classList.remove("active");
-        el.closeupCameraBox.classList.remove("active");
-        el.afterCameraBox.classList.remove("active");
       }
 
-      async function openCamera(video, box) {
-        stopCamera();
-
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          alert("Camera is not available in this browser.");
-          return;
-        }
-
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: {
-              facingMode: { ideal: "environment" }
-            }
+      function unlockOnFirstTap() {
+        function unlock() {
+          song.play().then(function () {
+            line.textContent = "♪ PixelPrix song playing";
+          }).catch(function () {
+            line.textContent = "♪ PixelPrix song ready";
           });
-
-          state.activeStream = stream;
-          video.srcObject = stream;
-          box.classList.add("active");
-          speak("Camera ready. Snap.");
-        } catch (error) {
-          alert("Camera permission needed. Turn camera permission on.");
-          speak("Camera permission needed.");
         }
+
+        document.addEventListener("pointerdown", unlock, { once: true });
+        document.addEventListener("touchstart", unlock, { once: true });
+        document.addEventListener("click", unlock, { once: true });
       }
 
-      function snap(video, canvas) {
-        const width = video.videoWidth || 1280;
-        const height = video.videoHeight || 720;
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(video, 0, 0, width, height);
-
-        return canvas.toDataURL("image/jpeg", 0.88);
+      function openPortal() {
+        portalOpen = true;
+        body.classList.add("open");
+        button.textContent = "TAP TO ENTER PIXELPRIX";
+        trySong();
       }
 
-      function showPic(container, dataUrl) {
-        if (!dataUrl) {
-          container.textContent = "Picture will show here.";
+      function enterGame() {
+        body.classList.add("entering");
+        trySong();
+
+        setTimeout(function () {
+          window.location.href = "pixelprix.html";
+        }, 650);
+      }
+
+      button.addEventListener("click", function () {
+        if (!portalOpen) {
+          openPortal();
           return;
         }
 
-        container.innerHTML = '<img src="' + dataUrl + '" alt="Local source-only picture" />';
-      }
-
-      function go(step) {
-        state.step = step;
-        stopCamera();
-
-        screens.games.style.display = step === "games" ? "block" : "none";
-        screens.pixelprix.classList.toggle("active", step !== "games");
-
-        ["room", "count", "closeup", "play", "after", "spot", "reward"].forEach(function (key) {
-          screens[key].classList.toggle("active", key === step);
-        });
-
-        updateHeader();
-        updateDots();
-
-        if (step === "room") speak("Take room picture.");
-        if (step === "count") speak("Pick how many things.");
-        if (step === "closeup") renderCloseup();
-        if (step === "play") renderCleanup();
-        if (step === "after") speak("Take clean or treat picture.");
-        if (step === "spot") renderSpot();
-        if (step === "reward") speak("Great job. Reward ready.");
-      }
-
-      function updateHeader() {
-        const labels = {
-          games: "Games",
-          room: "Room Picture",
-          count: "Pick Count",
-          closeup: "Close-ups",
-          play: "Clean Up",
-          after: "Clean / Treat Pic",
-          spot: "Spot Difference",
-          reward: "Reward"
-        };
-
-        el.stepLabel.textContent = labels[state.step] || "PixelPrix";
-        el.itemCountLabel.textContent = String(state.count);
-        el.closeupProgressLabel.textContent = state.closeups.length + " / " + state.count;
-
-        if (state.step === "room") {
-          el.statusLabel.textContent = state.roomPic ? "room pic ready" : "waiting for room pic";
-        } else if (state.step === "closeup") {
-          el.statusLabel.textContent = "taking close-ups";
-        } else if (state.step === "play") {
-          el.statusLabel.textContent = "cleanup game";
-        } else if (state.step === "after") {
-          el.statusLabel.textContent = state.afterPic ? "after pic ready" : "waiting for after pic";
-        } else if (state.step === "spot") {
-          el.statusLabel.textContent = "spot the difference";
-        } else if (state.step === "reward") {
-          el.statusLabel.textContent = "reward ready";
-        } else {
-          el.statusLabel.textContent = "ready";
-        }
-      }
-
-      function updateDots() {
-        el.dotRoom.classList.toggle("on", ["room", "count", "closeup", "play", "after", "spot", "reward"].includes(state.step));
-        el.dotCount.classList.toggle("on", ["count", "closeup", "play", "after", "spot", "reward"].includes(state.step));
-        el.dotCloseups.classList.toggle("on", ["closeup", "play", "after", "spot", "reward"].includes(state.step));
-        el.dotPlay.classList.toggle("on", ["play", "after", "spot", "reward"].includes(state.step));
-        el.dotSpot.classList.toggle("on", ["spot", "reward"].includes(state.step));
-      }
-
-      function chooseCount(count) {
-        state.count = count;
-        state.closeups = [];
-        state.currentCloseupPic = "";
-        state.cleanupChecked = false;
-        go("closeup");
-      }
-
-      function renderCloseup() {
-        const next = state.closeups.length + 1;
-        el.currentCloseupNumber.textContent = String(Math.min(next, state.count));
-        el.requiredCloseupNumber.textContent = String(state.count);
-
-        if (state.closeups.length >= state.count) {
-          go("play");
-          return;
-        }
-
-        el.closeupPrompt.textContent = "Take close-up " + next + ".";
-        el.closeupPreview.textContent = "Close-up picture will show here.";
-        renderCloseupList();
-        updateHeader();
-        speak("Take close up " + next + ".");
-      }
-
-      function saveCloseup() {
-        if (!state.currentCloseupPic) {
-          speak("Snap the close up picture.");
-          return;
-        }
-
-        state.closeups.push({
-          pic: state.currentCloseupPic,
-          done: false,
-          spotted: false
-        });
-
-        state.currentCloseupPic = "";
-        beep();
-
-        if (state.closeups.length >= state.count) {
-          go("play");
-          return;
-        }
-
-        renderCloseup();
-      }
-
-      function renderCloseupList() {
-        el.closeupList.innerHTML = state.closeups.map(function (_, index) {
-          return '<div class="mini-item done">Close-up ' + (index + 1) + ' saved — source only</div>';
-        }).join("");
-      }
-
-      function cleanupDoneCount() {
-        return state.closeups.filter(function (item) {
-          return item.done;
-        }).length;
-      }
-
-      function spotDoneCount() {
-        return state.closeups.filter(function (item) {
-          return item.spotted;
-        }).length;
-      }
-
-      function percent(done, total) {
-        return total ? Math.round((done / total) * 100) : 0;
-      }
-
-      function currentCleanupItem() {
-        return state.closeups.find(function (item) {
-          return !item.done;
-        }) || state.closeups[state.closeups.length - 1] || null;
-      }
-
-      function currentSpotItem() {
-        return state.closeups.find(function (item) {
-          return !item.spotted;
-        }) || state.closeups[state.closeups.length - 1] || null;
-      }
-
-      function renderCleanup() {
-        const done = cleanupDoneCount();
-        const total = state.closeups.length;
-        const current = currentCleanupItem();
-
-        el.cleanupDoneLabel.textContent = String(done);
-        el.cleanupTotalLabel.textContent = String(total);
-        el.cleanupBar.style.width = percent(done, total) + "%";
-
-        if (!current) {
-          el.cleanupThumb.textContent = "No item.";
-          el.cleanupTitle.textContent = "No item";
-          return;
-        }
-
-        showPic(el.cleanupThumb, current.pic);
-        el.cleanupTitle.textContent = "Item " + (state.closeups.indexOf(current) + 1);
-
-        el.cleanupList.innerHTML = state.closeups.map(function (item, index) {
-          return '<div class="mini-item ' + (item.done ? "done" : "") + '">Item ' + (index + 1) + (item.done ? " done" : " waiting") + '</div>';
-        }).join("");
-
-        el.cleanupPrompt.textContent = done >= total && total > 0
-          ? "Parent check."
-          : "Find it. Tap it. Put it away.";
-
-        updateHeader();
-      }
-
-      function foundItem() {
-        const current = currentCleanupItem();
-        if (!current) return;
-
-        current.done = true;
-        beep();
-
-        if (cleanupDoneCount() >= state.closeups.length) {
-          renderCleanup();
-          speak("Parent check.");
-          return;
-        }
-
-        renderCleanup();
-        speak("Next one.");
-      }
-
-      function parentCheckCleanup() {
-        if (cleanupDoneCount() < state.closeups.length) {
-          speak("Finish cleanup first.");
-          return;
-        }
-
-        state.cleanupChecked = true;
-        beep();
-        speak("Cleanup checked.");
-      }
-
-      function goAfterPic() {
-        if (cleanupDoneCount() < state.closeups.length) {
-          speak("Finish cleanup first.");
-          return;
-        }
-
-        if (!state.cleanupChecked) {
-          speak("Parent check first.");
-          return;
-        }
-
-        go("after");
-      }
-
-      function renderSpot() {
-        const done = spotDoneCount();
-        const total = state.closeups.length;
-        const current = currentSpotItem();
-
-        el.spotDoneLabel.textContent = String(done);
-        el.spotTotalLabel.textContent = String(total);
-        el.spotBar.style.width = percent(done, total) + "%";
-
-        if (!current) {
-          el.spotThumb.textContent = "No difference.";
-          el.spotTitle.textContent = "No difference";
-          return;
-        }
-
-        showPic(el.spotThumb, current.pic);
-        el.spotTitle.textContent = "Difference " + (state.closeups.indexOf(current) + 1);
-
-        el.spotList.innerHTML = state.closeups.map(function (item, index) {
-          return '<div class="mini-item ' + (item.spotted ? "done" : "") + '">Difference ' + (index + 1) + (item.spotted ? " spotted" : " waiting") + '</div>';
-        }).join("");
-
-        updateHeader();
-      }
-
-      function spotIt() {
-        const current = currentSpotItem();
-        if (!current) return;
-
-        current.spotted = true;
-        beep();
-
-        if (spotDoneCount() >= state.closeups.length) {
-          renderSpot();
-          speak("Parent confirm reward.");
-          return;
-        }
-
-        renderSpot();
-        speak("Spot the next difference.");
-      }
-
-      function reset() {
-        stopCamera();
-        state.step = "games";
-        state.count = 5;
-        state.roomPic = "";
-        state.afterPic = "";
-        state.closeups = [];
-        state.currentCloseupPic = "";
-        state.cleanupChecked = false;
-
-        el.roomPreview.textContent = "Room picture will show here.";
-        el.closeupPreview.textContent = "Close-up picture will show here.";
-        el.afterPreview.textContent = "Clean / treat picture will show here.";
-        el.closeupList.innerHTML = "";
-        el.cleanupList.innerHTML = "";
-        el.spotList.innerHTML = "";
-
-        go("games");
-      }
-
-      el.openPixelPrix.addEventListener("click", function () {
-        go("room");
+        enterGame();
       });
 
-      el.takeRoomPic.addEventListener("click", function () {
-        openCamera(el.roomVideo, el.roomCameraBox);
-      });
-
-      el.snapRoomPic.addEventListener("click", function () {
-        state.roomPic = snap(el.roomVideo, el.roomCanvas);
-        showPic(el.roomPreview, state.roomPic);
-        stopCamera();
-        beep();
-        speak("Room picture ready.");
-        updateHeader();
-      });
-
-      el.roomNext.addEventListener("click", function () {
-        if (!state.roomPic) {
-          speak("Take the room picture.");
-          return;
-        }
-
-        go("count");
-      });
-
-      document.querySelectorAll("[data-count]").forEach(function (button) {
-        button.addEventListener("click", function () {
-          chooseCount(Number(button.dataset.count || 5));
-        });
-      });
-
-      el.takeCloseupPic.addEventListener("click", function () {
-        openCamera(el.closeupVideo, el.closeupCameraBox);
-      });
-
-      el.snapCloseupPic.addEventListener("click", function () {
-        state.currentCloseupPic = snap(el.closeupVideo, el.closeupCanvas);
-        showPic(el.closeupPreview, state.currentCloseupPic);
-        stopCamera();
-        beep();
-        speak("Close up ready.");
-      });
-
-      el.saveCloseup.addEventListener("click", saveCloseup);
-
-      el.retakeCloseup.addEventListener("click", function () {
-        state.currentCloseupPic = "";
-        el.closeupPreview.textContent = "Close-up picture will show here.";
-        openCamera(el.closeupVideo, el.closeupCameraBox);
-      });
-
-      el.foundItem.addEventListener("click", foundItem);
-      el.parentCheckCleanup.addEventListener("click", parentCheckCleanup);
-      el.goAfterPic.addEventListener("click", goAfterPic);
-
-      el.takeAfterPic.addEventListener("click", function () {
-        openCamera(el.afterVideo, el.afterCameraBox);
-      });
-
-      el.snapAfterPic.addEventListener("click", function () {
-        state.afterPic = snap(el.afterVideo, el.afterCanvas);
-        showPic(el.afterPreview, state.afterPic);
-        stopCamera();
-        beep();
-        speak("Clean or treat picture ready.");
-        updateHeader();
-      });
-
-      el.startSpot.addEventListener("click", function () {
-        if (!state.afterPic) {
-          speak("Take clean or treat picture.");
-          return;
-        }
-
-        state.closeups.forEach(function (item) {
-          item.spotted = false;
-        });
-
-        go("spot");
-      });
-
-      el.spotIt.addEventListener("click", spotIt);
-
-      el.parentConfirmReward.addEventListener("click", function () {
-        if (spotDoneCount() < state.closeups.length) {
-          speak("Spot the differences first.");
-          return;
-        }
-
-        go("reward");
-      });
-
-      el.playAgain.addEventListener("click", function () {
-        reset();
-        go("room");
-      });
-
-      el.backGames.addEventListener("click", reset);
-
-      reset();
+      window.addEventListener("DOMContentLoaded", trySong);
+      window.addEventListener("pageshow", trySong);
     })();
   </script>
 </body>
