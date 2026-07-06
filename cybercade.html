@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CyberCade | PixelPrix</title>
+
+  <style>
+    :root {
+      --bg: #07070d;
+      --panel: #11131f;
+      --panel2: #171a2a;
+      --ink: #f8f2df;
+      --muted: #b9b0a0;
+      --gold: #f2c94c;
+      --green: #68e084;
+      --blue: #6dc7ff;
+      --red: #ff6b6b;
+      --purple: #bd8cff;
+      --line: rgba(255, 255, 255, 0.18);
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+      --radius: 22px;
+      --big: clamp(2.2rem, 8vw, 5.4rem);
+      --mid: clamp(1.2rem, 4.5vw, 2.2rem);
+      --small: clamp(1rem, 3.5vw, 1.25rem);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100svh;
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(109, 199, 255, 0.22), transparent 32rem),
+        radial-gradient(circle at bottom right, rgba(242, 201, 76, 0.16), transparent 30rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      padding: 16px;
+      overflow-y: auto;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: #080808;
+      background: var(--gold);
+      font-weight: 900;
+      border-radius: 999px;
+      padding: 16px 22px;
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    button.secondary {
+      background: var(--blue);
+    }
+
+    button.good {
+      background: var(--green);
+    }
+
+    button.danger {
+      background: var(--red);
+    }
+
+    button.locked,
+    button:disabled {
+      background: #777;
+      color: #252525;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      color: var(--ink);
+      background: #080912;
+      outline: none;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 18px;
+      border: 3px dashed rgba(255, 255, 255, 0.28);
+      border-radius: 20px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .wrap {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      border: 2px solid var(--line);
+      background: rgba(17, 19, 31, 0.92);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .brand {
+      margin: 0;
+      font-size: var(--big);
+      line-height: 0.95;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      text-shadow: 0 4px 0 #000;
+    }
+
+    .tagline {
+      margin: 12px 0 0;
+      font-size: var(--mid);
+      font-weight: 900;
+    }
+
+    .rules {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .rule {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 900;
+    }
+
+    .rule.gold {
+      color: var(--gold);
+    }
+
+    .rule.green {
+      color: var(--green);
+    }
+
+    .room {
+      display: grid;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .panel {
+      border: 2px solid var(--line);
+      background: rgba(17, 19, 31, 0.94);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2,
+    .panel h3 {
+      margin: 0 0 12px;
+      font-size: var(--mid);
+      color: var(--gold);
+    }
+
+    .panel p {
+      margin: 8px 0;
+      color: var(--muted);
+      font-size: var(--small);
+      line-height: 1.35;
+    }
+
+    .games {
+      display: grid;
+      gap: 14px;
+    }
+
+    .game-card {
+      border: 2px solid var(--line);
+      border-radius: 22px;
+      padding: 16px;
+      background: var(--panel2);
+      display: grid;
+      gap: 12px;
+    }
+
+    .game-title {
+      font-size: clamp(1.6rem, 7vw, 3.4rem);
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 3px 0 #000;
+    }
+
+    .game-status {
+      width: fit-content;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(104, 224, 132, 0.18);
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .game-status.locked {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+    }
+
+    .big-pixel {
+      width: 100%;
+      min-height: 110px;
+      border-radius: 28px;
+      font-size: clamp(2rem, 8vw, 4.8rem);
+      letter-spacing: 0.05em;
+      background:
+        linear-gradient(135deg, #f2c94c, #ffef9f);
+      color: #050505;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .toggle-row,
+    .mode-row,
+    .action-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      margin-top: 12px;
+    }
+
+    .mode-btn {
+      min-height: 72px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.13);
+      color: var(--ink);
+      box-shadow: none;
+      border: 2px solid var(--line);
+    }
+
+    .mode-btn.active {
+      background: var(--green);
+      color: #061108;
+      border-color: transparent;
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .tab-btn {
+      min-height: 72px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.13);
+      color: var(--ink);
+      box-shadow: none;
+      border: 2px solid var(--line);
+    }
+
+    .tab-btn.active {
+      background: var(--blue);
+      color: #041017;
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .status-strip {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--line);
+      font-weight: 900;
+    }
+
+    .status-strip span {
+      color: var(--gold);
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    @media (min-width: 760px) {
+      .grid.two {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .rules {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .step-number {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #050505;
+      font-weight: 900;
+      margin-right: 8px;
+    }
+
+    .preview {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 18px;
+      border: 2px dashed rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.05);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--muted);
+      text-align: center;
+      padding: 10px;
+    }
+
+    .preview img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      display: block;
+      border-radius: 14px;
+    }
+
+    .items {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .item-card {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    @media (min-width: 720px) {
+      .item-card {
+        grid-template-columns: 110px 1fr 120px;
+        align-items: center;
+      }
+    }
+
+    .thumb {
+      width: 100%;
+      min-height: 90px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      min-height: 90px;
+      object-fit: cover;
+    }
+
+    .mini {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .kid-board {
+      display: grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .kid-prompt {
+      border-radius: 24px;
+      padding: 18px;
+      background: rgba(104, 224, 132, 0.15);
+      border: 2px solid rgba(104, 224, 132, 0.35);
+      font-size: clamp(1.6rem, 6vw, 3.4rem);
+      font-weight: 900;
+      text-align: center;
+      color: var(--green);
+    }
+
+    .target-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
+    }
+
+    .target-btn {
+      min-height: 108px;
+      border-radius: 24px;
+      font-size: clamp(1.3rem, 5vw, 2.4rem);
+      display: grid;
+      place-items: center;
+      gap: 6px;
+      background: var(--gold);
+    }
+
+    .target-btn.done {
+      background: var(--green);
+    }
+
+    .target-btn .num {
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    .progress {
+      height: 28px;
+      background: rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      transition: width 220ms ease;
+    }
+
+    .reward {
+      border: 3px solid rgba(104, 224, 132, 0.5);
+      background: rgba(104, 224, 132, 0.12);
+      border-radius: 26px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .reward h2 {
+      color: var(--green);
+      font-size: clamp(2rem, 8vw, 4rem);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      margin: 20px 0 8px;
+      font-weight: 900;
+    }
+
+    .source-only {
+      color: var(--blue);
+      font-weight: 900;
+    }
+
+    .biff {
+      margin-top: 12px;
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: rgba(189, 140, 255, 0.17);
+      color: var(--purple);
+      font-weight: 900;
+      border: 1px solid rgba(189, 140, 255, 0.35);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="cybercade-title">
+      <h1 id="cybercade-title" class="brand">CYBERCADE</h1>
+      <p class="tagline">Playtime is learn time.</p>
+
+      <div class="rules" aria-label="CyberCade rules">
+        <div class="rule gold">Teach the difference.</div>
+        <div class="rule green">Do not shame the child.</div>
+        <div class="rule">Pictures stay source.</div>
+        <div class="rule">Only results move.</div>
+        <div class="rule">Chat OFF.</div>
+        <div class="rule">Child identity OFF.</div>
+        <div class="rule">Parent approval ON.</div>
+        <div class="rule gold">So easy Biff can do it.</div>
+      </div>
+
+      <div class="biff">
+        Big button. Big icon. One job. Play.
+      </div>
+    </section>
+
+    <section class="room panel" id="games-menu" aria-labelledby="games-title">
+      <h2 id="games-title">GAMES 🎮</h2>
+
+      <div class="games">
+        <article class="game-card">
+          <div class="game-status">ACTIVE NOW</div>
+          <div class="game-title">PIXELPRIX</div>
+          <p>Two games in one: <strong>Clean Up</strong> and <strong>Spot the Difference</strong>.</p>
+          <button class="big-pixel" id="open-pixelprix" type="button">PIXELPRIX</button>
+        </article>
+
+        <article class="game-card">
+          <div class="game-status locked">COMING SOON</div>
+          <div class="game-title">LOCKED</div>
+          <p>Future game slot. Not built yet.</p>
+          <button class="locked" type="button" disabled>LOCKED</button>
+        </article>
+
+        <article class="game-card">
+          <div class="game-status locked">COMING SOON</div>
+          <div class="game-title">LOCKED</div>
+          <p>Future game slot. Not built yet.</p>
+          <button class="locked" type="button" disabled>LOCKED</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="pixelprix-room" aria-labelledby="pixelprix-title">
+      <h2 id="pixelprix-title">PIXELPRIX</h2>
+      <p>
+        Parent sets it up. Kid plays it. Parent confirms.
+        <span class="source-only">Pictures stay source.</span>
+      </p>
+
+      <div class="toggle-row" aria-label="PixelPrix room tabs">
+        <button class="tab-btn active" id="parent-tab" type="button">PARENT SETUP</button>
+        <button class="tab-btn" id="kid-tab" type="button">KID PLAY</button>
+      </div>
+
+      <div class="status-strip" aria-live="polite">
+        <div>Mode: <span id="mode-status">Tiny Tidy — 5 pics</span></div>
+        <div>Close-up pics: <span id="pic-count">0</span> / <span id="pic-required">5</span></div>
+        <div>Room board: <span id="dirty-status">waiting</span></div>
+        <div>Reward / clean pic: <span id="after-status">waiting</span></div>
+        <div>Game: <span id="phase-status">setup</span></div>
+      </div>
+
+      <section id="parent-panel">
+        <div class="panel">
+          <h3>1. Pick the size</h3>
+          <p>Parent picks how many close-up item pictures are required.</p>
+
+          <div class="mode-row">
+            <button class="mode-btn active" type="button" data-mode="tiny_tidy" data-count="5">Tiny Tidy<br />5 pics</button>
+            <button class="mode-btn" type="button" data-mode="mini_pickup" data-count="10">Mini Pickup<br />10 pics</button>
+            <button class="mode-btn" type="button" data-mode="room_rally" data-count="20">Room Rally<br />20 pics</button>
+            <button class="mode-btn" type="button" data-mode="prix_sprint" data-count="34">Prix Sprint<br />34 pics</button>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="step">
+            <h3><span class="step-number">2</span>Close-up item pics</h3>
+            <p>Take the required item pics. These help build the cleanup targets.</p>
+            <input id="closeup-input" type="file" accept="image/*" capture="environment" multiple />
+            <div class="items" id="item-list"></div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">3</span>Dirty room game board</h3>
+            <p>Step back. Take the dirty room picture. It stays local/source.</p>
+            <input id="dirty-input" type="file" accept="image/*" capture="environment" />
+            <div class="preview" id="dirty-preview">Dirty room game board preview</div>
+
+            <div class="action-row">
+              <button class="good" id="build-cleanup" type="button">BUILD CLEAN UP</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="step">
+            <h3><span class="step-number">4</span>After / clean / treat pic</h3>
+            <p>After cleanup, take the clean room or treat-ready picture.</p>
+            <input id="after-input" type="file" accept="image/*" capture="environment" />
+            <div class="preview" id="after-preview">Clean / treat-ready preview</div>
+
+            <div class="action-row">
+              <button class="secondary" id="open-spot" type="button">OPEN SPOT THE DIFFERENCE</button>
+            </div>
+          </div>
+
+          <div class="step">
+            <h3><span class="step-number">5</span>Parent approval</h3>
+            <p>Parent confirms cleanup and reward. No shame. Learning first.</p>
+            <div class="action-row">
+              <button id="parent-confirm-cleanup" type="button">CONFIRM CLEANUP</button>
+              <button class="good" id="parent-confirm-reward" type="button">CONFIRM REWARD</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="kid-panel" class="hidden">
+        <div class="kid-board">
+          <div class="kid-prompt" id="kid-prompt">Ready to play?</div>
+
+          <div>
+            <h3>CLEAN UP</h3>
+            <p>Find it. Tap it. Put it away.</p>
+            <div class="progress" aria-label="Cleanup progress">
+              <div class="bar" id="cleanup-bar"></div>
+            </div>
+            <div class="target-grid" id="cleanup-targets"></div>
+          </div>
+
+          <div id="spot-section" class="hidden">
+            <h3>SPOT THE DIFFERENCE</h3>
+            <p>Can you spot the difference?</p>
+            <div class="progress" aria-label="Spot the Difference progress">
+              <div class="bar" id="spot-bar"></div>
+            </div>
+            <div class="target-grid" id="spot-targets"></div>
+          </div>
+
+          <div id="reward-section" class="reward hidden">
+            <h2>REWARD READY</h2>
+            <p>Parent approval ON.</p>
+            <p>Great job. Playtime is learn time.</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <p class="footer">
+      CyberCade / PixelPrix — legacy-simple room. No dashboard maze.
+    </p>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const state = {
+        roomOpen: false,
+        mode: "tiny_tidy",
+        modeLabel: "Tiny Tidy",
+        requiredCount: 5,
+        phase: "setup",
+        closeups: [],
+        dirtyRoom: null,
+        afterRoom: null,
+        cleanupConfirmed: false,
+        spotOpen: false,
+        rewardReady: false
+      };
+
+      const labelBank = [
+        "toy",
+        "shirt",
+        "cup",
+        "paper",
+        "shoe",
+        "book",
+        "trash",
+        "sock",
+        "blocks",
+        "blanket",
+        "dish",
+        "pillow",
+        "crayon",
+        "ball",
+        "towel"
+      ];
+
+      const iconBank = [
+        "🧸",
+        "👕",
+        "🥤",
+        "📄",
+        "👟",
+        "📘",
+        "🗑️",
+        "🧦",
+        "🧱",
+        "⭐",
+        "🍽️",
+        "🛏️",
+        "🖍️",
+        "⚽",
+        "🧺"
+      ];
+
+      const el = {
+        openPixelPrix: document.getElementById("open-pixelprix"),
+        pixelprixRoom: document.getElementById("pixelprix-room"),
+        parentTab: document.getElementById("parent-tab"),
+        kidTab: document.getElementById("kid-tab"),
+        parentPanel: document.getElementById("parent-panel"),
+        kidPanel: document.getElementById("kid-panel"),
+        modeStatus: document.getElementById("mode-status"),
+        picCount: document.getElementById("pic-count"),
+        picRequired: document.getElementById("pic-required"),
+        dirtyStatus: document.getElementById("dirty-status"),
+        afterStatus: document.getElementById("after-status"),
+        phaseStatus: document.getElementById("phase-status"),
+        closeupInput: document.getElementById("closeup-input"),
+        dirtyInput: document.getElementById("dirty-input"),
+        afterInput: document.getElementById("after-input"),
+        itemList: document.getElementById("item-list"),
+        dirtyPreview: document.getElementById("dirty-preview"),
+        afterPreview: document.getElementById("after-preview"),
+        buildCleanup: document.getElementById("build-cleanup"),
+        confirmCleanup: document.getElementById("parent-confirm-cleanup"),
+        openSpot: document.getElementById("open-spot"),
+        confirmReward: document.getElementById("parent-confirm-reward"),
+        kidPrompt: document.getElementById("kid-prompt"),
+        cleanupTargets: document.getElementById("cleanup-targets"),
+        cleanupBar: document.getElementById("cleanup-bar"),
+        spotSection: document.getElementById("spot-section"),
+        spotTargets: document.getElementById("spot-targets"),
+        spotBar: document.getElementById("spot-bar"),
+        rewardSection: document.getElementById("reward-section")
+      };
+
+      function makeId(prefix) {
+        return prefix + "." + Date.now() + "." + Math.random().toString(36).slice(2, 9);
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function speak(text) {
+        try {
+          if (!("speechSynthesis" in window)) {
+            return;
+          }
+
+          window.speechSynthesis.cancel();
+
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.rate = 0.9;
+          utterance.pitch = 1.1;
+          window.speechSynthesis.speak(utterance);
+        } catch (error) {
+          return;
+        }
+      }
+
+      function ding() {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) {
+            return;
+          }
+
+          const ctx = new AudioContext();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = "square";
+          osc.frequency.value = 660;
+          gain.gain.value = 0.03;
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start();
+          setTimeout(function () {
+            osc.stop();
+            ctx.close();
+          }, 90);
+        } catch (error) {
+          return;
+        }
+      }
+
+      function setTab(tab) {
+        const isParent = tab === "parent";
+
+        el.parentTab.classList.toggle("active", isParent);
+        el.kidTab.classList.toggle("active", !isParent);
+        el.parentPanel.classList.toggle("hidden", !isParent);
+        el.kidPanel.classList.toggle("hidden", isParent);
+
+        if (!isParent) {
+          renderKidGame();
+        }
+      }
+
+      function updateStatus() {
+        el.modeStatus.textContent = state.modeLabel + " — " + state.requiredCount + " pics";
+        el.picCount.textContent = String(state.closeups.length);
+        el.picRequired.textContent = String(state.requiredCount);
+        el.dirtyStatus.textContent = state.dirtyRoom ? "ready — source only" : "waiting";
+        el.afterStatus.textContent = state.afterRoom ? "ready — source only" : "waiting";
+        el.phaseStatus.textContent = state.phase;
+      }
+
+      function setMode(mode, label, count) {
+        state.mode = mode;
+        state.modeLabel = label;
+        state.requiredCount = count;
+        state.phase = "setup";
+
+        document.querySelectorAll(".mode-btn").forEach(function (button) {
+          button.classList.toggle("active", button.dataset.mode === mode);
+        });
+
+        updateStatus();
+      }
+
+      function previewFile(file, container) {
+        if (!file || !container) {
+          return;
+        }
+
+        const url = URL.createObjectURL(file);
+        container.innerHTML = "";
+
+        const img = document.createElement("img");
+        img.alt = "Local source-only preview";
+        img.src = url;
+
+        container.appendChild(img);
+      }
+
+      function handleCloseups(files) {
+        Array.prototype.slice.call(files || []).forEach(function (file) {
+          const nextNumber = state.closeups.length + 1;
+          const url = URL.createObjectURL(file);
+
+          state.closeups.push({
+            id: makeId("pixelprixCloseup"),
+            number: nextNumber,
+            fileName: file.name || "local-picture",
+            localUrl: url,
+            label: labelBank[(nextNumber - 1) % labelBank.length],
+            icon: iconBank[(nextNumber - 1) % iconBank.length],
+            done: false,
+            spotted: false
+          });
+        });
+
+        if (state.closeups.length > 0) {
+          state.phase = "closeups_ready";
+        }
+
+        renderParentItems();
+        renderKidGame();
+        updateStatus();
+      }
+
+      function renderParentItems() {
+        if (!state.closeups.length) {
+          el.itemList.innerHTML = "";
+          return;
+        }
+
+        el.itemList.innerHTML = state.closeups.map(function (item, index) {
+          return [
+            '<div class="item-card" data-id="' + escapeHtml(item.id) + '">',
+              '<div class="thumb"><img src="' + escapeHtml(item.localUrl) + '" alt="Local close-up item ' + (index + 1) + '"></div>',
+              '<div>',
+                '<div class="mini">Item ' + (index + 1) + ' — LOCAL ONLY</div>',
+                '<input type="text" class="item-label" data-id="' + escapeHtml(item.id) + '" value="' + escapeHtml(item.label) + '" aria-label="Item label">',
+              '</div>',
+              '<div>',
+                '<select class="item-icon" data-id="' + escapeHtml(item.id) + '" aria-label="Item icon">',
+                  iconBank.map(function (icon) {
+                    return '<option value="' + escapeHtml(icon) + '"' + (icon === item.icon ? " selected" : "") + '>' + escapeHtml(icon) + '</option>';
+                  }).join(""),
+                '</select>',
+              '</div>',
+            '</div>'
+          ].join("");
+        }).join("");
+
+        document.querySelectorAll(".item-label").forEach(function (input) {
+          input.addEventListener("input", function () {
+            const item = state.closeups.find(function (target) {
+              return target.id === input.dataset.id;
+            });
+
+            if (item) {
+              item.label = input.value.trim() || "item";
+              renderKidGame();
+            }
+          });
+        });
+
+        document.querySelectorAll(".item-icon").forEach(function (select) {
+          select.addEventListener("change", function () {
+            const item = state.closeups.find(function (target) {
+              return target.id === select.dataset.id;
+            });
+
+            if (item) {
+              item.icon = select.value;
+              renderKidGame();
+            }
+          });
+        });
+      }
+
+      function buildCleanupGame() {
+        if (state.closeups.length < state.requiredCount) {
+          state.phase = "need_more_closeups";
+          updateStatus();
+          speak("Need more pictures.");
+          return;
+        }
+
+        if (!state.dirtyRoom) {
+          state.phase = "need_dirty_room_picture";
+          updateStatus();
+          speak("Take the dirty room picture.");
+          return;
+        }
+
+        state.phase = "cleanup_active";
+        state.closeups.forEach(function (item) {
+          item.done = false;
+          item.spotted = false;
+        });
+        state.cleanupConfirmed = false;
+        state.spotOpen = false;
+        state.rewardReady = false;
+
+        setTab("kid");
+        renderKidGame();
+        updateStatus();
+        speak("Find it. Tap it. Put it away.");
+      }
+
+      function cleanupPercent() {
+        if (!state.closeups.length) {
+          return 0;
+        }
+
+        const done = state.closeups.filter(function (item) {
+          return item.done;
+        }).length;
+
+        return Math.round((done / state.closeups.length) * 100);
+      }
+
+      function spotPercent() {
+        if (!state.closeups.length) {
+          return 0;
+        }
+
+        const spotted = state.closeups.filter(function (item) {
+          return item.spotted;
+        }).length;
+
+        return Math.round((spotted / state.closeups.length) * 100);
+      }
+
+      function renderKidGame() {
+        const cleanPercent = cleanupPercent();
+        const differencePercent = spotPercent();
+
+        el.cleanupBar.style.width = cleanPercent + "%";
+        el.spotBar.style.width = differencePercent + "%";
+
+        if (!state.closeups.length) {
+          el.cleanupTargets.innerHTML = '<p>No targets yet. Parent setup first.</p>';
+          el.spotTargets.innerHTML = "";
+          el.kidPrompt.textContent = "Parent setup first.";
+          return;
+        }
+
+        if (state.phase === "cleanup_active") {
+          el.kidPrompt.textContent = "Find it. Tap it. Put it away.";
+        } else if (state.phase === "cleanup_done_waiting_parent") {
+          el.kidPrompt.textContent = "Parent check.";
+        } else if (state.phase === "spot_difference_active") {
+          el.kidPrompt.textContent = "Can you spot the difference?";
+        } else if (state.phase === "reward_ready") {
+          el.kidPrompt.textContent = "Great job.";
+        } else {
+          el.kidPrompt.textContent = "Ready to play?";
+        }
+
+        el.cleanupTargets.innerHTML = state.closeups.map(function (item, index) {
+          return [
+            '<button type="button" class="target-btn ' + (item.done ? "done" : "") + '" data-cleanup-id="' + escapeHtml(item.id) + '">',
+              '<span class="num">#' + (index + 1) + '</span>',
+              '<span>' + escapeHtml(item.icon) + '</span>',
+              '<span>' + escapeHtml(item.label || "item") + '</span>',
+            '</button>'
+          ].join("");
+        }).join("");
+
+        document.querySelectorAll("[data-cleanup-id]").forEach(function (button) {
+          button.addEventListener("click", function () {
+            const item = state.closeups.find(function (target) {
+              return target.id === button.dataset.cleanupId;
+            });
+
+            if (!item || state.phase !== "cleanup_active") {
+              return;
+            }
+
+            item.done = !item.done;
+            ding();
+
+            if (item.done) {
+              speak("Good job. Put it away.");
+            } else {
+              speak("Try again.");
+            }
+
+            if (cleanupPercent() === 100) {
+              state.phase = "cleanup_done_waiting_parent";
+              speak("Parent check.");
+            }
+
+            renderKidGame();
+            updateStatus();
+          });
+        });
+
+        el.spotSection.classList.toggle("hidden", !state.spotOpen);
+
+        if (state.spotOpen) {
+          el.spotTargets.innerHTML = state.closeups.map(function (item, index) {
+            return [
+              '<button type="button" class="target-btn ' + (item.spotted ? "done" : "") + '" data-spot-id="' + escapeHtml(item.id) + '">',
+                '<span class="num">#' + (index + 1) + '</span>',
+                '<span>' + escapeHtml(item.icon) + '</span>',
+                '<span>Changed?</span>',
+              '</button>'
+            ].join("");
+          }).join("");
+
+          document.querySelectorAll("[data-spot-id]").forEach(function (button) {
+            button.addEventListener("click", function () {
+              const item = state.closeups.find(function (target) {
+                return target.id === button.dataset.spotId;
+              });
+
+              if (!item || state.phase !== "spot_difference_active") {
+                return;
+              }
+
+              item.spotted = !item.spotted;
+              ding();
+
+              if (item.spotted) {
+                speak("You spotted it.");
+              } else {
+                speak("Look again.");
+              }
+
+              if (spotPercent() === 100) {
+                state.phase = "spot_done_waiting_parent";
+                speak("Parent check.");
+              }
+
+              renderKidGame();
+              updateStatus();
+            });
+          });
+        }
+
+        el.rewardSection.classList.toggle("hidden", !state.rewardReady);
+      }
+
+      function confirmCleanup() {
+        if (cleanupPercent() < 100) {
+          state.phase = "cleanup_waiting";
+          updateStatus();
+          speak("Finish cleanup first.");
+          return;
+        }
+
+        state.cleanupConfirmed = true;
+        state.phase = "cleanup_confirmed";
+        updateStatus();
+        speak("Cleanup confirmed.");
+      }
+
+      function openSpotDifference() {
+        if (!state.cleanupConfirmed) {
+          state.phase = "cleanup_needs_parent_confirm";
+          updateStatus();
+          speak("Parent confirm cleanup first.");
+          return;
+        }
+
+        if (!state.afterRoom) {
+          state.phase = "need_clean_or_treat_picture";
+          updateStatus();
+          speak("Take the clean or treat picture.");
+          return;
+        }
+
+        state.spotOpen = true;
+        state.phase = "spot_difference_active";
+
+        setTab("kid");
+        renderKidGame();
+        updateStatus();
+        speak("Can you spot the difference?");
+      }
+
+      function confirmReward() {
+        if (!state.spotOpen || spotPercent() < 100) {
+          state.phase = "spot_difference_waiting";
+          updateStatus();
+          speak("Spot the difference first.");
+          return;
+        }
+
+        state.rewardReady = true;
+        state.phase = "reward_ready";
+
+        renderKidGame();
+        updateStatus();
+        speak("Reward ready. Great job.");
+      }
+
+      el.openPixelPrix.addEventListener("click", function () {
+        state.roomOpen = true;
+        state.phase = "room_open";
+        el.pixelprixRoom.classList.remove("hidden");
+        el.pixelprixRoom.scrollIntoView({ behavior: "smooth", block: "start" });
+        updateStatus();
+        speak("PixelPrix.");
+      });
+
+      el.parentTab.addEventListener("click", function () {
+        setTab("parent");
+      });
+
+      el.kidTab.addEventListener("click", function () {
+        setTab("kid");
+      });
+
+      document.querySelectorAll(".mode-btn").forEach(function (button) {
+        button.addEventListener("click", function () {
+          const mode = button.dataset.mode;
+          const count = Number(button.dataset.count || 5);
+          const label = button.textContent.replace(/\s+/g, " ").replace(String(count) + " pics", "").trim();
+
+          setMode(mode, label, count);
+        });
+      });
+
+      el.closeupInput.addEventListener("change", function () {
+        handleCloseups(el.closeupInput.files);
+        el.closeupInput.value = "";
+      });
+
+      el.dirtyInput.addEventListener("change", function () {
+        const file = el.dirtyInput.files && el.dirtyInput.files[0];
+
+        if (!file) {
+          return;
+        }
+
+        state.dirtyRoom = {
+          name: file.name || "dirty-room",
+          localOnly: true
+        };
+
+        previewFile(file, el.dirtyPreview);
+        state.phase = "dirty_room_ready";
+        updateStatus();
+        speak("Dirty room board ready.");
+      });
+
+      el.afterInput.addEventListener("change", function () {
+        const file = el.afterInput.files && el.afterInput.files[0];
+
+        if (!file) {
+          return;
+        }
+
+        state.afterRoom = {
+          name: file.name || "after-room",
+          localOnly: true
+        };
+
+        previewFile(file, el.afterPreview);
+        state.phase = "clean_or_treat_ready";
+        updateStatus();
+        speak("Clean or treat picture ready.");
+      });
+
+      el.buildCleanup.addEventListener("click", buildCleanupGame);
+      el.confirmCleanup.addEventListener("click", confirmCleanup);
+      el.openSpot.addEventListener("click", openSpotDifference);
+      el.confirmReward.addEventListener("click", confirmReward);
+
+      updateStatus();
+      renderParentItems();
+      renderKidGame();
+    })();
+  </script>
+</body>
+  </html>
