@@ -1,0 +1,293 @@
+<!doctype html>
+<!--
+  NET FILE
+  cybermarket-local-inventory.html
+  CyberCrowd — CyberMarket Local Inventory
+
+  Purpose:
+  - how scanned items become local search
+
+  Owns:
+  - local inventory signal
+  - barcode-to-item connection
+  - shelf photo context
+  - store proximity
+  - local item discovery
+  - item seen here records
+  - price observation
+  - availability observation
+  - nearby search result context
+  - scan-to-search visibility
+
+  Does NOT own:
+  - WDIG routing
+  - worker capture workflow
+  - Repeat / Snap / Next capture flow
+  - proof resume scoring
+  - proof resume display
+  - payment
+  - checkout
+  - shipping
+  - payroll
+  - hiring decisions
+  - sessions
+  - cookies
+  - KV storage
+  - authority execution
+  - identity creation
+  - movement approval
+  - provider execution
+  - OAuth
+  - scraping
+  - webhook delivery
+  - real-world execution
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CyberCrowd CyberMarket Local Inventory | Scanned Items Become Local Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CyberCrowd CyberMarket Local Inventory defines how scanned items, shelf photos, prices, and store proximity can become local search visibility.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cybercrowd.net/cybermarket-local-inventory.html">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem 5vw;
+      background: #050608;
+      color: #f4f4f4;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 860px;
+    }
+
+    h1, h2, h3 {
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    h2 {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #2a2a2a;
+    }
+
+    h3 {
+      margin-bottom: 0.3rem;
+    }
+
+    p {
+      max-width: 760px;
+    }
+
+    ul {
+      max-width: 760px;
+      padding-left: 1.4rem;
+    }
+
+    li {
+      margin: 0.35rem 0;
+    }
+
+    a {
+      color: #9fd3ff;
+      text-decoration: none;
+    }
+
+    .small {
+      color: #bbbbbb;
+      font-size: 0.92rem;
+    }
+
+    .card {
+      max-width: 760px;
+      margin: 1rem 0;
+      padding: 1rem 1.2rem;
+      border: 1px solid #252525;
+      border-radius: 0.7rem;
+      background: radial-gradient(circle at top left, #15171c, #050608);
+    }
+
+    .chain {
+      font-size: 1.05rem;
+      letter-spacing: 0.01em;
+    }
+
+    .market-line {
+      display: block;
+      margin: 0.35rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>CyberMarket Local Inventory</h1>
+    <p class="small">How scanned items become local search.</p>
+
+    <h2>Local Items Should Be Findable</h2>
+    <p>
+      CyberMarket Local Inventory helps make nearby items visible. When an item
+      is scanned, photographed, priced, or observed on a shelf, that item may
+      become a local inventory signal.
+    </p>
+
+    <p>
+      A local inventory signal can help people find what is actually nearby
+      instead of only seeing distant online listings.
+    </p>
+
+    <h2>Inventory Purpose</h2>
+    <p>
+      The purpose of CyberMarket Local Inventory is local discovery. A product
+      sitting in a nearby store should not be invisible just because it is not
+      part of a large online marketplace.
+    </p>
+
+    <p>
+      A scanned item may carry useful context: barcode, shelf photo, price
+      observation, store proximity, time seen, and availability observation.
+    </p>
+
+    <h2>CyberMarket Local Inventory Owns</h2>
+    <ul>
+      <li>Local inventory signal</li>
+      <li>Barcode-to-item connection</li>
+      <li>Shelf photo context</li>
+      <li>Store proximity</li>
+      <li>Local item discovery</li>
+      <li>Item seen here records</li>
+      <li>Price observation</li>
+      <li>Availability observation</li>
+      <li>Nearby search result context</li>
+      <li>Scan-to-search visibility</li>
+    </ul>
+
+    <h2>Scan to Local Search</h2>
+    <div class="card">
+      <p class="chain">
+        <span class="market-line"><strong>Scanned item</strong></span>
+        ↓
+        <span class="market-line"><strong>Local inventory signal</strong></span>
+        ↓
+        <span class="market-line"><strong>Nearby search result</strong></span>
+        ↓
+        <span class="market-line"><strong>Customer discovery</strong></span>
+      </p>
+
+      <p class="small">
+        Work Capture may capture the item. CyberMarket Local Inventory explains
+        how that item can become visible to nearby search.
+      </p>
+    </div>
+
+    <h2>Barcode-to-Item Connection</h2>
+    <p>
+      A barcode can act as the item anchor. The barcode helps connect the
+      physical shelf item to a product identity without requiring the worker to
+      type the product name again and again.
+    </p>
+
+    <p>
+      The barcode alone is not the whole record. The local inventory signal may
+      also need shelf context, store context, time context, price observation,
+      and availability observation.
+    </p>
+
+    <h2>Shelf Photo Context</h2>
+    <p>
+      A shelf photo can show what the barcode cannot. It may show placement,
+      condition, display quality, nearby products, signage, price tags, and
+      whether the item was actually present at the time of capture.
+    </p>
+
+    <p>
+      The photo helps turn a product code into real-world local evidence.
+    </p>
+
+    <h2>Store Proximity</h2>
+    <p>
+      CyberMarket Local Inventory is about nearby discovery. A customer searching
+      for an item may need to know whether that item was seen close enough to be
+      useful.
+    </p>
+
+    <p>
+      Store proximity helps local stores, discount stores, salvage stores,
+      small retailers, and other nearby sellers become visible when people are
+      looking for real items close to them.
+    </p>
+
+    <h2>Price Observation</h2>
+    <p>
+      A price observation records what price was seen with the item. This is not
+      the same as checkout, payment, or final sale authority.
+    </p>
+
+    <p>
+      A price observation helps searchers understand why a local item may be
+      worth visiting, comparing, or checking before buying elsewhere.
+    </p>
+
+    <h2>Availability Observation</h2>
+    <p>
+      Availability observation means the item was seen in a local place at a
+      certain time. It does not guarantee the item will remain available forever.
+    </p>
+
+    <p>
+      The signal should show that the item was observed, where it was observed,
+      and when it was observed.
+    </p>
+
+    <h2>Local Search Result</h2>
+    <p>
+      A local search result may show that an item was seen nearby. The result may
+      include item identity, store proximity, photo context, price observation,
+      and time seen.
+    </p>
+
+    <div class="card">
+      <h3>Example Local Result</h3>
+      <p class="small">
+        A couch, tool, food item, display item, or discount product is scanned
+        or photographed in a local store. The item becomes searchable nearby
+        with its observed place, price, photo, and time seen.
+      </p>
+    </div>
+
+    <h2>Inventory Boundary</h2>
+    <div class="card">
+      <p>
+        CyberMarket Local Inventory answers one question:
+      </p>
+
+      <p>
+        <strong>How does a scanned item become local search?</strong>
+      </p>
+
+      <p class="small">
+        This page does not define WDIG routing, worker capture workflow, Repeat /
+        Snap / Next capture flow, proof resume scoring, proof resume display,
+        payment, checkout, shipping, payroll, hiring decisions, sessions,
+        cookies, KV storage, authority execution, identity creation, movement
+        approval, provider execution, OAuth, scraping, webhook delivery, or
+        real-world execution. Those are separate CyberCrowd lanes.
+      </p>
+    </div>
+
+    <p>
+      <a href="/">Return to CyberCrowd</a>
+    </p>
+  </main>
+</body>
+</html>
