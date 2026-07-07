@@ -1,81 +1,218 @@
 <!doctype html>
+<!--
+  NET FILE
+  wdig-routing.html
+  CyberCrowd — WDIG Routing
+
+  Purpose:
+  - where things belong
+
+  Owns:
+  - placement
+  - custody
+  - surface
+  - lane
+  - routing
+  - control path
+  - archive path
+  - live signal path
+
+  Does NOT own:
+  - worker capture
+  - Repeat / Snap / Next
+  - proof resume records
+  - barcode inventory
+  - estimator workflows
+  - local marketplace search
+  - payment
+  - sessions
+  - cookies
+  - KV storage
+  - authority execution
+  - identity creation
+  - movement approval
+  - provider execution
+  - OAuth
+  - scraping
+  - webhook delivery
+  - real-world execution
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>CyberCrowd WDIG Routing | Where We Belong, Placement, Control</title>
+  <title>CyberCrowd WDIG Routing | Where Things Belong</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CyberCrowd WDIG Routing defines the Where We Belong placement layer for files, devices, cameras, people, signals, surfaces, records, proof objects, and live system routing.">
+  <meta name="description" content="CyberCrowd WDIG Routing defines where people, files, devices, signals, cameras, records, proof objects, and surfaces belong inside the CyberCrowd system.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://cybercrowd.net/wdig-routing.html">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem 5vw;
+      background: #050608;
+      color: #f4f4f4;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 860px;
+    }
+
+    h1, h2 {
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    h2 {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #2a2a2a;
+    }
+
+    p {
+      max-width: 760px;
+    }
+
+    ul {
+      max-width: 760px;
+      padding-left: 1.4rem;
+    }
+
+    li {
+      margin: 0.35rem 0;
+    }
+
+    a {
+      color: #9fd3ff;
+      text-decoration: none;
+    }
+
+    .small {
+      color: #bbbbbb;
+      font-size: 0.92rem;
+    }
+
+    .card {
+      max-width: 760px;
+      margin: 1rem 0;
+      padding: 1rem 1.2rem;
+      border: 1px solid #252525;
+      border-radius: 0.7rem;
+      background: radial-gradient(circle at top left, #15171c, #050608);
+    }
+  </style>
 </head>
+
 <body>
   <main>
     <h1>CyberCrowd WDIG Routing</h1>
-
-    <p>
-      CyberCrowd WDIG Routing is the placement layer for the platform. WDIG asks
-      where something belongs before it is moved, surfaced, archived, controlled,
-      broadcast, or connected.
-    </p>
+    <p class="small">Where things belong inside the CyberCrowd system.</p>
 
     <h2>Where We Belong</h2>
     <p>
-      Where We Belong is not just a slogan. It is CyberCrowd’s routing question.
-      A person, file, device, camera, signal, surface, record, proof object, or
-      live input must be identified, defined, and routed to the correct place.
+      WDIG Routing is CyberCrowd’s placement layer. It asks where something
+      belongs before it is moved, surfaced, archived, controlled, broadcast,
+      connected, or preserved.
     </p>
 
-    <h2>WDIG Purpose</h2>
+    <h2>Routing Purpose</h2>
     <p>
-      WDIG helps CyberCrowd prevent confusion by asking where things go before
-      they are placed into the system. The goal is not only movement. The goal is
-      correct custody, correct surface, correct role, and correct proof path.
+      The purpose of WDIG Routing is to prevent confusion. CyberCrowd should not
+      throw every person, file, device, signal, record, proof object, or surface
+      into one feed, one bucket, or one room.
     </p>
 
-    <h2>What WDIG May Route</h2>
+    <p>
+      WDIG Routing protects correct placement, correct custody, correct surface,
+      correct lane, correct control path, correct archive path, and correct live
+      signal path.
+    </p>
+
+    <h2>WDIG Routing Owns</h2>
     <ul>
-      <li>Files and media assets</li>
-      <li>Camera inputs and camera angles</li>
-      <li>Phone inputs</li>
-      <li>Trusted device surfaces</li>
-      <li>Magic Cursor control paths</li>
-      <li>Live session signals</li>
-      <li>Viewer access states</li>
-      <li>Creator and client controls</li>
-      <li>Archive proof objects</li>
-      <li>Record and media references</li>
-      <li>Atomic Kricket show surfaces</li>
-      <li>Reten Records media surfaces</li>
-      <li>CyberCrowd public discourse surfaces</li>
+      <li>Placement</li>
+      <li>Custody</li>
+      <li>Surface</li>
+      <li>Lane</li>
+      <li>Routing</li>
+      <li>Control path</li>
+      <li>Archive path</li>
+      <li>Live signal path</li>
     </ul>
 
-    <h2>Placement Before Production</h2>
+    <h2>Placement</h2>
     <p>
-      CyberCrowd should not throw every object into one feed, one bucket, or one
-      app surface. WDIG supports placement before production, so files, signals,
-      people, and proof objects enter the correct lane.
+      Placement decides where something should enter CyberCrowd. A file, camera,
+      person, device, record, or signal must be placed in the correct system
+      area before it becomes active.
     </p>
 
-    <h2>Connection to Magic Cursor</h2>
+    <h2>Custody</h2>
     <p>
-      WDIG defines where something belongs. Magic Cursor helps control and move
-      through those placements across surfaces. Together, they support the
-      multi-surface live system.
+      Custody defines who or what is responsible for an object while it moves
+      through CyberCrowd. Custody protects meaning, access, proof, and control.
     </p>
 
-    <h2>Connection to the Archive</h2>
+    <h2>Surface</h2>
     <p>
-      When something becomes evidence, history, or a platform lesson, WDIG can
-      route it toward the CyberCrowd Archive. The Archive preserves meaning,
-      custody, proof, and version history.
+      A surface is where something appears or becomes usable. WDIG Routing helps
+      decide whether an object belongs on a live surface, private surface, public
+      surface, creator surface, client surface, archive surface, or control
+      surface.
     </p>
 
-    <h2>Connection to the CyberCrowd System</h2>
+    <h2>Lane</h2>
     <p>
-      WDIG Routing may connect to Cam Packages, Viewer Upgrades, Live Control Room,
-      Magic Cursor, Secure Surface Hardware, Atomic Kricket, Reten Records, access
-      passes, and platform archive proof.
+      A lane keeps work separated. WDIG Routing helps CyberCrowd avoid mixing
+      jobs, media, live signals, proof records, marketplace signals, archive
+      objects, and control paths into the wrong place.
     </p>
+
+    <h2>Control Path</h2>
+    <p>
+      A control path defines how an operator, creator, client, worker, device,
+      or system surface may control movement. WDIG Routing does not give control
+      to everything. It routes control only where control belongs.
+    </p>
+
+    <h2>Archive Path</h2>
+    <p>
+      When something becomes evidence, history, proof, or a platform lesson,
+      WDIG Routing may move it toward the CyberCrowd Archive. The archive path
+      preserves meaning, custody, version history, and proof.
+    </p>
+
+    <h2>Live Signal Path</h2>
+    <p>
+      Live signals may come from phones, cameras, devices, rooms, events, viewer
+      inputs, creator controls, or trusted surfaces. WDIG Routing decides where
+      those live signals belong before they are shown, mixed, queued, dropped,
+      preserved, or archived.
+    </p>
+
+    <h2>Routing Boundary</h2>
+    <div class="card">
+      <p>
+        WDIG Routing answers one question:
+      </p>
+
+      <p>
+        <strong>Where does this belong?</strong>
+      </p>
+
+      <p class="small">
+        This page does not define worker capture, proof resume records, barcode
+        inventory, estimator workflows, or local marketplace search. Those are
+        separate CyberCrowd lanes.
+      </p>
+    </div>
 
     <p>
       <a href="/">Return to CyberCrowd</a>
