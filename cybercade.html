@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CyberCade | PixelPrix</title>
+
+  <style>
+    :root {
+      --bg: #05060a;
+      --ink: #fff7df;
+      --gold: #ffd34d;
+      --green: #6dff91;
+      --blue: #7bd4ff;
+      --pink: #ff8bd1;
+      --shadow: rgba(0, 0, 0, 0.62);
+      --line: rgba(255, 255, 255, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-width: 320px;
+      min-height: 100svh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 12%, rgba(123, 212, 255, 0.34), transparent 22rem),
+        radial-gradient(circle at 85% 18%, rgba(255, 139, 209, 0.26), transparent 20rem),
+        radial-gradient(circle at 50% 92%, rgba(255, 211, 77, 0.22), transparent 24rem),
+        var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
+    }
+
+    .sparkle {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.65) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255, 211, 77, 0.75) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(109, 255, 145, 0.55) 0 2px, transparent 3px);
+      background-size: 88px 88px, 132px 132px, 156px 156px;
+      background-position: 12px 20px, 44px 72px, 90px 18px;
+      opacity: 0.34;
+      animation: twinkle 5s linear infinite;
+    }
+
+    @keyframes twinkle {
+      0% { transform: translateY(0); opacity: 0.28; }
+      50% { opacity: 0.5; }
+      100% { transform: translateY(18px); opacity: 0.28; }
+    }
+
+    .room {
+      position: relative;
+      z-index: 1;
+      width: min(920px, 100%);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: max(16px, env(safe-area-inset-top)) 14px max(16px, env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      transition: transform 700ms ease, filter 700ms ease;
+    }
+
+    .hero {
+      text-align: center;
+      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1), opacity 700ms ease;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(3.2rem, 15vw, 7.6rem);
+      line-height: 0.86;
+      letter-spacing: 0.07em;
+      text-shadow:
+        0 5px 0 #000,
+        0 0 28px rgba(255, 211, 77, 0.42);
+    }
+
+    .games {
+      margin: 8px 0 0;
+      color: var(--blue);
+      font-size: clamp(1.8rem, 7vw, 3.4rem);
+      font-weight: 900;
+      text-shadow: 0 4px 0 #000;
+    }
+
+    .game-stage {
+      align-self: center;
+      display: grid;
+      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1);
+    }
+
+    .poster-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      border: 4px solid rgba(255, 255, 255, 0.24);
+      background: #101522;
+      box-shadow:
+        0 20px 50px var(--shadow),
+        0 0 0 7px rgba(255, 211, 77, 0.12);
+      transform-origin: center;
+      transition:
+        transform 800ms cubic-bezier(.16, 1.15, .24, 1),
+        box-shadow 800ms ease,
+        border-color 800ms ease;
+    }
+
+    .poster-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        conic-gradient(
+          from 0deg,
+          transparent,
+          rgba(255, 211, 77, 0.26),
+          transparent,
+          rgba(123, 212, 255, 0.24),
+          transparent,
+          rgba(109, 255, 145, 0.2),
+          transparent
+        );
+      animation: spinGlow 8s linear infinite;
+      opacity: 0.46;
+      pointer-events: none;
+    }
+
+    @keyframes spinGlow {
+      to { transform: rotate(360deg); }
+    }
+
+    .poster-inner {
+      position: relative;
+      z-index: 1;
+      display: block;
+      background: #000;
+    }
+
+    .poster {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .active-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 2;
+      padding: 8px 13px;
+      border-radius: 999px;
+      color: #061108;
+      background: var(--green);
+      font-weight: 900;
+      box-shadow: 0 5px 0 var(--shadow);
+      pointer-events: none;
+    }
+
+    .button-zone {
+      display: grid;
+      gap: 10px;
+      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1);
+    }
+
+    .portal-button {
+      width: 100%;
+      min-height: 92px;
+      border: 0;
+      border-radius: 30px;
+      padding: 18px;
+      color: #050505;
+      background: linear-gradient(135deg, var(--green), #dbff73);
+      font: inherit;
+      font-size: clamp(1.75rem, 8vw, 4.1rem);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow:
+        0 10px 0 var(--shadow),
+        0 0 28px rgba(109, 255, 145, 0.24);
+      touch-action: manipulation;
+    }
+
+    .portal-button:active {
+      transform: translateY(5px);
+      box-shadow:
+        0 5px 0 var(--shadow),
+        0 0 28px rgba(109, 255, 145, 0.24);
+    }
+
+    .song-line {
+      min-height: 24px;
+      color: rgba(255, 247, 223, 0.9);
+      text-align: center;
+      font-weight: 900;
+      text-shadow: 0 3px 0 #000;
+    }
+
+    .portal-message {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 24px;
+      color: var(--ink);
+      background: rgba(5, 6, 10, 0.74);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      font-weight: 900;
+      text-shadow: 0 3px 0 #000;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 500ms ease, transform 500ms ease;
+      pointer-events: none;
+    }
+
+    .open .hero {
+      transform: translateY(-40px) scale(0.94);
+      opacity: 0.62;
+    }
+
+    .open .game-stage {
+      transform: translateY(-18px);
+    }
+
+    .open .poster-card {
+      transform: scale(1.055);
+      border-color: rgba(109, 255, 145, 0.75);
+      box-shadow:
+        0 24px 70px var(--shadow),
+        0 0 0 9px rgba(109, 255, 145, 0.18),
+        0 0 45px rgba(255, 211, 77, 0.3);
+    }
+
+    .open .portal-message {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .entering .room {
+      transform: scale(1.08);
+      filter: brightness(1.15) saturate(1.2);
+    }
+
+    .entering .poster-card {
+      transform: scale(1.22);
+    }
+
+    audio {
+      display: none;
+    }
+
+    @media (max-height: 690px) {
+      .portal-button {
+        min-height: 76px;
+      }
+
+      .poster-card {
+        border-radius: 28px;
+      }
+
+      .hero {
+        transform: scale(0.94);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sparkle"></div>
+
+  <main class="room">
+    <header class="hero">
+      <h1>CYBERCADE</h1>
+      <div class="games">Games 🎮</div>
+    </header>
+
+    <section class="game-stage" aria-label="PixelPrix game door">
+      <article class="poster-card">
+        <span class="active-badge">ACTIVE</span>
+
+        <div class="poster-inner">
+          <img
+            class="poster"
+            src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png"
+            alt="PixelPrix Clean-Up Adventure"
+          />
+        </div>
+      </article>
+    </section>
+
+    <section class="button-zone">
+      <div class="portal-message" id="portal-message">
+        Song is on. World is awake.
+      </div>
+
+      <button class="portal-button" id="portal-button" type="button">
+        ENTER PIXELPRIX
+      </button>
+
+      <div class="song-line" id="song-line">
+        ♪ PixelPrix song ready
+      </div>
+    </section>
+  </main>
+
+  <audio
+    id="cybercade-song"
+    preload="auto"
+    autoplay
+    loop
+    playsinline
+    src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/CyberCade_PixelPrix_60s.title-htlm.mp3">
+  </audio>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const body = document.body;
+      const song = document.getElementById("cybercade-song");
+      const line = document.getElementById("song-line");
+      const button = document.getElementById("portal-button");
+
+      let portalOpen = false;
+
+      function trySong() {
+        song.volume = 1;
+
+        const attempt = song.play();
+
+        if (attempt && typeof attempt.then === "function") {
+          attempt.then(function () {
+            line.textContent = "♪ PixelPrix song playing";
+          }).catch(function () {
+            line.textContent = "tap to start the song";
+            unlockOnFirstTap();
+          });
+        }
+      }
+
+      function unlockOnFirstTap() {
+        function unlock() {
+          song.play().then(function () {
+            line.textContent = "♪ PixelPrix song playing";
+          }).catch(function () {
+            line.textContent = "♪ PixelPrix song ready";
+          });
+        }
+
+        document.addEventListener("pointerdown", unlock, { once: true });
+        document.addEventListener("touchstart", unlock, { once: true });
+        document.addEventListener("click", unlock, { once: true });
+      }
+
+      function openPortal() {
+        portalOpen = true;
+        body.classList.add("open");
+        button.textContent = "TAP TO ENTER PIXELPRIX";
+        trySong();
+      }
+
+      function enterGame() {
+        body.classList.add("entering");
+        trySong();
+
+        setTimeout(function () {
+          window.location.href = "pixelprix.html";
+        }, 650);
+      }
+
+      button.addEventListener("click", function () {
+        if (!portalOpen) {
+          openPortal();
+          return;
+        }
+
+        enterGame();
+      });
+
+      window.addEventListener("DOMContentLoaded", trySong);
+      window.addEventListener("pageshow", trySong);
+    })();
+  </script>
+</body>
+</html>
