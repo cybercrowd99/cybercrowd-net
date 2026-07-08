@@ -89,6 +89,43 @@
         radial-gradient(circle at center, transparent 22%, rgba(0, 0, 0, 0.35));
     }
 
+    .camera-touch {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      pointer-events: none;
+    }
+
+    .camera-touch.show {
+      display: grid;
+      pointer-events: auto;
+    }
+
+    .camera-touch-bubble {
+      max-width: min(520px, 92vw);
+      padding: 16px 20px;
+      border-radius: 28px;
+      color: #050505;
+      background: rgba(255, 211, 77, 0.94);
+      border: 3px solid rgba(255, 255, 255, 0.65);
+      box-shadow:
+        0 10px 0 var(--shadow),
+        0 0 34px rgba(255, 211, 77, 0.35);
+      font-size: clamp(1.1rem, 5vw, 2rem);
+      font-weight: 900;
+      text-align: center;
+      transform: scale(1);
+      transition: transform 160ms ease, opacity 160ms ease;
+      user-select: none;
+    }
+
+    .camera-touch.tap .camera-touch-bubble {
+      transform: scale(1.08);
+    }
+
     .page {
       position: relative;
       z-index: 2;
@@ -129,6 +166,7 @@
       font-weight: 900;
       box-shadow: 0 4px 0 var(--shadow);
       white-space: nowrap;
+      touch-action: manipulation;
     }
 
     .top a.home {
@@ -231,6 +269,12 @@
       color: rgba(255, 247, 223, 0.7);
       font-size: 0.76rem;
       font-weight: 900;
+      touch-action: manipulation;
+    }
+
+    .thumb.has-pic {
+      cursor: pointer;
+      border-color: rgba(255, 211, 77, 0.7);
     }
 
     .thumb img {
@@ -262,6 +306,12 @@
       color: rgba(255, 247, 223, 0.8);
       font-weight: 900;
       text-align: center;
+      touch-action: manipulation;
+    }
+
+    .compare-card.has-pic {
+      cursor: pointer;
+      border-color: rgba(255, 211, 77, 0.7);
     }
 
     .compare-card img {
@@ -269,6 +319,37 @@
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    .choice-row {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .choice-row.show {
+      display: grid;
+    }
+
+    .choice-button {
+      min-height: 52px;
+      border-radius: 18px;
+      padding: 8px;
+      font-size: clamp(0.82rem, 3.5vw, 1.05rem);
+      box-shadow: 0 5px 0 var(--shadow);
+    }
+
+    .choice-button.yes {
+      background: linear-gradient(135deg, var(--green), #dbff73);
+    }
+
+    .choice-button.again {
+      background: linear-gradient(135deg, var(--gold), #fff1a3);
+    }
+
+    .choice-button.home {
+      background: linear-gradient(135deg, var(--blue), #d8f4ff);
     }
 
     .button-row {
@@ -301,6 +382,44 @@
     .top a:active {
       transform: translateY(4px);
       box-shadow: 0 3px 0 var(--shadow);
+    }
+
+    .zoom-viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0, 0, 0, 0.92);
+    }
+
+    .zoom-viewer.show {
+      display: grid;
+    }
+
+    .zoom-viewer img {
+      max-width: 100%;
+      max-height: 86svh;
+      border-radius: 22px;
+      border: 3px solid var(--gold);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      object-fit: contain;
+    }
+
+    .zoom-close {
+      position: fixed;
+      top: max(12px, env(safe-area-inset-top));
+      right: 12px;
+      z-index: 100;
+      width: auto;
+      min-height: 44px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: var(--gold);
+      color: #050505;
+      font-size: 1rem;
+      box-shadow: 0 5px 0 var(--shadow);
     }
 
     .hidden {
@@ -382,6 +501,11 @@
         padding: 8px 12px;
         font-size: clamp(0.95rem, 4.1vw, 1.95rem);
       }
+
+      .choice-button {
+        min-height: 46px;
+        font-size: clamp(0.74rem, 3.1vw, 0.95rem);
+      }
     }
 
     @media (max-height: 600px) {
@@ -434,9 +558,15 @@
   <div class="still" id="still"></div>
   <div class="shade"></div>
 
+  <div class="camera-touch" id="camera-touch" aria-hidden="true">
+    <div class="camera-touch-bubble" id="camera-touch-bubble">
+      Tap the screen when you see it.
+    </div>
+  </div>
+
   <main class="page">
     <header class="top">
-      <a href="pixelprix.html">← PixelPrix</a>
+      <a href="pixelprix.html" id="back-game">← BACK</a>
       <a class="home" href="https://cybercrowd.net/">CyberCrowd 🏠</a>
     </header>
 
@@ -472,6 +602,20 @@
           <div class="compare-card" id="before-card">Before</div>
           <div class="compare-card" id="after-card">After</div>
         </div>
+
+        <div class="choice-row" id="choice-row">
+          <button class="choice-button yes" id="like-yes" type="button">
+            YES 😄
+          </button>
+
+          <button class="choice-button again" id="like-again" type="button">
+            PLAY AGAIN
+          </button>
+
+          <button class="choice-button home" id="like-home" type="button">
+            GO HOME
+          </button>
+        </div>
       </div>
     </section>
 
@@ -483,6 +627,11 @@
   </main>
 
   <canvas id="capture-canvas"></canvas>
+
+  <div class="zoom-viewer" id="zoom-viewer" aria-hidden="true">
+    <button class="zoom-close" id="zoom-close" type="button">CLOSE</button>
+    <img id="zoom-image" alt="Enlarged PixelPrix picture" />
+  </div>
 
   <script>
     (function () {
@@ -507,7 +656,8 @@
         cleanPic: "",
         items: [],
         cleanupIndex: 0,
-        targetCount: 5
+        targetCount: 5,
+        phaseHistory: []
       };
 
       const el = {
@@ -523,7 +673,17 @@
         compare: document.getElementById("compare"),
         beforeCard: document.getElementById("before-card"),
         afterCard: document.getElementById("after-card"),
-        mainButton: document.getElementById("main-button")
+        choiceRow: document.getElementById("choice-row"),
+        likeYes: document.getElementById("like-yes"),
+        likeAgain: document.getElementById("like-again"),
+        likeHome: document.getElementById("like-home"),
+        mainButton: document.getElementById("main-button"),
+        backGame: document.getElementById("back-game"),
+        cameraTouch: document.getElementById("camera-touch"),
+        cameraTouchBubble: document.getElementById("camera-touch-bubble"),
+        zoomViewer: document.getElementById("zoom-viewer"),
+        zoomImage: document.getElementById("zoom-image"),
+        zoomClose: document.getElementById("zoom-close")
       };
 
       function loadGuide() {
@@ -557,6 +717,7 @@
       function beep() {
         try {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
+
           if (!AudioContext) {
             return;
           }
@@ -650,6 +811,86 @@
         return '<img src="' + pic + '" alt="' + alt + '" />';
       }
 
+      function isCameraPhase() {
+        return (
+          state.phase === "room" ||
+          state.phase === "items" ||
+          state.phase === "after"
+        );
+      }
+
+      function showCameraTouch(text) {
+        if (!isCameraPhase()) {
+          hideCameraTouch();
+          return;
+        }
+
+        el.cameraTouchBubble.textContent = text || "Tap the screen when you see it.";
+        el.cameraTouch.classList.add("show");
+        el.cameraTouch.setAttribute("aria-hidden", "false");
+      }
+
+      function hideCameraTouch() {
+        el.cameraTouch.classList.remove("show", "tap");
+        el.cameraTouch.setAttribute("aria-hidden", "true");
+      }
+
+      function cameraTouchFeedback() {
+        if (!isCameraPhase()) {
+          return;
+        }
+
+        el.cameraTouch.classList.add("tap");
+        beep();
+
+        if (state.phase === "room") {
+          el.cameraTouchBubble.textContent = "I see the room. Hold still.";
+        }
+
+        if (state.phase === "items") {
+          el.cameraTouchBubble.textContent = "I see the treasure. Hold close.";
+        }
+
+        if (state.phase === "after") {
+          el.cameraTouchBubble.textContent = "I see the clean picture. Hold still.";
+        }
+
+        window.setTimeout(function () {
+          el.cameraTouch.classList.remove("tap");
+        }, 180);
+      }
+
+      function openZoom(pic) {
+        if (!pic) {
+          return;
+        }
+
+        el.zoomImage.src = pic;
+        el.zoomViewer.classList.add("show");
+        el.zoomViewer.setAttribute("aria-hidden", "false");
+      }
+
+      function closeZoom() {
+        el.zoomViewer.classList.remove("show");
+        el.zoomViewer.setAttribute("aria-hidden", "true");
+        el.zoomImage.removeAttribute("src");
+      }
+
+      function clearCompareClicks() {
+        el.beforeCard.onclick = null;
+        el.afterCard.onclick = null;
+        el.beforeCard.classList.remove("has-pic");
+        el.afterCard.classList.remove("has-pic");
+      }
+
+      function hideChoices() {
+        el.choiceRow.classList.remove("show");
+      }
+
+      function showChoices() {
+        el.choiceRow.classList.add("show");
+      }
+
       function renderDots() {
         const dots = el.progress.querySelectorAll(".dot");
 
@@ -675,7 +916,11 @@
           });
         }
 
-        if (state.phase === "done" || state.phase === "difference") {
+        if (
+          state.phase === "done" ||
+          state.phase === "difference" ||
+          state.phase === "finish"
+        ) {
           dots.forEach(function (dot) {
             dot.classList.add("done");
             dot.classList.remove("now");
@@ -691,7 +936,12 @@
           box.className = "thumb";
 
           if (state.items[i] && state.items[i].pic) {
+            box.classList.add("has-pic");
             box.innerHTML = imageHtml(state.items[i].pic, "Treasure " + (i + 1));
+
+            box.addEventListener("click", function () {
+              openZoom(state.items[i].pic);
+            });
           } else {
             box.textContent = String(i + 1);
           }
@@ -705,9 +955,18 @@
         setTimeout(setRealViewportHeight, 60);
       }
 
-      function setPhase(phase) {
+      function setPhase(phase, options) {
+        options = options || {};
+
+        if (!options.skipHistory && state.phase && state.phase !== phase) {
+          state.phaseHistory.push(state.phase);
+        }
+
         state.phase = phase;
         el.compare.classList.remove("show");
+        hideChoices();
+        hideCameraTouch();
+        clearCompareClicks();
 
         if (phase === "intro") {
           stopCamera();
@@ -721,7 +980,8 @@
         if (phase === "room") {
           el.title.textContent = "Game Board";
           el.prompt.textContent = "Stand back. Take one big room picture.";
-          el.helper.textContent = "This is where the adventure begins.";
+          el.helper.textContent = "Tap the screen when the room is ready. Then press TAKE ROOM PIC.";
+          showCameraTouch("Tap the screen when the room is ready.");
           setButton("TAKE ROOM PIC");
         }
 
@@ -737,7 +997,8 @@
         if (phase === "items") {
           el.title.textContent = "Treasure " + (state.items.length + 1);
           el.prompt.textContent = "Point close. Take the treasure picture.";
-          el.helper.textContent = "Picture " + (state.items.length + 1) + " of " + state.targetCount + ".";
+          el.helper.textContent = "Tap the screen when you see the treasure. Then press TAKE TREASURE PIC.";
+          showCameraTouch("Tap the screen when you see the treasure.");
           setButton("TAKE TREASURE PIC");
         }
 
@@ -746,7 +1007,7 @@
           setStill(state.roomPic);
           el.title.textContent = "Game Ready";
           el.prompt.textContent = "Your five treasures are ready.";
-          el.helper.textContent = "Now the clean-up hunt begins.";
+          el.helper.textContent = "Tap a treasure picture to make it bigger. Then start the clean-up hunt.";
           setButton("PLAY CLEAN UP");
         }
 
@@ -761,7 +1022,7 @@
 
           el.title.textContent = "Find It";
           el.prompt.textContent = "Find treasure " + (state.cleanupIndex + 1) + ". Move it home.";
-          el.helper.textContent = "When it is picked up, tap FOUND IT.";
+          el.helper.textContent = "When it is picked up, tap FOUND IT. Tap the picture below to zoom.";
           setButton("FOUND IT");
         }
 
@@ -777,7 +1038,8 @@
         if (phase === "after") {
           el.title.textContent = "Clean Picture";
           el.prompt.textContent = "Take the clean or treat-ready picture.";
-          el.helper.textContent = "Then we can spot what changed.";
+          el.helper.textContent = "Tap the screen when the clean picture is ready. Then press TAKE CLEAN PIC.";
+          showCameraTouch("Tap the screen when the clean picture is ready.");
           setButton("TAKE CLEAN PIC");
         }
 
@@ -786,10 +1048,21 @@
           setStill(state.cleanPic);
           el.title.textContent = "Spot the Difference";
           el.prompt.textContent = "Look what changed.";
-          el.helper.textContent = "Before and after. Same room. New story.";
+          el.helper.textContent = "Tap Before or After to make it bigger.";
           el.compare.classList.add("show");
+          el.beforeCard.classList.add("has-pic");
+          el.afterCard.classList.add("has-pic");
           el.beforeCard.innerHTML = imageHtml(state.roomPic, "Before room");
           el.afterCard.innerHTML = imageHtml(state.cleanPic, "After room");
+
+          el.beforeCard.onclick = function () {
+            openZoom(state.roomPic);
+          };
+
+          el.afterCard.onclick = function () {
+            openZoom(state.cleanPic);
+          };
+
           setButton("I SEE IT");
         }
 
@@ -798,7 +1071,17 @@
           setStill(state.cleanPic || state.roomPic);
           el.title.textContent = "Adventure Done";
           el.prompt.textContent = "You made a clean-up story.";
-          el.helper.textContent = "Tap PLAY AGAIN or use CyberCrowd home at the top.";
+          el.helper.textContent = "Before, treasures, cleanup, and after. That is the whole adventure.";
+          setButton("SHOW FINISH");
+        }
+
+        if (phase === "finish") {
+          stopCamera();
+          setStill(state.cleanPic || state.roomPic);
+          el.title.textContent = "PixelPrix Complete";
+          el.prompt.textContent = "Did you like this?";
+          el.helper.textContent = "Choose what happens next.";
+          showChoices();
           setButton("PLAY AGAIN");
         }
 
@@ -909,8 +1192,47 @@
         }
 
         if (state.phase === "done") {
+          speak("Did you like this?");
+          setPhase("finish");
+          return;
+        }
+
+        if (state.phase === "finish") {
           resetGame();
         }
+      }
+
+      function goBack(event) {
+        event.preventDefault();
+
+        if (state.phase === "intro") {
+          window.location.href = "pixelprix.html";
+          return;
+        }
+
+        if (state.phase === "items" && state.items.length > 0) {
+          state.items.pop();
+          setPhase("items", { skipHistory: true });
+          speak("Back one treasure.");
+          return;
+        }
+
+        if (state.phase === "cleanup" && state.cleanupIndex > 0) {
+          state.cleanupIndex -= 1;
+          setPhase("cleanup", { skipHistory: true });
+          speak("Back one treasure.");
+          return;
+        }
+
+        const previous = state.phaseHistory.pop();
+
+        if (previous) {
+          setPhase(previous, { skipHistory: true });
+          speak("Back.");
+          return;
+        }
+
+        window.location.href = "pixelprix.html";
       }
 
       function resetGame() {
@@ -920,16 +1242,42 @@
         state.cleanPic = "";
         state.items = [];
         state.cleanupIndex = 0;
+        state.phaseHistory = [];
 
-        setPhase("intro");
+        setPhase("intro", { skipHistory: true });
       }
 
+      function likeYes() {
+        beep();
+        el.prompt.textContent = "Yes! PixelPrix liked your clean-up story too.";
+        el.helper.textContent = "Tap PLAY AGAIN when you are ready.";
+        speak("Yes. Great job.");
+      }
+
+      function goHome() {
+        window.location.href = "pixelprix.html";
+      }
+
+      el.backGame.addEventListener("click", goBack);
       el.mainButton.addEventListener("click", mainAction);
+      el.cameraTouch.addEventListener("click", cameraTouchFeedback);
+
+      el.zoomClose.addEventListener("click", closeZoom);
+
+      el.zoomViewer.addEventListener("click", function (event) {
+        if (event.target === el.zoomViewer) {
+          closeZoom();
+        }
+      });
+
+      el.likeYes.addEventListener("click", likeYes);
+      el.likeAgain.addEventListener("click", resetGame);
+      el.likeHome.addEventListener("click", goHome);
 
       window.addEventListener("pagehide", stopCamera);
 
       loadGuide();
-      setPhase("intro");
+      setPhase("intro", { skipHistory: true });
     })();
   </script>
 
