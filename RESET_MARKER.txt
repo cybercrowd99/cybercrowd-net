@@ -1,0 +1,3 @@
+RESET TO WORKING STATE: ca6961bf27f0560a5378da3878df9bc669b6dd4b
+Timestamp: 2026-07-08
+Reason: Restore ping-delivery.js and working PING system
