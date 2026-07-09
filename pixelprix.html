@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<!--
-  NET FILE: pixelprix.html
-  CyberCrowd | PixelPrix Start Surface
-  Purpose: Art-first PixelPrix entry surface.
-  Owns: full-poster one-button entry into pixelprix-game.html.
-  Does NOT own: game flow, camera, voice replay, treasure count, setup, uploads, sync, PING, NET, CORE.
--->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>PixelPrix | Clean-Up Adventure</title>
 
   <style>
+    :root {
+      --bg: #05060a;
+      --ink: #fff7df;
+      --gold: #ffd34d;
+      --green: #6dff91;
+      --blue: #7bd4ff;
+      --purple: #c79cff;
+      --pink: #ff8bd1;
+      --dark: rgba(0, 0, 0, 0.72);
+      --shadow: rgba(0, 0, 0, 0.62);
+      --line: rgba(255, 255, 255, 0.22);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -21,57 +28,505 @@
     body {
       width: 100%;
       min-width: 320px;
-      min-height: 100%;
+      min-height: 100svh;
       margin: 0;
-      background: #05060a;
-      overflow: hidden;
+      color: var(--ink);
+      background: var(--bg);
       font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
     }
 
     body {
-      min-height: 100svh;
-      min-height: 100dvh;
+      position: relative;
     }
 
-    .pixelprix-enter {
+    .page {
+      position: relative;
+      width: 100%;
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      background:
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.82)),
+        url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .sparkle {
       position: fixed;
       inset: 0;
-      display: block;
-      width: 100%;
-      height: 100svh;
-      height: 100dvh;
-      background:
-        url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png")
-        center / cover
-        no-repeat;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.68) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255, 211, 77, 0.7) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(109, 255, 145, 0.55) 0 2px, transparent 3px);
+      background-size: 92px 92px, 138px 138px, 166px 166px;
+      background-position: 10px 16px, 42px 78px, 88px 24px;
+      opacity: 0.28;
+      animation: sparkleDrift 5s linear infinite;
+    }
+
+    @keyframes sparkleDrift {
+      0% { transform: translateY(0); opacity: 0.22; }
+      50% { opacity: 0.42; }
+      100% { transform: translateY(18px); opacity: 0.22; }
+    }
+
+    .top {
+      position: relative;
+      z-index: 2;
+      padding: max(14px, env(safe-area-inset-top)) 14px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .home {
+      display: grid;
+      place-items: center;
+      min-width: 54px;
+      min-height: 46px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: #050505;
+      background: var(--gold);
       text-decoration: none;
+      font-weight: 900;
+      box-shadow: 0 5px 0 var(--shadow);
+      touch-action: manipulation;
+    }
+
+    .song-note {
+      min-height: 46px;
+      border: 0;
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: #050505;
+      background: rgba(109, 255, 145, 0.92);
+      font: inherit;
+      font-weight: 900;
+      font-size: 0.95rem;
+      box-shadow: 0 5px 0 var(--shadow);
+      white-space: nowrap;
       cursor: pointer;
       touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
     }
 
-    .pixelprix-enter:focus-visible {
-      outline: 5px solid #ffd34d;
-      outline-offset: -10px;
+    .song-note.off {
+      background: var(--gold);
     }
 
-    .screen-reader-text {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
+    .spacer {
+      min-height: 20px;
+    }
+
+    .bottom {
+      position: relative;
+      z-index: 2;
+      padding: 16px 14px calc(16px + env(safe-area-inset-bottom));
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0));
+    }
+
+    .panel {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: 16px;
+      border-radius: 30px;
+      background: rgba(5, 6, 10, 0.76);
+      border: 2px solid var(--line);
+      box-shadow: 0 20px 50px var(--shadow);
+      backdrop-filter: blur(7px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: clamp(2.6rem, 12vw, 6rem);
+      line-height: 0.88;
+      letter-spacing: 0.04em;
+      text-shadow:
+        0 5px 0 #000,
+        0 0 28px rgba(255, 211, 77, 0.36);
+    }
+
+    p {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(1.08rem, 4.4vw, 1.55rem);
+      line-height: 1.22;
+      font-weight: 900;
+      text-shadow: 0 3px 0 #000;
+    }
+
+    .small {
+      margin-top: 8px;
+      color: rgba(255, 247, 223, 0.86);
+      font-size: clamp(0.95rem, 3.7vw, 1.1rem);
+      font-weight: 900;
+    }
+
+    .guide-row {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 14px;
+    }
+
+    .guide {
+      min-height: 70px;
+      border: 2px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      padding: 10px 8px;
+      color: #050505;
+      font: inherit;
+      font-size: clamp(0.9rem, 3.7vw, 1.2rem);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 0 var(--shadow);
+      touch-action: manipulation;
+    }
+
+    .guide:active,
+    .enter:active,
+    .home:active,
+    .clear:active,
+    .song-note:active {
+      transform: translateY(4px);
+      box-shadow: 0 3px 0 var(--shadow);
+    }
+
+    .guide.robot {
+      background: var(--blue);
+    }
+
+    .guide.star {
+      background: var(--purple);
+    }
+
+    .guide.voice {
+      background: var(--green);
+    }
+
+    .guide.selected {
+      outline: 4px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    .guide-copy {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(0, 0, 0, 0.36);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: rgba(255, 247, 223, 0.92);
+      font-size: clamp(0.95rem, 3.7vw, 1.08rem);
+      font-weight: 900;
+      line-height: 1.25;
+      text-shadow: 0 2px 0 #000;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .enter {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      min-height: 86px;
+      border-radius: 28px;
+      padding: 16px 18px;
+      color: #050505;
+      background:
+        linear-gradient(135deg, var(--green), #dbff73);
+      font-size: clamp(1.45rem, 6vw, 3.2rem);
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow:
+        0 9px 0 var(--shadow),
+        0 0 28px rgba(109, 255, 145, 0.24);
+      touch-action: manipulation;
+      text-align: center;
+    }
+
+    .clear {
+      min-height: 54px;
       border: 0;
+      border-radius: 999px;
+      color: #050505;
+      background: var(--gold);
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 900;
+      box-shadow: 0 5px 0 var(--shadow);
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .memory-line {
+      min-height: 22px;
+      margin-top: 8px;
+      color: rgba(255, 247, 223, 0.86);
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 900;
+      text-shadow: 0 2px 0 #000;
+    }
+
+    audio {
+      display: none;
+    }
+
+    @media (max-height: 720px) {
+      .panel {
+        padding: 14px;
+      }
+
+      .guide {
+        min-height: 60px;
+      }
+
+      .enter {
+        min-height: 74px;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 10vw, 5rem);
+      }
     }
   </style>
 </head>
 
 <body>
-  <a class="pixelprix-enter" href="pixelprix-game.html" aria-label="Play PixelPrix">
-    <span class="screen-reader-text">Play PixelPrix</span>
-  </a>
+  <div class="sparkle"></div>
+
+  <main class="page">
+    <header class="top">
+      <a class="home" href="cybercade.html" aria-label="Back to CyberCade">🏠</a>
+
+      <button class="song-note" id="song-toggle" type="button">
+        ♪ song ready
+      </button>
+    </header>
+
+    <div class="spacer"></div>
+
+    <section class="bottom">
+      <div class="panel">
+        <h1>PixelPrix</h1>
+
+        <p>
+          Welcome to the Clean-Up Adventure.
+          The room becomes the game.
+        </p>
+
+        <p class="small">
+          Pick your guide. Then enter the camera game.
+        </p>
+
+        <div class="guide-row" aria-label="Choose game guide">
+          <button class="guide robot" type="button" data-guide="robot">
+            💙<br />Robot Buddy
+          </button>
+
+          <button class="guide star selected" type="button" data-guide="star">
+            💜<br />Star Helper
+          </button>
+
+          <button class="guide voice" type="button" data-guide="voice">
+            💚<br />Your Voice
+          </button>
+        </div>
+
+        <div class="guide-copy" id="guide-copy">
+          Star Helper is riding with us today. A softer computer voice helps tell the story.
+        </div>
+
+        <div class="actions">
+          <a class="enter" id="enter-game" href="pixelprix-game.html">
+            ENTER CAMERA GAME
+          </a>
+
+          <button class="clear" id="clear-memory" type="button">
+            CLEAR GAME MEMORY
+          </button>
+        </div>
+
+        <div class="memory-line" id="memory-line">
+          Your pictures and voice stay on this device.
+        </div>
+      </div>
+    </section>
+
+    <audio
+      id="pixelprix-song"
+      preload="auto"
+      autoplay
+      loop
+      playsinline
+      src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/CyberCade_PixelPrix_60s.title-htlm.mp3">
+    </audio>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const song = document.getElementById("pixelprix-song");
+      const songToggle = document.getElementById("song-toggle");
+      const guideButtons = document.querySelectorAll("[data-guide]");
+      const guideCopy = document.getElementById("guide-copy");
+      const enterGame = document.getElementById("enter-game");
+      const clearMemory = document.getElementById("clear-memory");
+      const memoryLine = document.getElementById("memory-line");
+
+      let songWanted = true;
+      let songPlaying = false;
+      let unlockArmed = false;
+
+      const guideText = {
+        robot: "Robot Buddy is riding with us today. A fun computer voice helps run the game.",
+        star: "Star Helper is riding with us today. A softer computer voice helps tell the story.",
+        voice: "Your Voice is riding with us today. Record the words your family uses in the camera game."
+      };
+
+      function updateSongButton(text) {
+        songToggle.textContent = text;
+        songToggle.classList.toggle("off", !songWanted || !songPlaying);
+      }
+
+      function playSong() {
+        if (!songWanted) {
+          return;
+        }
+
+        song.volume = 1;
+
+        const attempt = song.play();
+
+        if (attempt && typeof attempt.then === "function") {
+          attempt.then(function () {
+            songPlaying = true;
+            updateSongButton("♪ song on");
+          }).catch(function () {
+            songPlaying = false;
+            updateSongButton("tap for song");
+            unlockOnFirstTap();
+          });
+        }
+      }
+
+      function stopSong() {
+        song.pause();
+        songPlaying = false;
+        songWanted = false;
+        updateSongButton("▶ song off");
+      }
+
+      function toggleSong() {
+        if (songPlaying) {
+          stopSong();
+          return;
+        }
+
+        songWanted = true;
+        playSong();
+      }
+
+      function unlockOnFirstTap() {
+        if (unlockArmed) {
+          return;
+        }
+
+        unlockArmed = true;
+
+        function unlock() {
+          unlockArmed = false;
+
+          if (!songWanted) {
+            return;
+          }
+
+          playSong();
+        }
+
+        document.addEventListener("pointerdown", unlock, { once: true });
+        document.addEventListener("touchstart", unlock, { once: true });
+        document.addEventListener("click", unlock, { once: true });
+      }
+
+      function chooseGuide(guide) {
+        guideButtons.forEach(function (button) {
+          button.classList.toggle("selected", button.dataset.guide === guide);
+        });
+
+        guideCopy.textContent = guideText[guide] || guideText.star;
+
+        try {
+          localStorage.setItem("pixelprixGuide", guide);
+        } catch (error) {}
+
+        playSong();
+      }
+
+      function loadGuide() {
+        let savedGuide = "star";
+
+        try {
+          savedGuide = localStorage.getItem("pixelprixGuide") || "star";
+        } catch (error) {
+          savedGuide = "star";
+        }
+
+        chooseGuide(savedGuide);
+      }
+
+      song.addEventListener("play", function () {
+        songPlaying = true;
+        updateSongButton("♪ song on");
+      });
+
+      song.addEventListener("pause", function () {
+        songPlaying = false;
+        updateSongButton(songWanted ? "tap for song" : "▶ song off");
+      });
+
+      songToggle.addEventListener("click", toggleSong);
+
+      guideButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          chooseGuide(button.dataset.guide || "star");
+        });
+      });
+
+      enterGame.addEventListener("click", function () {
+        playSong();
+      });
+
+      clearMemory.addEventListener("click", function () {
+        try {
+          localStorage.removeItem("pixelprixGuide");
+          localStorage.removeItem("pixelprixGameMemory");
+          sessionStorage.clear();
+        } catch (error) {}
+
+        chooseGuide("star");
+        memoryLine.textContent = "Game memory cleared on this device.";
+      });
+
+      window.addEventListener("DOMContentLoaded", function () {
+        loadGuide();
+        playSong();
+      });
+
+      window.addEventListener("pageshow", playSong);
+    })();
+  </script>
 </body>
 </html>
