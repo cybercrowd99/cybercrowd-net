@@ -3,7 +3,7 @@
   NET FILE: pixelprix-game.html
   CyberCrowd | PixelPrix Camera Game
   Purpose: Runs the PixelPrix kid cleanup camera adventure.
-  Owns: robot choice, parent song toggle, room game-board shot, treasure snaps, human voice naming, cleanup replay, big picture review, clean/dirty compare.
+  Owns: layered art wake, robot choice window, parent song toggle, room game-board shot, treasure snaps, human voice naming, cleanup replay, big picture review, clean/dirty compare.
   Does NOT own: PixelPrix poster landing, uploads, sync, accounts, provider transport, PING, NET, CORE.
 -->
 <html lang="en">
@@ -74,7 +74,7 @@
       inset: 0;
       z-index: 0;
       background:
-        linear-gradient(to bottom, rgba(5, 6, 10, 0.08), rgba(5, 6, 10, 0.74)),
+        linear-gradient(to bottom, rgba(5, 6, 10, 0.04), rgba(5, 6, 10, 0.18)),
         url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png")
         center / cover
         no-repeat,
@@ -94,13 +94,118 @@
       z-index: 1;
       pointer-events: none;
       background:
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.24), transparent 30%, rgba(0, 0, 0, 0.78)),
-        radial-gradient(circle at center, transparent 22%, rgba(0, 0, 0, 0.18));
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.18), transparent 30%, rgba(0, 0, 0, 0.72)),
+        radial-gradient(circle at center, transparent 22%, rgba(0, 0, 0, 0.16));
+    }
+
+    .art-wake {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      display: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .art-wake.show {
+      display: block;
+    }
+
+    .choice-window {
+      position: fixed;
+      left: 50%;
+      bottom: max(72px, calc(env(safe-area-inset-bottom) + 68px));
+      z-index: 7;
+      width: min(360px, calc(100vw - 34px));
+      transform: translateX(-50%);
+      display: none;
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(5, 6, 10, 0.76);
+      border: 2px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 14px 38px rgba(0, 0, 0, 0.62);
+      backdrop-filter: blur(8px);
+    }
+
+    .choice-window.show {
+      display: grid;
+      gap: 9px;
+    }
+
+    .choice-title {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(1.15rem, 5vw, 1.7rem);
+      line-height: 1;
+      font-weight: 900;
+      text-align: center;
+      text-shadow: 0 3px 0 #000;
+    }
+
+    .choice-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .choice-button {
+      min-height: 54px;
+      border-radius: 18px;
+      color: #050505;
+      font: inherit;
+      font-size: clamp(1rem, 4.2vw, 1.24rem);
+      font-weight: 900;
+      box-shadow: 0 5px 0 var(--shadow);
+    }
+
+    .choice-button.male {
+      background: var(--blue);
+    }
+
+    .choice-button.female {
+      background: var(--purple);
+    }
+
+    .parent-song {
+      position: fixed;
+      right: 12px;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      z-index: 8;
+      display: none;
+    }
+
+    .parent-song.show {
+      display: block;
+    }
+
+    .song-toggle {
+      width: auto;
+      min-height: 38px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: var(--gold);
+      color: #050505;
+      font: inherit;
+      font-size: 0.86rem;
+      font-weight: 900;
+      box-shadow: 0 4px 0 var(--shadow);
+      white-space: nowrap;
+    }
+
+    .song-toggle.off {
+      background: rgba(255, 255, 255, 0.78);
     }
 
     .page {
       position: relative;
-      z-index: 2;
+      z-index: 3;
       width: min(900px, 100%);
       height: var(--pxp-vh);
       min-height: var(--pxp-vh);
@@ -114,15 +219,23 @@
       grid-template-rows: auto minmax(0, 1fr) auto;
       gap: 6px;
       overflow: hidden;
+      pointer-events: none;
+    }
+
+    .page.active-ui {
+      pointer-events: auto;
     }
 
     .top {
+      position: relative;
+      z-index: 9;
       display: flex;
       justify-content: space-between;
       gap: 7px;
       align-items: center;
       min-height: 36px;
       flex-shrink: 0;
+      pointer-events: auto;
     }
 
     .top a {
@@ -177,6 +290,11 @@
       display: none;
     }
 
+    .art-mode .stage,
+    .art-mode .button-row {
+      display: none;
+    }
+
     .camera-mode .panel {
       padding: 10px 13px;
       border-radius: 22px;
@@ -209,75 +327,6 @@
       margin-top: 5px;
       color: rgba(255, 247, 223, 0.86);
       font-size: clamp(0.78rem, 3.1vw, 0.98rem);
-    }
-
-    .setup-area {
-      display: none;
-      gap: 8px;
-      margin-top: 9px;
-    }
-
-    .setup-area.show {
-      display: grid;
-    }
-
-    .voice-choice {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .choice-button {
-      min-height: 58px;
-      border-radius: 18px;
-      padding: 8px;
-      color: #050505;
-      font: inherit;
-      font-size: clamp(1rem, 4vw, 1.28rem);
-      font-weight: 900;
-      box-shadow: 0 5px 0 var(--shadow);
-    }
-
-    .choice-button.male {
-      background: var(--blue);
-    }
-
-    .choice-button.female {
-      background: var(--purple);
-    }
-
-    .parent-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-top: 8px;
-      padding: 8px 10px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-    }
-
-    .parent-label {
-      color: rgba(255, 247, 223, 0.9);
-      font-size: 0.86rem;
-      font-weight: 900;
-      text-shadow: 0 2px 0 #000;
-    }
-
-    .song-toggle {
-      width: auto;
-      min-height: 38px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: var(--gold);
-      font-size: 0.86rem;
-      box-shadow: 0 4px 0 var(--shadow);
-      white-space: nowrap;
-    }
-
-    .song-toggle.off {
-      background: rgba(255, 255, 255, 0.72);
     }
 
     .thumbs {
@@ -539,7 +588,22 @@
   <div class="still" id="still"></div>
   <div class="shade"></div>
 
-  <main class="page" id="page">
+  <button class="art-wake" id="art-wake" type="button" aria-label="Wake PixelPrix"></button>
+
+  <section class="choice-window" id="choice-window" aria-label="Choose robot">
+    <p class="choice-title">Choose Robot</p>
+
+    <div class="choice-row">
+      <button class="choice-button male" id="voice-male" type="button">🤖 Male</button>
+      <button class="choice-button female" id="voice-female" type="button">🤖 Female</button>
+    </div>
+  </section>
+
+  <div class="parent-song" id="parent-song">
+    <button class="song-toggle" id="song-toggle" type="button">Song ON 🎵</button>
+  </div>
+
+  <main class="page art-mode" id="page">
     <header class="top">
       <a href="pixelprix.html" id="back-game">← EXIT</a>
       <a class="home" href="https://cybercrowd.net/">CyberCrowd 🏠</a>
@@ -549,21 +613,9 @@
       <div class="panel">
         <h1 id="title">PixelPrix</h1>
 
-        <p id="prompt">Choose your robot.</p>
+        <p id="prompt">Start your treasure adventure.</p>
 
-        <p class="small" id="helper">Tap Male or Female to start.</p>
-
-        <div class="setup-area" id="voice-choice">
-          <div class="voice-choice">
-            <button class="choice-button male" id="voice-male" type="button">🤖 Male</button>
-            <button class="choice-button female" id="voice-female" type="button">🤖 Female</button>
-          </div>
-
-          <div class="parent-row">
-            <div class="parent-label">Parent song setting</div>
-            <button class="song-toggle" id="song-toggle" type="button">Song ON 🎵</button>
-          </div>
-        </div>
+        <p class="small" id="helper">Open the camera. First we take the room picture.</p>
 
         <div class="thumbs empty" id="thumbs"></div>
 
@@ -618,7 +670,7 @@
       });
 
       const state = {
-        phase: "voice-choice",
+        phase: "wake",
         robotVoice: "female",
         songEnabled: true,
         songStarted: false,
@@ -638,6 +690,9 @@
 
       const el = {
         page: document.getElementById("page"),
+        artWake: document.getElementById("art-wake"),
+        choiceWindow: document.getElementById("choice-window"),
+        parentSong: document.getElementById("parent-song"),
         cameraShell: document.getElementById("camera-shell"),
         video: document.getElementById("camera-video"),
         canvas: document.getElementById("capture-canvas"),
@@ -645,7 +700,6 @@
         title: document.getElementById("title"),
         prompt: document.getElementById("prompt"),
         helper: document.getElementById("helper"),
-        voiceChoice: document.getElementById("voice-choice"),
         voiceMale: document.getElementById("voice-male"),
         voiceFemale: document.getElementById("voice-female"),
         songToggle: document.getElementById("song-toggle"),
@@ -667,6 +721,38 @@
         zoomImage: document.getElementById("zoom-image"),
         zoomClose: document.getElementById("zoom-close")
       };
+
+      function voiceGuide(key, detail, after) {
+        if (typeof detail === "function") {
+          after = detail;
+          detail = null;
+        }
+
+        if (window.PixelPrixVoice && window.PixelPrixVoice.guide) {
+          window.PixelPrixVoice.guide(key, detail, after);
+          return;
+        }
+
+        if (typeof after === "function") {
+          after();
+        }
+      }
+
+      function voiceGuideSequence(list) {
+        let index = 0;
+
+        function next() {
+          if (index >= list.length) {
+            return;
+          }
+
+          const item = list[index];
+          index += 1;
+          voiceGuide(item, null, next);
+        }
+
+        next();
+      }
 
       function saveRobotVoice(mode) {
         state.robotVoice = mode === "male" ? "male" : "female";
@@ -727,12 +813,19 @@
           el.song.volume = 0.42;
           const attempt = el.song.play();
 
-          if (attempt && typeof attempt.catch === "function") {
-            attempt.catch(function () {});
+          if (attempt && typeof attempt.then === "function") {
+            attempt.then(function () {
+              state.songStarted = true;
+            }).catch(function () {
+              state.songStarted = false;
+            });
+            return;
           }
 
           state.songStarted = true;
-        } catch (error) {}
+        } catch (error) {
+          state.songStarted = false;
+        }
       }
 
       function stopSong() {
@@ -832,7 +925,7 @@
       function setStill(pic) {
         if (!pic) {
           el.still.style.backgroundImage =
-            'linear-gradient(to bottom, rgba(5, 6, 10, 0.08), rgba(5, 6, 10, 0.74)), url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png") center / cover no-repeat, #05060a';
+            'linear-gradient(to bottom, rgba(5, 6, 10, 0.04), rgba(5, 6, 10, 0.18)), url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png") center / cover no-repeat, #05060a';
           return;
         }
 
@@ -857,10 +950,6 @@
         el.zoomViewer.classList.remove("show");
         el.zoomViewer.setAttribute("aria-hidden", "true");
         el.zoomImage.removeAttribute("src");
-      }
-
-      function hideSetup() {
-        el.voiceChoice.classList.remove("show");
       }
 
       function hideFinish() {
@@ -1020,6 +1109,29 @@
         el.page.classList.toggle("camera-mode", on);
       }
 
+      function setArtMode(on) {
+        el.page.classList.toggle("art-mode", on);
+        el.page.classList.toggle("active-ui", !on);
+        el.artWake.classList.toggle("show", on && state.phase === "wake");
+        el.parentSong.classList.toggle("show", on || state.phase === "choice");
+      }
+
+      function openChoiceWindow() {
+        if (state.phase !== "wake") {
+          return;
+        }
+
+        startSong();
+        state.phase = "choice";
+        el.artWake.classList.remove("show");
+        el.choiceWindow.classList.add("show");
+        el.parentSong.classList.add("show");
+      }
+
+      function closeChoiceWindow() {
+        el.choiceWindow.classList.remove("show");
+      }
+
       function setPhase(phase, options) {
         options = options || {};
 
@@ -1031,25 +1143,21 @@
 
         state.phase = phase;
 
-        hideSetup();
         hideFinish();
         clearCompare();
         setSideButtons("");
+        closeChoiceWindow();
         state.voiceRecording = false;
         setCameraMode(phase === "room" || phase === "items" || phase === "after");
 
-        if (phase === "voice-choice") {
+        if (phase === "wake") {
           stopCamera();
           setStill("");
-          el.title.textContent = "PixelPrix";
-          el.prompt.textContent = "Choose your robot.";
-          el.helper.textContent = "Tap Male or Female to start your treasure adventure.";
-          el.voiceChoice.classList.add("show");
-          setButton("START");
-          el.mainButton.style.display = "none";
-        } else {
-          el.mainButton.style.display = "grid";
+          setArtMode(true);
+          return;
         }
+
+        setArtMode(false);
 
         if (phase === "intro") {
           stopCamera();
@@ -1211,10 +1319,13 @@
         saveRobotVoice(mode);
         startSong();
         setPhase("intro");
+        voiceGuideSequence(["welcome", "adventure"]);
       }
 
       async function mainAction() {
         if (state.phase === "intro") {
+          voiceGuide("room");
+
           const ok = await openCamera();
 
           if (ok) {
@@ -1229,6 +1340,7 @@
           setStill(state.roomPic);
           beep();
           setPhase("items");
+          voiceGuide("treasure");
           return;
         }
 
@@ -1244,6 +1356,7 @@
 
           beep();
           setPhase("name-treasure");
+          voiceGuide("name");
           return;
         }
 
@@ -1257,6 +1370,7 @@
 
           if (ok) {
             setPhase("items");
+            voiceGuide("treasure");
           }
 
           return;
@@ -1323,7 +1437,7 @@
       function recordVoiceForTreasure() {
         const number = state.namingTreasureNumber;
 
-        if (!window.PixelPrixVoice) {
+        if (!window.PixelPrixVoice || !window.PixelPrixVoice.start) {
           el.helper.textContent = "Voice recorder is not ready. Tap NEXT TREASURE.";
           setPhase("treasure-saved");
           return;
@@ -1393,7 +1507,10 @@
 
         state.exitArmed = true;
         el.backGame.textContent = "EXIT AGAIN";
-        el.helper.textContent = "Tap EXIT again to leave PixelPrix.";
+
+        if (state.phase !== "wake" && state.phase !== "choice" && el.helper) {
+          el.helper.textContent = "Tap EXIT again to leave PixelPrix.";
+        }
 
         state.exitTimer = setTimeout(function () {
           clearExitArm();
@@ -1418,7 +1535,7 @@
         state.namingTreasureNumber = 0;
         state.voiceRecording = false;
 
-        setPhase("voice-choice", { skipHistory: true });
+        setPhase("wake", { skipHistory: true });
       }
 
       function likeYes() {
@@ -1430,6 +1547,8 @@
       function goHome() {
         window.location.href = "pixelprix.html";
       }
+
+      el.artWake.addEventListener("click", openChoiceWindow);
 
       el.voiceMale.addEventListener("click", function () {
         chooseVoice("male");
@@ -1467,7 +1586,7 @@
 
       loadRobotVoice();
       loadSongSetting();
-      setPhase("voice-choice", { skipHistory: true });
+      setPhase("wake", { skipHistory: true });
     })();
   </script>
 
