@@ -94,39 +94,8 @@
       z-index: 1;
       pointer-events: none;
       background:
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.32), transparent 26%, rgba(0, 0, 0, 0.88)),
-        radial-gradient(circle at center, transparent 22%, rgba(0, 0, 0, 0.28));
-    }
-
-    .camera-touch {
-      position: fixed;
-      inset: 0;
-      z-index: 3;
-      display: none;
-      place-items: center;
-      padding: 18px;
-      pointer-events: none;
-    }
-
-    .camera-touch.show {
-      display: grid;
-      pointer-events: none;
-    }
-
-    .camera-touch-bubble {
-      max-width: min(520px, 92vw);
-      padding: 16px 20px;
-      border-radius: 28px;
-      color: #050505;
-      background: rgba(255, 211, 77, 0.94);
-      border: 3px solid rgba(255, 255, 255, 0.65);
-      box-shadow:
-        0 10px 0 var(--shadow),
-        0 0 34px rgba(255, 211, 77, 0.35);
-      font-size: clamp(1.05rem, 4.7vw, 1.9rem);
-      font-weight: 900;
-      text-align: center;
-      user-select: none;
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.24), transparent 30%, rgba(0, 0, 0, 0.78)),
+        radial-gradient(circle at center, transparent 22%, rgba(0, 0, 0, 0.18));
     }
 
     .page {
@@ -208,6 +177,12 @@
       display: none;
     }
 
+    .camera-mode .panel {
+      padding: 10px 13px;
+      border-radius: 22px;
+      background: rgba(5, 6, 10, 0.62);
+    }
+
     h1 {
       margin: 0 0 5px;
       color: var(--gold);
@@ -215,6 +190,10 @@
       line-height: 0.9;
       letter-spacing: 0.04em;
       text-shadow: 0 4px 0 #000;
+    }
+
+    .camera-mode h1 {
+      font-size: clamp(1.55rem, 7vw, 3.7rem);
     }
 
     p {
@@ -306,6 +285,10 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 5px;
       margin-top: 7px;
+    }
+
+    .thumbs.empty {
+      display: none;
     }
 
     .thumb {
@@ -556,15 +539,9 @@
   <div class="still" id="still"></div>
   <div class="shade"></div>
 
-  <div class="camera-touch" id="camera-touch" aria-hidden="true">
-    <div class="camera-touch-bubble" id="camera-touch-bubble">
-      Tap the screen when you see it.
-    </div>
-  </div>
-
-  <main class="page">
+  <main class="page" id="page">
     <header class="top">
-      <a href="pixelprix.html" id="back-game">← BACK</a>
+      <a href="pixelprix.html" id="back-game">← EXIT</a>
       <a class="home" href="https://cybercrowd.net/">CyberCrowd 🏠</a>
     </header>
 
@@ -588,7 +565,7 @@
           </div>
         </div>
 
-        <div class="thumbs" id="thumbs"></div>
+        <div class="thumbs empty" id="thumbs"></div>
 
         <div class="compare" id="compare">
           <div class="compare-card" id="dirty-card">Dirty Room</div>
@@ -627,6 +604,7 @@
       "use strict";
 
       const SONG_KEY = "pixelprixSongEnabled";
+      const EXIT_ARM_MS = 2600;
 
       function setRealViewportHeight() {
         document.documentElement.style.setProperty("--pxp-vh", window.innerHeight + "px");
@@ -653,10 +631,13 @@
         reviewList: [],
         phaseHistory: [],
         namingTreasureNumber: 0,
-        voiceRecording: false
+        voiceRecording: false,
+        exitArmed: false,
+        exitTimer: null
       };
 
       const el = {
+        page: document.getElementById("page"),
         cameraShell: document.getElementById("camera-shell"),
         video: document.getElementById("camera-video"),
         canvas: document.getElementById("capture-canvas"),
@@ -682,8 +663,6 @@
         leftButton: document.getElementById("left-button"),
         rightButton: document.getElementById("right-button"),
         backGame: document.getElementById("back-game"),
-        cameraTouch: document.getElementById("camera-touch"),
-        cameraTouchBubble: document.getElementById("camera-touch-bubble"),
         zoomViewer: document.getElementById("zoom-viewer"),
         zoomImage: document.getElementById("zoom-image"),
         zoomClose: document.getElementById("zoom-close")
@@ -864,22 +843,6 @@
         return '<img src="' + pic + '" alt="' + alt + '" />';
       }
 
-      function showCameraTouch(text) {
-        if (state.phase !== "room" && state.phase !== "items" && state.phase !== "after") {
-          hideCameraTouch();
-          return;
-        }
-
-        el.cameraTouchBubble.textContent = text || "Tap the screen when you see it.";
-        el.cameraTouch.classList.add("show");
-        el.cameraTouch.setAttribute("aria-hidden", "false");
-      }
-
-      function hideCameraTouch() {
-        el.cameraTouch.classList.remove("show");
-        el.cameraTouch.setAttribute("aria-hidden", "true");
-      }
-
       function openZoom(pic) {
         if (!pic) {
           return;
@@ -936,8 +899,17 @@
         }
       }
 
+      function isLiveCameraPhase() {
+        return state.phase === "room" || state.phase === "items" || state.phase === "after";
+      }
+
       function renderThumbs() {
         el.thumbs.innerHTML = "";
+        el.thumbs.classList.add("empty");
+
+        if (isLiveCameraPhase()) {
+          return;
+        }
 
         const pics = [];
 
@@ -958,6 +930,7 @@
         }
 
         const visible = pics.slice(-8);
+        el.thumbs.classList.remove("empty");
         el.thumbs.style.gridTemplateColumns = "repeat(" + Math.min(visible.length, 4) + ", 1fr)";
 
         visible.forEach(function (item) {
@@ -1033,8 +1006,24 @@
         renderThumbs();
       }
 
+      function clearExitArm() {
+        state.exitArmed = false;
+        el.backGame.textContent = "← EXIT";
+
+        if (state.exitTimer) {
+          clearTimeout(state.exitTimer);
+          state.exitTimer = null;
+        }
+      }
+
+      function setCameraMode(on) {
+        el.page.classList.toggle("camera-mode", on);
+      }
+
       function setPhase(phase, options) {
         options = options || {};
+
+        clearExitArm();
 
         if (!options.skipHistory && state.phase && state.phase !== phase) {
           state.phaseHistory.push(state.phase);
@@ -1044,10 +1033,10 @@
 
         hideSetup();
         hideFinish();
-        hideCameraTouch();
         clearCompare();
         setSideButtons("");
         state.voiceRecording = false;
+        setCameraMode(phase === "room" || phase === "items" || phase === "after");
 
         if (phase === "voice-choice") {
           stopCamera();
@@ -1075,15 +1064,13 @@
           el.title.textContent = "Room Shot";
           el.prompt.textContent = "Take the room picture first.";
           el.helper.textContent = "This is the game board / dirty room / before picture.";
-          showCameraTouch("Room shot first.");
           setButton("TAKE ROOM PIC 📸");
         }
 
         if (phase === "items") {
           el.title.textContent = "Treasure " + (state.items.length + 1);
-          el.prompt.textContent = "Take your treasure picture.";
-          el.helper.textContent = "Snap one treasure. When you have enough treasures, tap DONE.";
-          showCameraTouch("Aim at one treasure.");
+          el.prompt.textContent = "Look for a treasure.";
+          el.helper.textContent = "Point the camera at one treasure, then tap TAKE SNAP.";
           setButton("TAKE SNAP 📸");
 
           if (state.items.length > 0) {
@@ -1171,7 +1158,6 @@
           el.title.textContent = "Clean Room";
           el.prompt.textContent = "Take the clean room picture.";
           el.helper.textContent = "This becomes the after picture.";
-          showCameraTouch("Clean room picture.");
           setButton("TAKE CLEAN PIC 📸");
         }
 
@@ -1400,46 +1386,18 @@
       function goBack(event) {
         event.preventDefault();
 
-        if (state.phase === "voice-choice") {
+        if (state.exitArmed) {
           window.location.href = "pixelprix.html";
           return;
         }
 
-        if (state.phase === "intro") {
-          setPhase("voice-choice", { skipHistory: true });
-          return;
-        }
+        state.exitArmed = true;
+        el.backGame.textContent = "EXIT AGAIN";
+        el.helper.textContent = "Tap EXIT again to leave PixelPrix.";
 
-        if (state.phase === "items" && state.items.length > 0) {
-          state.items.pop();
-          setPhase("items", { skipHistory: true });
-          return;
-        }
-
-        if ((state.phase === "name-treasure" || state.phase === "treasure-saved") && state.items.length > 0) {
-          state.items.pop();
-          openCamera().then(function (ok) {
-            if (ok) {
-              setPhase("items", { skipHistory: true });
-            }
-          });
-          return;
-        }
-
-        if (state.phase === "cleanup" && state.cleanupIndex > 0) {
-          state.cleanupIndex -= 1;
-          setPhase("cleanup", { skipHistory: true });
-          return;
-        }
-
-        const previous = state.phaseHistory.pop();
-
-        if (previous) {
-          setPhase(previous, { skipHistory: true });
-          return;
-        }
-
-        window.location.href = "pixelprix.html";
+        state.exitTimer = setTimeout(function () {
+          clearExitArm();
+        }, EXIT_ARM_MS);
       }
 
       function resetGame() {
