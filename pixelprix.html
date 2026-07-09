@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<!--
-  NET FILE: pixelprix.html
-  CyberCrowd | PixelPrix Start Surface
-  Purpose: Art-first PixelPrix entry surface with hold-to-activate power-up feedback.
-  Owns: full-poster hold entry into pixelprix-game.html.
-  Does NOT own: game flow, camera, voice replay, treasure count, setup, uploads, sync, PING, NET, CORE.
--->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
 
   <title>PixelPrix | Clean-Up Adventure</title>
 
@@ -17,9 +13,6 @@
     :root {
       --bg: #05060a;
       --gold: #ffd34d;
-      --power-progress: 0%;
-      --touch-x: 50%;
-      --touch-y: 55%;
     }
 
     * {
@@ -56,86 +49,8 @@
         no-repeat;
       text-decoration: none;
       cursor: pointer;
-      touch-action: none;
-      user-select: none;
-      -webkit-user-select: none;
+      touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      overflow: hidden;
-      transition:
-        filter 160ms ease,
-        transform 160ms ease;
-    }
-
-    .pixelprix-enter::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      background:
-        radial-gradient(
-          circle at var(--touch-x) var(--touch-y),
-          rgba(255, 211, 77, 0.95) 0%,
-          rgba(255, 211, 77, 0.55) 12%,
-          rgba(255, 211, 77, 0.18) 30%,
-          rgba(255, 211, 77, 0) 58%
-        ),
-        radial-gradient(
-          circle at center,
-          rgba(255, 255, 255, 0.18) 0%,
-          rgba(255, 211, 77, 0.12) 38%,
-          rgba(5, 6, 10, 0.18) 100%
-        );
-      transform: scale(0.82);
-      transition:
-        opacity 120ms ease,
-        transform 120ms ease;
-    }
-
-    .pixelprix-enter::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 11px;
-      pointer-events: none;
-      background:
-        linear-gradient(
-          90deg,
-          var(--gold) var(--power-progress),
-          rgba(255, 255, 255, 0.18) var(--power-progress)
-        );
-      box-shadow:
-        0 -8px 22px rgba(255, 211, 77, 0.48),
-        0 0 32px rgba(255, 211, 77, 0.55);
-      opacity: 0;
-      transition: opacity 120ms ease;
-    }
-
-    .pixelprix-enter.is-holding {
-      filter: brightness(1.12) saturate(1.16);
-      transform: scale(1.006);
-    }
-
-    .pixelprix-enter.is-holding::before {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .pixelprix-enter.is-holding::after,
-    .pixelprix-enter.is-ready::after {
-      opacity: 1;
-    }
-
-    .pixelprix-enter.is-ready {
-      filter: brightness(1.22) saturate(1.28);
-      transform: scale(1.012);
-    }
-
-    .pixelprix-enter.is-ready::before {
-      opacity: 1;
-      transform: scale(1.18);
     }
 
     .pixelprix-enter:focus-visible {
@@ -162,8 +77,8 @@
     class="pixelprix-enter"
     id="pixelprix-enter"
     href="pixelprix-game.html"
-    aria-label="Hold to activate PixelPrix">
-    <span class="screen-reader-text">Hold to activate PixelPrix</span>
+    aria-label="Play PixelPrix">
+    <span class="screen-reader-text">Play PixelPrix</span>
   </a>
 
   <script>
@@ -171,12 +86,6 @@
       "use strict";
 
       const enter = document.getElementById("pixelprix-enter");
-      const holdTime = 1000;
-
-      let holdTimer = null;
-      let progressFrame = null;
-      let holdStartedAt = 0;
-      let activated = false;
 
       function prepareGameDefaults() {
         try {
@@ -192,109 +101,9 @@
         } catch (error) {}
       }
 
-      function setPower(percent) {
-        enter.style.setProperty("--power-progress", percent + "%");
-      }
-
-      function setTouchPoint(event) {
-        const rect = enter.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width) * 100;
-        const y = ((event.clientY - rect.top) / rect.height) * 100;
-
-        enter.style.setProperty("--touch-x", x + "%");
-        enter.style.setProperty("--touch-y", y + "%");
-      }
-
-      function animatePower() {
-        if (!holdStartedAt || activated) return;
-
-        const elapsed = Date.now() - holdStartedAt;
-        const percent = Math.min(100, Math.round((elapsed / holdTime) * 100));
-
-        setPower(percent);
-
-        if (percent < 100) {
-          progressFrame = requestAnimationFrame(animatePower);
-        }
-      }
-
-      function resetHold() {
-        if (activated) return;
-
-        clearTimeout(holdTimer);
-        cancelAnimationFrame(progressFrame);
-
-        holdTimer = null;
-        progressFrame = null;
-        holdStartedAt = 0;
-
-        enter.classList.remove("is-holding");
-        enter.classList.remove("is-ready");
-        setPower(0);
-      }
-
-      function activateGame() {
-        if (activated) return;
-
-        activated = true;
-
-        clearTimeout(holdTimer);
-        cancelAnimationFrame(progressFrame);
-
-        prepareGameDefaults();
-
-        enter.classList.remove("is-holding");
-        enter.classList.add("is-ready");
-        setPower(100);
-
-        window.setTimeout(function () {
-          window.location.href = enter.href;
-        }, 180);
-      }
-
-      function startHold(event) {
-        if (activated) return;
-
-        if (event) {
-          event.preventDefault();
-          setTouchPoint(event);
-        }
-
-        clearTimeout(holdTimer);
-        cancelAnimationFrame(progressFrame);
-
-        holdStartedAt = Date.now();
-
-        enter.classList.add("is-holding");
-        enter.classList.remove("is-ready");
-        setPower(0);
-
-        progressFrame = requestAnimationFrame(animatePower);
-        holdTimer = window.setTimeout(activateGame, holdTime);
-      }
-
-      enter.addEventListener("pointerdown", startHold);
-      enter.addEventListener("pointerup", resetHold);
-      enter.addEventListener("pointerleave", resetHold);
-      enter.addEventListener("pointercancel", resetHold);
-
-      enter.addEventListener("click", function (event) {
-        if (!activated) {
-          event.preventDefault();
-        }
-      });
-
-      enter.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" || event.key === " ") {
-          startHold(event);
-        }
-      });
-
-      enter.addEventListener("keyup", function (event) {
-        if (event.key === "Enter" || event.key === " ") {
-          resetHold();
-        }
-      });
+      enter.addEventListener("pointerdown", prepareGameDefaults);
+      enter.addEventListener("touchstart", prepareGameDefaults, { passive: true });
+      enter.addEventListener("click", prepareGameDefaults);
     })();
   </script>
 </body>
