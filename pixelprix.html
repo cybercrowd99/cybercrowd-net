@@ -1,20 +1,18 @@
 <!DOCTYPE html>
+<!--
+  NET FILE: pixelprix.html
+  CyberCrowd | PixelPrix Start Surface
+  Purpose: Art-first PixelPrix entry surface.
+  Owns: full-poster one-button entry into pixelprix-game.html.
+  Does NOT own: game flow, camera, voice replay, treasure count, setup, uploads, sync, PING, NET, CORE.
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>PixelPrix | Clean-Up Adventure</title>
 
   <style>
-    :root {
-      --bg: #05060a;
-      --gold: #ffd34d;
-    }
-
     * {
       box-sizing: border-box;
     }
@@ -25,9 +23,9 @@
       min-width: 320px;
       min-height: 100%;
       margin: 0;
-      background: var(--bg);
-      font-family: Arial, Helvetica, sans-serif;
+      background: #05060a;
       overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     body {
@@ -42,7 +40,6 @@
       width: 100%;
       height: 100svh;
       height: 100dvh;
-      min-height: 100%;
       background:
         url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png")
         center / cover
@@ -54,7 +51,7 @@
     }
 
     .pixelprix-enter:focus-visible {
-      outline: 5px solid var(--gold);
+      outline: 5px solid #ffd34d;
       outline-offset: -10px;
     }
 
@@ -73,38 +70,8 @@
 </head>
 
 <body>
-  <a
-    class="pixelprix-enter"
-    id="pixelprix-enter"
-    href="pixelprix-game.html"
-    aria-label="Play PixelPrix">
+  <a class="pixelprix-enter" href="pixelprix-game.html" aria-label="Play PixelPrix">
     <span class="screen-reader-text">Play PixelPrix</span>
   </a>
-
-  <script>
-    (function () {
-      "use strict";
-
-      const enter = document.getElementById("pixelprix-enter");
-
-      function prepareGameDefaults() {
-        try {
-          if (!localStorage.getItem("pixelprixRobotVoice")) {
-            localStorage.setItem("pixelprixRobotVoice", "female");
-          }
-
-          if (!localStorage.getItem("pixelprixTreasureCount")) {
-            localStorage.setItem("pixelprixTreasureCount", "5");
-          }
-
-          localStorage.setItem("pixelprixGuide", "robot");
-        } catch (error) {}
-      }
-
-      enter.addEventListener("pointerdown", prepareGameDefaults);
-      enter.addEventListener("touchstart", prepareGameDefaults, { passive: true });
-      enter.addEventListener("click", prepareGameDefaults);
-    })();
-  </script>
 </body>
 </html>
