@@ -2,9 +2,9 @@
 <!--
   NET FILE: pixelprix-game.html
   CyberCrowd | PixelPrix Camera Game
-  Purpose: Runs the PixelPrix camera game flow.
-  Owns: voice choice, treasure count, room snap, treasure snaps, naming pause, cleanup, zoom, back, finish.
-  Does NOT own: PixelPrix poster landing, uploads, sync, accounts, provider transport, PING, NET, CORE.
+  Purpose: Runs the PixelPrix treasure camera game flow.
+  Owns: Male/Female robot choice, parent song toggle, song start, treasure snaps, naming pause, cleanup replay, zoom, back, finish.
+  Does NOT own: PixelPrix poster landing, treasure pre-counting, uploads, sync, accounts, provider transport, PING, NET, CORE.
 -->
 <html lang="en">
 <head>
@@ -74,8 +74,10 @@
       inset: 0;
       z-index: 0;
       background:
-        radial-gradient(circle at 20% 20%, rgba(123, 212, 255, 0.22), transparent 20rem),
-        radial-gradient(circle at 80% 80%, rgba(255, 211, 77, 0.18), transparent 22rem),
+        linear-gradient(to bottom, rgba(5, 6, 10, 0.18), rgba(5, 6, 10, 0.72)),
+        url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png")
+        center / cover
+        no-repeat,
         #05060a;
       background-size: cover;
       background-position: center;
@@ -92,8 +94,8 @@
       z-index: 1;
       pointer-events: none;
       background:
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.52), transparent 28%, rgba(0, 0, 0, 0.86)),
-        radial-gradient(circle at center, transparent 22%, rgba(0, 0, 0, 0.35));
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.36), transparent 28%, rgba(0, 0, 0, 0.86)),
+        radial-gradient(circle at center, transparent 22%, rgba(0, 0, 0, 0.28));
     }
 
     .camera-touch {
@@ -108,7 +110,7 @@
 
     .camera-touch.show {
       display: grid;
-      pointer-events: auto;
+      pointer-events: none;
     }
 
     .camera-touch-bubble {
@@ -201,7 +203,7 @@
       overscroll-behavior: contain;
       padding: 11px;
       border-radius: 24px;
-      background: rgba(5, 6, 10, 0.72);
+      background: rgba(5, 6, 10, 0.74);
       border: 2px solid var(--line);
       box-shadow: 0 18px 45px var(--shadow);
       backdrop-filter: blur(7px);
@@ -271,29 +273,43 @@
       background: var(--purple);
     }
 
-    .count-line {
-      display: grid;
-      grid-template-columns: 1fr 92px;
-      gap: 8px;
+    .parent-row {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
 
-    .count-input {
-      width: 100%;
-      min-height: 54px;
-      border: 3px solid rgba(255, 211, 77, 0.72);
-      border-radius: 18px;
-      padding: 7px 10px;
-      color: #050505;
-      background: #fff7df;
-      font: inherit;
-      font-size: clamp(1.25rem, 5.4vw, 2rem);
+    .parent-label {
+      color: rgba(255, 247, 223, 0.9);
+      font-size: 0.86rem;
       font-weight: 900;
-      text-align: center;
+      text-shadow: 0 2px 0 #000;
+    }
+
+    .song-toggle {
+      width: auto;
+      min-height: 38px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--gold);
+      font-size: 0.86rem;
+      box-shadow: 0 4px 0 var(--shadow);
+      white-space: nowrap;
+    }
+
+    .song-toggle.off {
+      background: rgba(255, 255, 255, 0.72);
     }
 
     .progress {
       display: grid;
+      grid-template-columns: repeat(6, 1fr);
       gap: 5px;
       margin-top: 7px;
     }
@@ -315,6 +331,7 @@
 
     .thumbs {
       display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 5px;
       margin-top: 6px;
     }
@@ -415,9 +432,14 @@
 
     .button-row {
       display: grid;
-      gap: 0;
+      grid-template-columns: 1fr;
+      gap: 7px;
       flex-shrink: 0;
       padding-bottom: 0;
+    }
+
+    .button-row.two {
+      grid-template-columns: 1fr 0.52fr;
     }
 
     button {
@@ -437,6 +459,15 @@
       place-items: center;
       box-shadow: 0 7px 0 var(--shadow);
       touch-action: manipulation;
+    }
+
+    .done-button {
+      display: none;
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+    }
+
+    .done-button.show {
+      display: grid;
     }
 
     button:active,
@@ -573,11 +604,11 @@
         <h1 id="title">PixelPrix</h1>
 
         <p id="prompt">
-          Choose how the robot talks.
+          Choose your robot.
         </p>
 
         <p class="small" id="helper">
-          Pick Male or Female. Then choose how many treasures.
+          Tap Male or Female to start.
         </p>
 
         <div class="setup-area" id="voice-choice">
@@ -590,27 +621,14 @@
               🤖 Female
             </button>
           </div>
-        </div>
 
-        <div class="setup-area" id="count-choice">
-          <p>
-            How many treasures today?
-          </p>
+          <div class="parent-row">
+            <div class="parent-label">
+              Parent song setting
+            </div>
 
-          <div class="count-line">
-            <input
-              class="count-input"
-              id="treasure-count"
-              type="number"
-              inputmode="numeric"
-              min="1"
-              max="25"
-              value="5"
-              aria-label="How many treasures today?"
-            />
-
-            <button id="count-ok" type="button">
-              OK
+            <button class="song-toggle" id="song-toggle" type="button">
+              Song ON 🎵
             </button>
           </div>
         </div>
@@ -644,6 +662,10 @@
       <button id="main-button" type="button">
         START
       </button>
+
+      <button class="done-button" id="done-button" type="button">
+        DONE ✔️
+      </button>
     </section>
   </main>
 
@@ -654,9 +676,16 @@
     <img id="zoom-image" alt="Enlarged PixelPrix picture" />
   </div>
 
+  <audio id="pixelprix-song" preload="auto" loop>
+    <source src="audio/pixelprix-song.mp3" type="audio/mpeg" />
+    <source src="pixelprix-song.mp3" type="audio/mpeg" />
+  </audio>
+
   <script>
     (function () {
       "use strict";
+
+      const SONG_KEY = "pixelprixSongEnabled";
 
       function setRealViewportHeight() {
         document.documentElement.style.setProperty("--pxp-vh", window.innerHeight + "px");
@@ -672,12 +701,12 @@
       const state = {
         phase: "voice-choice",
         robotVoice: "female",
+        songEnabled: true,
+        songStarted: false,
         stream: null,
-        roomPic: "",
         cleanPic: "",
         items: [],
         cleanupIndex: 0,
-        targetCount: 5,
         phaseHistory: [],
         namingTreasureNumber: 0
       };
@@ -693,9 +722,8 @@
         voiceChoice: document.getElementById("voice-choice"),
         voiceMale: document.getElementById("voice-male"),
         voiceFemale: document.getElementById("voice-female"),
-        countChoice: document.getElementById("count-choice"),
-        treasureCount: document.getElementById("treasure-count"),
-        countOk: document.getElementById("count-ok"),
+        songToggle: document.getElementById("song-toggle"),
+        song: document.getElementById("pixelprix-song"),
         progress: document.getElementById("progress"),
         thumbs: document.getElementById("thumbs"),
         compare: document.getElementById("compare"),
@@ -705,7 +733,9 @@
         likeYes: document.getElementById("like-yes"),
         likeAgain: document.getElementById("like-again"),
         likeHome: document.getElementById("like-home"),
+        buttonRow: document.getElementById("button-row"),
         mainButton: document.getElementById("main-button"),
+        doneButton: document.getElementById("done-button"),
         backGame: document.getElementById("back-game"),
         cameraTouch: document.getElementById("camera-touch"),
         cameraTouchBubble: document.getElementById("camera-touch-bubble"),
@@ -732,45 +762,64 @@
         }
       }
 
-      function readTargetCount() {
-        let count = 5;
-
+      function loadSongSetting() {
         try {
-          count = Number(localStorage.getItem("pixelprixTreasureCount") || 5);
+          const saved = localStorage.getItem(SONG_KEY);
+          state.songEnabled = saved === null ? true : saved === "true";
         } catch (error) {
-          count = 5;
+          state.songEnabled = true;
         }
 
-        count = Math.floor(count);
-
-        if (!count || count < 1) {
-          count = 5;
-        }
-
-        if (count > 25) {
-          count = 25;
-        }
-
-        state.targetCount = count;
-        el.treasureCount.value = String(count);
+        renderSongToggle();
       }
 
-      function saveTargetCount() {
-        let count = Math.floor(Number(el.treasureCount.value || 5));
+      function saveSongSetting() {
+        try {
+          localStorage.setItem(SONG_KEY, String(state.songEnabled));
+        } catch (error) {}
+      }
 
-        if (!count || count < 1) {
-          count = 5;
+      function renderSongToggle() {
+        el.songToggle.textContent = state.songEnabled ? "Song ON 🎵" : "Song OFF";
+        el.songToggle.classList.toggle("off", !state.songEnabled);
+      }
+
+      function toggleSong() {
+        state.songEnabled = !state.songEnabled;
+        saveSongSetting();
+        renderSongToggle();
+
+        if (!state.songEnabled) {
+          stopSong();
         }
+      }
 
-        if (count > 25) {
-          count = 25;
+      function startSong() {
+        if (!state.songEnabled || state.songStarted || !el.song) {
+          return;
         }
-
-        state.targetCount = count;
-        el.treasureCount.value = String(count);
 
         try {
-          localStorage.setItem("pixelprixTreasureCount", String(count));
+          el.song.volume = 0.42;
+          const playAttempt = el.song.play();
+
+          if (playAttempt && typeof playAttempt.catch === "function") {
+            playAttempt.catch(function () {});
+          }
+
+          state.songStarted = true;
+        } catch (error) {}
+      }
+
+      function stopSong() {
+        if (!el.song) {
+          return;
+        }
+
+        try {
+          el.song.pause();
+          el.song.currentTime = 0;
+          state.songStarted = false;
         } catch (error) {}
       }
 
@@ -876,7 +925,8 @@
 
       function setStill(pic) {
         if (!pic) {
-          el.still.style.backgroundImage = "";
+          el.still.style.backgroundImage =
+            'linear-gradient(to bottom, rgba(5, 6, 10, 0.18), rgba(5, 6, 10, 0.72)), url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png") center / cover no-repeat, #05060a';
           return;
         }
 
@@ -888,11 +938,7 @@
       }
 
       function isCameraPhase() {
-        return (
-          state.phase === "room" ||
-          state.phase === "items" ||
-          state.phase === "after"
-        );
+        return state.phase === "items" || state.phase === "after";
       }
 
       function showCameraTouch(text) {
@@ -909,31 +955,6 @@
       function hideCameraTouch() {
         el.cameraTouch.classList.remove("show", "tap");
         el.cameraTouch.setAttribute("aria-hidden", "true");
-      }
-
-      function cameraTouchFeedback() {
-        if (!isCameraPhase()) {
-          return;
-        }
-
-        el.cameraTouch.classList.add("tap");
-        beep();
-
-        if (state.phase === "room") {
-          el.cameraTouchBubble.textContent = "I see the room. Hold still.";
-        }
-
-        if (state.phase === "items") {
-          el.cameraTouchBubble.textContent = "I see the treasure. Hold close.";
-        }
-
-        if (state.phase === "after") {
-          el.cameraTouchBubble.textContent = "I see the clean picture. Hold still.";
-        }
-
-        window.setTimeout(function () {
-          el.cameraTouch.classList.remove("tap");
-        }, 180);
       }
 
       function openZoom(pic) {
@@ -961,7 +982,6 @@
 
       function hideSetup() {
         el.voiceChoice.classList.remove("show");
-        el.countChoice.classList.remove("show");
       }
 
       function hideFinish() {
@@ -974,20 +994,20 @@
 
       function renderDots() {
         el.progress.innerHTML = "";
-        el.progress.style.gridTemplateColumns = "repeat(" + state.targetCount + ", 1fr)";
 
-        for (let i = 0; i < state.targetCount; i += 1) {
+        const count = Math.min(Math.max(state.items.length + 1, 1), 12);
+        el.progress.style.gridTemplateColumns = "repeat(" + count + ", 1fr)";
+
+        for (let i = 0; i < count; i += 1) {
           const dot = document.createElement("div");
           dot.className = "dot";
 
-          if (state.phase === "items" || state.phase === "name-treasure") {
-            if (i < state.items.length) {
-              dot.classList.add("done");
-            }
+          if (i < state.items.length) {
+            dot.classList.add("done");
+          }
 
-            if (i === state.items.length && state.phase === "items") {
-              dot.classList.add("now");
-            }
+          if (state.phase === "items" && i === state.items.length) {
+            dot.classList.add("now");
           }
 
           if (state.phase === "cleanup") {
@@ -998,47 +1018,42 @@
             }
           }
 
-          if (
-            state.phase === "ready" ||
-            state.phase === "after-ready" ||
-            state.phase === "after" ||
-            state.phase === "difference" ||
-            state.phase === "done" ||
-            state.phase === "finish"
-          ) {
-            dot.classList.add("done");
-          }
-
           el.progress.appendChild(dot);
         }
       }
 
       function renderThumbs() {
         el.thumbs.innerHTML = "";
-        el.thumbs.style.gridTemplateColumns = "repeat(" + Math.min(state.targetCount, 5) + ", 1fr)";
 
-        for (let i = 0; i < state.targetCount; i += 1) {
+        if (!state.items.length) {
+          return;
+        }
+
+        const visibleItems = state.items.slice(-8);
+        const columnCount = Math.min(visibleItems.length, 4);
+        el.thumbs.style.gridTemplateColumns = "repeat(" + columnCount + ", 1fr)";
+
+        visibleItems.forEach(function (item) {
           const box = document.createElement("div");
-          box.className = "thumb";
+          box.className = "thumb has-pic";
+          box.innerHTML = imageHtml(item.pic, "Treasure " + item.number);
 
-          if (state.items[i] && state.items[i].pic) {
-            box.classList.add("has-pic");
-            box.innerHTML = imageHtml(state.items[i].pic, "Treasure " + (i + 1));
-
-            box.addEventListener("click", function () {
-              openZoom(state.items[i].pic);
-            });
-          } else {
-            box.textContent = String(i + 1);
-          }
+          box.addEventListener("click", function () {
+            openZoom(item.pic);
+          });
 
           el.thumbs.appendChild(box);
-        }
+        });
       }
 
       function setButton(mainText) {
         el.mainButton.textContent = mainText;
         setTimeout(setRealViewportHeight, 60);
+      }
+
+      function showDoneButton(show) {
+        el.doneButton.classList.toggle("show", show);
+        el.buttonRow.classList.toggle("two", show);
       }
 
       function setPhase(phase, options) {
@@ -1053,6 +1068,7 @@
         hideSetup();
         hideFinish();
         hideCameraTouch();
+        showDoneButton(false);
         clearCompareClicks();
         el.compare.classList.remove("show");
 
@@ -1060,54 +1076,28 @@
           stopCamera();
           setStill("");
           el.title.textContent = "PixelPrix";
-          el.prompt.textContent = "Choose how the robot talks.";
-          el.helper.textContent = "Pick Male or Female.";
+          el.prompt.textContent = "Choose your robot.";
+          el.helper.textContent = "Tap Male or Female to start your treasure adventure.";
           el.voiceChoice.classList.add("show");
-          setButton("CHOOSE VOICE");
-        }
-
-        if (phase === "count-choice") {
-          stopCamera();
-          setStill("");
-          el.title.textContent = "Treasures";
-          el.prompt.textContent = "How many treasures today?";
-          el.helper.textContent = "Default is 5. Pick the number, then tap OK.";
-          el.countChoice.classList.add("show");
-          setButton("OK");
+          setButton("CHOOSE ROBOT");
         }
 
         if (phase === "intro") {
           stopCamera();
           setStill("");
           el.title.textContent = "PixelPrix";
-          el.prompt.textContent = "Let’s make a Tiny Tidy adventure.";
-          el.helper.textContent = "Open the camera. Take one room picture. Then we find " + state.targetCount + " treasures.";
+          el.prompt.textContent = "Start your treasure adventure.";
+          el.helper.textContent = "Take pictures until you are done. Then tap DONE.";
           setButton("OPEN CAMERA");
-        }
-
-        if (phase === "room") {
-          el.title.textContent = "Game Board";
-          el.prompt.textContent = "Stand back. Take one big room picture.";
-          el.helper.textContent = "Tap the screen when the room is ready. Then press TAKE ROOM PIC.";
-          showCameraTouch("Tap the screen when the room is ready.");
-          setButton("TAKE ROOM PIC");
-        }
-
-        if (phase === "tiny") {
-          stopCamera();
-          setStill(state.roomPic);
-          el.title.textContent = "Tiny Tidy";
-          el.prompt.textContent = state.targetCount + " treasures today.";
-          el.helper.textContent = "Now we take close-up pictures. One treasure at a time.";
-          setButton("START TINY TIDY");
         }
 
         if (phase === "items") {
           el.title.textContent = "Treasure " + (state.items.length + 1);
-          el.prompt.textContent = "Point close. Take the treasure picture.";
-          el.helper.textContent = "Picture " + (state.items.length + 1) + " of " + state.targetCount + ".";
+          el.prompt.textContent = "Take your treasure picture.";
+          el.helper.textContent = "Snap one treasure. When you have enough treasures, tap DONE.";
           showCameraTouch("Tap the screen when you see the treasure.");
-          setButton("TAKE SNAP");
+          showDoneButton(state.items.length > 0);
+          setButton("TAKE SNAP 📸");
         }
 
         if (phase === "name-treasure") {
@@ -1118,19 +1108,19 @@
             setStill(item.pic);
           }
 
-          state.namingTreasureNumber = state.items.length;
+          state.namingTreasureNumber = item ? item.number : state.items.length;
           el.title.textContent = "Treasure " + state.namingTreasureNumber;
-          el.prompt.textContent = "Okay, what is this treasure?";
+          el.prompt.textContent = "Okay, what is it?";
           el.helper.textContent = "Say the word. The game saves the voice replay for cleanup.";
           setButton("RECORD NAME");
         }
 
         if (phase === "ready") {
           stopCamera();
-          setStill(state.roomPic);
+          setStill(state.items[0] ? state.items[0].pic : "");
           el.title.textContent = "Game Ready";
           el.prompt.textContent = "Your treasures are ready.";
-          el.helper.textContent = "Tap a treasure picture to make it bigger. Then start the clean-up hunt.";
+          el.helper.textContent = "Now cleanup can play back each treasure voice.";
           setButton("PLAY CLEAN UP");
         }
 
@@ -1159,10 +1149,11 @@
 
         if (phase === "after-ready") {
           stopCamera();
-          setStill(state.roomPic);
-          el.title.textContent = "Find the Difference?";
-          el.prompt.textContent = "One last clean picture makes the before-and-after game.";
-          el.helper.textContent = "This picture is for Spot the Difference.";
+          setStill(state.items[state.items.length - 1] ? state.items[state.items.length - 1].pic : "");
+          el.title.textContent = "Finish Picture";
+          el.prompt.textContent = "Want one clean picture at the end?";
+          el.helper.textContent = "This is optional. Take one final picture or finish now.";
+          showDoneButton(true);
           setButton("OPEN CAMERA");
         }
 
@@ -1180,35 +1171,47 @@
           el.title.textContent = "Spot the Difference";
           el.prompt.textContent = "Look what changed.";
           el.helper.textContent = "Tap Before or After to make it bigger.";
+
+          const beforePic = state.items[0] ? state.items[0].pic : "";
+          const afterPic = state.cleanPic;
+
           el.compare.classList.add("show");
-          el.beforeCard.classList.add("has-pic");
-          el.afterCard.classList.add("has-pic");
-          el.beforeCard.innerHTML = imageHtml(state.roomPic, "Before room");
-          el.afterCard.innerHTML = imageHtml(state.cleanPic, "After room");
 
-          el.beforeCard.onclick = function () {
-            openZoom(state.roomPic);
-          };
+          if (beforePic) {
+            el.beforeCard.classList.add("has-pic");
+            el.beforeCard.innerHTML = imageHtml(beforePic, "First treasure");
+            el.beforeCard.onclick = function () {
+              openZoom(beforePic);
+            };
+          } else {
+            el.beforeCard.textContent = "Before";
+          }
 
-          el.afterCard.onclick = function () {
-            openZoom(state.cleanPic);
-          };
+          if (afterPic) {
+            el.afterCard.classList.add("has-pic");
+            el.afterCard.innerHTML = imageHtml(afterPic, "After room");
+            el.afterCard.onclick = function () {
+              openZoom(afterPic);
+            };
+          } else {
+            el.afterCard.textContent = "After";
+          }
 
           setButton("I SEE IT");
         }
 
         if (phase === "done") {
           stopCamera();
-          setStill(state.cleanPic || state.roomPic);
+          setStill(state.cleanPic || (state.items[0] ? state.items[0].pic : ""));
           el.title.textContent = "Adventure Done";
-          el.prompt.textContent = "You made a clean-up story.";
-          el.helper.textContent = "Before, treasures, cleanup, and after. That is the whole adventure.";
+          el.prompt.textContent = "You made a treasure story.";
+          el.helper.textContent = "Pictures, voice names, cleanup, and finish.";
           setButton("SHOW FINISH");
         }
 
         if (phase === "finish") {
           stopCamera();
-          setStill(state.cleanPic || state.roomPic);
+          setStill(state.cleanPic || (state.items[0] ? state.items[0].pic : ""));
           el.title.textContent = "PixelPrix Complete";
           el.prompt.textContent = "Did you like this?";
           el.helper.textContent = "Choose what happens next.";
@@ -1223,17 +1226,12 @@
 
       function chooseVoice(mode) {
         saveRobotVoice(mode);
-        speak(mode === "male" ? "Male robot selected." : "Female robot selected.");
-        setPhase("count-choice");
+        startSong();
+        speak(mode === "male" ? "Male robot selected. Start your treasure adventure." : "Female robot selected. Start your treasure adventure.");
+        setPhase("intro");
       }
 
       function finishNamingAndContinue() {
-        if (state.items.length >= state.targetCount) {
-          speak("All treasures ready.");
-          setPhase("ready");
-          return;
-        }
-
         openCamera().then(function (ok) {
           if (ok) {
             setPhase("items");
@@ -1258,40 +1256,12 @@
           return;
         }
 
-        if (state.phase === "count-choice") {
-          saveTargetCount();
-          setPhase("intro");
-          speak("Let us make a Tiny Tidy adventure.");
-          return;
-        }
-
         if (state.phase === "intro") {
           const ok = await openCamera();
 
           if (ok) {
-            setPhase("room");
-            speak("Stand back. Take one big room picture.");
-          }
-
-          return;
-        }
-
-        if (state.phase === "room") {
-          state.roomPic = capturePic();
-          setStill(state.roomPic);
-          beep();
-          speak("Great. That is the game board.");
-          setPhase("tiny");
-          return;
-        }
-
-        if (state.phase === "tiny") {
-          const ok = await openCamera();
-
-          if (ok) {
-            state.items = [];
             setPhase("items");
-            speak("Treasure one. Point close.");
+            speak("Take your first treasure picture.");
           }
 
           return;
@@ -1299,15 +1269,17 @@
 
         if (state.phase === "items") {
           const pic = capturePic();
+          const number = state.items.length + 1;
 
           state.items.push({
+            number: number,
             pic: pic,
             done: false
           });
 
           beep();
           setPhase("name-treasure");
-          speak("Okay, what is this treasure?");
+          speak("Okay, what is it?");
           return;
         }
 
@@ -1327,7 +1299,7 @@
           beep();
 
           if (state.cleanupIndex >= state.items.length) {
-            speak("Clean up done. Want to find the difference?");
+            speak("Clean up done.");
             setPhase("after-ready");
             return;
           }
@@ -1372,6 +1344,23 @@
         }
       }
 
+      function doneAction() {
+        if (state.phase === "items") {
+          if (!state.items.length) {
+            speak("Take one treasure picture first.");
+            return;
+          }
+
+          speak("Treasures done. Start cleanup.");
+          setPhase("ready");
+          return;
+        }
+
+        if (state.phase === "after-ready") {
+          setPhase("done");
+        }
+      }
+
       function goBack(event) {
         event.preventDefault();
 
@@ -1380,7 +1369,7 @@
           return;
         }
 
-        if (state.phase === "count-choice") {
+        if (state.phase === "intro") {
           setPhase("voice-choice", { skipHistory: true });
           return;
         }
@@ -1422,8 +1411,8 @@
 
       function resetGame() {
         stopCamera();
+        stopSong();
 
-        state.roomPic = "";
         state.cleanPic = "";
         state.items = [];
         state.cleanupIndex = 0;
@@ -1435,7 +1424,7 @@
 
       function likeYes() {
         beep();
-        el.prompt.textContent = "Yes! PixelPrix liked your clean-up story too.";
+        el.prompt.textContent = "Yes! PixelPrix liked your treasure story too.";
         el.helper.textContent = "Tap PLAY AGAIN when you are ready.";
         speak("Yes. Great job.");
       }
@@ -1452,15 +1441,10 @@
         chooseVoice("female");
       });
 
-      el.countOk.addEventListener("click", function () {
-        saveTargetCount();
-        setPhase("intro");
-        speak("Let us make a Tiny Tidy adventure.");
-      });
-
+      el.songToggle.addEventListener("click", toggleSong);
       el.backGame.addEventListener("click", goBack);
       el.mainButton.addEventListener("click", mainAction);
-      el.cameraTouch.addEventListener("click", cameraTouchFeedback);
+      el.doneButton.addEventListener("click", doneAction);
 
       el.zoomClose.addEventListener("click", closeZoom);
 
@@ -1474,10 +1458,12 @@
       el.likeAgain.addEventListener("click", resetGame);
       el.likeHome.addEventListener("click", goHome);
 
-      window.addEventListener("pagehide", stopCamera);
+      window.addEventListener("pagehide", function () {
+        stopCamera();
+      });
 
       loadRobotVoice();
-      readTargetCount();
+      loadSongSetting();
       setPhase("voice-choice", { skipHistory: true });
     })();
   </script>
