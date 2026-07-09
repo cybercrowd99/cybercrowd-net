@@ -1,21 +1,31 @@
 <!DOCTYPE html>
+<!--
+  NET FILE: cybercade.html
+  CyberCrowd | CyberCade Game Dashboard
+  Purpose: Shows the CyberCade dashboard with PixelPrix as the first active game slot.
+  Owns: arcade lobby, game cards, locked future slots, PixelPrix launch link.
+  Does NOT own: PixelPrix game flow, PixelPrix camera, PixelPrix voice replay, uploads, sync, accounts, PING, NET, CORE.
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>CyberCade | PixelPrix</title>
+  <title>CyberCade | Game Dashboard</title>
 
   <style>
     :root {
       --bg: #05060a;
       --ink: #fff7df;
+      --muted: rgba(255, 247, 223, 0.72);
       --gold: #ffd34d;
       --green: #6dff91;
       --blue: #7bd4ff;
       --pink: #ff8bd1;
+      --purple: #c79cff;
       --shadow: rgba(0, 0, 0, 0.62);
       --line: rgba(255, 255, 255, 0.22);
+      --card: rgba(8, 10, 18, 0.82);
     }
 
     * {
@@ -30,12 +40,15 @@
       margin: 0;
       color: var(--ink);
       background:
-        radial-gradient(circle at 15% 12%, rgba(123, 212, 255, 0.34), transparent 22rem),
-        radial-gradient(circle at 85% 18%, rgba(255, 139, 209, 0.26), transparent 20rem),
-        radial-gradient(circle at 50% 92%, rgba(255, 211, 77, 0.22), transparent 24rem),
+        radial-gradient(circle at 15% 12%, rgba(123, 212, 255, 0.28), transparent 22rem),
+        radial-gradient(circle at 85% 18%, rgba(255, 139, 209, 0.22), transparent 20rem),
+        radial-gradient(circle at 50% 92%, rgba(255, 211, 77, 0.18), transparent 24rem),
         var(--bg);
       font-family: Arial, Helvetica, sans-serif;
-      overflow: hidden;
+    }
+
+    body {
+      overflow-x: hidden;
     }
 
     .sparkle {
@@ -48,38 +61,39 @@
         radial-gradient(circle, rgba(109, 255, 145, 0.55) 0 2px, transparent 3px);
       background-size: 88px 88px, 132px 132px, 156px 156px;
       background-position: 12px 20px, 44px 72px, 90px 18px;
-      opacity: 0.34;
+      opacity: 0.26;
       animation: twinkle 5s linear infinite;
     }
 
     @keyframes twinkle {
-      0% { transform: translateY(0); opacity: 0.28; }
-      50% { opacity: 0.5; }
-      100% { transform: translateY(18px); opacity: 0.28; }
+      0% { transform: translateY(0); opacity: 0.22; }
+      50% { opacity: 0.42; }
+      100% { transform: translateY(18px); opacity: 0.22; }
     }
 
-    .room {
+    .dashboard {
       position: relative;
       z-index: 1;
-      width: min(920px, 100%);
+      width: min(1120px, 100%);
       min-height: 100svh;
       margin: 0 auto;
-      padding: max(16px, env(safe-area-inset-top)) 14px max(16px, env(safe-area-inset-bottom));
+      padding:
+        max(16px, env(safe-area-inset-top))
+        14px
+        max(18px, env(safe-area-inset-bottom));
       display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: 12px;
-      transition: transform 700ms ease, filter 700ms ease;
+      gap: 16px;
     }
 
     .hero {
       text-align: center;
-      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1), opacity 700ms ease;
+      padding-top: 2px;
     }
 
     h1 {
       margin: 0;
       color: var(--gold);
-      font-size: clamp(3.2rem, 15vw, 7.6rem);
+      font-size: clamp(3rem, 14vw, 7.2rem);
       line-height: 0.86;
       letter-spacing: 0.07em;
       text-shadow:
@@ -90,61 +104,59 @@
     .games {
       margin: 8px 0 0;
       color: var(--blue);
-      font-size: clamp(1.8rem, 7vw, 3.4rem);
+      font-size: clamp(1.55rem, 6.5vw, 3.2rem);
       font-weight: 900;
       text-shadow: 0 4px 0 #000;
     }
 
-    .game-stage {
-      align-self: center;
-      display: grid;
-      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1);
+    .dashboard-note {
+      margin: 8px auto 0;
+      max-width: 680px;
+      color: var(--muted);
+      font-size: clamp(0.86rem, 3.2vw, 1rem);
+      font-weight: 900;
+      line-height: 1.2;
+      text-shadow: 0 3px 0 #000;
     }
 
-    .poster-card {
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .game-card {
       position: relative;
+      min-height: 176px;
       overflow: hidden;
-      border-radius: 34px;
-      border: 4px solid rgba(255, 255, 255, 0.24);
-      background: #101522;
+      border-radius: 28px;
+      border: 3px solid var(--line);
+      background: var(--card);
+      box-shadow:
+        0 16px 36px var(--shadow),
+        0 0 0 5px rgba(255, 211, 77, 0.08);
+    }
+
+    .game-card.active {
+      grid-column: 1 / -1;
+      border-color: rgba(109, 255, 145, 0.68);
       box-shadow:
         0 20px 50px var(--shadow),
-        0 0 0 7px rgba(255, 211, 77, 0.12);
-      transform-origin: center;
-      transition:
-        transform 800ms cubic-bezier(.16, 1.15, .24, 1),
-        box-shadow 800ms ease,
-        border-color 800ms ease;
+        0 0 0 7px rgba(109, 255, 145, 0.14),
+        0 0 36px rgba(255, 211, 77, 0.24);
     }
 
-    .poster-card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        conic-gradient(
-          from 0deg,
-          transparent,
-          rgba(255, 211, 77, 0.26),
-          transparent,
-          rgba(123, 212, 255, 0.24),
-          transparent,
-          rgba(109, 255, 145, 0.2),
-          transparent
-        );
-      animation: spinGlow 8s linear infinite;
-      opacity: 0.46;
-      pointer-events: none;
-    }
-
-    @keyframes spinGlow {
-      to { transform: rotate(360deg); }
-    }
-
-    .poster-inner {
-      position: relative;
-      z-index: 1;
+    .poster-link {
       display: block;
+      color: inherit;
+      text-decoration: none;
+      touch-action: manipulation;
+    }
+
+    .poster-wrap {
+      position: relative;
+      overflow: hidden;
       background: #000;
     }
 
@@ -154,122 +166,141 @@
       height: auto;
     }
 
-    .active-badge {
+    .active-badge,
+    .locked-badge {
       position: absolute;
-      top: 14px;
-      left: 14px;
+      top: 12px;
+      left: 12px;
       z-index: 2;
       padding: 8px 13px;
       border-radius: 999px;
       color: #061108;
-      background: var(--green);
+      font-size: 0.88rem;
       font-weight: 900;
       box-shadow: 0 5px 0 var(--shadow);
       pointer-events: none;
     }
 
-    .button-zone {
-      display: grid;
-      gap: 10px;
-      transition: transform 700ms cubic-bezier(.2, 1.2, .2, 1);
+    .active-badge {
+      background: var(--green);
     }
 
-    .portal-button {
-      width: 100%;
-      min-height: 92px;
-      border: 0;
-      border-radius: 30px;
-      padding: 18px;
+    .locked-badge {
+      color: #050505;
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .card-body {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .game-title {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(1.25rem, 5.5vw, 2.2rem);
+      line-height: 1;
+      font-weight: 900;
+      text-shadow: 0 3px 0 #000;
+    }
+
+    .game-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(0.82rem, 3.4vw, 1rem);
+      line-height: 1.2;
+      font-weight: 900;
+      text-shadow: 0 2px 0 #000;
+    }
+
+    .play-button {
+      display: grid;
+      place-items: center;
+      min-height: 62px;
+      border-radius: 22px;
       color: #050505;
       background: linear-gradient(135deg, var(--green), #dbff73);
-      font: inherit;
-      font-size: clamp(1.75rem, 8vw, 4.1rem);
+      text-decoration: none;
+      font-size: clamp(1.2rem, 5.6vw, 2.2rem);
       font-weight: 900;
-      cursor: pointer;
       box-shadow:
-        0 10px 0 var(--shadow),
-        0 0 28px rgba(109, 255, 145, 0.24);
+        0 8px 0 var(--shadow),
+        0 0 24px rgba(109, 255, 145, 0.22);
       touch-action: manipulation;
     }
 
-    .portal-button:active {
-      transform: translateY(5px);
+    .play-button:active {
+      transform: translateY(4px);
       box-shadow:
-        0 5px 0 var(--shadow),
-        0 0 28px rgba(109, 255, 145, 0.24);
+        0 4px 0 var(--shadow),
+        0 0 24px rgba(109, 255, 145, 0.22);
     }
 
-    .song-line {
-      min-height: 24px;
-      color: rgba(255, 247, 223, 0.9);
-      text-align: center;
-      font-weight: 900;
-      text-shadow: 0 3px 0 #000;
+    .locked-card {
+      display: grid;
+      align-content: end;
+      padding: 12px;
+      min-height: 210px;
+      background:
+        linear-gradient(135deg, rgba(123, 212, 255, 0.16), rgba(255, 139, 209, 0.1)),
+        rgba(8, 10, 18, 0.86);
     }
 
-    .portal-message {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 24px;
-      color: var(--ink);
-      background: rgba(5, 6, 10, 0.74);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      text-align: center;
+    .locked-icon {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(255, 247, 223, 0.12);
+      font-size: clamp(4rem, 18vw, 8rem);
       font-weight: 900;
-      text-shadow: 0 3px 0 #000;
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 500ms ease, transform 500ms ease;
       pointer-events: none;
     }
 
-    .open .hero {
-      transform: translateY(-40px) scale(0.94);
-      opacity: 0.62;
+    .footer {
+      padding: 4px 0 0;
+      text-align: center;
+      color: rgba(255, 247, 223, 0.58);
+      font-size: 0.8rem;
+      font-weight: 900;
+      text-shadow: 0 2px 0 #000;
     }
 
-    .open .game-stage {
-      transform: translateY(-18px);
-    }
-
-    .open .poster-card {
-      transform: scale(1.055);
-      border-color: rgba(109, 255, 145, 0.75);
-      box-shadow:
-        0 24px 70px var(--shadow),
-        0 0 0 9px rgba(109, 255, 145, 0.18),
-        0 0 45px rgba(255, 211, 77, 0.3);
-    }
-
-    .open .portal-message {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .entering .room {
-      transform: scale(1.08);
-      filter: brightness(1.15) saturate(1.2);
-    }
-
-    .entering .poster-card {
-      transform: scale(1.22);
-    }
-
-    audio {
-      display: none;
-    }
-
-    @media (max-height: 690px) {
-      .portal-button {
-        min-height: 76px;
+    @media (min-width: 760px) {
+      .game-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
-      .poster-card {
-        border-radius: 28px;
+      .game-card.active {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+    }
+
+    @media (max-height: 700px) {
+      .dashboard {
+        gap: 10px;
+        padding:
+          max(10px, env(safe-area-inset-top))
+          12px
+          max(12px, env(safe-area-inset-bottom));
       }
 
-      .hero {
-        transform: scale(0.94);
+      h1 {
+        font-size: clamp(2.6rem, 12vw, 6rem);
+      }
+
+      .games {
+        font-size: clamp(1.28rem, 5vw, 2.4rem);
+      }
+
+      .game-card.active {
+        border-radius: 24px;
+      }
+
+      .play-button {
+        min-height: 54px;
       }
     }
   </style>
@@ -278,118 +309,95 @@
 <body>
   <div class="sparkle"></div>
 
-  <main class="room">
+  <main class="dashboard">
     <header class="hero">
       <h1>CYBERCADE</h1>
       <div class="games">Games 🎮</div>
+      <p class="dashboard-note">
+        Arcade dashboard. PixelPrix is the first active game.
+      </p>
     </header>
 
-    <section class="game-stage" aria-label="PixelPrix game door">
-      <article class="poster-card">
-        <span class="active-badge">ACTIVE</span>
+    <section class="game-grid" aria-label="CyberCade games">
+      <article class="game-card active">
+        <a class="poster-link" href="pixelprix-game.html" aria-label="Play PixelPrix">
+          <div class="poster-wrap">
+            <span class="active-badge">ACTIVE</span>
 
-        <div class="poster-inner">
-          <img
-            class="poster"
-            src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png"
-            alt="PixelPrix Clean-Up Adventure"
-          />
+            <img
+              class="poster"
+              src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/PixelPrix.png"
+              alt="PixelPrix Clean-Up Adventure"
+            />
+          </div>
+        </a>
+
+        <div class="card-body">
+          <h2 class="game-title">PixelPrix</h2>
+
+          <p class="game-text">
+            Clean-up camera adventure. Touch the art, wake the world, choose a robot, then start the treasure game.
+          </p>
+
+          <a class="play-button" href="pixelprix-game.html">
+            ▶ PLAY PIXELPRIX
+          </a>
         </div>
+      </article>
+
+      <article class="game-card locked-card">
+        <span class="locked-badge">LOCKED</span>
+        <div class="locked-icon">?</div>
+        <h2 class="game-title">Game Slot 2</h2>
+        <p class="game-text">Coming soon.</p>
+      </article>
+
+      <article class="game-card locked-card">
+        <span class="locked-badge">LOCKED</span>
+        <div class="locked-icon">?</div>
+        <h2 class="game-title">Game Slot 3</h2>
+        <p class="game-text">Coming soon.</p>
+      </article>
+
+      <article class="game-card locked-card">
+        <span class="locked-badge">LOCKED</span>
+        <div class="locked-icon">?</div>
+        <h2 class="game-title">Game Slot 4</h2>
+        <p class="game-text">Coming soon.</p>
+      </article>
+
+      <article class="game-card locked-card">
+        <span class="locked-badge">LOCKED</span>
+        <div class="locked-icon">?</div>
+        <h2 class="game-title">Game Slot 5</h2>
+        <p class="game-text">Coming soon.</p>
+      </article>
+
+      <article class="game-card locked-card">
+        <span class="locked-badge">LOCKED</span>
+        <div class="locked-icon">?</div>
+        <h2 class="game-title">Game Slot 6</h2>
+        <p class="game-text">Coming soon.</p>
+      </article>
+
+      <article class="game-card locked-card">
+        <span class="locked-badge">LOCKED</span>
+        <div class="locked-icon">?</div>
+        <h2 class="game-title">Game Slot 7</h2>
+        <p class="game-text">Coming soon.</p>
+      </article>
+
+      <article class="game-card locked-card">
+        <span class="locked-badge">LOCKED</span>
+        <div class="locked-icon">?</div>
+        <h2 class="game-title">Game Slot 8</h2>
+        <p class="game-text">Coming soon.</p>
       </article>
     </section>
 
-    <section class="button-zone">
-      <div class="portal-message" id="portal-message">
-        Song is on. World is awake.
-      </div>
-
-      <button class="portal-button" id="portal-button" type="button">
-        ENTER PIXELPRIX
-      </button>
-
-      <div class="song-line" id="song-line">
-        ♪ PixelPrix song ready
-      </div>
-    </section>
+    <footer class="footer">
+      CyberCade dashboard keeps games separate. PixelPrix is one game slot.
+    </footer>
   </main>
-
-  <audio
-    id="cybercade-song"
-    preload="auto"
-    autoplay
-    loop
-    playsinline
-    src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/CyberCade_PixelPrix_60s.title-htlm.mp3">
-  </audio>
-
-  <script>
-    (function () {
-      "use strict";
-
-      const body = document.body;
-      const song = document.getElementById("cybercade-song");
-      const line = document.getElementById("song-line");
-      const button = document.getElementById("portal-button");
-
-      let portalOpen = false;
-
-      function trySong() {
-        song.volume = 1;
-
-        const attempt = song.play();
-
-        if (attempt && typeof attempt.then === "function") {
-          attempt.then(function () {
-            line.textContent = "♪ PixelPrix song playing";
-          }).catch(function () {
-            line.textContent = "tap to start the song";
-            unlockOnFirstTap();
-          });
-        }
-      }
-
-      function unlockOnFirstTap() {
-        function unlock() {
-          song.play().then(function () {
-            line.textContent = "♪ PixelPrix song playing";
-          }).catch(function () {
-            line.textContent = "♪ PixelPrix song ready";
-          });
-        }
-
-        document.addEventListener("pointerdown", unlock, { once: true });
-        document.addEventListener("touchstart", unlock, { once: true });
-        document.addEventListener("click", unlock, { once: true });
-      }
-
-      function openPortal() {
-        portalOpen = true;
-        body.classList.add("open");
-        button.textContent = "TAP TO ENTER PIXELPRIX";
-        trySong();
-      }
-
-      function enterGame() {
-        body.classList.add("entering");
-        trySong();
-
-        setTimeout(function () {
-          window.location.href = "pixelprix.html";
-        }, 650);
-      }
-
-      button.addEventListener("click", function () {
-        if (!portalOpen) {
-          openPortal();
-          return;
-        }
-
-        enterGame();
-      });
-
-      window.addEventListener("DOMContentLoaded", trySong);
-      window.addEventListener("pageshow", trySong);
-    })();
-  </script>
 </body>
 </html>
