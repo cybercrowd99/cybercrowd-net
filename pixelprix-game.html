@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<!--
+  NET FILE: pixelprix-game.html
+  CyberCrowd | PixelPrix Camera Game
+  Purpose: Runs the PixelPrix camera game flow.
+  Owns: voice choice, treasure count, room snap, treasure snaps, naming pause, cleanup, zoom, back, finish.
+  Does NOT own: PixelPrix poster landing, uploads, sync, accounts, provider transport, PING, NET, CORE.
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -118,7 +125,7 @@
       font-weight: 900;
       text-align: center;
       transform: scale(1);
-      transition: transform 160ms ease, opacity 160ms ease;
+      transition: transform 160ms ease;
       user-select: none;
     }
 
@@ -229,9 +236,64 @@
       font-size: clamp(0.78rem, 3.1vw, 0.98rem);
     }
 
+    .setup-area {
+      display: none;
+      gap: 8px;
+      margin-top: 9px;
+    }
+
+    .setup-area.show {
+      display: grid;
+    }
+
+    .voice-choice {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .choice-button {
+      min-height: 58px;
+      border-radius: 18px;
+      padding: 8px;
+      color: #050505;
+      font: inherit;
+      font-size: clamp(0.95rem, 4vw, 1.25rem);
+      font-weight: 900;
+      box-shadow: 0 5px 0 var(--shadow);
+    }
+
+    .choice-button.male {
+      background: var(--blue);
+    }
+
+    .choice-button.female {
+      background: var(--purple);
+    }
+
+    .count-line {
+      display: grid;
+      grid-template-columns: 1fr 92px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .count-input {
+      width: 100%;
+      min-height: 54px;
+      border: 3px solid rgba(255, 211, 77, 0.72);
+      border-radius: 18px;
+      padding: 7px 10px;
+      color: #050505;
+      background: #fff7df;
+      font: inherit;
+      font-size: clamp(1.25rem, 5.4vw, 2rem);
+      font-weight: 900;
+      text-align: center;
+    }
+
     .progress {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
       gap: 5px;
       margin-top: 7px;
     }
@@ -253,7 +315,6 @@
 
     .thumbs {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
       gap: 5px;
       margin-top: 6px;
     }
@@ -321,18 +382,18 @@
       display: block;
     }
 
-    .choice-row {
+    .finish-row {
       display: none;
       grid-template-columns: repeat(3, 1fr);
       gap: 7px;
       margin-top: 8px;
     }
 
-    .choice-row.show {
+    .finish-row.show {
       display: grid;
     }
 
-    .choice-button {
+    .finish-button {
       min-height: 52px;
       border-radius: 18px;
       padding: 8px;
@@ -340,15 +401,15 @@
       box-shadow: 0 5px 0 var(--shadow);
     }
 
-    .choice-button.yes {
+    .finish-button.yes {
       background: linear-gradient(135deg, var(--green), #dbff73);
     }
 
-    .choice-button.again {
+    .finish-button.again {
       background: linear-gradient(135deg, var(--gold), #fff1a3);
     }
 
-    .choice-button.home {
+    .finish-button.home {
       background: linear-gradient(135deg, var(--blue), #d8f4ff);
     }
 
@@ -473,24 +534,6 @@
         font-size: clamp(0.72rem, 2.9vw, 0.88rem);
       }
 
-      .progress {
-        margin-top: 5px;
-        gap: 4px;
-      }
-
-      .dot {
-        min-height: 8px;
-      }
-
-      .thumbs {
-        margin-top: 5px;
-        gap: 4px;
-      }
-
-      .thumb {
-        border-radius: 9px;
-      }
-
       .compare-card {
         min-height: 78px;
       }
@@ -500,51 +543,6 @@
         border-radius: 20px;
         padding: 8px 12px;
         font-size: clamp(0.95rem, 4.1vw, 1.95rem);
-      }
-
-      .choice-button {
-        min-height: 46px;
-        font-size: clamp(0.74rem, 3.1vw, 0.95rem);
-      }
-    }
-
-    @media (max-height: 600px) {
-      :root {
-        --android-bottom-safe: 62px;
-      }
-
-      .page {
-        gap: 4px;
-        padding:
-          max(4px, env(safe-area-inset-top))
-          7px
-          max(var(--android-bottom-safe), env(safe-area-inset-bottom));
-      }
-
-      .panel {
-        padding: 8px;
-      }
-
-      h1 {
-        font-size: clamp(1.28rem, 6.4vw, 3.2rem);
-      }
-
-      p {
-        font-size: clamp(0.78rem, 3vw, 0.98rem);
-      }
-
-      .small {
-        display: block;
-        font-size: clamp(0.68rem, 2.75vw, 0.82rem);
-      }
-
-      .compare-card {
-        min-height: 68px;
-      }
-
-      button {
-        min-height: 44px;
-        font-size: clamp(0.88rem, 3.8vw, 1.7rem);
       }
     }
   </style>
@@ -575,44 +573,67 @@
         <h1 id="title">PixelPrix</h1>
 
         <p id="prompt">
-          Let’s make a Tiny Tidy adventure.
+          Choose how the robot talks.
         </p>
 
         <p class="small" id="helper">
-          Camera opens here. Pictures stay on this device.
+          Pick Male or Female. Then choose how many treasures.
         </p>
 
-        <div class="progress" id="progress">
-          <div class="dot now"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
+        <div class="setup-area" id="voice-choice">
+          <div class="voice-choice">
+            <button class="choice-button male" id="voice-male" type="button">
+              🤖 Male
+            </button>
+
+            <button class="choice-button female" id="voice-female" type="button">
+              🤖 Female
+            </button>
+          </div>
         </div>
 
-        <div class="thumbs" id="thumbs">
-          <div class="thumb">1</div>
-          <div class="thumb">2</div>
-          <div class="thumb">3</div>
-          <div class="thumb">4</div>
-          <div class="thumb">5</div>
+        <div class="setup-area" id="count-choice">
+          <p>
+            How many treasures today?
+          </p>
+
+          <div class="count-line">
+            <input
+              class="count-input"
+              id="treasure-count"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              max="25"
+              value="5"
+              aria-label="How many treasures today?"
+            />
+
+            <button id="count-ok" type="button">
+              OK
+            </button>
+          </div>
         </div>
+
+        <div class="progress" id="progress"></div>
+
+        <div class="thumbs" id="thumbs"></div>
 
         <div class="compare" id="compare">
           <div class="compare-card" id="before-card">Before</div>
           <div class="compare-card" id="after-card">After</div>
         </div>
 
-        <div class="choice-row" id="choice-row">
-          <button class="choice-button yes" id="like-yes" type="button">
+        <div class="finish-row" id="finish-row">
+          <button class="finish-button yes" id="like-yes" type="button">
             YES 😄
           </button>
 
-          <button class="choice-button again" id="like-again" type="button">
+          <button class="finish-button again" id="like-again" type="button">
             PLAY AGAIN
           </button>
 
-          <button class="choice-button home" id="like-home" type="button">
+          <button class="finish-button home" id="like-home" type="button">
             GO HOME
           </button>
         </div>
@@ -621,7 +642,7 @@
 
     <section class="button-row" id="button-row">
       <button id="main-button" type="button">
-        OPEN CAMERA
+        START
       </button>
     </section>
   </main>
@@ -649,15 +670,16 @@
       });
 
       const state = {
-        phase: "intro",
-        guide: "star",
+        phase: "voice-choice",
+        robotVoice: "female",
         stream: null,
         roomPic: "",
         cleanPic: "",
         items: [],
         cleanupIndex: 0,
         targetCount: 5,
-        phaseHistory: []
+        phaseHistory: [],
+        namingTreasureNumber: 0
       };
 
       const el = {
@@ -668,12 +690,18 @@
         title: document.getElementById("title"),
         prompt: document.getElementById("prompt"),
         helper: document.getElementById("helper"),
+        voiceChoice: document.getElementById("voice-choice"),
+        voiceMale: document.getElementById("voice-male"),
+        voiceFemale: document.getElementById("voice-female"),
+        countChoice: document.getElementById("count-choice"),
+        treasureCount: document.getElementById("treasure-count"),
+        countOk: document.getElementById("count-ok"),
         progress: document.getElementById("progress"),
         thumbs: document.getElementById("thumbs"),
         compare: document.getElementById("compare"),
         beforeCard: document.getElementById("before-card"),
         afterCard: document.getElementById("after-card"),
-        choiceRow: document.getElementById("choice-row"),
+        finishRow: document.getElementById("finish-row"),
         likeYes: document.getElementById("like-yes"),
         likeAgain: document.getElementById("like-again"),
         likeHome: document.getElementById("like-home"),
@@ -686,12 +714,64 @@
         zoomClose: document.getElementById("zoom-close")
       };
 
-      function loadGuide() {
+      function saveRobotVoice(mode) {
+        state.robotVoice = mode === "male" ? "male" : "female";
+
         try {
-          state.guide = localStorage.getItem("pixelprixGuide") || "star";
+          localStorage.setItem("pixelprixRobotVoice", state.robotVoice);
+          localStorage.setItem("pixelprixGuide", "robot");
+        } catch (error) {}
+      }
+
+      function loadRobotVoice() {
+        try {
+          const saved = localStorage.getItem("pixelprixRobotVoice") || "female";
+          state.robotVoice = saved === "male" ? "male" : "female";
         } catch (error) {
-          state.guide = "star";
+          state.robotVoice = "female";
         }
+      }
+
+      function readTargetCount() {
+        let count = 5;
+
+        try {
+          count = Number(localStorage.getItem("pixelprixTreasureCount") || 5);
+        } catch (error) {
+          count = 5;
+        }
+
+        count = Math.floor(count);
+
+        if (!count || count < 1) {
+          count = 5;
+        }
+
+        if (count > 25) {
+          count = 25;
+        }
+
+        state.targetCount = count;
+        el.treasureCount.value = String(count);
+      }
+
+      function saveTargetCount() {
+        let count = Math.floor(Number(el.treasureCount.value || 5));
+
+        if (!count || count < 1) {
+          count = 5;
+        }
+
+        if (count > 25) {
+          count = 25;
+        }
+
+        state.targetCount = count;
+        el.treasureCount.value = String(count);
+
+        try {
+          localStorage.setItem("pixelprixTreasureCount", String(count));
+        } catch (error) {}
       }
 
       function speak(text) {
@@ -700,15 +780,11 @@
             return;
           }
 
-          if (state.guide === "voice") {
-            return;
-          }
-
           window.speechSynthesis.cancel();
 
           const voice = new SpeechSynthesisUtterance(text);
           voice.rate = 0.9;
-          voice.pitch = state.guide === "robot" ? 0.85 : 1.12;
+          voice.pitch = state.robotVoice === "male" ? 0.82 : 1.14;
 
           window.speechSynthesis.speak(voice);
         } catch (error) {}
@@ -883,53 +959,63 @@
         el.afterCard.classList.remove("has-pic");
       }
 
-      function hideChoices() {
-        el.choiceRow.classList.remove("show");
+      function hideSetup() {
+        el.voiceChoice.classList.remove("show");
+        el.countChoice.classList.remove("show");
       }
 
-      function showChoices() {
-        el.choiceRow.classList.add("show");
+      function hideFinish() {
+        el.finishRow.classList.remove("show");
+      }
+
+      function showFinish() {
+        el.finishRow.classList.add("show");
       }
 
       function renderDots() {
-        const dots = el.progress.querySelectorAll(".dot");
+        el.progress.innerHTML = "";
+        el.progress.style.gridTemplateColumns = "repeat(" + state.targetCount + ", 1fr)";
 
-        dots.forEach(function (dot, index) {
-          dot.classList.remove("done", "now");
+        for (let i = 0; i < state.targetCount; i += 1) {
+          const dot = document.createElement("div");
+          dot.className = "dot";
 
-          if (index < state.items.length) {
-            dot.classList.add("done");
-          } else if (index === state.items.length && state.phase === "items") {
-            dot.classList.add("now");
-          }
-        });
-
-        if (state.phase === "cleanup") {
-          dots.forEach(function (dot, index) {
-            dot.classList.remove("done", "now");
-
-            if (index < state.cleanupIndex) {
+          if (state.phase === "items" || state.phase === "name-treasure") {
+            if (i < state.items.length) {
               dot.classList.add("done");
-            } else if (index === state.cleanupIndex) {
+            }
+
+            if (i === state.items.length && state.phase === "items") {
               dot.classList.add("now");
             }
-          });
-        }
+          }
 
-        if (
-          state.phase === "done" ||
-          state.phase === "difference" ||
-          state.phase === "finish"
-        ) {
-          dots.forEach(function (dot) {
+          if (state.phase === "cleanup") {
+            if (i < state.cleanupIndex) {
+              dot.classList.add("done");
+            } else if (i === state.cleanupIndex) {
+              dot.classList.add("now");
+            }
+          }
+
+          if (
+            state.phase === "ready" ||
+            state.phase === "after-ready" ||
+            state.phase === "after" ||
+            state.phase === "difference" ||
+            state.phase === "done" ||
+            state.phase === "finish"
+          ) {
             dot.classList.add("done");
-            dot.classList.remove("now");
-          });
+          }
+
+          el.progress.appendChild(dot);
         }
       }
 
       function renderThumbs() {
         el.thumbs.innerHTML = "";
+        el.thumbs.style.gridTemplateColumns = "repeat(" + Math.min(state.targetCount, 5) + ", 1fr)";
 
         for (let i = 0; i < state.targetCount; i += 1) {
           const box = document.createElement("div");
@@ -963,17 +1049,39 @@
         }
 
         state.phase = phase;
-        el.compare.classList.remove("show");
-        hideChoices();
+
+        hideSetup();
+        hideFinish();
         hideCameraTouch();
         clearCompareClicks();
+        el.compare.classList.remove("show");
+
+        if (phase === "voice-choice") {
+          stopCamera();
+          setStill("");
+          el.title.textContent = "PixelPrix";
+          el.prompt.textContent = "Choose how the robot talks.";
+          el.helper.textContent = "Pick Male or Female.";
+          el.voiceChoice.classList.add("show");
+          setButton("CHOOSE VOICE");
+        }
+
+        if (phase === "count-choice") {
+          stopCamera();
+          setStill("");
+          el.title.textContent = "Treasures";
+          el.prompt.textContent = "How many treasures today?";
+          el.helper.textContent = "Default is 5. Pick the number, then tap OK.";
+          el.countChoice.classList.add("show");
+          setButton("OK");
+        }
 
         if (phase === "intro") {
           stopCamera();
           setStill("");
           el.title.textContent = "PixelPrix";
           el.prompt.textContent = "Let’s make a Tiny Tidy adventure.";
-          el.helper.textContent = "Open the camera. Take one room picture. Then we find five treasures.";
+          el.helper.textContent = "Open the camera. Take one room picture. Then we find " + state.targetCount + " treasures.";
           setButton("OPEN CAMERA");
         }
 
@@ -989,24 +1097,39 @@
           stopCamera();
           setStill(state.roomPic);
           el.title.textContent = "Tiny Tidy";
-          el.prompt.textContent = "Five treasures today.";
-          el.helper.textContent = "Now we take five close-up pictures. One treasure at a time.";
+          el.prompt.textContent = state.targetCount + " treasures today.";
+          el.helper.textContent = "Now we take close-up pictures. One treasure at a time.";
           setButton("START TINY TIDY");
         }
 
         if (phase === "items") {
           el.title.textContent = "Treasure " + (state.items.length + 1);
           el.prompt.textContent = "Point close. Take the treasure picture.";
-          el.helper.textContent = "Tap the screen when you see the treasure. Then press TAKE TREASURE PIC.";
+          el.helper.textContent = "Picture " + (state.items.length + 1) + " of " + state.targetCount + ".";
           showCameraTouch("Tap the screen when you see the treasure.");
-          setButton("TAKE TREASURE PIC");
+          setButton("TAKE SNAP");
+        }
+
+        if (phase === "name-treasure") {
+          stopCamera();
+          const item = state.items[state.items.length - 1];
+
+          if (item && item.pic) {
+            setStill(item.pic);
+          }
+
+          state.namingTreasureNumber = state.items.length;
+          el.title.textContent = "Treasure " + state.namingTreasureNumber;
+          el.prompt.textContent = "Okay, what is this treasure?";
+          el.helper.textContent = "Say the word. The game saves the voice replay for cleanup.";
+          setButton("RECORD NAME");
         }
 
         if (phase === "ready") {
           stopCamera();
           setStill(state.roomPic);
           el.title.textContent = "Game Ready";
-          el.prompt.textContent = "Your five treasures are ready.";
+          el.prompt.textContent = "Your treasures are ready.";
           el.helper.textContent = "Tap a treasure picture to make it bigger. Then start the clean-up hunt.";
           setButton("PLAY CLEAN UP");
         }
@@ -1021,9 +1144,17 @@
           }
 
           el.title.textContent = "Find It";
-          el.prompt.textContent = "Find treasure " + (state.cleanupIndex + 1) + ". Move it home.";
-          el.helper.textContent = "When it is picked up, tap FOUND IT. Tap the picture below to zoom.";
+          el.prompt.textContent = "Go find treasure " + (state.cleanupIndex + 1) + ".";
+          el.helper.textContent = "Listen for the saved voice replay. When it is picked up, tap FOUND IT.";
           setButton("FOUND IT");
+
+          window.setTimeout(function () {
+            if (window.PixelPrixVoice && window.PixelPrixVoice.cueFind) {
+              window.PixelPrixVoice.cueFind(state.cleanupIndex + 1);
+            } else {
+              speak("Go find treasure " + (state.cleanupIndex + 1) + ".");
+            }
+          }, 250);
         }
 
         if (phase === "after-ready") {
@@ -1081,7 +1212,7 @@
           el.title.textContent = "PixelPrix Complete";
           el.prompt.textContent = "Did you like this?";
           el.helper.textContent = "Choose what happens next.";
-          showChoices();
+          showFinish();
           setButton("PLAY AGAIN");
         }
 
@@ -1090,7 +1221,50 @@
         setRealViewportHeight();
       }
 
+      function chooseVoice(mode) {
+        saveRobotVoice(mode);
+        speak(mode === "male" ? "Male robot selected." : "Female robot selected.");
+        setPhase("count-choice");
+      }
+
+      function finishNamingAndContinue() {
+        if (state.items.length >= state.targetCount) {
+          speak("All treasures ready.");
+          setPhase("ready");
+          return;
+        }
+
+        openCamera().then(function (ok) {
+          if (ok) {
+            setPhase("items");
+            speak("Treasure " + (state.items.length + 1) + ".");
+          }
+        });
+      }
+
+      function askTreasureName() {
+        const treasureNumber = state.namingTreasureNumber || state.items.length;
+
+        if (window.PixelPrixVoice && window.PixelPrixVoice.ask) {
+          window.PixelPrixVoice.ask(treasureNumber, finishNamingAndContinue);
+          return;
+        }
+
+        finishNamingAndContinue();
+      }
+
       async function mainAction() {
+        if (state.phase === "voice-choice") {
+          return;
+        }
+
+        if (state.phase === "count-choice") {
+          saveTargetCount();
+          setPhase("intro");
+          speak("Let us make a Tiny Tidy adventure.");
+          return;
+        }
+
         if (state.phase === "intro") {
           const ok = await openCamera();
 
@@ -1132,22 +1306,19 @@
           });
 
           beep();
+          setPhase("name-treasure");
+          speak("Okay, what is this treasure?");
+          return;
+        }
 
-          if (state.items.length >= state.targetCount) {
-            speak("Five treasures ready.");
-            setPhase("ready");
-            return;
-          }
-
-          speak("Got it. Next treasure.");
-          setPhase("items");
+        if (state.phase === "name-treasure") {
+          askTreasureName();
           return;
         }
 
         if (state.phase === "ready") {
           state.cleanupIndex = 0;
           setPhase("cleanup");
-          speak("Find treasure one.");
           return;
         }
 
@@ -1161,7 +1332,6 @@
             return;
           }
 
-          speak("Next treasure.");
           setPhase("cleanup");
           return;
         }
@@ -1205,8 +1375,13 @@
       function goBack(event) {
         event.preventDefault();
 
-        if (state.phase === "intro") {
+        if (state.phase === "voice-choice") {
           window.location.href = "pixelprix.html";
+          return;
+        }
+
+        if (state.phase === "count-choice") {
+          setPhase("voice-choice", { skipHistory: true });
           return;
         }
 
@@ -1214,6 +1389,16 @@
           state.items.pop();
           setPhase("items", { skipHistory: true });
           speak("Back one treasure.");
+          return;
+        }
+
+        if (state.phase === "name-treasure" && state.items.length > 0) {
+          state.items.pop();
+          openCamera().then(function (ok) {
+            if (ok) {
+              setPhase("items", { skipHistory: true });
+            }
+          });
           return;
         }
 
@@ -1243,8 +1428,9 @@
         state.items = [];
         state.cleanupIndex = 0;
         state.phaseHistory = [];
+        state.namingTreasureNumber = 0;
 
-        setPhase("intro", { skipHistory: true });
+        setPhase("voice-choice", { skipHistory: true });
       }
 
       function likeYes() {
@@ -1257,6 +1443,20 @@
       function goHome() {
         window.location.href = "pixelprix.html";
       }
+
+      el.voiceMale.addEventListener("click", function () {
+        chooseVoice("male");
+      });
+
+      el.voiceFemale.addEventListener("click", function () {
+        chooseVoice("female");
+      });
+
+      el.countOk.addEventListener("click", function () {
+        saveTargetCount();
+        setPhase("intro");
+        speak("Let us make a Tiny Tidy adventure.");
+      });
 
       el.backGame.addEventListener("click", goBack);
       el.mainButton.addEventListener("click", mainAction);
@@ -1276,8 +1476,9 @@
 
       window.addEventListener("pagehide", stopCamera);
 
-      loadGuide();
-      setPhase("intro", { skipHistory: true });
+      loadRobotVoice();
+      readTargetCount();
+      setPhase("voice-choice", { skipHistory: true });
     })();
   </script>
 
