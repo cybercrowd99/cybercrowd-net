@@ -1,47 +1,92 @@
-// admin/access_classify.js
+/**
+ * NET FILE: functions/access/classify.js
+ * Repository: cybercrowd99/cybercrowd-net
+ * Title: CyberCrowd Access Signal Classifier
+ *
+ * Purpose:
+ * Classify which access signal is present on an incoming request.
+ *
+ * Owns:
+ * Access-signal presence classification and diagnostic response.
+ *
+ * Does NOT own:
+ * Authentication, token validation, authorization decisions,
+ * session creation, account lookup, identity storage, or admin access.
+ */
+
 export async function onRequest(context) {
-  const req = context.request;
-  const headers = req.headers;
+  const request = context.request;
+  const headers = request.headers;
 
-  // incoming signals
-  const atBat =
-    headers.get("authorization") ||
-    headers.get("x-at-bat-token") ||
-    null;
-
-  const cfAccess = headers.get("cf-access-jwt-assertion") || null;
+  const authorization = headers.get("authorization") || null;
+  const accessToken = headers.get("x-access-token") || null;
+  const cloudflareAccess =
+    headers.get("cf-access-jwt-assertion") || null;
 
   const cookieHeader = headers.get("cookie") || "";
-  const cookies = Object.fromEntries(
-    cookieHeader.split(";").map(v => {
-      const [k, ...rest] = v.trim().split("=");
-      return [k, rest.join("=")];
-    })
-  );
+  const cookies = parseCookies(cookieHeader);
+  const cybercrowdAccess = cookies.cc_access || null;
 
-  const cc = cookies["cc_at_bat"] || null;
+  let accessLevel = "anonymous";
 
-  // baseball‑mapped access lanes
-  let lane = "dugout"; // anonymous
+  if (authorization) {
+    accessLevel = "bearer";
+  } else if (accessToken) {
+    accessLevel = "access-token";
+  } else if (cloudflareAccess) {
+    accessLevel = "cloudflare-access";
+  } else if (cybercrowdAccess) {
+    accessLevel = "cybercrowd-token";
+  } else if (Object.keys(cookies).length > 0) {
+    accessLevel = "session-cookie";
+  }
 
-  if (atBat) lane = "at-bat";
-  else if (cfAccess) lane = "clubhouse-access";
-  else if (cc) lane = "dugout-token";
-  else if (cookieHeader.length > 0) lane = "cookie-signal";
-
-  return json({
-    lane,
+  return jsonResponse({
+    classified: true,
+    accessLevel,
     signals: {
-      atBat: !!atBat,
-      cfAccess: !!cfAccess,
-      dugoutToken: !!cc,
-      hasCookies: cookieHeader.length > 0
+      authorization: Boolean(authorization),
+      accessToken: Boolean(accessToken),
+      cloudflareAccess: Boolean(cloudflareAccess),
+      cybercrowdToken: Boolean(cybercrowdAccess),
+      hasCookies: Object.keys(cookies).length > 0
     }
   });
 }
 
-function json(obj) {
-  return new Response(JSON.stringify(obj, null, 2), {
-    headers: { "Content-Type": "application/json" }
+function parseCookies(cookieHeader) {
+  const cookies = {};
+
+  for (const entry of cookieHeader.split(";")) {
+    const trimmed = entry.trim();
+
+    if (!trimmed) {
+      continue;
+    }
+
+    const separatorIndex = trimmed.indexOf("=");
+
+    if (separatorIndex <= 0) {
+      continue;
+    }
+
+    const name = trimmed.slice(0, separatorIndex).trim();
+    const value = trimmed.slice(separatorIndex + 1);
+
+    if (name) {
+      cookies[name] = value;
+    }
+  }
+
+  return cookies;
+}
+
+function jsonResponse(data) {
+  return new Response(JSON.stringify(data, null, 2), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store"
+    }
   });
 }
