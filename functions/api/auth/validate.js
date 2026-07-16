@@ -1,5 +1,5 @@
 export async function onRequest(context) {
-  const { CC_SESSION_SECRET } = context.env;
+  const CC_SESSION_SECRET = process.env.CC_SESSION_SECRET;
   const req = context.request;
 
   const token =
@@ -43,7 +43,9 @@ export async function onRequest(context) {
   );
 
   const expectedArray = Array.from(new Uint8Array(expectedBuffer));
-  const expectedHex = expectedArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  const expectedHex = expectedArray
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
 
   const valid = expectedHex === signatureHex;
 
