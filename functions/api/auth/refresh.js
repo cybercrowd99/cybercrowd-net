@@ -1,5 +1,5 @@
 export async function onRequest(context) {
-  const { CC_SESSION_SECRET } = context.env;
+  const CC_SESSION_SECRET = process.env.CC_SESSION_SECRET;
   const req = context.request;
 
   const token =
