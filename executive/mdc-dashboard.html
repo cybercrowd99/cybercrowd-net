@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en"
+      data-surface="executive">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+CyberCrowd MDC Executive Dashboard
+</title>
+
+<link rel="stylesheet" href="./mdc-dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<!--
+============================================================
+
+[NET]
+
+File:
+executive/mdc-dashboard.html
+
+Purpose:
+Executive observation surface for CyberCrowd Metadata Center
+visibility through governed NET → MDC linkage.
+
+Owns:
+- executive presentation layer
+- MDC visibility panels
+- capability awareness display
+- evidence chain status display
+- operator observation indicators
+
+Does NOT own:
+- metadata editing
+- proof creation
+- ledger mutation
+- permissions
+- identity authority
+- MDC service control
+
+Boundary:
+
+EXECUTIVE USER
+        |
+        ▼
+NET EXECUTIVE DASHBOARD
+        |
+        ▼
+NET MDC LINKAGE
+        |
+        ▼
+MDC READ SERVICES
+
+Core Rule:
+
+NET observes MDC.
+NET does not control MDC.
+
+============================================================
+-->
+
+
+<header class="dashboard-header">
+
+
+<div class="header-title">
+
+<h1>
+CyberCrowd MDC Executive Dashboard
+</h1>
+
+<p>
+Metadata Center Visibility Surface
+</p>
+
+</div>
+
+
+
+<div class="governed-state">
+
+<span>
+MDC State
+</span>
+
+<strong id="governed-state">
+Checking...
+</strong>
+
+</div>
+
+
+
+<div class="heartbeat">
+
+<span>
+Heartbeat
+</span>
+
+<strong id="mdc-heartbeat">
+Checking...
+</strong>
+
+</div>
+
+
+
+<div class="visibility-mode">
+
+<span>
+Visibility
+</span>
+
+<strong id="mdc-visibility-mode">
+Checking...
+</strong>
+
+</div>
+
+
+
+</header>
+
+
+
+
+
+<main class="dashboard-grid">
+
+
+
+
+
+<section class="panel"
+         data-capability="query">
+
+
+<header>
+
+<h2>
+System Status
+</h2>
+
+<span class="capability-tag">
+QUERY
+</span>
+
+</header>
+
+
+<div id="mdc-status">
+
+Loading MDC status...
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<section class="panel"
+         data-capability="proof">
+
+
+<header>
+
+<h2>
+Evidence Chain
+</h2>
+
+<span class="capability-tag">
+PROOF
+</span>
+
+</header>
+
+
+<div id="mdc-evidence">
+
+
+<div>
+Chain Depth:
+<span id="chain-depth">
+--
+</span>
+</div>
+
+
+
+<div>
+Chain State:
+<span id="chain-state">
+--
+</span>
+</div>
+
+
+
+<div class="chain-bar">
+
+<div id="chain-bar-fill"></div>
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="panel"
+         data-capability="ledger">
+
+
+<header>
+
+<h2>
+Ledger Visibility
+</h2>
+
+<span class="capability-tag">
+LEDGER
+</span>
+
+</header>
+
+
+
+<div id="mdc-ledger">
+
+
+
+<div class="timeline-rail"
+     id="ledger-timeline">
+
+</div>
+
+
+
+<div id="ledger-state">
+
+Loading ledger references...
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="panel"
+         data-capability="session">
+
+
+<header>
+
+<h2>
+NET Linkage
+</h2>
+
+<span class="capability-tag">
+SESSION
+</span>
+
+</header>
+
+
+
+<div id="net-linkage">
+
+
+<div>
+Session:
+<span id="active-session">
+--
+</span>
+</div>
+
+
+
+<div>
+Session Age:
+<span id="session-age">
+--
+</span>
+</div>
+
+
+
+<div>
+Request IDs:
+<span id="request-ids">
+--
+</span>
+</div>
+
+
+
+<div>
+Link State:
+<span id="link-state">
+--
+</span>
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="panel"
+         data-capability="audit">
+
+
+<header>
+
+<h2>
+Audit Observation
+</h2>
+
+<span class="capability-tag">
+AUDIT
+</span>
+
+</header>
+
+
+
+<div id="mdc-audit">
+
+
+<div>
+Last Audit Tick:
+<span id="audit-timestamp">
+--
+</span>
+</div>
+
+
+
+<div>
+Audit Drift:
+<span id="audit-drift">
+--
+</span>
+</div>
+
+
+
+<div>
+Observation State:
+<span id="audit-state">
+--
+</span>
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="panel"
+         data-capability="capability">
+
+
+<header>
+
+<h2>
+MDC Capabilities
+</h2>
+
+<span class="capability-tag">
+MAP
+</span>
+
+</header>
+
+
+
+<div class="capability-rail"
+     id="capability-rail">
+
+Loading capability rail...
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+</main>
+
+
+
+
+
+
+<footer class="doctrine-footer">
+
+NET observes MDC.
+NET does not control MDC.
+
+<span id="dashboard-timestamp">
+--
+</span>
+
+</footer>
+
+
+
+
+
+<script type="module"
+        src="./mdc-dashboard.js">
+</script>
+
+
+</body>
+
+</html>
