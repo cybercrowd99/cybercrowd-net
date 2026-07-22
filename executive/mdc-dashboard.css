@@ -1,0 +1,471 @@
+/* ============================================================
+   [NET]
+   CyberCrowd NET
+
+   File:
+   executive/mdc-dashboard.css
+
+   Purpose:
+   Executive visual layer for MDC observation dashboard.
+
+   Owns:
+   - dashboard layout
+   - panel hierarchy
+   - operator indicators
+   - timeline presentation
+   - capability visualization
+
+   Does NOT own:
+   - MDC state decisions
+   - request routing
+   - metadata handling
+   - proof validation
+   - ledger operations
+
+   Core Rule:
+
+   NET displays MDC visibility.
+   NET does not control MDC.
+
+   ============================================================ */
+
+
+
+:root {
+
+  --background:
+    #070b12;
+
+  --panel:
+    #101722;
+
+  --panel-border:
+    #263344;
+
+  --text:
+    #e8f1ff;
+
+  --muted:
+    #8fa3b8;
+
+  --accent:
+    #00eaff;
+
+  --success:
+    #22c55e;
+
+  --warning:
+    #eab308;
+
+  --danger:
+    #ef4444;
+
+}
+
+
+
+* {
+
+  box-sizing:
+    border-box;
+
+}
+
+
+
+body {
+
+  margin:
+    0;
+
+  padding:
+    24px;
+
+  background:
+    var(--background);
+
+  color:
+    var(--text);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+}
+
+
+
+.dashboard-header {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+
+  gap:
+    16px;
+
+  padding:
+    20px;
+
+  border:
+    1px solid var(--panel-border);
+
+  background:
+    var(--panel);
+
+}
+
+
+
+.header-title h1 {
+
+  margin:
+    0;
+
+  font-size:
+    28px;
+
+}
+
+
+
+.header-title p {
+
+  margin-top:
+    8px;
+
+  color:
+    var(--muted);
+
+}
+
+
+
+.governed-state,
+.heartbeat,
+.visibility-mode {
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    6px;
+
+  min-width:
+    130px;
+
+}
+
+
+
+.governed-state span,
+.heartbeat span,
+.visibility-mode span {
+
+  color:
+    var(--muted);
+
+  font-size:
+    12px;
+
+  text-transform:
+    uppercase;
+
+}
+
+
+
+.governed-state strong,
+.heartbeat strong,
+.visibility-mode strong {
+
+  font-size:
+    15px;
+
+  color:
+    var(--accent);
+
+}
+
+
+
+
+
+.dashboard-grid {
+
+  margin-top:
+    24px;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(300px, 1fr));
+
+  gap:
+    20px;
+
+}
+
+
+
+
+
+.panel {
+
+  background:
+    var(--panel);
+
+  border:
+    1px solid var(--panel-border);
+
+  padding:
+    18px;
+
+  min-height:
+    180px;
+
+}
+
+
+
+
+
+.panel header {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+
+  margin-bottom:
+    18px;
+
+}
+
+
+
+.panel h2 {
+
+  margin:
+    0;
+
+  font-size:
+    18px;
+
+}
+
+
+
+
+
+.capability-tag {
+
+  padding:
+    4px 10px;
+
+  border:
+    1px solid var(--accent);
+
+  color:
+    var(--accent);
+
+  font-size:
+    11px;
+
+  border-radius:
+    12px;
+
+}
+
+
+
+
+
+.chain-bar {
+
+  width:
+    100%;
+
+  height:
+    12px;
+
+  margin-top:
+    18px;
+
+  background:
+    #1d2938;
+
+  overflow:
+    hidden;
+
+}
+
+
+
+#chain-bar-fill {
+
+  height:
+    100%;
+
+  width:
+    0%;
+
+  background:
+    var(--success);
+
+}
+
+
+
+
+
+.timeline-rail {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    16px;
+
+  min-height:
+    40px;
+
+  padding:
+    12px 0;
+
+}
+
+
+
+.timeline-marker {
+
+  width:
+    14px;
+
+  height:
+    14px;
+
+  border-radius:
+    50%;
+
+  border:
+    2px solid var(--accent);
+
+}
+
+
+
+
+
+.capability-rail {
+
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    10px;
+
+}
+
+
+
+.capability-item {
+
+  padding:
+    8px 12px;
+
+  border:
+    1px solid var(--panel-border);
+
+  background:
+    #0b111b;
+
+}
+
+
+
+
+
+#net-linkage span,
+#mdc-audit span,
+#ledger-state span {
+
+  color:
+    var(--accent);
+
+}
+
+
+
+
+
+.doctrine-footer {
+
+  margin-top:
+    24px;
+
+  padding:
+    12px;
+
+  border-top:
+    1px solid var(--panel-border);
+
+  color:
+    var(--muted);
+
+  font-size:
+    12px;
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+}
+
+
+
+@media(max-width:700px) {
+
+
+  body {
+
+    padding:
+      12px;
+
+  }
+
+
+  .dashboard-header {
+
+    flex-direction:
+      column;
+
+    align-items:
+      flex-start;
+
+  }
+
+
+}
