@@ -1,53 +1,55 @@
 name = "cybercrowd-net"
-main = "worker.js"
+pages_build_output_dir = "."
 compatibility_date = "2026-05-09"
 workers_dev = true
-
-[assets]
-directory = "./"
-binding = "ASSETS"
-run_worker_first = true
-html_handling = "auto-trailing-slash"
-not_found_handling = "404-page"
 
 [observability.logs]
 enabled = true
 
 [[r2_buckets]]
-binding = "TEASER_BUCKET"
+binding = "LEDGER_EVENTS"
+bucket_name = "cybercrowd-ledger-events"
+
+[[r2_buckets]]
+binding = "REPLAY"
+bucket_name = "cybercrowd-replay"
+
+[[r2_buckets]]
+binding = "DEADLETTER"
+bucket_name = "cybercrowd-deadletter"
+
+[[r2_buckets]]
+binding = "ARCHIVE"
+bucket_name = "cybercrowd-archive"
+
+[[r2_buckets]]
+binding = "LINEAGE"
+bucket_name = "cybercrowd-lineage"
+
+[[r2_buckets]]
+binding = "GOVERNANCE"
+bucket_name = "cybercrowd-governance"
+
+[[r2_buckets]]
+binding = "NODE_HEARTBEATS"
+bucket_name = "cybercrowd-node-heartbeats"
+
+[[r2_buckets]]
+binding = "SEQUESTER"
+bucket_name = "cybercrowd-sequester"
+
+[[r2_buckets]]
+binding = "GRAPHICS"
+bucket_name = "cybercrowd-graphics"
+
+[[r2_buckets]]
+binding = "TEASERS"
 bucket_name = "cybercrowd-teasers"
 
-[[kv_namespaces]]
-binding = "IDENTITY"
-id = "fe654980fc014402acd73c87ea04aa61"
+[[r2_buckets]]
+binding = "SURFACE_CACHE"
+bucket_name = "cybercrowd-surface-cache"
 
-[[kv_namespaces]]
-binding = "SIGNUP_RATE_LIMIT"
-id = "c11f2d19270443728b757b602a71c7e4"
-
-[[kv_namespaces]]
-binding = "USERS"
-id = "211ec37065aa46269485c90c2eb8936e"
-
-# Allocator DB/debug storage.
-# Uses allocator:* keys.
-# Durable Object remains the collision-safe authority.
-[[kv_namespaces]]
-binding = "ALLOCATOR_DB"
-id = "fe654980fc014402acd73c87ea04aa61"
-
-[vars]
-PORT_MIN = "49152"
-PORT_MAX = "65535"
-LEASE_TTL_MS = "30000"
-HEARTBEAT_GRACE_MS = "10000"
-MAX_RETRIES_PER_REQUEST = "8"
-ALLOCATOR_OBJECT_NAME = "global-ephemeral-port-allocator"
-
-[[durable_objects.bindings]]
-name = "EPHEMERAL_PORT_ALLOCATOR_DO"
-class_name = "EphemeralPortAllocatorDurableObject"
-
-[[migrations]]
-tag = "v1_ephemeral_port_allocator"
-new_sqlite_classes = ["EphemeralPortAllocatorDurableObject"]
+[[r2_buckets]]
+binding = "ALBUM"
+bucket_name = "cybercrowd-album"
