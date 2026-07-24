@@ -1,10 +1,6 @@
 name = "cybercrowd-net"
 pages_build_output_dir = "."
 compatibility_date = "2026-05-09"
-workers_dev = true
-
-[observability.logs]
-enabled = true
 
 [[r2_buckets]]
 binding = "LEDGER_EVENTS"
