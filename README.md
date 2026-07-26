@@ -1,46 +1,60 @@
-# CyberCrowd / RetenRecords Web Foundation
+CyberCrowd / RetenRecords Web Foundation
 
-This repository supports development for CyberCrowd.net and RetenRecords. The official public platform home is CyberCrowd.net.
+Building the Foundation for CyberCrowd.net
 
-## Overview
+This repository supports the development of CyberCrowd.net and RetenRecords.
 
-CyberCrowd Net is a discovery-first live media, camera-access, advertising, accessibility, safety, creator-income, viewer-participation, public-discourse, monetary, and digital platform ecosystem.
+The official public platform home is:
 
-CyberCrowd is not a basic website, simple storefront, or single-purpose media page. It is being developed as a larger living platform environment where viewers, subscribers, creators, clients, advertisers, and public participants engage in structured systems for discovery, access, monetization, transparency, safety, and participation.
+CyberCrowd.net
 
-The long-term goal is to create a platform where creators can monetize their work, viewers can participate in platform value, clients can purchase camera/broadcast access, advertisers can gain exposure, and public participants can contribute to platform governance through structured feedback and discourse.
+CyberCrowd is a discovery-first live media and participation platform designed around live culture, camera access, creator income, advertising, accessibility, safety, public discourse, digital commerce, and structured participation.
 
-CyberCrowd is designed to become a coordinated platform for live culture, discovery, media, access, safety, advertising, income independence, public transparency, civic-style discourse, monetary participation, and ecosystem-wide accountability.
+CyberCrowd is not a basic website, simple storefront, or single-purpose media page.
 
-## Purpose
+It is being developed as a coordinated platform environment where:
 
-CyberCrowd Net aims to connect audiences with engaging content and facilitate interactions around live cultural, entertainment, creator, client-driven, music, news, archive, public-discourse, and platform-building opportunities.
+- Viewers discover and participate
+- Creators monetize their work
+- Clients access camera and broadcast services
+- Advertisers gain structured exposure
+- Public participants contribute feedback and discourse
+- Systems preserve transparency, safety, and accountability
 
-The platform is designed to help users discover, participate in, and benefit from live experiences through camera-access tools, WDIG systems, MultiCam trials, CyberShop products, ad exposure systems, accessibility options, and future platform participation mechanisms.
+The long-term mission is to create a platform where attention, access, trust, participation, and value can circulate through clearly defined systems.
 
-A central purpose of CyberCrowd is to support income independence.
+---
 
-For creators, CyberCrowd is intended to provide tools for exposure, monetization, camera packages, broadcast participation, audience access, ad-supported visibility, Reten Records media publishing, CyberShop product sales, and future CRWD participation value.
+Platform Mission
 
-For viewers, CyberCrowd is intended to move beyond passive watching by creating paths for participation, discovery, rewards, access-based interaction, possible future CRWD participation value, and community-driven engagement.
+CyberCrowd exists to connect people with live experiences, creators, products, services, events, media, and future participation opportunities.
 
-For clients, CyberCrowd is intended to support camera packages, live-event participation, broadcast setups, promotional exposure, and hosted digital experiences.
+The platform is designed around:
 
-For advertisers and sponsors, CyberCrowd is intended to support exposure through adWorm-style perimeter advertising, page-based promotional space, live-event placements, sponsor visibility, CyberCourt review pool funding, and future monetization partnerships.
+- Live culture discovery
+- Camera-access systems
+- Creator monetization
+- Viewer participation
+- Client broadcast packages
+- Advertising exposure
+- Accessibility tools
+- Public transparency
+- Digital commerce
+- Community accountability
 
-For accessibility users, CyberCrowd is intended to support future tools such as Blind Slate, Deaf Companion, de-escalation support, Magic Cursor interaction, and device-based assistance systems.
+CyberCrowd aims to transform passive viewing into structured participation.
 
-For guardians and families, CyberCrowd may later support kid-safe, guardian-controlled access lanes with restricted discovery, approved content, spending locks, privacy protections, and child-safety features.
+The goal is not only to entertain.
 
-For public reviewers and community participants, CyberCrowd may support future public discourse, survey response, follow-up questions, repair paths, transparency review, and adWorm-sponsored engagement opportunities.
+The goal is to create opportunity.
 
-CyberCrowd's mission is to build a media platform where live culture, technology, accessibility, advertising, safety, public transparency, monetization, and monetary participation work together toward sustainable creator income, viewer value, public accountability, and ecosystem resilience.
+---
 
-## Income Independence Mission
+Income Independence Mission
 
-CyberCrowd is being built around the idea that digital platforms should create opportunity for the people who use them.
+CyberCrowd is being built around the belief that digital platforms should create value for the people who use them.
 
-The platform's income independence mission includes:
+The income independence mission includes:
 
 - Creator monetization
 - Viewer participation value
@@ -50,151 +64,460 @@ The platform's income independence mission includes:
 - MultiCam trial-to-subscription paths
 - CyberShop access products
 - WDIG host/control access
-- CyberCourt public discourse participation
-- Future adWorm-sponsored review pools
-- Future CRWD platform currency/token systems
-- Future media and archive monetization
-- Future Reten Records music/media opportunities
-- Future Atomic Kricket truth/news systems
-- Future accessibility-based platform tools
-- Future guardian-safe access products
-- Future reviewer compensation pools
-- Future sponsor-funded engagement lanes
+- CyberCourt participation systems
+- Future CRWD platform value systems
+- Reten Records media opportunities
+- Atomic Kricket media systems
+- Accessibility-based platform tools
+- Guardian-safe access products
+- Reviewer compensation opportunities
+- Sponsor-funded engagement lanes
 
-CyberCrowd is intended to help creators earn from content, broadcasts, access, ad exposure, and participation while also exploring ways for viewers and public participants to gain value from discovery, participation, and platform contribution.
+CyberCrowd is designed so creators can earn from:
 
-The goal is not only to entertain users, but to build a platform where participation can become opportunity.
+- Content
+- Broadcasts
+- Access
+- Advertising exposure
+- Products
+- Participation
 
-## Three-Sided Value Circulation
+The objective is structured value creation.
 
-CyberCrowd systems should answer three value questions:
+---
 
-**Me** — how does CyberCrowd survive, grow, pay infrastructure, and remain independent?
+Three-Sided Value Circulation
 
-**Them** — how does the participant, creator, reviewer, viewer, guardian, advertiser, sponsor, client, or partner receive value or compensation?
+CyberCrowd systems are designed around three questions:
 
-**They** — how does the public realm, platform ecosystem, or broader community receive value?
+Me
 
-CyberCrowd should avoid dead money, fake participation, unpaid public labor disguised as engagement, and pay-to-control systems.
+How does CyberCrowd survive, grow, maintain infrastructure, and remain independent?
 
-The goal is structured value circulation with boundaries:
+Them
 
-**Me, Them, and They.**
+How does each participant receive value?
+
+Including:
+
+- Creators
+- Viewers
+- Clients
+- Advertisers
+- Sponsors
+- Reviewers
+- Partners
+- Guardians
+
+They
+
+How does the broader public ecosystem receive value?
+
+CyberCrowd avoids:
+
+- Dead money
+- Fake participation
+- Unpaid public labor disguised as engagement
+- Pay-to-control systems
+
+The principle:
+
+Me. Them. They.
 
 Money, attention, labor, access, and trust should not flow in only one direction.
 
-## Monetary System Direction
+---
 
-CyberCrowd includes a planned monetary system layer connected to platform access, creator income, viewer participation, sponsor exposure, CyberShop products, adWorm advertising, CyberCourt review participation, Reten Records sales, and future CRWD token systems.
+Platform Layers
 
-The current public Page 2 includes a **Monetary System** navigation button as a placeholder for this future direction. This button represents a planned platform section, not a completed payment, banking, or currency system.
+CyberCrowd.net
 
-CyberCrowd's monetary direction should remain staged, transparent, and controlled.
+The primary public platform.
 
-The monetary system may eventually support:
+Responsibilities:
 
-- CyberShop product purchases
-- WDIG Access Pass sales
-- MultiCam trial or subscription access
-- Creator package purchases
-- Viewer upgrades
-- Sponsor placements
-- adWorm advertising campaigns
-- CyberCourt sponsored review pools
-- Reten Records media sales
-- Event access
-- Platform participation rewards
-- Reviewer compensation pools
-- Guardian-approved purchases
-- Creator payouts
-- Client broadcast packages
-- Future CRWD internal value systems
+- Discovery pages
+- Public entry points
+- CyberShop access
+- WDIG information
+- Search-indexed content
+- Future platform portal functions
 
-CyberCrowd should separate early payment products from future platform currency concepts.
+---
 
-Early monetary tools may include:
+WDIG
+
+Device-based host and control layer.
+
+Future responsibilities:
+
+- Device pairing
+- Access control
+- Camera switching
+- Local control
+- Magic Cursor interaction
+- Surface OS concepts
+- Kiosk logic
+- Platform tools
+
+---
+
+CyberShop
+
+Commerce access layer.
+
+CyberShop provides access to:
+
+- WDIG Access Pass
+- MultiCam access products
+- Platform access products
+- CyberCrowd items
+- Reten Records products
+
+CyberShop is the bridge between platform participation and real products.
+
+---
+
+Monetary System
+
+The Monetary System represents CyberCrowd's future financial foundation.
+
+The current Monetary System navigation button is a placeholder representing planned infrastructure.
+
+It is not a completed banking, payment, or currency system.
+
+The system must remain:
+
+- Staged
+- Transparent
+- Auditable
+- Controlled
+
+---
+
+Monetary System Direction
+
+CyberCrowd separates early payment systems from future internal value systems.
+
+Early Monetary Tools
+
+Possible early systems:
 
 - Stripe checkout
 - Stripe product pages
 - Stripe customer portal
-- Stripe Connect for creator payouts
+- Stripe Connect creator payouts
 - Sponsor invoices
 - Manual campaign approval
-- Controlled access passes
-- Verified creator payout onboarding
-- Guardian-approved purchase flows
+- Access passes
+- Creator payout onboarding
 
-Future monetary tools may include:
+Future Monetary Systems
+
+Possible future systems:
 
 - CRWD internal platform credits
 - Viewer participation rewards
-- Reviewer compensation pools
-- Creator revenue shares
+- Creator revenue sharing
 - Sponsor-funded engagement lanes
 - Wallet-style platform balances
 - Internal access credits
-- adWorm-funded public review pools
-- CyberCourt engagement compensation
-- Reten Records catalog purchase flows
+- adWorm-funded review pools
+- CyberCourt compensation systems
+- Reten Records catalog purchases
 
-CyberCrowd should not confuse early Stripe payments with a completed internal currency system.
+CyberCrowd must not confuse payment processing with a completed internal currency system.
 
-The first priority is simple:
+The first priority:
 
-**Sell clear access products safely before building complex money rails.**
+Sell clear access products safely before building complex money rails.
 
-## Monetary Button Status
+---
 
-The **Monetary System** button on Page 2 is currently a public navigation placeholder for CyberCrowd's future monetary foundation.
+Monetary System Principles
 
-It should eventually lead to a dedicated page or section explaining:
+CyberCrowd money must be:
 
-- what users can buy
-- what creators can earn
-- what sponsors can fund
-- what reviewers may be compensated for
-- what CyberCrowd keeps
-- what the public ecosystem gains
-- what is active now
-- what is planned later
-- what is not yet available
+- Clear
+- Staged
+- Auditable
+- Connected to real access
+- Connected to real participation
+- Connected to real sponsorship
+- Connected to real platform value
 
-The Monetary System page should not collect financial data directly.
+Financial systems should protect:
 
-Payment processing should be handled through trusted payment providers such as Stripe until CyberCrowd has the proper backend, compliance, privacy, payout, tax, fraud, and account systems in place.
+- Users
+- Creators
+- Sponsors
+- Partners
+- Platform integrity
 
-Core principle:
+Payment processing should remain with trusted providers until CyberCrowd has appropriate:
 
-**CyberCrowd money must be clear, staged, auditable, and tied to real access, real participation, real sponsorship, or real platform value.**
+- Compliance systems
+- Privacy controls
+- Fraud prevention
+- Tax systems
+- Account systems
+- Payout systems
 
-## Platform Layers
+---
 
-CyberCrowd is being built around several connected layers.
+MultiCam
 
-### CyberCrowd.net
+MultiCam provides expanded camera access possibilities.
 
-Main public platform, discovery pages, CyberShop, WDIG access information, search-indexed public entry point, and future platform portal.
+Future uses:
 
-### WDIG
+- Viewer access
+- Creator broadcasts
+- Client events
+- Shows
+- Live experiences
 
-Device-based host/control layer for future pairing, access, camera switching, local control, Magic Cursor, Surface OS, kiosk logic, and platform tools.
+MultiCam may support temporary access or subscription-based participation.
 
-### CyberShop
+---
 
-Access point for CyberCrowd products, including the WDIG Access Pass, future MultiCam trial access, platform access products, and future CyberCrowd/Reten Records items.
+adWorm
 
-### Monetary System
+adWorm is the advertising exposure layer.
 
-Future platform monetary layer for access products, creator income, viewer participation value, sponsor-funded engagement, adWorm campaigns, CyberCourt review pools, Reten Records media sales, Stripe Connect payouts, and future CRWD systems.
+Purpose:
 
-### MultiCam
+Create structured sponsor and advertising opportunities.
 
-Temporary or subscription-based expanded camera access for viewers, creators, clients, shows, broadcasts, and events.
+Possible uses:
 
-### adWorm
+- Perimeter advertising
+- Sponsor placement
+- Creator exposure
+- Event visibility
+- Page promotion
+- CyberCourt sponsored review pools
 
-Advertising exposure layer for perimeter ads, sponsor placement, page-based promotion, creator/client exposure, event visibility, CyberCourt sponsored review pools, and future monetization systems.
+Advertising should create value without destroying user experience.
 
-### CyberCourt
+---
 
-Future public discourse, docket, survey, follow-up question, repair, transparency, and public sentiment layer.
+CyberCourt
+
+CyberCourt is the future public discourse and transparency layer.
+
+Possible functions:
+
+- Public discussion
+- Surveys
+- Follow-up questions
+- Repair paths
+- Transparency review
+- Sentiment collection
+- Public accountability systems
+
+CyberCourt exists to organize participation, not replace human judgment.
+
+---
+
+RetenRecords
+
+RetenRecords supports media, music, archive, and creator publishing opportunities.
+
+Future directions:
+
+- Music releases
+- Media publishing
+- Archive monetization
+- Creator opportunities
+
+---
+
+Atomic Kricket
+
+Atomic Kricket represents future truth/news/media systems connected to live culture and public information.
+
+---
+
+Accessibility Foundation
+
+CyberCrowd intends to support future accessibility systems including:
+
+- Blind Slate
+- Deaf Companion
+- Magic Cursor
+- Device assistance
+- De-escalation support
+
+Accessibility is a platform responsibility.
+
+---
+
+Guardian-Safe Access
+
+Future guardian-controlled systems may include:
+
+- Restricted discovery lanes
+- Approved content
+- Spending controls
+- Privacy protections
+- Child-safety features
+
+---
+
+Blast-Radius Control (BRC)
+
+Foundation Principle
+
+CyberCrowd uses Blast-Radius Control (BRC) as a foundational architectural principle.
+
+Distributed systems fail when boundaries disappear.
+
+Every system grows.
+
+Every system changes.
+
+Every system can leak unless containment exists.
+
+BRC defines those containment boundaries.
+
+Its purpose is not to prevent movement.
+
+Its purpose is to control movement.
+
+---
+
+BRC Structural Truth
+
+A system's integrity is not preserved by complexity.
+
+It is preserved by containment.
+
+A function without a boundary becomes mutation.
+
+A module without a boundary becomes dependency leakage.
+
+A layer without a boundary becomes uncontrolled blast radius.
+
+Movement is allowed.
+
+Uncontrolled movement is not.
+
+---
+
+BRC Containment Model
+
+Surface Boundary
+
+Protects:
+
+- Public presentation
+- Discovery
+- User interaction
+
+Surface cannot mutate internal execution systems.
+
+---
+
+Engine Boundary
+
+Protects:
+
+- Processing
+- Operations
+- Execution logic
+
+Engine cannot mutate authority records.
+
+---
+
+Authority Boundary
+
+Protects:
+
+- Ownership
+- Contracts
+- Evidence
+- Trusted decisions
+
+Authority cannot mutate protected vault structures.
+
+---
+
+Vault Boundary
+
+Protects:
+
+- Continuity records
+- Origin references
+- Historical preservation
+- Refinement chains
+
+Vault cannot mutate adapter behavior.
+
+---
+
+Adapter Boundary
+
+Controls:
+
+- External communication
+- Translation layers
+- Declared outputs
+
+Adapters:
+
+- Do not create authority
+- Do not bypass containment
+- Do not rewrite protected records
+
+---
+
+BRC Prevents
+
+- Architectural drift
+- Dependency contamination
+- Accidental authority transfer
+- Uncontrolled mutation
+- Cross-layer leakage
+- Repository collapse
+
+A failure inside one area should remain contained.
+
+A change inside one layer should not silently rewrite another.
+
+---
+
+Core Architecture Statement
+
+CyberCrowd evolves through controlled movement.
+
+The platform grows through:
+
+- Clear ownership
+- Defined boundaries
+- Evidence-based authority
+- Auditable systems
+- Contained change
+
+The foundation principle:
+
+Containment before expansion.
+
+Boundaries before complexity.
+
+Evidence before authority.
+
+---
+
+Closing Statement
+
+CyberCrowd is being built as a platform where technology, media, accessibility, commerce, advertising, participation, and accountability can operate together.
+
+The foundation is not only about creating features.
+
+It is about creating systems that can grow without losing control.
+
+CyberCrowd's future depends on one principle:
+
+A platform becomes powerful when its movement remains accountable.
