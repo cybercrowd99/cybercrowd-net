@@ -1,4 +1,4 @@
-name = "cybercrowd-net"
+name = "cybercrowd-auth"
 main = "worker.js"
 compatibility_date = "2026-05-09"
 workers_dev = true
