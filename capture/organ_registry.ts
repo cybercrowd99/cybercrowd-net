@@ -47,5 +47,5 @@ export function getOrganById(id: string): CaptureOrgan | undefined {
 }
 
 export function getOrganByIndex(index: number): CaptureOrgan | undefined {
-  return CAPTURE_ORGANISTRY.find((o) => o.index === index);
+  return CAPTURE_ORGAN_REGISTRY.find((o) => o.index === index);
 }
