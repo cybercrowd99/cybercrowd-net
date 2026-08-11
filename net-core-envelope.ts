@@ -142,4 +142,13 @@ export const validateNetCoreEnvelope = (
     Boolean(envelope.envelopeReference) &&
     Boolean(envelope.netDomainReference) &&
     Boolean(envelope.coreStructureReference) &&
-    Boolean(envelope.netCompletionProofReference)
+    Boolean(envelope.netCompletionProofReference) &&
+    Array.isArray(envelope.sealedOrgans) &&
+    envelope.sealedOrgans.length > 0 &&
+    envelope.sealedOrgans.every(o =>
+      Boolean(o.organName) &&
+      Boolean(o.organReference),
+    ) &&
+    Boolean(envelope.createdAt)
+  );
+};
