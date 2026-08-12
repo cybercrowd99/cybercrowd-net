@@ -1,0 +1,373 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>cybercrowd99 — Repositories Graph</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    html,body{height:100%;margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial}
+    #graph{width:100%;height:100vh;background:#0b1220}
+    .node circle{stroke:#fff;stroke-width:1.2}
+    .node text{pointer-events:none;font-size:12px;fill:#fff}
+    .tooltip{position:fixed;right:16px;top:16px;max-width:360px;background:#0f1720;color:#dbeafe;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .controls{position:fixed;left:16px;top:16px;display:flex;gap:8px}
+    .btn{background:#111827;color:#e6eef8;padding:8px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+    .legend{position:fixed;left:16px;bottom:16px;background:rgba(2,6,23,0.7);color:#cfe8ff;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+    a{color:#a5e8ff}
+  </style>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <div class="controls">
+    <button id="reset" class="btn">Reset</button>
+    <button id="export" class="btn">Export SVG</button>
+  </div>
+
+  <div id="graph" role="img" aria-label="Repository graph"></div>
+
+  <div id="tip" class="tooltip" hidden>
+    <strong id="tip-title"></strong>
+    <div id="tip-body" style="margin-top:8px;font-size:13px;line-height:1.3"></div>
+    <div style="margin-top:10px">
+      <a id="tip-link" href="#" target="_blank">View on GitHub →</a>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div><strong>cybercrowd99 — repo graph</strong></div>
+    <div style="font-size:12px;margin-top:6px">
+      Nodes = public repositories detected via the GitHub API.
+    </div>
+    <div style="font-size:12px;margin-top:6px">
+      Click a node for details. This is repo-level (not file-dependency graph).
+    </div>
+  </div>
+
+  <script>
+  // Embedded repository data (snapshot from GitHub API)
+  const repos = [
+    {
+      name: "AtomicKricket",
+      full_name: "cybercrowd99/AtomicKricket",
+      html_url: "https://github.com/cybercrowd99/AtomicKricket",
+      description: "Is the new school of the old ways we use to talk truth,",
+      language: null,
+      size: 0,
+      pushed_at: "2026-07-21T17:38:42Z"
+    },
+    {
+      name: "cybercrowd-net",
+      full_name: "cybercrowd99/cybercrowd-net",
+      html_url: "https://github.com/cybercrowd99/cybercrowd-net",
+      description: "CyberCrowd.net is the official home of the CyberCrowd platform...",
+      language: "JavaScript",
+      size: 10441,
+      pushed_at: "2026-08-12T22:30:46Z"
+    },
+    {
+      name: "cybercrowd99.github.io",
+      full_name: "cybercrowd99/cybercrowd99.github.io",
+      html_url: "https://github.com/cybercrowd99/cybercrowd99.github.io",
+      description: "CC-CORE-WEB-0001",
+      language: null,
+      size: 2112,
+      pushed_at: "2026-04-20T21:59:57Z"
+    },
+    {
+      name: "CyberServices-",
+      full_name: "cybercrowd99/CyberServices-",
+      html_url: "https://github.com/cybercrowd99/CyberServices-",
+      description: "CyberServices is the operational engine of CyberCrowd...",
+      language: "TypeScript",
+      size: 126,
+      pushed_at: "2026-08-06T20:54:11Z"
+    },
+    {
+      name: "README.md",
+      full_name: "cybercrowd99/README.md",
+      html_url: "https://github.com/cybercrowd99/README.md",
+      description: "# Cybercrowd Core System",
+      language: null,
+      size: 0,
+      pushed_at: "2026-03-23T00:59:03Z"
+    },
+    {
+      name: "retenrecords-web",
+      full_name: "cybercrowd99/retenrecords-web",
+      html_url: "https://github.com/cybercrowd99/retenrecords-web",
+      description: "Official web/app foundation for RetenRecords.com",
+      language: "HTML",
+      size: 34,
+      pushed_at: "2026-07-04T16:54:45Z"
+    },
+    {
+      name: "wrangler.jsonc",
+      full_name: "cybercrowd99/wrangler.jsonc",
+      html_url: "https://github.com/cybercrowd99/wrangler.jsonc",
+      description: "AI+wrangler.jsonc chatgpt sux",
+      language: null,
+      size: 0,
+      pushed_at: "2026-03-23T10:25:04Z"
+    }
+  ];
+
+  const nodes = repos.map((r, i) => ({
+    id: r.full_name,
+    label: r.name,
+    size: Math.max(
+      6,
+      Math.min(48, Math.log2((r.size || 1) + 1) * 8)
+    ),
+    meta: r
+  }));
+
+  // Repo-level edges are not inferred in this snapshot.
+  const links = [];
+
+  const width = document.getElementById("graph").clientWidth;
+  const height = document.getElementById("graph").clientHeight;
+
+  const svg = d3.select("#graph")
+    .append("svg")
+    .attr(
+      "viewBox",
+      `0 0 ${Math.max(960, width)} ${Math.max(600, height)}`
+    )
+    .style("width", "100%")
+    .style("height", "100%");
+
+  const defs = svg.append("defs");
+
+  defs.append("filter")
+    .attr("id", "glow")
+    .append("feGaussianBlur")
+    .attr("stdDeviation", 3)
+    .attr("in", "coloredBlur");
+
+  const linkG = svg.append("g").attr("class", "links");
+  const nodeG = svg.append("g").attr("class", "nodes");
+
+  const simulation = d3.forceSimulation(nodes)
+    .force("charge", d3.forceManyBody().strength(-280))
+    .force("center", d3.forceCenter(480, 300))
+    .force(
+      "collision",
+      d3.forceCollide().radius(d => d.size + 8)
+    )
+    .force(
+      "link",
+      d3.forceLink(links)
+        .id(d => d.id)
+        .distance(200)
+        .strength(0.6)
+    );
+
+  const link = linkG.selectAll("line")
+    .data(links)
+    .enter()
+    .append("line")
+    .attr("stroke", "#99b4c8")
+    .attr("stroke-opacity", 0.5)
+    .attr("stroke-width", 1.2);
+
+  const node = nodeG.selectAll("g")
+    .data(nodes)
+    .enter()
+    .append("g")
+    .attr("class", "node")
+    .call(
+      d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended)
+    );
+
+  node.append("circle")
+    .attr("r", d => d.size)
+    .attr(
+      "fill",
+      d => colorForLanguage(d.meta.language || "unknown")
+    )
+    .attr("stroke", "#0b1220")
+    .on("click", showDetails);
+
+  node.append("text")
+    .attr("dy", 4)
+    .attr("x", d => d.size + 8)
+    .text(d => d.label)
+    .style("font-size", "12px")
+    .style("fill", "#e6f6ff")
+    .style(
+      "text-shadow",
+      "0 1px 0 rgba(0,0,0,0.6)"
+    );
+
+  simulation.on("tick", () => {
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+
+    node.attr(
+      "transform",
+      d =>
+        `translate(${Math.max(50, Math.min(920, d.x))},${Math.max(
+          40,
+          Math.min(560, d.y)
+        )})`
+    );
+  });
+
+  function dragstarted(event, d) {
+    if (!event.active) {
+      simulation.alphaTarget(0.2).restart();
+    }
+
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragended(event, d) {
+    if (!event.active) {
+      simulation.alphaTarget(0);
+    }
+
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function colorForLanguage(lang) {
+    if (!lang) return "#7f8c9a";
+
+    const map = {
+      "JavaScript": "#f1c40f",
+      "TypeScript": "#2ecc71",
+      "HTML": "#e34c26",
+      "CSS": "#2965f1",
+      "Python": "#3572A5",
+      "null": "#7f8c9a"
+    };
+
+    return map[lang] || "#8aa4b8";
+  }
+
+  function showDetails(event, d) {
+    const tip = document.getElementById("tip");
+
+    document.getElementById("tip-title").textContent =
+      d.meta.full_name;
+
+    const body = [
+      d.meta.description
+        ? `<div style="margin-bottom:6px">${escapeHtml(
+            d.meta.description
+          )}</div>`
+        : "",
+
+      `<div style="font-size:12px">Language: <strong>${
+        d.meta.language || "—"
+      }</strong></div>`,
+
+      `<div style="font-size:12px">Size (KB): <strong>${
+        d.meta.size
+      }</strong></div>`,
+
+      `<div style="font-size:12px">Last push: <strong>${
+        d.meta.pushed_at
+      }</strong></div>`
+    ].join("");
+
+    document.getElementById("tip-body").innerHTML = body;
+
+    const link = document.getElementById("tip-link");
+    link.href = d.meta.html_url;
+
+    tip.hidden = false;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(
+      /[&<>"]/g,
+      c =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;"
+        })[c]
+    );
+  }
+
+  document
+    .getElementById("reset")
+    .addEventListener("click", () => {
+      nodes.forEach(n => {
+        n.fx = null;
+        n.fy = null;
+      });
+
+      simulation.alpha(1).restart();
+
+      document.getElementById("tip").hidden = true;
+    });
+
+  document
+    .getElementById("export")
+    .addEventListener("click", () => {
+      const serializer = new XMLSerializer();
+      const svgNode = svg.node();
+
+      const string =
+        serializer.serializeToString(svgNode);
+
+      const blob = new Blob(
+        [string],
+        { type: "image/svg+xml" }
+      );
+
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download =
+        "cybercrowd99-repos-graph.svg";
+
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    });
+
+  svg.call(
+    d3.zoom()
+      .scaleExtent([0.3, 3])
+      .on("zoom", event => {
+        nodeG.attr("transform", event.transform);
+        linkG.attr("transform", event.transform);
+      })
+  );
+
+  nodes.forEach((n, i) => {
+    n.x = 240 + i * 80;
+    n.y = 200 + (i % 3) * 80;
+  });
+
+  document.body.addEventListener("click", ev => {
+    if (
+      !ev.target.closest(".node") &&
+      !ev.target.closest(".tooltip") &&
+      !ev.target.closest(".btn")
+    ) {
+      document.getElementById("tip").hidden = true;
+    }
+  });
+  </script>
+</body>
+</html>
