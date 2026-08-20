@@ -3,12 +3,6 @@ main = "src/router.ts"
 compatibility_date = "2026-05-01"
 compatibility_flags = ["nodejs_compat"]
 
-[observability]
-enabled = true
-
-[observability.logs]
-enabled = true
-
 [[kv_namespaces]]
 binding = "VERIFY_KV"
 id = "62a6c667bfc94d43aaf6936bc2502750"
