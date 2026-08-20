@@ -22,3 +22,7 @@ zone_name = "cybercrowd.net"
 [[routes]]
 pattern = "cybercrowd.net/api/auth/send-verification"
 zone_name = "cybercrowd.net"
+
+[[migrations]]
+tag = "v2_remove_ephemeral_port_allocator"
+deleted_classes = ["EphemeralPortAllocatorDurableObject"]
