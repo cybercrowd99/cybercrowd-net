@@ -20,11 +20,9 @@ export default {
         });
       }
 
-      // Create token
       const token = await createVerificationToken(env, email);
 
-      // FIXED ARGUMENT ORDER — THIS IS THE BUG
-      await sendVerificationEmail(env, email, token);
+      await sendVerificationEmail(email, token, env);
 
       return new Response(
         JSON.stringify({
