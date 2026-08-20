@@ -9,6 +9,7 @@ const checkEmailWhoosh = document.getElementById("checkEmailWhoosh");
 let humanToken = "";
 let widgetId = null;
 let gateVisible = false;
+let whooshPrimePromise = Promise.resolve();
 
 const flyInClasses = [
   "from-top",
@@ -39,13 +40,42 @@ function unlockButton() {
   sendButton.textContent = "Send";
 }
 
-function playCheckEmailWhoosh() {
+function playCheckEmailWhoosh(primeOnly = false) {
   if (!checkEmailWhoosh) return;
 
-  checkEmailWhoosh.volume = 0.28;
-  checkEmailWhoosh.currentTime = 0;
+  if (primeOnly) {
+    checkEmailWhoosh.muted = true;
+    checkEmailWhoosh.volume = 0;
+    checkEmailWhoosh.currentTime = 0;
 
-  checkEmailWhoosh.play().catch(function () {});
+    const primeAttempt = checkEmailWhoosh.play();
+
+    whooshPrimePromise = Promise.resolve(primeAttempt)
+      .then(function () {
+        checkEmailWhoosh.pause();
+        checkEmailWhoosh.currentTime = 0;
+        checkEmailWhoosh.muted = false;
+        checkEmailWhoosh.volume = 0.28;
+      })
+      .catch(function (error) {
+        checkEmailWhoosh.muted = false;
+        checkEmailWhoosh.volume = 0.28;
+        console.error("CyberCrowd whoosh prime failed:", error);
+      });
+
+    return;
+  }
+
+  whooshPrimePromise.finally(function () {
+    checkEmailWhoosh.pause();
+    checkEmailWhoosh.muted = false;
+    checkEmailWhoosh.volume = 0.28;
+    checkEmailWhoosh.currentTime = 0;
+
+    checkEmailWhoosh.play().catch(function (error) {
+      console.error("CyberCrowd whoosh play failed:", error);
+    });
+  });
 }
 
 function showCheckEmailOverlay() {
@@ -91,17 +121,20 @@ function renderHumanGate() {
 
   widgetId = window.turnstile.render("#turnstileSlot", {
     sitekey: "0x4AAAAAACvkecVo2F3hpb1r",
+
     callback: function (token) {
       humanToken = token;
       sendButton.disabled = false;
       sendButton.textContent = "Confirm Send";
       setStatus("Human gate passed. Press Confirm Send.");
     },
+
     "expired-callback": function () {
       humanToken = "";
       setStatus("Human gate expired. Press Send again.");
       unlockButton();
     },
+
     "error-callback": function () {
       humanToken = "";
       setStatus("Human gate failed. Press Send again.");
@@ -133,6 +166,17 @@ async function sendEntry() {
     return;
   }
 
+  /*
+   * SILENT AUDIO UNLOCK
+   *
+   * This runs during the Confirm Send user gesture,
+   * BEFORE any network await.
+   *
+   * It does NOT audibly play the whoosh.
+   * The banner still owns audible playback.
+   */
+  playCheckEmailWhoosh(true);
+
   lockButton("Sending");
   setStatus("Preparing your CyberCrowd entry.");
 
@@ -156,6 +200,9 @@ async function sendEntry() {
       throw new Error(data.error || "Entry request failed.");
     }
 
+    /*
+     * THIS remains the actual banner + audible whoosh trigger.
+     */
     showCheckEmailOverlay();
 
     form.reset();
