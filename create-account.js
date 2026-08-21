@@ -9,7 +9,7 @@ const checkEmailWhoosh = document.getElementById("checkEmailWhoosh");
 let humanToken = "";
 let widgetId = null;
 let gateVisible = false;
-let whooshPrimePromise = Promise.resolve();
+let activeWindowOpened = false;
 
 const flyInClasses = [
   "from-top",
@@ -40,45 +40,24 @@ function unlockButton() {
   sendButton.textContent = "Send";
 }
 
-function playCheckEmailWhoosh(primeOnly = false) {
+function playCheckEmailWhoosh() {
   if (!checkEmailWhoosh) return;
 
-  if (primeOnly) {
-    checkEmailWhoosh.muted = true;
-    checkEmailWhoosh.volume = 0;
-    checkEmailWhoosh.currentTime = 0;
+  checkEmailWhoosh.pause();
+  checkEmailWhoosh.muted = false;
+  checkEmailWhoosh.volume = 0.28;
+  checkEmailWhoosh.currentTime = 0;
 
-    const primeAttempt = checkEmailWhoosh.play();
-
-    whooshPrimePromise = Promise.resolve(primeAttempt)
-      .then(function () {
-        checkEmailWhoosh.pause();
-        checkEmailWhoosh.currentTime = 0;
-        checkEmailWhoosh.muted = false;
-        checkEmailWhoosh.volume = 0.28;
-      })
-      .catch(function (error) {
-        checkEmailWhoosh.muted = false;
-        checkEmailWhoosh.volume = 0.28;
-        console.error("CyberCrowd whoosh prime failed:", error);
-      });
-
-    return;
-  }
-
-  whooshPrimePromise.finally(function () {
-    checkEmailWhoosh.pause();
-    checkEmailWhoosh.muted = false;
-    checkEmailWhoosh.volume = 0.28;
-    checkEmailWhoosh.currentTime = 0;
-
-    checkEmailWhoosh.play().catch(function (error) {
-      console.error("CyberCrowd whoosh play failed:", error);
-    });
+  checkEmailWhoosh.play().catch(function (error) {
+    console.error("CyberCrowd whoosh play failed:", error);
   });
 }
 
 function showCheckEmailOverlay() {
+  if (activeWindowOpened) return;
+
+  activeWindowOpened = true;
+
   const chosenFlyIn =
     flyInClasses[Math.floor(Math.random() * flyInClasses.length)];
 
@@ -124,9 +103,18 @@ function renderHumanGate() {
 
     callback: function (token) {
       humanToken = token;
-      sendButton.disabled = false;
-      sendButton.textContent = "Confirm Send";
-      setStatus("Human gate passed. Press Confirm Send.");
+
+      /*
+       * TURNSTILE PASSED.
+       * FIRE THE ACTIVE WINDOW NOW.
+       * THE WINDOW OWNS THE WHOOSH.
+       */
+      showCheckEmailOverlay();
+
+      /*
+       * CONTINUE THE EMAIL JOB SEPARATELY.
+       */
+      sendEntry();
     },
 
     "expired-callback": function () {
@@ -166,17 +154,6 @@ async function sendEntry() {
     return;
   }
 
-  /*
-   * SILENT AUDIO UNLOCK
-   *
-   * This runs during the Confirm Send user gesture,
-   * BEFORE any network await.
-   *
-   * It does NOT audibly play the whoosh.
-   * The banner still owns audible playback.
-   */
-  playCheckEmailWhoosh(true);
-
   lockButton("Sending");
   setStatus("Preparing your CyberCrowd entry.");
 
@@ -199,11 +176,6 @@ async function sendEntry() {
     if (!response.ok || data.success !== true) {
       throw new Error(data.error || "Entry request failed.");
     }
-
-    /*
-     * THIS remains the actual banner + audible whoosh trigger.
-     */
-    showCheckEmailOverlay();
 
     form.reset();
     humanToken = "";
@@ -232,5 +204,8 @@ async function sendEntry() {
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
+
+  activeWindowOpened = false;
+
   sendEntry();
 });
