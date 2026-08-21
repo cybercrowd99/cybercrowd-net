@@ -5,6 +5,7 @@ const statusText = document.getElementById("status");
 const turnstileSlot = document.getElementById("turnstileSlot");
 const checkEmailOverlay = document.getElementById("checkEmailOverlay");
 const checkEmailWhoosh = document.getElementById("checkEmailWhoosh");
+const hurryBack = document.querySelector(".hurry-back");
 
 let humanToken = "";
 let widgetId = null;
@@ -78,9 +79,28 @@ function showCheckEmailOverlay() {
   checkEmailOverlay.classList.add(chosenFlyIn);
   checkEmailOverlay.classList.add("is-visible");
   checkEmailOverlay.setAttribute("aria-hidden", "false");
+  checkEmailOverlay.style.pointerEvents = "auto";
+
+  if (hurryBack) {
+    hurryBack.style.pointerEvents = "auto";
+    hurryBack.style.cursor = "pointer";
+  }
+
   document.body.classList.add("check-email-open");
 
   playCheckEmailWhoosh();
+}
+
+function hideCheckEmailOverlay() {
+  checkEmailOverlay.classList.remove("is-visible");
+  checkEmailOverlay.setAttribute("aria-hidden", "true");
+  checkEmailOverlay.style.pointerEvents = "none";
+
+  document.body.classList.remove("check-email-open");
+
+  activeWindowOpened = false;
+
+  emailInput.focus();
 }
 
 function renderHumanGate() {
@@ -104,16 +124,8 @@ function renderHumanGate() {
     callback: function (token) {
       humanToken = token;
 
-      /*
-       * TURNSTILE PASSED.
-       * FIRE THE ACTIVE WINDOW NOW.
-       * THE WINDOW OWNS THE WHOOSH.
-       */
       showCheckEmailOverlay();
 
-      /*
-       * CONTINUE THE EMAIL JOB SEPARATELY.
-       */
       sendEntry();
     },
 
@@ -209,3 +221,25 @@ form.addEventListener("submit", function (event) {
 
   sendEntry();
 });
+
+if (hurryBack) {
+  hurryBack.setAttribute("role", "button");
+  hurryBack.setAttribute("tabindex", "0");
+  hurryBack.style.pointerEvents = "auto";
+  hurryBack.style.cursor = "pointer";
+
+  hurryBack.addEventListener("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    hideCheckEmailOverlay();
+  });
+
+  hurryBack.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+
+      hideCheckEmailOverlay();
+    }
+  });
+}
