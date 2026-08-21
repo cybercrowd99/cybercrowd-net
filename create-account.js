@@ -1,14 +1,21 @@
+// create-account.js
+// CyberCrowd — LIVE PAGE → RECOVERY LANE BRIDGE
+// JOB: Connect the existing create-account page to entry-flow-harness.js.
+// DOES NOT send email itself.
+// DOES NOT own backend logic.
+// DOES NOT create setup tokens.
+
 const form = document.getElementById("entryForm");
 const emailInput = document.getElementById("email");
 const sendButton = document.getElementById("sendButton");
 const statusText = document.getElementById("status");
 const turnstileSlot = document.getElementById("turnstileSlot");
+
 const checkEmailOverlay = document.getElementById("checkEmailOverlay");
 const checkEmailWhoosh = document.getElementById("checkEmailWhoosh");
 
-let humanToken = "";
 let widgetId = null;
-let gateVisible = false;
+let pipelineRunning = false;
 
 const flyInClasses = [
   "from-top",
@@ -21,35 +28,30 @@ const flyInClasses = [
   "from-bottom-right"
 ];
 
-function isValidEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
 function setStatus(text) {
-  statusText.textContent = text;
+  if (statusText) {
+    statusText.textContent = text;
+  }
 }
 
-function lockButton(text) {
-  sendButton.disabled = true;
-  sendButton.textContent = text;
-}
-
-function unlockButton() {
-  sendButton.disabled = false;
-  sendButton.textContent = "Send";
-}
-
-function playCheckEmailWhoosh() {
-  if (!checkEmailWhoosh) return;
+function playWhoosh() {
+  if (!checkEmailWhoosh) {
+    return;
+  }
 
   checkEmailWhoosh.volume = 0.28;
   checkEmailWhoosh.currentTime = 0;
 
-  checkEmailWhoosh.play().catch(function () {});
+  checkEmailWhoosh.play().catch(() => {});
 }
 
 function showCheckEmailOverlay() {
-  const chosenFlyIn = flyInClasses[Math.floor(Math.random() * flyInClasses.length)];
+  if (!checkEmailOverlay) {
+    return;
+  }
+
+  const chosenFlyIn =
+    flyInClasses[Math.floor(Math.random() * flyInClasses.length)];
 
   checkEmailOverlay.classList.remove(
     "from-top",
@@ -68,120 +70,146 @@ function showCheckEmailOverlay() {
   checkEmailOverlay.classList.add(chosenFlyIn);
   checkEmailOverlay.classList.add("is-visible");
   checkEmailOverlay.setAttribute("aria-hidden", "false");
-  document.body.classList.add("check-email-open");
 
-  playCheckEmailWhoosh();
+  document.body.classList.add("check-email-open");
 }
 
-function renderHumanGate() {
-  if (!window.turnstile) {
-    setStatus("Human gate loading. Press Send again in a moment.");
-    unlockButton();
-    return;
-  }
+async function loadRecoveryLane() {
+  const [
+    harnessModule,
+    whooshModule
+  ] = await Promise.all([
+    import("./entry-flow-harness.js"),
+    import("./entry-whoosh-listener.js")
+  ]);
 
-  turnstileSlot.style.display = "grid";
-  gateVisible = true;
+  return {
+    runEntryPipeline: harnessModule.runEntryPipeline,
+    installWhooshListener: whooshModule.installWhooshListener
+  };
+}
 
-  if (widgetId !== null) {
-    window.turnstile.remove(widgetId);
-    widgetId = null;
-  }
+function waitForTurnstile() {
+  return new Promise((resolve, reject) => {
+    let attempts = 0;
 
-  widgetId = window.turnstile.render("#turnstileSlot", {
-    sitekey: "0x4AAAAAACvkecVo2F3hpb1r",
-    callback: function (token) {
-      humanToken = token;
-      sendButton.disabled = false;
-      sendButton.textContent = "Confirm Send";
-      setStatus("Human gate passed. Press Confirm Send.");
-    },
-    "expired-callback": function () {
-      humanToken = "";
-      setStatus("Human gate expired. Press Send again.");
-      unlockButton();
-    },
-    "error-callback": function () {
-      humanToken = "";
-      setStatus("Human gate failed. Press Send again.");
-      unlockButton();
-    }
+    const check = () => {
+      attempts += 1;
+
+      if (window.turnstile) {
+        resolve();
+        return;
+      }
+
+      if (attempts >= 100) {
+        reject(new Error("turnstile-not-loaded"));
+        return;
+      }
+
+      setTimeout(check, 100);
+    };
+
+    check();
   });
 }
 
-async function sendEntry() {
-  const email = emailInput.value.trim();
+async function createHumanWidget() {
+  await waitForTurnstile();
 
-  if (!isValidEmail(email)) {
-    setStatus("Please enter a valid email.");
-    emailInput.focus();
-    unlockButton();
-    return;
+  if (widgetId !== null) {
+    return widgetId;
   }
 
-  if (!humanToken) {
-    lockButton("Check");
-    setStatus("Complete the human gate.");
+  turnstileSlot.style.display = "grid";
 
-    if (!gateVisible) {
-      renderHumanGate();
-    } else {
-      unlockButton();
+  widgetId = window.turnstile.render("#turnstileSlot", {
+    sitekey: "0x4AAAAAACvkecVo2F3hpb1r",
+    execution: "execute",
+    appearance: "interaction-only",
+    callback: function () {
+      setStatus("Human verified.");
+    },
+    "expired-callback": function () {
+      setStatus("Human verification expired.");
+    },
+    "error-callback": function () {
+      setStatus("Human verification failed.");
     }
+  });
 
+  return widgetId;
+}
+
+async function startLiveRecoveryLane(event) {
+  event.preventDefault();
+
+  if (pipelineRunning) {
     return;
   }
 
-  lockButton("Sending");
-  setStatus("Preparing your CyberCrowd entry.");
+  pipelineRunning = true;
+  sendButton.disabled = true;
 
   try {
-    const response = await fetch("/api/auth/send-verification", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: email,
-        turnstileToken: humanToken
-      })
+    const rawEmail = emailInput.value.trim();
+
+    console.log("[CyberCrowd] LIVE BRIDGE START");
+    console.log("[CyberCrowd] rawEmail:", rawEmail);
+
+    setStatus("Starting verification.");
+
+    const {
+      runEntryPipeline,
+      installWhooshListener
+    } = await loadRecoveryLane();
+
+    console.log("[CyberCrowd] harness loaded:", typeof runEntryPipeline === "function");
+
+    installWhooshListener({
+      playWhoosh,
+      showCheckEmailOverlay
     });
 
-    const data = await response.json().catch(function () {
-      return {};
+    const turnstileWidgetId = await createHumanWidget();
+
+    console.log(
+      "[CyberCrowd] turnstileWidgetId:",
+      turnstileWidgetId
+    );
+
+    const result = await runEntryPipeline({
+      rawEmail,
+      turnstileWidgetId
     });
 
-    if (!response.ok || data.success !== true) {
-      throw new Error(data.error || "Entry request failed.");
+    console.log("[CyberCrowd] PIPELINE RESULT:", result);
+
+    if (result.success === true) {
+      setStatus("EMAIL SENT");
+
+      form.reset();
+
+      if (window.turnstile && widgetId !== null) {
+        window.turnstile.reset(widgetId);
+      }
+
+      return;
     }
 
-    showCheckEmailOverlay();
+    setStatus(
+      `STOPPED: ${result.stage || "unknown"} / ${result.reason || "unknown"}`
+    );
 
-    form.reset();
-    humanToken = "";
-    gateVisible = false;
-    turnstileSlot.style.display = "none";
-    setStatus("");
+  } catch (err) {
+    console.error("[CyberCrowd] LIVE BRIDGE ERROR:", err);
 
-    if (window.turnstile && widgetId !== null) {
-      window.turnstile.remove(widgetId);
-      widgetId = null;
-    }
-
-    unlockButton();
-  } catch (error) {
-    humanToken = "";
-
-    if (window.turnstile && widgetId !== null) {
-      window.turnstile.reset(widgetId);
-    }
-
-    setStatus(error.message || "Entry request failed.");
-    unlockButton();
+    setStatus(
+      `ERROR: ${err?.message || "unknown"}`
+    );
+  } finally {
+    pipelineRunning = false;
+    sendButton.disabled = false;
   }
 }
 
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
-  sendEntry();
-});
+form.addEventListener("submit", startLiveRecoveryLane);
