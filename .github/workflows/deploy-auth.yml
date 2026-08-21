@@ -1,0 +1,32 @@
+name: Deploy CyberCrowd Auth Worker
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cybercrowd-auth-production
+  cancel-in-progress: false
+
+jobs:
+  deploy-auth:
+    name: Deploy cybercrowd-auth
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Deploy cybercrowd-auth
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          workingDirectory: auth
+          wranglerVersion: "4"
+          command: deploy
