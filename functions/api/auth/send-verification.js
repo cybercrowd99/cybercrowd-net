@@ -1,128 +1,97 @@
+// functions/api/auth/send-verification.js
+// CyberCrowd — Verification Email Sender (RESTORED)
+// This file was deleted in commit 2c8a659e10ef01ed72d0c520b913d61c980fde26.
+// This is the recovery version: clean, linear, no drift.
+
 import { createSetupToken } from "./setup-token.js";
 import { storeSetupToken } from "./setup-token-store.js";
 
 export async function onRequestPost(context) {
-  const { request, env } = context;
-
-  let body;
   try {
-    body = await request.json();
-  } catch (_) {
-    return json({ success: false, error: "invalid_json" }, 400);
-  }
+    const { request, env } = context;
 
-  const email = String(body.email || "").trim().toLowerCase();
+    // Parse incoming JSON
+    const body = await request.json().catch(() => null);
+    if (!body || typeof body.email !== "string") {
+      return new Response(
+        JSON.stringify({ success: false, reason: "invalid-email" }),
+        { status: 400 }
+      );
+    }
 
-  if (!email || !email.includes("@")) {
-    return json({ success: false, error: "valid_email_required" }, 400);
-  }
+    const email = body.email.trim();
+    const humanToken = body["cf-turnstile-response"];
 
-  const tokenRecord = createSetupToken(email);
-  const kvKey = `setup:${tokenRecord.token}`;
+    // Basic sanity check
+    if (!humanToken || typeof humanToken !== "string") {
+      return new Response(
+        JSON.stringify({ success: false, reason: "missing-human-token" }),
+        { status: 400 }
+      );
+    }
 
-  try {
-    await storeSetupToken(env, kvKey, tokenRecord);
-  } catch (_) {
-    return json({ success: false, error: "kv_write_failed" }, 500);
-  }
+    // 1. Create setup token
+    const tokenRecord = await createSetupToken(email);
 
-  const origin = new URL(request.url).origin;
-  const verifyUrl = `${origin}/setup.html?setup=${encodeURIComponent(tokenRecord.token)}`;
+    if (!tokenRecord || !tokenRecord.token) {
+      return new Response(
+        JSON.stringify({ success: false, reason: "token-failed" }),
+        { status: 500 }
+      );
+    }
 
-  const emailPayload = {
-    From: env.CC_EMAIL_FROM,
-    To: email,
-    ReplyTo: env.CC_REPLY_TO || env.CC_EMAIL_FROM,
-    Subject: "Verify your CyberCrowd entry",
-    HtmlBody: buildEmailHtml(verifyUrl),
-    TextBody: buildEmailText(verifyUrl),
-    MessageStream: "outbound"
-  };
+    // 2. Store token
+    const stored = await storeSetupToken(env, tokenRecord);
 
-  try {
-    await sendEmail(env, emailPayload);
-  } catch (error) {
-    return json(
-      {
-        success: false,
-        error: "email_delivery_failed",
-        detail: error.message
+    if (!stored || stored.success !== true) {
+      return new Response(
+        JSON.stringify({ success: false, reason: "token-store-failed" }),
+        { status: 500 }
+      );
+    }
+
+    // 3. Build verification URL
+    const verificationUrl = `${env.PUBLIC_BASE_URL}/setup.html?setup=${tokenRecord.token}`;
+
+    // 4. Send Postmark email
+    const postmarkPayload = {
+      From: env.POSTMARK_FROM,
+      To: email,
+      Subject: "Your CyberCrowd Setup Link",
+      TextBody: `Click to continue: ${verificationUrl}`,
+      MessageStream: "outbound"
+    };
+
+    const postmarkResponse = await fetch("https://api.postmarkapp.com/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Postmark-Server-Token": env.POSTMARK_SERVER_TOKEN
       },
-      502
+      body: JSON.stringify(postmarkPayload)
+    });
+
+    if (!postmarkResponse.ok) {
+      return new Response(
+        JSON.stringify({ success: false, reason: "postmark-rejected" }),
+        { status: 502 }
+      );
+    }
+
+    // 5. Success
+    return new Response(
+      JSON.stringify({ success: true }),
+      { status: 200 }
+    );
+
+  } catch (err) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        reason: "exception",
+        error: err?.message || "unknown"
+      }),
+      { status: 500 }
     );
   }
-
-  return json({
-    success: true,
-    message: "Check your email."
-  });
-}
-
-function buildEmailHtml(verifyUrl) {
-  return `
-    <div style="font-family:Arial,sans-serif;background:#050505;color:white;padding:28px;">
-      <div style="max-width:620px;margin:0 auto;border:1px solid rgba(0,255,255,.35);
-      border-radius:22px;padding:26px;background:rgba(5,10,18,.96);">
-        <h1 style="color:#00ffff;letter-spacing:2px;">CyberCrowd Entry Verification</h1>
-        <p style="line-height:1.7;opacity:.88;">
-          Click the button below to continue your CyberCrowd entry.
-        </p>
-        <p>
-          <a href="${verifyUrl}" style="display:inline-block;padding:16px 22px;border-radius:16px;
-          background:linear-gradient(90deg,#00ffff,#00ffaa);color:black;font-weight:bold;
-          text-decoration:none;letter-spacing:1px;">
-            VERIFY CYBERCROWD ENTRY
-          </a>
-        </p>
-        <p style="line-height:1.7;opacity:.72;font-size:13px;">
-          If the button does not work, copy and paste the verification link from this email into your browser.
-        </p>
-      </div>
-    </div>
-  `;
-}
-
-function buildEmailText(verifyUrl) {
-  return [
-    "CyberCrowd Entry Verification",
-    "",
-    "Click the link below to continue:",
-    verifyUrl,
-    "",
-    "This link is for your CyberCrowd entry only.",
-    "If you did not request this, ignore this email."
-  ].join("\n");
-}
-
-async function sendEmail(env, payload) {
-  const apiKey = env.POSTMARK_API_KEY;
-
-  if (!apiKey) {
-    throw new Error("missing_postmark_api_key");
-  }
-
-  const response = await fetch("https://api.postmarkapp.com/email", {
-    method: "POST",
-    headers: {
-      "X-Postmark-Server-Token": apiKey,
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`postmark_rejected:${response.status}:${text}`);
-  }
-}
-
-function json(payload, status = 200) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-store"
-    }
-  });
 }
