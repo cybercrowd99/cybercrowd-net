@@ -1,7 +1,51 @@
-// Put this in auth/src/email.ts (or wherever you keep email helpers)
+// CYBERCROWD
+// REPO: cybercrowd99/cybercrowd-net
+// PATH: auth/src/email.ts
+//
+// DEPLOYED CELL:
+// cybercrowd-auth
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+//
+// JOB:
+// Send the CyberCrowd verification email through Postmark.
+//
+// TRACK:
+// auth/src/router.ts
+// → sendVerificationEmail(email, token, env)
+// → auth/src/email.ts
+// → POSTMARK
+// → verification email delivered
+//
+// SECURITY BOUNDARY:
+// PRIVATE AUTH sends.
+// POSTMARK transports.
+// EMAIL does not authorize entry.
+//
+// RECOVERY LOCK:
+// No router change.
+// No verify.ts change.
+// No frontend change.
+// No new helper.
+// No bridge.
+// No envelope.
+// No session logic.
+// No token creation.
+//
+// REPAIR:
+// Use the established CyberCrowd Postmark secret binding:
+// POSTMARK_API_KEY
 
-export async function sendVerificationEmail(toEmail: string, token: string, env: Env) {
-  const verifyUrl = `https://cybercrowd.net/api/auth/verify?token=${encodeURIComponent(token)}`;
+export async function sendVerificationEmail(
+  toEmail: string,
+  token: string,
+  env: Env
+) {
+  const verifyUrl =
+    `https://cybercrowd.net/api/auth/verify?token=${encodeURIComponent(token)}`;
 
   const body = {
     From: "CyberCrowd <welcome@cybercrowd.net>",
@@ -11,7 +55,7 @@ export async function sendVerificationEmail(toEmail: string, token: string, env:
       <h2>Email Change Request</h2>
       <p>You requested to change your email on CyberCrowd.</p>
       <p>Click the button below to confirm:</p>
-      <a href="${verifyUrl}" 
+      <a href="${verifyUrl}"
          style="display:inline-block;padding:14px 24px;background:#111;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;">
         Verify New Email
       </a>
@@ -20,22 +64,34 @@ export async function sendVerificationEmail(toEmail: string, token: string, env:
         If you did not request this change, ignore this email.
       </p>
     `,
-    TextBody: `Verify your new email: ${verifyUrl}\n\nThis link expires in 15 minutes.`
+    TextBody:
+      `Verify your new email: ${verifyUrl}\n\nThis link expires in 15 minutes.`
   };
 
-  const res = await fetch("https://api.postmarkapp.com/email", {
-    method: "POST",
-    headers: {
-      "X-Postmark-Server-Token": env.POSTMARK_TOKEN,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(body)
-  });
+  const res = await fetch(
+    "https://api.postmarkapp.com/email",
+    {
+      method: "POST",
+      headers: {
+        "X-Postmark-Server-Token": env.POSTMARK_API_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    }
+  );
 
   if (!res.ok) {
     const error = await res.text();
-    console.error("Postmark error:", res.status, error);
-    throw new Error(`Postmark error: ${res.status}`);
+
+    console.error(
+      "Postmark error:",
+      res.status,
+      error
+    );
+
+    throw new Error(
+      `Postmark error: ${res.status}`
+    );
   }
 
   return true;
