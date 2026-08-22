@@ -3,7 +3,7 @@ CYBERCROWD
 
 REPO: cybercrowd99/cybercrowd-net
 PATH: create-account.html
-BUILD: #15
+BUILD: #16
 
 BUILD LAW:
 1 FILE
@@ -15,7 +15,7 @@ JOB:
 Public account room.
 
 FUNCTION:
-Expose the existing create-account DOM anchors.
+Expose the existing create-account DOM anchors and attach the browser runtime lifelines.
 
 POINT:
 create-account.css
@@ -190,5 +190,20 @@ PUBLIC RESPONDS
       type="audio/mpeg"
     />
   </audio>
+
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+  ></script>
+
+  <script
+    type="module"
+    src="./turnstile-one-ui.js"
+  ></script>
+
+  <script
+    src="./entry-flow-controller.js"
+  ></script>
 </body>
 </html>
