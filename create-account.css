@@ -135,8 +135,19 @@ body.check-email-open .page {
     inset 0 0 0 1px rgba(255, 255, 255, 0.52),
     inset 0 0 30px rgba(255, 255, 255, 0.18);
   overflow: hidden;
+
+  /* 3D foundation */
   perspective: 900px;
-  transform: translateY(-2px) rotateX(2deg);
+  transform-style: preserve-3d;
+
+  /* ⭐ ROTATOR INSTALLED ⭐ */
+  transform:
+    translateY(-2px)
+    rotateX(2deg)
+    rotateY(calc(180deg * var(--turn, 0)));
+
+  /* Performance */
+  will-change: transform;
 }
 
 /* INTERACTIVE SURFACE */
