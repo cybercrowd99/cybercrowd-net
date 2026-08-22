@@ -17,7 +17,7 @@
 // into the first human-verification slot.
 //
 // POINT:
-// js/turnstile-client.js
+// turnstile-client.js
 //
 // DOES NOT OWN:
 // Human verification decision.
@@ -29,7 +29,7 @@
 // WHOOSH.
 // Routing.
 
-import { renderTurnstile } from "./js/turnstile-client.js";
+import { renderTurnstile } from "./turnstile-client.js";
 
 export function openTurnstileOne() {
   return renderTurnstile(
