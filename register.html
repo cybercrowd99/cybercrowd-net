@@ -9,18 +9,29 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Collect the registration email and continue the registration path.
+Open the CyberCrowd create-account human-gate crossing.
 
 TRACK:
 REGISTER
-→ EMAIL
-→ SEND VERIFICATION EMAIL
-→ email-sent.html
+→ create-account.html
+→ TURNSTILE #1
+
+RAIL CONSTRAINTS:
+ART = FROZEN
+LAYOUT = FROZEN
+FLOW = FROZEN
+
+NO localStorage
+NO EMAIL COLLECTION
+NO AUTH DECISION
+NO TOKEN CREATION
+NO TURNSTILE IMITATION
+NO BACKEND OWNERSHIP
+NO ADJACENT CLEANUP
 
 BOUNDARY:
-No Turnstile logic here.
-No auth verification here.
-No backend ownership here.
+PUBLIC REQUEST ONLY.
+PRIVATE AUTH DECIDES.
 -->
 
 <!DOCTYPE html>
@@ -28,6 +39,7 @@ No backend ownership here.
 <head>
   <meta charset="UTF-8">
   <title>Register</title>
+
   <style>
     body {
       background:#000;
@@ -40,21 +52,20 @@ No backend ownership here.
       align-items:center;
       height:100vh;
     }
+
     #register-box {
       width:350px;
       padding:20px;
       background:#111;
       border:2px solid #b8860b;
     }
-    input, button {
+
+    button {
       width:100%;
       padding:11px;
       margin-top:10px;
-      background:#222;
       color:#fff;
       border:1px solid #b8860b;
-    }
-    button {
       background:#b8860b;
       cursor:pointer;
       font-size:110%;
@@ -66,25 +77,17 @@ No backend ownership here.
   <div id="register-box">
     <h2>Create Your Account</h2>
 
-    <label>Email Address</label>
-    <input type="email" id="emailInput" placeholder="Enter your email">
-
-    <button id="sendEmail">Send Verification Email</button>
+    <button id="registerButton" type="button">
+      Register
+    </button>
   </div>
 
   <script>
-    document.getElementById('sendEmail').addEventListener('click', () => {
-      const email = document.getElementById('emailInput').value;
-
-      if (!email) {
-        alert("Email required");
-        return;
-      }
-
-      localStorage.setItem('cc_pending_email', email);
-
-      window.location.href = '/email-sent.html';
-    });
+    document
+      .getElementById("registerButton")
+      .addEventListener("click", () => {
+        window.location.href = "/create-account.html?entry=register";
+      });
   </script>
 </body>
 </html>
