@@ -1,3 +1,49 @@
+// CYBERCROWD
+// REPO: cybercrowd99/cybercrowd-net
+// PATH: auth/src/router.ts
+//
+// DEPLOYED CELL:
+// cybercrowd-auth
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+//
+// JOB:
+// Route CyberCrowd private-auth requests.
+//
+// TRACK:
+// create-account.html
+// → create-account.js
+// → Cloudflare Turnstile
+// → cf-turnstile-response
+// → POST /api/auth/send-verification
+// → cybercrowd-auth
+// → auth/src/router.ts
+// → Cloudflare Turnstile siteverify
+// → createVerificationToken()
+// → auth/src/verify.ts
+// → sendVerificationEmail()
+// → auth/src/email.ts
+// → POSTMARK
+// → { ok:true, success:true }
+//
+// SECURITY BOUNDARY:
+// PUBLIC REQUESTS.
+// PRIVATE AUTH DECIDES.
+// Turnstile token MUST be verified server-side
+// before verification-token creation.
+//
+// RECOVERY LOCK:
+// No new route.
+// No new helper.
+// No bridge.
+// No envelope.
+// No frontend change.
+// No auth/src/verify.ts change.
+// No auth/src/email.ts change.
+
 import { createVerificationToken, consumeVerificationToken } from "./verify";
 import { sendVerificationEmail } from "./email";
 
@@ -6,12 +52,14 @@ export default {
     const url = new URL(request.url);
     const headers = { "Cache-Control": "no-store" };
 
-    // POST /api/auth/send-verification
     if (
       url.pathname === "/api/auth/send-verification" &&
       request.method === "POST"
     ) {
-      const { email } = await request.json();
+      const {
+        email,
+        "cf-turnstile-response": turnstileToken
+      } = await request.json();
 
       if (!email) {
         return new Response("Missing email", {
@@ -20,25 +68,78 @@ export default {
         });
       }
 
-      const token = await createVerificationToken(env, email);
+      if (!turnstileToken) {
+        return Response.json(
+          {
+            ok: false,
+            success: false,
+            reason: "missing-turnstile-token"
+          },
+          {
+            status: 400,
+            headers
+          }
+        );
+      }
 
-      await sendVerificationEmail(email, token, env);
+      const verifyForm = new FormData();
 
-      return new Response(
-        JSON.stringify({
+      verifyForm.append(
+        "secret",
+        env.TURNSTILE_SECRET_KEY
+      );
+
+      verifyForm.append(
+        "response",
+        turnstileToken
+      );
+
+      const verifyResponse = await fetch(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        {
+          method: "POST",
+          body: verifyForm
+        }
+      );
+
+      const human = await verifyResponse.json();
+
+      if (human.success !== true) {
+        return Response.json(
+          {
+            ok: false,
+            success: false,
+            reason: "turnstile-failed"
+          },
+          {
+            status: 403,
+            headers
+          }
+        );
+      }
+
+      const token = await createVerificationToken(
+        env,
+        email
+      );
+
+      await sendVerificationEmail(
+        email,
+        token,
+        env
+      );
+
+      return Response.json(
+        {
           ok: true,
           success: true
-        }),
+        },
         {
-          headers: {
-            ...headers,
-            "Content-Type": "application/json"
-          }
+          headers
         }
       );
     }
 
-    // GET /api/auth/verify — render confirmation page
     if (
       url.pathname === "/api/auth/verify" &&
       request.method === "GET"
@@ -68,7 +169,6 @@ export default {
       );
     }
 
-    // POST /api/auth/verify — validate & consume token
     if (
       url.pathname === "/api/auth/verify" &&
       request.method === "POST"
@@ -83,7 +183,10 @@ export default {
         });
       }
 
-      const result = await consumeVerificationToken(env, token);
+      const result = await consumeVerificationToken(
+        env,
+        token
+      );
 
       if (!result.ok) {
         return new Response("Token expired or invalid", {
