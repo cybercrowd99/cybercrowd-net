@@ -1,10 +1,6 @@
 <!--
 CYBERCROWD
-
-REPO: cybercrowd99/cybercrowd-net
-PATH: create-account.html
-ORGAN: 02-Secretary
-ORGAN PIN: 02-Secretary
+FILE: create-account/create-account.html
 
 BUILD LAW:
 1 FILE
@@ -12,31 +8,25 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Host the CyberCrowd public create-account room.
+Expose the permanent first-entry room into CyberCrowd.
 
 FUNCTION:
-Expose the create-account DOM anchors.
+Provide the permanent visual surface only.
 
-OWNS:
-Nothing else.
-
-POINTS TO:
-create-account.css
-create-account.js
-create-account-entry.js
-
-BOUNDARY:
-PUBLIC REQUESTS
-PRIVATE AUTH DECIDES
-PUBLIC RESPONDS
+ART LOCK:
+image-4.png
+1780664884427.png
 
 DO NOT:
-MOVE AUTHORITY INTO THIS FILE
-MOVE TURNSTILE VERIFICATION INTO THIS FILE
-MOVE EMAIL DELIVERY INTO THIS FILE
-MOVE SESSION AUTHORITY INTO THIS FILE
-REBUILD THE ARTWORK
-EXPAND THIS FILE WITH CSS OR RUNTIME LOGIC
+REDESIGN ART
+REPLACE IMAGERY
+OWN ACTION BEHAVIOR
+OWN AUTHORITY
+OWN ROUTING
+OWN TURNSTILE LOGIC
+OWN EMAIL LOGIC
+OWN SEND LOGIC
+OWN CHECK-EMAIL LOGIC
 -->
 
 <!DOCTYPE html>
@@ -44,18 +34,42 @@ EXPAND THIS FILE WITH CSS OR RUNTIME LOGIC
 <head>
   <meta charset="UTF-8" />
 
-  <title>CyberCrowd Entry</title>
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1"
   />
 
-  <script
-    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-    async
-    defer
-  ></script>
+  <title>CyberCrowd Entry</title>
+
+  <link
+    rel="stylesheet"
+    href="./create-account.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="./actions/turnstile-one.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="./actions/email-entry.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="./actions/wheel-turn.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="./actions/send.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="./actions/check-email.css"
+  />
 </head>
 
 <body>
@@ -63,20 +77,20 @@ EXPAND THIS FILE WITH CSS OR RUNTIME LOGIC
     class="background-photo"
     src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/image-4.png"
     alt=""
+    aria-hidden="true"
   />
 
   <main
     class="page"
-    id="entryPage"
-    aria-label="CyberCrowd entry window"
+    aria-label="CyberCrowd Entry"
   >
     <section
       class="glass-plaque"
-      aria-labelledby="entry-title"
+      aria-label="CyberCrowd entry surface"
     >
       <div
         class="seal-wrapper"
-        aria-hidden="false"
+        aria-label="CyberCrowd Seal"
       >
         <div
           class="seal-ring"
@@ -90,125 +104,14 @@ EXPAND THIS FILE WITH CSS OR RUNTIME LOGIC
         />
       </div>
 
-      <h1
-        id="entry-title"
-        class="title"
-      >
-        CyberCrowd Entry
+      <h1 class="title">
+        Enter CyberCrowd
       </h1>
 
       <div class="welcome">
         Welcome to CyberCrowd
       </div>
-
-      <form
-        class="entry-form"
-        id="entryForm"
-      >
-        <input
-          class="email-field"
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Enter your email here"
-          autocomplete="email"
-          required
-        />
-
-        <div
-          class="turnstile-slot"
-          id="turnstileSlot"
-        ></div>
-
-        <button
-          class="send-button"
-          id="sendButton"
-          type="submit"
-        >
-          Send
-        </button>
-
-        <div
-          class="status"
-          id="status"
-          aria-live="polite"
-        ></div>
-      </form>
     </section>
-
-    <a
-      class="member-strap"
-      href="login.html"
-      aria-label="Already a member"
-    >
-      Already a Member
-    </a>
   </main>
-
-  <div
-    class="check-email-overlay"
-    id="checkEmailOverlay"
-    role="status"
-    aria-live="polite"
-    aria-labelledby="checkEmailTitle"
-    aria-hidden="true"
-  >
-    <div
-      class="check-email-stage"
-      id="checkEmailStage"
-    >
-      <div
-        class="check-email-slab"
-        aria-hidden="true"
-      ></div>
-
-      <div
-        class="sparkle-glint"
-        aria-hidden="true"
-      ></div>
-
-      <div class="floating-email-words">
-        <div class="floating-email-inner">
-          <h2 id="checkEmailTitle">
-            Check Your Email
-          </h2>
-
-          <p>
-            CyberCrowd sent your entry link.
-          </p>
-
-          <p>
-            Open your email and press the link to continue.
-          </p>
-
-          <div class="hurry-back">
-            Hurry Back
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <audio
-    id="checkEmailWhoosh"
-    preload="auto"
-  >
-    <source
-      src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/whooshing-email-sent_1.1s%20teaser.mp3"
-      type="audio/mpeg"
-    />
-  </audio>
-
-  <link
-    rel="stylesheet"
-    href="create-account.css"
-  />
-
-  <script src="create-account.js"></script>
-
-  <script
-    type="module"
-    src="create-account-entry.js"
-  ></script>
 </body>
 </html>
