@@ -1,3 +1,60 @@
+<!--
+CYBERCROWD
+
+REPO: cybercrowd99/cybercrowd-net
+PATH: create-account.html
+ORGAN: 02-Secretary
+ORGAN PIN: 02-Secretary
+
+FILE ACTION:
+CREATE NEW FILE
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+JOB:
+Host the CyberCrowd public create-account surface.
+
+FUNCTION:
+REGISTER opens create-account.html.
+Create-account loads REAL Cloudflare Turnstile #1.
+The glass account/email surface remains the existing designed object.
+
+CURRENT CELL:
+REGISTER
+→ CREATE ACCOUNT
+→ REAL TURNSTILE #1
+
+DESIGN CHANGE:
+Glass account/email surface increased 32%.
+2.5D glass depth added.
+
+BOUNDARY:
+PUBLIC REQUESTS
+PRIVATE AUTH DECIDES
+PUBLIC RESPONDS
+
+FREEZE:
+BACKGROUND ART = FROZEN
+BACK-WALL PARALLAX = FROZEN
+TURNSTILE SITEKEY = FROZEN
+TURNSTILE FUNCTION = FROZEN
+GLASS SHAPE = FROZEN
+GLASS ASPECT RATIO = FROZEN
+
+DO NOT:
+REDESIGN
+REPLACE ART
+ADD EMAIL FUNCTION YET
+ADD SEND FUNCTION YET
+CHANGE AUTH
+CHANGE ROUTES
+CHANGE WORKERS
+CREATE HELPERS
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +122,8 @@
     .account-glass-window {
       position: relative;
       z-index: 2;
-      width: min(74vw, 360px);
+
+      width: min(92vw, 475.2px);
       aspect-ratio: 1 / 1.18;
       border-radius: 14px;
 
@@ -81,11 +139,21 @@
       backdrop-filter: blur(4px) saturate(120%);
       -webkit-backdrop-filter: blur(4px) saturate(120%);
 
+      transform:
+        perspective(1100px)
+        rotateX(2.5deg)
+        translateZ(18px);
+
+      transform-style: preserve-3d;
+
       box-shadow:
-        0 24px 70px rgba(0, 0, 0, 0.68),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.52),
-        0 0 18px rgba(160, 255, 235, 0.13);
+        0 34px 90px rgba(0, 0, 0, 0.72),
+        0 14px 24px rgba(0, 0, 0, 0.42),
+        inset 0 2px 0 rgba(255, 255, 255, 0.24),
+        inset 0 -3px 8px rgba(0, 0, 0, 0.58),
+        inset 10px 0 18px rgba(255, 255, 255, 0.035),
+        inset -12px 0 22px rgba(0, 0, 0, 0.16),
+        0 0 24px rgba(160, 255, 235, 0.16);
 
       overflow: hidden;
     }
@@ -104,8 +172,17 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.08), transparent 32%),
-        linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.045) 46%, transparent 58%);
+        radial-gradient(
+          circle at 50% 18%,
+          rgba(255, 255, 255, 0.08),
+          transparent 32%
+        ),
+        linear-gradient(
+          120deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.045) 46%,
+          transparent 58%
+        );
       pointer-events: none;
     }
 
@@ -119,7 +196,7 @@
 
     @media (max-width: 640px) {
       .account-glass-window {
-        width: min(78vw, 330px);
+        width: min(92vw, 435.6px);
       }
     }
 
@@ -142,7 +219,10 @@
   <main class="create-account-stage" aria-label="Create An Account">
     <div class="account-back-wall" aria-hidden="true"></div>
 
-    <section class="account-glass-window" aria-label="Create An Account glass window">
+    <section
+      class="account-glass-window"
+      aria-label="Create An Account glass window"
+    >
       <div id="turnstile-one"></div>
     </section>
   </main>
@@ -177,8 +257,11 @@
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
 
-        const x = ((event.clientX - centerX) / centerX) * maxShift;
-        const y = ((event.clientY - centerY) / centerY) * maxShift;
+        const x =
+          ((event.clientX - centerX) / centerX) * maxShift;
+
+        const y =
+          ((event.clientY - centerY) / centerY) * maxShift;
 
         setWallShift(x, y);
       });
@@ -187,8 +270,17 @@
         const gamma = event.gamma || 0;
         const beta = event.beta || 0;
 
-        const x = clamp(gamma * 0.7, -maxShift, maxShift);
-        const y = clamp(beta * 0.25, -maxShift, maxShift);
+        const x = clamp(
+          gamma * 0.7,
+          -maxShift,
+          maxShift
+        );
+
+        const y = clamp(
+          beta * 0.25,
+          -maxShift,
+          maxShift
+        );
 
         setWallShift(x, y);
       });
