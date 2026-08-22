@@ -1,20 +1,54 @@
-// create-account.js
-// CyberCrowd — LIVE PAGE → RECOVERY LANE BRIDGE
-// JOB: Connect the existing create-account page to entry-flow-harness.js.
-// DOES NOT send email itself.
-// DOES NOT own backend logic.
-// DOES NOT create setup tokens.
+// CYBERCROWD
+// REPO: cybercrowd99/cybercrowd-net
+// PATH: create-account.js
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION PATH
+//
+// JOB:
+// Control the create-account human-entry sequence.
+//
+// TRACK:
+// create-account.html
+// → SPINNING LOCK
+// → HUMAN TOUCH
+// → CLOUDFLARE TURNSTILE
+// → HUMAN VERIFICATION
+// → EMAIL FIELD
+// → EMAIL ENTERED
+// → SEND BUTTON
+// → EXISTING BACKEND ENTRY PIPELINE
+// → WHOOSH
+// → HURRY BACK
+//
+// SECURITY:
+// REGISTER touch is not Turnstile proof.
+// A separate human interaction with Cloudflare Turnstile is required.
+// No automatic Turnstile execution.
+// No email entry before human verification.
+// No Send before human verification and valid email.
+//
+// RECOVERY LOCK:
+// Backend frozen.
+// No new helper.
+// No new route.
+// No bridge.
+// No envelope.
 
 const form = document.getElementById("entryForm");
 const emailInput = document.getElementById("email");
 const sendButton = document.getElementById("sendButton");
 const statusText = document.getElementById("status");
 const turnstileSlot = document.getElementById("turnstileSlot");
+const humanTouch = document.querySelector(".seal-wrapper");
 
 const checkEmailOverlay = document.getElementById("checkEmailOverlay");
 const checkEmailWhoosh = document.getElementById("checkEmailWhoosh");
 
 let widgetId = null;
+let humanVerified = false;
 let pipelineRunning = false;
 
 const flyInClasses = [
@@ -113,31 +147,114 @@ function waitForTurnstile() {
   });
 }
 
-async function createHumanWidget() {
-  await waitForTurnstile();
+function lockEntrySurface() {
+  emailInput.style.display = "none";
+  sendButton.style.display = "none";
+  turnstileSlot.style.display = "none";
 
-  if (widgetId !== null) {
-    return widgetId;
+  emailInput.disabled = true;
+  sendButton.disabled = true;
+
+  setStatus("Touch the lock.");
+}
+
+function revealEmailEntry() {
+  emailInput.disabled = false;
+  emailInput.style.display = "";
+
+  emailInput.focus();
+
+  setStatus("Enter your email.");
+}
+
+function updateSendState() {
+  if (!humanVerified) {
+    sendButton.style.display = "none";
+    sendButton.disabled = true;
+    return;
   }
 
-  turnstileSlot.style.display = "grid";
+  const emailValid = emailInput.checkValidity() &&
+    emailInput.value.trim().length > 0;
 
-  widgetId = window.turnstile.render("#turnstileSlot", {
-    sitekey: "0x4AAAAAACvkecVo2F3hpb1r",
-    execution: "execute",
-    appearance: "interaction-only",
-    callback: function () {
-      setStatus("Human verified.");
-    },
-    "expired-callback": function () {
-      setStatus("Human verification expired.");
-    },
-    "error-callback": function () {
-      setStatus("Human verification failed.");
-    }
-  });
+  if (emailValid) {
+    sendButton.style.display = "";
+    sendButton.disabled = false;
+    setStatus("Ready to Send.");
+    return;
+  }
 
-  return widgetId;
+  sendButton.style.display = "none";
+  sendButton.disabled = true;
+}
+
+async function activateHumanGate() {
+  if (widgetId !== null || humanVerified) {
+    return;
+  }
+
+  setStatus("Are you human?");
+
+  try {
+    await waitForTurnstile();
+
+    turnstileSlot.style.display = "grid";
+
+    widgetId = window.turnstile.render("#turnstileSlot", {
+      sitekey: "0x4AAAAAACvkecVo2F3hpb1r",
+      appearance: "always",
+
+      callback(token) {
+        if (!token) {
+          return;
+        }
+
+        humanVerified = true;
+
+        if (humanTouch) {
+          humanTouch.classList.add("human-touch-active");
+        }
+
+        revealEmailEntry();
+      },
+
+      "expired-callback"() {
+        humanVerified = false;
+
+        emailInput.value = "";
+        emailInput.disabled = true;
+        emailInput.style.display = "none";
+
+        sendButton.disabled = true;
+        sendButton.style.display = "none";
+
+        setStatus("Human verification expired. Touch the lock again.");
+
+        if (window.turnstile && widgetId !== null) {
+          window.turnstile.remove(widgetId);
+        }
+
+        widgetId = null;
+      },
+
+      "error-callback"() {
+        humanVerified = false;
+
+        setStatus("Human verification failed. Touch the lock again.");
+
+        if (window.turnstile && widgetId !== null) {
+          window.turnstile.remove(widgetId);
+        }
+
+        widgetId = null;
+      }
+    });
+
+  } catch (err) {
+    setStatus(
+      `ERROR: ${err?.message || "turnstile-not-ready"}`
+    );
+  }
 }
 
 async function startLiveRecoveryLane(event) {
@@ -147,51 +264,67 @@ async function startLiveRecoveryLane(event) {
     return;
   }
 
+  if (!humanVerified || widgetId === null) {
+    setStatus("Human verification required.");
+    return;
+  }
+
+  const humanToken =
+    window.turnstile?.getResponse(widgetId) || "";
+
+  if (!humanToken) {
+    setStatus("Human verification required.");
+    return;
+  }
+
+  const rawEmail = emailInput.value.trim();
+
+  if (!emailInput.checkValidity() || !rawEmail) {
+    setStatus("Enter a valid email.");
+    return;
+  }
+
   pipelineRunning = true;
   sendButton.disabled = true;
 
   try {
-    const rawEmail = emailInput.value.trim();
-
-    console.log("[CyberCrowd] LIVE BRIDGE START");
-    console.log("[CyberCrowd] rawEmail:", rawEmail);
-
-    setStatus("Starting verification.");
+    setStatus("Sending.");
 
     const {
       runEntryPipeline,
       installWhooshListener
     } = await loadRecoveryLane();
 
-    console.log("[CyberCrowd] harness loaded:", typeof runEntryPipeline === "function");
-
     installWhooshListener({
       playWhoosh,
       showCheckEmailOverlay
     });
 
-    const turnstileWidgetId = await createHumanWidget();
-
-    console.log(
-      "[CyberCrowd] turnstileWidgetId:",
-      turnstileWidgetId
-    );
-
     const result = await runEntryPipeline({
       rawEmail,
-      turnstileWidgetId
+      turnstileWidgetId: widgetId
     });
-
-    console.log("[CyberCrowd] PIPELINE RESULT:", result);
 
     if (result.success === true) {
       setStatus("EMAIL SENT");
 
       form.reset();
 
+      humanVerified = false;
+
       if (window.turnstile && widgetId !== null) {
-        window.turnstile.reset(widgetId);
+        window.turnstile.remove(widgetId);
       }
+
+      widgetId = null;
+
+      emailInput.disabled = true;
+      emailInput.style.display = "none";
+
+      sendButton.disabled = true;
+      sendButton.style.display = "none";
+
+      turnstileSlot.style.display = "none";
 
       return;
     }
@@ -201,15 +334,27 @@ async function startLiveRecoveryLane(event) {
     );
 
   } catch (err) {
-    console.error("[CyberCrowd] LIVE BRIDGE ERROR:", err);
+    console.error("[CyberCrowd] ENTRY ERROR:", err);
 
     setStatus(
       `ERROR: ${err?.message || "unknown"}`
     );
+
   } finally {
     pipelineRunning = false;
-    sendButton.disabled = false;
+
+    if (humanVerified) {
+      updateSendState();
+    }
   }
 }
+
+lockEntrySurface();
+
+if (humanTouch) {
+  humanTouch.addEventListener("click", activateHumanGate);
+}
+
+emailInput.addEventListener("input", updateSendState);
 
 form.addEventListener("submit", startLiveRecoveryLane);
