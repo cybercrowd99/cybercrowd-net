@@ -3,6 +3,9 @@ main = "src/router.ts"
 compatibility_date = "2026-05-01"
 compatibility_flags = ["nodejs_compat"]
 
+workers_dev = false
+preview_urls = false
+
 [observability]
 enabled = true
 head_sampling_rate = 1
@@ -22,6 +25,10 @@ zone_name = "cybercrowd.net"
 [[routes]]
 pattern = "cybercrowd.net/api/auth/send-verification"
 zone_name = "cybercrowd.net"
+
+[[migrations]]
+tag = "v1_ephemeral_port_allocator"
+new_classes = ["EphemeralPortAllocatorDurableObject"]
 
 [[migrations]]
 tag = "v2_remove_ephemeral_port_allocator"
