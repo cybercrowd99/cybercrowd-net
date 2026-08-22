@@ -1,7 +1,42 @@
 // functions/api/auth/send-verification.js
-// CyberCrowd — Verification Email Sender (RESTORED)
-// This file was deleted in commit 2c8a659e10ef01ed72d0c520b913d61c980fde26.
-// This is the recovery version: clean, linear, no drift.
+// CYBERCROWD — VERIFICATION EMAIL API
+//
+// REPO:
+// cybercrowd99/cybercrowd-net
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+//
+// JOB:
+// Receive the CyberCrowd entry request,
+// create and store one setup token,
+// send one Postmark verification email,
+// return one structured result.
+//
+// TRACK:
+// request-entry-client.js
+// → /api/auth/send-verification
+// → setup-token.js
+// → setup-token-store.js
+// → IDENTITY
+// → Postmark
+// → success:true
+//
+// STORAGE CONTRACT:
+// storeSetupToken(env, key, record)
+//
+// POSTMARK CONTRACT:
+// POSTMARK_API_KEY
+// CyberCrowd <welcome@cybercrowd.net>
+//
+// FREEZE:
+// frontend unchanged
+// setup-token.js unchanged
+// setup-token-store.js unchanged
+// verify.js unchanged
+// bindings unchanged
 
 import { createSetupToken } from "./setup-token.js";
 import { storeSetupToken } from "./setup-token-store.js";
@@ -10,87 +45,144 @@ export async function onRequestPost(context) {
   try {
     const { request, env } = context;
 
-    // Parse incoming JSON
     const body = await request.json().catch(() => null);
+
     if (!body || typeof body.email !== "string") {
-      return new Response(
-        JSON.stringify({ success: false, reason: "invalid-email" }),
+      return Response.json(
+        {
+          success: false,
+          reason: "invalid-email"
+        },
         { status: 400 }
       );
     }
 
-    const email = body.email.trim();
+    const email = body.email.trim().toLowerCase();
     const humanToken = body["cf-turnstile-response"];
 
-    // Basic sanity check
-    if (!humanToken || typeof humanToken !== "string") {
-      return new Response(
-        JSON.stringify({ success: false, reason: "missing-human-token" }),
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return Response.json(
+        {
+          success: false,
+          reason: "invalid-email"
+        },
         { status: 400 }
       );
     }
 
-    // 1. Create setup token
-    const tokenRecord = await createSetupToken(email);
+    if (!humanToken || typeof humanToken !== "string") {
+      return Response.json(
+        {
+          success: false,
+          reason: "missing-human-token"
+        },
+        { status: 400 }
+      );
+    }
+
+    const tokenRecord = createSetupToken(email);
 
     if (!tokenRecord || !tokenRecord.token) {
-      return new Response(
-        JSON.stringify({ success: false, reason: "token-failed" }),
+      return Response.json(
+        {
+          success: false,
+          reason: "token-failed"
+        },
         { status: 500 }
       );
     }
 
-    // 2. Store token
-    const stored = await storeSetupToken(env, tokenRecord);
+    const kvKey = `setup:${tokenRecord.token}`;
 
-    if (!stored || stored.success !== true) {
-      return new Response(
-        JSON.stringify({ success: false, reason: "token-store-failed" }),
+    await storeSetupToken(
+      env,
+      kvKey,
+      tokenRecord
+    );
+
+    const origin = new URL(request.url).origin;
+
+    const verificationUrl =
+      `${origin}/setup.html?setup=${encodeURIComponent(tokenRecord.token)}`;
+
+    const postmarkKey = env.POSTMARK_API_KEY;
+
+    if (!postmarkKey) {
+      return Response.json(
+        {
+          success: false,
+          reason: "missing-postmark-api-key"
+        },
         { status: 500 }
       );
     }
 
-    // 3. Build verification URL
-    const verificationUrl = `${env.PUBLIC_BASE_URL}/setup.html?setup=${tokenRecord.token}`;
+    const sender =
+      "CyberCrowd <welcome@cybercrowd.net>";
 
-    // 4. Send Postmark email
-    const postmarkPayload = {
-      From: env.POSTMARK_FROM,
-      To: email,
-      Subject: "Your CyberCrowd Setup Link",
-      TextBody: `Click to continue: ${verificationUrl}`,
-      MessageStream: "outbound"
-    };
+    const postmarkResponse = await fetch(
+      "https://api.postmarkapp.com/email",
+      {
+        method: "POST",
+        headers: {
+          "X-Postmark-Server-Token": postmarkKey,
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          From: sender,
+          To: email,
+          Subject: "Your CyberCrowd Setup Link",
+          TextBody:
+            `Click to continue your CyberCrowd setup:\n\n${verificationUrl}`,
+          HtmlBody:
+            `<p>Continue your CyberCrowd setup:</p>
+             <p><a href="${verificationUrl}">Continue CyberCrowd Setup</a></p>`,
+          MessageStream: "outbound"
+        })
+      }
+    );
 
-    const postmarkResponse = await fetch("https://api.postmarkapp.com/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Postmark-Server-Token": env.POSTMARK_SERVER_TOKEN
-      },
-      body: JSON.stringify(postmarkPayload)
-    });
+    const postmarkData =
+      await postmarkResponse.json().catch(() => null);
 
     if (!postmarkResponse.ok) {
-      return new Response(
-        JSON.stringify({ success: false, reason: "postmark-rejected" }),
+      console.error(
+        "CYBERCROWD POSTMARK FAILURE:",
+        postmarkResponse.status,
+        postmarkData
+      );
+
+      return Response.json(
+        {
+          success: false,
+          reason: "postmark-rejected",
+          status: postmarkResponse.status
+        },
         { status: 502 }
       );
     }
 
-    // 5. Success
-    return new Response(
-      JSON.stringify({ success: true }),
+    return Response.json(
+      {
+        success: true,
+        message: "Check your email."
+      },
       { status: 200 }
     );
 
   } catch (err) {
-    return new Response(
-      JSON.stringify({
+    console.error(
+      "CYBERCROWD SEND VERIFICATION ERROR:",
+      err
+    );
+
+    return Response.json(
+      {
         success: false,
         reason: "exception",
         error: err?.message || "unknown"
-      }),
+      },
       { status: 500 }
     );
   }
