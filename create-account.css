@@ -1,3 +1,46 @@
+/*
+CYBERCROWD
+
+REPO: cybercrowd99/cybercrowd-net
+PATH: create-account.css
+ORGAN: 02-Secretary
+ORGAN PIN: 02-Secretary
+
+FILE ACTION:
+REFERENCE HEADER ONLY
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+JOB:
+Style the public CyberCrowd create-account room.
+
+FUNCTION:
+Own the visual presentation of create-account.html.
+
+OWNS:
+Create-account visual styling only.
+
+POINTS TO:
+create-account.html
+create-account.js
+create-account-entry.js
+
+BOUNDARY:
+PUBLIC PRESENTATION
+PRIVATE AUTH DECIDES
+PUBLIC RESPONDS
+
+DO NOT:
+MOVE AUTHORITY INTO CSS
+CREATE AUTH LOGIC
+CREATE NEW FILES
+CHANGE RUNTIME LOGIC
+CHANGE DOM
+*/
+
 :root {
   --glass-card: rgba(238, 248, 242, 0.28);
   --glass-edge: rgba(214, 242, 232, 0.78);
@@ -94,6 +137,17 @@ body.check-email-open .page {
   overflow: hidden;
   perspective: 900px;
   transform: translateY(-2px) rotateX(2deg);
+}
+
+/* INTERACTIVE SURFACE */
+.entry-form,
+.email-field,
+.turnstile-slot,
+.send-button,
+.status,
+.member-strap {
+  position: relative;
+  z-index: 20;
 }
 
 .glass-plaque::before {
