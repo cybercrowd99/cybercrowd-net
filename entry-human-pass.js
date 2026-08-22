@@ -1,7 +1,35 @@
-// entry-human-pass.js
-// CyberCrowd — Human Verification Gate
-// JOB: Execute existing Turnstile widget and return HUMAN TOKEN.
-// NO backend calls. NO email send. NO WHOOSH. NO READY logic.
+// CYBERCROWD
+// REPO: cybercrowd99/cybercrowd-net
+// PATH: entry-human-pass.js
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+//
+// JOB:
+// Read and return an already-established Cloudflare Turnstile human token.
+//
+// TRACK:
+// HUMAN TOUCH
+// → CLOUDFLARE TURNSTILE
+// → HUMAN INTERACTION
+// → TOKEN ALREADY EXISTS
+// → HUMAN PASS RETURNS TOKEN
+//
+// SECURITY:
+// This file does not execute Turnstile.
+// This file does not create human proof.
+// This file only accepts proof already created by the human-gate surface.
+//
+// RECOVERY LOCK:
+// Frontend lane only.
+// Backend frozen.
+// No polling.
+// No auto-execute.
+// No new helper.
+// No bridge.
+// No envelope.
 
 export async function runHumanPass(turnstileWidgetId) {
   if (
@@ -17,44 +45,24 @@ export async function runHumanPass(turnstileWidgetId) {
   }
 
   try {
-    const existingToken =
+    const token =
       window.turnstile.getResponse(turnstileWidgetId);
 
     if (
-      typeof existingToken === "string" &&
-      existingToken.length > 0
+      typeof token === "string" &&
+      token.length > 0
     ) {
       return {
         human: true,
-        token: existingToken,
+        token,
         reason: "human-token-ready"
       };
-    }
-
-    window.turnstile.execute("#turnstileSlot");
-
-    for (let attempt = 0; attempt < 100; attempt += 1) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const token =
-        window.turnstile.getResponse(turnstileWidgetId);
-
-      if (
-        typeof token === "string" &&
-        token.length > 0
-      ) {
-        return {
-          human: true,
-          token,
-          reason: "human-token-generated"
-        };
-      }
     }
 
     return {
       human: false,
       token: null,
-      reason: "human-token-timeout"
+      reason: "human-token-required"
     };
 
   } catch (err) {
