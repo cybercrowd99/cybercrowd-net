@@ -8,20 +8,16 @@
 // 1 FUNCTION PATH
 //
 // JOB:
-// Control the create-account human-entry sequence.
+// Control the create-account human-entry sequence and drive the 2.5D cylinder orbit.
 //
 // TRACK:
 // create-account.html
-// → SPINNING LOCK
-// → HUMAN TOUCH
-// → CLOUDFLARE TURNSTILE
-// → HUMAN VERIFICATION
-// → EMAIL FIELD
-// → EMAIL ENTERED
-// → SEND BUTTON
-// → EXISTING BACKEND ENTRY PIPELINE
+// → STEP 0: SPINNING LOCK (0 rad)
+// → STEP 1: HUMAN TOUCH & CLOUDFLARE TURNSTILE (pi/3 rad)
+// → STEP 2: HUMAN VERIFICATION & EMAIL FIELD (2pi/3 rad)
+// → STEP 3: SUBMISSION & EMAIL SENT (pi rad)
 // → WHOOSH
-// → HURRY BACK
+// → CHECK EMAIL OVERLAY
 //
 // SECURITY:
 // REGISTER touch is not Turnstile proof.
@@ -43,6 +39,7 @@ const sendButton = document.getElementById("sendButton");
 const statusText = document.getElementById("status");
 const turnstileSlot = document.getElementById("turnstileSlot");
 const humanTouch = document.querySelector(".seal-wrapper");
+const plaque = document.querySelector(".glass-plaque");
 
 const checkEmailOverlay = document.getElementById("checkEmailOverlay");
 const checkEmailWhoosh = document.getElementById("checkEmailWhoosh");
@@ -51,6 +48,68 @@ let widgetId = null;
 let humanVerified = false;
 let pipelineRunning = false;
 
+// ==========================================
+// 2.5D CYLINDER ORBIT ENGINE
+// ==========================================
+const TOTAL_STEPS = 4;
+const ACTION_DURATION = 850; // ms per step transition
+const MAX_ORBIT_RAD = Math.PI; // 180 degrees total travel
+
+let currentStep = 0;
+let targetStep = 0;
+let currentAngle = 0;
+let startAngle = 0;
+let targetAngle = 0;
+let animStartTime = null;
+let isAnimating = false;
+
+function stepToAngle(stepIndex) {
+  const clamped = Math.max(0, Math.min(TOTAL_STEPS - 1, stepIndex));
+  return (clamped / (TOTAL_STEPS - 1)) * MAX_ORBIT_RAD;
+}
+
+function setCylinderAngle(rad) {
+  if (!plaque) return;
+  plaque.style.setProperty("--cylinder-angle", `${rad.toFixed(6)}rad`);
+}
+
+function orbitTick(now) {
+  if (!animStartTime) animStartTime = now;
+  const elapsed = now - animStartTime;
+  const progress = Math.min(elapsed / ACTION_DURATION, 1.0);
+
+  // Linear progress across cylindrical coordinates
+  currentAngle = startAngle + (targetAngle - startAngle) * progress;
+  setCylinderAngle(currentAngle);
+
+  if (progress < 1.0) {
+    requestAnimationFrame(orbitTick);
+  } else {
+    currentAngle = targetAngle;
+    currentStep = targetStep;
+    setCylinderAngle(currentAngle);
+    isAnimating = false;
+    animStartTime = null;
+  }
+}
+
+function moveCylinderToStep(nextStep) {
+  targetStep = Math.max(0, Math.min(TOTAL_STEPS - 1, nextStep));
+  if (targetStep === currentStep && !isAnimating) return;
+
+  startAngle = currentAngle;
+  targetAngle = stepToAngle(targetStep);
+  animStartTime = null;
+
+  if (!isAnimating) {
+    isAnimating = true;
+    requestAnimationFrame(orbitTick);
+  }
+}
+
+// ==========================================
+// FLY-IN OVERLAY & SOUND
+// ==========================================
 const flyInClasses = [
   "from-top",
   "from-bottom",
@@ -147,6 +206,9 @@ function waitForTurnstile() {
   });
 }
 
+// ==========================================
+// SURFACE FLOW & TURNSTILE GATE
+// ==========================================
 function lockEntrySurface() {
   emailInput.style.display = "none";
   sendButton.style.display = "none";
@@ -155,6 +217,7 @@ function lockEntrySurface() {
   emailInput.disabled = true;
   sendButton.disabled = true;
 
+  moveCylinderToStep(0);
   setStatus("Touch the lock.");
 }
 
@@ -162,8 +225,10 @@ function revealEmailEntry() {
   emailInput.disabled = false;
   emailInput.style.display = "";
 
-  emailInput.focus();
+  // Advance cylinder to Step 2 (Verification complete, reveal email)
+  moveCylinderToStep(2);
 
+  emailInput.focus();
   setStatus("Enter your email.");
 }
 
@@ -194,6 +259,9 @@ async function activateHumanGate() {
   }
 
   setStatus("Are you human?");
+  
+  // Advance cylinder to Step 1 (Turnstile slot presentation)
+  moveCylinderToStep(1);
 
   try {
     await waitForTurnstile();
@@ -228,6 +296,7 @@ async function activateHumanGate() {
         sendButton.disabled = true;
         sendButton.style.display = "none";
 
+        moveCylinderToStep(0);
         setStatus("Human verification expired. Touch the lock again.");
 
         if (window.turnstile && widgetId !== null) {
@@ -240,6 +309,7 @@ async function activateHumanGate() {
       "error-callback"() {
         humanVerified = false;
 
+        moveCylinderToStep(0);
         setStatus("Human verification failed. Touch the lock again.");
 
         if (window.turnstile && widgetId !== null) {
@@ -251,6 +321,7 @@ async function activateHumanGate() {
     });
 
   } catch (err) {
+    moveCylinderToStep(0);
     setStatus(
       `ERROR: ${err?.message || "turnstile-not-ready"}`
     );
@@ -299,6 +370,9 @@ async function startLiveRecoveryLane(event) {
       playWhoosh,
       showCheckEmailOverlay
     });
+
+    // Advance cylinder to Step 3 (Submitting / completing track)
+    moveCylinderToStep(3);
 
     const result = await runEntryPipeline({
       rawEmail,
@@ -349,6 +423,7 @@ async function startLiveRecoveryLane(event) {
   }
 }
 
+// Initial state lock
 lockEntrySurface();
 
 if (humanTouch) {
