@@ -50,6 +50,10 @@ CHANGE DOM
   --gold-top: #e9c979;
   --gold-bottom: #9b7131;
   --gold-border: rgba(82, 53, 20, 0.76);
+
+  /* CYLINDER ORBIT PARAMETERS */
+  --cylinder-radius: 320px;
+  --cylinder-angle: 0rad;
 }
 
 * {
@@ -71,6 +75,7 @@ body {
   overflow: hidden;
   padding: 0;
   font-family: Arial, sans-serif;
+  perspective: 1200px;
 }
 
 .background-photo {
@@ -95,6 +100,7 @@ body {
   gap: clamp(12px, 2.2svh, 24px);
   margin: 0 auto;
   transform-origin: center center;
+  transform-style: preserve-3d;
   transition:
     transform 720ms cubic-bezier(0.2, 0.85, 0.22, 1),
     opacity 720ms ease,
@@ -112,6 +118,7 @@ body.check-email-open .page {
   filter: blur(1.2px) saturate(0.88);
 }
 
+/* ⭐ INVISIBLE CYLINDER ROTATOR ⭐ */
 .glass-plaque {
   position: relative;
   width: 100%;
@@ -136,17 +143,16 @@ body.check-email-open .page {
     inset 0 0 30px rgba(255, 255, 255, 0.18);
   overflow: hidden;
 
-  /* 3D foundation */
-  perspective: 900px;
+  /* 3D Cylindrical Geometry */
+  transform-origin: center center;
   transform-style: preserve-3d;
-
-  /* ⭐ ROTATOR INSTALLED ⭐ */
   transform:
     translateY(-2px)
+    translateX(calc(var(--cylinder-radius) * sin(var(--cylinder-angle))))
+    translateZ(calc(var(--cylinder-radius) * (1 - cos(var(--cylinder-angle)))))
     rotateX(2deg)
-    rotateY(calc(180deg * var(--turn, 0)));
+    rotateY(var(--cylinder-angle));
 
-  /* Performance */
   will-change: transform;
 }
 
