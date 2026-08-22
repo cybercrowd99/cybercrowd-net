@@ -1,0 +1,188 @@
+<!--
+CYBERCROWD
+
+REPO: cybercrowd99/cybercrowd-net
+PATH: create-account.html
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+POINT — DO NOT NEST
+
+JOB:
+Public account room.
+
+FUNCTION:
+Expose the create-account DOM anchors.
+
+OWNS:
+Nothing else.
+
+POINTS TO:
+create-account.css
+turnstile-one-ui.js
+turnstile-one-verify.js
+email-entry.js
+turnstile-two-ui.js
+turnstile-two-verify.js
+send-verification.js
+whoosh.js
+check-email.js
+
+BOUNDARY:
+PUBLIC REQUESTS
+PRIVATE AUTH DECIDES
+PUBLIC RESPONDS
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+  <title>Create Your Account | CyberCrowd</title>
+
+  <link
+    rel="stylesheet"
+    href="create-account.css"
+  />
+
+  <script
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+    defer
+  ></script>
+
+  <script src="turnstile-one-ui.js" defer></script>
+  <script src="turnstile-one-verify.js" defer></script>
+  <script src="email-entry.js" defer></script>
+  <script src="turnstile-two-ui.js" defer></script>
+  <script src="turnstile-two-verify.js" defer></script>
+  <script src="send-verification.js" defer></script>
+  <script src="whoosh.js" defer></script>
+  <script src="check-email.js" defer></script>
+</head>
+
+<body>
+  <main
+    id="create-account-room"
+    class="create-account-room"
+    aria-label="Create Your Account"
+  >
+    <div
+      id="account-back-wall"
+      class="account-back-wall"
+      aria-hidden="true"
+    ></div>
+
+    <section
+      id="account-glass-window"
+      class="account-glass-window"
+      aria-label="Create Your Account glass room"
+    >
+      <div
+        id="turnstile-one"
+        class="turnstile-one"
+        aria-label="First human verification"
+      ></div>
+
+      <div
+        id="account-room-content"
+        class="account-room-content"
+        aria-hidden="true"
+      >
+        <div
+          id="account-seal"
+          class="account-seal"
+        >
+          <img
+            src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png"
+            alt="CyberCrowd Seal"
+          />
+        </div>
+
+        <h1
+          id="create-account-title"
+          class="create-account-title"
+        >
+          Create Your Account
+        </h1>
+
+        <div
+          id="create-account-welcome"
+          class="create-account-welcome"
+        >
+          Welcome to CyberCrowd
+        </div>
+
+        <div
+          id="email-entry"
+          class="email-entry"
+        >
+          <button
+            id="email-invite"
+            class="email-invite"
+            type="button"
+          >
+            Add Your Email
+          </button>
+
+          <input
+            id="email"
+            class="email-field"
+            name="email"
+            type="email"
+            autocomplete="email"
+            autocapitalize="none"
+            spellcheck="false"
+            aria-label="Email address"
+          />
+        </div>
+
+        <div
+          id="turnstile-two"
+          class="turnstile-two"
+          aria-label="Second human verification"
+        ></div>
+
+        <button
+          id="send-button"
+          class="send-button"
+          type="button"
+          disabled
+          aria-disabled="true"
+        >
+          Send
+        </button>
+
+        <div
+          id="create-account-status"
+          class="create-account-status"
+          aria-live="polite"
+        ></div>
+      </div>
+    </section>
+  </main>
+
+  <div
+    id="check-email-root"
+    class="check-email-root"
+    aria-live="polite"
+  ></div>
+
+  <audio
+    id="check-email-whoosh"
+    preload="auto"
+  >
+    <source
+      src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/whooshing-email-sent_1.1s%20teaser.mp3"
+      type="audio/mpeg"
+    />
+  </audio>
+</body>
+</html>
