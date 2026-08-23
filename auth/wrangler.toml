@@ -23,6 +23,10 @@ pattern = "cybercrowd.net/api/auth/verify*"
 zone_name = "cybercrowd.net"
 
 [[routes]]
+pattern = "cybercrowd.net/api/auth/human-verify"
+zone_name = "cybercrowd.net"
+
+[[routes]]
 pattern = "cybercrowd.net/api/auth/send-verification"
 zone_name = "cybercrowd.net"
 
