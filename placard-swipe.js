@@ -21,6 +21,9 @@ CONTROL:
 → --cylinder-angle
 → wheel-turn.css
 
+SIGNAL:
+cybercrowd:cylinder-turned
+
 CARD MAP:
 CARD 1 =   0°
 CARD 2 =  90°
@@ -32,14 +35,16 @@ Pointer-down position.
 Swipe threshold.
 Card index.
 90-degree cylinder-angle update.
+Turn signal publication.
 Pointer release.
 
 DOES NOT OWN:
 Wheel geometry.
 CSS animation.
+Turn audio.
 Turnstile.
 Email.
-Sound.
+Sound generation.
 Send.
 Check Email.
 WHOOSH.
@@ -55,9 +60,14 @@ export function installPlacardSwipe() {
     return;
   }
 
-  const CARD_ANGLE = Math.PI / 2;
-  const MAX_INDEX = 3;
-  const SWIPE_THRESHOLD = 40;
+  const CARD_ANGLE =
+    Math.PI / 2;
+
+  const MAX_INDEX =
+    3;
+
+  const SWIPE_THRESHOLD =
+    40;
 
   let startX = 0;
   let cardIndex = 0;
@@ -70,6 +80,21 @@ export function installPlacardSwipe() {
     document.documentElement.style.setProperty(
       "--cylinder-angle",
       `${angle}rad`
+    );
+  };
+
+  const publishTurn = () => {
+    window.dispatchEvent(
+      new CustomEvent(
+        "cybercrowd:cylinder-turned",
+        {
+          detail: {
+            cardIndex,
+            angle:
+              cardIndex * CARD_ANGLE
+          }
+        }
+      )
     );
   };
 
@@ -95,12 +120,15 @@ export function installPlacardSwipe() {
       const distance =
         event.clientX - startX;
 
+      let turned =
+        false;
+
       if (
         distance <= -SWIPE_THRESHOLD &&
         cardIndex < MAX_INDEX
       ) {
         cardIndex += 1;
-        setCardAngle();
+        turned = true;
       }
 
       if (
@@ -108,7 +136,12 @@ export function installPlacardSwipe() {
         cardIndex > 0
       ) {
         cardIndex -= 1;
+        turned = true;
+      }
+
+      if (turned) {
         setCardAngle();
+        publishTurn();
       }
 
       dragging = false;
