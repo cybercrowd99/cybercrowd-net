@@ -1,116 +1,75 @@
 /*
 CYBERCROWD
-FILE: create-account-flow.js
+
+FILE:
+create-account-flow.js
 
 BUILD LAW:
 1 FILE
 1 JOB
-1 ACTION
+1 FUNCTION
 
 JOB:
-Own the public create-account entry sequence only.
+Expose the Email + Send state after Face Two reveal.
 
-ACTION:
-Advance the existing entry surface through its ordered public states.
+FUNCTION:
+startCreateAccountFlow()
 
-FLOW:
-REGISTER
-→ create-account.html
-→ TURNSTILE #1
-→ VERIFIED
-→ SURFACE-CLOSING SOUND
-→ EMAIL ENTRY
-→ EMAIL CLICK
-→ WHEEL ROTATE + SOUND
-→ VERIFIED TURNSTILE
-→ AUTO SWIPE TO SEND
-→ HUMAN PRESSES SEND
-→ EXISTING EMAIL REQUEST LANE
-→ EMAIL GOES OUT
-→ CHECK EMAIL / HURRY BACK
+INPUT:
+cybercrowd:face-two-reveal
+
+OUTPUT:
+Email entry becomes available.
+Send becomes available.
 
 DOES NOT OWN:
-CSS styling.
-Turnstile rendering internals.
-Turnstile private verification.
-Email validation internals.
-Email transmission internals.
-Token creation.
-KV.
-D1.
-Postmark.
-Private authority.
-Routing after verification.
+Audio.
+Wheel movement.
+Movement #1.
+Movement #2.
+Movement #3.
+Turnstile rendering.
+Turnstile verification.
+Email validation.
+Email transmission.
+Check Email.
+Hurry Back.
+Authentication.
+Session.
+Routing.
+Backend authority.
 */
 
 export function startCreateAccountFlow() {
-  const page = document.querySelector(".page");
-  const plaque = document.querySelector(".glass-plaque");
-  const email = document.getElementById("email");
-  const send = document.getElementById("sendButton");
-  const sound = document.getElementById("surfaceClosingSound");
+  const email =
+    document.getElementById("email");
 
-  if (!page || !plaque) {
-    return;
-  }
+  const send =
+    document.getElementById("sendButton");
 
-  const playSurfaceSound = () => {
-    if (!sound) {
-      return;
-    }
-
-    sound.currentTime = 0;
-    sound.play().catch(() => {});
-  };
+  let revealed = false;
 
   window.addEventListener(
-    "cybercrowd:turnstile-one-verified",
+    "cybercrowd:face-two-reveal",
     () => {
-      playSurfaceSound();
+      if (revealed) {
+        return;
+      }
 
-      page.classList.add("email-entry-open");
-      plaque.classList.add("email-entry-open");
+      revealed = true;
 
       if (email) {
         email.disabled = false;
+        email.removeAttribute("aria-disabled");
       }
-    }
-  );
-
-  if (email) {
-    email.addEventListener(
-      "click",
-      () => {
-        playSurfaceSound();
-
-        page.classList.add("wheel-turn");
-        plaque.classList.add("wheel-turn");
-      },
-      { once: true }
-    );
-  }
-
-  window.addEventListener(
-    "cybercrowd:turnstile-two-verified",
-    () => {
-      playSurfaceSound();
-
-      page.classList.add("send-open");
-      plaque.classList.add("send-open");
 
       if (send) {
         send.disabled = false;
-        send.setAttribute("aria-disabled", "false");
-        send.focus();
+        send.setAttribute(
+          "aria-disabled",
+          "false"
+        );
       }
-    }
-  );
-
-  window.addEventListener(
-    "cybercrowd:email-sent",
-    () => {
-      page.classList.add("check-email-open");
-      plaque.classList.add("check-email-open");
     }
   );
 }
