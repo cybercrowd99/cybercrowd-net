@@ -20,6 +20,7 @@
 // placard-swipe.js
 // create-account-turn-audio-listener.js
 // create-account-face-turn.js
+// create-account-face-two-reveal.js
 // human-verify-start.js
 //
 // DOES NOT OWN:
@@ -31,6 +32,7 @@
 // Movement #3.
 // Cylinder geometry.
 // Turn audio generation.
+// Face-two reveal decision.
 // Turnstile rendering.
 // Turnstile token creation.
 // Human verification decision.
@@ -62,6 +64,10 @@ import {
 } from "./create-account-face-turn.js";
 
 import {
+  installFaceTwoReveal
+} from "./create-account-face-two-reveal.js";
+
+import {
   startHumanVerify
 } from "./human-verify-start.js";
 
@@ -72,6 +78,7 @@ function startCreateAccountEntry() {
   installPlacardSwipe();
 
   installFaceTurn();
+  installFaceTwoReveal();
 
   startHumanVerify();
 }
