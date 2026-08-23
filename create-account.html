@@ -1,6 +1,8 @@
 <!--
 CYBERCROWD
-FILE: create-account.html
+
+REPO: cybercrowd99/cybercrowd-net
+PATH: create-account.html
 
 BUILD LAW:
 1 FILE
@@ -8,25 +10,28 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Expose the permanent first-entry room into CyberCrowd.
+Provide the public CyberCrowd create-account stage.
 
 FUNCTION:
-Provide the permanent visual surface only.
+Hold the permanent background image and accept presentation from create-account.css.
 
-ART LOCK:
-image-4.png
-1780664884427.png
+OWNS:
+BACKGROUND IMAGE
+STAGE
+
+POINTS TO:
+create-account.css
 
 DO NOT:
-REDESIGN ART
-REPLACE IMAGERY
-OWN ACTION BEHAVIOR
-OWN AUTHORITY
+OWN GLASS
+OWN WHEEL
+OWN FORM
+OWN TURNSTILE
+OWN EMAIL
+OWN SEND
+OWN AUTH
 OWN ROUTING
-OWN TURNSTILE LOGIC
-OWN EMAIL LOGIC
-OWN SEND LOGIC
-OWN CHECK-EMAIL LOGIC
+OWN RUNTIME LOGIC
 -->
 
 <!DOCTYPE html>
@@ -45,31 +50,6 @@ OWN CHECK-EMAIL LOGIC
     rel="stylesheet"
     href="./create-account.css"
   />
-
-  <link
-    rel="stylesheet"
-    href="./actions/turnstile-one.css"
-  />
-
-  <link
-    rel="stylesheet"
-    href="./actions/email-entry.css"
-  />
-
-  <link
-    rel="stylesheet"
-    href="./wheel-turn.css"
-  />
-
-  <link
-    rel="stylesheet"
-    href="./actions/send.css"
-  />
-
-  <link
-    rel="stylesheet"
-    href="./actions/check-email.css"
-  />
 </head>
 
 <body>
@@ -80,43 +60,6 @@ OWN CHECK-EMAIL LOGIC
     aria-hidden="true"
   />
 
-  <main
-    class="page"
-    aria-label="CyberCrowd Entry"
-  >
-    <section
-      class="glass-plaque"
-      aria-label="CyberCrowd entry surface"
-    >
-      <div
-        class="seal-wrapper"
-        aria-label="CyberCrowd Seal"
-      >
-        <div
-          class="seal-ring"
-          aria-hidden="true"
-        ></div>
-
-        <img
-          class="seal"
-          src="https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png"
-          alt="CyberCrowd Seal"
-        />
-      </div>
-
-      <h1 class="title">
-        Enter CyberCrowd
-      </h1>
-
-      <div class="welcome">
-        Welcome to CyberCrowd
-      </div>
-    </section>
-  </main>
-
-  <script type="module">
-    import { installPlacardSwipe } from "./placard-swipe.js";
-    installPlacardSwipe();
-  </script>
+  <main class="stage"></main>
 </body>
 </html>
