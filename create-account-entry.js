@@ -19,12 +19,16 @@
 // create-account-lock-touch-listener.js
 // placard-swipe.js
 // create-account-turn-audio-listener.js
+// create-account-face-turn.js
 // human-verify-start.js
 //
 // DOES NOT OWN:
 // Lock-touch behavior.
 // Lock-touch response.
 // Swipe math.
+// Movement #1.
+// Movement #2.
+// Movement #3.
 // Cylinder geometry.
 // Turn audio generation.
 // Turnstile rendering.
@@ -54,6 +58,10 @@ import {
 } from "./create-account-turn-audio-listener.js";
 
 import {
+  installFaceTurn
+} from "./create-account-face-turn.js";
+
+import {
   startHumanVerify
 } from "./human-verify-start.js";
 
@@ -62,6 +70,9 @@ function startCreateAccountEntry() {
   installLockTouch();
   installTurnAudioListener();
   installPlacardSwipe();
+
+  installFaceTurn();
+
   startHumanVerify();
 }
 
