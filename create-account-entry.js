@@ -21,6 +21,7 @@
 // create-account-turn-audio-listener.js
 // create-account-face-turn.js
 // create-account-face-two-reveal.js
+// create-account-email-send-surface.js
 // create-account-flow.js
 // human-verify-start.js
 //
@@ -34,6 +35,7 @@
 // Cylinder geometry.
 // Turn audio generation.
 // Face-two reveal decision.
+// Email + Send DOM creation.
 // Email + Send exposure behavior.
 // Turnstile rendering.
 // Turnstile token creation.
@@ -70,6 +72,10 @@ import {
 } from "./create-account-face-two-reveal.js";
 
 import {
+  installEmailSendSurface
+} from "./create-account-email-send-surface.js";
+
+import {
   startCreateAccountFlow
 } from "./create-account-flow.js";
 
@@ -85,6 +91,8 @@ function startCreateAccountEntry() {
 
   installFaceTurn();
   installFaceTwoReveal();
+
+  installEmailSendSurface();
   startCreateAccountFlow();
 
   startHumanVerify();
