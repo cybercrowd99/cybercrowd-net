@@ -1,0 +1,39 @@
+/*
+CYBERCROWD
+
+FILE: create-account-projections.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+JOB:
+Connect bounded Create Account presentation files.
+
+FUNCTION:
+Import approved Create Account projection CSS files only.
+
+OWNS:
+Projection imports only
+
+DOES NOT OWN:
+Backdrop
+Stage
+Glass
+Seal
+Title
+Welcome
+Email
+Turnstile
+Send
+Wheel
+Motion
+Authentication
+Routing
+Runtime logic
+*/
+
+@import url("./create-account-seal.css");
+@import url("./create-account-title.css");
+@import url("./create-account-welcome.css");
