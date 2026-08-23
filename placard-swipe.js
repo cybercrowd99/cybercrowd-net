@@ -1,28 +1,31 @@
 /*
 CYBERCROWD
+
 FILE: placard-swipe.js
 
 BUILD LAW:
 1 FILE
 1 JOB
-1 ACTION
+1 FUNCTION
 
 JOB:
 Own the human placard swipe input only.
 
-ACTION:
-Advance the existing glass placard through four fixed
-90-degree indexed card positions.
+FUNCTION:
+Advance the current Create Account stage through four fixed
+90-degree indexed cylinder positions.
+
+CONTROL:
+.stage
+→ human swipe
+→ --cylinder-angle
+→ wheel-turn.css
 
 CARD MAP:
 CARD 1 =   0°
 CARD 2 =  90°
 CARD 3 = 180°
 CARD 4 = 270°
-
-WHOOSH:
-Separate exit movement.
-Not owned here.
 
 OWNS:
 Pointer-down position.
@@ -45,7 +48,8 @@ Routing.
 */
 
 export function installPlacardSwipe() {
-  const placard = document.querySelector(".glass-plaque");
+  const placard =
+    document.querySelector(".stage");
 
   if (!placard) {
     return;
@@ -60,7 +64,8 @@ export function installPlacardSwipe() {
   let dragging = false;
 
   const setCardAngle = () => {
-    const angle = cardIndex * CARD_ANGLE;
+    const angle =
+      cardIndex * CARD_ANGLE;
 
     document.documentElement.style.setProperty(
       "--cylinder-angle",
@@ -68,43 +73,58 @@ export function installPlacardSwipe() {
     );
   };
 
-  placard.addEventListener("pointerdown", (event) => {
-    dragging = true;
-    startX = event.clientX;
-    placard.setPointerCapture(event.pointerId);
-  });
+  placard.addEventListener(
+    "pointerdown",
+    (event) => {
+      dragging = true;
+      startX = event.clientX;
 
-  placard.addEventListener("pointerup", (event) => {
-    if (!dragging) {
-      return;
+      placard.setPointerCapture(
+        event.pointerId
+      );
     }
+  );
 
-    const distance = event.clientX - startX;
+  placard.addEventListener(
+    "pointerup",
+    (event) => {
+      if (!dragging) {
+        return;
+      }
 
-    if (
-      distance <= -SWIPE_THRESHOLD &&
-      cardIndex < MAX_INDEX
-    ) {
-      cardIndex += 1;
-      setCardAngle();
+      const distance =
+        event.clientX - startX;
+
+      if (
+        distance <= -SWIPE_THRESHOLD &&
+        cardIndex < MAX_INDEX
+      ) {
+        cardIndex += 1;
+        setCardAngle();
+      }
+
+      if (
+        distance >= SWIPE_THRESHOLD &&
+        cardIndex > 0
+      ) {
+        cardIndex -= 1;
+        setCardAngle();
+      }
+
+      dragging = false;
+
+      placard.releasePointerCapture(
+        event.pointerId
+      );
     }
+  );
 
-    if (
-      distance >= SWIPE_THRESHOLD &&
-      cardIndex > 0
-    ) {
-      cardIndex -= 1;
-      setCardAngle();
+  placard.addEventListener(
+    "pointercancel",
+    () => {
+      dragging = false;
     }
-
-    dragging = false;
-
-    placard.releasePointerCapture(event.pointerId);
-  });
-
-  placard.addEventListener("pointercancel", () => {
-    dragging = false;
-  });
+  );
 
   setCardAngle();
 }
