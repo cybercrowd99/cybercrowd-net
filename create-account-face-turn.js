@@ -8,42 +8,59 @@
 // 1 JOB
 // 1 FUNCTION
 //
+// TITLE:
+// FACE TURN TWO
+//
 // JOB:
-// Turn the existing Create Account glass surface
-// exactly 180 degrees after server human verification succeeds.
+// Own Create Account automatic Movement #2 only.
 //
 // FUNCTION:
 // installFaceTurn()
+//
+// CONTROL:
+//
+// MOVEMENT #1 ALREADY COMPLETE
+// 90°
+//
+// TURNSTILE #1
+// SERVER VERIFIED
+// ↓
+// cybercrowd:turnstile-one-verified
+// ↓
+// MOVEMENT #2
+// 90° → 180°
+// ↓
+// STOP
+// ↓
+// cybercrowd:face-two-arrived
 //
 // INPUT:
 // cybercrowd:turnstile-one-verified
 //
 // OUTPUT:
-// cybercrowd:cylinder-turned
 // cybercrowd:face-two-arrived
 //
-// CONTROL:
-// cybercrowd:turnstile-one-verified
-// → --cylinder-angle
-// → wheel-turn.css
-// → .stage::before
-//
-// FACE MAP:
-// FACE 1 = 0°
-// FACE 2 = 180°
+// POSITION MAP:
+// ARRIVAL FROM MOVEMENT #1 = 90°
+// MOVEMENT #2 DESTINATION = 180°
 //
 // TURN TIME:
 // 0.09 seconds.
 //
 // DOES NOT OWN:
-// Glass geometry.
+// Movement #1.
+// Movement #3.
+// Human swipe.
+// Reverse movement.
+// Wheel geometry.
 // CSS transition.
-// Turn audio generation.
-// Turnstile.
-// Human verification decision.
-// Face-two content reveal.
+// Turn audio.
+// Turnstile #1 rendering.
+// Turnstile #1 verification.
 // Email.
+// Email activation.
 // Send.
+// Turnstile #2.
 // WHOOSH.
 // Authentication.
 // Session.
@@ -51,7 +68,12 @@
 
 export function installFaceTurn() {
   const TURN_DURATION = 90;
-  const FACE_TWO_ANGLE = Math.PI;
+
+  const MOVEMENT_TWO_START =
+    Math.PI / 2;
+
+  const MOVEMENT_TWO_DESTINATION =
+    Math.PI;
 
   let turned = false;
 
@@ -64,23 +86,9 @@ export function installFaceTurn() {
 
       turned = true;
 
-      window.dispatchEvent(
-        new CustomEvent(
-          "cybercrowd:cylinder-turned",
-          {
-            detail: {
-              from: 0,
-              to: FACE_TWO_ANGLE,
-              degrees: 180,
-              duration: TURN_DURATION
-            }
-          }
-        )
-      );
-
       document.documentElement.style.setProperty(
         "--cylinder-angle",
-        `${FACE_TWO_ANGLE}rad`
+        `${MOVEMENT_TWO_DESTINATION}rad`
       );
 
       window.setTimeout(
@@ -90,9 +98,12 @@ export function installFaceTurn() {
               "cybercrowd:face-two-arrived",
               {
                 detail: {
-                  face: 2,
-                  angle: FACE_TWO_ANGLE,
-                  degrees: 180
+                  movement: 2,
+                  from: MOVEMENT_TWO_START,
+                  to: MOVEMENT_TWO_DESTINATION,
+                  degreesMoved: 90,
+                  destinationDegrees: 180,
+                  duration: TURN_DURATION
                 }
               }
             )
