@@ -1,0 +1,81 @@
+/*
+CYBERCROWD
+FILE: wheel-turn.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 ACTION
+
+JOB:
+Own the wheel / cylinder / surface-motion action only.
+
+ACTION:
+Apply the proven cylindrical 2.5D movement math to the existing entry surface.
+
+OWNS:
+Cylinder radius.
+Cylinder angle.
+Perspective relationship.
+Transform origin.
+Preserve-3D behavior.
+Wheel/surface transition.
+Surface-closing movement state.
+
+DOES NOT OWN:
+Base page styling.
+Background.
+Glass appearance.
+Seal appearance.
+Title.
+Welcome.
+Turnstile.
+Email.
+Send.
+Check Email.
+Authentication.
+Routing.
+*/
+
+:root {
+  --cylinder-radius: 320px;
+  --cylinder-angle: 0rad;
+}
+
+body {
+  perspective: 1200px;
+}
+
+.page {
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  transition:
+    transform 720ms cubic-bezier(0.2, 0.85, 0.22, 1),
+    opacity 720ms ease,
+    filter 720ms ease;
+  will-change: transform, opacity, filter;
+}
+
+.glass-plaque {
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  transform:
+    translateY(-2px)
+    translateX(calc(var(--cylinder-radius) * sin(var(--cylinder-angle))))
+    translateZ(calc(var(--cylinder-radius) * (1 - cos(var(--cylinder-angle)))))
+    rotateX(2deg)
+    rotateY(var(--cylinder-angle));
+
+  will-change: transform;
+}
+
+body.check-email-open .page {
+  transform:
+    perspective(900px)
+    translateY(24px)
+    scale(0.90)
+    rotateX(8deg);
+
+  opacity: 0.56;
+  filter: blur(1.2px) saturate(0.88);
+}
