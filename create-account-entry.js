@@ -24,6 +24,7 @@
 // create-account-email-send-surface.js
 // create-account-email-descriptor-activation.js
 // create-account-email-descriptor-response.js
+// create-account-send-action.js
 // create-account-flow.js
 // human-verify-start.js
 //
@@ -40,6 +41,7 @@
 // Email + Send DOM creation.
 // Email descriptor activation behavior.
 // Email descriptor response behavior.
+// Send click behavior.
 // Email + Send exposure behavior.
 // Turnstile rendering.
 // Turnstile token creation.
@@ -88,6 +90,10 @@ import {
 } from "./create-account-email-descriptor-response.js";
 
 import {
+  installSendAction
+} from "./create-account-send-action.js";
+
+import {
   startCreateAccountFlow
 } from "./create-account-flow.js";
 
@@ -107,6 +113,7 @@ function startCreateAccountEntry() {
   installEmailSendSurface();
   installEmailDescriptorActivation();
   installEmailDescriptorResponse();
+  installSendAction();
   startCreateAccountFlow();
 
   startHumanVerify();
