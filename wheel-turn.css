@@ -12,14 +12,14 @@ JOB:
 Own the wheel / cylinder / surface-motion geometry only.
 
 FUNCTION:
-Rotate the existing entry surface as a double-sided
-2.5D cylinder wall around a fixed rear axle.
+Apply double-sided 2.5D cylinder rotation
+to the existing Create Account glass surface.
 
 CONTROL:
 placard-swipe.js
 → --cylinder-angle
 → wheel-turn.css
-→ 2.5D wall rotation
+→ .stage::before
 
 OWNS:
 Cylinder depth.
@@ -27,23 +27,21 @@ Cylinder angle.
 Perspective relationship.
 Rear axle.
 Preserve-3D behavior.
-Double-sided wall behavior.
 Surface rotation transition.
 
 DOES NOT OWN:
-Base page styling.
-Background.
+Stage.
 Glass appearance.
-Seal appearance.
+Swipe input.
+Seal.
 Title.
 Welcome.
 Turnstile.
 Email.
 Send.
-Check Email.
+Overlay.
 Authentication.
 Routing.
-Swipe input.
 */
 
 :root {
@@ -56,16 +54,11 @@ body {
   perspective-origin: 50% 50%;
 }
 
-/*
-2.5D WALL
+.stage {
+  transform-style: preserve-3d;
+}
 
-The wall does NOT travel around a circle.
-
-Its rotation axle sits behind the visible surface.
-That rear axle creates the cylindrical movement.
-*/
-
-.glass-plaque {
+.stage::before {
   transform-origin:
     50%
     50%
@@ -87,47 +80,4 @@ That rear axle creates the cylindrical movement.
     cubic-bezier(0.2, 0.85, 0.22, 1);
 
   will-change: transform;
-}
-
-/*
-DOUBLE-SIDED WALL
-
-Children remain in the same 3D space as the wall
-instead of flattening during rotation.
-*/
-
-.glass-plaque > * {
-  transform-style: preserve-3d;
-
-  backface-visibility: visible;
-  -webkit-backface-visibility: visible;
-}
-
-/*
-Keep the complete entry surface in 3D space.
-This does not control its appearance.
-*/
-
-.page {
-  transform-style: preserve-3d;
-}
-
-/*
-CHECK EMAIL MOVEMENT REMAINS A SEPARATE EXIT STATE.
-
-It does not alter cylinder geometry.
-*/
-
-body.check-email-open .page {
-  transform:
-    perspective(900px)
-    translateY(24px)
-    scale(0.90)
-    rotateX(8deg);
-
-  opacity: 0.56;
-
-  filter:
-    blur(1.2px)
-    saturate(0.88);
 }
