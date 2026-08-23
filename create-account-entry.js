@@ -16,12 +16,14 @@
 //
 // CONNECTS:
 // placard-swipe.js
+// create-account-turn-audio-listener.js
 // human-verify-start.js
 // turnstile-one-ui.js
 //
 // DOES NOT OWN:
 // Swipe math.
 // Cylinder geometry.
+// Turn audio generation.
 // Turnstile rendering.
 // Turnstile token creation.
 // Human verification decision.
@@ -37,6 +39,10 @@ import {
 } from "./placard-swipe.js";
 
 import {
+  installTurnAudioListener
+} from "./create-account-turn-audio-listener.js";
+
+import {
   startHumanVerify
 } from "./human-verify-start.js";
 
@@ -45,6 +51,7 @@ import {
 } from "./turnstile-one-ui.js";
 
 function startCreateAccountEntry() {
+  installTurnAudioListener();
   installPlacardSwipe();
   startHumanVerify();
   openTurnstileOne();
