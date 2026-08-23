@@ -7,6 +7,7 @@ BUILD LAW:
 1 FILE
 1 JOB
 1 FUNCTION
+1 UNIQUE PROJECTION SLOT
 
 JOB:
 Project the Create Your Account title onto the existing stage.
@@ -15,6 +16,7 @@ FUNCTION:
 Render the title presentation only.
 
 OWNS:
+body::after
 Title text
 Title position
 Title typography
@@ -39,22 +41,10 @@ Comeback
 Runtime logic
 */
 
-.stage {
-  position: relative;
-}
-
-.stage::selection {
-  background: transparent;
-}
-
-.stage {
-  color: #e9c979;
-}
-
-.stage::after {
+body::after {
   content: "Create Your Account";
 
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
 
@@ -81,4 +71,6 @@ Runtime logic
 
   pointer-events: none;
   user-select: none;
+
+  z-index: 2;
 }
