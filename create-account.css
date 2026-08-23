@@ -1,7 +1,11 @@
 /*
 CYBERCROWD
 
-FILE: create-account.css
+REPO:
+cybercrowd99/cybercrowd-net
+
+FILE:
+create-account.css
 
 BUILD LAW:
 1 FILE
@@ -9,35 +13,43 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Project the first visual entry surface onto .stage
+Own the Create Account glass presentation only.
 
 FUNCTION:
-Render the glass entry presentation only
+Render the glass surface for the current empty stage
+and the incoming persistent .glass-plaque organism.
+
+MIGRATION LAW:
+IF .stage IS EMPTY
+→ preserve current pseudo glass
+
+IF .stage CONTAINS .glass-plaque
+→ pseudo glass disappears
+→ real glass plaque owns the presentation
 
 OWNS:
-Glass surface
-Glass edge
-Glass depth
-Glass reflection
-Glass projection onto stage
+Glass surface.
+Glass edge.
+Glass depth.
+Glass reflection.
+Glass presentation.
 
 DOES NOT OWN:
-Backdrop image
-HTML structure
-Seal
-Title
-Welcome text
-Email
-Turnstile
-Send
-Wheel
-Motion
-Overlay
-Audio
-Authentication
-Routing
-Comeback
-Runtime logic
+Backdrop image.
+HTML structure.
+Seal.
+Title.
+Welcome text.
+Email behavior.
+Turnstile.
+Send behavior.
+Wheel geometry.
+Motion authority.
+Overlay.
+Audio.
+Authentication.
+Routing.
+Runtime logic.
 */
 
 * {
@@ -74,7 +86,13 @@ body {
   padding: 24px;
 }
 
-.stage::before {
+/*
+CURRENT PRODUCTION FALLBACK
+
+The pseudo glass exists only while .stage
+has no real DOM children.
+*/
+.stage:empty::before {
   content: "";
   display: block;
 
@@ -104,4 +122,122 @@ body {
     0 26px 70px rgba(0, 0, 0, 0.34),
     inset 0 0 0 1px rgba(255, 255, 255, 0.52),
     inset 0 0 30px rgba(255, 255, 255, 0.18);
+}
+
+/*
+REAL CREATE ACCOUNT ORGANISM
+
+This becomes the glass surface automatically
+when create-account.html contains .glass-plaque.
+*/
+.glass-plaque {
+  position: relative;
+
+  width: min(88vw, 520px);
+  min-height: min(72vh, 620px);
+
+  padding:
+    clamp(24px, 4svh, 44px)
+    34px
+    clamp(24px, 4svh, 42px);
+
+  display: grid;
+  justify-items: center;
+  align-content: start;
+
+  border: 2px solid rgba(214, 242, 232, 0.78);
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.42),
+      rgba(255, 255, 255, 0.10)
+    ),
+    rgba(238, 248, 242, 0.28);
+
+  backdrop-filter:
+    blur(7px)
+    saturate(1.08);
+
+  -webkit-backdrop-filter:
+    blur(7px)
+    saturate(1.08);
+
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.52),
+    inset 0 0 30px rgba(255, 255, 255, 0.18);
+
+  transform-style: preserve-3d;
+  overflow: hidden;
+}
+
+/*
+INNER GLASS EDGE
+*/
+.glass-plaque::before {
+  content: "";
+
+  position: absolute;
+  inset: 12px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.48);
+
+  border-radius: 18px;
+
+  pointer-events: none;
+  z-index: 8;
+}
+
+/*
+TOP-RIGHT GLASS REFLECTION
+*/
+.glass-plaque::after {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 55%;
+  height: 38%;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.42),
+      transparent 64%
+    );
+
+  pointer-events: none;
+  z-index: 9;
+}
+
+@media (max-width: 560px) {
+  .stage {
+    padding: 18px;
+  }
+
+  .glass-plaque {
+    width: min(92vw, 520px);
+
+    padding:
+      38px
+      22px
+      36px;
+  }
+}
+
+@media (max-height: 740px) and (min-width: 561px) {
+  .glass-plaque {
+    width: min(88vw, 500px);
+
+    padding:
+      22px
+      32px
+      24px;
+  }
 }
