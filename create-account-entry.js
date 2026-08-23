@@ -19,17 +19,19 @@
 // create-account-lock-touch-listener.js
 // create-account-turn-audio-listener.js
 // create-account-face-turn.js
+// create-account-face-two-reveal.js
 // human-verify-start.js
 //
 // DOES NOT OWN:
 // Lock-touch behavior.
 // Lock-touch response.
 // Face-turn behavior.
+// Face-two reveal behavior.
 // Turn audio generation.
 // Turnstile rendering.
 // Turnstile token creation.
 // Human verification decision.
-// Face-two reveal.
+// Face-two content.
 // Email.
 // Send.
 // WHOOSH.
@@ -55,6 +57,10 @@ import {
 } from "./create-account-face-turn.js";
 
 import {
+  installFaceTwoReveal
+} from "./create-account-face-two-reveal.js";
+
+import {
   startHumanVerify
 } from "./human-verify-start.js";
 
@@ -63,6 +69,7 @@ function startCreateAccountEntry() {
   installLockTouch();
   installTurnAudioListener();
   installFaceTurn();
+  installFaceTwoReveal();
   startHumanVerify();
 }
 
