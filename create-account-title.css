@@ -1,0 +1,84 @@
+/*
+CYBERCROWD
+
+FILE: create-account-title.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+JOB:
+Project the Create Your Account title onto the existing stage.
+
+FUNCTION:
+Render the title presentation only.
+
+OWNS:
+Title text
+Title position
+Title typography
+24kt gold title color
+
+DOES NOT OWN:
+Backdrop
+Stage
+Glass
+Seal
+Welcome
+Email
+Turnstile
+Send
+Wheel
+Motion
+Overlay
+Audio
+Authentication
+Routing
+Comeback
+Runtime logic
+*/
+
+.stage {
+  position: relative;
+}
+
+.stage::selection {
+  background: transparent;
+}
+
+.stage {
+  color: #e9c979;
+}
+
+.stage::after {
+  content: "Create Your Account";
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    translateY(20px);
+
+  width: min(86vw, 460px);
+
+  color: #e9c979;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: clamp(2rem, 6vw, 3.05rem);
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+
+  text-align: center;
+  text-transform: uppercase;
+
+  pointer-events: none;
+  user-select: none;
+}
