@@ -17,21 +17,22 @@
 // CONNECTS:
 // create-account-lock-touch.js
 // create-account-lock-touch-listener.js
-// placard-swipe.js
 // create-account-turn-audio-listener.js
+// create-account-face-turn.js
 // human-verify-start.js
 //
 // DOES NOT OWN:
 // Lock-touch behavior.
 // Lock-touch response.
-// Swipe math.
-// Cylinder geometry.
+// Face-turn behavior.
 // Turn audio generation.
 // Turnstile rendering.
 // Turnstile token creation.
 // Human verification decision.
+// Face-two reveal.
 // Email.
 // Send.
+// WHOOSH.
 // Authentication.
 // Session.
 // Routing.
@@ -46,12 +47,12 @@ import {
 } from "./create-account-lock-touch-listener.js";
 
 import {
-  installPlacardSwipe
-} from "./placard-swipe.js";
-
-import {
   installTurnAudioListener
 } from "./create-account-turn-audio-listener.js";
+
+import {
+  installFaceTurn
+} from "./create-account-face-turn.js";
 
 import {
   startHumanVerify
@@ -61,7 +62,7 @@ function startCreateAccountEntry() {
   installLockTouchListener();
   installLockTouch();
   installTurnAudioListener();
-  installPlacardSwipe();
+  installFaceTurn();
   startHumanVerify();
 }
 
