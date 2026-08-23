@@ -11,20 +11,24 @@ JOB:
 Own the human placard swipe input only.
 
 ACTION:
-Translate horizontal human drag across the existing glass placard
-into the cylinder-angle value already consumed by wheel-turn.css.
+Advance the existing glass placard through four fixed
+90-degree indexed card positions.
 
-FLOW POSITION:
-REGISTER
-→ CREATE ACCOUNT
-→ HUMAN SWIPE
-→ PLACARD TURNS
-→ NEXT SURFACE
+CARD MAP:
+CARD 1 =   0°
+CARD 2 =  90°
+CARD 3 = 180°
+CARD 4 = 270°
+
+WHOOSH:
+Separate exit movement.
+Not owned here.
 
 OWNS:
 Pointer-down position.
-Horizontal swipe distance.
-Cylinder-angle update.
+Swipe threshold.
+Card index.
+90-degree cylinder-angle update.
 Pointer release.
 
 DOES NOT OWN:
@@ -35,6 +39,7 @@ Email.
 Sound.
 Send.
 Check Email.
+WHOOSH.
 Authentication.
 Routing.
 */
@@ -46,28 +51,27 @@ export function installPlacardSwipe() {
     return;
   }
 
+  const CARD_ANGLE = Math.PI / 2;
+  const MAX_INDEX = 3;
+  const SWIPE_THRESHOLD = 40;
+
   let startX = 0;
-  let currentAngle = 0;
+  let cardIndex = 0;
   let dragging = false;
 
-  placard.addEventListener("pointerdown", (event) => {
-    dragging = true;
-    startX = event.clientX;
-    placard.setPointerCapture(event.pointerId);
-  });
-
-  placard.addEventListener("pointermove", (event) => {
-    if (!dragging) {
-      return;
-    }
-
-    const distance = event.clientX - startX;
-    const angle = currentAngle + distance * 0.0045;
+  const setCardAngle = () => {
+    const angle = cardIndex * CARD_ANGLE;
 
     document.documentElement.style.setProperty(
       "--cylinder-angle",
       `${angle}rad`
     );
+  };
+
+  placard.addEventListener("pointerdown", (event) => {
+    dragging = true;
+    startX = event.clientX;
+    placard.setPointerCapture(event.pointerId);
   });
 
   placard.addEventListener("pointerup", (event) => {
@@ -77,7 +81,22 @@ export function installPlacardSwipe() {
 
     const distance = event.clientX - startX;
 
-    currentAngle += distance * 0.0045;
+    if (
+      distance <= -SWIPE_THRESHOLD &&
+      cardIndex < MAX_INDEX
+    ) {
+      cardIndex += 1;
+      setCardAngle();
+    }
+
+    if (
+      distance >= SWIPE_THRESHOLD &&
+      cardIndex > 0
+    ) {
+      cardIndex -= 1;
+      setCardAngle();
+    }
+
     dragging = false;
 
     placard.releasePointerCapture(event.pointerId);
@@ -86,4 +105,6 @@ export function installPlacardSwipe() {
   placard.addEventListener("pointercancel", () => {
     dragging = false;
   });
+
+  setCardAngle();
 }
