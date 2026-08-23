@@ -27,12 +27,13 @@ Cylinder angle.
 Perspective relationship.
 Rear axle.
 Preserve-3D behavior.
-Surface rotation transition.
+0.09-second surface rotation transition.
 
 DOES NOT OWN:
 Stage.
 Glass appearance.
 Swipe input.
+Turn audio.
 Seal.
 Title.
 Welcome.
@@ -76,8 +77,8 @@ body {
 
   transition:
     transform
-    720ms
-    cubic-bezier(0.2, 0.85, 0.22, 1);
+    90ms
+    linear;
 
   will-change: transform;
 }
