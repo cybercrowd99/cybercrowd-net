@@ -23,6 +23,7 @@
 // create-account-face-two-reveal.js
 // create-account-email-send-surface.js
 // create-account-email-descriptor-activation.js
+// create-account-email-descriptor-response.js
 // create-account-flow.js
 // human-verify-start.js
 //
@@ -38,6 +39,7 @@
 // Face-two reveal decision.
 // Email + Send DOM creation.
 // Email descriptor activation behavior.
+// Email descriptor response behavior.
 // Email + Send exposure behavior.
 // Turnstile rendering.
 // Turnstile token creation.
@@ -82,6 +84,10 @@ import {
 } from "./create-account-email-descriptor-activation.js";
 
 import {
+  installEmailDescriptorResponse
+} from "./create-account-email-descriptor-response.js";
+
+import {
   startCreateAccountFlow
 } from "./create-account-flow.js";
 
@@ -100,6 +106,7 @@ function startCreateAccountEntry() {
 
   installEmailSendSurface();
   installEmailDescriptorActivation();
+  installEmailDescriptorResponse();
   startCreateAccountFlow();
 
   startHumanVerify();
