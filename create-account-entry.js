@@ -15,12 +15,14 @@
 // startCreateAccountEntry()
 //
 // CONNECTS:
+// create-account-lock-touch.js
 // placard-swipe.js
 // create-account-turn-audio-listener.js
 // human-verify-start.js
 // turnstile-one-ui.js
 //
 // DOES NOT OWN:
+// Lock-touch behavior.
 // Swipe math.
 // Cylinder geometry.
 // Turn audio generation.
@@ -33,6 +35,10 @@
 // Session.
 // Routing.
 // Backend authority.
+
+import {
+  installLockTouch
+} from "./create-account-lock-touch.js";
 
 import {
   installPlacardSwipe
@@ -51,6 +57,7 @@ import {
 } from "./turnstile-one-ui.js";
 
 function startCreateAccountEntry() {
+  installLockTouch();
   installTurnAudioListener();
   installPlacardSwipe();
   startHumanVerify();
