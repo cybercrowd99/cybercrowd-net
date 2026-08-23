@@ -21,6 +21,7 @@
 // create-account-turn-audio-listener.js
 // create-account-face-turn.js
 // create-account-face-two-reveal.js
+// create-account-flow.js
 // human-verify-start.js
 //
 // DOES NOT OWN:
@@ -33,6 +34,7 @@
 // Cylinder geometry.
 // Turn audio generation.
 // Face-two reveal decision.
+// Email + Send exposure behavior.
 // Turnstile rendering.
 // Turnstile token creation.
 // Human verification decision.
@@ -68,6 +70,10 @@ import {
 } from "./create-account-face-two-reveal.js";
 
 import {
+  startCreateAccountFlow
+} from "./create-account-flow.js";
+
+import {
   startHumanVerify
 } from "./human-verify-start.js";
 
@@ -79,6 +85,7 @@ function startCreateAccountEntry() {
 
   installFaceTurn();
   installFaceTwoReveal();
+  startCreateAccountFlow();
 
   startHumanVerify();
 }
