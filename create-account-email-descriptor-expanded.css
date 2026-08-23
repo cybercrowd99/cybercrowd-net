@@ -1,0 +1,49 @@
+/*
+CYBERCROWD
+
+FILE:
+create-account-email-descriptor-expanded.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+JOB:
+Own the activated Email descriptor expansion presentation.
+
+FUNCTION:
+Render the existing Email field in its activated state.
+
+INPUT:
+.email-field.email-descriptor-activated
+
+OWNS:
+Activated Email-field width.
+Activated Email-field visual transition.
+
+DOES NOT OWN:
+Base Email presentation.
+Email DOM.
+Email activation input.
+Keystroke consumption.
+Email reveal.
+Send.
+Email validation.
+Email transmission.
+Wheel movement.
+Audio.
+Turnstile.
+Postmark.
+Authentication.
+Routing.
+*/
+
+.email-field.email-descriptor-activated {
+  width: min(100%, 460px);
+
+  transition:
+    width
+    180ms
+    ease-out;
+}
