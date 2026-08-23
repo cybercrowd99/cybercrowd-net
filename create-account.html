@@ -14,7 +14,7 @@ Provide the public CyberCrowd create-account stage.
 
 FUNCTION:
 Hold the permanent background image
-and connect the approved presentation entry points.
+and connect the approved presentation and entry points.
 
 OWNS:
 BACKGROUND IMAGE
@@ -23,6 +23,7 @@ STAGE
 POINTS TO:
 create-account.css
 create-account-projections.css
+create-account-entry.js
 
 DO NOT:
 OWN GLASS
@@ -68,5 +69,10 @@ OWN RUNTIME LOGIC
   />
 
   <main class="stage"></main>
+
+  <script
+    type="module"
+    src="./create-account-entry.js"
+  ></script>
 </body>
 </html>
