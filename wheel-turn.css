@@ -1,7 +1,11 @@
 /*
 CYBERCROWD
 
-FILE: wheel-turn.css
+REPO:
+cybercrowd99/cybercrowd-net
+
+FILE:
+wheel-turn.css
 
 BUILD LAW:
 1 FILE
@@ -12,14 +16,21 @@ JOB:
 Own the wheel / cylinder / surface-motion geometry only.
 
 FUNCTION:
-Apply double-sided 2.5D cylinder rotation
-to the existing Create Account glass surface.
+Apply the existing 2.5D rear-cylinder rotation
+to the current temporary glass projection
+and the incoming real .glass-plaque organism.
 
 CONTROL:
 placard-swipe.js
+create-account-face-turn.js
 → --cylinder-angle
 → wheel-turn.css
-→ .stage::before
+
+CURRENT TARGET:
+.stage:empty::before
+
+INCOMING TARGET:
+.glass-plaque
 
 OWNS:
 Cylinder depth.
@@ -32,7 +43,9 @@ Preserve-3D behavior.
 DOES NOT OWN:
 Stage.
 Glass appearance.
+HTML structure.
 Swipe input.
+Movement authority.
 Turn audio.
 Seal.
 Title.
@@ -59,7 +72,44 @@ body {
   transform-style: preserve-3d;
 }
 
-.stage::before {
+/*
+CURRENT PRODUCTION GLASS
+
+This selector remains active only while
+.stage contains no real DOM organism.
+*/
+.stage:empty::before {
+  transform-origin:
+    50%
+    50%
+    calc(-1 * var(--cylinder-depth));
+
+  transform-style: preserve-3d;
+
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+
+  transform:
+    translateY(-2px)
+    rotateX(2deg)
+    rotateY(var(--cylinder-angle));
+
+  transition:
+    transform
+    90ms
+    linear;
+
+  will-change: transform;
+}
+
+/*
+REAL CREATE ACCOUNT ORGANISM
+
+When .glass-plaque enters .stage,
+it inherits the exact same rear axle,
+angle, timing, and cylinder behavior.
+*/
+.glass-plaque {
   transform-origin:
     50%
     50%
