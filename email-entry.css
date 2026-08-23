@@ -1,0 +1,74 @@
+/*
+CYBERCROWD
+FILE: email-entry.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 ACTION
+
+JOB:
+Own the email-entry surface only.
+
+ACTION:
+Render the proven email-entry field and its placement.
+
+OWNS:
+Email-entry container.
+Email-field dimensions.
+Email-field spacing.
+Email-field border.
+Email-field glass treatment.
+Email-field typography.
+Email placeholder presentation.
+
+DOES NOT OWN:
+Base surface.
+Background.
+Glass plaque.
+Seal.
+Wheel motion.
+Turnstile.
+Send.
+Check Email.
+Hurry Back.
+Authentication.
+Routing.
+*/
+
+.entry-form {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  z-index: 12;
+}
+
+.email-field {
+  position: relative;
+  z-index: 20;
+
+  width: min(100%, 390px);
+  height: clamp(52px, 6.8svh, 58px);
+
+  padding: 0 24px;
+
+  border: 2px solid rgba(54, 39, 24, 0.78);
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.30);
+
+  color: var(--ink);
+
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  text-align: center;
+
+  outline: none;
+
+  box-shadow:
+    inset 0 0 10px rgba(0, 0, 0, 0.12),
+    0 0 14px rgba(255, 255, 255, 0.18);
+}
+
+.email-field::placeholder {
+  color: rgba(42, 33, 24, 0.68);
+}
