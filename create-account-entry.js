@@ -22,6 +22,7 @@
 // create-account-face-turn.js
 // create-account-face-two-reveal.js
 // create-account-email-send-surface.js
+// create-account-glass-plaque-node.js
 // create-account-email-descriptor-activation.js
 // create-account-email-descriptor-response.js
 // create-account-send-action.js
@@ -29,6 +30,7 @@
 // human-verify-start.js
 //
 // DOES NOT OWN:
+// Glass-plaque node creation.
 // Lock-touch behavior.
 // Lock-touch response.
 // Swipe math.
@@ -82,6 +84,10 @@ import {
 } from "./create-account-email-send-surface.js";
 
 import {
+  installGlassPlaqueNode
+} from "./create-account-glass-plaque-node.js";
+
+import {
   installEmailDescriptorActivation
 } from "./create-account-email-descriptor-activation.js";
 
@@ -102,15 +108,18 @@ import {
 } from "./human-verify-start.js";
 
 function startCreateAccountEntry() {
-  installLockTouchListener();
   installLockTouch();
+  installEmailSendSurface();
+
+  installGlassPlaqueNode();
+
+  installLockTouchListener();
   installTurnAudioListener();
   installPlacardSwipe();
 
   installFaceTurn();
   installFaceTwoReveal();
 
-  installEmailSendSurface();
   installEmailDescriptorActivation();
   installEmailDescriptorResponse();
   installSendAction();
