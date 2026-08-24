@@ -14,59 +14,29 @@
 // FUNCTION:
 // startCreateAccountEntry()
 //
-// SEQUENCE #1:
-// PLAQUE ONLY.
-// SWIPE WINDOW ONLY.
+// SEQUENCE #1 HUMAN CIRCUIT:
 //
-// HUMAN STARTER:
-// THE GLASS PLAQUE SWIPE IS THE HOLD / STARTER.
+// HUMAN SEES
+// ↓
+// glass plaque
+// face one
+// swipe interface
 //
-// CONNECTS:
-// create-account-glass-plaque-node.js
-// create-account-swipe-cue.js
-// placard-swipe.js
-// create-account-turn-audio-listener.js
-// create-account-face-turn.js
-// create-account-face-two-reveal.js
-// human-verify-start.js
+// HUMAN SWIPES
+// ↓
+// movement #1
+// sound
+// 0° → 90°
 //
-// DOES NOT CONNECT DURING STATE 0:
-// create-account-lock-touch.js
-// create-account-lock-touch-listener.js
-// create-account-email-send-surface.js
-// create-account-email-descriptor-activation.js
-// create-account-email-descriptor-response.js
-// create-account-send-action.js
-// create-account-flow.js
-//
-// DOES NOT OWN:
-// Glass-plaque node creation.
-// Swipe-cue presentation.
-// Swipe math.
-// Movement #1.
-// Movement #2.
-// Movement #3.
-// Cylinder geometry.
-// Turn audio generation.
-// Face-two reveal decision.
-// Email + Send DOM creation.
-// Email descriptor activation behavior.
-// Email descriptor response behavior.
-// Send click behavior.
-// Email + Send exposure behavior.
-// Turnstile rendering.
-// Turnstile token creation.
-// Human verification decision.
-// Email.
-// Send.
-// Authentication.
-// Session.
-// Routing.
-// Backend authority.
+// STOP
 
 import {
   installGlassPlaqueNode
 } from "./create-account-glass-plaque-node.js";
+
+import {
+  installFaceOne
+} from "./create-account-face-one.js";
 
 import {
   installSwipeCue
@@ -94,6 +64,8 @@ import {
 
 function startCreateAccountEntry() {
   installGlassPlaqueNode();
+
+  installFaceOne();
   installSwipeCue();
 
   installTurnAudioListener();
