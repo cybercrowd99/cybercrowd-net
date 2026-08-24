@@ -10,30 +10,10 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Present the CyberCrowd seal
-inside the real Sequence #1 glass plaque.
+Present the CyberCrowd seal.
 
 FUNCTION:
 Style .create-account-seal only.
-
-OWNS:
-Seal size.
-Seal position.
-Seal circular presentation.
-Seal shadow language.
-
-DOES NOT OWN:
-Seal DOM creation.
-Plaque.
-Title.
-Welcome.
-Swipe.
-Movement.
-Audio.
-Turnstile.
-Email.
-Authentication.
-Routing.
 */
 
 .create-account-seal {
@@ -54,12 +34,14 @@ Routing.
   border-radius: 50%;
 
   box-shadow:
-    inset 0 0 24px rgba(255, 255, 255, 0.24),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.42),
-    0 14px 28px rgba(0, 0, 0, 0.28);
+    inset 0 0 24px
+      rgba(255, 255, 255, 0.24),
+    inset 0 0 0 1px
+      rgba(255, 255, 255, 0.42),
+    0 14px 28px
+      rgba(0, 0, 0, 0.28);
 
   pointer-events: none;
-
   user-select: none;
 
   z-index: 2;
