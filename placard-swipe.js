@@ -23,18 +23,23 @@
 //
 // ALL VALID.
 //
-// MOVEMENT START:
+// FLOW:
 //
 // valid swipe
 // ↓
-// publish Movement #1 signal
+// cybercrowd:cylinder-turned
 // ↓
-// audio listener fires immediately
+// Audio #1 starts
 // ↓
 // command 90 degree movement
+// ↓
+// transform lands
+// ↓
+// cybercrowd:movement-one-landed
 //
 // NO TIMER.
-// NO DELAY.
+// NO STORAGE.
+// NO TURNSTILE.
 
 export function installPlacardSwipe() {
   const placard =
@@ -86,6 +91,25 @@ export function installPlacardSwipe() {
               angle:
                 MOVEMENT_ONE_ANGLE,
               degrees: 90
+            }
+          }
+        )
+      );
+    };
+
+  const publishMovementOneLanded =
+    () => {
+      window.dispatchEvent(
+        new CustomEvent(
+          "cybercrowd:movement-one-landed",
+          {
+            detail: {
+              cardIndex: 1,
+              movement: 1,
+              angle:
+                MOVEMENT_ONE_ANGLE,
+              degrees: 90,
+              landed: true
             }
           }
         )
@@ -176,19 +200,30 @@ export function installPlacardSwipe() {
       movementOneComplete =
         true;
 
-      /*
-        dispatchEvent is synchronous.
+      const movementOneLanding =
+        (transitionEvent) => {
+          if (
+            transitionEvent.propertyName !==
+            "transform"
+          ) {
+            return;
+          }
 
-        The existing audio listener
-        receives Movement #1 here,
-        during the human pointer event.
-      */
+          placard.removeEventListener(
+            "transitionend",
+            movementOneLanding
+          );
+
+          publishMovementOneLanded();
+        };
+
+      placard.addEventListener(
+        "transitionend",
+        movementOneLanding
+      );
+
       publishMovementOne();
 
-      /*
-        Command the existing movement
-        immediately after the slam starts.
-      */
       setMovementOneAngle();
     }
   );
@@ -202,7 +237,7 @@ export function installPlacardSwipe() {
       if (
         typeof
           placard.hasPointerCapture ===
-        "function" &&
+          "function" &&
         placard.hasPointerCapture(
           event.pointerId
         )
