@@ -30,8 +30,6 @@ Style .create-account-title only.
 
   margin: 0;
 
-  color: #e9c979;
-
   font-family:
     Arial,
     Helvetica,
@@ -42,11 +40,26 @@ Style .create-account-title only.
 
   line-height: 1.05;
 
-  font-weight: 500;
+  font-weight: 700;
 
   letter-spacing: 0.06em;
 
   text-align: center;
+
+  color: #ffd700;
+
+  -webkit-text-stroke:
+    1.5px #6f5000;
+
+  paint-order:
+    stroke fill;
+
+  text-shadow:
+    0 -1px 0 #fff0a0,
+    0 1px 0 #d6a500,
+    0 2px 0 #ad7f00,
+    0 3px 0 #795700,
+    0 5px 5px rgba(0, 0, 0, 0.42);
 
   pointer-events: none;
   user-select: none;
