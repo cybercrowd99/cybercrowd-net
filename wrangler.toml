@@ -17,10 +17,6 @@ enabled = true
 binding = "TEASER_BUCKET"
 bucket_name = "cybercrowd-teasers"
 
-[[r2_buckets]]
-binding = "SOUND_EFFECTS"
-bucket_name = "sound-effects"
-
 [[kv_namespaces]]
 binding = "IDENTITY"
 id = "fe654980fc014402acd73c87ea04aa61"
