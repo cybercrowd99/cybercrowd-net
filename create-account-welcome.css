@@ -36,10 +36,10 @@ Style .create-account-welcome only.
     Arial,
     Helvetica,
     sans-serif;
-
+  
   font-size:
-    clamp(1rem, 3.4vw, 1.35rem);
-
+  clamp(1.25rem, 3.75vw, 2rem);
+  
   line-height: 1.2;
 
   font-weight: 500;
