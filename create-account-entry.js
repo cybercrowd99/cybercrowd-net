@@ -30,10 +30,15 @@
 // ↓
 // Turnstile Widget #1 attached
 // ↓
+// cybercrowd:human-passed
+// ↓
+// private human verification
+// ↓
+// cybercrowd:turnstile-one-verified
+// ↓
 // STOP
 //
 // NO AUDIO #2.
-// NO VERIFICATION MOVEMENT.
 // NO MOVEMENT #2.
 // NO STORAGE.
 
@@ -62,6 +67,10 @@ import {
 } from "./turnstile-one-ui.js";
 
 import {
+  openHumanVerifyCrossing
+} from "./human-verify-crossing.js";
+
+import {
   installPlacardSwipe
 } from "./placard-swipe.js";
 
@@ -75,6 +84,8 @@ function startCreateAccountEntry() {
   installTurnAudioListener();
 
   installGlassPlaqueTwoNode();
+
+  openHumanVerifyCrossing();
 
   window.addEventListener(
     "cybercrowd:movement-one-landed",
