@@ -9,7 +9,7 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Project the first visual entry surface onto .stage
+Project the first visual entry surface onto .glass-plaque
 
 FUNCTION:
 Render the glass entry presentation only
@@ -19,7 +19,7 @@ Glass surface
 Glass edge
 Glass depth
 Glass reflection
-Glass projection onto stage
+Glass projection onto the real plaque node
 
 DOES NOT OWN:
 Backdrop image
@@ -74,8 +74,8 @@ body {
   padding: 24px;
 }
 
-.stage::before {
-  content: "";
+.glass-plaque {
+  position: relative;
   display: block;
 
   width: min(88vw, 520px);
