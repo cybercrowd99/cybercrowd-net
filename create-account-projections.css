@@ -10,10 +10,10 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Connect Sequence #1 CSS presenters.
+Connect Create Account CSS presenters.
 
 FUNCTION:
-Import Sequence #1 presentation files only.
+Import Create Account presentation files only.
 */
 
 @import url("./create-account-glass-plaque.css");
@@ -22,3 +22,4 @@ Import Sequence #1 presentation files only.
 @import url("./create-account-title.css");
 @import url("./create-account-welcome.css");
 @import url("./create-account-swipe-cue.css");
+@import url("./create-account-glass-plaque-two.css");
