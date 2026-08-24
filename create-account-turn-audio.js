@@ -16,7 +16,7 @@
 // playTurnAudio()
 //
 // SOURCE:
-// cybercrowd-net Worker
+// cybercrowd-net Pages Function
 // ↓
 // private SOUND_EFFECTS R2
 // ↓
@@ -29,7 +29,7 @@
 
 const turnAudio =
   new Audio(
-    "/api/r2-sound-effect/Surface-closing_1sEffect.mp3"
+    "/api/r2-sound-effect"
   );
 
 turnAudio.preload =
