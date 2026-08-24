@@ -1,50 +1,43 @@
 /*
 CYBERCROWD
 
-FILE: create-account-title.css
+FILE:
+create-account-title.css
 
 BUILD LAW:
 1 FILE
 1 JOB
 1 FUNCTION
-1 UNIQUE PROJECTION SLOT
 
 JOB:
-Project the Create Your Account title onto the existing stage.
+Present the Create Your Account title
+inside the real Sequence #1 glass plaque.
 
 FUNCTION:
-Render the title presentation only.
+Style .create-account-title only.
 
 OWNS:
-body::after
-Title text
-Title position
-Title typography
-24kt gold title color
+Title position.
+Title typography.
+24kt gold title color.
 
 DOES NOT OWN:
-Backdrop
-Stage
-Glass
-Seal
-Welcome
-Email
-Turnstile
-Send
-Wheel
-Motion
-Overlay
-Audio
-Authentication
-Routing
-Comeback
-Runtime logic
+Title DOM creation.
+Plaque.
+Seal.
+Welcome.
+Swipe.
+Movement.
+Audio.
+Turnstile.
+Email.
+Authentication.
+Routing.
 */
 
-body::after {
-  content: "Create Your Account";
+.create-account-title {
+  position: absolute;
 
-  position: fixed;
   left: 50%;
   top: 50%;
 
@@ -54,6 +47,8 @@ body::after {
 
   width: min(86vw, 460px);
 
+  margin: 0;
+
   color: #e9c979;
 
   font-family:
@@ -61,15 +56,21 @@ body::after {
     Helvetica,
     sans-serif;
 
-  font-size: clamp(2rem, 6vw, 3.05rem);
+  font-size:
+    clamp(2rem, 6vw, 3.05rem);
+
   line-height: 1;
+
   font-weight: 500;
+
   letter-spacing: 0.10em;
 
   text-align: center;
+
   text-transform: uppercase;
 
   pointer-events: none;
+
   user-select: none;
 
   z-index: 2;
