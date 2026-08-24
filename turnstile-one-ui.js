@@ -10,15 +10,14 @@
 // POINT — DO NOT NEST
 //
 // JOB:
-// Open the first public Turnstile surface.
+// Open Turnstile Widget #1
+// on Sequence #2 clear glass.
 //
 // FUNCTION:
-// Provide the first human-verification slot
-// on the current Create Account stage,
-// then render the existing browser Turnstile client into it.
+// openTurnstileOne()
 //
 // POINT:
-// .stage
+// .glass-plaque-two
 // → #turnstile-one
 // → turnstile-client.js
 //
@@ -30,35 +29,44 @@
 //
 // DOES NOT OWN:
 // Human verification decision.
-// Email reveal.
-// Second Turnstile.
-// Send.
-// Auth.
-// Fetch.
-// WHOOSH.
+// Audio.
+// Movement.
+// Email.
+// Authentication.
 // Routing.
 // Backend authority.
 
-import { renderTurnstile } from "./turnstile-client.js";
+import {
+  renderTurnstile
+} from "./turnstile-client.js";
 
 export function openTurnstileOne() {
-  const stage =
-    document.querySelector(".stage");
+  const plaque =
+    document.querySelector(
+      ".glass-plaque-two"
+    );
 
-  if (!stage) {
+  if (!plaque) {
     return false;
   }
 
+  plaque.classList.add(
+    "is-active"
+  );
+
   let slot =
-    document.getElementById("turnstile-one");
+    document.getElementById(
+      "turnstile-one"
+    );
 
   if (!slot) {
     slot =
       document.createElement("div");
 
-    slot.id = "turnstile-one";
+    slot.id =
+      "turnstile-one";
 
-    stage.appendChild(slot);
+    plaque.appendChild(slot);
   }
 
   return renderTurnstile(
