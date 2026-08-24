@@ -19,10 +19,11 @@ FUNCTION:
 installPlacardSwipe()
 
 CONTROL:
+SEQUENCE #1
 STATE 0
 0°
 ↓
-HUMAN SWIPE LEFT OR RIGHT
+HUMAN SWIPE ON GLASS PLAQUE
 ↓
 MOVEMENT #1
 0° → 90°
@@ -37,6 +38,7 @@ STATE 0 =   0°
 MOVE #1 =  90°
 
 OWNS:
+Glass-plaque swipe target.
 Pointer-down position.
 Horizontal swipe threshold.
 One-time human Movement #1 permission.
@@ -67,10 +69,10 @@ Routing.
 
 export function installPlacardSwipe() {
   const placard =
-    document.querySelector(".stage");
+    document.querySelector(".glass-plaque");
 
   if (!placard) {
-    return;
+    return false;
   }
 
   const MOVEMENT_ONE_ANGLE =
@@ -183,4 +185,6 @@ export function installPlacardSwipe() {
     "--cylinder-angle",
     "0rad"
   );
+
+  return true;
 }
