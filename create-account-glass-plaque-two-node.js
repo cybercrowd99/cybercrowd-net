@@ -9,38 +9,93 @@
 // 1 FUNCTION
 //
 // JOB:
-// Create the Sequence #2 clear glass face.
+// Create Sequence #2 clear glass
+// only after Sequence #1 has landed.
 //
 // FUNCTION:
 // installGlassPlaqueTwoNode()
+//
+// INPUT:
+// cybercrowd:cylinder-turned
+//
+// WAIT:
+// Sequence #1 real transform transitionend
+//
+// OUTPUT:
+// .glass-plaque-two
+//
+// DOES NOT OWN:
+// Turnstile.
+// Audio.
+// Verification.
+// Movement #2.
+// Email.
+// Authentication.
+// Routing.
+// Backend authority.
 
 export function installGlassPlaqueTwoNode() {
   const stage =
     document.querySelector(".stage");
 
-  if (!stage) {
+  const faceOne =
+    document.querySelector(".glass-plaque");
+
+  if (!stage || !faceOne) {
     return false;
   }
 
-  let plaque =
-    stage.querySelector(
-      ":scope > .glass-plaque-two"
-    );
+  const createGlassTwo =
+    () => {
+      if (
+        stage.querySelector(
+          ":scope > .glass-plaque-two"
+        )
+      ) {
+        return;
+      }
 
-  if (!plaque) {
-    plaque =
-      document.createElement("section");
+      const glassTwo =
+        document.createElement("section");
 
-    plaque.className =
-      "glass-plaque-two";
+      glassTwo.className =
+        "glass-plaque-two";
 
-    plaque.setAttribute(
-      "aria-label",
-      "CyberCrowd Human Verification"
-    );
+      glassTwo.setAttribute(
+        "aria-label",
+        "CyberCrowd Sequence Two"
+      );
 
-    stage.appendChild(plaque);
-  }
+      stage.appendChild(glassTwo);
+    };
+
+  window.addEventListener(
+    "cybercrowd:cylinder-turned",
+    () => {
+      const waitForLanding =
+        (event) => {
+          if (
+            event.propertyName !==
+            "transform"
+          ) {
+            return;
+          }
+
+          faceOne.removeEventListener(
+            "transitionend",
+            waitForLanding
+          );
+
+          createGlassTwo();
+        };
+
+      faceOne.addEventListener(
+        "transitionend",
+        waitForLanding
+      );
+    },
+    { once: true }
+  );
 
   return true;
 }
