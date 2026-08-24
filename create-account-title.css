@@ -1,68 +1,94 @@
-/*
-CYBERCROWD
+// CYBERCROWD
+//
+// FILE:
+// create-account-face-one.js
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+//
+// JOB:
+// Install visible Sequence #1 face.
+//
+// FUNCTION:
+// installFaceOne()
+//
+// HUMAN SEES:
+//
+// seal
+//
+// Welcome To Cybercrowd
+//
+// CREATE YOUR ACCOUNT
+//
+// Swipe
 
-FILE:
-create-account-title.css
+export function installFaceOne() {
+  const plaque =
+    document.querySelector(
+      ".glass-plaque"
+    );
 
-BUILD LAW:
-1 FILE
-1 JOB
-1 FUNCTION
+  if (!plaque) {
+    return false;
+  }
 
-JOB:
-Present Welcome To Cybercrowd.
+  if (
+    plaque.querySelector(
+      ":scope > .create-account-face-one"
+    )
+  ) {
+    return false;
+  }
 
-FUNCTION:
-Style .create-account-title only.
-*/
+  const face =
+    document.createElement("div");
 
-.create-account-title {
-  position: absolute;
+  face.className =
+    "create-account-face-one";
 
-  left: 50%;
-  top: 50%;
+  const seal =
+    document.createElement("img");
 
-  transform:
-    translate(-50%, -50%)
-    translateY(18px);
+  seal.className =
+    "create-account-seal";
 
-  width: min(88vw, 480px);
+  seal.src =
+    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png";
 
-  margin: 0;
+  seal.alt = "";
 
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+  seal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
 
-  font-size:
-    clamp(1.85rem, 5.6vw, 3rem);
+  const title =
+    document.createElement("h1");
 
-  line-height: 1.05;
+  title.className =
+    "create-account-title";
 
-  font-weight: 700;
+  title.textContent =
+    "Welcome To Cybercrowd";
 
-  letter-spacing: 0.06em;
+  const welcome =
+    document.createElement("p");
 
-  text-align: center;
+  welcome.className =
+    "create-account-welcome";
 
-  color: #ffd700;
+  welcome.textContent =
+    "CREATE YOUR ACCOUNT";
 
-  -webkit-text-stroke:
-    1.5px #6f5000;
+  face.append(
+    seal,
+    title,
+    welcome
+  );
 
-  paint-order:
-    stroke fill;
+  plaque.prepend(face);
 
-  text-shadow:
-    0 -1px 0 #fff0a0,
-    0 1px 0 #d6a500,
-    0 2px 0 #ad7f00,
-    0 3px 0 #795700,
-    0 5px 5px rgba(0, 0, 0, 0.42);
-
-  pointer-events: none;
-  user-select: none;
-
-  z-index: 2;
+  return true;
 }
