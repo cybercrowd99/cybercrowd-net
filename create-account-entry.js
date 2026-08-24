@@ -22,6 +22,7 @@
 // create-account-lock-touch.js
 // create-account-lock-touch-listener.js
 // create-account-glass-plaque-node.js
+// create-account-swipe-cue.js
 // placard-swipe.js
 // create-account-turn-audio-listener.js
 // create-account-face-turn.js
@@ -37,6 +38,7 @@
 //
 // DOES NOT OWN:
 // Glass-plaque node creation.
+// Swipe-cue presentation.
 // Lock-touch behavior.
 // Lock-touch response.
 // Swipe math.
@@ -74,6 +76,10 @@ import {
 } from "./create-account-glass-plaque-node.js";
 
 import {
+  installSwipeCue
+} from "./create-account-swipe-cue.js";
+
+import {
   installPlacardSwipe
 } from "./placard-swipe.js";
 
@@ -97,6 +103,7 @@ function startCreateAccountEntry() {
   installLockTouch();
 
   installGlassPlaqueNode();
+  installSwipeCue();
 
   installLockTouchListener();
   installTurnAudioListener();
