@@ -14,19 +14,28 @@
 // FUNCTION:
 // startCreateAccountEntry()
 //
-// CURRENT TEST:
+// FLOW:
 //
 // Sequence #1
 // ↓
 // human swipe
 // ↓
+// cybercrowd:cylinder-turned
+// ↓
 // Slam #1 + Movement #1
 // ↓
-// Sequence #1 transform lands
+// cybercrowd:movement-one-landed
 // ↓
-// Sequence #2 clear glass created
+// Glass #2 created
+// ↓
+// Turnstile Widget #1 attached
 // ↓
 // STOP
+//
+// NO AUDIO #2.
+// NO VERIFICATION MOVEMENT.
+// NO MOVEMENT #2.
+// NO STORAGE.
 
 import {
   installGlassPlaqueNode
@@ -49,6 +58,10 @@ import {
 } from "./create-account-glass-plaque-two-node.js";
 
 import {
+  openTurnstileOne
+} from "./turnstile-one-ui.js";
+
+import {
   installPlacardSwipe
 } from "./placard-swipe.js";
 
@@ -62,6 +75,12 @@ function startCreateAccountEntry() {
   installTurnAudioListener();
 
   installGlassPlaqueTwoNode();
+
+  window.addEventListener(
+    "cybercrowd:movement-one-landed",
+    openTurnstileOne,
+    { once: true }
+  );
 
   installPlacardSwipe();
 }
