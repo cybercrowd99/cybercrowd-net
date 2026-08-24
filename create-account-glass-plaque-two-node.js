@@ -10,89 +10,68 @@
 //
 // JOB:
 // Create Sequence #2 clear glass
-// only after Sequence #1 has landed.
+// after Movement #1 lands,
+// then mount Turnstile Widget #1.
 //
 // FUNCTION:
 // installGlassPlaqueTwoNode()
 //
 // INPUT:
-// cybercrowd:cylinder-turned
-//
-// WAIT:
-// Sequence #1 real transform transitionend
+// cybercrowd:movement-one-landed
 //
 // OUTPUT:
 // .glass-plaque-two
+// ↓
+// Turnstile Widget #1
 //
-// DOES NOT OWN:
-// Turnstile.
-// Audio.
-// Verification.
-// Movement #2.
-// Email.
-// Authentication.
-// Routing.
-// Backend authority.
+// NO TIMER.
+// NO STORAGE.
+// NO AUDIO #2.
+// NO VERIFICATION MOVEMENT.
+// NO SEQUENCE #3.
+
+import {
+  openTurnstileOne
+} from "./turnstile-one-ui.js";
 
 export function installGlassPlaqueTwoNode() {
   const stage =
-    document.querySelector(".stage");
+    document.querySelector(
+      ".stage"
+    );
 
-  const faceOne =
-    document.querySelector(".glass-plaque");
-
-  if (!stage || !faceOne) {
+  if (!stage) {
     return false;
   }
 
-  const createGlassTwo =
+  window.addEventListener(
+    "cybercrowd:movement-one-landed",
     () => {
-      if (
+      let plaque =
         stage.querySelector(
           ":scope > .glass-plaque-two"
-        )
-      ) {
-        return;
-      }
+        );
 
-      const glassTwo =
-        document.createElement("section");
-
-      glassTwo.className =
-        "glass-plaque-two";
-
-      glassTwo.setAttribute(
-        "aria-label",
-        "CyberCrowd Sequence Two"
-      );
-
-      stage.appendChild(glassTwo);
-    };
-
-  window.addEventListener(
-    "cybercrowd:cylinder-turned",
-    () => {
-      const waitForLanding =
-        (event) => {
-          if (
-            event.propertyName !==
-            "transform"
-          ) {
-            return;
-          }
-
-          faceOne.removeEventListener(
-            "transitionend",
-            waitForLanding
+      if (!plaque) {
+        plaque =
+          document.createElement(
+            "section"
           );
 
-          createGlassTwo();
-        };
+        plaque.className =
+          "glass-plaque-two";
 
-      faceOne.addEventListener(
-        "transitionend",
-        waitForLanding
-      );
+        plaque.setAttribute(
+          "aria-label",
+          "CyberCrowd Sequence Two"
+        );
+
+        stage.appendChild(
+          plaque
+        );
+      }
+
+      openTurnstileOne();
     },
     { once: true }
   );
