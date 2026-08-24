@@ -1,31 +1,25 @@
 // CYBERCROWD
 //
 // FILE:
-// create-account-sequence-two-audio.js
+// create-account-sequence-two.js
 //
 // JOB:
-// Play Slam #2.
+// Wake Sequence #2 from the real
+// verified Turnstile signal.
 //
 // FUNCTION:
-// playSequenceTwoAudio()
+// installSequenceTwo()
 
-const audio =
-  new Audio("/api/r2-sound-effect");
+import {
+  playSequenceTwoAudio
+} from "./create-account-sequence-two-audio.js";
 
-audio.preload = "auto";
-audio.playsInline = true;
-audio.volume = 1;
-
-export async function playSequenceTwoAudio() {
-  try {
-    audio.currentTime = 0;
-    await audio.play();
-    return true;
-  } catch (error) {
-    console.error(
-      "Sequence #2 audio failed:",
-      error
-    );
-    return false;
-  }
+export function installSequenceTwo() {
+  window.addEventListener(
+    "cybercrowd:turnstile-one-verified",
+    () => {
+      playSequenceTwoAudio();
+    },
+    { once: true }
+  );
 }
