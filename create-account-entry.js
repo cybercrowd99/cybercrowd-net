@@ -9,22 +9,24 @@
 // 1 FUNCTION
 //
 // JOB:
-// Start Sequence #1.
+// Start the live Create Account stage.
 //
 // FUNCTION:
 // startCreateAccountEntry()
 //
-// START ORDER:
+// STAGE:
 //
-// plaque node
+// Sequence #1
 // ↓
-// face one
+// cybercrowd:cylinder-turned
 // ↓
-// swipe cue
+// existing Turnstile #1
 // ↓
-// audio listener
+// existing verification crossing
 // ↓
-// swipe listener
+// cybercrowd:turnstile-one-verified
+// ↓
+// Sequence #2
 
 import {
   installGlassPlaqueNode
@@ -46,6 +48,14 @@ import {
   installPlacardSwipe
 } from "./placard-swipe.js";
 
+import {
+  openTurnstileOne
+} from "./turnstile-one-ui.js";
+
+import {
+  openHumanVerifyCrossing
+} from "./human-verify-crossing.js";
+
 import "./create-account-sequence-two.js";
 
 function startCreateAccountEntry() {
@@ -56,6 +66,14 @@ function startCreateAccountEntry() {
   installSwipeCue();
 
   installTurnAudioListener();
+
+  openHumanVerifyCrossing();
+
+  window.addEventListener(
+    "cybercrowd:cylinder-turned",
+    openTurnstileOne,
+    { once: true }
+  );
 
   installPlacardSwipe();
 }
