@@ -1,7 +1,8 @@
 /*
 CYBERCROWD
 
-FILE: create-account-projections.css
+FILE:
+create-account-projections.css
 
 BUILD LAW:
 1 FILE
@@ -9,37 +10,15 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Connect bounded Create Account presentation files.
+Connect Sequence #1 CSS presenters.
 
 FUNCTION:
-Import approved Create Account projection CSS files only.
-
-OWNS:
-Projection imports only
-
-DOES NOT OWN:
-Backdrop
-Stage
-Glass
-Seal
-Title
-Welcome
-Email
-Turnstile
-Send
-Wheel
-Motion
-Authentication
-Routing
-Runtime logic
+Import Sequence #1 presentation files only.
 */
 
 @import url("./create-account-glass-plaque.css");
-@import url("./create-account-swipe-cue.css");
+@import url("./create-account-glass-plaque-turn.css");
 @import url("./create-account-seal.css");
 @import url("./create-account-title.css");
 @import url("./create-account-welcome.css");
-@import url("./turnstile-one.css");
-@import url("./wheel-turn.css");
-@import url("./email-entry.css");
-@import url("./create-account-email-descriptor-expanded.css");
+@import url("./create-account-swipe-cue.css");
