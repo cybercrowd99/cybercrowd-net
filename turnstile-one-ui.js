@@ -1,68 +1,83 @@
 // CYBERCROWD
 //
-// REPO: cybercrowd99/cybercrowd-net
-// PATH: turnstile-one-ui.js
+// FILE:
+// create-account-entry.js
 //
 // BUILD LAW:
 // 1 FILE
 // 1 JOB
 // 1 FUNCTION
-// POINT — DO NOT NEST
 //
 // JOB:
-// Open the first public Turnstile surface.
+// Start the live Create Account stage.
 //
 // FUNCTION:
-// Provide the first human-verification slot
-// on the current Create Account stage,
-// then render the existing browser Turnstile client into it.
-//
-// POINT:
-// .stage
-// → #turnstile-one
-// → turnstile-client.js
-//
-// PRESERVES:
-// Existing Turnstile browser client.
-// Existing Turnstile site key.
-// Existing cybercrowd:human-passed token event.
-// Existing human-verification crossing.
-//
-// DOES NOT OWN:
-// Human verification decision.
-// Email reveal.
-// Second Turnstile.
-// Send.
-// Auth.
-// Fetch.
-// WHOOSH.
-// Routing.
-// Backend authority.
+// startCreateAccountEntry()
 
-import { renderTurnstile } from "./turnstile-client.js";
+import {
+  installGlassPlaqueNode
+} from "./create-account-glass-plaque-node.js";
 
-export function openTurnstileOne() {
-  const stage =
-    document.querySelector(".stage");
+import {
+  installFaceOne
+} from "./create-account-face-one.js";
 
-  if (!stage) {
-    return false;
-  }
+import {
+  installSwipeCue
+} from "./create-account-swipe-cue.js";
 
-  let slot =
-    document.getElementById("turnstile-one");
+import {
+  installTurnAudioListener
+} from "./create-account-turn-audio-listener.js";
 
-  if (!slot) {
-    slot =
-      document.createElement("div");
+import {
+  installPlacardSwipe
+} from "./placard-swipe.js";
 
-    slot.id = "turnstile-one";
+import {
+  installGlassPlaqueTwoNode
+} from "./create-account-glass-plaque-two-node.js";
 
-    stage.appendChild(slot);
-  }
+import {
+  openTurnstileOne
+} from "./turnstile-one-ui.js";
 
-  return renderTurnstile(
-    "turnstile-one",
-    "0x4AAAAAACvkecVo2F3hpb1r"
+import {
+  openHumanVerifyCrossing
+} from "./human-verify-crossing.js";
+
+import {
+  installSequenceTwo
+} from "./create-account-sequence-two.js";
+
+import {
+  installFaceTurn
+} from "./create-account-face-turn.js";
+
+function startCreateAccountEntry() {
+  installGlassPlaqueNode();
+
+  installFaceOne();
+
+  installGlassPlaqueTwoNode();
+
+  installSwipeCue();
+
+  installTurnAudioListener();
+
+  openHumanVerifyCrossing();
+
+  installSequenceTwo();
+
+  installFaceTurn();
+
+  window.addEventListener(
+    "cybercrowd:cylinder-turned",
+    openTurnstileOne,
+    { once: true }
   );
+
+  installPlacardSwipe();
 }
+
+startCreateAccountEntry();
