@@ -160,7 +160,7 @@ Future responsibilities:
 - Kiosk logic
 - Platform tools
 
----
+--- 
 
 CyberShop
 
