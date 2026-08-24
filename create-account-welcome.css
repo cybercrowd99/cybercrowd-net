@@ -10,29 +10,10 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Present the Welcome to CyberCrowd text
-inside the real Sequence #1 glass plaque.
+Present Create your account.
 
 FUNCTION:
 Style .create-account-welcome only.
-
-OWNS:
-Welcome position.
-Welcome typography.
-24kt gold welcome color.
-
-DOES NOT OWN:
-Welcome DOM creation.
-Plaque.
-Seal.
-Title.
-Swipe.
-Movement.
-Audio.
-Turnstile.
-Email.
-Authentication.
-Routing.
 */
 
 .create-account-welcome {
@@ -43,7 +24,7 @@ Routing.
 
   transform:
     translate(-50%, -50%)
-    translateY(82px);
+    translateY(88px);
 
   width: min(86vw, 460px);
 
@@ -68,7 +49,6 @@ Routing.
   text-align: center;
 
   pointer-events: none;
-
   user-select: none;
 
   z-index: 2;
