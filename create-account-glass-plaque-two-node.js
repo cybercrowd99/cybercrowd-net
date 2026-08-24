@@ -1,7 +1,8 @@
+
 // CYBERCROWD
 //
 // FILE:
-// create-account-glass-plaque-two-node.js
+// create-account-entry.js
 //
 // BUILD LAW:
 // 1 FILE
@@ -9,72 +10,61 @@
 // 1 FUNCTION
 //
 // JOB:
-// Create Sequence #2 clear glass
-// after Movement #1 lands,
-// then mount Turnstile Widget #1.
+// Start the live Create Account stage.
 //
 // FUNCTION:
-// installGlassPlaqueTwoNode()
+// startCreateAccountEntry()
 //
-// INPUT:
-// cybercrowd:movement-one-landed
+// CURRENT TEST:
 //
-// OUTPUT:
-// .glass-plaque-two
+// Sequence #1
 // ↓
-// Turnstile Widget #1
-//
-// NO TIMER.
-// NO STORAGE.
-// NO AUDIO #2.
-// NO VERIFICATION MOVEMENT.
-// NO SEQUENCE #3.
+// human swipe
+// ↓
+// Slam #1 + Movement #1
+// ↓
+// Sequence #1 transform lands
+// ↓
+// Sequence #2 clear glass created
+// ↓
+// STOP
 
 import {
-  openTurnstileOne
-} from "./turnstile-one-ui.js";
+  installGlassPlaqueNode
+} from "./create-account-glass-plaque-node.js";
 
-export function installGlassPlaqueTwoNode() {
-  const stage =
-    document.querySelector(
-      ".stage"
-    );
+import {
+  installFaceOne
+} from "./create-account-face-one.js";
 
-  if (!stage) {
-    return false;
-  }
+import {
+  installSwipeCue
+} from "./create-account-swipe-cue.js";
 
-  window.addEventListener(
-    "cybercrowd:movement-one-landed",
-    () => {
-      let plaque =
-        stage.querySelector(
-          ":scope > .glass-plaque-two"
-        );
+import {
+  installTurnAudioListener
+} from "./create-account-turn-audio-listener.js";
 
-      if (!plaque) {
-        plaque =
-          document.createElement(
-            "section"
-          );
+import {
+  installGlassPlaqueTwoNode
+} from "./create-account-glass-plaque-two-node.js";
 
-        plaque.className =
-          "glass-plaque-two";
+import {
+  installPlacardSwipe
+} from "./placard-swipe.js";
 
-        plaque.setAttribute(
-          "aria-label",
-          "CyberCrowd Sequence Two"
-        );
+function startCreateAccountEntry() {
+  installGlassPlaqueNode();
 
-        stage.appendChild(
-          plaque
-        );
-      }
+  installFaceOne();
 
-      openTurnstileOne();
-    },
-    { once: true }
-  );
+  installSwipeCue();
 
-  return true;
+  installTurnAudioListener();
+
+  installGlassPlaqueTwoNode();
+
+  installPlacardSwipe();
 }
+
+startCreateAccountEntry();
