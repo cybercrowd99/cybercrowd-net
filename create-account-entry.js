@@ -14,19 +14,19 @@
 // FUNCTION:
 // startCreateAccountEntry()
 //
-// STAGE:
+// CURRENT TEST:
 //
 // Sequence #1
 // ↓
-// cybercrowd:cylinder-turned
+// human swipe
 // ↓
-// existing Turnstile #1
+// Slam #1 + Movement #1
 // ↓
-// existing verification crossing
+// Sequence #1 transform lands
 // ↓
-// cybercrowd:turnstile-one-verified
+// Sequence #2 clear glass created
 // ↓
-// Sequence #2
+// STOP
 
 import {
   installGlassPlaqueNode
@@ -45,20 +45,12 @@ import {
 } from "./create-account-turn-audio-listener.js";
 
 import {
+  installGlassPlaqueTwoNode
+} from "./create-account-glass-plaque-two-node.js";
+
+import {
   installPlacardSwipe
 } from "./placard-swipe.js";
-
-import {
-  openTurnstileOne
-} from "./turnstile-one-ui.js";
-
-import {
-  openHumanVerifyCrossing
-} from "./human-verify-crossing.js";
-
-import {
-  installSequenceTwo
-} from "./create-account-sequence-two.js";
 
 function startCreateAccountEntry() {
   installGlassPlaqueNode();
@@ -69,15 +61,7 @@ function startCreateAccountEntry() {
 
   installTurnAudioListener();
 
-  openHumanVerifyCrossing();
-
-  installSequenceTwo();
-
-  window.addEventListener(
-    "cybercrowd:cylinder-turned",
-    openTurnstileOne,
-    { once: true }
-  );
+  installGlassPlaqueTwoNode();
 
   installPlacardSwipe();
 }
