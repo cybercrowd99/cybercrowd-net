@@ -23,7 +23,7 @@ import {
 
 import {
   installFaceTurn
-} from "./create-account-face-turn.js";
+} from "./create-account-face-turn-v2.js";
 
 export function startSequenceTwo() {
   openHumanVerifyCrossing();
