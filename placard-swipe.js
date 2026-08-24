@@ -23,9 +23,18 @@
 //
 // ALL VALID.
 //
-// OUTPUT:
-// --cylinder-angle = 90deg
-// cybercrowd:cylinder-turned
+// MOVEMENT START:
+//
+// valid swipe
+// ↓
+// publish Movement #1 signal
+// ↓
+// audio listener fires immediately
+// ↓
+// command 90 degree movement
+//
+// NO TIMER.
+// NO DELAY.
 
 export function installPlacardSwipe() {
   const placard =
@@ -46,7 +55,8 @@ export function installPlacardSwipe() {
   let startX = 0;
   let startY = 0;
 
-  let dragging = false;
+  let dragging =
+    false;
 
   let movementOneComplete =
     false;
@@ -91,7 +101,8 @@ export function installPlacardSwipe() {
         return;
       }
 
-      dragging = true;
+      dragging =
+        true;
 
       startX =
         event.clientX;
@@ -131,11 +142,16 @@ export function installPlacardSwipe() {
 
       const gestureDistance =
         Math.max(
-          Math.abs(distanceX),
-          Math.abs(distanceY)
+          Math.abs(
+            distanceX
+          ),
+          Math.abs(
+            distanceY
+          )
         );
 
-      dragging = false;
+      dragging =
+        false;
 
       if (
         typeof
@@ -160,21 +176,33 @@ export function installPlacardSwipe() {
       movementOneComplete =
         true;
 
-      setMovementOneAngle();
+      /*
+        dispatchEvent is synchronous.
 
+        The existing audio listener
+        receives Movement #1 here,
+        during the human pointer event.
+      */
       publishMovementOne();
+
+      /*
+        Command the existing movement
+        immediately after the slam starts.
+      */
+      setMovementOneAngle();
     }
   );
 
   placard.addEventListener(
     "pointercancel",
     (event) => {
-      dragging = false;
+      dragging =
+        false;
 
       if (
         typeof
           placard.hasPointerCapture ===
-          "function" &&
+        "function" &&
         placard.hasPointerCapture(
           event.pointerId
         )
