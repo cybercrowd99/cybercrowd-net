@@ -9,34 +9,16 @@
 // 1 FUNCTION
 //
 // JOB:
-// Install the creator-designed Sequence #1 swipe interface.
+// Install the approved Sequence #1 SWIPE interface.
 //
 // FUNCTION:
 // installSwipeCue()
-//
-// CREATOR DESIGN:
-// Preserve supplied SVG geometry.
-// Preserve frosted transparent pill.
-// Preserve layered left/right chevrons.
-// Preserve 24kt gold lettering.
-// Preserve black outline on SWIPE.
-//
-// DOES NOT OWN:
-// Swipe detection.
-// Movement.
-// Audio.
-// Plaque creation.
-// Seal.
-// Title.
-// Welcome.
-// Turnstile.
-// Email.
-// Authentication.
-// Routing.
 
 export function installSwipeCue() {
   const plaque =
-    document.querySelector(".glass-plaque");
+    document.querySelector(
+      ".glass-plaque"
+    );
 
   if (!plaque) {
     return false;
@@ -57,26 +39,52 @@ export function installSwipeCue() {
     "create-account-swipe-cue";
 
   cue.innerHTML = `
-<svg width="600" height="240" viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg">
+<svg
+  width="600"
+  height="240"
+  viewBox="0 0 600 240"
+  xmlns="http://www.w3.org/2000/svg"
+>
   <defs>
-    <linearGradient id="goldText" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#FFD700"/>
-      <stop offset="50%" stop-color="#FFC300"/>
-      <stop offset="100%" stop-color="#E6A800"/>
+    <linearGradient
+      id="goldText"
+      x1="0%"
+      y1="0%"
+      x2="0%"
+      y2="100%"
+    >
+      <stop
+        offset="0%"
+        stop-color="#FFD700"
+      />
+      <stop
+        offset="50%"
+        stop-color="#FFC300"
+      />
+      <stop
+        offset="100%"
+        stop-color="#E6A800"
+      />
     </linearGradient>
 
-    <linearGradient id="glassFill" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.04"/>
+    <linearGradient
+      id="glassFill"
+      x1="0%"
+      y1="0%"
+      x2="0%"
+      y2="100%"
+    >
+      <stop
+        offset="0%"
+        stop-color="#FFFFFF"
+        stop-opacity="0.18"
+      />
+      <stop
+        offset="100%"
+        stop-color="#FFFFFF"
+        stop-opacity="0.04"
+      />
     </linearGradient>
-
-    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
 
   <rect
