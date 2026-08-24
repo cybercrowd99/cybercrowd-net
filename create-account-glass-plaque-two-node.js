@@ -1,0 +1,46 @@
+// CYBERCROWD
+//
+// FILE:
+// create-account-glass-plaque-two-node.js
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+//
+// JOB:
+// Create the Sequence #2 clear glass face.
+//
+// FUNCTION:
+// installGlassPlaqueTwoNode()
+
+export function installGlassPlaqueTwoNode() {
+  const stage =
+    document.querySelector(".stage");
+
+  if (!stage) {
+    return false;
+  }
+
+  let plaque =
+    stage.querySelector(
+      ":scope > .glass-plaque-two"
+    );
+
+  if (!plaque) {
+    plaque =
+      document.createElement("section");
+
+    plaque.className =
+      "glass-plaque-two";
+
+    plaque.setAttribute(
+      "aria-label",
+      "CyberCrowd Human Verification"
+    );
+
+    stage.appendChild(plaque);
+  }
+
+  return true;
+}
