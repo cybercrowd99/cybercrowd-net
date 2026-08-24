@@ -56,7 +56,9 @@ import {
   openHumanVerifyCrossing
 } from "./human-verify-crossing.js";
 
-import "./create-account-sequence-two.js";
+import {
+  installSequenceTwo
+} from "./create-account-sequence-two.js";
 
 function startCreateAccountEntry() {
   installGlassPlaqueNode();
@@ -68,6 +70,8 @@ function startCreateAccountEntry() {
   installTurnAudioListener();
 
   openHumanVerifyCrossing();
+
+  installSequenceTwo();
 
   window.addEventListener(
     "cybercrowd:cylinder-turned",
