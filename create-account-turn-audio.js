@@ -9,100 +9,40 @@
 // 1 FUNCTION
 //
 // JOB:
-// Generate the Sequence #1
-// matched mechanical slam.
+// Play the existing Sequence #1
+// surface-closing sound.
 //
 // FUNCTION:
 // playTurnAudio()
 //
-// MATCH:
-// Movement #1 = 90ms
-// Audio #1    = 90ms
-//
-// ONE MOVEMENT.
-// ONE SLAM.
+// SOURCE:
+// Cloudflare R2
+// sound-effects/Surface-closing_1sEffect.mp3
 
-let audioContext = null;
+const TURN_AUDIO_URL =
+  "https://pub-660d879738134ba990d1708d015ec763.r2.dev/sound-effects/Surface-closing_1sEffect.mp3";
+
+const turnAudio =
+  new Audio(TURN_AUDIO_URL);
+
+turnAudio.preload = "auto";
+turnAudio.playsInline = true;
 
 export function playTurnAudio() {
   try {
-    const AudioContextClass =
-      window.AudioContext ||
-      window.webkitAudioContext;
+    turnAudio.currentTime = 0;
 
-    if (!AudioContextClass) {
-      return false;
-    }
-
-    if (!audioContext) {
-      audioContext =
-        new AudioContextClass();
-    }
+    const playRequest =
+      turnAudio.play();
 
     if (
-      audioContext.state ===
-      "suspended"
+      playRequest &&
+      typeof playRequest.catch === "function"
     ) {
-      audioContext.resume();
+      playRequest.catch(() => {});
     }
 
-    const now =
-      audioContext.currentTime;
-
-    const duration =
-      0.09;
-
-    const oscillator =
-      audioContext.createOscillator();
-
-    const gain =
-      audioContext.createGain();
-
-    oscillator.type =
-      "sine";
-
-    oscillator.frequency
-      .setValueAtTime(
-        840,
-        now
-      );
-
-    oscillator.frequency
-      .exponentialRampToValueAtTime(
-        120,
-        now + duration
-      );
-
-    gain.gain
-      .setValueAtTime(
-        0.22,
-        now
-      );
-
-    gain.gain
-      .exponentialRampToValueAtTime(
-        0.001,
-        now + duration
-      );
-
-    oscillator.connect(
-      gain
-    );
-
-    gain.connect(
-      audioContext.destination
-    );
-
-    oscillator.start(
-      now
-    );
-
-    oscillator.stop(
-      now + duration
-    );
-
     return true;
-
   } catch (_) {
     return false;
   }
