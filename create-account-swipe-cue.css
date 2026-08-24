@@ -1,0 +1,60 @@
+/*
+CYBERCROWD
+
+FILE:
+create-account-swipe-cue.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+JOB:
+Own the visible presentation of the Sequence #1 swipe cue.
+
+FUNCTION:
+Position the existing #create-account-swipe-cue
+inside the real glass plaque.
+
+PRESENTS:
+<----------"SWIPE"---------->
+
+OWNS:
+Swipe-cue position.
+Swipe-cue alignment.
+Swipe-cue stacking.
+Swipe-cue text containment.
+
+DOES NOT OWN:
+Swipe-cue creation.
+Swipe wording.
+Font family.
+Plaque presentation.
+Swipe detection.
+Pointer events.
+Movement #1.
+Wheel geometry.
+Audio.
+Turnstile.
+Email.
+Send.
+Authentication.
+Routing.
+Runtime logic.
+*/
+
+#create-account-swipe-cue {
+  position: absolute;
+
+  left: 50%;
+  bottom: clamp(20px, 4vh, 34px);
+
+  transform: translateX(-50%);
+
+  z-index: 30;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+  user-select: none;
+}
