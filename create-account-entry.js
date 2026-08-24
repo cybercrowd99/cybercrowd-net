@@ -18,9 +18,10 @@
 // PLAQUE ONLY.
 // SWIPE WINDOW ONLY.
 //
+// HUMAN STARTER:
+// THE GLASS PLAQUE SWIPE IS THE HOLD / STARTER.
+//
 // CONNECTS:
-// create-account-lock-touch.js
-// create-account-lock-touch-listener.js
 // create-account-glass-plaque-node.js
 // create-account-swipe-cue.js
 // placard-swipe.js
@@ -29,7 +30,9 @@
 // create-account-face-two-reveal.js
 // human-verify-start.js
 //
-// DOES NOT CONNECT DURING SEQUENCE #1:
+// DOES NOT CONNECT DURING STATE 0:
+// create-account-lock-touch.js
+// create-account-lock-touch-listener.js
 // create-account-email-send-surface.js
 // create-account-email-descriptor-activation.js
 // create-account-email-descriptor-response.js
@@ -39,8 +42,6 @@
 // DOES NOT OWN:
 // Glass-plaque node creation.
 // Swipe-cue presentation.
-// Lock-touch behavior.
-// Lock-touch response.
 // Swipe math.
 // Movement #1.
 // Movement #2.
@@ -62,14 +63,6 @@
 // Session.
 // Routing.
 // Backend authority.
-
-import {
-  installLockTouch
-} from "./create-account-lock-touch.js";
-
-import {
-  installLockTouchListener
-} from "./create-account-lock-touch-listener.js";
 
 import {
   installGlassPlaqueNode
@@ -100,12 +93,9 @@ import {
 } from "./human-verify-start.js";
 
 function startCreateAccountEntry() {
-  installLockTouch();
-
   installGlassPlaqueNode();
   installSwipeCue();
 
-  installLockTouchListener();
   installTurnAudioListener();
   installPlacardSwipe();
 
