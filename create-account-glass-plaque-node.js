@@ -1,7 +1,7 @@
 // CYBERCROWD
 //
-// REPO: cybercrowd99/cybercrowd-net
-// PATH: create-account-glass-plaque-node.js
+// FILE:
+// create-account-glass-plaque-node.js
 //
 // BUILD LAW:
 // 1 FILE
@@ -9,31 +9,10 @@
 // 1 FUNCTION
 //
 // JOB:
-// Create the single Create Account glass-plaque organism node.
+// Create the single Sequence #1 glass plaque node.
 //
 // FUNCTION:
 // installGlassPlaqueNode()
-//
-// OWNS:
-// .glass-plaque runtime node.
-// Physical parent boundary for Create Account interface children.
-// Adoption of existing direct stage children.
-//
-// DOES NOT OWN:
-// Child behavior.
-// Seal presentation.
-// Title presentation.
-// Welcome presentation.
-// Email presentation.
-// Send behavior.
-// Turnstile behavior.
-// Wheel movement.
-// Cylinder geometry.
-// Audio.
-// Authentication.
-// Session.
-// Routing.
-// Backend authority.
 
 export function installGlassPlaqueNode() {
   const stage =
@@ -44,7 +23,9 @@ export function installGlassPlaqueNode() {
   }
 
   let plaque =
-    stage.querySelector(":scope > .glass-plaque");
+    stage.querySelector(
+      ":scope > .glass-plaque"
+    );
 
   if (!plaque) {
     plaque =
@@ -58,14 +39,7 @@ export function installGlassPlaqueNode() {
       "CyberCrowd Create Account"
     );
 
-    const existingChildren =
-      Array.from(stage.children);
-
     stage.appendChild(plaque);
-
-    for (const child of existingChildren) {
-      plaque.appendChild(child);
-    }
   }
 
   return true;
