@@ -10,29 +10,10 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Present the Create Your Account title
-inside the real Sequence #1 glass plaque.
+Present Welcome To Cybercrowd.
 
 FUNCTION:
 Style .create-account-title only.
-
-OWNS:
-Title position.
-Title typography.
-24kt gold title color.
-
-DOES NOT OWN:
-Title DOM creation.
-Plaque.
-Seal.
-Welcome.
-Swipe.
-Movement.
-Audio.
-Turnstile.
-Email.
-Authentication.
-Routing.
 */
 
 .create-account-title {
@@ -43,9 +24,9 @@ Routing.
 
   transform:
     translate(-50%, -50%)
-    translateY(20px);
+    translateY(18px);
 
-  width: min(86vw, 460px);
+  width: min(88vw, 480px);
 
   margin: 0;
 
@@ -57,20 +38,17 @@ Routing.
     sans-serif;
 
   font-size:
-    clamp(2rem, 6vw, 3.05rem);
+    clamp(1.85rem, 5.6vw, 3rem);
 
-  line-height: 1;
+  line-height: 1.05;
 
   font-weight: 500;
 
-  letter-spacing: 0.10em;
+  letter-spacing: 0.06em;
 
   text-align: center;
 
-  text-transform: uppercase;
-
   pointer-events: none;
-
   user-select: none;
 
   z-index: 2;
