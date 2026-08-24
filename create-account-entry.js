@@ -78,7 +78,7 @@ import {
 
 import {
   installFaceTurn
-} from "./create-account-face-turn-v2.js";
+} from "./create-account-face-turn.js";
 
 import {
   installPlacardSwipe
