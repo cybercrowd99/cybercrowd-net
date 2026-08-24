@@ -1,0 +1,86 @@
+/*
+CYBERCROWD
+
+FILE:
+create-account-glass-plaque-turn.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+JOB:
+Own Sequence #1 physical rotation of the real Create Account glass-plaque node.
+
+FUNCTION:
+Apply the existing cylinder angle to .glass-plaque.
+
+CONTROL:
+placard-swipe.js
+→ --cylinder-angle
+→ create-account-glass-plaque-turn.css
+→ .glass-plaque
+
+POSITION MAP:
+STATE 0 =   0°
+MOVE #1 =  90°
+
+OWNS:
+Real plaque rotation target.
+Cylinder depth.
+Rear axle.
+Perspective relationship.
+Preserve-3D behavior.
+Movement #1 transform transition.
+
+DOES NOT OWN:
+Swipe detection.
+Swipe cue.
+Plaque appearance.
+Plaque creation.
+Audio.
+Turn signal publication.
+Turnstile.
+Email.
+Send.
+Authentication.
+Routing.
+*/
+
+:root {
+  --cylinder-depth: 220px;
+  --cylinder-angle: 0rad;
+}
+
+body {
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+
+.stage {
+  transform-style: preserve-3d;
+}
+
+.glass-plaque {
+  transform-origin:
+    50%
+    50%
+    calc(-1 * var(--cylinder-depth));
+
+  transform-style: preserve-3d;
+
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+
+  transform:
+    translateY(-2px)
+    rotateX(2deg)
+    rotateY(var(--cylinder-angle));
+
+  transition:
+    transform
+    90ms
+    linear;
+
+  will-change: transform;
+}
