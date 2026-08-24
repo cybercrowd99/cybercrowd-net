@@ -1,7 +1,7 @@
 // CYBERCROWD
 //
-// REPO: cybercrowd99/cybercrowd-net
-// PATH: create-account-entry.js
+// FILE:
+// create-account-entry.js
 //
 // BUILD LAW:
 // 1 FILE
@@ -9,26 +9,22 @@
 // 1 FUNCTION
 //
 // JOB:
-// Start the bounded Create Account entry components.
+// Start Sequence #1.
 //
 // FUNCTION:
 // startCreateAccountEntry()
 //
-// SEQUENCE #1 HUMAN CIRCUIT:
+// START ORDER:
 //
-// HUMAN SEES
+// plaque node
 // ↓
-// glass plaque
 // face one
-// swipe interface
-//
-// HUMAN SWIPES
 // ↓
-// movement #1
-// sound
-// 0° → 90°
-//
-// STOP
+// swipe cue
+// ↓
+// audio listener
+// ↓
+// swipe listener
 
 import {
   installGlassPlaqueNode
@@ -43,38 +39,23 @@ import {
 } from "./create-account-swipe-cue.js";
 
 import {
-  installPlacardSwipe
-} from "./placard-swipe.js";
-
-import {
   installTurnAudioListener
 } from "./create-account-turn-audio-listener.js";
 
 import {
-  installFaceTurn
-} from "./create-account-face-turn.js";
-
-import {
-  installFaceTwoReveal
-} from "./create-account-face-two-reveal.js";
-
-import {
-  startHumanVerify
-} from "./human-verify-start.js";
+  installPlacardSwipe
+} from "./placard-swipe.js";
 
 function startCreateAccountEntry() {
   installGlassPlaqueNode();
 
   installFaceOne();
+
   installSwipeCue();
 
   installTurnAudioListener();
+
   installPlacardSwipe();
-
-  installFaceTurn();
-  installFaceTwoReveal();
-
-  startHumanVerify();
 }
 
 startCreateAccountEntry();
