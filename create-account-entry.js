@@ -14,20 +14,26 @@
 // FUNCTION:
 // startCreateAccountEntry()
 //
+// SEQUENCE #1:
+// PLAQUE ONLY.
+// SWIPE WINDOW ONLY.
+//
 // CONNECTS:
 // create-account-lock-touch.js
 // create-account-lock-touch-listener.js
+// create-account-glass-plaque-node.js
 // placard-swipe.js
 // create-account-turn-audio-listener.js
 // create-account-face-turn.js
 // create-account-face-two-reveal.js
+// human-verify-start.js
+//
+// DOES NOT CONNECT DURING SEQUENCE #1:
 // create-account-email-send-surface.js
-// create-account-glass-plaque-node.js
 // create-account-email-descriptor-activation.js
 // create-account-email-descriptor-response.js
 // create-account-send-action.js
 // create-account-flow.js
-// human-verify-start.js
 //
 // DOES NOT OWN:
 // Glass-plaque node creation.
@@ -64,6 +70,10 @@ import {
 } from "./create-account-lock-touch-listener.js";
 
 import {
+  installGlassPlaqueNode
+} from "./create-account-glass-plaque-node.js";
+
+import {
   installPlacardSwipe
 } from "./placard-swipe.js";
 
@@ -80,36 +90,11 @@ import {
 } from "./create-account-face-two-reveal.js";
 
 import {
-  installEmailSendSurface
-} from "./create-account-email-send-surface.js";
-
-import {
-  installGlassPlaqueNode
-} from "./create-account-glass-plaque-node.js";
-
-import {
-  installEmailDescriptorActivation
-} from "./create-account-email-descriptor-activation.js";
-
-import {
-  installEmailDescriptorResponse
-} from "./create-account-email-descriptor-response.js";
-
-import {
-  installSendAction
-} from "./create-account-send-action.js";
-
-import {
-  startCreateAccountFlow
-} from "./create-account-flow.js";
-
-import {
   startHumanVerify
 } from "./human-verify-start.js";
 
 function startCreateAccountEntry() {
   installLockTouch();
-  installEmailSendSurface();
 
   installGlassPlaqueNode();
 
@@ -119,11 +104,6 @@ function startCreateAccountEntry() {
 
   installFaceTurn();
   installFaceTwoReveal();
-
-  installEmailDescriptorActivation();
-  installEmailDescriptorResponse();
-  installSendAction();
-  startCreateAccountFlow();
 
   startHumanVerify();
 }
