@@ -1,8 +1,7 @@
-
 // CYBERCROWD
 //
 // FILE:
-// create-account-entry.js
+// create-account-glass-plaque-two-node.js
 //
 // BUILD LAW:
 // 1 FILE
@@ -10,61 +9,67 @@
 // 1 FUNCTION
 //
 // JOB:
-// Start the live Create Account stage.
+// Create Sequence #2 clear glass
+// after Movement #1 lands.
 //
 // FUNCTION:
-// startCreateAccountEntry()
+// installGlassPlaqueTwoNode()
 //
-// CURRENT TEST:
+// INPUT:
+// cybercrowd:movement-one-landed
 //
-// Sequence #1
-// ↓
-// human swipe
-// ↓
-// Slam #1 + Movement #1
-// ↓
-// Sequence #1 transform lands
-// ↓
-// Sequence #2 clear glass created
-// ↓
-// STOP
+// OUTPUT:
+// .glass-plaque-two
+//
+// NO TIMER.
+// NO STORAGE.
+// NO TURNSTILE.
+// NO AUDIO.
+// NO VERIFICATION.
+// NO MOVEMENT #2.
+// NO ENTRY LOGIC.
 
-import {
-  installGlassPlaqueNode
-} from "./create-account-glass-plaque-node.js";
+export function installGlassPlaqueTwoNode() {
+  const stage =
+    document.querySelector(
+      ".stage"
+    );
 
-import {
-  installFaceOne
-} from "./create-account-face-one.js";
+  if (!stage) {
+    return false;
+  }
 
-import {
-  installSwipeCue
-} from "./create-account-swipe-cue.js";
+  window.addEventListener(
+    "cybercrowd:movement-one-landed",
+    () => {
+      let plaque =
+        stage.querySelector(
+          ":scope > .glass-plaque-two"
+        );
 
-import {
-  installTurnAudioListener
-} from "./create-account-turn-audio-listener.js";
+      if (plaque) {
+        return;
+      }
 
-import {
-  installGlassPlaqueTwoNode
-} from "./create-account-glass-plaque-two-node.js";
+      plaque =
+        document.createElement(
+          "section"
+        );
 
-import {
-  installPlacardSwipe
-} from "./placard-swipe.js";
+      plaque.className =
+        "glass-plaque-two";
 
-function startCreateAccountEntry() {
-  installGlassPlaqueNode();
+      plaque.setAttribute(
+        "aria-label",
+        "CyberCrowd Sequence Two"
+      );
 
-  installFaceOne();
+      stage.appendChild(
+        plaque
+      );
+    },
+    { once: true }
+  );
 
-  installSwipeCue();
-
-  installTurnAudioListener();
-
-  installGlassPlaqueTwoNode();
-
-  installPlacardSwipe();
+  return true;
 }
-
-startCreateAccountEntry();
