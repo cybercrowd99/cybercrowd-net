@@ -9,39 +9,26 @@
 // 1 FUNCTION
 //
 // JOB:
-// Install the real visible children of Sequence #1
-// inside the existing .glass-plaque.
+// Install visible Sequence #1 face.
 //
 // FUNCTION:
 // installFaceOne()
 //
 // HUMAN SEES:
-// .glass-plaque
-// ├── seal
-// ├── title
-// ├── welcome
-// └── swipe interface
 //
-// OWNS:
-// Seal DOM.
-// Create Your Account DOM.
-// Welcome to CyberCrowd DOM.
+// seal
 //
-// DOES NOT OWN:
-// Glass plaque creation.
-// Swipe interface.
-// Swipe detection.
-// Movement.
-// Audio.
-// Turnstile.
-// Email.
-// Authentication.
-// Routing.
-// CSS presentation.
+// Welcome To Cybercrowd
+//
+// Create your account
+//
+// Swipe
 
 export function installFaceOne() {
   const plaque =
-    document.querySelector(".glass-plaque");
+    document.querySelector(
+      ".glass-plaque"
+    );
 
   if (!plaque) {
     return false;
@@ -71,6 +58,7 @@ export function installFaceOne() {
     "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png";
 
   seal.alt = "";
+
   seal.setAttribute(
     "aria-hidden",
     "true"
@@ -83,7 +71,7 @@ export function installFaceOne() {
     "create-account-title";
 
   title.textContent =
-    "Create Your Account";
+    "Welcome To Cybercrowd";
 
   const welcome =
     document.createElement("p");
@@ -92,7 +80,7 @@ export function installFaceOne() {
     "create-account-welcome";
 
   welcome.textContent =
-    "Welcome to CyberCrowd";
+    "Create your account";
 
   face.append(
     seal,
