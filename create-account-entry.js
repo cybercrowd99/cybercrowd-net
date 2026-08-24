@@ -36,10 +36,12 @@
 // ↓
 // cybercrowd:turnstile-one-verified
 // ↓
-// STOP
+// Audio #2
+// +
+// automatic Movement #2
+// ↓
+// 90° → 180°
 //
-// NO AUDIO #2.
-// NO MOVEMENT #2.
 // NO STORAGE.
 
 import {
@@ -71,6 +73,14 @@ import {
 } from "./human-verify-crossing.js";
 
 import {
+  installSequenceTwo
+} from "./create-account-sequence-two.js";
+
+import {
+  installFaceTurn
+} from "./create-account-face-turn.js";
+
+import {
   installPlacardSwipe
 } from "./placard-swipe.js";
 
@@ -86,6 +96,10 @@ function startCreateAccountEntry() {
   installGlassPlaqueTwoNode();
 
   openHumanVerifyCrossing();
+
+  installSequenceTwo();
+
+  installFaceTurn();
 
   window.addEventListener(
     "cybercrowd:movement-one-landed",
