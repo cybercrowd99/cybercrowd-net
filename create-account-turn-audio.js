@@ -10,13 +10,17 @@
 //
 // JOB:
 // Play the existing Sequence #1
-// Surface Closing sound.
+// surface-closing sound.
 //
 // FUNCTION:
 // playTurnAudio()
 //
-// OBJECT:
-// Surface-closing_1sEffect.mp3
+// AUDIO CALL LAW:
+// unmute
+// full volume
+// load if needed
+// rewind
+// play
 //
 // NO OSCILLATOR.
 // NO SYNTHESIS.
@@ -24,29 +28,49 @@
 // NO MOVEMENT OWNERSHIP.
 
 const turnAudio =
-  new Audio(
-    "/sound-effects/Surface-closing_1sEffect.mp3"
-  );
+  new Audio();
 
 turnAudio.preload = "auto";
 turnAudio.playsInline = true;
 
-export function playTurnAudio() {
-  try {
-    turnAudio.currentTime = 0;
+turnAudio.src =
+  "/api/r2-sound-effect/Surface-closing_1sEffect.mp3";
 
-    const playRequest =
-      turnAudio.play();
+export async function playTurnAudio() {
+  try {
+    turnAudio.muted = false;
+    turnAudio.volume = 1;
+
+    turnAudio.setAttribute(
+      "playsinline",
+      ""
+    );
+
+    turnAudio.setAttribute(
+      "webkit-playsinline",
+      ""
+    );
 
     if (
-      playRequest &&
-      typeof playRequest.catch === "function"
+      turnAudio.readyState === 0
     ) {
-      playRequest.catch(() => {});
+      turnAudio.load();
     }
 
+    try {
+      turnAudio.currentTime = 0;
+    } catch (_) {}
+
+    await turnAudio.play();
+
     return true;
-  } catch (_) {
+
+  } catch (error) {
+    console.error(
+      "CyberCrowd Sequence #1 audio failed:",
+      error
+    );
+
     return false;
   }
 }
