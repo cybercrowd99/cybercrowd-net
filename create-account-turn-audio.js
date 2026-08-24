@@ -9,10 +9,18 @@
 // 1 FUNCTION
 //
 // JOB:
-// Generate the Sequence #1 mechanical turn sound.
+// Generate the Sequence #1
+// matched mechanical slam.
 //
 // FUNCTION:
 // playTurnAudio()
+//
+// MATCH:
+// Movement #1 = 90ms
+// Audio #1    = 90ms
+//
+// ONE MOVEMENT.
+// ONE SLAM.
 
 let audioContext = null;
 
