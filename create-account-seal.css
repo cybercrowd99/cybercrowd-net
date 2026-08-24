@@ -1,7 +1,8 @@
 /*
 CYBERCROWD
 
-FILE: create-account-seal.css
+FILE:
+create-account-seal.css
 
 BUILD LAW:
 1 FILE
@@ -9,54 +10,48 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Project the CyberCrowd seal onto the existing stage.
+Present the CyberCrowd seal
+inside the real Sequence #1 glass plaque.
 
 FUNCTION:
-Render the seal presentation only.
+Style .create-account-seal only.
 
-USES:
-Existing CyberCrowd seal asset.
-Existing proven seal size.
-Existing proven circular presentation.
-Existing proven shadow language.
+OWNS:
+Seal size.
+Seal position.
+Seal circular presentation.
+Seal shadow language.
 
 DOES NOT OWN:
-Backdrop
-Stage
-Glass
-Title
-Welcome
-Email
-Turnstile
-Send
-Wheel
-Motion
-Overlay
-Audio
-Authentication
-Routing
-Comeback
-Runtime logic
+Seal DOM creation.
+Plaque.
+Title.
+Welcome.
+Swipe.
+Movement.
+Audio.
+Turnstile.
+Email.
+Authentication.
+Routing.
 */
 
-.stage::after {
-  content: "";
-
+.create-account-seal {
   position: absolute;
+
+  left: 50%;
+  top: 50%;
 
   width: 160px;
   height: 160px;
 
-  background-image:
-    url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png");
+  transform:
+    translate(-50%, -50%)
+    translateY(-185px);
 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  object-fit: cover;
 
   border-radius: 50%;
-
-  transform: translateY(-185px);
 
   box-shadow:
     inset 0 0 24px rgba(255, 255, 255, 0.24),
@@ -64,5 +59,8 @@ Runtime logic
     0 14px 28px rgba(0, 0, 0, 0.28);
 
   pointer-events: none;
+
   user-select: none;
+
+  z-index: 2;
 }
