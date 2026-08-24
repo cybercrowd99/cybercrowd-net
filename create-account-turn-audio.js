@@ -20,7 +20,7 @@
 // sound-effects/Surface-closing_1sEffect.mp3
 
 const TURN_AUDIO_URL =
-  "https://pub-660d879738134ba990d1708d015ec763.r2.dev/sound-effects/Surface-closing_1sEffect.mp3";
+https://b15830fa5a72b2e179236cb740dd762d.r2.cloudflarestorage.com/sound-effects/Surface-closing_1sEffect.mp3";
 
 const turnAudio =
   new Audio(TURN_AUDIO_URL);
