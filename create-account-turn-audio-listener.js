@@ -9,7 +9,8 @@
 // 1 FUNCTION
 //
 // JOB:
-// Connect Movement #1 signal to turn audio.
+// Connect Movement #1 start signal
+// directly to its matched audio.
 //
 // FUNCTION:
 // installTurnAudioListener()
@@ -19,6 +20,13 @@
 //
 // OUTPUT:
 // playTurnAudio()
+//
+// MATCH:
+// Movement #1 = 90ms
+// Audio #1    = 90ms
+//
+// ONE MOVEMENT.
+// ONE SLAM.
 
 import {
   playTurnAudio
