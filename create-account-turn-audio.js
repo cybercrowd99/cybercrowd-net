@@ -9,18 +9,18 @@
 // 1 FUNCTION
 //
 // JOB:
-// Play the existing Sequence #1
-// surface-closing sound.
+// Play Sequence #1
+// Surface Closing audio.
 //
 // FUNCTION:
 // playTurnAudio()
 //
-// AUDIO CALL LAW:
-// unmute
-// full volume
-// load if needed
-// rewind
-// play
+// SOURCE:
+// cybercrowd-net Worker
+// ↓
+// private SOUND_EFFECTS R2
+// ↓
+// Surface-closing_1sEffect.mp3
 //
 // NO OSCILLATOR.
 // NO SYNTHESIS.
@@ -28,28 +28,30 @@
 // NO MOVEMENT OWNERSHIP.
 
 const turnAudio =
-  new Audio();
+  new Audio(
+    "/api/r2-sound-effect/Surface-closing_1sEffect.mp3"
+  );
 
-turnAudio.preload = "auto";
-turnAudio.playsInline = true;
+turnAudio.preload =
+  "auto";
 
-turnAudio.src =
-  "/api/r2-sound-effect/Surface-closing_1sEffect.mp3";
+turnAudio.setAttribute(
+  "playsinline",
+  ""
+);
+
+turnAudio.setAttribute(
+  "webkit-playsinline",
+  ""
+);
 
 export async function playTurnAudio() {
   try {
-    turnAudio.muted = false;
-    turnAudio.volume = 1;
+    turnAudio.muted =
+      false;
 
-    turnAudio.setAttribute(
-      "playsinline",
-      ""
-    );
-
-    turnAudio.setAttribute(
-      "webkit-playsinline",
-      ""
-    );
+    turnAudio.volume =
+      1;
 
     if (
       turnAudio.readyState === 0
@@ -58,7 +60,8 @@ export async function playTurnAudio() {
     }
 
     try {
-      turnAudio.currentTime = 0;
+      turnAudio.currentTime =
+        0;
     } catch (_) {}
 
     await turnAudio.play();
