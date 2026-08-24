@@ -1,75 +1,37 @@
-/*
-CYBERCROWD
-
-REPO:
-cybercrowd99/cybercrowd-net
-
-FILE:
-placard-swipe.js
-
-BUILD LAW:
-1 FILE
-1 JOB
-1 FUNCTION
-
-JOB:
-Own Create Account human swipe Movement #1 only.
-
-FUNCTION:
-installPlacardSwipe()
-
-CONTROL:
-SEQUENCE #1
-STATE 0
-0°
-↓
-HUMAN SWIPE ON GLASS PLAQUE
-↓
-MOVEMENT #1
-0° → 90°
-↓
-STOP
-
-SIGNAL:
-cybercrowd:cylinder-turned
-
-POSITION MAP:
-STATE 0 =   0°
-MOVE #1 =  90°
-
-OWNS:
-Glass-plaque swipe target.
-Pointer-down position.
-Horizontal swipe threshold.
-One-time human Movement #1 permission.
-90-degree cylinder-angle update.
-Existing cylinder-turn signal publication.
-Pointer release.
-
-DOES NOT OWN:
-Movement #2.
-Movement #3.
-180-degree position.
-270-degree position.
-Reverse movement.
-Wheel geometry.
-CSS animation.
-Turn audio.
-Turnstile #1 rendering.
-Turnstile #1 verification.
-Email.
-Email activation.
-Send.
-Turnstile #2.
-Check Email.
-WHOOSH.
-Authentication.
-Routing.
-*/
+// CYBERCROWD
+//
+// FILE:
+// placard-swipe.js
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+//
+// JOB:
+// Own human Movement #1.
+//
+// FUNCTION:
+// installPlacardSwipe()
+//
+// HUMAN:
+//
+// LEFT
+// RIGHT
+// UP
+// DOWN
+//
+// ALL VALID.
+//
+// OUTPUT:
+// --cylinder-angle = 90deg
+// cybercrowd:cylinder-turned
 
 export function installPlacardSwipe() {
   const placard =
-    document.querySelector(".glass-plaque");
+    document.querySelector(
+      ".glass-plaque"
+    );
 
   if (!placard) {
     return false;
@@ -82,45 +44,70 @@ export function installPlacardSwipe() {
     40;
 
   let startX = 0;
+  let startY = 0;
+
   let dragging = false;
-  let movementOneComplete = false;
 
-  const setMovementOneAngle = () => {
-    document.documentElement.style.setProperty(
-      "--cylinder-angle",
-      `${MOVEMENT_ONE_ANGLE}rad`
-    );
-  };
+  let movementOneComplete =
+    false;
 
-  const publishMovementOne = () => {
-    window.dispatchEvent(
-      new CustomEvent(
-        "cybercrowd:cylinder-turned",
-        {
-          detail: {
-            cardIndex: 1,
-            movement: 1,
-            angle: MOVEMENT_ONE_ANGLE,
-            degrees: 90
+  placard.style.touchAction =
+    "none";
+
+  const setMovementOneAngle =
+    () => {
+      document.documentElement
+        .style
+        .setProperty(
+          "--cylinder-angle",
+          `${MOVEMENT_ONE_ANGLE}rad`
+        );
+    };
+
+  const publishMovementOne =
+    () => {
+      window.dispatchEvent(
+        new CustomEvent(
+          "cybercrowd:cylinder-turned",
+          {
+            detail: {
+              cardIndex: 1,
+              movement: 1,
+              angle:
+                MOVEMENT_ONE_ANGLE,
+              degrees: 90
+            }
           }
-        }
-      )
-    );
-  };
+        )
+      );
+    };
 
   placard.addEventListener(
     "pointerdown",
     (event) => {
-      if (movementOneComplete) {
+      if (
+        movementOneComplete
+      ) {
         return;
       }
 
       dragging = true;
-      startX = event.clientX;
 
-      placard.setPointerCapture(
-        event.pointerId
-      );
+      startX =
+        event.clientX;
+
+      startY =
+        event.clientY;
+
+      if (
+        typeof
+          placard.setPointerCapture ===
+        "function"
+      ) {
+        placard.setPointerCapture(
+          event.pointerId
+        );
+      }
     }
   );
 
@@ -134,16 +121,26 @@ export function installPlacardSwipe() {
         return;
       }
 
-      const distance =
-        event.clientX - startX;
+      const distanceX =
+        event.clientX -
+        startX;
 
-      const horizontalSwipe =
-        Math.abs(distance) >=
-        SWIPE_THRESHOLD;
+      const distanceY =
+        event.clientY -
+        startY;
+
+      const gestureDistance =
+        Math.max(
+          Math.abs(distanceX),
+          Math.abs(distanceY)
+        );
 
       dragging = false;
 
       if (
+        typeof
+          placard.hasPointerCapture ===
+          "function" &&
         placard.hasPointerCapture(
           event.pointerId
         )
@@ -153,13 +150,18 @@ export function installPlacardSwipe() {
         );
       }
 
-      if (!horizontalSwipe) {
+      if (
+        gestureDistance <
+        SWIPE_THRESHOLD
+      ) {
         return;
       }
 
-      movementOneComplete = true;
+      movementOneComplete =
+        true;
 
       setMovementOneAngle();
+
       publishMovementOne();
     }
   );
@@ -170,6 +172,9 @@ export function installPlacardSwipe() {
       dragging = false;
 
       if (
+        typeof
+          placard.hasPointerCapture ===
+          "function" &&
         placard.hasPointerCapture(
           event.pointerId
         )
@@ -181,10 +186,12 @@ export function installPlacardSwipe() {
     }
   );
 
-  document.documentElement.style.setProperty(
-    "--cylinder-angle",
-    "0rad"
-  );
+  document.documentElement
+    .style
+    .setProperty(
+      "--cylinder-angle",
+      "0rad"
+    );
 
   return true;
 }
