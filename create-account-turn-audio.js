@@ -10,20 +10,23 @@
 //
 // JOB:
 // Play the existing Sequence #1
-// surface-closing sound.
+// Surface Closing sound.
 //
 // FUNCTION:
 // playTurnAudio()
 //
-// SOURCE:
-// Cloudflare R2
-// sound-effects/Surface-closing_1sEffect.mp3
-
-const TURN_AUDIO_URL =
-  "https://pub-660d879738134ba990d1708d015ec763.r2.dev/sound-effects/Surface-closing_1sEffect.mp3";
+// OBJECT:
+// Surface-closing_1sEffect.mp3
+//
+// NO OSCILLATOR.
+// NO SYNTHESIS.
+// NO TIMER.
+// NO MOVEMENT OWNERSHIP.
 
 const turnAudio =
-  new Audio(TURN_AUDIO_URL);
+  new Audio(
+    "/sound-effects/Surface-closing_1sEffect.mp3"
+  );
 
 turnAudio.preload = "auto";
 turnAudio.playsInline = true;
