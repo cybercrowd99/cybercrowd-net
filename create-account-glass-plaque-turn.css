@@ -10,41 +10,16 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Own Sequence #1 physical rotation of the real Create Account glass-plaque node.
+Rotate the real Sequence #1 glass plaque.
 
 FUNCTION:
-Apply the existing cylinder angle to .glass-plaque.
+Apply --cylinder-angle to .glass-plaque.
 
 CONTROL:
 placard-swipe.js
 → --cylinder-angle
-→ create-account-glass-plaque-turn.css
+→ this file
 → .glass-plaque
-
-POSITION MAP:
-STATE 0 =   0°
-MOVE #1 =  90°
-
-OWNS:
-Real plaque rotation target.
-Cylinder depth.
-Rear axle.
-Perspective relationship.
-Preserve-3D behavior.
-Movement #1 transform transition.
-
-DOES NOT OWN:
-Swipe detection.
-Swipe cue.
-Plaque appearance.
-Plaque creation.
-Audio.
-Turn signal publication.
-Turnstile.
-Email.
-Send.
-Authentication.
-Routing.
 */
 
 :root {
