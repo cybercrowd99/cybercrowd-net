@@ -1,94 +1,68 @@
-// CYBERCROWD
-//
-// FILE:
-// create-account-face-one.js
-//
-// BUILD LAW:
-// 1 FILE
-// 1 JOB
-// 1 FUNCTION
-//
-// JOB:
-// Install visible Sequence #1 face.
-//
-// FUNCTION:
-// installFaceOne()
-//
-// HUMAN SEES:
-//
-// seal
-//
-// Welcome To Cybercrowd
-//
-// CREATE YOUR ACCOUNT
-//
-// Swipe
+/*
+CYBERCROWD
 
-export function installFaceOne() {
-  const plaque =
-    document.querySelector(
-      ".glass-plaque"
-    );
+FILE:
+create-account-title.css
 
-  if (!plaque) {
-    return false;
-  }
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
 
-  if (
-    plaque.querySelector(
-      ":scope > .create-account-face-one"
-    )
-  ) {
-    return false;
-  }
+JOB:
+Present Welcome To Cybercrowd.
 
-  const face =
-    document.createElement("div");
+FUNCTION:
+Style .create-account-title only.
+*/
 
-  face.className =
-    "create-account-face-one";
+.create-account-title {
+  position: absolute;
 
-  const seal =
-    document.createElement("img");
+  left: 50%;
+  top: 50%;
 
-  seal.className =
-    "create-account-seal";
+  transform:
+    translate(-50%, -50%)
+    translateY(18px);
 
-  seal.src =
-    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/1780664884427.png";
+  width: min(88vw, 480px);
 
-  seal.alt = "";
+  margin: 0;
 
-  seal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-  const title =
-    document.createElement("h1");
+  font-size:
+    clamp(1.85rem, 5.6vw, 3rem);
 
-  title.className =
-    "create-account-title";
+  line-height: 1.05;
 
-  title.textContent =
-    "Welcome To Cybercrowd";
+  font-weight: 700;
 
-  const welcome =
-    document.createElement("p");
+  letter-spacing: 0.06em;
 
-  welcome.className =
-    "create-account-welcome";
+  text-align: center;
 
-  welcome.textContent =
-    "CREATE YOUR ACCOUNT";
+  color: #ffd700;
 
-  face.append(
-    seal,
-    title,
-    welcome
-  );
+  -webkit-text-stroke:
+    1.5px #6f5000;
 
-  plaque.prepend(face);
+  paint-order:
+    stroke fill;
 
-  return true;
+  text-shadow:
+    0 -1px 0 #fff0a0,
+    0 1px 0 #d6a500,
+    0 2px 0 #ad7f00,
+    0 3px 0 #795700,
+    0 5px 5px rgba(0, 0, 0, 0.42);
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: 2;
 }
