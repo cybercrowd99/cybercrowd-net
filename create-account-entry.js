@@ -46,6 +46,8 @@ import {
   installPlacardSwipe
 } from "./placard-swipe.js";
 
+import "./create-account-sequence-two.js";
+
 function startCreateAccountEntry() {
   installGlassPlaqueNode();
 
