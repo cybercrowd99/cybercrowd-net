@@ -1,7 +1,9 @@
+// LABEL: 2
+//
 // CYBERCROWD
-// 
-// FILE:
-// create-account-sequence-two.js
+//
+// REPO: cybercrowd99/cybercrowd-net
+// PATH: create-account-glass-plaque-node.js
 //
 // BUILD LAW:
 // 1 FILE
@@ -9,36 +11,64 @@
 // 1 FUNCTION
 //
 // JOB:
-// Wake Sequence #2 audio from the same
-// Turnstile success strike that starts Movement #2.
+// Create the single Create Account glass-plaque organism node.
 //
 // FUNCTION:
-// installSequenceTwo()
+// installGlassPlaqueNode()
 //
-// INPUT:
-// cybercrowd:human-passed
-//
-// OUTPUT:
-// Sequence #2 slam audio starts.
+// OWNS:
+// .glass-plaque runtime node.
+// Physical parent boundary for Create Account interface children.
+// Adoption of existing direct stage children.
 //
 // DOES NOT OWN:
-// Movement #2.
-// Turnstile rendering.
-// Turnstile verification.
+// Child behavior.
+// Seal presentation.
+// Title presentation.
+// Welcome presentation.
+// Email presentation.
+// Send behavior.
+// Turnstile behavior.
+// Wheel movement.
+// Cylinder geometry.
+// Audio.
 // Authentication.
-// Email.
+// Session.
 // Routing.
+// Backend authority.
 
-import {
-  playSequenceTwoAudio
-} from "./create-account-sequence-two-audio.js";
+export function installGlassPlaqueNode() {
+  const stage =
+    document.querySelector(".stage");
 
-export function installSequenceTwo() {
-  window.addEventListener(
-    "cybercrowd:human-passed",
-    () => {
-      playSequenceTwoAudio();
-    },
-    { once: true }
-  );
+  if (!stage) {
+    return false;
+  }
+
+  let plaque =
+    stage.querySelector(":scope > .glass-plaque");
+
+  if (!plaque) {
+    plaque =
+      document.createElement("section");
+
+    plaque.className =
+      "glass-plaque";
+
+    plaque.setAttribute(
+      "aria-label",
+      "CyberCrowd Create Account"
+    );
+
+    const existingChildren =
+      Array.from(stage.children);
+
+    stage.appendChild(plaque);
+
+    for (const child of existingChildren) {
+      plaque.appendChild(child);
+    }
+  }
+
+  return true;
 }
