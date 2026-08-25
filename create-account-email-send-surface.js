@@ -41,10 +41,13 @@
 // Effect remains behind instructions, email surface, and SEND.
 //
 // ENTER ACTION:
-// ENTER decal
-// -> one human touch
-// -> decal disappears
-// -> same footprint becomes writable email surface.
+// Actual email input exists HOT from arrival.
+// Neutral state presents approved ENTER decal.
+// One human touch.
+// Input receives focus immediately.
+// Decal clears.
+// Keyboard opens.
+// Same footprint becomes writable email surface.
 //
 // SEND ACTION:
 // SEND decal
@@ -74,7 +77,6 @@ export function installEmailSendSurface() {
       }
 
       if (
-        document.getElementById("email-invite") ||
         document.getElementById("email") ||
         document.getElementById("sendButton") ||
         document.getElementById("send-waiting")
@@ -596,58 +598,24 @@ export function installEmailSendSurface() {
         "none";
 
       /*
-       * ENTER EMAIL HUMAN TOUCH
+       * ENTER EMAIL
+       *
+       * HOT FROM ARRIVAL.
+       *
+       * The visible decal IS the real email input.
+       * No hidden input.
+       * No replacement.
+       * No wake-up.
+       *
+       * Neutral:
+       * approved ENTER decal.
+       *
+       * Human touch:
+       * browser focuses this same input,
+       * email keyboard opens,
+       * decal clears,
+       * writable surface is ready.
        */
-      const emailInvite =
-        document.createElement("button");
-
-      emailInvite.id =
-        "email-invite";
-
-      emailInvite.className =
-        "email-field";
-
-      emailInvite.type =
-        "button";
-
-      emailInvite.setAttribute(
-        "aria-label",
-        "Enter your email here"
-      );
-
-      emailInvite.style.padding =
-        "0";
-
-      emailInvite.style.border =
-        "0";
-
-      emailInvite.style.overflow =
-        "hidden";
-
-      emailInvite.style.backgroundImage =
-        `url("${APPROVED_ENTER_EMAIL_DECAL}")`;
-
-      emailInvite.style.backgroundSize =
-        "contain";
-
-      emailInvite.style.backgroundPosition =
-        "center";
-
-      emailInvite.style.backgroundRepeat =
-        "no-repeat";
-
-      emailInvite.style.backgroundColor =
-        "transparent";
-
-      emailInvite.style.color =
-        "transparent";
-
-      emailInvite.style.cursor =
-        "pointer";
-
-      emailInvite.style.zIndex =
-        "7";
-
       const email =
         document.createElement("input");
 
@@ -661,6 +629,9 @@ export function installEmailSendSurface() {
         "email";
 
       email.name =
+        "email";
+
+      email.inputMode =
         "email";
 
       email.autocomplete =
@@ -677,14 +648,61 @@ export function installEmailSendSurface() {
 
       email.setAttribute(
         "aria-label",
-        "Email address"
+        "Enter your email here"
       );
 
-      email.hidden =
-        true;
+      email.style.padding =
+        "0";
+
+      email.style.border =
+        "0";
+
+      email.style.overflow =
+        "hidden";
+
+      email.style.backgroundImage =
+        `url("${APPROVED_ENTER_EMAIL_DECAL}")`;
+
+      email.style.backgroundSize =
+        "contain";
+
+      email.style.backgroundPosition =
+        "center";
+
+      email.style.backgroundRepeat =
+        "no-repeat";
+
+      email.style.backgroundColor =
+        "transparent";
+
+      email.style.color =
+        "transparent";
+
+      email.style.caretColor =
+        "transparent";
+
+      email.style.cursor =
+        "text";
 
       email.style.zIndex =
         "7";
+
+      email.addEventListener(
+        "focus",
+        () => {
+          email.style.backgroundImage =
+            "none";
+
+          email.style.backgroundColor =
+            "rgba(255, 255, 255, 0.82)";
+
+          email.style.color =
+            "#2a2118";
+
+          email.style.caretColor =
+            "#2a2118";
+        }
+      );
 
       /*
        * SEND HUMAN TOUCH
@@ -849,26 +867,6 @@ export function installEmailSendSurface() {
         "inset 0 0 10px rgba(255, 240, 174, 0.16)";
 
       /*
-       * ENTER graphic
-       * -> one human touch
-       * -> same footprint becomes writable input.
-       */
-      emailInvite.addEventListener(
-        "click",
-        () => {
-          emailInvite.replaceWith(
-            email
-          );
-
-          email.hidden =
-            false;
-
-          email.focus();
-        },
-        { once: true }
-      );
-
-      /*
        * Typing prepares SEND.
        */
       email.addEventListener(
@@ -945,7 +943,7 @@ export function installEmailSendSurface() {
 
       entryForm.append(
         instructions,
-        emailInvite,
+        email,
         sendButton
       );
 
