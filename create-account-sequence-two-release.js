@@ -1,72 +1,125 @@
 // CYBERCROWD
 //
-// FILE:
-// create-account-sequence-two-release.js
+// REPO: cybercrowd99/cybercrowd-net
+// PATH: create-account-face-turn.js
 //
 // BUILD LAW:
 // 1 FILE
 // 1 JOB
 // 1 FUNCTION
 //
-// SEQUENCE:
-// #2
+// TITLE:
+// FACE TURN TWO
 //
 // JOB:
-// Release Sequence #2 human-touch ownership
-// after Movement #2 has completed.
+// Own Create Account automatic Movement #2 only.
 //
 // FUNCTION:
-// installSequenceTwoRelease()
+// installFaceTurn()
 //
-// INPUT:
+// CONTROL:
+//
+// MOVEMENT #1 ALREADY COMPLETE
+// 90°
+//
+// TURNSTILE #1
+// GREEN CHECK / TOKEN
+// ↓
+// cybercrowd:turnstile-one-verified
+// ↓
+// PRIVATE VERIFICATION CONFIRMED
+// ↓
+// MOVEMENT #2
+// 90° → 180°
+// ↓
+// STOP
+// ↓
 // cybercrowd:face-two-arrived
 //
-// ACTION:
-// Remove .is-active from .glass-plaque-two.
+// INPUT:
+// cybercrowd:turnstile-one-verified
 //
-// RESULT:
-// Sequence #2 returns to pointer-events: none.
-// Sequence #3 receives human touch.
+// OUTPUT:
+// cybercrowd:face-two-arrived
+//
+// POSITION MAP:
+// ARRIVAL FROM MOVEMENT #1 = 90°
+// MOVEMENT #2 DESTINATION = 180°
+//
+// TURN TIME:
+// 0.09 seconds.
+//
+// SECURITY BOUNDARY:
+// This file moves presentation only.
+// It does not grant human authority.
+// Private server verification remains separate.
 //
 // DOES NOT OWN:
-// Turnstile #1.
-// Turnstile verification.
-// Movement.
+// Movement #1.
+// Movement #3.
+// Human swipe.
+// Reverse movement.
+// Wheel geometry.
+// CSS transition.
+// Turn audio.
+// Turnstile #1 rendering.
+// Turnstile #1 verification.
+// Human authorization.
 // Email.
-// SEND.
+// Email activation.
+// Send.
 // Turnstile #2.
 // WHOOSH.
 // Authentication.
+// Session.
 // Routing.
-// Backend authority.
 
-export function installSequenceTwoRelease() {
-  let released = false;
+export function installFaceTurn() {
+  const TURN_DURATION = 90;
+
+  const MOVEMENT_TWO_START =
+    Math.PI / 2;
+
+  const MOVEMENT_TWO_DESTINATION =
+    Math.PI;
+
+  let turned = false;
 
   window.addEventListener(
-    "cybercrowd:face-two-arrived",
+    "cybercrowd:turnstile-one-verified",
     () => {
-      if (released) {
+      if (turned) {
         return;
       }
 
-      released = true;
+      turned = true;
 
-      const plaque =
-        document.querySelector(
-          ".glass-plaque-two"
-        );
+      document.documentElement.style.setProperty(
+        "--cylinder-angle",
+        `${MOVEMENT_TWO_DESTINATION}rad`
+      );
 
-      if (!plaque) {
-        return;
-      }
-
-      plaque.classList.remove(
-        "is-active"
+      window.setTimeout(
+        () => {
+          window.dispatchEvent(
+            new CustomEvent(
+              "cybercrowd:face-two-arrived",
+              {
+                detail: {
+                  movement: 2,
+                  from: MOVEMENT_TWO_START,
+                  to: MOVEMENT_TWO_DESTINATION,
+                  degreesMoved: 90,
+                  destinationDegrees: 180,
+                  duration: TURN_DURATION
+                }
+              }
+            )
+          );
+        },
+        TURN_DURATION
       );
     },
     { once: true }
   );
-
-  return true;
 }
