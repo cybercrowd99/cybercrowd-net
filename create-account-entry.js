@@ -65,6 +65,10 @@ import {
 } from "./create-account-glass-plaque-two-node.js";
 
 import {
+  installGlassPlaqueThreeNode
+} from "./create-account-glass-plaque-three-node.js";
+
+import {
   openTurnstileOne
 } from "./turnstile-one-ui.js";
 
@@ -94,6 +98,8 @@ function startCreateAccountEntry() {
   installTurnAudioListener();
 
   installGlassPlaqueTwoNode();
+
+  installGlassPlaqueThreeNode();
 
   openHumanVerifyCrossing();
 
