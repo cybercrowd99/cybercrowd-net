@@ -1,7 +1,7 @@
 // CYBERCROWD
 //
-// REPO: cybercrowd99/cybercrowd-net
-// PATH: create-account-send-action.js
+// FILE:
+// create-account-send-action.js
 //
 // BUILD LAW:
 // 1 FILE
@@ -9,61 +9,69 @@
 // 1 FUNCTION
 //
 // JOB:
-// Own the human Send click boundary.
+// Own the human SEND click boundary.
 //
 // FUNCTION:
 // installSendAction()
 //
-// INPUT:
-// Human click on #sendButton.
+// ARM:
+// cybercrowd:email-opened
 //
 // OUTPUT:
 // cybercrowd:turnstile-two-requested
 //
-// DOES NOT OWN:
-// Email DOM creation.
-// Email descriptor activation.
-// Email entry.
-// Email validation.
-// Email transmission.
-// Movement #1.
-// Movement #2.
-// Movement #3.
-// Wheel geometry.
-// Audio.
-// Turnstile rendering.
-// Turnstile verification.
-// Postmark.
-// Authentication.
-// Session.
-// Routing.
-// Backend authority.
+// LAW:
+// SEND HAS NO CLICK CONNECTION
+// UNTIL ENTER EMAIL HAS OPENED.
 
 export function installSendAction() {
-  const sendButton =
-    document.getElementById("sendButton");
+  let connected =
+    false;
 
-  if (!sendButton) {
-    return false;
-  }
+  let requested =
+    false;
 
-  let requested = false;
-
-  sendButton.addEventListener(
-    "click",
+  window.addEventListener(
+    "cybercrowd:email-opened",
     () => {
-      if (requested) {
+      if (connected) {
         return;
       }
 
-      requested = true;
+      const sendButton =
+        document.getElementById(
+          "sendButton"
+        );
 
-      window.dispatchEvent(
-        new CustomEvent(
-          "cybercrowd:turnstile-two-requested"
-        )
+      if (!sendButton) {
+        return;
+      }
+
+      connected =
+        true;
+
+      sendButton.addEventListener(
+        "click",
+        () => {
+          if (
+            sendButton.disabled ||
+            requested
+          ) {
+            return;
+          }
+
+          requested =
+            true;
+
+          window.dispatchEvent(
+            new CustomEvent(
+              "cybercrowd:turnstile-two-requested"
+            )
+          );
+        }
       );
-    }
+    },
+    { once: true }
   );
 
   return true;
