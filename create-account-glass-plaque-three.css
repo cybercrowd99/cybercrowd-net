@@ -1,0 +1,106 @@
+/*
+CYBERCROWD
+
+FILE:
+create-account-glass-plaque-three.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+SEQUENCE:
+#3
+
+JOB:
+Present the Sequence #3 glass face
+on the existing Create Account rail.
+
+FUNCTION:
+Style .glass-plaque-three only.
+
+DOES NOT OWN:
+Email entry.
+Email input.
+Send button.
+Turnstile.
+Verification.
+Audio.
+WHOOSH.
+Authentication.
+Session.
+Routing.
+*/
+
+.glass-plaque-three {
+  position: relative;
+
+  grid-area: 1 / 1;
+
+  display: block;
+
+  width: min(88vw, 520px);
+  height: min(72vh, 620px);
+
+  border:
+    2px solid
+    rgba(214, 242, 232, 0.78);
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.42),
+      rgba(255, 255, 255, 0.10)
+    ),
+    rgba(238, 248, 242, 0.28);
+
+  backdrop-filter:
+    blur(7px)
+    saturate(1.08);
+
+  -webkit-backdrop-filter:
+    blur(7px)
+    saturate(1.08);
+
+  box-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px
+      rgba(255, 255, 255, 0.52),
+    inset 0 0 30px
+      rgba(255, 255, 255, 0.18);
+
+  transform-origin:
+    50%
+    50%
+    calc(-1 * var(--cylinder-depth));
+
+  transform-style: preserve-3d;
+
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+
+  transform:
+    translateY(-2px)
+    rotateX(2deg)
+    rotateY(
+      calc(
+        var(--cylinder-angle) -
+        3.141592653589793rad
+      )
+    );
+
+  transition:
+    transform
+    90ms
+    linear;
+
+  will-change: transform;
+
+  pointer-events: none;
+}
+
+.glass-plaque-three.is-active {
+  pointer-events: auto;
+}
