@@ -12,7 +12,7 @@
 // #3
 //
 // JOB:
-// Create the Email + Send DOM surface
+// Create the Enter Email + Send human-action surface
 // inside the Sequence #3 glass plaque.
 //
 // FUNCTION:
@@ -21,8 +21,16 @@
 // INPUT:
 // cybercrowd:face-two-arrived
 //
+// FLOW:
+// ENTER YOUR EMAIL HERE
+// -> human click
+// -> same-size blank email surface
+// -> human types
+// -> SEND remains next human action
+//
 // CREATES:
 // .entry-form
+// #email-invite
 // #email
 // #sendButton
 //
@@ -32,7 +40,6 @@
 // DOES NOT OWN:
 // Email validation.
 // Email transmission.
-// Send behavior.
 // Turnstile.
 // Verification.
 // Movement.
@@ -58,6 +65,7 @@ export function installEmailSendSurface() {
       }
 
       if (
+        document.getElementById("email-invite") ||
         document.getElementById("email") ||
         document.getElementById("sendButton")
       ) {
@@ -69,6 +77,21 @@ export function installEmailSendSurface() {
 
       entryForm.className =
         "entry-form";
+
+      const emailInvite =
+        document.createElement("button");
+
+      emailInvite.id =
+        "email-invite";
+
+      emailInvite.className =
+        "email-field";
+
+      emailInvite.type =
+        "button";
+
+      emailInvite.textContent =
+        "ENTER YOUR EMAIL HERE";
 
       const email =
         document.createElement("input");
@@ -88,16 +111,17 @@ export function installEmailSendSurface() {
       email.autocomplete =
         "email";
 
+      email.autocapitalize =
+        "none";
+
+      email.spellcheck =
+        false;
+
       email.placeholder =
-        "Email";
+        "";
 
-      email.disabled =
+      email.hidden =
         true;
-
-      email.setAttribute(
-        "aria-disabled",
-        "true"
-      );
 
       const sendButton =
         document.createElement("button");
@@ -109,7 +133,7 @@ export function installEmailSendSurface() {
         "button";
 
       sendButton.textContent =
-        "Send";
+        "SEND";
 
       sendButton.disabled =
         true;
@@ -119,7 +143,38 @@ export function installEmailSendSurface() {
         "true"
       );
 
+      emailInvite.addEventListener(
+        "click",
+        () => {
+          emailInvite.hidden =
+            true;
+
+          email.hidden =
+            false;
+
+          email.focus();
+        },
+        { once: true }
+      );
+
+      email.addEventListener(
+        "input",
+        () => {
+          const hasValue =
+            email.value.trim().length > 0;
+
+          sendButton.disabled =
+            !hasValue;
+
+          sendButton.setAttribute(
+            "aria-disabled",
+            hasValue ? "false" : "true"
+          );
+        }
+      );
+
       entryForm.append(
+        emailInvite,
         email,
         sendButton
       );
