@@ -103,6 +103,10 @@ import {
 } from "./create-account-sequence-two.js";
 
 import {
+  installSequenceTwoRelease
+} from "./create-account-sequence-two-release.js";
+
+import {
   installFaceTurn
 } from "./create-account-face-turn.js";
 
@@ -130,6 +134,8 @@ function startCreateAccountEntry() {
   openHumanVerifyCrossing();
 
   installSequenceTwo();
+
+  installSequenceTwoRelease();
 
   installFaceTurn();
 
