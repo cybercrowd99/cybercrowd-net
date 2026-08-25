@@ -1,7 +1,7 @@
 /*
 CYBERCROWD
 
-FILE: 
+FILE:
 create-account-glass-plaque-three.css
 
 BUILD LAW:
@@ -108,3 +108,16 @@ Routing.
 
   pointer-events: auto;
 }
+
+@media (min-width: 769px) {
+  .glass-plaque-three {
+    transform-origin:
+      50%
+      50%;
+
+    transform:
+      translateY(-2px)
+      rotateX(0deg)
+      rotateY(0deg);
+  }
+}t
