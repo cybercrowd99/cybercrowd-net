@@ -40,15 +40,26 @@
 // Effect remains clipped to the glass.
 // Effect remains behind instructions, email surface, and SEND.
 //
-// FLOW:
-// approved ENTER YOUR EMAIL HERE decal
-// -> human click
-// -> same footprint becomes blank writable email surface
-// -> human types email
-// -> approved SEND decal remains next human action
+// ENTER ACTION:
+// ENTER decal
+// -> one human touch
+// -> decal disappears
+// -> same footprint becomes writable email surface.
+//
+// SEND ACTION:
+// SEND decal
+// -> one human touch
+// -> cybercrowd:send-requested
+// -> SEND decal disappears
+// -> automatic non-touch waiting state appears
+// -> cybercrowd:email-sent
+// -> waiting state clears
+// -> existing WHOOSH fires automatically.
+//
+// NO SECOND TOUCH.
 //
 // ONE-FILE ASSET RULE:
-// Both approved decals are embedded below.
+// Both approved decals are embedded in this file.
 // No side image files.
 // No placeholder asset strings.
 // No new graphics.
@@ -106,7 +117,8 @@ export function installEmailSendSurface() {
       if (
         document.getElementById("email-invite") ||
         document.getElementById("email") ||
-        document.getElementById("sendButton")
+        document.getElementById("sendButton") ||
+        document.getElementById("send-waiting")
       ) {
         return;
       }
@@ -211,12 +223,6 @@ export function installEmailSendSurface() {
       const maximumParticles =
         72;
 
-      /*
-       * 0 = top
-       * 1 = right
-       * 2 = bottom
-       * 3 = left
-       */
       const emitParticle =
         (edge) => {
           if (
@@ -282,7 +288,9 @@ export function installEmailSendSurface() {
             "monospace";
 
           particle.style.fontWeight =
-            sparkle ? "700" : "600";
+            sparkle
+              ? "700"
+              : "600";
 
           particle.style.fontSize =
             sparkle
@@ -305,17 +313,10 @@ export function installEmailSendSurface() {
           particle.style.willChange =
             "transform, opacity";
 
-          let x =
-            0;
-
-          let y =
-            0;
-
-          let vx =
-            0;
-
-          let vy =
-            0;
+          let x = 0;
+          let y = 0;
+          let vx = 0;
+          let vy = 0;
 
           if (edge === 0) {
             x =
@@ -406,8 +407,7 @@ export function installEmailSendSurface() {
               2,
             flutter:
               4 +
-              Math.random() * 9,
-            sparkle
+              Math.random() * 9
           };
 
           rainLayer.appendChild(
@@ -454,9 +454,6 @@ export function installEmailSendSurface() {
               dt * 1.8
             );
 
-          /*
-           * Emit only from the four glass surfaces.
-           */
           if (
             now - lastEmission >
             65
@@ -639,6 +636,9 @@ export function installEmailSendSurface() {
       instructions.style.pointerEvents =
         "none";
 
+      /*
+       * ENTER EMAIL HUMAN TOUCH
+       */
       const emailInvite =
         document.createElement("button");
 
@@ -724,6 +724,9 @@ export function installEmailSendSurface() {
       email.style.zIndex =
         "7";
 
+      /*
+       * SEND HUMAN TOUCH
+       */
       const sendButton =
         document.createElement("button");
 
@@ -776,6 +779,123 @@ export function installEmailSendSurface() {
       sendButton.style.zIndex =
         "7";
 
+      /*
+       * SECOND SEND STATE
+       *
+       * NOT A HUMAN TOUCH.
+       * NOT A SECOND SEND.
+       * NOT EMAIL TRANSMISSION.
+       *
+       * Appears automatically after
+       * cybercrowd:send-requested.
+       *
+       * Waits for cybercrowd:email-sent.
+       *
+       * Existing WHOOSH listener owns
+       * automatic WHOOSH.
+       */
+      const sendWaiting =
+        document.createElement("div");
+
+      sendWaiting.id =
+        "send-waiting";
+
+      sendWaiting.setAttribute(
+        "role",
+        "status"
+      );
+
+      sendWaiting.setAttribute(
+        "aria-live",
+        "polite"
+      );
+
+      sendWaiting.setAttribute(
+        "aria-label",
+        "Sending email"
+      );
+
+      sendWaiting.textContent =
+        "SENDING";
+
+      sendWaiting.hidden =
+        true;
+
+      sendWaiting.style.position =
+        "absolute";
+
+      sendWaiting.style.top =
+        "68%";
+
+      sendWaiting.style.left =
+        "50%";
+
+      sendWaiting.style.transform =
+        "translate(-50%, -50%) translateZ(4px)";
+
+      sendWaiting.style.width =
+        "min(72%, 360px)";
+
+      sendWaiting.style.minHeight =
+        "64px";
+
+      sendWaiting.style.display =
+        "none";
+
+      sendWaiting.style.placeItems =
+        "center";
+
+      sendWaiting.style.padding =
+        "0 24px";
+
+      sendWaiting.style.border =
+        "1px solid rgba(82, 53, 20, 0.90)";
+
+      sendWaiting.style.borderRadius =
+        "999px";
+
+      sendWaiting.style.background =
+        "rgba(233, 201, 121, 0.24)";
+
+      sendWaiting.style.backdropFilter =
+        "blur(8px)";
+
+      sendWaiting.style.color =
+        "#e9c979";
+
+      sendWaiting.style.font =
+        "inherit";
+
+      sendWaiting.style.fontSize =
+        "18px";
+
+      sendWaiting.style.fontWeight =
+        "700";
+
+      sendWaiting.style.letterSpacing =
+        "0.12em";
+
+      sendWaiting.style.textAlign =
+        "center";
+
+      sendWaiting.style.pointerEvents =
+        "none";
+
+      sendWaiting.style.userSelect =
+        "none";
+
+      sendWaiting.style.zIndex =
+        "7";
+
+      sendWaiting.style.boxShadow =
+        "0 0 8px rgba(233, 201, 121, 0.48), " +
+        "inset 0 0 10px rgba(255, 240, 174, 0.16)";
+
+      /*
+       * ENTER graphic
+       * -> one human touch
+       * -> same footprint becomes writable input.
+       */
       emailInvite.addEventListener(
         "click",
         () => {
@@ -791,6 +911,9 @@ export function installEmailSendSurface() {
         { once: true }
       );
 
+      /*
+       * Typing prepares SEND.
+       */
       email.addEventListener(
         "input",
         () => {
@@ -813,6 +936,68 @@ export function installEmailSendSurface() {
               ? "pointer"
               : "default";
         }
+      );
+
+      /*
+       * ONE SEND TOUCH.
+       *
+       * Existing send-action file emits:
+       * cybercrowd:send-requested
+       *
+       * This file owns only the visual
+       * transition into waiting state.
+       */
+      window.addEventListener(
+        "cybercrowd:send-requested",
+        () => {
+          if (
+            !sendButton.isConnected
+          ) {
+            return;
+          }
+
+          sendButton.replaceWith(
+            sendWaiting
+          );
+
+          sendWaiting.hidden =
+            false;
+
+          sendWaiting.style.display =
+            "grid";
+
+          email.disabled =
+            true;
+
+          email.setAttribute(
+            "aria-disabled",
+            "true"
+          );
+        },
+        { once: true }
+      );
+
+      /*
+       * AUTO TURN.
+       *
+       * Existing success emitter sends:
+       * cybercrowd:email-sent
+       *
+       * Waiting state clears.
+       * Existing WHOOSH listener fires.
+       *
+       * NO SECOND TOUCH.
+       */
+      window.addEventListener(
+        "cybercrowd:email-sent",
+        () => {
+          sendWaiting.hidden =
+            true;
+
+          sendWaiting.style.display =
+            "none";
+        },
+        { once: true }
       );
 
       entryForm.append(
