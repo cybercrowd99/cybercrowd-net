@@ -48,11 +48,9 @@
 // ↓
 // SEND
 // ↓
-// existing entry bridge
+// cybercrowd:turnstile-two-requested
 // ↓
-// verification-email request
-// ↓
-// cybercrowd:email-sent
+// Turnstile Widget #2 attached
 //
 // NO STORAGE.
 
@@ -91,6 +89,10 @@ import {
 import {
   openTurnstileOne
 } from "./turnstile-one-ui.js";
+
+import {
+  openTurnstileTwo
+} from "./turnstile-two-ui.js";
 
 import {
   openHumanVerifyCrossing
@@ -134,6 +136,12 @@ function startCreateAccountEntry() {
   window.addEventListener(
     "cybercrowd:movement-one-landed",
     openTurnstileOne,
+    { once: true }
+  );
+
+  window.addEventListener(
+    "cybercrowd:turnstile-two-requested",
+    openTurnstileTwo,
     { once: true }
   );
 
