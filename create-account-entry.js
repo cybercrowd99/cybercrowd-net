@@ -41,6 +41,18 @@
 // automatic Movement #2
 // ↓
 // 90° → 180°
+// ↓
+// Sequence #3
+// ↓
+// ENTER EMAIL
+// ↓
+// SEND
+// ↓
+// existing entry bridge
+// ↓
+// verification-email request
+// ↓
+// cybercrowd:email-sent
 //
 // NO STORAGE.
 
@@ -63,6 +75,18 @@ import {
 import {
   installGlassPlaqueTwoNode
 } from "./create-account-glass-plaque-two-node.js";
+
+import {
+  installGlassPlaqueThreeNode
+} from "./create-account-glass-plaque-three-node.js";
+
+import {
+  installEmailSendSurface
+} from "./create-account-email-send-surface.js";
+
+import {
+  installEntryBridge
+} from "./create-account-entry-bridge.js";
 
 import {
   openTurnstileOne
@@ -94,6 +118,12 @@ function startCreateAccountEntry() {
   installTurnAudioListener();
 
   installGlassPlaqueTwoNode();
+
+  installGlassPlaqueThreeNode();
+
+  installEmailSendSurface();
+
+  installEntryBridge();
 
   openHumanVerifyCrossing();
 
