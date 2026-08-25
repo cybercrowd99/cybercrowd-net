@@ -69,6 +69,10 @@ import {
 } from "./create-account-glass-plaque-three-node.js";
 
 import {
+  installEmailSendSurface
+} from "./create-account-email-send-surface.js";
+
+import {
   openTurnstileOne
 } from "./turnstile-one-ui.js";
 
@@ -100,6 +104,8 @@ function startCreateAccountEntry() {
   installGlassPlaqueTwoNode();
 
   installGlassPlaqueThreeNode();
+
+  installEmailSendSurface();
 
   openHumanVerifyCrossing();
 
