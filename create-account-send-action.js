@@ -18,7 +18,7 @@
 // Human click on #sendButton.
 //
 // OUTPUT:
-// cybercrowd:send-requested
+// cybercrowd:turnstile-two-requested
 //
 // DOES NOT OWN:
 // Email DOM creation.
@@ -60,7 +60,7 @@ export function installSendAction() {
 
       window.dispatchEvent(
         new CustomEvent(
-          "cybercrowd:send-requested"
+          "cybercrowd:turnstile-two-requested"
         )
       );
     }
