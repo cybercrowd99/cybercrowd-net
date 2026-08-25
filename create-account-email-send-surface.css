@@ -78,7 +78,7 @@ Backend authority.
     translate(-50%, -50%)
     translateZ(4px);
 
-  width: min(82%, 420px);
+  width: min(68%, 350px);
   min-height: 58px;
 
   padding:
@@ -134,7 +134,7 @@ Backend authority.
     translate(-50%, -50%)
     translateZ(4px);
 
-  width: min(72%, 360px);
+  width: min(54%, 275px);
   min-height: 64px;
 
   padding:
