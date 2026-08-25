@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hurry Back | CyberCrowd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --glass-card: rgba(238, 248, 242, 0.18);
+      --glass-edge: rgba(214, 242, 232, 0.78);
+      --glass-shine: rgba(255, 255, 255, 0.42);
+      --ink: #eaffff;
+      --cyan: #00ffff;
+      --mint: #00ffaa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% 20%, rgba(0,255,255,.18), transparent 34%),
+        linear-gradient(135deg, #020409, #07131a 55%, #020409);
+    }
+
+    .stage {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(0,0,0,.22);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .whoosh-card {
+      position: relative;
+      width: min(92vw, 520px);
+      padding: 34px 34px 30px;
+      text-align: center;
+      border-radius: 28px;
+      color: white;
+      background: var(--glass-card);
+      border: 1px solid var(--glass-edge);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.14) inset,
+        0 24px 80px rgba(0,0,0,.46),
+        0 0 42px rgba(0,255,255,.18);
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      opacity: 0;
+    }
+
+    .whoosh-card::before {
+      content: "";
+      position: absolute;
+      inset: 14px 18px auto 18px;
+      height: 1px;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          var(--glass-shine),
+          transparent
+        );
+      opacity: .9;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      text-shadow:
+        0 0 18px rgba(0,255,255,.42);
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.6;
+      opacity: .9;
+      font-size: 16px;
+    }
+
+    .from-top {
+      animation:
+        whooshFromTop
+        .72s
+        cubic-bezier(.15,.9,.2,1.1)
+        forwards;
+    }
+
+    .from-bottom {
+      animation:
+        whooshFromBottom
+        .72s
+        cubic-bezier(.15,.9,.2,1.1)
+        forwards;
+    }
+
+    .from-left {
+      animation:
+        whooshFromLeft
+        .72s
+        cubic-bezier(.15,.9,.2,1.1)
+        forwards;
+    }
+
+    .from-right {
+      animation:
+        whooshFromRight
+        .72s
+        cubic-bezier(.15,.9,.2,1.1)
+        forwards;
+    }
+
+    .from-top-left {
+      animation:
+        whooshFromTopLeft
+        .72s
+        cubic-bezier(.15,.9,.2,1.1)
+        forwards;
+    }
+
+    .from-top-right {
+      animation:
+        whooshFromTopRight
+        .72s
+        cubic-bezier(.15,.9,.2,1.1)
+        forwards;
+    }
+
+    .from-bottom-left {
+      animation:
+        whooshFromBottomLeft
+        .72s
+        cubic-bezier(.15,.9,.2,1.1)
+        forwards;
+    }
+
+    .from-bottom-right {
+      animation:
+        whooshFromBottomRight
+        .72s
+        cubic-bezier(.15,.9,.2,1.1)
+        forwards;
+    }
+
+    @keyframes whooshFromTop {
+      0% {
+        transform:
+          translateY(-120vh)
+          rotate(-8deg)
+          scale(.84);
+        opacity: 0;
+      }
+
+      68% {
+        transform:
+          translateY(2vh)
+          rotate(1deg)
+          scale(1.03);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translateY(0)
+          rotate(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes whooshFromBottom {
+      0% {
+        transform:
+          translateY(120vh)
+          rotate(8deg)
+          scale(.84);
+        opacity: 0;
+      }
+
+      68% {
+        transform:
+          translateY(-2vh)
+          rotate(-1deg)
+          scale(1.03);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translateY(0)
+          rotate(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes whooshFromLeft {
+      0% {
+        transform:
+          translateX(-120vw)
+          rotate(-8deg)
+          scale(.84);
+        opacity: 0;
+      }
+
+      68% {
+        transform:
+          translateX(2vw)
+          rotate(1deg)
+          scale(1.03);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translateX(0)
+          rotate(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes whooshFromRight {
+      0% {
+        transform:
+          translateX(120vw)
+          rotate(8deg)
+          scale(.84);
+        opacity: 0;
+      }
+
+      68% {
+        transform:
+          translateX(-2vw)
+          rotate(-1deg)
+          scale(1.03);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translateX(0)
+          rotate(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes whooshFromTopLeft {
+      0% {
+        transform:
+          translate(-120vw, -120vh)
+          rotate(-10deg)
+          scale(.84);
+        opacity: 0;
+      }
+
+      68% {
+        transform:
+          translate(2vw, 2vh)
+          rotate(1deg)
+          scale(1.03);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translate(0, 0)
+          rotate(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes whooshFromTopRight {
+      0% {
+        transform:
+          translate(120vw, -120vh)
+          rotate(10deg)
+          scale(.84);
+        opacity: 0;
+      }
+
+      68% {
+        transform:
+          translate(-2vw, 2vh)
+          rotate(-1deg)
+          scale(1.03);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translate(0, 0)
+          rotate(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes whooshFromBottomLeft {
+      0% {
+        transform:
+          translate(-120vw, 120vh)
+          rotate(10deg)
+          scale(.84);
+        opacity: 0;
+      }
+
+      68% {
+        transform:
+          translate(2vw, -2vh)
+          rotate(-1deg)
+          scale(1.03);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translate(0, 0)
+          rotate(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes whooshFromBottomRight {
+      0% {
+        transform:
+          translate(120vw, 120vh)
+          rotate(-10deg)
+          scale(.84);
+        opacity: 0;
+      }
+
+      68% {
+        transform:
+          translate(-2vw, -2vh)
+          rotate(1deg)
+          scale(1.03);
+        opacity: 1;
+      }
+
+      100% {
+        transform:
+          translate(0, 0)
+          rotate(0deg)
+          scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="stage">
+    <section
+      class="whoosh-card"
+      id="whoosh-card"
+      aria-live="polite"
+    >
+      <h1>HURRY BACK</h1>
+
+      <p>
+        Your CyberCrowd verification email is on the way.
+        Check your email and return through your verification link.
+      </p>
+    </section>
+  </main>
+
+  <audio
+    id="whoosh-audio"
+    src="https://pub-660d879738134ba990d1708d015ec763.r2.dev/whooshing-email-sent_1.1s%20teaser.mp3"
+    preload="auto"
+  ></audio>
+
+  <script>
+    const card =
+      document.getElementById(
+        "whoosh-card"
+      );
+
+    const whoosh =
+      document.getElementById(
+        "whoosh-audio"
+      );
+
+    const flyInClasses = [
+      "from-top",
+      "from-bottom",
+      "from-left",
+      "from-right",
+      "from-top-left",
+      "from-top-right",
+      "from-bottom-left",
+      "from-bottom-right"
+    ];
+
+    window.addEventListener(
+      "load",
+      () => {
+        const chosenFlyIn =
+          flyInClasses[
+            Math.floor(
+              Math.random() *
+              flyInClasses.length
+            )
+          ];
+
+        card?.classList.add(
+          chosenFlyIn
+        );
+
+        if (whoosh) {
+          whoosh.currentTime =
+            0;
+
+          whoosh
+            .play()
+            .catch(() => {});
+        }
+      }
+    );
+  </script>
+</body>
+</html>
