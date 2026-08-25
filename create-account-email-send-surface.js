@@ -569,11 +569,6 @@ export function installEmailSendSurface() {
         "Enter your email here"
       );
 
-      email.setAttribute(
-        "readonly",
-        ""
-      );
-
       email.style.padding =
         "0";
 
@@ -603,9 +598,6 @@ export function installEmailSendSurface() {
 
       email.style.caretColor =
         "transparent";
-
-      email.style.cursor =
-        "pointer";
 
       email.style.zIndex =
         "7";
@@ -661,9 +653,6 @@ export function installEmailSendSurface() {
 
       sendButton.style.cursor =
         "default";
-
-      sendButton.style.pointerEvents =
-        "none";
 
       sendButton.style.zIndex =
         "7";
