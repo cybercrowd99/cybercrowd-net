@@ -13,15 +13,20 @@
 //
 // JOB:
 // Mount the empty Sequence #3 glass plaque
-// onto the existing Create Account rail.
+// only after Sequence #2 arrives.
 //
 // FUNCTION:
 // installGlassPlaqueThreeNode()
+//
+// INPUT:
+// cybercrowd:face-two-arrived
 //
 // OUTPUT:
 // .glass-plaque-three
 //
 // DOES NOT OWN:
+// Sequence #1.
+// Sequence #2.
 // Email entry.
 // Email input.
 // Send button.
@@ -43,27 +48,33 @@ export function installGlassPlaqueThreeNode() {
     return false;
   }
 
-  let plaque =
-    stage.querySelector(
-      ":scope > .glass-plaque-three"
-    );
+  window.addEventListener(
+    "cybercrowd:face-two-arrived",
+    () => {
+      let plaque =
+        stage.querySelector(
+          ":scope > .glass-plaque-three"
+        );
 
-  if (plaque) {
-    return true;
-  }
+      if (plaque) {
+        return;
+      }
 
-  plaque =
-    document.createElement("section");
+      plaque =
+        document.createElement("section");
 
-  plaque.className =
-    "glass-plaque-three";
+      plaque.className =
+        "glass-plaque-three";
 
-  plaque.setAttribute(
-    "aria-label",
-    "CyberCrowd Sequence Three"
+      plaque.setAttribute(
+        "aria-label",
+        "CyberCrowd Sequence Three"
+      );
+
+      stage.appendChild(plaque);
+    },
+    { once: true }
   );
-
-  stage.appendChild(plaque);
 
   return true;
 }
