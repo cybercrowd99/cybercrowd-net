@@ -19,6 +19,14 @@ on the existing Create Account rail.
 FUNCTION:
 Style .glass-plaque-three only.
 
+HUMAN ACTION:
+Sequence #3 exists only after
+cybercrowd:face-two-arrived.
+
+When this glass exists,
+its ENTER EMAIL and SEND controls
+must be able to receive human touch.
+
 DOES NOT OWN:
 Email entry.
 Email input.
@@ -98,9 +106,5 @@ Routing.
 
   will-change: transform;
 
-  pointer-events: none;
-}
-
-.glass-plaque-three.is-active {
   pointer-events: auto;
 }
