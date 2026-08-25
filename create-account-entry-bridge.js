@@ -9,7 +9,7 @@
 // 1 FUNCTION
 //
 // JOB:
-// Connect the live Sequence #3 SEND human action
+// Connect the live Sequence #3 Turnstile #2 YES response
 // to the existing verification-email pipeline.
 //
 // FUNCTION:
@@ -18,19 +18,32 @@
 // LIVE TRACK:
 //
 // cybercrowd:human-passed
-// -> remember browser Turnstile token
+// -> remember Turnstile #1 browser token
 //
 // cybercrowd:turnstile-one-verified
-// -> private human verification confirmed
+// -> private Turnstile #1 human verification confirmed
 //
 // cybercrowd:face-two-arrived
-// -> Sequence #3 SEND surface exists
+// -> Sequence #3 EMAIL + SEND surface exists
 // -> install existing SEND human-action boundary
 //
+// open email
+// -> cybercrowd:email-opened
+// -> SEND human-action boundary becomes live
+//
 // human touches SEND
-// -> cybercrowd:send-requested
+// -> cybercrowd:turnstile-two-requested
+// -> Turnstile #2 opens
+//
+// Turnstile #2 NO
+// -> blocked
+//
+// Turnstile #2 YES
+// -> cybercrowd:turnstile-two-passed
+// -> receive Turnstile #2 token
+// -> require existing Turnstile #1 verification
 // -> validate existing #email
-// -> arm existing Send gate
+// -> arm existing Send gate with Turnstile #2 token
 // -> request-entry-client.js
 // -> POST /api/auth/send-verification
 // -> map result
@@ -42,7 +55,8 @@
 // SEND graphic.
 // Waiting widget.
 // Turnstile rendering.
-// Human verification decision.
+// Turnstile #1 verification decision.
+// Turnstile #2 rendering.
 // Network implementation.
 // Postmark.
 // Setup token.
@@ -78,9 +92,9 @@ import {
 } from "./entry-send-success.js";
 
 export function installEntryBridge() {
-  let humanToken = "";
+  let turnstileOneToken = "";
 
-  let humanVerified = false;
+  let turnstileOneVerified = false;
 
   let sending = false;
 
@@ -94,23 +108,25 @@ export function installEntryBridge() {
         typeof token !== "string" ||
         token.length === 0
       ) {
-        humanToken = "";
-        humanVerified = false;
+        turnstileOneToken = "";
+        turnstileOneVerified = false;
         return;
       }
 
-      humanToken = token;
+      turnstileOneToken = token;
     }
   );
 
   window.addEventListener(
     "cybercrowd:turnstile-one-verified",
     () => {
-      if (humanToken.length === 0) {
+      if (
+        turnstileOneToken.length === 0
+      ) {
         return;
       }
 
-      humanVerified = true;
+      turnstileOneVerified = true;
     }
   );
 
@@ -123,9 +139,24 @@ export function installEntryBridge() {
   );
 
   window.addEventListener(
-    "cybercrowd:send-requested",
-    async () => {
+    "cybercrowd:turnstile-two-passed",
+    async (event) => {
       if (sending) {
+        return;
+      }
+
+      if (!turnstileOneVerified) {
+        return;
+      }
+
+      const turnstileTwoToken =
+        event?.detail?.token;
+
+      if (
+        typeof turnstileTwoToken !==
+          "string" ||
+        turnstileTwoToken.length === 0
+      ) {
         return;
       }
 
@@ -144,10 +175,8 @@ export function installEntryBridge() {
         );
 
       const humanState = {
-        human:
-          humanVerified,
-        token:
-          humanToken
+        human: true,
+        token: turnstileTwoToken
       };
 
       const readyState =
