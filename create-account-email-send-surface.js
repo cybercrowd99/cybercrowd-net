@@ -8,54 +8,14 @@
 // 1 JOB
 // 1 FUNCTION
 //
-// SEQUENCE:
-// #3
-//
 // JOB:
-// Create the approved Enter Email + Send human-action surface
-// inside the Sequence #3 glass plaque.
+// Present the live email input and SEND surface.
 //
 // FUNCTION:
 // installEmailSendSurface()
 //
-// INPUT:
-// cybercrowd:face-two-arrived
-//
-// LOCKED VISUALS:
-// Approved ENTER YOUR EMAIL HERE decal.
-// Approved SEND decal.
-//
-// INSTRUCTIONS:
-// Enter your email.
-// Press SEND.
-// Check your email right away.
-// You must verify within five minutes.
-// If you wait too long, it will EXPIRE.
-//
-// GLASS EFFECT:
-// Gold rim.
-// Gold Matrix rain emitted from the four glass edges only.
-// Gold sparkle shedding from the four glass edges.
-// Wind-gust drift instead of rigid straight-down rain.
-// Effect remains clipped to the glass.
-// Effect remains behind instructions, email surface, and SEND.
-//
-// ENTER ACTION:
-// Actual email input exists HOT from arrival.
-// Neutral state presents approved ENTER decal.
-// One human touch.
-// Input receives focus immediately.
-// Decal clears.
-// Keyboard opens.
-// Same footprint becomes writable email surface.
-//
-// SEND ACTION:
-// SEND decal
-// -> one human touch.
-//
-// ASSET RULE:
-// Approved button decals are loaded from CyberCrowd R2.
-// No embedded BASE64 graphics.
+// OUTPUT:
+// cybercrowd:email-opened
 
 export function installEmailSendSurface() {
   const APPROVED_ENTER_EMAIL_DECAL =
@@ -68,9 +28,7 @@ export function installEmailSendSurface() {
     "cybercrowd:face-two-arrived",
     () => {
       const plaque =
-        document.querySelector(
-          ".glass-plaque-three"
-        );
+        document.querySelector(".glass-plaque-three");
 
       if (!plaque) {
         return;
@@ -78,15 +36,11 @@ export function installEmailSendSurface() {
 
       if (
         document.getElementById("email") ||
-        document.getElementById("sendButton") ||
-        document.getElementById("send-waiting")
+        document.getElementById("sendButton")
       ) {
         return;
       }
 
-      /*
-       * GOLD GLASS RIM
-       */
       if (
         window.getComputedStyle(plaque).position ===
         "static"
@@ -106,9 +60,6 @@ export function installEmailSendSurface() {
         "0 0 12px rgba(233, 201, 121, 0.62), " +
         "inset 0 0 8px rgba(255, 237, 166, 0.35)";
 
-      /*
-       * FOUR-SURFACE GOLD MATRIX / SPARKLE LAYER
-       */
       const rainLayer =
         document.createElement("div");
 
@@ -137,9 +88,6 @@ export function installEmailSendSurface() {
 
       rainLayer.style.zIndex =
         "1";
-
-      rainLayer.style.userSelect =
-        "none";
 
       plaque.appendChild(
         rainLayer
@@ -519,9 +467,6 @@ export function installEmailSendSurface() {
         animateRain
       );
 
-      /*
-       * HUMAN-ACTION SURFACE
-       */
       const entryForm =
         document.createElement("div");
 
@@ -536,11 +481,6 @@ export function installEmailSendSurface() {
 
       instructions.className =
         "email-send-instructions";
-
-      instructions.setAttribute(
-        "aria-label",
-        "Email verification instructions"
-      );
 
       instructions.innerHTML =
         "Enter your email.<br>" +
@@ -597,25 +537,6 @@ export function installEmailSendSurface() {
       instructions.style.pointerEvents =
         "none";
 
-      /*
-       * ENTER EMAIL
-       *
-       * HOT FROM ARRIVAL.
-       *
-       * The visible decal IS the real email input.
-       * No hidden input.
-       * No replacement.
-       * No wake-up.
-       *
-       * Neutral:
-       * approved ENTER decal.
-       *
-       * Human touch:
-       * browser focuses this same input,
-       * email keyboard opens,
-       * decal clears,
-       * writable surface is ready.
-       */
       const email =
         document.createElement("input");
 
@@ -642,9 +563,6 @@ export function installEmailSendSurface() {
 
       email.spellcheck =
         false;
-
-      email.placeholder =
-        "";
 
       email.setAttribute(
         "aria-label",
@@ -687,9 +605,19 @@ export function installEmailSendSurface() {
       email.style.zIndex =
         "7";
 
+      let emailOpened =
+        false;
+
       email.addEventListener(
         "focus",
         () => {
+          if (emailOpened) {
+            return;
+          }
+
+          emailOpened =
+            true;
+
           email.style.backgroundImage =
             "none";
 
@@ -701,12 +629,15 @@ export function installEmailSendSurface() {
 
           email.style.caretColor =
             "#2a2118";
+
+          window.dispatchEvent(
+            new CustomEvent(
+              "cybercrowd:email-opened"
+            )
+          );
         }
       );
 
-      /*
-       * SEND HUMAN TOUCH
-       */
       const sendButton =
         document.createElement("button");
 
@@ -762,183 +693,30 @@ export function installEmailSendSurface() {
       sendButton.style.zIndex =
         "7";
 
-      /*
-       * SECOND SEND STATE
-       *
-       * NOT A HUMAN TOUCH.
-       * NOT A SECOND SEND.
-       * NOT EMAIL TRANSMISSION.
-       */
-      const sendWaiting =
-        document.createElement("div");
-
-      sendWaiting.id =
-        "send-waiting";
-
-      sendWaiting.setAttribute(
-        "role",
-        "status"
-      );
-
-      sendWaiting.setAttribute(
-        "aria-live",
-        "polite"
-      );
-
-      sendWaiting.setAttribute(
-        "aria-label",
-        "Sending email"
-      );
-
-      sendWaiting.textContent =
-        "SENDING";
-
-      sendWaiting.hidden =
-        true;
-
-      sendWaiting.style.position =
-        "absolute";
-
-      sendWaiting.style.top =
-        "68%";
-
-      sendWaiting.style.left =
-        "50%";
-
-      sendWaiting.style.transform =
-        "translate(-50%, -50%) translateZ(4px)";
-
-      sendWaiting.style.width =
-        "min(72%, 360px)";
-
-      sendWaiting.style.minHeight =
-        "64px";
-
-      sendWaiting.style.display =
-        "none";
-
-      sendWaiting.style.placeItems =
-        "center";
-
-      sendWaiting.style.padding =
-        "0 24px";
-
-      sendWaiting.style.border =
-        "1px solid rgba(82, 53, 20, 0.90)";
-
-      sendWaiting.style.borderRadius =
-        "999px";
-
-      sendWaiting.style.background =
-        "rgba(233, 201, 121, 0.24)";
-
-      sendWaiting.style.backdropFilter =
-        "blur(8px)";
-
-      sendWaiting.style.color =
-        "#e9c979";
-
-      sendWaiting.style.font =
-        "inherit";
-
-      sendWaiting.style.fontSize =
-        "18px";
-
-      sendWaiting.style.fontWeight =
-        "700";
-
-      sendWaiting.style.letterSpacing =
-        "0.12em";
-
-      sendWaiting.style.textAlign =
-        "center";
-
-      sendWaiting.style.pointerEvents =
-        "none";
-
-      sendWaiting.style.userSelect =
-        "none";
-
-      sendWaiting.style.zIndex =
-        "7";
-
-      sendWaiting.style.boxShadow =
-        "0 0 8px rgba(233, 201, 121, 0.48), " +
-        "inset 0 0 10px rgba(255, 240, 174, 0.16)";
-
-      /*
-       * Typing prepares SEND.
-       */
       email.addEventListener(
         "input",
         () => {
-          const hasValue =
+          const ready =
+            emailOpened &&
+            email.checkValidity() &&
             email.value.trim().length >
-            0;
+              0;
 
           sendButton.disabled =
-            !hasValue;
+            !ready;
 
           sendButton.setAttribute(
             "aria-disabled",
-            hasValue
+            ready
               ? "false"
               : "true"
           );
 
           sendButton.style.cursor =
-            hasValue
+            ready
               ? "pointer"
               : "default";
         }
-      );
-
-      /*
-       * ONE SEND TOUCH.
-       *
-       * Existing send-action file owns
-       * the SEND click boundary.
-       */
-      window.addEventListener(
-        "cybercrowd:send-requested",
-        () => {
-          if (
-            !sendButton.isConnected
-          ) {
-            return;
-          }
-
-          sendButton.replaceWith(
-            sendWaiting
-          );
-
-          sendWaiting.hidden =
-            false;
-
-          sendWaiting.style.display =
-            "grid";
-
-          email.disabled =
-            true;
-
-          email.setAttribute(
-            "aria-disabled",
-            "true"
-          );
-        },
-        { once: true }
-      );
-
-      window.addEventListener(
-        "cybercrowd:email-sent",
-        () => {
-          sendWaiting.hidden =
-            true;
-
-          sendWaiting.style.display =
-            "none";
-        },
-        { once: true }
       );
 
       entryForm.append(
