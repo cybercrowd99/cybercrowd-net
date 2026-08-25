@@ -675,9 +675,6 @@ export function installEmailSendSurface() {
       sendButton.style.cursor =
         "default";
 
-      sendButton.style.pointerEvents =
-        "none";
-
       sendButton.style.zIndex =
         "7";
 
@@ -786,11 +783,6 @@ export function installEmailSendSurface() {
             sendLocked
               ? "default"
               : "pointer";
-
-          sendButton.style.pointerEvents =
-            sendLocked
-              ? "none"
-              : "auto";
         }
       );
 
