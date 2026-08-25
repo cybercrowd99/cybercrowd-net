@@ -10,10 +10,40 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Present the real Sequence #1 glass plaque.
+Own the visible glass presentation of the real Create Account plaque node.
 
 FUNCTION:
-Style .glass-plaque only.
+Render .glass-plaque as the Sequence #1 glass organism.
+
+OWNS:
+Plaque dimensions.
+Plaque border.
+Plaque radius.
+Plaque glass background.
+Plaque blur.
+Plaque reflection.
+Plaque shadow.
+Plaque physical presentation boundary.
+
+DOES NOT OWN:
+Stage.
+Backdrop.
+HTML.
+Plaque node creation.
+Seal.
+Title.
+Welcome.
+Swipe cue.
+Swipe detection.
+Wheel geometry.
+Movement.
+Turnstile.
+Email.
+Send.
+Audio.
+Authentication.
+Routing.
+Runtime logic.
 */
 
 .glass-plaque {
@@ -23,10 +53,7 @@ Style .glass-plaque only.
   width: min(88vw, 520px);
   height: min(72vh, 620px);
 
-  border:
-    2px solid
-    rgba(214, 242, 232, 0.78);
-
+  border: 2px solid rgba(214, 242, 232, 0.78);
   border-radius: 24px;
 
   background:
@@ -47,8 +74,6 @@ Style .glass-plaque only.
 
   box-shadow:
     0 26px 70px rgba(0, 0, 0, 0.34),
-    inset 0 0 0 1px
-      rgba(255, 255, 255, 0.52),
-    inset 0 0 30px
-      rgba(255, 255, 255, 0.18);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.52),
+    inset 0 0 30px rgba(255, 255, 255, 0.18);
 }
