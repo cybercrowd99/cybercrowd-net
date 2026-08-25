@@ -9,7 +9,9 @@
 // 1 FUNCTION
 //
 // JOB:
-// Present the live email input and SEND surface.
+// Present the ENTER EMAIL HERE action,
+// then reveal the live email input and SEND surface
+// only after the human clicks ENTER EMAIL HERE.
 //
 // FUNCTION:
 // installEmailSendSurface()
@@ -35,6 +37,7 @@ export function installEmailSendSurface() {
       }
 
       if (
+        document.getElementById("enterEmailButton") ||
         document.getElementById("email") ||
         document.getElementById("sendButton")
       ) {
@@ -476,147 +479,177 @@ export function installEmailSendSurface() {
       entryForm.style.zIndex =
         "5";
 
-      const instructions =
-        document.createElement("div");
+      const enterEmailButton =
+        document.createElement("button");
 
-      instructions.className =
-        "email-send-instructions";
+      enterEmailButton.id =
+        "enterEmailButton";
 
-      instructions.innerHTML =
-        "Enter your email.<br>" +
-        "Press SEND.<br>" +
-        "Check your email right away.<br>" +
-        "You must verify within five minutes.<br>" +
-        "If you wait too long, it will <strong>EXPIRE</strong>.";
-
-      instructions.style.position =
-        "absolute";
-
-      instructions.style.top =
-        "19%";
-
-      instructions.style.left =
-        "50%";
-
-      instructions.style.transform =
-        "translate(-50%, -50%) translateZ(4px)";
-
-      instructions.style.width =
-        "min(88%, 460px)";
-
-      instructions.style.margin =
-        "0";
-
-      instructions.style.padding =
-        "0";
-
-      instructions.style.color =
-        "#2a2118";
-
-      instructions.style.font =
-        "inherit";
-
-      instructions.style.fontSize =
-        "clamp(0.82rem, 2.2vw, 1rem)";
-
-      instructions.style.fontWeight =
-        "600";
-
-      instructions.style.lineHeight =
-        "1.45";
-
-      instructions.style.letterSpacing =
-        "0.02em";
-
-      instructions.style.textAlign =
-        "center";
-
-      instructions.style.zIndex =
-        "7";
-
-      instructions.style.pointerEvents =
-        "none";
-
-      const email =
-        document.createElement("input");
-
-      email.id =
-        "email";
-
-      email.className =
+      enterEmailButton.className =
         "email-field";
 
-      email.type =
-        "email";
+      enterEmailButton.type =
+        "button";
 
-      email.name =
-        "email";
-
-      email.inputMode =
-        "email";
-
-      email.autocomplete =
-        "email";
-
-      email.autocapitalize =
-        "none";
-
-      email.spellcheck =
-        false;
-
-      email.setAttribute(
+      enterEmailButton.setAttribute(
         "aria-label",
         "Enter your email here"
       );
 
-      email.style.padding =
+      enterEmailButton.style.padding =
         "0";
 
-      email.style.border =
+      enterEmailButton.style.border =
         "0";
 
-      email.style.overflow =
+      enterEmailButton.style.overflow =
         "hidden";
 
-      email.style.backgroundImage =
+      enterEmailButton.style.backgroundImage =
         `url("${APPROVED_ENTER_EMAIL_DECAL}")`;
 
-      email.style.backgroundSize =
+      enterEmailButton.style.backgroundSize =
         "contain";
 
-      email.style.backgroundPosition =
+      enterEmailButton.style.backgroundPosition =
         "center";
 
-      email.style.backgroundRepeat =
+      enterEmailButton.style.backgroundRepeat =
         "no-repeat";
 
-      email.style.backgroundColor =
+      enterEmailButton.style.backgroundColor =
         "transparent";
 
-      email.style.color =
+      enterEmailButton.style.color =
         "transparent";
 
-      email.style.caretColor =
-        "transparent";
+      enterEmailButton.style.cursor =
+        "pointer";
 
-      email.style.cursor =
-        "text";
-
-      email.style.zIndex =
+      enterEmailButton.style.zIndex =
         "7";
 
-      let emailOpened =
-        false;
+      entryForm.appendChild(
+        enterEmailButton
+      );
 
-      email.addEventListener(
-        "focus",
+      plaque.appendChild(
+        entryForm
+      );
+
+      enterEmailButton.addEventListener(
+        "click",
         () => {
-          if (emailOpened) {
+          if (
+            document.getElementById("email") ||
+            document.getElementById("sendButton")
+          ) {
             return;
           }
 
-          emailOpened =
-            true;
+          enterEmailButton.remove();
+
+          const instructions =
+            document.createElement("div");
+
+          instructions.className =
+            "email-send-instructions";
+
+          instructions.innerHTML =
+            "Enter your email.<br>" +
+            "Press SEND.<br>" +
+            "Check your email right away.<br>" +
+            "You must verify within five minutes.<br>" +
+            "If you wait too long, it will <strong>EXPIRE</strong>.";
+
+          instructions.style.position =
+            "absolute";
+
+          instructions.style.top =
+            "19%";
+
+          instructions.style.left =
+            "50%";
+
+          instructions.style.transform =
+            "translate(-50%, -50%) translateZ(4px)";
+
+          instructions.style.width =
+            "min(88%, 460px)";
+
+          instructions.style.margin =
+            "0";
+
+          instructions.style.padding =
+            "0";
+
+          instructions.style.color =
+            "#2a2118";
+
+          instructions.style.font =
+            "inherit";
+
+          instructions.style.fontSize =
+            "clamp(0.82rem, 2.2vw, 1rem)";
+
+          instructions.style.fontWeight =
+            "600";
+
+          instructions.style.lineHeight =
+            "1.45";
+
+          instructions.style.letterSpacing =
+            "0.02em";
+
+          instructions.style.textAlign =
+            "center";
+
+          instructions.style.zIndex =
+            "7";
+
+          instructions.style.pointerEvents =
+            "none";
+
+          const email =
+            document.createElement("input");
+
+          email.id =
+            "email";
+
+          email.className =
+            "email-field";
+
+          email.type =
+            "email";
+
+          email.name =
+            "email";
+
+          email.inputMode =
+            "email";
+
+          email.autocomplete =
+            "email";
+
+          email.autocapitalize =
+            "none";
+
+          email.spellcheck =
+            false;
+
+          email.setAttribute(
+            "aria-label",
+            "Enter your email here"
+          );
+
+          email.style.padding =
+            "0";
+
+          email.style.border =
+            "0";
+
+          email.style.overflow =
+            "hidden";
 
           email.style.backgroundImage =
             "none";
@@ -630,103 +663,107 @@ export function installEmailSendSurface() {
           email.style.caretColor =
             "#2a2118";
 
+          email.style.cursor =
+            "text";
+
+          email.style.zIndex =
+            "7";
+
+          const sendButton =
+            document.createElement("button");
+
+          sendButton.id =
+            "sendButton";
+
+          sendButton.type =
+            "button";
+
+          sendButton.disabled =
+            true;
+
+          sendButton.setAttribute(
+            "aria-disabled",
+            "true"
+          );
+
+          sendButton.setAttribute(
+            "aria-label",
+            "Send"
+          );
+
+          sendButton.style.padding =
+            "0";
+
+          sendButton.style.border =
+            "0";
+
+          sendButton.style.overflow =
+            "hidden";
+
+          sendButton.style.backgroundImage =
+            `url("${APPROVED_SEND_DECAL}")`;
+
+          sendButton.style.backgroundSize =
+            "contain";
+
+          sendButton.style.backgroundPosition =
+            "center";
+
+          sendButton.style.backgroundRepeat =
+            "no-repeat";
+
+          sendButton.style.backgroundColor =
+            "transparent";
+
+          sendButton.style.color =
+            "transparent";
+
+          sendButton.style.cursor =
+            "default";
+
+          sendButton.style.zIndex =
+            "7";
+
+          email.addEventListener(
+            "input",
+            () => {
+              const ready =
+                email.checkValidity() &&
+                email.value.trim().length >
+                  0;
+
+              sendButton.disabled =
+                !ready;
+
+              sendButton.setAttribute(
+                "aria-disabled",
+                ready
+                  ? "false"
+                  : "true"
+              );
+
+              sendButton.style.cursor =
+                ready
+                  ? "pointer"
+                  : "default";
+            }
+          );
+
+          entryForm.append(
+            instructions,
+            email,
+            sendButton
+          );
+
           window.dispatchEvent(
             new CustomEvent(
               "cybercrowd:email-opened"
             )
           );
-        }
-      );
 
-      const sendButton =
-        document.createElement("button");
-
-      sendButton.id =
-        "sendButton";
-
-      sendButton.type =
-        "button";
-
-      sendButton.disabled =
-        true;
-
-      sendButton.setAttribute(
-        "aria-disabled",
-        "true"
-      );
-
-      sendButton.setAttribute(
-        "aria-label",
-        "Send"
-      );
-
-      sendButton.style.padding =
-        "0";
-
-      sendButton.style.border =
-        "0";
-
-      sendButton.style.overflow =
-        "hidden";
-
-      sendButton.style.backgroundImage =
-        `url("${APPROVED_SEND_DECAL}")`;
-
-      sendButton.style.backgroundSize =
-        "contain";
-
-      sendButton.style.backgroundPosition =
-        "center";
-
-      sendButton.style.backgroundRepeat =
-        "no-repeat";
-
-      sendButton.style.backgroundColor =
-        "transparent";
-
-      sendButton.style.color =
-        "transparent";
-
-      sendButton.style.cursor =
-        "default";
-
-      sendButton.style.zIndex =
-        "7";
-
-      email.addEventListener(
-        "input",
-        () => {
-          const ready =
-            emailOpened &&
-            email.checkValidity() &&
-            email.value.trim().length >
-              0;
-
-          sendButton.disabled =
-            !ready;
-
-          sendButton.setAttribute(
-            "aria-disabled",
-            ready
-              ? "false"
-              : "true"
-          );
-
-          sendButton.style.cursor =
-            ready
-              ? "pointer"
-              : "default";
-        }
-      );
-
-      entryForm.append(
-        instructions,
-        email,
-        sendButton
-      );
-
-      plaque.appendChild(
-        entryForm
+          email.focus();
+        },
+        { once: true }
       );
     },
     { once: true }
