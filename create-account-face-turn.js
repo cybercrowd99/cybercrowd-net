@@ -23,9 +23,9 @@
 // 90°
 //
 // TURNSTILE #1
-// SERVER VERIFIED
+// GREEN CHECK / TOKEN
 // ↓
-// cybercrowd:turnstile-one-verified
+// cybercrowd:human-passed
 // ↓
 // MOVEMENT #2
 // 90° → 180°
@@ -35,7 +35,7 @@
 // cybercrowd:face-two-arrived
 //
 // INPUT:
-// cybercrowd:turnstile-one-verified
+// cybercrowd:human-passed
 //
 // OUTPUT:
 // cybercrowd:face-two-arrived
@@ -47,6 +47,11 @@
 // TURN TIME:
 // 0.09 seconds.
 //
+// SECURITY BOUNDARY:
+// This file moves presentation only.
+// It does not grant human authority.
+// Private server verification remains separate.
+//
 // DOES NOT OWN:
 // Movement #1.
 // Movement #3.
@@ -57,6 +62,7 @@
 // Turn audio.
 // Turnstile #1 rendering.
 // Turnstile #1 verification.
+// Human authorization.
 // Email.
 // Email activation.
 // Send.
@@ -78,7 +84,7 @@ export function installFaceTurn() {
   let turned = false;
 
   window.addEventListener(
-    "cybercrowd:turnstile-one-verified",
+    "cybercrowd:human-passed",
     () => {
       if (turned) {
         return;
@@ -111,6 +117,7 @@ export function installFaceTurn() {
         },
         TURN_DURATION
       );
-    }
+    },
+    { once: true }
   );
 }
