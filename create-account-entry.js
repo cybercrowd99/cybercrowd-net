@@ -41,6 +41,18 @@
 // automatic Movement #2
 // ↓
 // 90° → 180°
+// ↓
+// Sequence #3
+// ↓
+// ENTER EMAIL
+// ↓
+// SEND
+// ↓
+// existing entry bridge
+// ↓
+// verification-email request
+// ↓
+// cybercrowd:email-sent
 //
 // NO STORAGE.
 
@@ -71,6 +83,10 @@ import {
 import {
   installEmailSendSurface
 } from "./create-account-email-send-surface.js";
+
+import {
+  installEntryBridge
+} from "./create-account-entry-bridge.js";
 
 import {
   openTurnstileOne
@@ -106,6 +122,8 @@ function startCreateAccountEntry() {
   installGlassPlaqueThreeNode();
 
   installEmailSendSurface();
+
+  installEntryBridge();
 
   openHumanVerifyCrossing();
 
