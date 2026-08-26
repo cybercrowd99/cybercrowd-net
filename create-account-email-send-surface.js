@@ -1,7 +1,21 @@
 // CYBERCROWD
 //
+// PASTE INTO CODE
+//
+// FILE ACTION:
+// REPLACE EXISTING FILE
+//
 // FILE:
 // create-account-email-send-surface.js
+//
+// COMMIT:
+// Separate Sequence three display images from live controls
+//
+// CONTEXT:
+// Real email input owns the human trigger.
+// CSS owns the display-only email image.
+// Focus opens the type-in surface.
+// SEND uses native disabled state only.
 //
 // BUILD LAW:
 // 1 FILE
@@ -9,26 +23,39 @@
 // 1 FUNCTION
 //
 // JOB:
-// Present the live email input and SEND surface.
+// Present and operate the live Email + SEND DOM surface.
 //
 // FUNCTION:
 // installEmailSendSurface()
 //
+// INPUT:
+// cybercrowd:face-two-arrived
+//
 // OUTPUT:
 // cybercrowd:email-opened
+//
+// DOES NOT OWN:
+// Turnstile #1.
+// Turnstile #2.
+// Human verification.
+// Email transmission.
+// Movement.
+// Rotation.
+// Audio.
+// WHOOSH.
+// Authentication.
+// Session.
+// Routing.
+// Backend authority.
 
 export function installEmailSendSurface() {
-  const APPROVED_ENTER_EMAIL_DECAL =
-    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_enter-email-here.png";
-
-  const APPROVED_SEND_DECAL =
-    "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_send-email.png";
-
   window.addEventListener(
     "cybercrowd:face-two-arrived",
     () => {
       const plaque =
-        document.querySelector(".glass-plaque-three");
+        document.querySelector(
+          ".glass-plaque-three"
+        );
 
       if (!plaque) {
         return;
@@ -42,8 +69,9 @@ export function installEmailSendSurface() {
       }
 
       if (
-        window.getComputedStyle(plaque).position ===
-        "static"
+        window.getComputedStyle(
+          plaque
+        ).position === "static"
       ) {
         plaque.style.position =
           "relative";
@@ -155,7 +183,9 @@ export function installEmailSendSurface() {
             Math.random() < 0.22;
 
           const particle =
-            document.createElement("span");
+            document.createElement(
+              "span"
+            );
 
           particle.textContent =
             sparkle
@@ -468,16 +498,17 @@ export function installEmailSendSurface() {
       );
 
       const entryForm =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       entryForm.className =
         "entry-form";
 
-      entryForm.style.zIndex =
-        "5";
-
       const instructions =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       instructions.className =
         "email-send-instructions";
@@ -538,7 +569,9 @@ export function installEmailSendSurface() {
         "none";
 
       const email =
-        document.createElement("input");
+        document.createElement(
+          "input"
+        );
 
       email.id =
         "email";
@@ -569,62 +602,10 @@ export function installEmailSendSurface() {
         "Enter your email here"
       );
 
-      email.setAttribute(
-        "readonly",
-        ""
-      );
-
-      email.style.padding =
-        "0";
-
-      email.style.border =
-        "0";
-
-      email.style.overflow =
-        "hidden";
-
-      email.style.backgroundImage =
-        `url("${APPROVED_ENTER_EMAIL_DECAL}")`;
-
-      email.style.backgroundSize =
-        "contain";
-
-      email.style.backgroundPosition =
-        "center";
-
-      email.style.backgroundRepeat =
-        "no-repeat";
-
-      email.style.backgroundColor =
-        "transparent";
-
-      email.style.color =
-        "transparent";
-
-      email.style.caretColor =
-        "transparent";
-
-      email.style.cursor =
-        "pointer";
-
-      email.style.zIndex =
-        "7";
-
-      // ⭐ ADDED DIMENSIONS (email)
-      email.style.position = "absolute";
-      email.style.top = "46%";
-      email.style.left = "50%";
-      email.style.transform =
-        "translate(-50%, -50%) translateZ(4px)";
-      email.style.width = "min(68%, 350px)";
-      email.style.minHeight = "58px";
-      email.style.padding = "0 20px";
-      email.style.border =
-        "1px solid rgba(82, 53, 20, 0.90)";
-      email.style.borderRadius = "999px";
-
       const sendButton =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
 
       sendButton.id =
         "sendButton";
@@ -645,96 +626,17 @@ export function installEmailSendSurface() {
         "Send"
       );
 
-      sendButton.style.padding =
-        "0";
-
-      sendButton.style.border =
-        "0";
-
-      sendButton.style.overflow =
-        "hidden";
-
-      sendButton.style.backgroundImage =
-        `url("${APPROVED_SEND_DECAL}")`;
-
-      sendButton.style.backgroundSize =
-        "contain";
-
-      sendButton.style.backgroundPosition =
-        "center";
-
-      sendButton.style.backgroundRepeat =
-        "no-repeat";
-
-      sendButton.style.backgroundColor =
-        "transparent";
-
-      sendButton.style.color =
-        "transparent";
-
-      sendButton.style.cursor =
-        "default";
-
-      sendButton.style.zIndex =
-        "7";
-
-      // ⭐ ADDED DIMENSIONS (sendButton)
-      sendButton.style.position = "absolute";
-      sendButton.style.top = "68%";
-      sendButton.style.left = "50%";
-      sendButton.style.transform =
-        "translate(-50%, -50%) translateZ(4px)";
-      sendButton.style.width = "min(54%, 275px)";
-      sendButton.style.minHeight = "64px";
-      sendButton.style.padding = "0 24px";
-      sendButton.style.border =
-        "1px solid rgba(82, 53, 20, 0.90)";
-      sendButton.style.borderRadius = "999px";
-      sendButton.style.background =
-        "linear-gradient(180deg, #e9c979, #9b7131)";
-      sendButton.style.color = "#2a2118";
-      sendButton.style.font = "inherit";
-      sendButton.style.fontSize = "20px";
-      sendButton.style.fontWeight = "700";
-      sendButton.style.letterSpacing = "0.12em";
-      sendButton.style.boxShadow =
-        "0 10px 26px rgba(0, 0, 0, 0.20)";
-
       let emailOpened =
         false;
 
-      let sendLocked =
-        true;
-
-      let sendBusy =
-        false;
-
-      const openEmailInput =
+      email.addEventListener(
+        "focus",
         () => {
-          if (emailOpened) {
-            return;
-          }
-
           emailOpened =
             true;
 
-          email.style.backgroundImage =
-            "none";
-
-          email.style.backgroundColor =
-            "rgba(255, 255, 255, 0.82)";
-
-          email.style.color =
-            "#2a2118";
-
-          email.style.caretColor =
-            "#2a2118";
-
-          email.style.cursor =
-            "text";
-
-          email.removeAttribute(
-            "readonly"
+          email.classList.add(
+            "is-open"
           );
 
           window.dispatchEvent(
@@ -742,19 +644,8 @@ export function installEmailSendSurface() {
               "cybercrowd:email-opened"
             )
           );
-
-          email.focus();
-        };
-
-      email.addEventListener(
-        "pointerdown",
-        openEmailInput,
+        },
         { once: true }
-      );
-
-      email.addEventListener(
-        "focus",
-        openEmailInput
       );
 
       email.addEventListener(
@@ -766,23 +657,15 @@ export function installEmailSendSurface() {
             email.value.trim().length >
               0;
 
-          sendLocked =
-            !ready;
-
           sendButton.disabled =
-            sendLocked;
+            !ready;
 
           sendButton.setAttribute(
             "aria-disabled",
-            sendLocked
-              ? "true"
-              : "false"
+            ready
+              ? "false"
+              : "true"
           );
-
-          sendButton.style.cursor =
-            sendLocked
-              ? "default"
-              : "pointer";
         }
       );
 
