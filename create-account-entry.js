@@ -26,6 +26,8 @@
 // ↓
 // cybercrowd:movement-one-landed
 // ↓
+// Sequence #1 CLOSED
+// ↓
 // Glass #2 created
 // ↓
 // Turnstile Widget #1 attached
@@ -99,6 +101,10 @@ import {
 } from "./human-verify-crossing.js";
 
 import {
+  installSequenceOneRelease
+} from "./create-account-sequence-one-release.js";
+
+import {
   installSequenceTwo
 } from "./create-account-sequence-two.js";
 
@@ -132,6 +138,8 @@ function startCreateAccountEntry() {
   installEntryBridge();
 
   openHumanVerifyCrossing();
+
+  installSequenceOneRelease();
 
   installSequenceTwo();
 
