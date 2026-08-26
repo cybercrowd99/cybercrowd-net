@@ -1,8 +1,22 @@
 /*
 CYBERCROWD
 
+PASTE INTO CODE
+
+FILE ACTION:
+REPLACE EXISTING FILE
+
 FILE:
 create-account-email-send-surface.css
+
+COMMIT:
+Separate Sequence three display images from live controls
+
+CONTEXT:
+The PNG images are presentation only.
+The actual input and button remain above and own all human interaction.
+Email focus removes its display image and reveals the type-in ledger.
+SEND uses native button enable/disable behavior only.
 
 BUILD LAW:
 1 FILE
@@ -13,29 +27,23 @@ SEQUENCE:
 #3
 
 JOB:
-Present the Email + Send controls
-in front of the Sequence #3 glass plaque.
+Present the live Email + SEND controls.
 
 FUNCTION:
-Position and style .email-field
-and #sendButton inside .glass-plaque-three only.
+Style .email-field and #sendButton
+inside .glass-plaque-three only.
 
 OWNS:
-Email field presentation.
-Send button presentation.
-Sequence #3 vertical spacing.
-Sequence #3 control depth.
+Email display image.
+Email type-in presentation.
+SEND display image.
+Control geometry.
+Control depth.
 
 DOES NOT OWN:
-Sequence #1 seal.
-Sequence #1 title.
-Sequence #1 welcome.
-Sequence #1 narration.
-Status text.
-Already A Member.
 Email validation.
 Email transmission.
-Send behavior.
+SEND behavior.
 Turnstile.
 Verification.
 Movement.
@@ -68,6 +76,14 @@ Backend authority.
     preserve-3d;
 }
 
+
+/*
+REAL EMAIL TRIGGER
+
+The input is always physically present.
+The PNG is display-only.
+*/
+
 .glass-plaque-three .email-field {
   position: absolute;
 
@@ -85,17 +101,32 @@ Backend authority.
     0
     20px;
 
-  border:
-    1px solid
-    rgba(82, 53, 20, 0.90);
+  border: 0;
 
   border-radius: 999px;
 
-  background:
-    rgba(255, 255, 255, 0.82);
+  background-color:
+    transparent;
+
+  background-image:
+    url(
+      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_enter-email-here.png"
+    );
+
+  background-size:
+    contain;
+
+  background-position:
+    center;
+
+  background-repeat:
+    no-repeat;
 
   color:
-    #2a2118;
+    transparent;
+
+  caret-color:
+    transparent;
 
   font:
     inherit;
@@ -108,21 +139,77 @@ Backend authority.
 
   opacity: 1;
 
-  z-index: 5;
+  z-index: 7;
+
+  cursor: text;
+
+  touch-action:
+    manipulation;
+}
+
+
+/*
+TYPE-IN LEDGER
+
+Human touched the real input.
+The display-only PNG disappears.
+The live typing surface is exposed.
+*/
+
+.glass-plaque-three
+.email-field.is-open {
+  background-image:
+    none;
+
+  background-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
+
+  color:
+    #2a2118;
+
+  caret-color:
+    #2a2118;
+
+  border:
+    1px solid
+    rgba(
+      82,
+      53,
+      20,
+      0.90
+    );
 
   box-shadow:
     0 8px 24px
-      rgba(0, 0, 0, 0.16),
+      rgba(
+        0,
+        0,
+        0,
+        0.16
+      ),
     inset 0 0 0 1px
-      rgba(255, 255, 255, 0.70);
+      rgba(
+        255,
+        255,
+        255,
+        0.70
+      );
 }
 
-.glass-plaque-three .email-field::placeholder {
-  color:
-    rgba(42, 33, 24, 0.72);
 
-  opacity: 1;
-}
+/*
+REAL SEND TRIGGER
+
+The button owns the click.
+The PNG is display-only.
+No pointer-event lock.
+No extra CSS gold ring.
+*/
 
 .glass-plaque-three #sendButton {
   position: absolute;
@@ -137,47 +224,45 @@ Backend authority.
   width: min(54%, 275px);
   min-height: 64px;
 
-  padding:
-    0
-    24px;
+  padding: 0;
 
-  border:
-    1px solid
-    rgba(82, 53, 20, 0.90);
+  border: 0;
 
   border-radius: 999px;
 
-  background:
-    linear-gradient(
-      180deg,
-      #e9c979,
-      #9b7131
+  background-color:
+    transparent;
+
+  background-image:
+    url(
+      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_send-email.png"
     );
 
+  background-size:
+    contain;
+
+  background-position:
+    center;
+
+  background-repeat:
+    no-repeat;
+
   color:
-    #2a2118;
-
-  font:
-    inherit;
-
-  font-size: 20px;
-  font-weight: 700;
-
-  letter-spacing: 0.12em;
+    transparent;
 
   opacity: 1;
 
-  z-index: 5;
+  z-index: 7;
 
   cursor: pointer;
 
-  box-shadow:
-    0 10px 26px
-      rgba(0, 0, 0, 0.20);
+  touch-action:
+    manipulation;
 }
 
-.glass-plaque-three .email-field:disabled,
-.glass-plaque-three #sendButton:disabled {
+.glass-plaque-three
+#sendButton:disabled {
   opacity: 1;
+
   cursor: default;
 }
