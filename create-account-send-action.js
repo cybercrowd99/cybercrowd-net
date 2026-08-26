@@ -9,66 +9,61 @@
 // 1 FUNCTION
 //
 // JOB:
-// Own the human SEND click boundary.
+// Own the human SEND button press.
 //
 // FUNCTION:
 // installSendAction()
 //
-// ARM:
-// cybercrowd:email-opened
+// INPUT:
+// Human presses #sendButton.
 //
 // OUTPUT:
 // cybercrowd:turnstile-two-requested
 //
 // LAW:
-// SEND HAS NO CLICK CONNECTION
-// UNTIL ENTER EMAIL HAS OPENED.
+// BUTTON EXISTS.
+// BUTTON IS PRESSABLE.
+// HUMAN PRESSES BUTTON.
+// ONE EVENT LEAVES.
+//
+// DOES NOT OWN:
+// Email opening.
+// Email presentation.
+// Email validation.
+// Turnstile rendering.
+// Verification.
+// Email transmission.
+// WHOOSH.
+// Authentication.
+// Session.
+// Routing.
+// Backend authority.
 
 export function installSendAction() {
-  let connected =
+  const sendButton =
+    document.getElementById(
+      "sendButton"
+    );
+
+  if (!sendButton) {
+    return false;
+  }
+
+  sendButton.disabled =
     false;
 
-  let requested =
-    false;
+  sendButton.setAttribute(
+    "aria-disabled",
+    "false"
+  );
 
-  window.addEventListener(
-    "cybercrowd:email-opened",
+  sendButton.addEventListener(
+    "click",
     () => {
-      if (connected) {
-        return;
-      }
-
-      const sendButton =
-        document.getElementById(
-          "sendButton"
-        );
-
-      if (!sendButton) {
-        return;
-      }
-
-      connected =
-        true;
-
-      sendButton.addEventListener(
-        "click",
-        () => {
-          if (
-            sendButton.disabled ||
-            requested
-          ) {
-            return;
-          }
-
-          requested =
-            true;
-
-          window.dispatchEvent(
-            new CustomEvent(
-              "cybercrowd:turnstile-two-requested"
-            )
-          );
-        }
+      window.dispatchEvent(
+        new CustomEvent(
+          "cybercrowd:turnstile-two-requested"
+        )
       );
     },
     { once: true }
