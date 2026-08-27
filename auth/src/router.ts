@@ -51,6 +51,10 @@ import {
   sendVerificationEmail
 } from "./email";
 
+import {
+  emailServiceEnabled
+} from "../email-service-gate.js";
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -216,6 +220,22 @@ export default {
       url.pathname === "/api/auth/send-verification" &&
       request.method === "POST"
     ) {
+      if (
+        emailServiceEnabled(env) !== true
+      ) {
+        return Response.json(
+          {
+            ok: false,
+            success: false,
+            reason: "email-service-disabled"
+          },
+          {
+            status: 503,
+            headers
+          }
+        );
+      }
+
       const origin =
         request.headers.get("Origin") || "";
 
