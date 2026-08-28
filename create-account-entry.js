@@ -28,41 +28,31 @@
 // ↓
 // Sequence #1 CLOSED
 // ↓
-// Sequence #2
+// Glass #2 created
 // ↓
-// Turnstile Widget #1
+// Turnstile Widget #1 attached
 // ↓
 // cybercrowd:human-passed
 // ↓
+// private human verification
+// ↓
+// cybercrowd:turnstile-one-verified
+// ↓
+// Audio #2
+// +
 // automatic Movement #2
 // ↓
 // 90° → 180°
 // ↓
 // Sequence #3
 // ↓
-// ENTER EMAIL invitation
-// ↓
-// human touch
-// ↓
-// cybercrowd:movement-three-requested
-// ↓
-// Movement #3
-// ↓
-// 180° → 270°
-// ↓
-// cybercrowd:face-three-arrived
-// ↓
-// Sequence #4
-// ↓
-// real Email input
+// ENTER EMAIL
 // ↓
 // SEND
 // ↓
 // cybercrowd:turnstile-two-requested
-//
-// SEVERED:
-// create-account-email-send-surface.js
-// is no longer installed by this entry.
+// ↓
+// Turnstile Widget #2 attached
 //
 // NO STORAGE.
 
@@ -91,44 +81,8 @@ import {
 } from "./create-account-glass-plaque-three-node.js";
 
 import {
-  installSequenceThreeEmailInviteNode
-} from "./create-account-sequence-three-email-invite-node.js";
-
-import {
-  installSequenceThreeEmailInviteTouch
-} from "./create-account-sequence-three-email-invite-touch.js";
-
-import {
-  installGlassPlaqueFourNode
-} from "./create-account-glass-plaque-four-node.js";
-
-import {
-  installSequenceFourInstructionsNode
-} from "./create-account-sequence-four-instructions-node.js";
-
-import {
-  installSequenceFourEmailInputNode
-} from "./create-account-sequence-four-email-input-node.js";
-
-import {
-  installSequenceFourEmailOpen
-} from "./create-account-sequence-four-email-open.js";
-
-import {
-  installSequenceFourEmailOpenState
-} from "./create-account-sequence-four-email-open-state.js";
-
-import {
-  installSequenceFourSendButtonNode
-} from "./create-account-sequence-four-send-button-node.js";
-
-import {
-  installSequenceFourEmailReadiness
-} from "./create-account-sequence-four-email-readiness.js";
-
-import {
-  installSequenceFourSendReadiness
-} from "./create-account-sequence-four-send-readiness.js";
+  installEmailSendSurface
+} from "./create-account-email-send-surface.js";
 
 import {
   installEntryBridge
@@ -163,10 +117,6 @@ import {
 } from "./create-account-face-turn.js";
 
 import {
-  installFaceTurnThree
-} from "./create-account-face-turn-three.js";
-
-import {
   installPlacardSwipe
 } from "./placard-swipe.js";
 
@@ -183,25 +133,7 @@ function startCreateAccountEntry() {
 
   installGlassPlaqueThreeNode();
 
-  installSequenceThreeEmailInviteNode();
-
-  installSequenceThreeEmailInviteTouch();
-
-  installGlassPlaqueFourNode();
-
-  installSequenceFourInstructionsNode();
-
-  installSequenceFourEmailInputNode();
-
-  installSequenceFourSendButtonNode();
-
-  installSequenceFourEmailOpenState();
-
-  installSequenceFourSendReadiness();
-
-  installSequenceFourEmailOpen();
-
-  installSequenceFourEmailReadiness();
+  installEmailSendSurface();
 
   installEntryBridge();
 
@@ -215,10 +147,8 @@ function startCreateAccountEntry() {
 
   installFaceTurn();
 
-  installFaceTurnThree();
-
   window.addEventListener(
-    "cybercrowd:cylinder-turned",
+    "cybercrowd:movement-one-landed",
     openTurnstileOne,
     { once: true }
   );
