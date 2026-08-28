@@ -218,7 +218,7 @@ function startCreateAccountEntry() {
   installFaceTurnThree();
 
   window.addEventListener(
-    "cybercrowd:movement-one-landed",
+    "cybercrowd:cylinder-turned",
     openTurnstileOne,
     { once: true }
   );
