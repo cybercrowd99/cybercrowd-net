@@ -1,0 +1,124 @@
+/*
+CYBERCROWD
+
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
+FILE:
+create-account-sequence-four-email-input.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+SEQUENCE:
+#4
+
+JOB:
+Present the real Sequence #4 Email input
+in its approved closed image state.
+
+FUNCTION:
+Style the direct .email-field
+inside .glass-plaque-four.
+
+ASSET:
+https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_enter-email-here.png
+
+OWNS:
+Email image presentation.
+Email geometry.
+Email presentation depth.
+Email human-touch dimensions.
+
+DOES NOT OWN:
+Email node creation.
+Email focus.
+Email opening.
+Email typing behavior.
+Email validation.
+SEND.
+Turnstile.
+Verification.
+Movement.
+Rotation.
+Audio.
+WHOOSH.
+Transmission.
+Authentication.
+Session.
+Routing.
+Backend authority.
+Old-limb removal.
+*/
+
+.glass-plaque-four
+> .email-field {
+  position: absolute;
+
+  top: 46%;
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    translateZ(4px);
+
+  width: min(68%, 350px);
+  min-height: 58px;
+
+  padding:
+    0
+    20px;
+
+  border: 0;
+
+  border-radius: 999px;
+
+  background-color:
+    transparent;
+
+  background-image:
+    url(
+      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_enter-email-here.png"
+    );
+
+  background-size:
+    contain;
+
+  background-position:
+    center;
+
+  background-repeat:
+    no-repeat;
+
+  color:
+    transparent;
+
+  caret-color:
+    transparent;
+
+  font:
+    inherit;
+
+  font-size: 16px;
+
+  text-align:
+    center;
+
+  outline:
+    none;
+
+  opacity: 1;
+
+  z-index: 7;
+
+  cursor:
+    text;
+
+  touch-action:
+    manipulation;
+}
