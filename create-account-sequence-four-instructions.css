@@ -1,103 +1,48 @@
 /*
-CYBERCROWD
-
-REPO:
-cybercrowd99/cybercrowd-net
-
-LANE:
-PUBLIC NET
-
-FILE:
-create-account-sequence-four-instructions.css
-
-BUILD LAW:
-1 FILE
-1 JOB
-1 FUNCTION
-
-SEQUENCE:
-#4
-
-JOB:
-Present the approved Email + SEND instructions
-on the existing Sequence #4 plaque.
-
-FUNCTION:
-Style the direct .email-send-instructions
-inside .glass-plaque-four.
-
-OWNS:
-Instruction placement.
-Instruction dimensions.
-Instruction typography.
-Instruction presentation depth.
-
-DOES NOT OWN:
-Instructions node creation.
-Instructions content.
-Email input.
-Email presentation.
-Email opening.
-Email readiness.
-SEND.
-Turnstile.
-Verification.
-Movement.
-Rotation.
-Audio.
-WHOOSH.
-Transmission.
-Authentication.
-Session.
-Routing.
-Backend authority.
-Old-limb removal.
+// CYBERCROWD
+//
+// FILE:
+// create-account-glass-plaque-two-node.js
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+//
+// JOB:
+// Create the Sequence #2 clear glass face.
+//
+// FUNCTION:
+// installGlassPlaqueTwoNode()
 */
 
-.glass-plaque-four
-> .email-send-instructions {
-  position: absolute;
+export function installGlassPlaqueTwoNode() {
+  const stage =
+    document.querySelector(".stage");
 
-  top: 19%;
-  left: 50%;
+  if (!stage) {
+    return false;
+  }
 
-  transform:
-    translate(-50%, -50%)
-    translateZ(4px);
-
-  width:
-    min(88%, 460px);
-
-  margin: 0;
-  padding: 0;
-
-  color:
-    #2a2118;
-
-  font:
-    inherit;
-
-  font-size:
-    clamp(
-      0.82rem,
-      2.2vw,
-      1rem
+  let plaque =
+    stage.querySelector(
+      ":scope > .glass-plaque-two"
     );
 
-  font-weight:
-    600;
+  if (!plaque) {
+    plaque =
+      document.createElement("section");
 
-  line-height:
-    1.45;
+    plaque.className =
+      "glass-plaque-two";
 
-  letter-spacing:
-    0.02em;
+    plaque.setAttribute(
+      "aria-label",
+      "CyberCrowd Human Verification"
+    );
 
-  text-align:
-    center;
+    stage.appendChild(plaque);
+  }
 
-  z-index: 7;
-
-  pointer-events:
-    none;
+  return true;
 }
