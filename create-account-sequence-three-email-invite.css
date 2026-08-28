@@ -1,0 +1,109 @@
+/*
+CYBERCROWD
+
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
+FILE:
+create-account-sequence-three-email-invite.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+SEQUENCE:
+#3
+
+JOB:
+Present the approved ENTER EMAIL image
+on the existing Sequence #3 invitation node.
+
+FUNCTION:
+Style #email-invite only
+inside .glass-plaque-three.
+
+ASSET:
+https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_enter-email-here.png
+
+OWNS:
+Image presentation.
+Image geometry.
+Human-touch dimensions.
+Presentation depth.
+
+DOES NOT OWN:
+Invitation node creation.
+Human click behavior.
+Movement #3.
+Sequence #4.
+Email input.
+SEND.
+Turnstile.
+Verification.
+Rotation.
+Audio.
+WHOOSH.
+Authentication.
+Session.
+Routing.
+Backend authority.
+*/
+
+.glass-plaque-three
+#email-invite {
+  position: absolute;
+
+  top: 46%;
+  left: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    translateZ(4px);
+
+  width: min(68%, 350px);
+  min-height: 58px;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background-color:
+    transparent;
+
+  background-image:
+    url(
+      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_enter-email-here.png"
+    );
+
+  background-size:
+    contain;
+
+  background-position:
+    center;
+
+  background-repeat:
+    no-repeat;
+
+  color:
+    transparent;
+
+  font-size: 0;
+
+  opacity: 1;
+
+  z-index: 7;
+
+  cursor: pointer;
+
+  touch-action:
+    manipulation;
+
+  pointer-events:
+    auto;
+}
