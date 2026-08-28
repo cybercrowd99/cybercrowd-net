@@ -1,0 +1,104 @@
+/*
+CYBERCROWD
+
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
+FILE:
+create-account-sequence-four-email-open-state.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+SEQUENCE:
+#4
+
+JOB:
+Present the real Sequence #4 Email input
+in its approved open type-in state.
+
+FUNCTION:
+Style the direct .email-field.is-open
+inside .glass-plaque-four.
+
+INPUT:
+.email-field.is-open
+
+OWNS:
+Open Email presentation.
+Writable ledger color.
+Visible caret.
+Open Email border.
+Open Email depth.
+
+DOES NOT OWN:
+Email node creation.
+Raw human focus.
+Email-opened publication.
+Open-state application.
+Email typing.
+Email validation.
+SEND.
+Turnstile.
+Verification.
+Movement.
+Rotation.
+Audio.
+WHOOSH.
+Transmission.
+Authentication.
+Session.
+Routing.
+Backend authority.
+Old-limb removal.
+*/
+
+.glass-plaque-four
+> .email-field.is-open {
+  background-image:
+    none;
+
+  background-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
+
+  color:
+    #2a2118;
+
+  caret-color:
+    #2a2118;
+
+  border:
+    1px solid
+    rgba(
+      82,
+      53,
+      20,
+      0.90
+    );
+
+  box-shadow:
+    0 8px 24px
+      rgba(
+        0,
+        0,
+        0,
+        0.16
+      ),
+    inset 0 0 0 1px
+      rgba(
+        255,
+        255,
+        255,
+        0.70
+      );
+}
