@@ -1,30 +1,64 @@
 /*
 CYBERCROWD
 
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
 FILE:
 create-account-glass-plaque-four.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
 
 SEQUENCE:
 #4
 
 JOB:
 Present Sequence #4 glass
-with a complete green
+with a complete bright green
 inner bevel wall GO signal.
 
-GREEN OWNS:
-ENTIRE INNER BEVEL WALL
+FUNCTION:
+Style .glass-plaque-four only.
 
-TOP.
-RIGHT.
-BOTTOM.
-LEFT.
+POSITION:
+270 degrees.
+
+GO SIGNAL:
+Normal email:
+normal glass.
+
+Valid email:
+entire inner bevel wall
+turns bright saturated green.
+
+Invalid again:
+green disappears immediately.
+
+GREEN OWNS:
+TOP INNER BEVEL.
+RIGHT INNER BEVEL.
+BOTTOM INNER BEVEL.
+LEFT INNER BEVEL.
 
 GREEN DOES NOT OWN:
 Front glass face.
 Outer border.
 Glass body.
 Graphics.
+
+NO SOFT GREEN.
+NO SUBTLE GREEN.
+NO REFLECTIVE GREEN.
+NO PULSE.
+NO ANIMATION.
+NO SPARKLE.
+NO GLASS WASH.
 */
 
 .glass-plaque-four {
@@ -106,7 +140,7 @@ Graphics.
 /*
 INNER BEVEL WALL
 
-Complete perimeter.
+Complete four-edge perimeter.
 
 Invisible until GO.
 */
@@ -124,8 +158,7 @@ Invisible until GO.
     transparent;
 
   box-shadow:
-    inset 0 0 0 0
-      transparent;
+    none;
 
   opacity: 0;
 
@@ -139,33 +172,30 @@ Invisible until GO.
 /*
 GO
 
-Entire inner chamfer wall
-becomes green.
+BRIGHT.
+HARD.
+SATURATED.
 
-No front-face wash.
-No pulse.
-No animation.
+EMAIL READY.
+HIT SEND.
 */
 
 .glass-plaque-four.is-email-ready::after {
   box-shadow:
-    inset 0 7px 6px -6px
-      rgba(35, 255, 95, 1),
+    inset 0 8px 0
+      rgb(0, 255, 70),
 
-    inset -7px 0 6px -6px
-      rgba(35, 255, 95, 1),
+    inset -8px 0 0
+      rgb(0, 255, 70),
 
-    inset 0 -7px 6px -6px
-      rgba(35, 255, 95, 1),
+    inset 0 -8px 0
+      rgb(0, 255, 70),
 
-    inset 7px 0 6px -6px
-      rgba(35, 255, 95, 1),
+    inset 8px 0 0
+      rgb(0, 255, 70),
 
-    inset 0 0 0 3px
-      rgba(35, 255, 95, 0.92),
-
-    inset 0 0 8px
-      rgba(35, 255, 95, 0.40);
+    inset 0 0 0 4px
+      rgb(0, 255, 70);
 
   opacity: 1;
 }
