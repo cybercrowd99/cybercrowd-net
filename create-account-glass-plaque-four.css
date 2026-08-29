@@ -1,42 +1,30 @@
 /*
 CYBERCROWD
 
-REPO:
-cybercrowd99/cybercrowd-net
-
-LANE:
-PUBLIC NET
-
 FILE:
 create-account-glass-plaque-four.css
-
-BUILD LAW:
-1 FILE
-1 JOB
-1 FUNCTION
 
 SEQUENCE:
 #4
 
 JOB:
 Present Sequence #4 glass
-with a bright green GO signal.
+with a complete green
+inner bevel wall GO signal.
 
-GO SIGNAL:
-1. Entire inner bevel wall turns green.
-2. Outer glass border turns bright green.
-3. Border receives a hard visible green glow.
+GREEN OWNS:
+ENTIRE INNER BEVEL WALL
 
-VALID:
-HIT SEND.
+TOP.
+RIGHT.
+BOTTOM.
+LEFT.
 
-INVALID:
-Return immediately to normal glass.
-
-NO PULSE.
-NO ANIMATION.
-NO SPARKLE.
-NO GRAPHIC EFFECT.
+GREEN DOES NOT OWN:
+Front glass face.
+Outer border.
+Glass body.
+Graphics.
 */
 
 .glass-plaque-four {
@@ -74,10 +62,8 @@ NO GRAPHIC EFFECT.
   box-shadow:
     0 26px 70px
       rgba(0, 0, 0, 0.34),
-
     inset 0 0 0 1px
       rgba(255, 255, 255, 0.52),
-
     inset 0 0 30px
       rgba(255, 255, 255, 0.18);
 
@@ -120,7 +106,9 @@ NO GRAPHIC EFFECT.
 /*
 INNER BEVEL WALL
 
-Invisible until READY.
+Complete perimeter.
+
+Invisible until GO.
 */
 
 .glass-plaque-four::after {
@@ -136,7 +124,8 @@ Invisible until READY.
     transparent;
 
   box-shadow:
-    none;
+    inset 0 0 0 0
+      transparent;
 
   opacity: 0;
 
@@ -148,62 +137,35 @@ Invisible until READY.
 }
 
 /*
-READY
+GO
 
-BRIGHT GREEN GO.
+Entire inner chamfer wall
+becomes green.
 
-BORDER:
-hard green line
-+
-visible green glow
-
-INNER BEVEL:
-all four edges green
+No front-face wash.
+No pulse.
+No animation.
 */
-
-.glass-plaque-four.is-email-ready {
-  border-color:
-    rgb(0, 255, 70);
-
-  box-shadow:
-    0 0 0 2px
-      rgb(0, 255, 70),
-
-    0 0 8px
-      rgb(0, 255, 70),
-
-    0 0 18px
-      rgba(0, 255, 70, 0.95),
-
-    0 0 34px
-      rgba(0, 255, 70, 0.70),
-
-    0 26px 70px
-      rgba(0, 0, 0, 0.34),
-
-    inset 0 0 0 1px
-      rgba(255, 255, 255, 0.52),
-
-    inset 0 0 30px
-      rgba(255, 255, 255, 0.18);
-}
 
 .glass-plaque-four.is-email-ready::after {
   box-shadow:
-    inset 0 8px 0
-      rgb(0, 255, 70),
+    inset 0 7px 6px -6px
+      rgba(35, 255, 95, 1),
 
-    inset -8px 0 0
-      rgb(0, 255, 70),
+    inset -7px 0 6px -6px
+      rgba(35, 255, 95, 1),
 
-    inset 0 -8px 0
-      rgb(0, 255, 70),
+    inset 0 -7px 6px -6px
+      rgba(35, 255, 95, 1),
 
-    inset 8px 0 0
-      rgb(0, 255, 70),
+    inset 7px 0 6px -6px
+      rgba(35, 255, 95, 1),
 
-    inset 0 0 0 4px
-      rgb(0, 255, 70);
+    inset 0 0 0 3px
+      rgba(35, 255, 95, 0.92),
+
+    inset 0 0 8px
+      rgba(35, 255, 95, 0.40);
 
   opacity: 1;
 }
