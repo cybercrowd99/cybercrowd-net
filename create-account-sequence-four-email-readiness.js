@@ -1,11 +1,5 @@
 // CYBERCROWD
 //
-// REPO:
-// cybercrowd99/cybercrowd-net
-//
-// LANE:
-// PUBLIC NET
-//
 // FILE:
 // create-account-sequence-four-email-readiness.js
 //
@@ -18,46 +12,39 @@
 // #4
 //
 // JOB:
-// Convert native Sequence #4 Email input
-// into one browser-readiness signal.
+// Continuously resolve Sequence #4
+// Email readiness.
 //
 // FUNCTION:
 // installSequenceFourEmailReadiness()
 //
-// INPUT:
-// Native input event from the direct
-// .email-field inside .glass-plaque-four.
+// STATE:
+// KEEP TRYING
+// ↕
+// READY
+//
+// READY SHAPE:
+// local@domain.tld
+//
+// EXAMPLES:
+//
+// cybercrowd@yahoo.com
+// cybercrowd@gmail.com
+// cybercrowd@live.com
+// cybercrowd@domain.co
+//
+// NOT READY:
+//
+// cybercrowd@
+// cybercrowd@gmail
+// cybercrowd@live.co.
+// @gmail.com
 //
 // OUTPUT:
 // cybercrowd:sequence-four-email-readiness
 //
-// PAYLOAD:
-// ready
-//
-// READY:
-// Non-empty Email value
-// plus native browser Email validity.
-//
-// DOES NOT OWN:
-// Email node creation.
-// Email presentation.
-// Email opening.
-// SEND node creation.
-// SEND enablement.
-// SEND click.
-// Private Email validation.
-// Turnstile.
-// Verification.
-// Movement.
-// Rotation.
-// Audio.
-// WHOOSH.
-// Transmission.
-// Authentication.
-// Session.
-// Routing.
-// Backend authority.
-// Old-limb removal.
+// GLASS STATE:
+// .is-email-ready
 
 export function installSequenceFourEmailReadiness() {
   window.addEventListener(
@@ -84,10 +71,19 @@ export function installSequenceFourEmailReadiness() {
       email.addEventListener(
         "input",
         () => {
+          const value =
+            email.value.trim();
+
           const ready =
             email.checkValidity() &&
-            email.value.trim().length >
-              0;
+            /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(
+              value
+            );
+
+          plaque.classList.toggle(
+            "is-email-ready",
+            ready
+          );
 
           window.dispatchEvent(
             new CustomEvent(
