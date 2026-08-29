@@ -9,11 +9,11 @@
 // 1 FUNCTION
 //
 // SEQUENCE:
-// 2
+// #2
 //
 // JOB:
-// Release Sequence 2 human-touch ownership
-// after Movement 2 has completed.
+// Release Sequence #2 human-touch ownership
+// after Movement #2 has completed.
 //
 // FUNCTION:
 // installSequenceTwoRelease()
@@ -25,16 +25,16 @@
 // Remove .is-active from .glass-plaque-two.
 //
 // RESULT:
-// Sequence 2 returns to pointer-events: none.
-// Sequence 3 receives human touch.
+// Sequence #2 returns to pointer-events: none.
+// Sequence #3 receives human touch.
 //
 // DOES NOT OWN:
-// Turnstile 1.
+// Turnstile #1.
 // Turnstile verification.
 // Movement.
 // Email.
 // SEND.
-// Turnstile 2.
+// Turnstile #2.
 // WHOOSH.
 // Authentication.
 // Routing.
