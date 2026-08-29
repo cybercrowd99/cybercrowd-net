@@ -14,46 +14,6 @@
 // FUNCTION:
 // startCreateAccountEntry()
 //
-// FLOW:
-//
-// Sequence #1
-// ↓
-// human swipe
-// ↓
-// cybercrowd:cylinder-turned
-// ↓
-// Slam #1 + Movement #1
-// ↓
-// cybercrowd:movement-one-landed
-// ↓
-// Sequence #1 CLOSED
-// ↓
-// Glass #2 created
-// ↓
-// Turnstile Widget #1 attached
-// ↓
-// cybercrowd:human-passed
-// ↓
-// private human verification
-// ↓
-// cybercrowd:turnstile-one-verified
-// ↓
-// Audio #2
-// +
-// automatic Movement #2
-// ↓
-// 90° → 180°
-// ↓
-// Sequence #3
-// ↓
-// ENTER EMAIL
-// ↓
-// SEND
-// ↓
-// cybercrowd:turnstile-two-requested
-// ↓
-// Turnstile Widget #2 attached
-//
 // NO STORAGE.
 
 import {
@@ -73,36 +33,24 @@ import {
 } from "./create-account-turn-audio-listener.js";
 
 import {
-  installGlassPlaqueTwoNode
-} from "./create-account-glass-plaque-two-node.js";
-
-import {
-  installGlassPlaqueThreeNode
-} from "./create-account-glass-plaque-three-node.js";
-
-import {
-  installEmailSendSurface
-} from "./create-account-email-send-surface.js";
-
-import {
-  installEntryBridge
-} from "./create-account-entry-bridge.js";
-
-import {
   openTurnstileOne
 } from "./turnstile-one-ui.js";
 
 import {
-  openTurnstileTwo
-} from "./turnstile-two-ui.js";
+  installSequenceOneRelease
+} from "./create-account-sequence-one-release.js";
+
+import {
+  installPlacardSwipe
+} from "./placard-swipe.js";
+
+import {
+  installGlassPlaqueTwoNode
+} from "./create-account-glass-plaque-two-node.js";
 
 import {
   openHumanVerifyCrossing
 } from "./human-verify-crossing.js";
-
-import {
-  installSequenceOneRelease
-} from "./create-account-sequence-one-release.js";
 
 import {
   installSequenceTwo
@@ -117,8 +65,24 @@ import {
 } from "./create-account-face-turn.js";
 
 import {
-  installPlacardSwipe
-} from "./placard-swipe.js";
+  installGlassPlaqueThreeNode
+} from "./create-account-glass-plaque-three-node.js";
+
+import {
+  installSequenceThreeEmailInviteNode
+} from "./create-account-sequence-three-email-invite-node.js";
+
+import {
+  installSequenceThreeEmailInviteTouch
+} from "./create-account-sequence-three-email-invite-touch.js";
+
+import {
+  installFaceTurnThree
+} from "./create-account-face-turn-three.js";
+
+import {
+  installGlassPlaqueFourNode
+} from "./create-account-glass-plaque-four-node.js";
 
 function startCreateAccountEntry() {
   installGlassPlaqueNode();
@@ -129,17 +93,13 @@ function startCreateAccountEntry() {
 
   installTurnAudioListener();
 
-  installGlassPlaqueTwoNode();
-
-  installGlassPlaqueThreeNode();
-
-  installEmailSendSurface();
-
-  installEntryBridge();
-
   openHumanVerifyCrossing();
 
   installSequenceOneRelease();
+
+  installPlacardSwipe();
+
+  installGlassPlaqueTwoNode();
 
   installSequenceTwo();
 
@@ -147,19 +107,21 @@ function startCreateAccountEntry() {
 
   installFaceTurn();
 
+  installGlassPlaqueThreeNode();
+
+  installSequenceThreeEmailInviteNode();
+
+  installSequenceThreeEmailInviteTouch();
+
+  installFaceTurnThree();
+
+  installGlassPlaqueFourNode();
+
   window.addEventListener(
     "cybercrowd:movement-one-landed",
     openTurnstileOne,
     { once: true }
   );
-
-  window.addEventListener(
-    "cybercrowd:turnstile-two-requested",
-    openTurnstileTwo,
-    { once: true }
-  );
-
-  installPlacardSwipe();
 }
 
 startCreateAccountEntry();
