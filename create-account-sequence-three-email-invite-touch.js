@@ -1,11 +1,5 @@
 // CYBERCROWD
 //
-// REPO:
-// cybercrowd99/cybercrowd-net
-//
-// LANE:
-// PUBLIC NET
-//
 // FILE:
 // create-account-sequence-three-email-invite-touch.js
 //
@@ -15,27 +9,32 @@
 // 1 FUNCTION
 //
 // SEQUENCE:
-// #3
+// 3
 //
 // JOB:
-// Own the first human touch
-// on the existing ENTER EMAIL invitation.
+// Own one human touch on the existing
+// ENTER EMAIL invitation.
 //
 // FUNCTION:
 // installSequenceThreeEmailInviteTouch()
 //
 // INPUT:
-// First click on #email-invite.
+// Human click on email-invite.
 //
 // OUTPUT:
 // cybercrowd:movement-three-requested
 //
+// ACTUAL END:
+// Movement request emitted.
+// Click listener removed.
+// CLOSED.
+//
 // DOES NOT OWN:
 // Invitation node creation.
 // Image presentation.
-// Movement #3.
+// Movement 3.
 // Rotation.
-// Sequence #4.
+// Sequence 4.
 // Email input.
 // SEND.
 // Turnstile.
@@ -48,42 +47,22 @@
 // Backend authority.
 
 export function installSequenceThreeEmailInviteTouch() {
-  let requested =
-    false;
+  function handleInviteTouch(event) {
+    const emailInvite =
+      event.target.closest('[id="email-invite"]');
 
-  window.addEventListener(
-    "cybercrowd:face-two-arrived",
-    () => {
-      const emailInvite =
-        document.getElementById(
-          "email-invite"
-        );
+    if (!emailInvite) {
+      return;
+    }
 
-      if (!emailInvite) {
-        return;
-      }
+    document.removeEventListener("click", handleInviteTouch);
 
-      emailInvite.addEventListener(
-        "click",
-        () => {
-          if (requested) {
-            return;
-          }
+    window.dispatchEvent(
+      new CustomEvent("cybercrowd:movement-three-requested")
+    );
+  }
 
-          requested =
-            true;
-
-          window.dispatchEvent(
-            new CustomEvent(
-              "cybercrowd:movement-three-requested"
-            )
-          );
-        },
-        { once: true }
-      );
-    },
-    { once: true }
-  );
+  document.addEventListener("click", handleInviteTouch);
 
   return true;
 }
