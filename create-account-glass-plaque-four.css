@@ -20,37 +20,52 @@ SEQUENCE:
 
 JOB:
 Present the Sequence #4 glass face
-as the shared geometric whole.
+on the existing Create Account rotary.
 
 FUNCTION:
 Style .glass-plaque-four only.
 
-GEOMETRY:
-The glass is the whole.
+POSITION:
+270 degrees.
 
-Its center is the shared vortex.
+GO SIGNAL:
+Normal email:
+normal glass edge.
 
-Email and SEND geometry reference
-this same vortex rather than using
-independent unrelated coordinates.
+Valid email:
+steady green 2.5D edge.
 
-READY STATE:
-Normal glass = KEEP TRYING.
-Lit glass = READY.
+Invalid again:
+normal glass edge immediately.
 
-NO GRAPHIC EFFECTS.
+NO PULSE.
+NO ANIMATION.
+NO SPARKLE.
+NO GRAPHIC EFFECT.
+NO GLASS WASH.
+
+DOES NOT OWN:
+Plaque node creation.
+Sequence #1.
+Sequence #2.
+Sequence #3.
+Human touch.
+Email entry.
+Email validation.
+SEND.
+Turnstile.
+Verification.
+Movement.
+Rotation.
+Audio.
+WHOOSH.
+Authentication.
+Session.
+Routing.
+Backend authority.
 */
 
 .glass-plaque-four {
-  --cc4-vortex-x: 50%;
-  --cc4-vortex-y: 50%;
-
-  --cc4-email-offset-y: 4%;
-  --cc4-send-offset-y: 26%;
-
-  --cc4-email-depth: 8px;
-  --cc4-send-depth: 8px;
-
   position: relative;
 
   grid-area: 1 / 1;
@@ -91,8 +106,8 @@ NO GRAPHIC EFFECTS.
       rgba(255, 255, 255, 0.18);
 
   transform-origin:
-    var(--cc4-vortex-x)
-    var(--cc4-vortex-y)
+    50%
+    50%
     calc(-1 * var(--cylinder-depth));
 
   transform-style:
@@ -127,41 +142,34 @@ NO GRAPHIC EFFECTS.
 }
 
 /*
-KEEP TRYING
-*/
+GREEN GO SIGNAL
 
-.glass-plaque-four:not(.is-email-ready) {
-  border-color:
-    rgba(214, 242, 232, 0.78);
-}
+Traffic light.
+Not nightclub.
 
-/*
-READY
+The edge lights only when the
+existing readiness organ applies:
 
-The glass acknowledges readiness.
-
-No image changes.
-No button effects.
-No animation.
+.is-email-ready
 */
 
 .glass-plaque-four.is-email-ready {
   border-color:
-    rgba(244, 255, 250, 0.98);
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255, 255, 255, 0.54),
-      rgba(255, 255, 255, 0.14)
-    ),
-    rgba(238, 248, 242, 0.35);
+    rgba(35, 255, 95, 1);
 
   box-shadow:
     0 26px 70px
       rgba(0, 0, 0, 0.34),
+
+    0 0 4px
+      rgba(35, 255, 95, 0.95),
+
+    0 0 10px
+      rgba(35, 255, 95, 0.58),
+
     inset 0 0 0 1px
-      rgba(255, 255, 255, 0.84),
-    inset 0 0 38px
-      rgba(255, 255, 255, 0.30);
+      rgba(80, 255, 125, 1),
+
+    inset 0 0 5px
+      rgba(35, 255, 95, 0.48);
 }
