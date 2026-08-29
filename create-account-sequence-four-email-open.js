@@ -18,15 +18,14 @@
 // #4
 //
 // JOB:
-// Own the first focus
-// on the real Sequence #4 Email input.
+// Open and focus the real Sequence #4
+// Email input when Window #4 arrives.
 //
 // FUNCTION:
 // installSequenceFourEmailOpen()
 //
 // INPUT:
-// First focus on the direct .email-field
-// inside .glass-plaque-four.
+// cybercrowd:face-three-arrived
 //
 // OUTPUT:
 // cybercrowd:email-opened
@@ -73,17 +72,15 @@ export function installSequenceFourEmailOpen() {
         return;
       }
 
-      email.addEventListener(
-        "focus",
-        () => {
-          window.dispatchEvent(
-            new CustomEvent(
-              "cybercrowd:email-opened"
-            )
-          );
-        },
-        { once: true }
+      window.dispatchEvent(
+        new CustomEvent(
+          "cybercrowd:email-opened"
+        )
       );
+
+      email.focus({
+        preventScroll: true
+      });
     },
     { once: true }
   );
