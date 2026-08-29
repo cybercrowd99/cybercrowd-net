@@ -58,15 +58,15 @@ Old-limb removal.
 > .email-send-instructions {
   position: absolute;
 
-  top: 19%;
+  top: 12%;
   left: 50%;
 
   transform:
-    translate(-50%, -50%)
+    translateX(-50%)
     translateZ(4px);
 
   width:
-    min(88%, 460px);
+    min(82%, 420px);
 
   margin: 0;
   padding: 0;
