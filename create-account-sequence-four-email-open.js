@@ -1,11 +1,5 @@
 // CYBERCROWD
 //
-// REPO:
-// cybercrowd99/cybercrowd-net
-//
-// LANE:
-// PUBLIC NET
-//
 // FILE:
 // create-account-sequence-four-email-open.js
 //
@@ -18,8 +12,8 @@
 // #4
 //
 // JOB:
-// Open and focus the real Sequence #4
-// Email input when Window #4 arrives.
+// Open the real Sequence #4 Email input
+// immediately when its face arrives.
 //
 // FUNCTION:
 // installSequenceFourEmailOpen()
@@ -30,25 +24,12 @@
 // OUTPUT:
 // cybercrowd:email-opened
 //
-// DOES NOT OWN:
-// Email node creation.
-// Email presentation.
-// Open-state presentation.
-// Email typing.
-// Email validation.
-// SEND.
-// Turnstile.
-// Verification.
-// Movement.
-// Rotation.
-// Audio.
-// WHOOSH.
-// Transmission.
-// Authentication.
-// Session.
-// Routing.
-// Backend authority.
-// Old-limb removal.
+// HUMAN ACTION:
+// None.
+//
+// Window #3 touch already supplied
+// the human action that brought
+// Window #4 into position.
 
 export function installSequenceFourEmailOpen() {
   window.addEventListener(
