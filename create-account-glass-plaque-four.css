@@ -20,45 +20,23 @@ SEQUENCE:
 
 JOB:
 Present Sequence #4 glass
-with a complete bright green
-inner bevel wall GO signal.
-
-FUNCTION:
-Style .glass-plaque-four only.
-
-POSITION:
-270 degrees.
+with a bright green GO signal.
 
 GO SIGNAL:
-Normal email:
-normal glass.
+1. Entire inner bevel wall turns green.
+2. Outer glass border turns bright green.
+3. Border receives a hard visible green glow.
 
-Valid email:
-entire inner bevel wall
-turns bright saturated green.
+VALID:
+HIT SEND.
 
-Invalid again:
-green disappears immediately.
+INVALID:
+Return immediately to normal glass.
 
-GREEN OWNS:
-TOP INNER BEVEL.
-RIGHT INNER BEVEL.
-BOTTOM INNER BEVEL.
-LEFT INNER BEVEL.
-
-GREEN DOES NOT OWN:
-Front glass face.
-Outer border.
-Glass body.
-Graphics.
-
-NO SOFT GREEN.
-NO SUBTLE GREEN.
-NO REFLECTIVE GREEN.
 NO PULSE.
 NO ANIMATION.
 NO SPARKLE.
-NO GLASS WASH.
+NO GRAPHIC EFFECT.
 */
 
 .glass-plaque-four {
@@ -96,8 +74,10 @@ NO GLASS WASH.
   box-shadow:
     0 26px 70px
       rgba(0, 0, 0, 0.34),
+
     inset 0 0 0 1px
       rgba(255, 255, 255, 0.52),
+
     inset 0 0 30px
       rgba(255, 255, 255, 0.18);
 
@@ -140,9 +120,7 @@ NO GLASS WASH.
 /*
 INNER BEVEL WALL
 
-Complete four-edge perimeter.
-
-Invisible until GO.
+Invisible until READY.
 */
 
 .glass-plaque-four::after {
@@ -170,15 +148,45 @@ Invisible until GO.
 }
 
 /*
-GO
+READY
 
-BRIGHT.
-HARD.
-SATURATED.
+BRIGHT GREEN GO.
 
-EMAIL READY.
-HIT SEND.
+BORDER:
+hard green line
++
+visible green glow
+
+INNER BEVEL:
+all four edges green
 */
+
+.glass-plaque-four.is-email-ready {
+  border-color:
+    rgb(0, 255, 70);
+
+  box-shadow:
+    0 0 0 2px
+      rgb(0, 255, 70),
+
+    0 0 8px
+      rgb(0, 255, 70),
+
+    0 0 18px
+      rgba(0, 255, 70, 0.95),
+
+    0 0 34px
+      rgba(0, 255, 70, 0.70),
+
+    0 26px 70px
+      rgba(0, 0, 0, 0.34),
+
+    inset 0 0 0 1px
+      rgba(255, 255, 255, 0.52),
+
+    inset 0 0 30px
+      rgba(255, 255, 255, 0.18);
+}
 
 .glass-plaque-four.is-email-ready::after {
   box-shadow:
