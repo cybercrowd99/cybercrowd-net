@@ -18,8 +18,8 @@
 // #3
 //
 // JOB:
-// Mount the empty ENTER EMAIL invitation node
-// inside the existing Sequence #3 plaque.
+// Mount one clickable entry image
+// on Sequence #3.
 //
 // FUNCTION:
 // installSequenceThreeEmailInviteNode()
@@ -27,29 +27,19 @@
 // INPUT:
 // cybercrowd:face-two-arrived
 //
-// OUTPUT:
-// #email-invite
+// HUMAN:
+// touch or mouse click
 //
-// PARENT:
-// .glass-plaque-three
+// OUTPUT:
+// cybercrowd:movement-three-requested
 //
 // DOES NOT OWN:
-// Image presentation.
-// Human click.
-// Movement #3.
-// Sequence #4.
 // Email input.
 // SEND.
-// Turnstile.
-// Verification.
+// Sequence #4.
 // Rotation.
-// Audio.
-// WHOOSH.
 // Authentication.
-// Session.
-// Routing.
 // Backend authority.
-//
 
 export function installSequenceThreeEmailInviteNode() {
   window.addEventListener(
@@ -72,24 +62,36 @@ export function installSequenceThreeEmailInviteNode() {
         return;
       }
 
-      const emailInvite =
+      const entryButton =
         document.createElement(
           "button"
         );
 
-      emailInvite.id =
+      entryButton.id =
         "email-invite";
 
-      emailInvite.type =
+      entryButton.type =
         "button";
 
-      emailInvite.setAttribute(
+      entryButton.setAttribute(
         "aria-label",
-        "Enter your email here"
+        "Click here to enter"
+      );
+
+      entryButton.addEventListener(
+        "click",
+        () => {
+          window.dispatchEvent(
+            new CustomEvent(
+              "cybercrowd:movement-three-requested"
+            )
+          );
+        },
+        { once: true }
       );
 
       plaque.appendChild(
-        emailInvite
+        entryButton
       );
     },
     { once: true }
