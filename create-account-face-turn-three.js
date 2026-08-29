@@ -18,7 +18,7 @@
 // FACE TURN THREE
 //
 // JOB:
-// Own Create Account Movement 3 only.
+// Own Create Account Movement #3 only.
 //
 // FUNCTION:
 // installFaceTurnThree()
@@ -38,10 +38,10 @@
 // 0.09 seconds.
 //
 // DOES NOT OWN:
-// Sequence 1.
-// Sequence 2.
-// Sequence 3 presentation.
-// Sequence 4 presentation.
+// Sequence #1.
+// Sequence #2.
+// Sequence #3 presentation.
+// Sequence #4 presentation.
 // Raw human touch.
 // ENTER EMAIL image.
 // Email entry.
@@ -59,6 +59,9 @@
 export function installFaceTurnThree() {
   const TURN_DURATION =
     90;
+
+  const MOVEMENT_THREE_START =
+    Math.PI;
 
   const MOVEMENT_THREE_DESTINATION =
     3 * Math.PI / 2;
@@ -85,7 +88,20 @@ export function installFaceTurnThree() {
         () => {
           window.dispatchEvent(
             new CustomEvent(
-              "cybercrowd:face-three-arrived"
+              "cybercrowd:face-three-arrived",
+              {
+                detail: {
+                  movement: 3,
+                  from:
+                    MOVEMENT_THREE_START,
+                  to:
+                    MOVEMENT_THREE_DESTINATION,
+                  degreesMoved: 90,
+                  destinationDegrees: 270,
+                  duration:
+                    TURN_DURATION
+                }
+              }
             )
           );
         },
