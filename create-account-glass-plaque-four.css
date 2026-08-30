@@ -1,6 +1,12 @@
 /*
 CYBERCROWD
 
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
 FILE:
 create-account-glass-plaque-four.css
 
@@ -14,20 +20,52 @@ SEQUENCE:
 
 JOB:
 Present the Sequence #4 glass face
-on the existing Create Account rotary.
+as the shared geometric whole.
 
 FUNCTION:
 Style .glass-plaque-four only.
+
+GEOMETRY:
+The glass is the whole.
+
+Its center is the shared vortex.
+
+Email and SEND geometry reference
+this same vortex rather than using
+independent unrelated coordinates.
+
+READY STATE:
+Normal glass = KEEP TRYING.
+Lit glass = READY.
+
+NO GRAPHIC EFFECTS.
 */
 
 .glass-plaque-four {
+  --cc4-vortex-x: 50%;
+  --cc4-vortex-y: 50%;
+
+  --cc4-email-offset-y: 4%;
+  --cc4-send-offset-y: 26%;
+
+  --cc4-email-depth: 8px;
+  --cc4-send-depth: 8px;
+
   position: relative;
+
   grid-area: 1 / 1;
+
   display: block;
+
   width: min(88vw, 520px);
   height: min(72vh, 620px);
-  border: 2px solid rgba(214, 242, 232, 0.78);
+
+  border:
+    2px solid
+    rgba(214, 242, 232, 0.78);
+
   border-radius: 24px;
+
   background:
     linear-gradient(
       145deg,
@@ -35,26 +73,37 @@ Style .glass-plaque-four only.
       rgba(255, 255, 255, 0.10)
     ),
     rgba(238, 248, 242, 0.28);
+
   backdrop-filter:
     blur(7px)
     saturate(1.08);
+
   -webkit-backdrop-filter:
     blur(7px)
     saturate(1.08);
+
   box-shadow:
-    0 26px 70px rgba(0, 0, 0, 0.34),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.52),
-    inset 0 0 30px rgba(255, 255, 255, 0.18);
+    0 26px 70px
+      rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px
+      rgba(255, 255, 255, 0.52),
+    inset 0 0 30px
+      rgba(255, 255, 255, 0.18);
+
   transform-origin:
-    50%
-    50%
+    var(--cc4-vortex-x)
+    var(--cc4-vortex-y)
     calc(-1 * var(--cylinder-depth));
+
   transform-style:
     preserve-3d;
+
   backface-visibility:
     visible;
+
   -webkit-backface-visibility:
     visible;
+
   transform:
     translateY(-2px)
     rotateX(2deg)
@@ -64,24 +113,55 @@ Style .glass-plaque-four only.
         4.71238898038469rad
       )
     );
+
   transition:
     transform
     90ms
     linear;
+
   will-change:
     transform;
+
   pointer-events:
     auto;
 }
 
+/*
+KEEP TRYING
+*/
+
+.glass-plaque-four:not(.is-email-ready) {
+  border-color:
+    rgba(214, 242, 232, 0.78);
+}
+
+/*
+READY
+
+The glass acknowledges readiness.
+
+No image changes.
+No button effects.
+No animation.
+*/
+
 .glass-plaque-four.is-email-ready {
   border-color:
-    rgba(35, 255, 95, 1);
+    rgba(244, 255, 250, 0.98);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.54),
+      rgba(255, 255, 255, 0.14)
+    ),
+    rgba(238, 248, 242, 0.35);
 
   box-shadow:
-    0 26px 70px rgba(0, 0, 0, 0.34),
-    0 0 4px rgba(35, 255, 95, 0.95),
-    0 0 10px rgba(35, 255, 95, 0.58),
-    inset 0 0 0 1px rgba(80, 255, 125, 1),
-    inset 0 0 5px rgba(35, 255, 95, 0.48);
+    0 26px 70px
+      rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px
+      rgba(255, 255, 255, 0.84),
+    inset 0 0 38px
+      rgba(255, 255, 255, 0.30);
 }
