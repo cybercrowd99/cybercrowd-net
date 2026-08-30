@@ -1,12 +1,6 @@
 /*
 CYBERCROWD
 
-REPO:
-cybercrowd99/cybercrowd-net
-
-LANE:
-PUBLIC NET
-
 FILE:
 create-account-glass-plaque-four.css
 
@@ -24,63 +18,16 @@ on the existing Create Account rotary.
 
 FUNCTION:
 Style .glass-plaque-four only.
-
-POSITION:
-270 degrees.
-
-GO SIGNAL:
-Normal email:
-normal glass edge.
-
-Valid email:
-steady green 2.5D edge.
-
-Invalid again:
-normal glass edge immediately.
-
-NO PULSE.
-NO ANIMATION.
-NO SPARKLE.
-NO GRAPHIC EFFECT.
-NO GLASS WASH.
-
-DOES NOT OWN:
-Plaque node creation.
-Sequence #1.
-Sequence #2.
-Sequence #3.
-Human touch.
-Email entry.
-Email validation.
-SEND.
-Turnstile.
-Verification.
-Movement.
-Rotation.
-Audio.
-WHOOSH.
-Authentication.
-Session.
-Routing.
-Backend authority.
 */
 
 .glass-plaque-four {
   position: relative;
-
   grid-area: 1 / 1;
-
   display: block;
-
   width: min(88vw, 520px);
   height: min(72vh, 620px);
-
-  border:
-    2px solid
-    rgba(214, 242, 232, 0.78);
-
+  border: 2px solid rgba(214, 242, 232, 0.78);
   border-radius: 24px;
-
   background:
     linear-gradient(
       145deg,
@@ -88,37 +35,26 @@ Backend authority.
       rgba(255, 255, 255, 0.10)
     ),
     rgba(238, 248, 242, 0.28);
-
   backdrop-filter:
     blur(7px)
     saturate(1.08);
-
   -webkit-backdrop-filter:
     blur(7px)
     saturate(1.08);
-
   box-shadow:
-    0 26px 70px
-      rgba(0, 0, 0, 0.34),
-    inset 0 0 0 1px
-      rgba(255, 255, 255, 0.52),
-    inset 0 0 30px
-      rgba(255, 255, 255, 0.18);
-
+    0 26px 70px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.52),
+    inset 0 0 30px rgba(255, 255, 255, 0.18);
   transform-origin:
     50%
     50%
     calc(-1 * var(--cylinder-depth));
-
   transform-style:
     preserve-3d;
-
   backface-visibility:
     visible;
-
   -webkit-backface-visibility:
     visible;
-
   transform:
     translateY(-2px)
     rotateX(2deg)
@@ -128,48 +64,24 @@ Backend authority.
         4.71238898038469rad
       )
     );
-
   transition:
     transform
     90ms
     linear;
-
   will-change:
     transform;
-
   pointer-events:
     auto;
 }
-
-/*
-GREEN GO SIGNAL
-
-Traffic light.
-Not nightclub.
-
-The edge lights only when the
-existing readiness organ applies:
-
-.is-email-ready
-*/
 
 .glass-plaque-four.is-email-ready {
   border-color:
     rgba(35, 255, 95, 1);
 
   box-shadow:
-    0 26px 70px
-      rgba(0, 0, 0, 0.34),
-
-    0 0 4px
-      rgba(35, 255, 95, 0.95),
-
-    0 0 10px
-      rgba(35, 255, 95, 0.58),
-
-    inset 0 0 0 1px
-      rgba(80, 255, 125, 1),
-
-    inset 0 0 5px
-      rgba(35, 255, 95, 0.48);
+    0 26px 70px rgba(0, 0, 0, 0.34),
+    0 0 4px rgba(35, 255, 95, 0.95),
+    0 0 10px rgba(35, 255, 95, 0.58),
+    inset 0 0 0 1px rgba(80, 255, 125, 1),
+    inset 0 0 5px rgba(35, 255, 95, 0.48);
 }
