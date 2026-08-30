@@ -143,6 +143,10 @@ import {
 } from "./turnstile-two-ui.js";
 
 import {
+  installTurnstileTwoPassReceiver
+} from "./turnstile-two-pass-receiver.js";
+
+import {
   openHumanVerifyCrossing
 } from "./human-verify-crossing.js";
 
@@ -206,6 +210,8 @@ function startCreateAccountEntry() {
   installEntryBridge();
 
   openHumanVerifyCrossing();
+
+  installTurnstileTwoPassReceiver();
 
   installSequenceOneRelease();
 
