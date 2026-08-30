@@ -1,30 +1,68 @@
 /*
 CYBERCROWD
 
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
 FILE:
 create-account-glass-plaque-four.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
 
 SEQUENCE:
 #4
 
 JOB:
-Present Sequence #4 glass
-with a complete green
-inner bevel wall GO signal.
+Present the Sequence #4 glass face
+on the existing Create Account rotary.
 
-GREEN OWNS:
-ENTIRE INNER BEVEL WALL
+FUNCTION:
+Style .glass-plaque-four only.
 
-TOP.
-RIGHT.
-BOTTOM.
-LEFT.
+POSITION:
+270 degrees.
 
-GREEN DOES NOT OWN:
-Front glass face.
-Outer border.
-Glass body.
-Graphics.
+GO SIGNAL:
+Normal email:
+normal glass edge.
+
+Valid email:
+steady green 2.5D edge.
+
+Invalid again:
+normal glass edge immediately.
+
+NO PULSE.
+NO ANIMATION.
+NO SPARKLE.
+NO GRAPHIC EFFECT.
+NO GLASS WASH.
+
+DOES NOT OWN:
+Plaque node creation.
+Sequence #1.
+Sequence #2.
+Sequence #3.
+Human touch.
+Email entry.
+Email validation.
+SEND.
+Turnstile.
+Verification.
+Movement.
+Rotation.
+Audio.
+WHOOSH.
+Authentication.
+Session.
+Routing.
+Backend authority.
 */
 
 .glass-plaque-four {
@@ -104,68 +142,34 @@ Graphics.
 }
 
 /*
-INNER BEVEL WALL
+GREEN GO SIGNAL
 
-Complete perimeter.
+Traffic light.
+Not nightclub.
 
-Invisible until GO.
+The edge lights only when the
+existing readiness organ applies:
+
+.is-email-ready
 */
 
-.glass-plaque-four::after {
-  content: "";
-
-  position: absolute;
-
-  inset: 7px;
-
-  border-radius: 18px;
-
-  background:
-    transparent;
+.glass-plaque-four.is-email-ready {
+  border-color:
+    rgba(35, 255, 95, 1);
 
   box-shadow:
-    inset 0 0 0 0
-      transparent;
+    0 26px 70px
+      rgba(0, 0, 0, 0.34),
 
-  opacity: 0;
+    0 0 4px
+      rgba(35, 255, 95, 0.95),
 
-  transform:
-    translateZ(5px);
+    0 0 10px
+      rgba(35, 255, 95, 0.58),
 
-  pointer-events:
-    none;
-}
+    inset 0 0 0 1px
+      rgba(80, 255, 125, 1),
 
-/*
-GO
-
-Entire inner chamfer wall
-becomes green.
-
-No front-face wash.
-No pulse.
-No animation.
-*/
-
-.glass-plaque-four.is-email-ready::after {
-  box-shadow:
-    inset 0 7px 6px -6px
-      rgba(35, 255, 95, 1),
-
-    inset -7px 0 6px -6px
-      rgba(35, 255, 95, 1),
-
-    inset 0 -7px 6px -6px
-      rgba(35, 255, 95, 1),
-
-    inset 7px 0 6px -6px
-      rgba(35, 255, 95, 1),
-
-    inset 0 0 0 3px
-      rgba(35, 255, 95, 0.92),
-
-    inset 0 0 8px
-      rgba(35, 255, 95, 0.40);
-
-  opacity: 1;
+    inset 0 0 5px
+      rgba(35, 255, 95, 0.48);
 }
