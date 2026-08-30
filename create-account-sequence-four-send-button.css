@@ -20,58 +20,62 @@ SEQUENCE:
 
 JOB:
 Present the real Sequence #4 SEND button
-relative to the shared glass vortex.
+in its approved image state.
 
 FUNCTION:
 Style the direct #sendButton
 inside .glass-plaque-four.
 
-GEOMETRY:
-Vortex Y
-+
-SEND offset Y
+ASSET:
+https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/file_send-email.png
 
-50%
-+
-26%
-=
-76%
+OWNS:
+SEND image presentation.
+SEND geometry.
+SEND presentation depth.
+SEND human-touch dimensions.
+Native disabled presentation.
 
-DEPTH:
-Shared perspective plane.
+DOES NOT OWN:
+SEND node creation.
+SEND readiness.
+SEND enablement.
+SEND click.
+Email input.
+Email validation.
+Turnstile.
+Verification.
+Movement.
+Rotation.
+Audio.
+WHOOSH.
+Transmission.
+Authentication.
+Session.
+Routing.
+Backend authority.
+Old-limb removal.
 */
 
 .glass-plaque-four
 > #sendButton {
   position: absolute;
 
-  top:
-    calc(
-      var(--cc4-vortex-y) +
-      var(--cc4-send-offset-y)
-    );
-
-  left:
-    var(--cc4-vortex-x);
+  top: 68%;
+  left: 50%;
 
   transform:
     translate(-50%, -50%)
-    translateZ(
-      var(--cc4-send-depth)
-    );
+    translateZ(4px);
 
-  width:
-    min(54%, 275px);
-
-  min-height:
-    64px;
+  width: min(54%, 275px);
+  min-height: 64px;
 
   padding: 0;
 
   border: 0;
 
-  border-radius:
-    999px;
+  border-radius: 999px;
 
   background-color:
     transparent;
