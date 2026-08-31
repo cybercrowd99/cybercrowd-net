@@ -1,6 +1,7 @@
 // request-entry-client.js
 // CyberCrowd — SEND Gate (Button 4)
-// JOB: POST /api/auth/send-verification with email + human token.
+// JOB: POST /api/auth/send-verification with email.
+// Server-issued cc_human_pass cookie carries human authority.
 // NO WHOOSH. NO overlay. NO UI mutation. NO token creation.
 
 export async function sendVerificationRequest(readyState) {
@@ -14,8 +15,7 @@ export async function sendVerificationRequest(readyState) {
   }
 
   const payload = {
-    email: readyState.email,
-    "cf-turnstile-response": readyState.token
+    email: readyState.email
   };
 
   try {
