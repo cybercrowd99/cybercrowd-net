@@ -54,14 +54,14 @@ Backend authority.
   background-image:
     url(
       "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Send-border-image-wormhole-gate.png"
-    );
+    ) !important;
 
   background-position:
-    center;
+    center !important;
 
   background-repeat:
-    no-repeat;
+    no-repeat !important;
 
   background-size:
-    100% 100%;
+    100% 100% !important;
 }
