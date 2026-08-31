@@ -139,6 +139,10 @@ import {
 } from "./turnstile-one-ui.js";
 
 import {
+  openTurnstileTwo
+} from "./turnstile-two-ui.js";
+
+import {
   installTurnstileTwoPassReceiver
 } from "./turnstile-two-pass-receiver.js";
 
@@ -222,6 +226,12 @@ function startCreateAccountEntry() {
   window.addEventListener(
     "cybercrowd:movement-one-landed",
     openTurnstileOne,
+    { once: true }
+  );
+
+  window.addEventListener(
+    "cybercrowd:turnstile-two-requested",
+    openTurnstileTwo,
     { once: true }
   );
 
