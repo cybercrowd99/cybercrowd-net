@@ -60,6 +60,8 @@
 // ↓
 // cybercrowd:send-business-entered
 // ↓
+// cybercrowd:send-business-received
+// ↓
 // cybercrowd:turnstile-two-requested
 //
 // SEVERED:
@@ -135,6 +137,10 @@ import {
 import {
   installSequenceFourSendBusinessEntry
 } from "./create-account-sequence-four-send-business-entry.js";
+
+import {
+  installSequenceFourSendBusinessReceiver
+} from "./create-account-sequence-four-send-business-receiver.js";
 
 import {
   installEntryBridge
@@ -214,6 +220,8 @@ function startCreateAccountEntry() {
   installSequenceFourEmailReadiness();
 
   installSequenceFourSendBusinessEntry();
+
+  installSequenceFourSendBusinessReceiver();
 
   installEntryBridge();
 
