@@ -58,6 +58,8 @@
 // ↓
 // SEND
 // ↓
+// cybercrowd:send-business-entered
+// ↓
 // cybercrowd:turnstile-two-requested
 //
 // SEVERED:
@@ -129,6 +131,10 @@ import {
 import {
   installSequenceFourSendReadiness
 } from "./create-account-sequence-four-send-readiness.js";
+
+import {
+  installSequenceFourSendBusinessEntry
+} from "./create-account-sequence-four-send-business-entry.js";
 
 import {
   installEntryBridge
@@ -206,6 +212,8 @@ function startCreateAccountEntry() {
   installSequenceFourEmailOpen();
 
   installSequenceFourEmailReadiness();
+
+  installSequenceFourSendBusinessEntry();
 
   installEntryBridge();
 
