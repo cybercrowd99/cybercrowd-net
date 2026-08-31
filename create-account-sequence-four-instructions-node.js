@@ -60,24 +60,30 @@ export function installSequenceFourInstructionsNode() {
   window.addEventListener(
     "cybercrowd:face-three-arrived",
     () => {
-      const plaque = document.querySelector(".glass-plaque-four");
-      if (!plaque) return;
+      const plaque =
+        document.querySelector(
+          ".glass-plaque-four"
+        );
 
-      if (plaque.querySelector(":scope > .email-send-instructions")) {
+      if (!plaque) {
         return;
       }
 
-      const instructions = document.createElement("div");
-      instructions.className = "email-send-instructions";
+      if (
+        plaque.querySelector(
+          ":scope > .email-send-instructions"
+        )
+      ) {
+        return;
+      }
 
-      // --- FIT & CENTER FIX ---
-      instructions.style.position = "relative";
-      instructions.style.display = "block";
-      instructions.style.margin = "12px auto 0 auto";
-      instructions.style.padding = "6px 10px";
-      instructions.style.textAlign = "center";
-      instructions.style.maxWidth = "90%";
-      instructions.style.lineHeight = "1.35";
+      const instructions =
+        document.createElement(
+          "div"
+        );
+
+      instructions.className =
+        "email-send-instructions";
 
       instructions.innerHTML =
         "Enter your email.<br>" +
@@ -86,7 +92,9 @@ export function installSequenceFourInstructionsNode() {
         "You must verify within five minutes.<br>" +
         "If you wait too long, it will <strong>EXPIRE</strong>.";
 
-      plaque.appendChild(instructions);
+      plaque.appendChild(
+        instructions
+      );
     },
     { once: true }
   );
