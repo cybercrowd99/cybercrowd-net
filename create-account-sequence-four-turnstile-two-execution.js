@@ -1,111 +1,77 @@
-// CYBERCROWD
-//
-// FILE:
-// turnstile-two-ui.js
-//
-// BUILD LAW:
-// 1 FILE
-// 1 JOB
-// 1 FUNCTION
-//
-// TURNSTILE:
-// #2
-//
-// JOB:
-// Open the independent Turnstile #2
-// browser checkpoint.
-//
-// FUNCTION:
-// openTurnstileTwo()
-//
-// DOM POINT:
-// #turnstile-two
-//
-// OUTPUT:
-// cybercrowd:turnstile-two-passed
-//
-// BOUNDARY:
-//
-// Turnstile #2
-// ↓
-// real browser token
-// ↓
-// cybercrowd:turnstile-two-passed
-//
-// DOES NOT OWN:
-// Turnstile #1.
-// #turnstile-one.
-// cybercrowd:human-passed.
-// Human verification decision.
-// Email.
-// SEND.
-// Verification email.
-// Movement.
-// Rotation.
-// WHOOSH.
-// Authentication.
-// Session.
-// Cookie.
-// KV.
-// Backend authority.
+/*
+CYBERCROWD
 
-export function openTurnstileTwo() {
-  const plaque =
-    document.querySelector(
-      ".glass-plaque-three"
-    );
+REPO:
+cybercrowd99/cybercrowd-net
 
-  if (!plaque) {
-    return false;
-  }
+FILE:
+create-account-sequence-four-turnstile-two-execution.js
 
-  if (!window.turnstile) {
-    console.warn(
-      "Turnstile #2 not yet loaded."
-    );
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
 
-    return false;
-  }
+SEQUENCE:
+#4
 
-  let slot =
-    document.getElementById(
-      "turnstile-two"
-    );
+JOB:
+Receive Turnstile Two request
+and release Turnstile Two execution.
 
-  if (!slot) {
-    slot =
-      document.createElement(
-        "div"
+FUNCTION:
+installSequenceFourTurnstileTwoExecution()
+
+INPUT:
+cybercrowd:turnstile-two-requested
+
+OUTPUT:
+cybercrowd:turnstile-two-execution-requested
+
+HEEL IN:
+Turnstile Two requested.
+
+HEEL OUT:
+Turnstile Two execution requested.
+
+OWNS:
+Turnstile Two execution release.
+
+DOES NOT OWN:
+SEND button.
+SEND click.
+Email input.
+Email validation.
+Email readiness.
+Turnstile rendering.
+Turnstile completion.
+Turnstile token.
+Security decision.
+MetadataCenter.
+Existing-member decision.
+Postmark.
+Golden link.
+Verification email.
+WHOOSH.
+Authentication.
+Session.
+Cookie.
+Routing.
+Backend authority.
+Movement.
+Rotation.
+*/
+
+export function installSequenceFourTurnstileTwoExecution() {
+  window.addEventListener(
+    "cybercrowd:turnstile-two-requested",
+    () => {
+      window.dispatchEvent(
+        new CustomEvent(
+          "cybercrowd:turnstile-two-execution-requested"
+        )
       );
-
-    slot.id =
-      "turnstile-two";
-
-    plaque.appendChild(
-      slot
-    );
-  }
-
-  window.turnstile.render(
-    "#turnstile-two",
-    {
-      sitekey:
-        "0x4AAAAAACvkecVo2F3hpb1r",
-
-      callback(token) {
-        window.dispatchEvent(
-          new CustomEvent(
-            "cybercrowd:turnstile-two-passed",
-            {
-              detail: {
-                token
-              }
-            }
-          )
-        );
-      }
-    }
+    },
+    { once: true }
   );
-
-  return true;
 }
