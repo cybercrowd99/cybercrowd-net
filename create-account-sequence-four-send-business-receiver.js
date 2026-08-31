@@ -17,8 +17,8 @@ SEQUENCE:
 
 JOB:
 Receive SEND business entry
-and release the SEND business
-rail to its next deterministic organ.
+and release the existing server-authorized
+verification-email request.
 
 FUNCTION:
 installSequenceFourSendBusinessReceiver()
@@ -27,13 +27,13 @@ INPUT:
 cybercrowd:send-business-entered
 
 OUTPUT:
-cybercrowd:send-business-received
+cybercrowd:server-verification-requested
 
 HEEL IN:
 SEND business entered.
 
 HEEL OUT:
-SEND business received.
+Server-authorized email request released.
 
 OWNS:
 SEND business reception.
@@ -44,11 +44,12 @@ SEND click.
 Email input.
 Email validation.
 Email readiness.
-Turnstile #2.
+Turnstile.
 Turnstile token.
-Security decision.
-MetadataCenter.
-Existing-member decision.
+Human verification.
+Human-pass creation.
+Human-pass validation.
+Human-pass consumption.
 Postmark.
 Golden link.
 Verification email.
@@ -68,7 +69,7 @@ export function installSequenceFourSendBusinessReceiver() {
     () => {
       window.dispatchEvent(
         new CustomEvent(
-          "cybercrowd:send-business-received"
+          "cybercrowd:server-verification-requested"
         )
       );
     },
