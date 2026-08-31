@@ -52,7 +52,7 @@
 export function openTurnstileTwo() {
   const plaque =
     document.querySelector(
-      ".glass-plaque-three"
+      ".glass-plaque-four"
     );
 
   if (!plaque) {
