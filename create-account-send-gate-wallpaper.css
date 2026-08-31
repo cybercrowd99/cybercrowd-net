@@ -20,8 +20,7 @@ SEQUENCE:
 
 JOB:
 Fit the approved SEND Gate artwork
-inside the exact existing glass geometry
-without stretching or cropping.
+to the outer glass boundary.
 
 FUNCTION:
 Present SEND Gate artwork only.
@@ -33,7 +32,7 @@ GEOMETRY AUTHORITY:
 create-account-glass-plaque-four.css
 
 OWNS:
-Artwork fit.
+Artwork scale.
 Artwork centering.
 Artwork containment.
 
@@ -68,5 +67,5 @@ Backend authority.
     no-repeat;
 
   background-size:
-    contain;
+    100% 100%;
 }
