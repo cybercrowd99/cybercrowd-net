@@ -1,0 +1,72 @@
+/*
+CYBERCROWD
+
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
+FILE:
+create-account-send-gate-wallpaper.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+SEQUENCE:
+#4
+
+JOB:
+Fit the approved SEND Gate artwork
+inside the exact existing glass geometry
+without stretching or cropping.
+
+FUNCTION:
+Present SEND Gate artwork only.
+
+ASSET:
+https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Send-border-image-wormhole-gate.png
+
+GEOMETRY AUTHORITY:
+create-account-glass-plaque-four.css
+
+OWNS:
+Artwork fit.
+Artwork centering.
+Artwork containment.
+
+DOES NOT OWN:
+Glass width.
+Glass height.
+Glass radius.
+Glass movement.
+Glass rotation.
+Email input.
+Email readiness.
+Instructions.
+SEND.
+SEND readiness.
+Turnstile.
+Security.
+Postmark.
+Routing.
+Backend authority.
+*/
+
+.glass-plaque-four {
+  background-image:
+    url(
+      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Send-border-image-wormhole-gate.png"
+    );
+
+  background-position:
+    center;
+
+  background-repeat:
+    no-repeat;
+
+  background-size:
+    contain;
+}
