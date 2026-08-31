@@ -58,10 +58,6 @@
 // ↓
 // SEND
 // ↓
-// cybercrowd:send-business-entered
-// ↓
-// cybercrowd:send-business-received
-// ↓
 // cybercrowd:turnstile-two-requested
 //
 // SEVERED:
@@ -135,60 +131,12 @@ import {
 } from "./create-account-sequence-four-send-readiness.js";
 
 import {
-  installSequenceFourSendBusinessEntry
-} from "./create-account-sequence-four-send-business-entry.js";
-
-import {
-  installSequenceFourSendBusinessReceiver
-} from "./create-account-sequence-four-send-business-receiver.js";
-
-import {
-  installSequenceFourTurnstileTwoRequest
-} from "./create-account-sequence-four-turnstile-two-request.js";
-
-import {
-  installSequenceFourTurnstileTwoExecution
-} from "./create-account-sequence-four-turnstile-two-execution.js";
-
-import {
-  installSequenceFourTurnstileTwoCompletion
-} from "./create-account-sequence-four-turnstile-two-completion.js";
-
-import {
-  installSequenceFourSecurityRequest
-} from "./create-account-sequence-four-security-request.js";
-
-import {
-  installSequenceFourSecurityCrossing
-} from "./create-account-sequence-four-security-crossing.js";
-
-import {
-  installSequenceFourSecurityVerificationRequest
-} from "./create-account-sequence-four-security-verification-request.js";
-
-import {
-  installSequenceFourSecurityVerificationCrossing
-} from "./create-account-sequence-four-security-verification-crossing.js";
-
-import {
-  installSequenceFourServerVerificationRequest
-} from "./create-account-sequence-four-server-verification-request.js";
-
-import {
-  installSequenceFourEmailValueRelease
-} from "./create-account-sequence-four-email-value-release.js";
-
-import {
   installEntryBridge
 } from "./create-account-entry-bridge.js";
 
 import {
   openTurnstileOne
 } from "./turnstile-one-ui.js";
-
-import {
-  openTurnstileTwo
-} from "./turnstile-two-ui.js";
 
 import {
   installTurnstileTwoPassReceiver
@@ -255,28 +203,6 @@ function startCreateAccountEntry() {
 
   installSequenceFourEmailReadiness();
 
-  installSequenceFourSendBusinessEntry();
-
-  installSequenceFourSendBusinessReceiver();
-
-  installSequenceFourTurnstileTwoRequest();
-
-  installSequenceFourTurnstileTwoExecution();
-
-  installSequenceFourTurnstileTwoCompletion();
-
-  installSequenceFourSecurityRequest();
-
-  installSequenceFourSecurityCrossing();
-
-  installSequenceFourSecurityVerificationRequest();
-
-  installSequenceFourSecurityVerificationCrossing();
-
-  installSequenceFourServerVerificationRequest();
-
-  installSequenceFourEmailValueRelease();
-
   installEntryBridge();
 
   openHumanVerifyCrossing();
@@ -296,12 +222,6 @@ function startCreateAccountEntry() {
   window.addEventListener(
     "cybercrowd:movement-one-landed",
     openTurnstileOne,
-    { once: true }
-  );
-
-  window.addEventListener(
-    "cybercrowd:turnstile-two-requested",
-    openTurnstileTwo,
     { once: true }
   );
 
