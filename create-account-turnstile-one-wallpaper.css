@@ -19,28 +19,34 @@ SEQUENCE:
 #2
 
 JOB:
-Present the approved Turnstile One
-wallpaper on its existing glass.
+Fit the approved Turnstile One artwork
+inside the exact existing glass geometry
+without stretching or cropping.
 
 FUNCTION:
-Style the .glass-plaque-two
-wallpaper only.
+Present Turnstile One artwork only.
 
 ASSET:
 https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Turnstile-one-glass-backdrop-for-image.png
 
+GEOMETRY AUTHORITY:
+create-account-glass-plaque-two.css
+
 OWNS:
-Turnstile One glass wallpaper.
+Artwork fit.
+Artwork centering.
+Artwork containment.
 
 DOES NOT OWN:
-Glass geometry.
+Glass width.
+Glass height.
+Glass radius.
 Glass movement.
 Glass rotation.
 Turnstile rendering.
 Turnstile execution.
 Turnstile token.
-Human verification.
-Security decision.
+Security.
 Routing.
 Backend authority.
 */
@@ -58,5 +64,5 @@ Backend authority.
     no-repeat;
 
   background-size:
-    cover;
+    contain;
 }
