@@ -1,6 +1,6 @@
 // request-entry-client.js
 // CyberCrowd — SEND Gate (Button 4)
-// JOB: POST /api/auth/send-verification with email.
+// JOB: POST /api/auth/send-verification with email. 
 // Server-issued cc_human_pass cookie carries human authority.
 // NO WHOOSH. NO overlay. NO UI mutation. NO token creation.
 
