@@ -19,6 +19,9 @@ and enter SEND business.
 FUNCTION:
 installSequenceFourSendBusinessEntry()
 
+INSTALL TRIGGER:
+cybercrowd:face-three-arrived
+
 INPUT:
 #sendButton
 
@@ -35,6 +38,9 @@ OWNS:
 SEND business entry.
 
 DOES NOT OWN:
+SEND button creation.
+SEND presentation.
+SEND readiness.
 Email readiness.
 Turnstile #2.
 Security decision.
@@ -46,30 +52,41 @@ Verification email.
 WHOOSH.
 Authentication.
 Session.
+Cookie.
+Storage.
 Routing.
+Backend authority.
+Movement.
+Rotation.
 */
 
 export function installSequenceFourSendBusinessEntry() {
-  const sendButton =
-    document.getElementById(
-      "sendButton"
-    );
-
-  if (!sendButton) {
-    return false;
-  }
-
-  sendButton.addEventListener(
-    "click",
+  window.addEventListener(
+    "cybercrowd:face-three-arrived",
     () => {
-      if (sendButton.disabled) {
+      const sendButton =
+        document.getElementById(
+          "sendButton"
+        );
+
+      if (!sendButton) {
         return;
       }
 
-      window.dispatchEvent(
-        new CustomEvent(
-          "cybercrowd:send-business-entered"
-        )
+      sendButton.addEventListener(
+        "click",
+        () => {
+          if (sendButton.disabled) {
+            return;
+          }
+
+          window.dispatchEvent(
+            new CustomEvent(
+              "cybercrowd:send-business-entered"
+            )
+          );
+        },
+        { once: true }
       );
     },
     { once: true }
