@@ -1,0 +1,71 @@
+/*
+CYBERCROWD
+
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
+FILE:
+create-account-glass-three-wallpaper.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+SEQUENCE:
+#3
+
+JOB:
+Fit the approved Glass Three artwork
+inside the exact existing glass geometry
+without stretching or cropping.
+
+FUNCTION:
+Present Glass Three artwork only.
+
+ASSET:
+https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/glass-plaque-three-email-gold.png
+
+GEOMETRY AUTHORITY:
+create-account-glass-plaque-three.css
+
+OWNS:
+Artwork fit.
+Artwork centering.
+Artwork containment.
+
+DOES NOT OWN:
+Glass width.
+Glass height.
+Glass radius.
+Glass movement.
+Glass rotation.
+ENTER EMAIL position.
+ENTER EMAIL behavior.
+Email input.
+Email validation.
+SEND.
+Turnstile.
+Security.
+Routing.
+Backend authority.
+*/
+
+.glass-plaque-three {
+  background-image:
+    url(
+      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/glass-plaque-three-email-gold.png"
+    );
+
+  background-position:
+    center;
+
+  background-repeat:
+    no-repeat;
+
+  background-size:
+    contain;
+}
