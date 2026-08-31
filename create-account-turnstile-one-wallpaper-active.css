@@ -1,0 +1,65 @@
+/*
+CYBERCROWD
+
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
+FILE:
+create-account-turnstile-one-wallpaper-active.css
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+SEQUENCE:
+#2
+
+JOB:
+Activate the approved Turnstile One
+wallpaper with the active glass state.
+
+FUNCTION:
+Style active Turnstile One
+wallpaper state only.
+
+INPUT:
+.glass-plaque-two.is-active
+
+OUTPUT:
+Turnstile One wallpaper visible.
+
+OWNS:
+Active wallpaper presentation.
+
+DOES NOT OWN:
+Glass geometry.
+Glass movement.
+Glass rotation.
+Turnstile rendering.
+Turnstile execution.
+Turnstile token.
+Human verification.
+Security decision.
+Routing.
+Backend authority.
+*/
+
+.glass-plaque-two.is-active {
+  background-image:
+    url(
+      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Turnstile-one-glass-backdrop-for-image.png"
+    );
+
+  background-position:
+    center;
+
+  background-repeat:
+    no-repeat;
+
+  background-size:
+    cover;
+}
