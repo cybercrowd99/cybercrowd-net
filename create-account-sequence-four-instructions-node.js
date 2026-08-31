@@ -56,40 +56,50 @@
 // Backend authority.
 // Old-limb removal.
 
-export function installSequenceFourInstructionsNode() {
-  window.addEventListener(
-    "cybercrowd:face-three-arrived",
-    () => {
-      const plaque = document.querySelector(".glass-plaque-four");
-      if (!plaque) return;
+.glass-plaque-four
+> .email-send-instructions {
+  position: absolute;
 
-      if (plaque.querySelector(":scope > .email-send-instructions")) {
-        return;
-      }
+  top: 19%;
+  left: 50%;
 
-      const instructions = document.createElement("div");
-      instructions.className = "email-send-instructions";
+  transform:
+    translate(-50%, -50%)
+    translateZ(4px);
 
-      // --- FIT & CENTER FIX ---
-      instructions.style.position = "relative";
-      instructions.style.display = "block";
-      instructions.style.margin = "12px auto 0 auto";   // move down + center
-      instructions.style.padding = "6px 10px";           // prevent side touch
-      instructions.style.textAlign = "center";           // center text
-      instructions.style.maxWidth = "90%";               // keep away from edges
-      instructions.style.lineHeight = "1.35";            // readable spacing
+  width:
+    min(88%, 460px);
 
-      instructions.innerHTML =
-        "Enter your email.<br>" +
-        "Press SEND.<br>" +
-        "Check your email right away.<br>" +
-        "You must verify within five minutes.<br>" +
-        "If you wait too long, it will <strong>EXPIRE</strong>.";
+  margin: 0;
+  padding: 0;
 
-      plaque.appendChild(instructions);
-    },
-    { once: true }
-  );
+  color:
+    #2a2118;
 
-  return true;
+  font:
+    inherit;
+
+  font-size:
+    clamp(
+      0.82rem,
+      2.2vw,
+      1rem
+    );
+
+  font-weight:
+    600;
+
+  line-height:
+    1.45;
+
+  letter-spacing:
+    0.02em;
+
+  text-align:
+    center;
+
+  z-index: 7;
+
+  pointer-events:
+    none;
 }
