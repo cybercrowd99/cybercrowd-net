@@ -19,7 +19,7 @@ SEQUENCE:
 #4
 
 JOB:
-Receive the SEND business entry
+Receive the server verification request
 and release the existing email value
 to the request-entry carrier.
 
@@ -27,13 +27,13 @@ FUNCTION:
 installSequenceFourEmailValueRelease()
 
 INPUT:
-cybercrowd:send-business-entered
+cybercrowd:server-verification-requested
 
 OUTPUT:
 releaseRequestEntry(email)
 
 HEEL IN:
-SEND business entered.
+Server verification requested.
 
 HEEL OUT:
 Existing email value released.
@@ -73,7 +73,7 @@ import {
 
 export function installSequenceFourEmailValueRelease() {
   window.addEventListener(
-    "cybercrowd:send-business-entered",
+    "cybercrowd:server-verification-requested",
     () => {
       const emailNode =
         document.getElementById(
