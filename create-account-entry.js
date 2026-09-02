@@ -149,6 +149,10 @@ import {
 } from "./create-account-sequence-four-mail-order-validator.js";
 
 import {
+  installSequenceFourMailRequest
+} from "./create-account-sequence-four-mail-request.js";
+
+import {
   installEntryBridge
 } from "./create-account-entry-bridge.js";
 
@@ -232,6 +236,8 @@ function startCreateAccountEntry() {
   installSequenceFourMailBridgeIn();
 
   installSequenceFourMailOrderValidator();
+
+  installSequenceFourMailRequest();
 
   installEntryBridge();
 
