@@ -18,14 +18,13 @@ BUILD LAW:
 BRIDGE:
 #1 OF 9
 
-WINDOW:
-#4
+ROOM:
+BROWSER MAIL-ORDER OUT
 
 JOB:
-Receive one Window #4
-SEND-business crossing
-and release one downstream
-WHOOSH request.
+Receive one SEND-business entry
+and release one bounded mail order
+through the room's separated OUT gate.
 
 FUNCTION:
 installSequenceFourSendBusinessReceiver()
@@ -34,32 +33,31 @@ FLEX GATE IN:
 cybercrowd:send-business-entered
 
 SEPARATED GATE OUT:
-cybercrowd:whoosh-requested
+cybercrowd:mail-order-released
+
+PAYLOAD:
+email
 
 ACTUAL END:
-One WHOOSH request released.
+Mail order released once.
 IN gate consumed.
-Window #4 OUT closed.
+Room closed.
 
 OWNS:
-Window #4 SEND-business reception.
-Window #4 downstream WHOOSH release.
+SEND-business reception.
+Existing email-value collection.
+One mail-order release.
 
 DOES NOT OWN:
-Window #1.
-Window #2.
-Window #3.
-Upstream movement.
 SEND button.
 SEND click.
-Email input.
+Email-input creation.
 Email validation.
-Turnstile rectangle.
-Turnstile rendering.
-Human verification.
-WHOOSH presentation.
-whoosh.html.
-Mail bridge.
+Email readiness.
+Human-authority verification.
+Turnstile #1.
+Turnstile #2.
+Mail-bridge reception.
 Network request.
 Postmark.
 Golden link.
@@ -78,26 +76,41 @@ Backend authority.
 Movement.
 Rotation.
 
-DIRECTION LAW:
-Window #4 OUT
-may move downstream only.
-
-FORBIDDEN:
-Window #4 OUT
-must never wake Window #3.
-
 LOOP LAW:
-WHOOSH OUT cannot return
-through this consumed IN gate.
+The OUT signal cannot reopen
+this room's consumed IN gate.
 */
 
 export function installSequenceFourSendBusinessReceiver() {
   window.addEventListener(
     "cybercrowd:send-business-entered",
     () => {
+      const emailInput =
+        document.getElementById(
+          "email"
+        );
+
+      if (!emailInput) {
+        return;
+      }
+
+      const email =
+        emailInput.value
+          .trim()
+          .toLowerCase();
+
+      if (email.length === 0) {
+        return;
+      }
+
       window.dispatchEvent(
         new CustomEvent(
-          "cybercrowd:whoosh-requested"
+          "cybercrowd:mail-order-released",
+          {
+            detail: {
+              email
+            }
+          }
         )
       );
     },
