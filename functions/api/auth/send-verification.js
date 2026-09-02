@@ -10,7 +10,7 @@
 // 1 FUNCTION
 //
 // JOB:
-// Receive the CyberCrowd entry request,
+// Receive one validated CyberCrowd email order,
 // create and store one setup token,
 // send one Postmark verification email,
 // return one structured result.
@@ -33,6 +33,7 @@
 //
 // FREEZE:
 // frontend unchanged
+// human verification unchanged
 // setup-token.js unchanged
 // setup-token-store.js unchanged
 // verify.js unchanged
@@ -58,23 +59,12 @@ export async function onRequestPost(context) {
     }
 
     const email = body.email.trim().toLowerCase();
-    const humanToken = body["cf-turnstile-response"];
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return Response.json(
         {
           success: false,
           reason: "invalid-email"
-        },
-        { status: 400 }
-      );
-    }
-
-    if (!humanToken || typeof humanToken !== "string") {
-      return Response.json(
-        {
-          success: false,
-          reason: "missing-human-token"
         },
         { status: 400 }
       );
