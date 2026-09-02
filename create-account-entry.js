@@ -137,6 +137,10 @@ import {
 } from "./create-account-sequence-four-send-business-entry.js";
 
 import {
+  installSequenceFourSendBusinessReceiver
+} from "./create-account-sequence-four-send-business-receiver.js";
+
+import {
   installEntryBridge
 } from "./create-account-entry-bridge.js";
 
@@ -214,6 +218,8 @@ function startCreateAccountEntry() {
   installSequenceFourEmailReadiness();
 
   installSequenceFourSendBusinessEntry();
+
+  installSequenceFourSendBusinessReceiver();
 
   installEntryBridge();
 
