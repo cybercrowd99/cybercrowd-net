@@ -20,6 +20,7 @@ export function renderTurnstile(slotId, siteKey) {
 
   window.turnstile.render(`#${slotId}`, {
     sitekey: siteKey,
+    size: "compact",
 
     callback(token) {
       window.dispatchEvent(
