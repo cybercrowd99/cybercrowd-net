@@ -19,14 +19,14 @@ SEQUENCE:
 #4
 
 JOB:
-Receive the successful email-sent receipt
-and release the existing WHOOSH surface.
+Receive the existing WHOOSH authorization
+and launch the original WHOOSH placard.
 
 FUNCTION:
 installWhooshListener()
 
 INPUT:
-cybercrowd:email-sent
+cybercrowd:whoosh-authorized
 
 OUTPUT:
 showCheckEmailOverlay()
@@ -45,7 +45,7 @@ import {
 
 export function installWhooshListener() {
   window.addEventListener(
-    "cybercrowd:email-sent",
+    "cybercrowd:whoosh-authorized",
     () => {
       showCheckEmailOverlay();
     },
