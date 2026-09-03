@@ -1,20 +1,56 @@
-// entry-whoosh-listener.js
-// CyberCrowd — WHOOSH / HURRY BACK Listener
-// JOB: Listen for the success event and trigger existing overlay + audio.
-// DOES NOT modify UI directly. Calls your existing functions only.
+/*
+CYBERCROWD
 
-export function installWhooshListener({
-  playWhoosh,
+REPO:
+cybercrowd99/cybercrowd-net
+
+LANE:
+PUBLIC NET
+
+FILE:
+entry-whoosh-listener.js
+
+BUILD LAW:
+1 FILE
+1 JOB
+1 FUNCTION
+
+SEQUENCE:
+#4
+
+JOB:
+Receive the successful email-sent receipt
+and release the existing WHOOSH surface.
+
+FUNCTION:
+installWhooshListener()
+
+INPUT:
+cybercrowd:email-sent
+
+OUTPUT:
+showCheckEmailOverlay()
+
+DOES NOT OWN:
+Email transmission.
+Turnstile.
+Authentication.
+Session.
+Routing.
+*/
+
+import {
   showCheckEmailOverlay
-}) {
-  window.addEventListener("cybercrowd:email-sent", () => {
-    try {
-      // These functions already exist in your system.
-      // We DO NOT rewrite them. We DO NOT touch their files.
-      playWhoosh();
+} from "./js/check-email-overlay.js";
+
+export function installWhooshListener() {
+  window.addEventListener(
+    "cybercrowd:email-sent",
+    () => {
       showCheckEmailOverlay();
-    } catch (err) {
-      console.error("WHOOSH listener error:", err);
-    }
-  });
+    },
+    { once: true }
+  );
+
+  return true;
 }
