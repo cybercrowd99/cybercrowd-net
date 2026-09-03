@@ -10,32 +10,10 @@ BUILD LAW:
 1 FUNCTION
 
 JOB:
-Present the Sequence #2 glass face
-with its approved Turnstile backdrop.
+Present the Sequence #2 clear glass face.
 
 FUNCTION:
 Style .glass-plaque-two only.
-
-BACKDROP:
-https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/glass-plaque-three-email-gold.png
-
-STACK:
-Face backdrop.
-Glass treatment.
-Turnstile #1 above backdrop.
-
-DOES NOT OWN:
-Permanent HTML background.
-Turnstile creation.
-Turnstile behavior.
-Turnstile verification.
-Movement.
-Rotation authority.
-Email.
-SEND.
-WHOOSH.
-Routing.
-Backend authority.
 */
 
 .glass-plaque-two {
@@ -60,15 +38,7 @@ Backend authority.
       rgba(255, 255, 255, 0.42),
       rgba(255, 255, 255, 0.10)
     ),
-    rgba(238, 248, 242, 0.18)
-    url(
-      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/glass-plaque-three-email-gold.png"
-    )
-    center
-    center
-    /
-    cover
-    no-repeat;
+    rgba(238, 248, 242, 0.28);
 
   backdrop-filter:
     blur(7px)
@@ -119,8 +89,7 @@ Backend authority.
   pointer-events: auto;
 }
 
-.glass-plaque-two
-#turnstile-one {
+.glass-plaque-two #turnstile-one {
   position: absolute;
   inset: 0;
 
