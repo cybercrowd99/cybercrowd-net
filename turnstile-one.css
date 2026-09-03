@@ -11,54 +11,38 @@ JOB:
 Own the Turnstile #1 visual surface only.
 
 ACTION:
-Render the first human-verification surface inside the
-CyberCrowd entry room.
-
-FLOW POSITION:
-REGISTER
-→ CREATE ACCOUNT
-→ TURNSTILE #1
-→ VERIFIED
-→ EMAIL ENTRY
-
-OWNS:
-Turnstile #1 slot dimensions.
-Turnstile #1 placement.
-Turnstile #1 stacking.
-Turnstile #1 responsive spacing.
+Fit the Turnstile comfort-zone rectangle
+inside the Cyberman emblem area.
 
 DOES NOT OWN:
-Base surface.
-Background.
-Glass plaque.
-Seal.
-Wheel motion.
-Email entry.
+Glass.
+Backdrop.
+Artwork.
+Cyberman.
+Turnstile logic.
+Verification.
+Movement.
+Rotation.
+Email.
 Send.
-Check Email.
-Hurry Back.
-Turnstile token logic.
-Turnstile verification.
-Authentication.
 Routing.
 */
 
 #turnstile-one {
-  position: relative;
+  position: absolute;
   z-index: 20;
 
-  width: min(100%, 390px);
-  min-height: 70px;
+  width: 210px;
+  height: 48px;
 
-  margin-top: 18px;
+  top: 61%;
+  left: 50%;
 
-  display: grid;
-  place-items: center;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
 }
 
-@media (max-height: 740px) and (min-width: 561px) {
-  #turnstile-one {
-    min-height: 64px;
-    margin-top: 12px;
-  }
+#turnstile-one iframe {
+  transform: scale(0.70);
+  transform-origin: top left;
 }
