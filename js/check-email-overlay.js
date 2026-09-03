@@ -19,44 +19,111 @@ SEQUENCE:
 #4
 
 JOB:
-Fly in the existing WHOOSH
-confirmation after email is sent.
+Mount and launch the original
+Check Email / Hurry Back placard.
 
 FUNCTION:
 showCheckEmailOverlay()
 
+INPUT:
+cybercrowd:email-sent
+
 OWNS:
-WHOOSH visibility.
+WHOOSH placard mount.
 WHOOSH fly-in direction.
 WHOOSH audio.
+Synchronized landing.
 
 DOES NOT OWN:
 Email transmission.
 Turnstile.
+Rotation.
 Authentication.
 Session.
 Routing.
 */
 
-const overlay =
-  document.getElementById(
-    "check-email-overlay"
-  );
-
-const closeBtn =
-  document.getElementById(
-    "overlay-close"
-  );
-
 const whooshAudio =
-  document.getElementById(
-    "whoosh-audio"
+  new Audio(
+    "https://pub-660d879738134ba990d1708d015ec763.r2.dev/whooshing-email-sent_1.1s%20teaser.mp3"
   );
+
+whooshAudio.preload =
+  "auto";
+
+whooshAudio.setAttribute(
+  "playsinline",
+  ""
+);
+
+whooshAudio.setAttribute(
+  "webkit-playsinline",
+  ""
+);
 
 export function showCheckEmailOverlay() {
+  let overlay =
+    document.getElementById(
+      "check-email-overlay"
+    );
+
   if (!overlay) {
-    return;
+    overlay =
+      document.createElement(
+        "section"
+      );
+
+    overlay.id =
+      "check-email-overlay";
+
+    overlay.className =
+      "check-email-overlay";
+
+    overlay.setAttribute(
+      "aria-live",
+      "polite"
+    );
+
+    overlay.innerHTML = `
+      <div class="check-email-stage">
+        <div class="check-email-slab"></div>
+
+        <div class="floating-email-words">
+          <div class="floating-email-inner">
+            <h2>CHECK YOUR EMAIL</h2>
+
+            <p>
+              Your CyberCrowd verification email is on the way.
+            </p>
+
+            <p>
+              Return through your verification link.
+            </p>
+
+            <div class="hurry-back">
+              HURRY BACK
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="sparkle-glint"
+          aria-hidden="true"
+        >
+          ✦
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(
+      overlay
+    );
   }
+
+  const stage =
+    overlay.querySelector(
+      ".check-email-stage"
+    );
 
   const flyInClasses = [
     "from-top",
@@ -82,8 +149,20 @@ export function showCheckEmailOverlay() {
       )
     ];
 
-  overlay.style.display =
-    "grid";
+  if (stage) {
+    stage.style.animationDuration =
+      Number.isFinite(
+        whooshAudio.duration
+      ) &&
+      whooshAudio.duration > 0
+        ? `${whooshAudio.duration}s`
+        : "1.1s";
+  }
+
+  try {
+    whooshAudio.currentTime =
+      0;
+  } catch (_) {}
 
   void overlay.offsetWidth;
 
@@ -92,28 +171,7 @@ export function showCheckEmailOverlay() {
     "is-visible"
   );
 
-  if (whooshAudio) {
-    whooshAudio.currentTime =
-      0;
-
-    whooshAudio
-      .play()
-      .catch(() => {});
-  }
-}
-
-if (closeBtn) {
-  closeBtn.addEventListener(
-    "click",
-    () => {
-      overlay?.classList.remove(
-        "is-visible"
-      );
-
-      if (overlay) {
-        overlay.style.display =
-          "none";
-      }
-    }
-  );
+  whooshAudio
+    .play()
+    .catch(() => {});
 }
