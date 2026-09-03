@@ -155,6 +155,14 @@ import {
 } from "./create-account-sequence-four-mail-request.js";
 
 import {
+  installSequenceFourMailResultGate
+} from "./create-account-sequence-four-mail-result-gate.js";
+
+import {
+  installSequenceFourWhooshRelease
+} from "./create-account-sequence-four-whoosh-release.js";
+
+import {
   installWhooshListener
 } from "./entry-whoosh-listener.js";
 
@@ -244,6 +252,10 @@ function startCreateAccountEntry() {
   installSequenceFourMailOrderValidator();
 
   installSequenceFourMailRequest();
+
+  installSequenceFourMailResultGate();
+
+  installSequenceFourWhooshRelease();
 
   installWhooshListener();
 
