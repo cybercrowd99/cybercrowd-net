@@ -100,4 +100,6 @@ Style .glass-plaque-two only.
   height: 100%;
 
   z-index: 2;
+
+  transform: translateY(55px);
 }
