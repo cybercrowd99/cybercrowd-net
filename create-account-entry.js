@@ -24,6 +24,8 @@
 // ↓
 // Slam #1 + Movement #1
 // ↓
+// cybercrowd:listen-one
+// ↓
 // cybercrowd:movement-one-landed
 // ↓
 // Sequence #1 CLOSED
@@ -153,6 +155,10 @@ import {
 } from "./create-account-sequence-four-mail-request.js";
 
 import {
+  installWhooshListener
+} from "./entry-whoosh-listener.js";
+
+import {
   installEntryBridge
 } from "./create-account-entry-bridge.js";
 
@@ -238,6 +244,8 @@ function startCreateAccountEntry() {
   installSequenceFourMailOrderValidator();
 
   installSequenceFourMailRequest();
+
+  installWhooshListener();
 
   installEntryBridge();
 
