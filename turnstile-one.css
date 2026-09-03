@@ -50,7 +50,7 @@ Routing.
   width: min(100%, 390px);
   min-height: 70px;
 
-  margin-top: 18px;
+  margin-top: 108px;
 
   display: grid;
   place-items: center;
@@ -59,6 +59,6 @@ Routing.
 @media (max-height: 740px) and (min-width: 561px) {
   #turnstile-one {
     min-height: 64px;
-    margin-top: 12px;
+    margin-top: 102px;
   }
 }
