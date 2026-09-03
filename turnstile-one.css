@@ -47,20 +47,18 @@ Routing.
   position: relative;
   z-index: 20;
 
-  width: 300px;
-  min-height: 65px;
+  width: min(100%, 390px);
+  min-height: 70px;
 
-  margin-top: 30px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-top: 18px;
 
-  display: block;
+  display: grid;
+  place-items: center;
 }
 
 @media (max-height: 740px) and (min-width: 561px) {
   #turnstile-one {
-    width: 300px;
-    min-height: 65px;
-    margin-top: 24px;
+    min-height: 64px;
+    margin-top: 12px;
   }
 }
