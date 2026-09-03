@@ -19,34 +19,39 @@ SEQUENCE:
 #2
 
 JOB:
-Fit the approved Turnstile One artwork
-inside the exact existing glass geometry
-without stretching or cropping.
+Present the approved gold backdrop
+behind Turnstile One.
 
 FUNCTION:
-Present Turnstile One artwork only.
+Present Turnstile One backdrop only.
 
 ASSET:
-https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Turnstile-one-glass-backdrop-for-image.png
+https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/glass-plaque-three-email-gold.png
 
 GEOMETRY AUTHORITY:
 create-account-glass-plaque-two.css
 
+STACK:
+Backdrop below.
+Turnstile One above.
+
 OWNS:
-Artwork fit.
-Artwork centering.
-Artwork containment.
+Backdrop image.
+Backdrop fit.
+Backdrop centering.
+Backdrop containment.
 
 DOES NOT OWN:
-Glass width.
-Glass height.
-Glass radius.
+Glass geometry.
 Glass movement.
 Glass rotation.
 Turnstile rendering.
-Turnstile execution.
-Turnstile token.
-Security.
+Turnstile behavior.
+Turnstile verification.
+Permanent HTML background.
+Email.
+SEND.
+WHOOSH.
 Routing.
 Backend authority.
 */
@@ -54,7 +59,7 @@ Backend authority.
 .glass-plaque-two {
   background-image:
     url(
-      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Turnstile-one-glass-backdrop-for-image.png"
+      "https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/glass-plaque-three-email-gold.png"
     );
 
   background-position:
