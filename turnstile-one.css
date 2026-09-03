@@ -1,5 +1,5 @@
 /*
-CYBERCROWD 
+CYBERCROWD
 FILE: turnstile-one.css
 
 BUILD LAW:
@@ -11,8 +11,7 @@ JOB:
 Own the Turnstile #1 visual surface only.
 
 ACTION:
-Fit the Turnstile comfort-zone rectangle
-inside the Cyberman emblem area.
+Land the normal-size Turnstile below the Cyberman.
 
 DOES NOT OWN:
 Glass.
@@ -32,17 +31,11 @@ Routing.
   position: absolute;
   z-index: 20;
 
-  width: 210px;
-  height: 48px;
+  width: 300px;
+  height: 65px;
 
-  top: 61%;
+  top: 64%;
   left: 50%;
 
-  transform: translate(-50%, -50%);
-  overflow: hidden;
-}
-
-#turnstile-one iframe {
-  transform: scale(0.70);
-  transform-origin: top left;
+  transform: translateX(-50%);
 }
