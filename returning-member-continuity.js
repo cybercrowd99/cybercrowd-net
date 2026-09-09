@@ -1,15 +1,18 @@
-// FILE ACTION: CREATE NEW FILE
+// FILE ACTION: REPLACE EXISTING FILE
 // FILE: returning-member-continuity.js
 // REPO: cybercrowd99/cybercrowd-net
-// COMMIT: Add returning member continuity decision
+// COMMIT: Route returning member continuity through server authority
 // CONTEXT:
-// After Turnstile #2 passes,
-// ask the existing session authority
-// whether this returning member
-// already has valid continuity.
+// Browser carries the Turnstile token.
+// Server verifies Turnstile.
+// Server decides member continuity.
+// Browser only relays the server result.
 //
 // INPUT:
-// cybercrowd:turnstile-two-passed
+// cybercrowd:turnstile-two-token-ready
+//
+// SERVER:
+// /api/auth/returning-member-continuity
 //
 // YES OUTPUT:
 // cybercrowd:returning-member-confirmed
@@ -17,42 +20,47 @@
 // NO OUTPUT:
 // cybercrowd:returning-member-retry
 //
-// DOES NOT OWN:
-// Turnstile rendering.
-// Password verification.
-// Email.
-// Warning email.
-// Voice.
-// Session creation.
-// Cookie creation.
-// Dashboard authority.
-// Vault routing.
+// BROWSER DOES NOT DECIDE IDENTITY.
 
 function startReturningMemberContinuity() {
   window.addEventListener(
-    "cybercrowd:turnstile-two-passed",
-    async function () {
+    "cybercrowd:turnstile-two-token-ready",
+    async function (event) {
+      const token =
+        event?.detail?.token;
+
+      if (
+        typeof token !== "string" ||
+        token.length === 0
+      ) {
+        return;
+      }
+
       try {
         const response = await fetch(
-          "/api/auth/dashboard",
+          "/api/auth/returning-member-continuity",
           {
-            method: "GET",
+            method: "POST",
             credentials: "include",
-            cache: "no-store"
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              "cf-turnstile-response": token
+            })
           }
         );
 
-        if (response.ok) {
-          const data = await response.json();
+        const result =
+          await response.json();
 
+        if (
+          response.ok &&
+          result.continuity === true
+        ) {
           window.dispatchEvent(
             new CustomEvent(
-              "cybercrowd:returning-member-confirmed",
-              {
-                detail: {
-                  user: data.user || null
-                }
-              }
+              "cybercrowd:returning-member-confirmed"
             )
           );
 
@@ -64,7 +72,7 @@ function startReturningMemberContinuity() {
             "cybercrowd:returning-member-retry"
           )
         );
-      } catch (error) {
+      } catch (_) {
         window.dispatchEvent(
           new CustomEvent(
             "cybercrowd:returning-member-retry"
