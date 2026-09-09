@@ -8,8 +8,9 @@
 // No NET.
 // No route guessing.
 // No silent failure.
+//
 
-const PBKDF2_ITERATIONS = 100000;
+const PBKDF2_ITERATIONS = 150000;
 const SESSION_TTL_SECONDS = 86400 * 7;
 
 function json(data, status = 200, extraHeaders = {}) {
