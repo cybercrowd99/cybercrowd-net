@@ -2,8 +2,9 @@
 FILE ACTION: REPLACE EXISTING FILE
 FILE: assets/surface/component-responsive.css
 REPO: cybercrowd99/cybercrowd-net
-COMMIT: Position Members Only control in Vault
+COMMIT: Add visible Members Only button press
 CONTEXT: Position and size only the Vault Members Only image control.
+Add visible press/release behavior.
 No routing.
 No function.
 No Turnstile.
@@ -134,6 +135,10 @@ body {
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+.vault-members-only:active {
+  transform: translateX(-50%) scale(0.94);
 }
 
 .glass-case-click-zone {
