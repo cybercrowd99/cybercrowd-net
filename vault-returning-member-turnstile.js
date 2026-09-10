@@ -1,146 +1,104 @@
-// FILE ACTION: CREATE NEW FILE
-// FILE: vault-returning-member-turnstile.js
-// REPO: cybercrowd99/cybercrowd-net
-// COMMIT: Add isolated Vault returning member turnstile
+// CYBERCROWD
+//
+// FILE:
+// vault-returning-member-turnstile.js
+//
+// TURNSTILE:
+// #3
+//
+// BUILD LAW:
+// 1 FILE
+// 1 JOB
+// 1 FUNCTION
+// NO NESTING
 //
 // ENTRANCE:
 // cybercrowd:returning-member-requested
 //
-// EXIT:
-// cybercrowd:returning-member-passed
+// JOB:
+// Open returning-member caretaker Turnstile #3.
 //
-// DOES NOT TOUCH:
-// create-account-entry.js
-// turnstile-two-ui.js
-// SEND
-// Email
-// Create Account Turnstile #1
-// Create Account Turnstile #2
+// EXIT:
+// cybercrowd:turnstile-three-passed
+//
+// DOES NOT OWN:
+// Members Only button.
+// Vault click movement.
+// Turnstile #1.
+// Turnstile #2.
+// Password creation.
+// Password verification.
+// Email.
+// Authentication.
+// Session.
+// Cookie.
+// Routing.
+// Turnstile #4.
 
-function installVaultReturningMemberTurnstile() {
-  let opened = false;
-
-  function renderReturningMemberTurnstile() {
-    if (opened) {
+window.addEventListener(
+  "cybercrowd:returning-member-requested",
+  function openTurnstileThree() {
+    if (!window.turnstile) {
       return;
     }
 
-    opened = true;
-
-    let slot =
+    if (
       document.getElementById(
-        "vault-returning-member-turnstile"
-      );
-
-    if (!slot) {
-      slot =
-        document.createElement(
-          "div"
-        );
-
-      slot.id =
-        "vault-returning-member-turnstile";
-
-      slot.style.position =
-        "absolute";
-
-      slot.style.left =
-        "50%";
-
-      slot.style.bottom =
-        "18%";
-
-      slot.style.transform =
-        "translateX(-50%)";
-
-      slot.style.zIndex =
-        "10000";
-
-      const frame =
-        document.querySelector(
-          ".vault-frame"
-        ) || document.body;
-
-      frame.appendChild(
-        slot
-      );
+        "turnstile-three"
+      )
+    ) {
+      return;
     }
 
+    const slot =
+      document.createElement(
+        "div"
+      );
+
+    slot.id =
+      "turnstile-three";
+
+    slot.style.position =
+      "fixed";
+
+    slot.style.inset =
+      "0";
+
+    slot.style.display =
+      "grid";
+
+    slot.style.placeItems =
+      "center";
+
+    slot.style.zIndex =
+      "10000";
+
+    slot.style.background =
+      "#000";
+
+    document.body.appendChild(
+      slot
+    );
+
     window.turnstile.render(
-      "#vault-returning-member-turnstile",
+      "#turnstile-three",
       {
         sitekey:
           "0x4AAAAAACvkecVo2F3hpb1r",
 
-        callback(token) {
+        callback: (token) =>
           window.dispatchEvent(
             new CustomEvent(
-              "cybercrowd:returning-member-passed",
+              "cybercrowd:turnstile-three-passed",
               {
                 detail: {
                   token
                 }
               }
             )
-          );
-        }
+          )
       }
     );
-  }
-
-  function openReturningMemberTurnstile() {
-    if (window.turnstile) {
-      renderReturningMemberTurnstile();
-      return;
-    }
-
-    let loader =
-      document.getElementById(
-        "vault-turnstile-api"
-      );
-
-    if (!loader) {
-      loader =
-        document.createElement(
-          "script"
-        );
-
-      loader.id =
-        "vault-turnstile-api";
-
-      loader.src =
-        "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-
-      loader.async =
-        true;
-
-      loader.defer =
-        true;
-
-      loader.addEventListener(
-        "load",
-        renderReturningMemberTurnstile,
-        { once: true }
-      );
-
-      document.head.appendChild(
-        loader
-      );
-
-      return;
-    }
-
-    loader.addEventListener(
-      "load",
-      renderReturningMemberTurnstile,
-      { once: true }
-    );
-  }
-
-  window.addEventListener(
-    "cybercrowd:returning-member-requested",
-    openReturningMemberTurnstile
-  );
-}
-
-installVaultReturningMemberTurnstile();
+  },
+  { once: true }
+);
