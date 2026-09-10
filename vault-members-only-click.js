@@ -1,7 +1,7 @@
-// FILE ACTION: CREATE NEW FILE
+// FILE ACTION: REPLACE EXISTING FILE
 // FILE: vault-members-only-click.js
 // REPO: cybercrowd99/cybercrowd-net
-// COMMIT: Emit returning member request from Members Only click
+// COMMIT: Connect Members Only directly to Turnstile 2
 // CONTEXT:
 // One rock.
 // One object.
@@ -15,7 +15,7 @@
 // .vault-members-only click
 //
 // EXIT:
-// cybercrowd:returning-member-requested
+// cybercrowd:turnstile-two-requested
 //
 // DOES NOT OWN:
 // Routing.
@@ -29,6 +29,7 @@
 // Cookie.
 // Voice.
 // Dashboard.
+//
 
 function installVaultMembersOnlyClick() {
   const membersOnly =
@@ -45,7 +46,7 @@ function installVaultMembersOnlyClick() {
     function () {
       window.dispatchEvent(
         new CustomEvent(
-          "cybercrowd:returning-member-requested"
+          "cybercrowd:turnstile-two-requested"
         )
       );
     }
