@@ -1,4 +1,4 @@
-uidl-control-deck-entry.js// CYBERCROWD
+// CYBERCROWD
 //
 // FILE:
 // uidl-control-deck-entry.js
