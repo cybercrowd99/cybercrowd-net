@@ -6,41 +6,24 @@
 // cybercrowd-auth
 //
 // BUILD LAW:
-// 1 FILE
-// 1 JOB
-// 1 FUNCTION
+// PRIVATE AUTH REQUEST ENTRANCE
 //
 // JOB:
 // Route CyberCrowd private-auth requests.
 //
-// HUMAN ENTRY TRACK:
-// REAL CLOUDFLARE TURNSTILE
-// → REAL HUMAN INTERACTION
-// → POST /api/auth/human-verify
-// → CLOUDFLARE SITEVERIFY
-// → SERVER HUMAN PASS
-// → EMAIL SURFACE AUTHORIZED
-// → EMAIL ENTERED
-// → SEND
-// → HUMAN PASS CONSUMED
-// → 900-SECOND EMAIL TOKEN
-// → POSTMARK
+// EXISTING TRACK:
+// human verification
+// email verification
+// verification-token consumption
 //
-// SECURITY LAW:
-// NO FAKE SECURITY UI.
-// NO SECURITY THEATER.
-// NO CLIENT-ONLY HUMAN AUTHORITY.
-// Cloudflare token is validated exactly once.
-// Private auth issues the temporary human pass.
-// Send requires that server-issued human pass.
+// RETURNING MEMBER TRACK:
+// email -> existing identity
+// existing password -> verified identity + session
 //
-// RECOVERY LOCK:
-// No frontend change in this cell.
-// No auth/src/verify.ts change.
-// No auth/src/email.ts change.
-// No duplicate Turnstile helper.
-// No bridge.
-// No envelope.
+// NO NET AUTHORITY.
+// NO ACCOUNT CREATION.
+// NO PASSWORD CREATION.
+// NO PASSWORD MUTATION.
 
 import {
   createVerificationToken,
@@ -55,6 +38,12 @@ import {
   emailServiceEnabled
 } from "../email-service-gate.js";
 
+const RETURNING_SESSION_TTL_SECONDS =
+  86400 * 7;
+
+const RETURNING_PASSWORD_ITERATIONS =
+  100000;
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -64,21 +53,465 @@ export default {
     };
 
     if (
-      url.pathname === "/api/auth/human-verify" &&
+      url.pathname ===
+        "/api/auth/returning-email-match" &&
+      request.method === "POST"
+    ) {
+      let body;
+
+      try {
+        body =
+          await request.json();
+      } catch {
+        return Response.json(
+          {
+            success: false,
+            matched: false,
+            error: "invalid-json"
+          },
+          {
+            status: 400,
+            headers
+          }
+        );
+      }
+
+      const email =
+        String(
+          body?.email || ""
+        )
+          .trim()
+          .toLowerCase();
+
+      if (!email) {
+        return Response.json(
+          {
+            success: false,
+            matched: false,
+            error: "email_missing"
+          },
+          {
+            status: 400,
+            headers
+          }
+        );
+      }
+
+      if (!env.IDENTITY) {
+        return Response.json(
+          {
+            success: false,
+            matched: false,
+            error:
+              "identity_storage_missing"
+          },
+          {
+            status: 500,
+            headers
+          }
+        );
+      }
+
+      const identityActiveId =
+        String(
+          await env.IDENTITY.get(
+            `user-email:${email}`
+          ) || ""
+        ).trim();
+
+      if (!identityActiveId) {
+        return Response.json(
+          {
+            success: true,
+            matched: false
+          },
+          {
+            status: 200,
+            headers
+          }
+        );
+      }
+
+      return Response.json(
+        {
+          success: true,
+          matched: true,
+          identity_active_id:
+            identityActiveId
+        },
+        {
+          status: 200,
+          headers
+        }
+      );
+    }
+
+    if (
+      url.pathname ===
+        "/api/auth/login" &&
+      request.method === "POST"
+    ) {
+      let body;
+
+      try {
+        body =
+          await request.json();
+      } catch {
+        return Response.json(
+          {
+            success: false,
+            error: "invalid-json"
+          },
+          {
+            status: 400,
+            headers
+          }
+        );
+      }
+
+      const email =
+        String(
+          body?.email || ""
+        )
+          .trim()
+          .toLowerCase();
+
+      const password =
+        String(
+          body?.password || ""
+        );
+
+      if (
+        !email ||
+        !password
+      ) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "missing_credentials"
+          },
+          {
+            status: 400,
+            headers
+          }
+        );
+      }
+
+      if (!env.IDENTITY) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "identity_storage_missing"
+          },
+          {
+            status: 500,
+            headers
+          }
+        );
+      }
+
+      const identityActiveId =
+        String(
+          await env.IDENTITY.get(
+            `user-email:${email}`
+          ) || ""
+        ).trim();
+
+      if (!identityActiveId) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "account_not_found"
+          },
+          {
+            status: 404,
+            headers
+          }
+        );
+      }
+
+      const rawUser =
+        await env.IDENTITY.get(
+          `user:${identityActiveId}`
+        );
+
+      if (!rawUser) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "account_not_found"
+          },
+          {
+            status: 404,
+            headers
+          }
+        );
+      }
+
+      let user;
+
+      try {
+        user =
+          JSON.parse(rawUser);
+      } catch {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "identity_record_corrupt"
+          },
+          {
+            status: 500,
+            headers
+          }
+        );
+      }
+
+      const storedHash =
+        String(
+          user?.passwordHash ||
+          user?.password_hash ||
+          ""
+        ).trim();
+
+      if (!storedHash) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "password_not_set"
+          },
+          {
+            status: 403,
+            headers
+          }
+        );
+      }
+
+      const iterations =
+        Number(
+          user?.password_hash_iterations ||
+          RETURNING_PASSWORD_ITERATIONS
+        );
+
+      if (
+        !Number.isInteger(
+          iterations
+        ) ||
+        iterations <= 0
+      ) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "password_record_invalid"
+          },
+          {
+            status: 500,
+            headers
+          }
+        );
+      }
+
+      const encoder =
+        new TextEncoder();
+
+      const keyMaterial =
+        await crypto.subtle.importKey(
+          "raw",
+          encoder.encode(
+            password
+          ),
+          "PBKDF2",
+          false,
+          [
+            "deriveBits"
+          ]
+        );
+
+      const bits =
+        await crypto.subtle.deriveBits(
+          {
+            name: "PBKDF2",
+            salt:
+              encoder.encode(
+                email
+              ),
+            iterations,
+            hash: "SHA-256"
+          },
+          keyMaterial,
+          256
+        );
+
+      const suppliedHash =
+        [
+          ...new Uint8Array(
+            bits
+          )
+        ]
+          .map(
+            (byte) =>
+              byte
+                .toString(16)
+                .padStart(
+                  2,
+                  "0"
+                )
+          )
+          .join("");
+
+      if (
+        suppliedHash.length !==
+        storedHash.length
+      ) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "invalid_credentials"
+          },
+          {
+            status: 401,
+            headers
+          }
+        );
+      }
+
+      let difference = 0;
+
+      for (
+        let index = 0;
+        index <
+        suppliedHash.length;
+        index += 1
+      ) {
+        difference |=
+          suppliedHash.charCodeAt(
+            index
+          ) ^
+          storedHash.charCodeAt(
+            index
+          );
+      }
+
+      if (difference !== 0) {
+        return Response.json(
+          {
+            success: false,
+            error:
+              "invalid_credentials"
+          },
+          {
+            status: 401,
+            headers
+          }
+        );
+      }
+
+      const sessionBytes =
+        crypto.getRandomValues(
+          new Uint8Array(32)
+        );
+
+      const eat =
+        Array.from(
+          sessionBytes
+        )
+          .map(
+            (byte) =>
+              byte
+                .toString(16)
+                .padStart(
+                  2,
+                  "0"
+                )
+          )
+          .join("");
+
+      const now =
+        Date.now();
+
+      const sessionRecord = {
+        eat,
+        token: eat,
+        "identity-active-id":
+          identityActiveId,
+        identity_active_id:
+          identityActiveId,
+        identity_id:
+          identityActiveId,
+        identityId:
+          identityActiveId,
+        email,
+        epoch: now,
+        band: "user",
+        created_at:
+          new Date(
+            now
+          ).toISOString(),
+        expires_at:
+          new Date(
+            now +
+              RETURNING_SESSION_TTL_SECONDS *
+                1000
+          ).toISOString()
+      };
+
+      await env.IDENTITY.put(
+        `session:${eat}`,
+        JSON.stringify(
+          sessionRecord
+        ),
+        {
+          expirationTtl:
+            RETURNING_SESSION_TTL_SECONDS
+        }
+      );
+
+      return Response.json(
+        {
+          success: true,
+          identity_active_id:
+            identityActiveId
+        },
+        {
+          status: 200,
+          headers: {
+            ...headers,
+            "Set-Cookie":
+              `EAT=${eat}; Path=/; Max-Age=${RETURNING_SESSION_TTL_SECONDS}; HttpOnly; Secure; SameSite=Lax`
+          }
+        }
+      );
+    }
+
+    if (
+      url.pathname ===
+        "/api/auth/human-verify" &&
       request.method === "POST"
     ) {
       const origin =
-        request.headers.get("Origin") || "";
+        request.headers.get(
+          "Origin"
+        ) || "";
 
       if (
-        origin !== "https://cybercrowd.net" &&
-        origin !== "https://www.cybercrowd.net"
+        origin !==
+          "https://cybercrowd.net" &&
+        origin !==
+          "https://www.cybercrowd.net"
       ) {
         return Response.json(
           {
             ok: false,
             success: false,
-            reason: "origin-rejected"
+            reason:
+              "origin-rejected"
           },
           {
             status: 403,
@@ -90,13 +523,15 @@ export default {
       let body;
 
       try {
-        body = await request.json();
+        body =
+          await request.json();
       } catch {
         return Response.json(
           {
             ok: false,
             success: false,
-            reason: "invalid-json"
+            reason:
+              "invalid-json"
           },
           {
             status: 400,
@@ -106,14 +541,17 @@ export default {
       }
 
       const turnstileToken =
-        body["cf-turnstile-response"];
+        body[
+          "cf-turnstile-response"
+        ];
 
       if (!turnstileToken) {
         return Response.json(
           {
             ok: false,
             success: false,
-            reason: "missing-turnstile-token"
+            reason:
+              "missing-turnstile-token"
           },
           {
             status: 400,
@@ -136,7 +574,9 @@ export default {
       );
 
       const remoteIp =
-        request.headers.get("CF-Connecting-IP");
+        request.headers.get(
+          "CF-Connecting-IP"
+        );
 
       if (remoteIp) {
         verifyForm.append(
@@ -158,8 +598,10 @@ export default {
         await verifyResponse.json();
 
       const validHostname =
-        human.hostname === "cybercrowd.net" ||
-        human.hostname === "www.cybercrowd.net";
+        human.hostname ===
+          "cybercrowd.net" ||
+        human.hostname ===
+          "www.cybercrowd.net";
 
       if (
         human.success !== true ||
@@ -169,7 +611,8 @@ export default {
           {
             ok: false,
             success: false,
-            reason: "turnstile-failed"
+            reason:
+              "turnstile-failed"
           },
           {
             status: 403,
@@ -184,11 +627,17 @@ export default {
         );
 
       const humanPass =
-        Array.from(passBytes)
-          .map((byte) =>
-            byte
-              .toString(16)
-              .padStart(2, "0")
+        Array.from(
+          passBytes
+        )
+          .map(
+            (byte) =>
+              byte
+                .toString(16)
+                .padStart(
+                  2,
+                  "0"
+                )
           )
           .join("");
 
@@ -217,17 +666,21 @@ export default {
     }
 
     if (
-      url.pathname === "/api/auth/send-verification" &&
+      url.pathname ===
+        "/api/auth/send-verification" &&
       request.method === "POST"
     ) {
       if (
-        emailServiceEnabled(env) !== true
+        emailServiceEnabled(
+          env
+        ) !== true
       ) {
         return Response.json(
           {
             ok: false,
             success: false,
-            reason: "email-service-disabled"
+            reason:
+              "email-service-disabled"
           },
           {
             status: 503,
@@ -237,17 +690,22 @@ export default {
       }
 
       const origin =
-        request.headers.get("Origin") || "";
+        request.headers.get(
+          "Origin"
+        ) || "";
 
       if (
-        origin !== "https://cybercrowd.net" &&
-        origin !== "https://www.cybercrowd.net"
+        origin !==
+          "https://cybercrowd.net" &&
+        origin !==
+          "https://www.cybercrowd.net"
       ) {
         return Response.json(
           {
             ok: false,
             success: false,
-            reason: "origin-rejected"
+            reason:
+              "origin-rejected"
           },
           {
             status: 403,
@@ -259,13 +717,15 @@ export default {
       let body;
 
       try {
-        body = await request.json();
+        body =
+          await request.json();
       } catch {
         return Response.json(
           {
             ok: false,
             success: false,
-            reason: "invalid-json"
+            reason:
+              "invalid-json"
           },
           {
             status: 400,
@@ -275,15 +735,17 @@ export default {
       }
 
       const email =
-        String(body.email || "")
-          .trim();
+        String(
+          body.email || ""
+        ).trim();
 
       if (!email) {
         return Response.json(
           {
             ok: false,
             success: false,
-            reason: "missing-email"
+            reason:
+              "missing-email"
           },
           {
             status: 400,
@@ -293,7 +755,9 @@ export default {
       }
 
       const cookieHeader =
-        request.headers.get("Cookie") || "";
+        request.headers.get(
+          "Cookie"
+        ) || "";
 
       const humanPassMatch =
         cookieHeader.match(
@@ -310,7 +774,8 @@ export default {
           {
             ok: false,
             success: false,
-            reason: "human-pass-required"
+            reason:
+              "human-pass-required"
           },
           {
             status: 403,
@@ -327,12 +792,16 @@ export default {
           humanKey
         );
 
-      if (humanState !== "verified") {
+      if (
+        humanState !==
+        "verified"
+      ) {
         return Response.json(
           {
             ok: false,
             success: false,
-            reason: "human-pass-invalid"
+            reason:
+              "human-pass-invalid"
           },
           {
             status: 403,
@@ -373,11 +842,14 @@ export default {
     }
 
     if (
-      url.pathname === "/api/auth/verify" &&
+      url.pathname ===
+        "/api/auth/verify" &&
       request.method === "GET"
     ) {
       const token =
-        url.searchParams.get("token");
+        url.searchParams.get(
+          "token"
+        );
 
       if (!token) {
         return new Response(
@@ -399,21 +871,25 @@ export default {
         {
           headers: {
             ...headers,
-            "Content-Type": "text/html"
+            "Content-Type":
+              "text/html"
           }
         }
       );
     }
 
     if (
-      url.pathname === "/api/auth/verify" &&
+      url.pathname ===
+        "/api/auth/verify" &&
       request.method === "POST"
     ) {
       const formData =
         await request.formData();
 
       const token =
-        formData.get("token");
+        formData.get(
+          "token"
+        );
 
       if (!token) {
         return new Response(
