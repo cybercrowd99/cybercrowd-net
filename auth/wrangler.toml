@@ -14,6 +14,10 @@ head_sampling_rate = 1
 binding = "VERIFY_KV"
 id = "62a6c667bfc94d43aaf6936bc2502750"
 
+[[kv_namespaces]]
+binding = "IDENTITY"
+id = "fe654980fc014402acd73c87ea04aa61"
+
 [[d1_databases]]
 binding = "DB"
 database_id = "ff39e37c-391a-4898-9db5-d2118a141c07"
@@ -28,6 +32,14 @@ zone_name = "cybercrowd.net"
 
 [[routes]]
 pattern = "cybercrowd.net/api/auth/send-verification"
+zone_name = "cybercrowd.net"
+
+[[routes]]
+pattern = "cybercrowd.net/api/auth/returning-email-match"
+zone_name = "cybercrowd.net"
+
+[[routes]]
+pattern = "cybercrowd.net/api/auth/login"
 zone_name = "cybercrowd.net"
 
 [[migrations]]
