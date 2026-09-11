@@ -99,6 +99,5 @@ window.addEventListener(
           )
       }
     );
-  },
-  { once: true }
+  }
 );
