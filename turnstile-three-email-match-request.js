@@ -1,7 +1,13 @@
 // CYBERCROWD
 //
+// REPO:
+// cybercrowd99/cybercrowd-net
+//
 // FILE:
 // turnstile-three-email-match-request.js
+//
+// LOCATION:
+// REPOSITORY ROOT / NET
 //
 // BUILD LAW:
 // 1 FILE
@@ -23,6 +29,9 @@
 //
 // OUTPUT:
 // cybercrowd:returning-identity-match-ready
+//
+// NEXT RECEIVER:
+// returning-identity-password-required.js
 //
 // FALLBACK OUTPUT:
 // cybercrowd:returning-identity-match-missing
@@ -100,6 +109,15 @@ export function installTurnstileThreeEmailMatchRequest() {
 
         return;
       }
+
+      const {
+        installReturningIdentityPasswordRequired
+      } =
+        await import(
+          "./returning-identity-password-required.js"
+        );
+
+      installReturningIdentityPasswordRequired();
 
       window.dispatchEvent(
         new CustomEvent(
