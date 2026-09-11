@@ -16,7 +16,8 @@
 //
 // JOB:
 // Send the returning-member email
-// to the existing identity matcher.
+// request to CORE auth and receive
+// the identity-match result.
 //
 // FUNCTION:
 // installTurnstileThreeEmailMatchRequest()
@@ -24,8 +25,12 @@
 // INPUT:
 // cybercrowd:turnstile-three-email-ready
 //
-// REQUEST:
+// CORE AUTH REQUEST:
 // /api/auth/returning-email-match
+//
+// CORE OWNS:
+// Existing identity lookup.
+// Identity match decision.
 //
 // OUTPUT:
 // cybercrowd:returning-identity-match-ready
@@ -40,12 +45,15 @@
 // Turnstile rendering.
 // Email storage.
 // Manual email input.
+// Identity lookup.
+// Identity matching authority.
 // Identity creation.
 // uIDL creation.
 // Password input.
 // Password verification.
 // Session.
 // Cookie.
+// CORE auth authority.
 // Routing.
 // UI.
 // Movement.
