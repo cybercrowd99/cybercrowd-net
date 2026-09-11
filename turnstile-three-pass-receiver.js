@@ -21,6 +21,9 @@
 // OUTPUT:
 // cybercrowd:turnstile-three-token-ready
 //
+// NEXT RECEIVER:
+// turnstile-three-email-provider.js
+//
 // DOES NOT OWN:
 // Turnstile rendering.
 // Turnstile #1.
@@ -40,7 +43,7 @@
 export function installTurnstileThreePassReceiver() {
   window.addEventListener(
     "cybercrowd:turnstile-three-passed",
-    (event) => {
+    async (event) => {
       const token =
         event?.detail?.token;
 
@@ -50,6 +53,15 @@ export function installTurnstileThreePassReceiver() {
       ) {
         return;
       }
+
+      const {
+        installTurnstileThreeEmailProvider
+      } =
+        await import(
+          "./turnstile-three-email-provider.js"
+        );
+
+      installTurnstileThreeEmailProvider();
 
       window.dispatchEvent(
         new CustomEvent(
