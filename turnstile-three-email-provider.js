@@ -1,7 +1,13 @@
 // CYBERCROWD
 //
+// REPO:
+// cybercrowd99/cybercrowd-net
+//
 // FILE:
 // turnstile-three-email-provider.js
+//
+// LOCATION:
+// REPOSITORY ROOT / NET
 //
 // BUILD LAW:
 // 1 FILE
@@ -21,6 +27,9 @@
 // OUTPUT:
 // cybercrowd:turnstile-three-email-ready
 //
+// NEXT RECEIVER:
+// turnstile-three-email-match-request.js
+//
 // FALLBACK OUTPUT:
 // cybercrowd:turnstile-three-email-manual-required
 //
@@ -28,6 +37,7 @@
 // Turnstile rendering.
 // Turnstile #1.
 // Turnstile #2.
+// Identity matching.
 // Password input.
 // Password verification.
 // uIDL matching.
@@ -41,7 +51,7 @@
 export function installTurnstileThreeEmailProvider() {
   window.addEventListener(
     "cybercrowd:turnstile-three-token-ready",
-    (event) => {
+    async (event) => {
       const token =
         event?.detail?.token;
 
@@ -75,6 +85,15 @@ export function installTurnstileThreeEmailProvider() {
 
         return;
       }
+
+      const {
+        installTurnstileThreeEmailMatchRequest
+      } =
+        await import(
+          "./turnstile-three-email-match-request.js"
+        );
+
+      installTurnstileThreeEmailMatchRequest();
 
       window.dispatchEvent(
         new CustomEvent(
