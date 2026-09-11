@@ -86,17 +86,23 @@ window.addEventListener(
         sitekey:
           "0x4AAAAAACvkecVo2F3hpb1r",
 
-        callback: (token) =>
-          window.dispatchEvent(
-            new CustomEvent(
-              "cybercrowd:turnstile-three-passed",
-              {
-                detail: {
-                  token
+        callback:
+          async (token) => {
+            await import(
+              "./turnstile-three-pass-receiver.js"
+            );
+
+            window.dispatchEvent(
+              new CustomEvent(
+                "cybercrowd:turnstile-three-passed",
+                {
+                  detail: {
+                    token
+                  }
                 }
-              }
-            )
-          )
+              )
+            );
+          }
       }
     );
   }
