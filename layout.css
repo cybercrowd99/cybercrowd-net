@@ -1,0 +1,61 @@
+/* CYBERCROWD
+ *
+ * REPO:
+ * cybercrowd99/cybercrowd-net
+ *
+ * FILE:
+ * layout.css
+ *
+ * LOCATION:
+ * cybercrowd-turnstile/organ-2-hud-style/
+ *
+ * ORGAN:
+ * ORGAN 2 — HUD STYLE
+ *
+ * JOB:
+ * Define the base CyberCrowd Turnstile
+ * page layout and ambient grid surface.
+ *
+ * OWNS:
+ * Global box sizing.
+ * Body positioning.
+ * Base page presentation.
+ * Ambient grid positioning.
+ *
+ * DOES NOT OWN:
+ * Design tokens.
+ * HUD component styling.
+ * Animations.
+ * Stage movement.
+ * State.
+ * Events.
+ * Storage.
+ * Authentication.
+ * Password verification.
+ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--cc-font);
+}
+
+body {
+  background-color: var(--cc-black);
+  color: var(--cc-text);
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.ambient-grid {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  z-index: 0;
+}
