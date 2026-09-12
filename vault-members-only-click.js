@@ -1,13 +1,34 @@
-// FILE ACTION: REPLACE EXISTING FILE
-// FILE: vault-members-only-click.js
-// REPO: cybercrowd99/cybercrowd-net
-// COMMIT: Remove email Turnstile event from Members Only
+// CYBERCROWD
+//
+// REPO:
+// cybercrowd99/cybercrowd-net
+//
+// FILE:
+// vault-members-only-click.js
+//
+// LOCATION:
+// REPOSITORY ROOT / NET
+//
+// JOB:
+// Members Only button opens the
+// existing returning-member access page.
 //
 // ENTRANCE:
 // .vault-members-only click
 //
 // EXIT:
-// cybercrowd:returning-member-requested
+// /auth_login.html
+//
+// DOES NOT OWN:
+// Vault presentation.
+// Button presentation.
+// Turnstile.
+// Email.
+// Password verification.
+// Authentication.
+// Session.
+// Cookie.
+// Routing beyond this one destination.
 
 function installVaultMembersOnlyClick() {
   const membersOnly =
@@ -22,11 +43,8 @@ function installVaultMembersOnlyClick() {
   membersOnly.addEventListener(
     "click",
     function () {
-      window.dispatchEvent(
-        new CustomEvent(
-          "cybercrowd:returning-member-requested"
-        )
-      );
+      window.location.href =
+        "/auth_login.html";
     }
   );
 }
