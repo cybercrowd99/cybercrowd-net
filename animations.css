@@ -1,0 +1,57 @@
+/* CYBERCROWD
+ *
+ * REPO:
+ * cybercrowd99/cybercrowd-net
+ *
+ * FILE:
+ * animations.css
+ *
+ * LOCATION:
+ * cybercrowd-turnstile/organ-2-hud-style/
+ *
+ * ORGAN:
+ * ORGAN 2 — HUD STYLE
+ *
+ * JOB:
+ * Define CyberCrowd Turnstile
+ * scan animation presentation.
+ *
+ * OWNS:
+ * HUD scan keyframes.
+ * Scan bar presentation.
+ * Scan beam presentation.
+ *
+ * DOES NOT OWN:
+ * Design tokens.
+ * Base page layout.
+ * HUD panel structure.
+ * Stage movement.
+ * State.
+ * Events.
+ * Storage.
+ * Authentication.
+ * Password verification.
+ */
+
+@keyframes hud-scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+.scan-bar {
+  height: 4px;
+  width: 100%;
+  background: #111827;
+  overflow: hidden;
+  position: relative;
+  margin: 16px 0;
+}
+
+.scan-beam {
+  position: absolute;
+  height: 100%;
+  width: 40%;
+  background: var(--cc-cyan);
+  box-shadow: 0 0 10px var(--cc-cyan);
+  animation: hud-scan 1s infinite linear;
+}
