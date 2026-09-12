@@ -11,15 +11,15 @@ LOCATION:
 REPOSITORY ROOT / NET
 
 JOB:
-Present the Member Entry holographic panel
-above the CyberCrowd rig and allow that same
-panel to dock into the Member Entry socket.
+Present the Member Entry holographic items
+above the CyberCrowd rig and allow those same
+items to dock into the Member Entry socket.
 
 OWNS:
 Rig perspective.
 Member Entry socket boundary.
 Floating hologram presentation.
-Docked solid presentation.
+Docked presentation.
 Hologram hover animation.
 
 DOES NOT OWN:
@@ -42,18 +42,33 @@ Routing.
 
 .member-entry-socket {
   position: absolute;
-  top: 22%;
-  left: 6.5%;
-  width: 29%;
-  height: 38%;
+
+  top: 14.5%;
+  left: 39.2%;
+
+  width: 21.8%;
+  height: 67.5%;
+
   pointer-events: none;
   transform-style: preserve-3d;
 }
 
+/*
+INVISIBLE GEOMETRY ONLY
+
+This object positions the holographic items.
+
+It has:
+NO background.
+NO border.
+NO panel.
+NO placard.
+NO visible box.
+*/
+
 .hologram-board {
   position: absolute;
   inset: 0;
-  border-radius: 6px;
 
   display: flex;
   flex-direction: column;
@@ -62,30 +77,51 @@ Routing.
 
   pointer-events: auto;
 
-  background: rgba(190, 0, 255, 0.10);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
 
-  border:
-    2px solid #d000ff;
-
-  box-shadow:
-    0 0 35px rgba(208, 0, 255, 0.80),
-    inset 0 0 20px rgba(208, 0, 255, 0.25);
-
-  backdrop-filter: blur(4px);
-
-  color:
-    #ecb8ff;
+  color: #e100ff;
 
   opacity: 0;
+
+  transform-style: preserve-3d;
 
   transform:
     translate3d(0, 0, 120px)
     rotateX(8deg);
 
   transition:
-    all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.35s ease;
 }
 
+/*
+ACTUAL HOLOGRAPHIC CONTENT
+
+Only the items themselves emit light.
+*/
+
+.hologram-board > * {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+
+  color: #e100ff;
+
+  text-shadow:
+    0 0 4px #ffffff,
+    0 0 8px #e100ff,
+    0 0 16px #d000ff,
+    0 0 28px rgba(208, 0, 255, 0.95),
+    0 0 46px rgba(153, 0, 255, 0.75);
+
+  filter:
+    drop-shadow(0 0 6px rgba(225, 0, 255, 0.95))
+    drop-shadow(0 0 14px rgba(153, 0, 255, 0.75));
+}
 
 /*
 FLOATING
@@ -93,10 +129,10 @@ FLOATING
 X = 0
 Y = 0
 
-The hologram stays zeroed directly over
-the MEMBER ENTRY target.
+Only Z changes.
 
-Only Z depth changes.
+The holographic items remain aligned
+directly over their Member Entry target.
 */
 
 .hologram-board.state-floating {
@@ -110,12 +146,18 @@ Only Z depth changes.
     holo-hover 3s ease-in-out infinite alternate;
 }
 
-
 /*
 DOCKED
 
-Same exact X/Y target.
-Returns from Z depth to physical zero.
+Same content.
+Same X.
+Same Y.
+
+Z returns to zero.
+
+No plate appears.
+No rectangle appears.
+The items themselves land.
 */
 
 .hologram-board.state-docked {
@@ -126,28 +168,27 @@ Returns from Z depth to physical zero.
   transform:
     translate3d(0, 0, 0)
     rotateX(0deg);
-
-  background:
-    #0d131f;
-
-  border:
-    2px solid #3b1847;
-
-  box-shadow:
-    inset 0 0 15px #000,
-    0 0 10px rgba(208, 0, 255, 0.40);
-
-  color:
-    #f0f6fc;
 }
 
+.hologram-board.state-docked > * {
+  color: #d4a6ff;
+
+  text-shadow:
+    0 0 3px #ffffff,
+    0 0 7px #d000ff,
+    0 0 12px rgba(208, 0, 255, 0.75);
+
+  filter:
+    drop-shadow(0 0 4px rgba(208, 0, 255, 0.65));
+}
 
 /*
-FLOATING DEPTH ONLY
+ONE MOVEMENT
 
-No X or Y movement.
-The board breathes toward and away
-from the viewer without leaving its target.
+90px -> 70px Z depth only.
+
+No X movement.
+No Y movement.
 */
 
 @keyframes holo-hover {
