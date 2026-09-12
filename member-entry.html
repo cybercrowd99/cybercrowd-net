@@ -53,7 +53,7 @@ Routing beyond this page.
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   />
 
-    <title>CyberCrowd // Member Entry</title>
+  <title>CyberCrowd // Member Entry</title>
 
   <link
     rel="stylesheet"
@@ -82,21 +82,26 @@ Routing beyond this page.
     }
 
     .member-entry-surface {
-  position: relative;
-  width: 100vw;
-  height: 100dvh;
-  background-image:
-    url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/IDENTITY-LANDING-PAGE.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+      position: relative;
+
+      width: var(--rig-width);
+      height: var(--rig-height);
+
+      flex: 0 0 auto;
+
+      background-image:
+        url("https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/IDENTITY-LANDING-PAGE.png");
+
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
   </style>
 </head>
 
 <body>
 
-    <main
+  <main
     class="member-entry-surface cyber-rig-container"
     id="member-entry-surface"
     aria-label="CyberCrowd Member Entry"
@@ -105,14 +110,68 @@ Routing beyond this page.
       class="member-entry-socket"
       id="member-entry-bay"
     ></div>
-      
   </main>
 
   <script type="module">
     import { MemberEntryHologram } from "/member-entry-hologram.js";
 
-    const bay = document.getElementById("member-entry-bay");
-    new MemberEntryHologram(bay);
+    const surface =
+      document.getElementById("member-entry-surface");
+
+    function fitMemberEntrySurface() {
+      const viewportWidth =
+        window.visualViewport?.width ||
+        window.innerWidth;
+
+      const viewportHeight =
+        window.visualViewport?.height ||
+        window.innerHeight;
+
+      const rigAspect = 3 / 2;
+      const viewportAspect =
+        viewportWidth / viewportHeight;
+
+      let width;
+      let height;
+
+      if (viewportAspect > rigAspect) {
+        height = viewportHeight;
+        width = height * rigAspect;
+      } else {
+        width = viewportWidth;
+        height = width / rigAspect;
+      }
+
+      surface.style.setProperty(
+        "--rig-width",
+        `${width}px`
+      );
+
+      surface.style.setProperty(
+        "--rig-height",
+        `${height}px`
+      );
+    }
+
+    fitMemberEntrySurface();
+
+    window.addEventListener(
+      "resize",
+      fitMemberEntrySurface
+    );
+
+    window.visualViewport?.addEventListener(
+      "resize",
+      fitMemberEntrySurface
+    );
+
+    const bay =
+      document.getElementById("member-entry-bay");
+
+    const holo =
+      new MemberEntryHologram(bay);
+
+    holo.project();
   </script>
 
 </body>
