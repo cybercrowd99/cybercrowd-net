@@ -1,0 +1,104 @@
+/*
+CYBERCROWD
+
+REPO:
+cybercrowd99/cybercrowd-net
+
+FILE:
+member-entry-hologram.css
+
+LOCATION:
+REPOSITORY ROOT / NET
+
+JOB:
+Present the Member Entry holographic panel
+above the CyberCrowd rig and allow that same
+panel to dock into the Member Entry socket.
+
+OWNS:
+Rig perspective.
+Member Entry socket boundary.
+Floating hologram presentation.
+Docked solid presentation.
+Hologram hover animation.
+
+DOES NOT OWN:
+Turnstile verification.
+Member recall.
+Email matching.
+Password verification.
+Authentication.
+Session.
+Cookie.
+Routing.
+*/
+
+.cyber-rig-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  perspective: 1000px;
+}
+
+.member-entry-socket {
+  position: absolute;
+  top: 22%;
+  left: 6.5%;
+  width: 29%;
+  height: 38%;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.hologram-board {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+
+  background: rgba(0, 229, 255, 0.08);
+  border: 2px solid #00e5ff;
+  box-shadow:
+    0 0 35px rgba(0, 229, 255, 0.6),
+    inset 0 0 20px rgba(0, 229, 255, 0.2);
+  backdrop-filter: blur(4px);
+  color: #00e5ff;
+  opacity: 0;
+
+  transform: translate3d(0, -30px, 120px) rotateX(8deg);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hologram-board.state-floating {
+  opacity: 1;
+  transform: translate3d(0, -20px, 90px) rotateX(4deg);
+  animation: holo-hover 3s ease-in-out infinite alternate;
+}
+
+.hologram-board.state-docked {
+  opacity: 1;
+  animation: none;
+
+  transform: translate3d(0, 0, 0) rotateX(0deg);
+
+  background: #0d131f;
+  border: 2px solid #1e293b;
+  box-shadow:
+    inset 0 0 15px #000,
+    0 0 10px rgba(0, 229, 255, 0.3);
+  color: #f0f6fc;
+}
+
+@keyframes holo-hover {
+  0% {
+    transform: translate3d(0, -20px, 90px) rotateX(4deg);
+  }
+
+  100% {
+    transform: translate3d(0, -10px, 70px) rotateX(1deg);
+  }
+}
