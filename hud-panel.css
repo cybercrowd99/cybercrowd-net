@@ -1,0 +1,95 @@
+/* CYBERCROWD
+ *
+ * REPO:
+ * cybercrowd99/cybercrowd-net
+ *
+ * FILE:
+ * hud-panel.css
+ *
+ * LOCATION:
+ * cybercrowd-turnstile/organ-2-hud-style/
+ *
+ * ORGAN:
+ * ORGAN 2 — HUD STYLE
+ *
+ * JOB:
+ * Define the CyberCrowd Turnstile
+ * overlay, HUD panel, inputs,
+ * and HUD button presentation.
+ *
+ * OWNS:
+ * Turnstile overlay presentation.
+ * HUD panel presentation.
+ * HUD input presentation.
+ * HUD button presentation.
+ *
+ * DOES NOT OWN:
+ * Design tokens.
+ * Base page layout.
+ * Animation timing.
+ * Stage movement.
+ * State.
+ * Events.
+ * Storage.
+ * Authentication.
+ * Password verification.
+ */
+
+.turnstile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(6px);
+  display: none;
+  place-items: center;
+  z-index: 999;
+}
+
+.turnstile-overlay.active {
+  display: grid;
+}
+
+.hud-panel {
+  width: 420px;
+  background: var(--cc-panel);
+  border: 1px solid var(--cc-cyan);
+  box-shadow: 0 0 30px var(--cc-cyan-glow);
+  padding: 24px;
+  clip-path: polygon(0 0, 93% 0, 100% 7%, 100% 100%, 7% 100%, 0 93%);
+}
+
+.hud-input {
+  width: 100%;
+  background: #04060a;
+  border: 1px solid var(--cc-border);
+  color: var(--cc-text);
+  padding: 12px;
+  font-size: 0.95rem;
+  outline: none;
+  margin-top: 6px;
+  margin-bottom: 14px;
+}
+
+.hud-input:focus {
+  border-color: var(--cc-cyan);
+  box-shadow: 0 0 10px var(--cc-cyan-glow);
+}
+
+.hud-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--cc-cyan);
+  color: #000;
+  border: none;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.hud-btn.secondary {
+  background: transparent;
+  color: var(--cc-muted);
+  border: 1px solid var(--cc-border);
+}
