@@ -1,7 +1,13 @@
 // CYBERCROWD
 //
+// REPO:
+// cybercrowd99/cybercrowd-net
+//
 // FILE:
 // returning-identity-password-required.js
+//
+// LOCATION:
+// REPOSITORY ROOT / NET
 //
 // BUILD LAW:
 // 1 FILE
@@ -25,6 +31,9 @@
 // OUTPUT:
 // cybercrowd:returning-password-required
 //
+// NEXT RECEIVER:
+// returning-password-field.js
+//
 // DOES NOT OWN:
 // Turnstile rendering.
 // Turnstile token.
@@ -46,7 +55,7 @@
 export function installReturningIdentityPasswordRequired() {
   window.addEventListener(
     "cybercrowd:returning-identity-match-ready",
-    (event) => {
+    async (event) => {
       const token =
         event?.detail?.token;
 
@@ -68,6 +77,15 @@ export function installReturningIdentityPasswordRequired() {
       ) {
         return;
       }
+
+      const {
+        installReturningPasswordField
+      } =
+        await import(
+          "./returning-password-field.js"
+        );
+
+      installReturningPasswordField();
 
       window.dispatchEvent(
         new CustomEvent(
