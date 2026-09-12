@@ -1,7 +1,13 @@
 // CYBERCROWD
 //
+// REPO:
+// cybercrowd99/cybercrowd-net
+//
 // FILE:
 // returning-password-field.js
+//
+// LOCATION:
+// REPOSITORY ROOT / NET
 //
 // BUILD LAW:
 // 1 FILE
@@ -25,6 +31,9 @@
 // DOM object:
 // #cybercrowd-returning-password
 //
+// NEXT RECEIVER:
+// returning-password-capture.js
+//
 // DOES NOT OWN:
 // CSS.
 // Email.
@@ -41,7 +50,7 @@
 export function installReturningPasswordField() {
   window.addEventListener(
     "cybercrowd:returning-password-required",
-    () => {
+    async () => {
       if (
         document.getElementById(
           "cybercrowd-returning-password"
@@ -69,6 +78,15 @@ export function installReturningPasswordField() {
 
       input.autocomplete =
         "current-password";
+
+      const {
+        installReturningPasswordCapture
+      } =
+        await import(
+          "./returning-password-capture.js"
+        );
+
+      installReturningPasswordCapture();
 
       document.body.appendChild(
         input
