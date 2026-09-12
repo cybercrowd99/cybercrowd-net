@@ -91,11 +91,24 @@ Routing beyond this page.
 
 <body>
 
-  <main
-    class="member-entry-surface"
+    <main
+    class="member-entry-surface cyber-rig-container"
     id="member-entry-surface"
     aria-label="CyberCrowd Member Entry"
-  ></main>
+  >
+    <div
+      class="member-entry-socket"
+      id="member-entry-bay"
+    ></div>
+      
+  </main>
+
+  <script type="module">
+    import { MemberEntryHologram } from "/member-entry-hologram.js";
+
+    const bay = document.getElementById("member-entry-bay");
+    new MemberEntryHologram(bay);
+  </script>
 
 </body>
 </html>
