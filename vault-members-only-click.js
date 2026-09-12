@@ -44,7 +44,7 @@ function installVaultMembersOnlyClick() {
     "click",
     function () {
       window.location.href =
-        "/auth_login.html";
+  "/member-entry.html";
     }
   );
 }
