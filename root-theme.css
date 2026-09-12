@@ -1,0 +1,49 @@
+/* CYBERCROWD
+ *
+ * REPO:
+ * cybercrowd99/cybercrowd-net
+ *
+ * FILE:
+ * tokens.css
+ *
+ * LOCATION:
+ * cybercrowd-turnstile/organ-2-hud-style/
+ *
+ * ORGAN:
+ * ORGAN 2 — HUD STYLE
+ *
+ * JOB:
+ * Define shared CyberCrowd Turnstile
+ * visual tokens and HUD design constants.
+ *
+ * OWNS:
+ * Color tokens.
+ * Glow tokens.
+ * Border token.
+ * Text tokens.
+ * Font token.
+ *
+ * DOES NOT OWN:
+ * Layout.
+ * Component structure.
+ * Animation behavior.
+ * Stage movement.
+ * State.
+ * Events.
+ * Storage.
+ * Authentication.
+ * Password verification.
+ */
+
+:root {
+  --cc-black: #06090e;
+  --cc-panel: rgba(10, 15, 24, 0.95);
+  --cc-cyan: #00e5ff;
+  --cc-cyan-glow: rgba(0, 229, 255, 0.35);
+  --cc-red: #ff2a6d;
+  --cc-red-glow: rgba(255, 42, 109, 0.35);
+  --cc-border: #1a2333;
+  --cc-text: #e6edf3;
+  --cc-muted: #7d8590;
+  --cc-font: "Courier New", monospace;
+}
