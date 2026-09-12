@@ -1,25 +1,133 @@
+<!--
+CYBERCROWD
+
+REPO:
+cybercrowd99/cybercrowd-net
+
+FILE:
+auth_login.html
+
+LOCATION:
+REPOSITORY ROOT / NET
+
+JOB:
+Provide the CyberCrowd Turnstile 3
+returning-member access surface.
+
+ENTRANCE:
+/auth_login.html
+
+OWNS:
+Turnstile 3 page shell.
+Returning-member entry surface.
+HUD mount location.
+Organ 2 stylesheet loading.
+Organ 4 app loading.
+
+EXIT:
+CyberCrowd Turnstile 3 mounted interface.
+
+DOES NOT OWN:
+Vault button behavior.
+Vault presentation.
+Turnstile stage logic.
+Identity storage implementation.
+Password verification authority.
+StateMachine implementation.
+EventBus implementation.
+Stage view internals.
+Session.
+Cookie.
+Backend authentication authority.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>CyberCrowd Access Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="login.css">
+  <title>CyberCrowd Turnstile 3</title>
+
+  <!-- Organ 2 Stylesheets -->
+  <link
+    rel="stylesheet"
+    href="/cybercrowd-turnstile/organ-2-hud-style/tokens.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="/cybercrowd-turnstile/organ-2-hud-style/layout.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="/cybercrowd-turnstile/organ-2-hud-style/hud-panel.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="/cybercrowd-turnstile/organ-2-hud-style/animations.css"
+  />
 </head>
 
 <body>
 
-    <div class="login-box">
-        <h1>Access Login</h1>
+  <div class="ambient-grid"></div>
 
-        <input id="auth-email" type="email" placeholder="Enter your email">
+  <!-- Trigger Button -->
+  <button
+    class="hud-btn"
+    id="btn-members-only"
+    style="width: auto; padding: 16px 36px;"
+  >
+    Members Only
+  </button>
 
-        <button id="auth-login-btn">Sign In</button>
+  <!-- Turnstile 3 Overlay -->
+  <div
+    class="turnstile-overlay"
+    id="turnstile-overlay"
+  >
 
-        <div id="auth-login-status"></div>
+    <div class="hud-panel">
+
+      <div
+        style="
+          border-bottom: 1px solid var(--cc-border);
+          padding-bottom: 10px;
+          margin-bottom: 16px;
+        "
+      >
+        <span
+          style="
+            font-size: 0.8rem;
+            color: var(--cc-cyan);
+            letter-spacing: 2px;
+          "
+        >
+          TURNSTILE WIDGET 3.0
+        </span>
+      </div>
+
+      <!--
+      ORGAN 3 STAGE SLOT
+
+      The ViewRouter purges and mounts
+      exactly one isolated stepping stone
+      inside this location.
+      -->
+      <div id="hud-view-slot"></div>
+
     </div>
 
-    <script src="auth_login.js"></script>
+  </div>
+
+  <!-- Organ 4 Entry Point -->
+  <script
+    type="module"
+    src="/cybercrowd-turnstile/organ-4-orchestrator/app.js"
+  ></script>
+
 </body>
 </html>
