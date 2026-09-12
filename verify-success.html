@@ -268,7 +268,7 @@
         }
 
         localStorage.removeItem("cc_verify_token");
-        window.location.href = "profile-setup.html";
+        window.location.href = "/member-entry.html";
       } catch (error) {
         console.error("CyberCrowd password setup error:", error);
         setStatus(error.message || "Password setup failed.", "error");
