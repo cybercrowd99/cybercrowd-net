@@ -1,0 +1,74 @@
+<!--
+CYBERCROWD
+
+FILE:
+member-entry.html
+
+ROLE:
+MEMBER ENTRY ART
+
+LAW:
+HTML = ART
+
+DOES NOT OWN:
+CSS.
+EMAIL MATCHING.
+PASSWORD.
+SESSION.
+ROUTING.
+PROJECTION LOGIC.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+
+  <title>CyberCrowd // Member Entry</title>
+
+  <link
+    rel="stylesheet"
+    href="/member-entry.css"
+  />
+</head>
+
+<body>
+
+  <main
+    class="member-entry-surface"
+    id="member-entry-surface"
+    aria-label="CyberCrowd Member Entry"
+  >
+
+    <form
+      class="member-entry-email-surface"
+      id="member-entry-email-form"
+      novalidate
+    >
+
+      <input
+        id="member-entry-email"
+        type="email"
+        inputmode="email"
+        enterkeyhint="go"
+        autocomplete="email"
+        placeholder="youname@email.com"
+        aria-label="Registered CyberCrowd email"
+      />
+
+    </form>
+
+  </main>
+
+  <script
+    type="module"
+    src="/member-entry-entry.js"
+  ></script>
+
+</body>
+</html>
