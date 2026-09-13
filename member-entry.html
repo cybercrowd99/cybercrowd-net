@@ -18,7 +18,9 @@ B = MEMBER ENTRY
 
 JOB:
 Provide the permanent CyberCrowd
-Member Entry surface.
+Member Entry surface and emit one
+Member Entry connection when the
+existing invisible target is touched.
 
 ENTRANCE:
 /member-entry.html
@@ -29,18 +31,16 @@ https://pub-081cb3c244be4e09b5e76012567a0b0a.r2.dev/Registry-Image/IDENTITY-LAND
 OWNS:
 Member Entry page shell.
 Approved Member Entry graphic surface.
+Member Entry touch connection.
 
 DOES NOT OWN:
-Members Only button.
-Email input.
-Password input.
+Pings.
+Needs.
+Icans.
+Permissions.
 Authentication.
 Identity verification.
-Avatar.
-Environment data.
-Emergency controls.
-Settings functions.
-Routing beyond this page.
+Routing beyond this connection.
 -->
 
 <!DOCTYPE html>
@@ -171,7 +171,33 @@ Routing beyond this page.
     const holo =
       new MemberEntryHologram(bay);
 
-    holo.project();
+    function connectMemberEntry(event) {
+      const target =
+        bay.getBoundingClientRect();
+
+      const inside =
+        event.clientX >= target.left &&
+        event.clientX <= target.right &&
+        event.clientY >= target.top &&
+        event.clientY <= target.bottom;
+
+      if (!inside) {
+        return;
+      }
+
+      holo.project();
+
+      window.dispatchEvent(
+        new CustomEvent(
+          "cybercrowd:member-entry-connect"
+        )
+      );
+    }
+
+    surface.addEventListener(
+      "pointerup",
+      connectMemberEntry
+    );
   </script>
 
 </body>
