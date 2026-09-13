@@ -1,64 +1,29 @@
 // CYBERCROWD
 //
-// REPO:
-// cybercrowd99/cybercrowd-net
-//
 // FILE:
 // member-entry-email-match.js
 //
-// LOCATION:
-// REPOSITORY ROOT / NET
-//
-// BUILD LAW:
-// 1 FILE
-// 1 JOB
-// 1 FUNCTION
+// LAW:
+// JS = SEPARATE FUNCTION
 //
 // JOB:
-// Send the Member Entry email
-// to the existing returning-member
-// identity matcher and wake the
-// existing password lane.
-//
-// FUNCTION:
-// requestMemberEntryEmailMatch()
-//
-// ENTRANCE:
-// Member Entry email string
-//
-// REQUEST:
-// /api/auth/returning-email-match
-//
-// PASS:
-// Save cc_verified_email
-//
-// OUTPUT:
-// cybercrowd:returning-password-required
-//
-// NEXT RECEIVER:
-// returning-password-field.js
+// Send one email to the existing
+// returning-member matcher
+// and return its answer.
 //
 // DOES NOT OWN:
-// Member Entry graphic.
-// Email field rendering.
-// Password field rendering.
-// Password capture.
-// Password verification.
-// Password hashing.
-// Password storage.
-// Session creation.
-// Cookie creation.
-// uIDL.
-// Profile.
-// Routing.
+// LOCAL STORAGE.
+// PASSWORD.
+// PASSWORD FIELD.
+// EVENTS.
+// PROJECTION.
+// ROUTING.
 
 export async function requestMemberEntryEmailMatch(
   email
 ) {
   const cleanEmail =
-    String(
-      email || ""
-    )
+    String(email || "")
       .trim()
       .toLowerCase();
 
@@ -81,9 +46,10 @@ export async function requestMemberEntryEmailMatch(
             "application/json"
         },
 
-        body: JSON.stringify({
-          email: cleanEmail
-        })
+        body:
+          JSON.stringify({
+            email: cleanEmail
+          })
       }
     );
 
@@ -92,57 +58,21 @@ export async function requestMemberEntryEmailMatch(
       .json()
       .catch(() => null);
 
-  if (
-    !response.ok ||
-    result?.success !== true ||
-    result?.matched !== true ||
-    !result?.identity_active_id
-  ) {
-    window.localStorage.removeItem(
-      "cc_verified_email"
-    );
-
-    return {
-      success: false,
-      matched: false,
-      error:
-        result?.error ||
-        "identity_not_found"
-    };
-  }
-
-  window.localStorage.setItem(
-    "cc_verified_email",
-    cleanEmail
-  );
-
-  const {
-    installReturningPasswordField
-  } =
-    await import(
-      "./returning-password-field.js"
-    );
-
-  installReturningPasswordField();
-
-  window.dispatchEvent(
-    new CustomEvent(
-      "cybercrowd:returning-password-required",
-      {
-        detail: {
-          email: cleanEmail,
-          identity_active_id:
-            result.identity_active_id
-        }
-      }
-    )
-  );
-
   return {
-    success: true,
-    matched: true,
-    email: cleanEmail,
+    success:
+      response.ok &&
+      result?.success === true,
+
+    matched:
+      result?.matched === true,
+
+    email:
+      cleanEmail,
+
     identity_active_id:
-      result.identity_active_id
+      result?.identity_active_id || null,
+
+    error:
+      result?.error || null
   };
 }
