@@ -37,14 +37,6 @@ id = "fe654980fc014402acd73c87ea04aa61"
 binding = "CORE_SERVICE"
 service = "cybercrowd-core"
 
-[[services]]
-binding = "CREATE_ACCOUNT_ENTRY"
-service = "create-account-cybercrowd-entry"
-
-[[services]]
-binding = "AUTH_SERVICE"
-service = "cybercrowd-auth"
-
 [vars]
 PORT_MIN = "49152"
 PORT_MAX = "65535"
