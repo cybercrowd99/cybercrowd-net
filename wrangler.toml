@@ -1,6 +1,7 @@
 name = "cybercrowd-net"
 main = "worker.js"
 compatibility_date = "2026-05-09"
+
 workers_dev = true
 
 [assets]
